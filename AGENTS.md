@@ -10,6 +10,8 @@ local/ and var/ are private/large preservation storage and must stay ignored. Ne
 
 The user resumed the revival goal on 2026-10-11. Work only in Server and Instrumented; DataDump is read-only evidence and the retained original folder is not an edit target. E6 Story04 remains uncleared; E7 is prepared but inactive. Historical PIDs are not live evidence. Server runtime uses config/profiles/current-e6.json and private var/state.json with one writer only.
 
+Instrumented/docs/bench-heal-native-2026-10-11.md records verified C004 bench healing into front Nene (net548.316528HP amid combat), with no server/APK change. E6 still lost. Next normal campaign replay should award earned10EXP to the four snapshotted party members and cross their current level thresholds; verify native results/persistence before claiming stronger levels. Keep all10 locked hunters intact; owned tickets are not EXP consumables.
+
 During battle, promptly repeat ordinary attacks after verifying the active HUD/stage; (695,900) is a verified attack point on1080x1920. Stop on results/stage changes; never spam menus or the exit door. Root exclusively owns ADB/UI. Keep Collector/Docker/inference offline. No host grants, forced clears, save rollback or undocumented stat retuning.
 
 Original app/native files are immutable; diagnostic changes are side-by-side. Always select an explicit ADB serial. No casual reinstall or clear. A future rebuilt instrumented APK requires an explicitly authorized GitHub release under the standing project instructions; no rebuild/install/release was performed during this migration.
