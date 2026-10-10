@@ -6,14 +6,18 @@ Start at **1.0.0**. Package/VERSION use `MAJOR.MINOR.PATCH`; Git tags use `vMAJO
 - Minor: compatible features/improvements.
 - Major: incompatible protocol/configuration or operational changes requiring an upgrade action.
 
-Every release body contains exactly these three change sections, in this order: **Added**, **Improved**, **Fixed**. Each lists changes since the preceding server release. The first release documents the complete included baseline. State “None in this release” when a section has no changes. Keep validation, installation and known limits in unheaded paragraphs after the change sections.
+The first public release (1.0.0) introduces the game to players with **Game features**, **Recovered game content**, **Current limitations**, and **Getting started**. Describe what players can do and which original content is recovered. Do not present private development or migration history as public improvements/fixes.
+
+Later releases use **Added**, **Improved**, and **Fixed** to describe actual changes from a previous public version. Keep those entries about gameplay, recovered content, or a user-visible problem. State “None in this release” when appropriate.
+
+Public release notes have no Validation section or test/build checklist. Perform all required checks internally and retain their evidence in developer documentation.
 
 Releases are published regular public releases, never drafts or prereleases. Mark each newly published version Latest. Do not reuse or overwrite a version/tag; retain previous notes/assets.
 
 ## Prepare and publish
 
 1. Update package.json, package-lock.json and VERSION together.
-2. Write `releases/<version>.md` with the required sections and concrete validation.
+2. Write `releases/<version>.md` with the appropriate public-facing sections.
 3. Run `npm ci`, `npm test`, `npm run build` and `npm run resources:verify`.
 4. Verify the external compiled-process protocol/restart path when runtime behavior changes. This uses a private disposable state copy.
 5. Export the current resource bundle under `local/bundles/` if its pinned manifest changes; verify it contains no account/signing material.

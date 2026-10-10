@@ -2,7 +2,7 @@
 
 The user authorized pushes and release publication after the copy-only migration. All three main branches now contain the reviewed migrated source/docs/data. Private archives, saves, signing keys, raw telemetry and toolchains remain ignored and local; the original folder is retained.
 
-- Server: [Blustone Server 1.0.0](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases/tag/v1.0.0), with Added/Improved/Fixed notes, verified resource ZIP, resource manifest and checksums.
+- Server: [Blustone Server 1.0.0](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases/tag/v1.0.0), with an introduction to game features and recovered content, plus the resource ZIP, resource manifest and checksums.
 - DataDump: [Blustone DataDump 2026-10-10](https://github.com/The-Blustone-Revival-Project/Blustone-DataDump/releases/tag/2026-10-10), with two readable stats/evidence documents, the JSON snapshot, manifest and checksums. Same-day future snapshots use .2, .3, etc.
 - Instrumented: [2.8.0.1+15](https://github.com/The-Blustone-Revival-Project/Blustone-Instrumented/releases/tag/2.8.0.1%2B15) is Latest. All14 existing releases have consistent titles and regular public status; no drafts/prereleases remain. APK asset IDs, sizes, digests and download URLs are unchanged. +6 retains its broken-build/DO NOT INSTALL warning.
 

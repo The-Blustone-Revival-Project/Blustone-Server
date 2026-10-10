@@ -18,4 +18,6 @@ See the local migration report and preserved original workspace guidance for det
 
 All releases are published regular releases, never drafts or prereleases. The newest release is explicitly Latest; historical releases remain regular public releases. Read docs/RELEASING.md for version, title, artifacts and validation requirements before publication.
 
-The user also authorized normalizing existing Instrumented release titles and regular-release status while preserving all APK assets. DataDump uses dated stats/evidence snapshots; Server begins at 1.0.0 with Added/Improved/Fixed sections. Publication does not authorize deleting the old folder or exposing local/private material.
+The user also authorized normalizing existing Instrumented release titles and regular-release status while preserving all APK assets. DataDump uses dated stats/evidence snapshots; Server 1.0.0 introduces game features and recovered content; later versions describe actual changes from a previous public release. Publication does not authorize deleting the old folder or exposing local/private material.
+
+Server release notes are public-facing. The initial 1.0.0 description must explain playable features, recovered content and remaining limitations, with no Improved/Fixed framing or Validation/test checklist. Keep internal checks in developer documentation.

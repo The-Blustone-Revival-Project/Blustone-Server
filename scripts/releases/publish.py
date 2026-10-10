@@ -18,8 +18,10 @@ def prepare(resources):
  if lock['version']!=version or lock['packages']['']['version']!=version or (ROOT/'VERSION').read_text().strip()!=version:raise ValueError('Version files disagree')
  notes=ROOT/'releases'/f'{version}.md';text=notes.read_text(encoding='utf-8')
  if text.splitlines()[0]!='# Blustone Server '+version:raise ValueError('Release heading/version mismatch')
- if re.findall(r'^## (.+)$',text,re.M)!=['Added','Improved','Fixed']:raise ValueError('Required sections: Added, Improved, Fixed')
- for section in ['Added','Improved','Fixed']:
+ sections=['Game features','Recovered game content','Current limitations','Getting started'] if version=='1.0.0' else ['Added','Improved','Fixed']
+ if re.findall(r'^## (.+)$',text,re.M)!=sections:raise ValueError('Required public-facing sections: '+', '.join(sections))
+ if re.search(r'^(?:#+\s*)?Validation\s*[:\n]',text,re.M|re.I):raise ValueError('Validation belongs in developer evidence, not public release notes')
+ for section in sections:
   if not re.search(r'^## '+section+r'\n\n\S',text,re.M):raise ValueError('Empty '+section+' section')
  if not resources.is_file():raise ValueError('Resource bundle missing')
  if resources.stat().st_size>=2*1024**3:raise ValueError('Resource asset exceeds current per-asset limit')
