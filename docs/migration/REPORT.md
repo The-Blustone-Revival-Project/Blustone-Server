@@ -43,3 +43,7 @@ The original state, signing key and original native library fingerprints remain 
 Native Android UI was not operated, no battle was started, and E7 remains inactive. The battle goal remains paused. The encrypted HTTP checks prove the standalone server protocol/resource/persistence path; they do not constitute a new native gameplay victory. Docker configuration was added, but no Docker service/build was run.
 
 Nothing is pushed or committed. Review the three local working trees and publication/storage decisions before publishing. Keep the original folder until a separate retirement/deletion request; the current instruction explicitly forbids deleting it.
+
+## Subsequent authorized publication
+
+The user subsequently authorized pushes and public releases on 2026-10-10. All three reviewed repositories were pushed and their release conventions published. See [publication handoff](../PUBLICATION.md); the earlier no-push statements above describe the copy-only milestone, not the current authorization. Original-folder deletion remains forbidden.
