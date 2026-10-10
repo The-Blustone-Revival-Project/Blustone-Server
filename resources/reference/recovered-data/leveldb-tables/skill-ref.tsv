@@ -1,0 +1,1071 @@
+skill_id	row	col	FORMULAR	IS_FLOAT	SUB_SERIAL	EN
+001	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+001	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+001	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+001	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+001	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+001	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+001	4	2	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's defense by [value]%.\nIt is maintained until deactivation.
+001	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Critical Chance by [value]% when the battle starts.
+002	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+002	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+002	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+002	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+002	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+002	4	1	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+002	5	0	nan	1	1	Becomes immune for [duration] second(s) every 3 seconds.
+003	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+003	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+003	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+003	2	1	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+003	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+003	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+003	4	1	(value+value_up*skill_level)*5	1	0	Recovers [value]% of the maximum HP for 4 seconds.
+003	4	2	nan	1	1	Becomes immune to Harmful Effects for [duration] second(s).
+003	5	0	value+value_up*skill_level	1	0	Increases the maximum HP of self by [value]% when the battle starts.
+003	5	1	value+value_up*skill_level	0	1	Increases the Regeneration of self in the Ornithopter by [value]% when the battle starts.
+004	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+004	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+004	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Critical Chance by [value]% for [duration] second(s).
+004	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+004	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+004	4	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+004	4	2	nan	1	1	Grants Harmful Effects Immunity to the frontline teammate for [duration] second(s).
+004	5	0	value+value_up*skill_level	0	0	Increases the Regeneration of all teammates in the Ornithopter by [value]% when the battle starts.
+005	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+005	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+005	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's attack by [value]% for [duration] second(s).
+005	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+005	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+005	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals [value] damage to the frontline enemy.
+005	4	2	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+005	5	0	nan	1	0	Becomes immune to Defense-weakening/halving effects.
+005	5	1	value+value_up*skill_level	1	2	Increases the maximum HP of self by [value]% when the battle starts.
+006	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+006	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+006	2	0	value+value_up*skill_level	1	0	Strengthens the attack of self by [value]% for [duration] second(s).
+006	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+006	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+006	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+006	4	2	nan	1	1	Stuns the frontline enemy for [duration] second(s).
+006	5	0	value+value_up*skill_level	1	0	Increases the Critical Chance of self by [value]% when the battle starts.
+007	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+007	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+007	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+007	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+007	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+007	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+007	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ Block Chance by [value]% when the battle starts.
+008	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+008	1	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals all teammates’ HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+008	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Attack Speed by [value]% for [duration] second(s).
+008	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+008	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+008	4	1	nan	1	0	All teammates become immune for [duration] second(s).
+008	5	0	value+value_up*skill_level	1	0	Increases all teammates’ defense by [value]% when the battle starts.
+009	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+009	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+009	1	2	nan	0	1	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+009	2	0	value+value_up*skill_level	1	0	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+009	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+009	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+009	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+009	4	2	value+value_up*skill_level	1	0	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+009	5	0	value+value_up*skill_level	1	0	Increases the Armor Penetration of self by [value] when the battle starts.
+010	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+010	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+010	1	2	nan	0	1	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+010	2	0	nan	1	0	Becomes immune for [duration] second(s).
+010	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+010	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+010	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+010	4	2	value+value_up*skill_level	1	0	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+010	5	0	value+value_up*skill_level	1	0	Increases the Armor Penetration of self by [value] when the battle starts.
+010	5	1	nan	1	1	Decreases 0.1 Rage Gauge of the enemy every second.\nIt is activated only when the hunter is in the frontline.
+011	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+011	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+011	2	0	nan	1	0	Becomes immune for [duration] second(s).
+011	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+011	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+011	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+011	4	2	value+value_up*skill_level	1	1	Strengthens the attack of self by [value]% for [duration] second(s).
+011	5	0	value+value_up*skill_level	1	0	Increases the Block Chance of self by [value]% when the battle starts.
+012	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+012	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+012	1	2	nan	0	1	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+012	2	0	value+value_up*skill_level	1	0	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+012	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+012	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+012	4	1	nan	1	1	Stuns the frontline enemy for [duration] second(s).
+012	4	2	(value+value_up*skill_level)*100	0	0	Strengthens the Critical Attack Damage of self by [value]% for [duration] second(s).
+012	5	0	value+value_up*skill_level	1	0	Increases the Critical Chance of self by [value]% when the battle starts.
+012	5	1	-1*(value+value_up*skill_level)	1	1	Decreases the opponent's Critical Chance by [value]%.
+013	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+013	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals all teammates’ HP by [value].\nThe higher the defense, the greater the amount of recovery.
+013	1	2	nan	1	1	Removes the Harmful Effects applied on the frontline teammate.
+013	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's attack by [value]% for [duration] second(s).
+013	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+013	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+013	4	1	stat*(value+value_up*skill_level)/100	0	0	Heals all teammates’ HP by [value].\nThe higher the defense, the greater the amount of recovery.
+013	4	2	nan	1	1	Removes the Harmful Effects applied on all teammates.
+013	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Block Chance by [value]% when the battle starts.
+014	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+014	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+014	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+014	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+014	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+014	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+014	4	2	nan	0	1	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+014	5	0	(value+value_up*skill_level)*100	0	0	Increases all teammates’ Critical Attack Damage by [value]% when the battle starts.
+015	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+015	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+015	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's attack by [value]% for [duration] second(s).
+015	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+015	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+015	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to all enemies.\nThis damage penetrates Immunity.
+015	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ defense by [value]% when the battle starts.
+016	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+016	1	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+016	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Block Chance by [value]% for [duration] second(s).
+016	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+016	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+016	4	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+016	5	0	value+value_up*skill_level	1	0	Increases all teammates’ defense by [value]% when the battle starts.
+017	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+017	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+017	2	0	value+value_up*skill_level	1	0	Strengthens the Critical Chance of self by [value]% for [duration] second(s).
+017	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+017	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+017	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals [value] damage to the frontline enemy.
+017	4	2	(value+value_up*skill_level)*100	0	0	Strengthens the Critical Attack Damage of self by [value]% for [duration] second(s).
+017	5	0	value+value_up*skill_level	1	0	Increases the Attack Speed of self by [value]% when the battle starts.
+018	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+018	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+018	2	0	(value+value_up*skill_level)*5	1	0	Recovers [value]% of the maximum HP for 4 seconds.
+018	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+018	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+018	4	1	value+value_up*skill_level	1	0	Strengthens the Critical Chance of self by [value]% for [duration] second(s).
+018	5	0	nan	1	0	Removes Harmful Effects applied on self for every second.
+018	5	1	value+value_up*skill_level	1	2	Increases the attack of self by [value]% when the battle starts.
+019	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+019	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+019	2	0	nan	1	0	Becomes immune for [duration] second(s).
+019	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+019	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+019	4	1	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+019	5	0	-1*(value+value_up*skill_level)	1	0	Decreases the opponent's Block Chance by [value]%.
+020	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+020	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+020	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+020	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+020	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+020	4	1	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+020	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Critical Chance by [value]% when the battle starts.
+021	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+021	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+021	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+021	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+021	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+021	4	1	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+021	5	0	(value+value_up*skill_level)*100	0	0	Increases the Critical Attack Damage of self by [value]% when the battle starts.
+022	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+022	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+022	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's defense by [value]% for [duration] second(s).
+022	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+022	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+022	4	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+022	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Elemental Resistance by [value] when the battle starts.
+023	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+023	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+023	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+023	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+023	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+023	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+023	4	2	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's Block Chance by [value]% for [duration] second(s).
+023	5	0	value+value_up*skill_level	1	0	Increases the Attack Speed of self by [value]% when the battle starts.
+023	5	1	value+value_up*skill_level	1	1	Increases the Block Chance of self by [value]% when the battle starts.
+024	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+024	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+024	2	0	value+value_up*skill_level	1	0	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+024	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+024	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+024	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+024	4	2	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+024	5	0	nan	1	1	Does not get stunned by the opponent's skill.
+024	5	1	value+value_up*skill_level	1	0	Increases the Damage Reduction of self by [value]% when the battle starts.
+025	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+025	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+025	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+025	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+025	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+025	4	1	value+value_up*skill_level	1	0	Stuns the frontline enemy for [duration] second(s).
+025	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ Damage Reduction by [value]% when the battle starts.
+026	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+026	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+026	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Critical Chance by [value]% for [duration] second(s).
+026	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+026	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+026	4	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+026	4	2	nan	1	1	Grants Harmful Effects Immunity to the frontline teammate for [duration] second(s).
+026	5	0	value+value_up*skill_level	0	0	Increases the Regeneration of all teammates in the Ornithopter by [value]% when the battle starts.
+027	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+027	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+027	2	0	value+value_up*skill_level	1	0	Strengthens the Damage Reduction of self by [value]% for [duration] second(s).
+027	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+027	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+027	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+027	4	2	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+027	4	3	nan	1	2	Blocks the frontline enemy from getting Beneficial Effects for [duration] second(s).
+027	5	0	value+value_up*skill_level	1	0	Increases the Block Chance of self by [value]% when the battle starts.
+027	5	1	-1*(value+value_up*skill_level)*100	0	1	Decreases the opponent's Critical Attack Damage by [value]%.
+028	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+028	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+028	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+028	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+028	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+028	4	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+028	4	2	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's Elemental Resistance by [value] for [duration] second(s).
+028	5	0	value+value_up*skill_level	1	0	Increases the Elemental Enhancement of self by [value] when the battle starts.
+028	5	1	-1*(value+value_up*skill_level)	1	1	Decreases the opponent's Attack Speed by [value]%.
+029	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+029	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+029	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's attack by [value]% for [duration] second(s).
+029	2	1	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's Attack Speed by [value]% for [duration] second(s).
+029	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+029	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+029	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+029	5	0	nan	1	0	Does not get stunned by the opponent's skill.
+029	5	1	value+value_up*skill_level	1	1	Increases the Elemental Resistance of self by [value] when the battle starts.
+030	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+030	1	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+030	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Critical Chance by [value]% for [duration] second(s).
+030	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+030	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+030	4	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+030	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Elemental Resistance by [value] when the battle starts.
+031	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+031	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+031	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+031	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+031	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+031	4	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+031	5	0	(value+value_up*skill_level)*100	0	0	Increases all teammates’ Critical Attack Damage by [value]% when the battle starts.
+032	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+032	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+032	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+032	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+032	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+032	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+032	5	0	value+value_up*skill_level	1	0	Increases the Block Chance of self by [value]% when the battle starts.
+033	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+033	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+033	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+033	2	1	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's Attack Speed by [value]% for [duration] second(s).
+033	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+033	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+033	4	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+033	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ Block Chance by [value]% when the battle starts.
+034	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+034	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+034	2	0	value+value_up*skill_level	1	0	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+034	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+034	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+034	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+034	4	2	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+034	5	0	nan	1	1	Does not get stunned by the opponent's skill.
+034	5	1	value+value_up*skill_level	1	0	Increases the Damage Reduction of self by [value]% when the battle starts.
+035	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+035	1	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+035	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Critical Chance by [value]% for [duration] second(s).
+035	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+035	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+035	4	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+035	5	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+036	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+036	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+036	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+036	3	0	value+value_up*skill_level	1	0	Recovers [value]% of the maximum HP every 3 seconds.
+036	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+036	4	1	value+value_up*skill_level	1	0	Heals [value]% of the maximum HP.
+036	4	2	nan	1	1	Becomes immune to Harmful Effects for [duration] second(s).
+036	5	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+037	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+037	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.\nThis damage penetrates Immunity.
+037	1	2	nan	0	1	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+037	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's Block Chance by [value]% for [duration] second(s).
+037	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+037	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+037	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores defense.
+037	5	0	-1*(value+value_up*skill_level)	1	1	Weakens the opponent's Damage Reduction by [value]% every second.\nThis can be stacked up to 5 times.
+038	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+038	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+038	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+038	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+038	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+038	4	1	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+038	5	0	(value+value_up*skill_level)*100	0	0	Increases the Critical Attack Damage of self by [value]% when the battle starts.
+039	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+039	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+039	2	0	nan	1	0	Prevents the frontline enemy from attacking for [duration] second(s).
+039	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+039	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+039	4	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+039	4	2	nan	1	1	Stuns the frontline enemy for [duration] second(s).
+039	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Attack Speed by [value]% when the battle starts.
+040	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+040	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+040	2	0	value+value_up*skill_level	1	0	Strengthens the attack of self by [value]% for [duration] second(s).
+040	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+040	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+040	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+040	5	0	-1*(value+value_up*skill_level)	1	2	Weakens the opponent's defense by [value]% every second.\nThis can be stacked up to 5 times.
+040	5	1	nan	1	0	Does not get stunned by the opponent's skill.
+041	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+041	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+041	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+041	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+041	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+041	4	1	nan	1	0	Becomes immune for [duration] second(s).
+041	4	2	value+value_up*skill_level	1	0	Strengthens the Attack Speed of self by [value]%.\nIt is maintained until deactivation.
+041	5	0	value+value_up*skill_level	1	0	Increases the Damage Reduction of self by [value]% when the battle starts.
+042	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+042	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+042	2	0	value+value_up*skill_level	1	0	Strengthens the attack of self by [value]% for [duration] second(s).
+042	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+042	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+042	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+042	4	2	nan	1	1	Stuns the frontline enemy for [duration] second(s).
+042	5	0	value+value_up*skill_level	1	0	Increases the Critical Chance of self by [value]% when the battle starts.
+043	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+043	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+043	1	2	value+value_up*skill_level	1	1	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+043	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+043	3	0	nan	1	0	Grants Critical Damage Immunity on self when the battle starts.
+043	3	1	nan	1	2	Becomes immune for [duration] second(s) every 3 seconds.
+043	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+043	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+043	4	2	value+value_up*skill_level	1	1	Strengthens the Damage Reduction of self by [value]% for [duration] second(s).
+043	5	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+044	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+044	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+044	2	0	stat*(value+value_up*skill_level)/100	0	0	Recovers the HP of self by [value].\nThe higher the defense, the greater the amount of recovery.
+044	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+044	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+044	4	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+044	4	2	nan	1	1	Prevents the frontline enemy from attacking for [duration] second(s).
+044	5	0	value+value_up*skill_level	1	0	Increases the Elemental Enhancement of self by [value] when the battle starts.
+045	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+045	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+045	2	0	nan	1	0	Becomes immune for [duration] second(s).
+045	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+045	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+045	4	1	value+value_up*skill_level	1	0	Strengthens the attack of self by [value]% for [duration] second(s).
+045	4	2	nan	1	2	Removes the Beneficial Effects applied on the frontline enemy.
+045	5	0	value+value_up*skill_level	1	0	Increases the Attack Speed of self by [value]% when the battle starts.
+046	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+046	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+046	1	2	nan	1	1	Prevents the frontline enemy from attacking for [duration] second(s).
+046	2	0	value+value_up*skill_level	1	0	Strengthens the defense of self by [value]% for [duration] second(s).
+046	2	1	value+value_up*skill_level	1	1	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+046	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+046	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+046	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+046	4	2	nan	0	0	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+046	4	3	nan	0	1	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+046	5	0	-1*(value+value_up*skill_level)	1	1	Weakens the opponent's attack by [value]% every second.\nThis can be stacked up to 5 times.
+047	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+047	1	1	(value+value_up*skill_level)*5	1	0	Recovers [value]% of the maximum HP for 4 seconds.
+047	1	2	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+047	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	1	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+047	2	1	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+047	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+047	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+047	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+047	5	0	value+value_up*skill_level	1	0	Increases the Critical Chance of self by [value]% when the battle starts.
+048	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+048	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+048	1	2	nan	0	1	Deals additional damage using the opponent's attack.\nThe higher the opponent's attack, the greater the damage.
+048	2	0	value+value_up*skill_level	1	0	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+048	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+048	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+048	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+048	4	2	nan	0	1	Deals additional damage using the opponent's attack.\nThe higher the opponent's attack, the greater the damage.
+048	5	0	nan	1	0	Reduces the opponent's defense in proportion to the opponent's attack.
+049	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+049	1	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+049	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's attack by [value]% for [duration] second(s).
+049	2	1	nan	0	1	Decreases 1 Rage Gauge of the enemy.
+049	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+049	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+049	4	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals all teammates’ HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+049	5	0	value+value_up*skill_level	1	0	Heals all teammates by [value]% of the maximum HP every 3 seconds.
+050	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+050	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+050	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's defense by [value]% for [duration] second(s).
+050	2	1	nan	1	1	Removes the Harmful Effects applied on the frontline teammate.
+050	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+050	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+050	4	1	value+value_up*skill_level	1	0	Strengthens the frontline teammate's attack by [value]% for [duration] second(s).
+050	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Damage Reduction by [value]% when the battle starts.
+051	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+051	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+051	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Attack Speed by [value]% for [duration] second(s).
+051	3	0	nan	1	1	Becomes immune for [duration] second(s) every 3 seconds.
+051	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+051	4	1	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+051	4	2	nan	1	1	Stuns the frontline enemy for [duration] second(s).
+051	5	0	nan	1	0	Increases the basic ability of self by 10% during a Fight Club battle.
+051	5	1	-1*(value+value_up*skill_level)	1	0	Decreases the opponent's Block Chance by [value]%.
+052	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+052	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+052	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+052	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+052	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+052	4	1	nan	1	0	The corresponding skill damage penetrates the target's Immunity.
+052	4	2	-1*(value+value_up*skill_level)	1	1	Weakens the target's defense by [value]% and calculates the skill's amount of damage afterwards.
+052	5	0	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals continuous Bleeding Damage by [value] every second to the opposing opponent.
+053	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+053	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+053	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the Attack Speed of self by [value]% for [duration] second(s).\nThe higher the skill level, the lower it gets.
+053	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+053	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+053	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+053	4	2	nan	1	1	Stuns self for [duration] second(s).
+053	5	0	value+value_up*skill_level	1	0	Increases the HP of self by [value]% when the battle starts.
+053	5	1	nan	1	1	Does not get stunned by the opponent's skill.
+054	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+054	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+054	2	0	nan	1	0	Prevents the frontline enemy from attacking for [duration] second(s).
+054	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+054	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+054	4	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to all enemies for 4 seconds.
+054	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ defense by [value]% when the battle starts.
+055	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+055	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+055	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's attack by [value]% for [duration] second(s).
+055	2	1	nan	1	1	Removes the Beneficial Effects applied on the frontline enemy.
+055	2	2	nan	1	1	Blocks the frontline enemy from getting Beneficial Effects for [duration] second(s).
+055	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+055	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+055	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores Damage Reduction.
+055	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Elemental Enhancement by [value] when the battle starts.
+056	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+056	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores Damage Reduction.
+056	2	0	nan	1	0	Removes the Beneficial Effects applied on the frontline enemy.
+056	2	1	nan	1	0	Blocks the frontline enemy from getting Beneficial Effects for [duration] second(s).
+056	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+056	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+056	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores Damage Reduction.
+056	4	2	nan	1	2	Prevents the frontline enemy to be switched out for [duration] second(s).
+056	5	0	value+value_up*skill_level	1	2	Increases the Elemental Resistance of self by [value] when the battle starts.
+056	5	1	nan	1	0	Removes Harmful Effects applied on self for every 0.5 seconds.
+057	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+057	1	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals all teammates’ HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+057	2	0	nan	1	0	Prevents the frontline enemy from attacking for [duration] second(s).
+057	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+057	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+057	4	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+057	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Block Chance by [value]% when the battle starts.
+058	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+058	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+058	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's attack by [value]% for [duration] second(s).
+058	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+058	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+058	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals [value] damage to the frontline enemy.
+058	4	2	nan	0	0	Deals additional damage using the opponent's attack.\nThe higher the opponent's attack, the greater the damage.
+058	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ maximum HP by [value]% when the battle starts.
+059	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+059	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+059	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+059	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+059	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+059	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+059	4	2	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's defense by [value]%.\nIt is maintained until deactivation.
+059	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Critical Chance by [value]% when the battle starts.
+060	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+060	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals all teammates’ HP by [value].\nThe higher the defense, the greater the amount of recovery.
+060	1	2	nan	1	1	Removes the Harmful Effects applied on the frontline teammate.
+060	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's attack by [value]% for [duration] second(s).
+060	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+060	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+060	4	1	stat*(value+value_up*skill_level)/100	0	0	Heals all teammates’ HP by [value].\nThe higher the defense, the greater the amount of recovery.
+060	4	2	nan	1	1	Removes the Harmful Effects applied on all teammates.
+060	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Block Chance by [value]% when the battle starts.
+061	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+061	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+061	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+061	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+061	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+061	4	1	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+061	4	2	value+value_up*skill_level	1	0	Strengthens the Critical Chance of self by [value]% for [duration] second(s).
+061	5	0	(value+value_up*skill_level)*100	0	0	Increases the Critical Attack Damage of self by [value]% when the battle starts.
+062	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+062	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+062	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's Block Chance by [value]%.\nIt is maintained until deactivation.
+062	2	1	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's Damage Reduction by [value]%.\nIt is maintained until deactivation.
+062	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+062	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+062	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+062	4	2	nan	1	1	Prevents the frontline enemy from attacking for [duration] second(s).
+062	5	0	nan	1	0	Grants Critical Damage Immunity on self when the battle starts.
+062	5	1	nan	1	2	Defense becomes 2x for [duration] second(s) every 3 seconds.
+063	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+063	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+063	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's attack by [value]%.\nIt is maintained until deactivation.
+063	2	1	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's defense by [value]%.\nIt is maintained until deactivation.
+063	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+063	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+063	4	1	value+value_up*skill_level	1	1	Strengthens the attack of self by [value]%.\nIt is maintained until deactivation.
+063	4	2	value+value_up*skill_level	1	0	Strengthens the defense of self by [value]%.\nIt is maintained until deactivation.
+063	5	0	nan	1	1	Does not get stunned by the opponent's skill.
+063	5	1	value+value_up*skill_level	1	0	Increases the Damage Reduction of self by [value]% when the battle starts.
+064	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+064	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+064	1	2	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's defense by [value]%.\nIt is maintained until deactivation.
+064	2	0	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+064	2	1	nan	0	1	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+064	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+064	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+064	4	1	nan	1	0	Switches out the frontline enemy and retreats them.
+064	4	2	nan	1	1	Stuns all enemies for [duration] second(s).
+064	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Armor Penetration by [value] when the battle starts.
+065	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+065	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+065	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Block Chance by [value]%.\nIt is maintained until deactivation.
+065	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+065	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+065	4	1	stat*(value+value_up*skill_level)/100	0	0	Heals all teammates’ HP by [value].\nThe higher the defense, the greater the amount of recovery.
+065	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ attack by [value]% when the battle starts.
+065	5	1	nan	1	1	All teammates do not get stunned by a Bomber or Support.
+066	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+066	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+066	1	2	nan	1	1	Weakens the frontline enemy's Elemental Resistance to 0.\nIt is maintained until deactivation.
+066	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's Block Chance by [value]% for [duration] second(s).
+066	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+066	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+066	4	1	value+value_up*skill_level	1	2	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+066	4	2	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+066	4	3	nan	0	1	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+066	4	4	nan	1	3	Prevents the frontline enemy to be switched out for [duration] second(s).
+066	5	0	nan	1	0	Nullifies the opponent's Immunity.
+066	5	1	-1*(value+value_up*skill_level)	1	2	Weakens the opponent's defense by [value]% every second.\nThis can be stacked up to 5 times.
+067	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+067	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to all enemies for 4 seconds.
+067	2	0	nan	1	0	Stuns all enemies for [duration] second(s).
+067	2	1	nan	1	0	Decreases 1 Rage Gauge of the enemy.
+067	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+067	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+067	4	1	nan	0	0	Deals 2000 Fixed Damage to the frontline enemy.\nThis damage penetrates Immunity.
+067	4	2	nan	1	0	Decreases 1 Rage Gauge of the enemy.
+067	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ Block Chance by [value]% when the battle starts.
+068	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+068	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+068	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+068	2	1	nan	0	1	Gains 1 Rage Gauge.
+068	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+068	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+068	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+068	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ Damage Reduction by [value]% when the battle starts.
+068	5	1	nan	1	1	All teammates do not get stunned by a Bomber or Support.
+069	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+069	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+069	2	0	stat*(value+value_up*skill_level)*5/100	0	0	Heals all teammates’ HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+069	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+069	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+069	4	1	nan	1	0	Strengthens all teammates’ attack for [duration] second(s).\nThe amount of enhancement is proportional to the defense of the target.
+069	4	2	nan	1	1	Strengthens all teammates’ Critical Chance for [duration] second(s).\nThe amount of enhancement is proportional to the defense of the target.
+069	4	3	nan	0	2	Strengthens all teammates’ Critical Attack Damage for [duration] second(s).\nThe amount of enhancement is proportional to the defense of the target.
+069	5	0	value+value_up*skill_level	1	1	Increases all teammates’ defense by [value]% when the battle starts.
+069	5	1	value*5	1	0	Increases the team's Rage Gauge by 0.1 every second.
+070	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+070	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+070	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Attack Speed by [value]% for [duration] second(s).
+070	2	1	nan	1	1	Grants Harmful Effects Immunity to the frontline teammate for [duration] second(s).
+070	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+070	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+070	4	1	stat*(value+value_up*skill_level)*5/100	0	2	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+070	4	2	nan	1	0	Stuns the frontline teammate for [duration] second(s).
+070	4	3	nan	1	1	Increases 2 Rage Gauge of the team.
+070	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Elemental Enhancement by [value] when the battle starts.
+070	5	1	value+value_up*skill_level	1	1	Increases all teammates’ Elemental Resistance by [value] when the battle starts.
+071	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+071	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	2	Deals [value] damage to the frontline enemy.
+071	1	2	nan	1	0	Switches out the frontline enemy and retreats them.
+071	2	0	nan	1	0	Becomes immune to Harmful Effects for [duration] second(s).
+071	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+071	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+071	4	1	value+value_up*skill_level	1	0	Recovers the HP of self by [value]% of the maximum HP.
+071	4	2	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+071	5	0	nan	1	0	Becomes immune to Attack-weakening effects.
+071	5	1	nan	1	0	Becomes immune to Defense-weakening/halving effects.
+071	5	2	value+value_up*skill_level	1	3	Increases the Elemental Resistance of self by [value] when the battle starts.
+072	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+072	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+072	2	0	nan	1	1	Prevents the frontline enemy to be switched out for [duration] second(s).
+072	2	1	nan	0	0	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+072	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+072	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+072	4	1	nan	0	0	Deals 2000 Fixed Damage to the frontline enemy.\nThis damage penetrates Immunity.
+072	5	0	value+value_up*skill_level	1	1	Increases all teammates’ Critical Chance by [value]% when the battle starts.
+072	5	1	(value+value_up*skill_level)*100	0	2	Increases all teammates’ Critical Attack Damage by [value]% when the battle starts.
+072	5	2	value+value_up*skill_level	1	0	Decreases all teammates’ Block Chance by [value]% when the battle starts.
+073	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+073	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+073	2	0	nan	1	0	Grants Immunity to the frontline teammate for [duration] second(s).
+073	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+073	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+073	4	1	stat*(value+value_up*skill_level)/100	0	2	Heals all teammates’ HP by [value].\nThe higher the defense, the greater the amount of recovery.
+073	4	2	nan	1	0	Removes the Harmful Effects applied on all teammates.
+073	4	3	nan	1	1	Removes Beneficial Effects applied on all enemies.
+073	5	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+073	5	1	value+value_up*skill_level	1	1	Decreases all enemies’ attack by [value]% when the battle starts.
+074	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+074	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+074	1	2	nan	1	1	Removes the Harmful Effects applied on the frontline teammate.
+074	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Critical Chance by [value]% for [duration] second(s).
+074	2	1	nan	0	1	Gains 1 Rage Gauge.
+074	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+074	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+074	4	1	value+value_up*skill_level	1	0	Strengthens the frontline teammate's attack by [value]% for [duration] second(s).
+074	4	2	value+value_up*skill_level	1	1	Strengthens the frontline teammate's Attack Speed by [value]% for [duration] second(s).
+074	4	3	nan	1	2	Grants Immunity to the frontline teammate for [duration] second(s).
+074	5	0	(value+value_up*skill_level)	1	0	Heals the frontline teammate by [value]% of the maximum HP every 3 seconds.
+074	5	1	nan	1	0	Increases all teammates’ basic ability by 10% during the Guild Blitz battle.
+075	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+075	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+075	1	2	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+075	2	0	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+075	2	1	nan	0	1	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+075	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+075	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+075	4	1	nan	1	0	Becomes immune for [duration] second(s).
+075	4	2	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]%.\nIt is maintained until deactivation.
+075	4	3	value+value_up*skill_level	1	2	Strengthens the attack of self by [value]%.\nIt is maintained until deactivation.
+075	5	0	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals continuous Bleeding Damage by [value] every second to the opposing opponent.
+075	5	1	nan	1	1	Does not get Attack Disabled by the opponent's skill.
+076	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+076	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+076	1	2	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's Attack Speed by [value]% for [duration] second(s).
+076	2	0	value+value_up*skill_level	1	0	Strengthens the defense of self by [value]% for [duration] second(s).
+076	2	1	(value+value_up*skill_level)*100	0	1	Strengthens the Critical Attack Damage of self by [value]% for [duration] second(s).
+076	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+076	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+076	4	1	nan	1	0	Removes the Harmful Effects applied on self.
+076	4	2	nan	1	1	Becomes immune for [duration] second(s).
+076	4	3	(value+value_up*skill_level)*5	1	2	Recovers [value]% of the maximum HP for 4 seconds.
+076	5	0	nan	1	0	Increases the Critical Chance of self in proportion to the opponent's attack.
+076	5	1	nan	1	1	Grants Critical Damage Immunity on self when the battle starts.
+076	5	2	value+value_up*skill_level	1	2	Increases the Elemental Resistance of self by [value] when the battle starts.
+077	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+077	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+077	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to all enemies for 4 seconds.
+077	2	1	-1*(value+value_up*skill_level)	1	2	Weakens all enemies’ defense by [value]% for [duration] second(s).
+077	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+077	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+077	4	1	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+077	4	2	nan	1	1	Ignores the target's Damage Reduction and calculates the skill's amount of damage afterwards.
+077	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ maximum HP by [value]% when the battle starts.
+077	5	1	nan	0	1	Sets the Regeneration of all enemies in the Ornithopter to 0 when the battle starts.
+078	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+078	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+078	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Critical Chance by [value]%.\nIt is maintained until deactivation.
+078	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+078	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+078	4	1	stat*(value+value_up*skill_level)/100	0	0	Heals all teammates’ HP by [value].\nThe higher the defense, the greater the amount of recovery.
+078	5	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+078	5	1	nan	1	1	All teammates do not get stunned by a Bomber or Support.
+079	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+079	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+079	1	2	value+value_up*skill_level	1	1	Strengthens the Damage Reduction of self by [value]% for [duration] second(s).
+079	2	0	nan	1	0	Stuns all enemies for [duration] second(s).
+079	2	1	nan	1	1	Removes the Beneficial Effects applied on the frontline enemy.
+079	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+079	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+079	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+079	4	2	value+value_up*skill_level	0	2	The attack of self increases by [value]%.\nThis effect cannot be deactivated.
+079	4	3	value+value_up*skill_level	0	3	Increases the Attack Speed of self by [value]%.\nThis effect cannot be deactivated.
+079	4	4	value+value_up*skill_level	0	1	The Damage Reduction of self decreases by [value]%.\nThis effect cannot be deactivated.
+079	5	0	value+value_up*skill_level	1	1	Increases the Block Chance of self by [value]% when the battle starts.
+079	5	1	nan	1	0	Does not get stunned by the opponent's skill.
+079	5	2	nan	1	2	Becomes immune to Defense-weakening/halving effects.
+080	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+080	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+080	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's attack by [value]% for [duration] second(s).
+080	2	1	value+value_up*skill_level	1	1	Strengthens the frontline teammate's defense by [value]% for [duration] second(s).
+080	2	2	nan	1	2	Removes the Harmful Effects applied on the frontline teammate.
+080	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+080	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+080	4	1	nan	1	0	Prevents the frontline enemy to be switched out for [duration] second(s).
+080	4	2	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's attack by [value]% for [duration] second(s).
+080	4	3	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+080	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Critical Chance by [value]% when the battle starts.
+080	5	1	value+value_up*skill_level	1	1	Increases all teammates’ Block Chance by [value]% when the battle starts.
+081	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+081	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+081	1	2	nan	0	1	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+081	2	0	value+value_up*skill_level	1	0	Strengthens the attack of self by [value]% for [duration] second(s).
+081	2	1	value+value_up*skill_level	1	1	Strengthens the defense of self by [value]% for [duration] second(s).
+081	2	2	value+value_up*skill_level	1	2	Strengthens the counterattack frequency of self for [duration] second(s).
+081	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+081	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+081	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+081	4	2	value+value_up*skill_level	1	2	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+081	4	3	nan	1	0	Strengthens the counterattack frequency of self for [duration] second(s).
+081	5	0	nan	1	0	Gains basic counterattack frequency when the battle starts.
+081	5	1	nan	1	0	Becomes immune to Damage Reduction weakening effects.
+081	5	2	-100*(value+value_up*skill_level)	0	3	Decreases the opponent's Critical Attack Damage by [value]%.
+082	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+082	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+082	1	2	nan	1	1	Weakens the frontline enemy's Elemental Resistance to 0.\nIt is maintained until deactivation.
+082	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's Damage Reduction by [value]% for [duration] second(s).
+082	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+082	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+082	4	1	value+value_up*skill_level	1	2	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+082	4	2	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+082	4	3	nan	0	1	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+082	4	4	nan	1	3	Prevents the frontline enemy to be switched out for [duration] second(s).
+082	5	0	nan	1	0	Nullifies the opponent's Immunity.
+082	5	1	-1*(value+value_up*skill_level)	1	2	Weakens the opponent's defense by [value]% every second.\nThis can be stacked up to 5 times.
+083	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+083	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+083	1	2	nan	0	1	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+083	2	0	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's attack by [value]%.\nIt is maintained until deactivation.
+083	2	1	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's Attack Speed by [value]%.\nIt is maintained until deactivation.
+083	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+083	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+083	4	1	nan	0	2	Deals 2000 Fixed Damage to the frontline enemy.\nThis damage penetrates Immunity.
+083	4	2	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+083	5	0	value+value_up*skill_level	1	0	Recovers [value]% of the maximum HP every 3 seconds.
+083	5	1	nan	1	1	Removes Harmful Effects applied on self for every second.
+084	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+084	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+084	1	2	nan	1	0	Switches out the frontline enemy and retreats them.
+084	2	0	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+084	2	1	nan	1	1	Removes the Harmful Effects applied on the frontline teammate.
+084	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+084	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+084	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+084	4	2	value+value_up*skill_level	1	1	Strengthens the frontline teammate's attack by [value]% for [duration] second(s).
+084	4	3	value+value_up*skill_level	1	2	Strengthens the frontline teammate's defense by [value]% for [duration] second(s).
+084	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ Elemental Resistance by [value] when the battle starts.
+084	5	1	value*5	1	2	Decreases enemy's Rage Gauge by [value] every 5 seconds.
+084	5	2	value*5	1	1	Increases team's Rage Gauge by [value] every 5 seconds.
+085	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+085	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+085	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Attack Speed by [value]% for [duration] second(s).
+085	2	1	nan	1	1	Grants Harmful Effects Immunity to the frontline teammate for [duration] second(s).
+085	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+085	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+085	4	1	stat*(value+value_up*skill_level)*5/100	0	3	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+085	4	2	nan	1	0	Stuns the frontline teammate for [duration] second(s).
+085	4	3	nan	0	1	Increases 1 Rage Gauge of the team.
+085	4	4	nan	0	2	Decreases 1 Rage Gauge of the enemy.
+085	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Elemental Enhancement by [value] when the battle starts.
+085	5	1	value+value_up*skill_level	1	1	Increases all teammates’ Elemental Resistance by [value] when the battle starts.
+086	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+086	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores Damage Reduction.
+086	2	0	nan	1	0	Removes the Beneficial Effects applied on the frontline enemy.
+086	2	1	nan	1	0	Blocks the frontline enemy from getting Beneficial Effects for [duration] second(s).
+086	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+086	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+086	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores Damage Reduction.
+086	4	2	nan	1	2	Prevents the frontline enemy to be switched out for [duration] second(s).
+086	5	0	value+value_up*skill_level	1	2	Increases the Elemental Enhancement of self by [value] when the battle starts.
+086	5	1	nan	1	0	Removes Harmful Effects applied on self for every 0.5 seconds.
+087	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+087	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to all enemies for 4 seconds.
+087	2	0	nan	1	0	Stuns all enemies for [duration] second(s).
+087	2	1	nan	1	0	Increases 1 Rage Gauge of the team.
+087	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+087	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+087	4	1	nan	0	0	Deals 2000 Fixed Damage to the frontline enemy.\nThis damage penetrates Immunity.
+087	4	2	nan	1	0	Increases 1 Rage Gauge of the team.
+087	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ Block Chance by [value]% when the battle starts.
+088	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+088	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+088	1	2	nan	1	1	Stuns the frontline enemy for [duration] second(s).
+088	2	0	value+value_up*skill_level	1	0	Strengthens the defense of self by [value]% for [duration] second(s).
+088	2	1	value+value_up*skill_level	1	1	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+088	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+088	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+088	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+088	4	2	nan	0	0	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+088	4	3	nan	0	1	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+088	5	0	-1*(value+value_up*skill_level)	1	1	Weakens the opponent's attack by [value]% every second.\nThis can be stacked up to 5 times.
+089	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+089	1	1	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+089	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Attack Speed by [value]% for [duration] second(s).
+089	2	1	value+value_up*skill_level	1	1	Strengthens the frontline teammate's Block Chance by [value]% for [duration] second(s).
+089	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+089	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+089	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+089	4	2	nan	1	1	Stuns the frontline enemy for [duration] second(s).
+089	4	3	nan	1	2	Removes the Beneficial Effects applied on the frontline enemy.
+089	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Damage Reduction by [value]% when the battle starts.
+089	5	1	nan	1	0	Stuns all enemies for 1 second every 10 seconds.
+090	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+090	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+090	2	0	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+090	2	1	nan	0	0	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+090	2	2	nan	1	1	Weakens the frontline enemy's Elemental Resistance to 0.\nIt is maintained until deactivation.
+090	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+090	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+090	4	1	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+090	4	2	nan	0	1	Gains 1 Rage Gauge.
+090	5	0	nan	1	0	Nullifies the opponent's Immunity.
+090	5	1	-1*(value+value_up*skill_level)	1	1	Decreases the opponent's Damage Reduction by [value]%.
+091	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+091	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	2	Deals [value] damage to the frontline enemy.
+091	1	2	nan	1	0	Switches out the frontline enemy and retreats them.
+091	2	0	nan	1	0	Becomes immune to Harmful Effects for [duration] second(s).
+091	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+091	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+091	4	1	value+value_up*skill_level	1	0	Recovers the HP of self by [value]% of the maximum HP.
+091	4	2	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+091	5	0	nan	1	0	Becomes immune to Attack-weakening effects.
+091	5	1	nan	1	0	Becomes immune to Defense-weakening/halving effects.
+091	5	2	value+value_up*skill_level	1	3	Increases the Elemental Resistance of self by [value] when the battle starts.
+092	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+092	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores defense.
+092	2	0	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+092	2	1	nan	0	1	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+092	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+092	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+092	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+092	4	2	-1*(value+value_up*skill_level)	1	1	Decreases the frontline enemy's Damage Reduction by [value]%.\nNo Immunity or deactivation is allowed.
+092	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Elemental Enhancement by [value] when the battle starts.
+092	5	1	nan	1	1	Nullifies the enemy's Critical Damage Immunity.
+093	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+093	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+093	1	2	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+093	2	0	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+093	2	1	nan	0	1	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+093	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+093	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+093	4	1	nan	1	0	Becomes immune for [duration] second(s).
+093	4	2	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]%.\nIt is maintained until deactivation.
+093	4	3	value+value_up*skill_level	1	2	Strengthens the attack of self by [value]%.\nIt is maintained until deactivation.
+093	5	0	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	1	Deals continuous Bleeding Damage by [value] every second to the opposing opponent.
+093	5	1	nan	1	1	Does not get stunned by the opponent's skill.
+094	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+094	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+094	1	2	nan	1	1	Removes the Harmful Effects applied on the frontline teammate.
+094	2	0	value+value_up*skill_level	1	0	Strengthens the frontline teammate's Critical Chance by [value]% for [duration] second(s).
+094	2	1	nan	0	1	Gains 1 Rage Gauge.
+094	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+094	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+094	4	1	value+value_up*skill_level	1	0	Strengthens the frontline teammate's attack by [value]% for [duration] second(s).
+094	4	2	value+value_up*skill_level	1	1	Strengthens the frontline teammate's Attack Speed by [value]% for [duration] second(s).
+094	4	3	nan	1	2	Grants Immunity to the frontline teammate for [duration] second(s).
+094	5	0	(value+value_up*skill_level)	1	0	Heals the frontline teammate by [value]% of the maximum HP every 3 seconds.
+095	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+095	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+095	1	2	(value+value_up*skill_level)*100	0	1	Strengthens the Critical Attack Damage of self by [value]% for [duration] second(s).
+095	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+095	2	1	nan	1	1	Removes the Beneficial Effects applied on the frontline enemy.
+095	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+095	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+095	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+095	4	2	value+value_up*skill_level	0	2	The attack of self increases by [value]%.\nThis effect cannot be deactivated.
+095	4	3	value+value_up*skill_level	0	3	Increases the Attack Speed of self by [value]%.\nThis effect cannot be deactivated.
+095	4	4	value+value_up*skill_level	0	1	The Damage Reduction of self decreases by [value]%.\nThis effect cannot be deactivated.
+095	5	0	value+value_up*skill_level	1	1	Increases the Critical Chance of self by [value]% when the battle starts.
+095	5	1	nan	1	0	Does not get stunned by the opponent's skill.
+095	5	2	nan	1	2	Becomes immune to Defense-weakening/halving effects.
+096	1	0	nan	0	0	Uses 3 Rage Gauge when using a skill.
+096	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+096	1	2	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+096	2	0	nan	1	0	Prevents the frontline enemy from attacking for [duration] second(s).
+096	2	1	nan	1	1	Prevents the frontline enemy to be switched out for [duration] second(s).
+096	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+096	4	0	nan	0	0	This effect has a 40% chance to activate when using a skill.
+096	4	1	-1*(value+value_up*skill_level)	1	0	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+096	4	2	nan	0	1	Decreases 1 Rage Gauge of the enemy.
+096	5	0	-1*(value+value_up*skill_level)	1	1	Weakens the opponent's Block Chance by [value]% every second.\nThis can be stacked up to 5 times.
+096	5	1	-1*(value+value_up*skill_level)	1	3	Weakens the opponent's Critical Chance by [value]% every second.\nThis can be stacked up to 5 times.
+096	5	2	-1*(value+value_up*skill_level)	1	4	Decreases the opponent's Elemental Resistance by [value]%.
+097	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+097	1	1	(value+value_up*skill_level)*5	1	0	Recovers [value]% of the maximum HP for 4 seconds.
+097	1	2	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+097	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+097	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+097	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+097	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+097	4	2	nan	1	1	Stuns the frontline enemy for [duration] second(s).
+097	5	0	value+value_up*skill_level	1	0	Increases the Critical Chance of self by [value]% when the battle starts.
+098	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+098	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+098	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+098	2	1	nan	0	1	Gains 1 Rage Gauge.
+098	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+098	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+098	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+098	5	0	value+value_up*skill_level	1	0	Decreases all enemies’ Damage Reduction by [value]% when the battle starts.
+098	5	1	nan	1	1	The frontline teammate becomes immune to tap attack disable.
+004_1	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+004_1	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+004_1	1	2	value+value_up*skill_level	1	1	Strengthens the frontline teammate's Critical Chance by [value]% for [duration] second(s).
+004_1	2	0	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+004_1	2	1	nan	1	1	Grants Harmful Effects Immunity to the frontline teammate for [duration] second(s).
+004_1	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+004_1	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+004_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+004_1	5	0	value+value_up*skill_level	0	0	Increases the Regeneration of all teammates in the Ornithopter by [value]% when the battle starts.
+005_1	1	0	nan	0	0	Uses 3 Rage Gauge when using a skill.
+005_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+005_1	1	2	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's attack by [value]%.\nIt is maintained until deactivation.
+005_1	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+005_1	2	1	nan	0	1	Decreases 1 Rage Gauge of the enemy.
+005_1	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+005_1	4	0	nan	0	0	This effect has a 40% chance to activate when using a skill.
+005_1	4	1	value+value_up*skill_level	1	0	Recovers the HP of self by [value]% of the maximum HP.
+005_1	4	2	value+value_up*skill_level	1	1	Strengthens the attack of self by [value]%.\nIt is maintained until deactivation.
+005_1	4	3	value+value_up*skill_level	1	2	Strengthens the defense of self by [value]%.\nIt is maintained until deactivation.
+005_1	5	0	nan	0	0	Becomes immune to Defense-weakening/halving effects.
+005_1	5	1	value+value_up*skill_level	1	2	Increases the maximum HP of self by [value]% when the battle starts.
+005_1	5	2	nan	0	3	Removes Harmful Effects applied on self for every second.
+009_1	1	0	nan	0	0	Uses 3 Rage Gauge when using a skill.
+009_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+009_1	1	2	nan	0	1	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+009_1	2	0	value+value_up*skill_level	1	0	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+009_1	2	1	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+009_1	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+009_1	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+009_1	4	1	value+value_up*skill_level	0	0	Recovers the HP of self by [value]% of the maximum HP.
+009_1	4	2	nan	1	1	Becomes immune to Harmful Effects for [duration] second(s).
+009_1	4	3	value+value_up*skill_level	1	2	Strengthens the Armor Penetration of self by [value]%.\nIt is maintained until deactivation.
+009_1	5	0	value+value_up*skill_level	0	0	Increases the Armor Penetration of self by [value] when the battle starts.
+009_1	5	1	value+value_up*skill_level	1	1	Recovers [value]% of the maximum HP every 3 seconds.
+009_1	5	2	value*5	1	2	Increases the team's Rage Gauge by 0.2 every 3 seconds.
+010_1	1	0	nan	0	0	Uses 3 Rage Gauge when using a skill.
+010_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+010_1	1	2	nan	0	1	Prohibits the frontline enemy from becoming immune for [duration] second(s).
+010_1	2	0	nan	1	0	Becomes immune for [duration] second(s).
+010_1	2	1	value+value_up*skill_level	1	1	Strengthens the Attack Speed of self by [value]% for [duration] second(s).
+010_1	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+010_1	4	0	nan	0	0	This effect has a 40% chance to activate when using a skill.
+010_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to all enemies.\nThis damage penetrates Immunity.
+010_1	4	2	-1*(value+value_up*skill_level)	1	1	Weaken all enemies’ attack by [value]%.\nIt is maintained until deactivation.
+010_1	4	3	-1*(value+value_up*skill_level)	1	2	Weaken all enemies’ defense by [value]%.\nIt is maintained until deactivation.
+010_1	5	0	value+value_up*skill_level	1	0	Increases the Armor Penetration of self by [value] when the battle starts.
+010_1	5	1	value+value_up*skill_level	1	1	Recovers [value]% of the maximum HP every 3 seconds.
+010_1	5	2	nan	0	2	Decreases 0.15 Rage Gauge of the enemy every second.\nIt is activated only when the hunter is in the frontline.
+011_1	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+011_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+011_1	1	2	nan	1	1	Becomes immune for [duration] second(s).
+011_1	2	0	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+011_1	2	1	value+value_up*skill_level	1	1	Strengthens the attack of self by [value]% for [duration] second(s).
+011_1	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+011_1	4	0	nan	0	0	This effect has a 40% chance to activate when using a skill.
+011_1	4	1	value+value_up*skill_level	1	0	Strengthens the attack of self by [value]% for [duration] second(s).
+011_1	4	2	nan	0	1	Strengthens the counterattack frequency of self for [duration] second(s).
+011_1	4	3	nan	1	2	Becomes immune to Harmful Effects for [duration] second(s).
+011_1	5	0	value+value_up*skill_level	1	0	Increases the Block Chance of self by [value]% when the battle starts.
+011_1	5	1	nan	1	1	Gains basic counterattack frequency when the battle starts.
+017_1	1	0	nan	0	0	Uses 3 Rage Gauge when using a skill.
+017_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] Bleeding Damage to the frontline enemy every 2 seconds.\nIt is maintained until deactivation.
+017_1	1	2	nan	0	1	Sets the frontline enemy's Regeneration to 0.\nIt is maintained until deactivation.
+017_1	2	0	value+value_up*skill_level	1	0	Strengthens the Critical Chance of self by [value]% for [duration] second(s).
+017_1	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+017_1	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+017_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+017_1	4	2	(value+value_up*skill_level)*100	0	1	Strengthens the Critical Attack Damage of self by [value]% for [duration] second(s).
+017_1	5	0	value+value_up*skill_level	1	0	Increases the Attack Speed of self by [value]% when the battle starts.
+017_1	5	1	nan	1	2	Becomes immune for [duration] second(s) every 3 seconds.
+019_1	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+019_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+019_1	2	0	nan	1	0	Becomes immune for [duration] second(s).
+019_1	2	1	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+019_1	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+019_1	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+019_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+019_1	4	2	nan	0	1	Decreases 2 Rage Gauge of the enemy.
+019_1	5	0	-1*(value+value_up*skill_level)	1	0	Decreases the opponent's Block Chance by [value]%.
+019_1	5	1	value+value_up*skill_level	1	1	Increases the Damage Reduction of self by [value]% when the battle starts.
+020_1	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+020_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+020_1	2	0	nan	1	0	Stuns the frontline enemy for [duration] second(s).
+020_1	2	1	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+020_1	3	0	value+value_up*skill_level	1	0	Increases all teammates’ attack by [value]% when the battle starts.
+020_1	4	0	nan	1	0	This effect has a 40% chance to activate when using a skill.
+020_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity.
+020_1	4	2	-1*(value+value_up*skill_level)	1	1	Decreases the frontline enemy's Damage Reduction by [value]%.\nNo Immunity or deactivation is allowed.
+020_1	5	0	value+value_up*skill_level	1	0	Increases all teammates’ Critical Chance by [value]% when the battle starts.
+020_1	5	1	(value+value_up*skill_level)*100	0	1	Increases all teammates’ Critical Attack Damage by [value]% when the battle starts.
+021_1	1	0	nan	0	0	Uses 3 Rage Gauge when using a skill.
+021_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+021_1	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+021_1	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+021_1	4	0	nan	0	0	This effect has a 40% chance to activate when using a skill.
+021_1	4	1	nan	0	0	Removes the Beneficial Effects applied on the frontline enemy.
+021_1	4	2	nan	1	0	Stuns the frontline enemy for [duration] second(s).\nStuns the target for half the duration if the target has stun immunity.
+021_1	5	0	(value+value_up*skill_level)*100	0	0	Increases the Critical Attack Damage of self by [value]% when the battle starts.
+021_1	5	1	value+value_up*skill_level	1	1	Increases the Elemental Enhancement of self by [value] when the battle starts.
+024_1	1	0	nan	0	0	Uses 3 Rage Gauge when using a skill.
+024_1	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+024_1	2	0	value+value_up*skill_level	1	0	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+024_1	2	1	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+024_1	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+024_1	4	0	nan	0	0	This effect has a 40% chance to activate when using a skill.
+024_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+024_1	4	2	nan	1	1	Prevents the frontline enemy from attacking for [duration] second(s).
+024_1	4	3	nan	1	2	Prevents the frontline enemy to be switched out for [duration] second(s).
+024_1	5	0	nan	0	1	Does not get stunned by the opponent's skill.
+024_1	5	1	value+value_up*skill_level	1	0	Increases the Damage Reduction of self by [value]% when the battle starts.
+026_1	1	0	nan	1	0	Uses 4 Rage Gauge when using a skill.
+026_1	1	1	stat*(value+value_up*skill_level)/100	0	0	Heals the frontline teammate's HP by [value].\nThe higher the defense, the greater the amount of recovery.
+026_1	1	2	value+value_up*skill_level	1	1	Strengthens the frontline teammate's Critical Chance by [value]% for [duration] second(s).
+026_1	2	0	stat*(value+value_up*skill_level)*5/100	0	0	Heals the frontline teammate's HP by a total of [value] for 4 seconds.\nThe higher the defense, the greater the amount of recovery.
+026_1	2	1	nan	1	1	Grants Harmful Effects Immunity to the frontline teammate for [duration] second(s).
+026_1	3	0	value+value_up*skill_level	1	0	Increases all teammates’ maximum HP by [value]% when the battle starts.
+026_1	4	0	nan	1	0	This effect has a 30% chance to activate when using a skill.
+026_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+026_1	5	0	value+value_up*skill_level	0	0	Increases the Regeneration of all teammates in the Ornithopter by [value]% when the battle starts.
+034_1	1	0	nan	0	0	Uses 3 Rage Gauge when using a skill.
+034_1	1	1	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+034_1	2	0	value+value_up*skill_level	1	0	Strengthens the Block Chance of self by [value]% for [duration] second(s).
+034_1	2	1	-1*(value+value_up*skill_level)	1	1	Weakens the frontline enemy's defense by [value]% for [duration] second(s).
+034_1	3	0	value+value_up*skill_level	1	0	Increases the defense of self by [value]% when the battle starts.
+034_1	4	0	nan	0	0	This effect has a 40% chance to activate when using a skill.
+034_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+034_1	4	2	nan	1	1	Prevents the frontline enemy from attacking for [duration] second(s).
+034_1	4	3	nan	1	2	Prevents the frontline enemy to be switched out for [duration] second(s).
+034_1	5	0	nan	0	1	Does not get stunned by the opponent's skill.
+034_1	5	1	value+value_up*skill_level	1	0	Increases the Damage Reduction of self by [value]% when the battle starts.
+038_1	1	0	nan	0	0	Uses 3 Rage Gauge when using a skill.
+038_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.
+038_1	2	0	(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5	0	0	Deals a total of [value] Bleeding Damage to the frontline enemy for 4 seconds.
+038_1	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+038_1	4	0	nan	0	0	This effect has a 40% chance to activate when using a skill.
+038_1	4	1	nan	0	0	Removes the Beneficial Effects applied on the frontline enemy.
+038_1	4	2	nan	1	0	Stuns the frontline enemy for [duration] second(s).\nStuns the target for half the duration if the target has stun immunity.
+038_1	5	0	(value+value_up*skill_level)*100	0	0	Increases the Critical Attack Damage of self by [value]% when the battle starts.
+038_1	5	1	value+value_up*skill_level	1	1	Increases the Elemental Enhancement of self by [value] when the battle starts.
+056_1	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+056_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores Damage Reduction.
+056_1	1	2	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's Elemental Resistance by [value] for [duration] second(s).
+056_1	2	0	nan	1	0	Prevents the frontline enemy to be switched out for [duration] second(s).
+056_1	2	1	nan	1	2	Removes the Beneficial Effects applied on the frontline enemy.
+056_1	2	2	nan	1	1	Blocks the frontline enemy from getting Beneficial Effects for [duration] second(s).
+056_1	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+056_1	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+056_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores Damage Reduction.
+056_1	4	2	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's Critical Chance by [value]% for [duration] second(s).
+056_1	4	3	-1*(value+value_up*skill_level)	1	3	Weakens the frontline enemy's Block Chance by [value]% for [duration] second(s).
+056_1	5	0	value+value_up*skill_level	1	2	Increases the Elemental Enhancement of self by [value] when the battle starts.
+056_1	5	1	value+value_up*skill_level	1	3	Increases the Elemental Resistance of self by [value] when the battle starts.
+056_1	5	2	nan	1	0	Removes Harmful Effects applied on self for every 0.5 seconds.
+086_1	1	0	nan	1	0	Uses 3 Rage Gauge when using a skill.
+086_1	1	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores Damage Reduction.
+086_1	1	2	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's Elemental Resistance by [value] for [duration] second(s).
+086_1	2	0	nan	1	0	Prevents the frontline enemy to be switched out for [duration] second(s).
+086_1	2	1	nan	1	2	Removes the Beneficial Effects applied on the frontline enemy.
+086_1	2	2	nan	1	1	Blocks the frontline enemy from getting Beneficial Effects for [duration] second(s).
+086_1	3	0	value+value_up*skill_level	1	0	Increases the attack of self by [value]% when the battle starts.
+086_1	4	0	nan	1	0	This effect has a 50% chance to activate when using a skill.
+086_1	4	1	-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000	0	0	Deals [value] damage to the frontline enemy.\nThis damage penetrates Immunity and ignores Damage Reduction.
+086_1	4	2	-1*(value+value_up*skill_level)	1	2	Weakens the frontline enemy's Critical Chance by [value]% for [duration] second(s).
+086_1	4	3	-1*(value+value_up*skill_level)	1	3	Weakens the frontline enemy's Block Chance by [value]% for [duration] second(s).
+086_1	5	0	value+value_up*skill_level	1	2	Increases the Elemental Enhancement of self by [value] when the battle starts.
+086_1	5	1	value+value_up*skill_level	1	3	Increases the Elemental Resistance of self by [value] when the battle starts.
+086_1	5	2	nan	1	0	Removes Harmful Effects applied on self for every 0.5 seconds.

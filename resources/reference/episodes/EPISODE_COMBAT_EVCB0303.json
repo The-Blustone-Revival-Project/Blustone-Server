@@ -1,0 +1,142 @@
+{
+  "id": "EVCB0303",
+  "title": "EV03_E03_TITLE",
+  "stage_name": "EV03_E03_TITLE",
+  "power": "40000",
+  "game_res_id": "99",
+  "bgm": "BGM_BATTLE1",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_9209B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0301_C068A",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0301_C085",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "monster",
+        "actor_id": "EVCB0301_M044",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "EVCB0301_M044",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "EVCB0301_M057",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "EVCB0301_M057",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0301_C058B",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  ]
+}

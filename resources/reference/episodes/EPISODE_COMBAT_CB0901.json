@@ -1,0 +1,92 @@
+{
+  "id": "CB0901",
+  "title": "E09_TITLE",
+  "stage_name": "E09_S03_TITLE",
+  "bgm": "BGM_COMIC1",
+  "power": "52000",
+  "game_res_id": "99",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_1603B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {}
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB0901_024_1",
+        "thumb": {
+          "level": 20,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0901_021_1",
+        "thumb": {
+          "level": 20,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 1
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0901_039_1",
+        "thumb": {
+          "level": 20,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0901_014_1",
+        "thumb": {
+          "level": 20,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ]
+}

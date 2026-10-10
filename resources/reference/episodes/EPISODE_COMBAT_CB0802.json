@@ -1,0 +1,41 @@
+{
+  "id": "CB0802",
+  "title": "E08_TITLE",
+  "stage_name": "E08_S06_TITLE",
+  "bgm": "BGM_BATTLE2",
+  "power": "44000",
+  "game_res_id": "900",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_1506B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {}
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB0802_056_1",
+        "thumb": {
+          "level": 10,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  ]
+}

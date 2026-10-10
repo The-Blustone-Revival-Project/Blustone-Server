@@ -1,0 +1,104 @@
+# Monster / card / stage-wave / deck key vocabulary, verbatim from the native library.
+# so_addr = address of the string literal in the relocated .so string pool.
+# parser  = the function the key was resolved in (ResolvePcRelativeStrings.java).
+# source  = which existing analysis/ dump it came from.
+parser	key	so_addr	source
+CSRGameMob::AddMonster (00a0b540)	_server	01d676bb	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	title	01d6ed87	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	attr	01d6f9d9	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	role	01d6f9d4	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	res_prefix	01d6f9de	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	rank	01d6fa90	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	level	01d6fecd	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	overcome	01d6fa54	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	hp	01d6feb7	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	atk	01d6feaf	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	def	01d6feb3	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	crt_chance	01d70187	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	crt_dmg	01d70192	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	penetration	01d7019a	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	block_chance	01d701a6	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	block_dec_dmg	01d701b3	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	attr_enhance	01d701c1	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	attr_resist	01d701ce	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	hp_page	01d759c5	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	skill_start_time	01d768b4	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	skill_list	01d6f9f2	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	name	01d63176	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	desc	01d69ab8	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	type	01d669f5	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	effect	01d6fa0a	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	effect_type	01d768c5	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	target_type	01d769be	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	target_stat	01d76aa5	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	refer_target_stat	01d76b91	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	refer_target_type	01d76ba3	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	base_number	01d76bb5	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	up_number	01d76bc1	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	duration	01d70153	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	duration_up	01d70147	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	interval	01d68005	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	cool_time	01d6fe34	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	is_active	01d6aed6	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddMonster (00a0b540)	cut_in_id	01d76bcb	analysis/ghidra-addmonster-keys.txt
+CSRGameMob::AddStageMonster (00a0d194)	_id	01d76bd1	analysis/ghidra-wave-keys.txt
+CSRGameMob::AddStageMonster (00a0d194)	ref_id	01d6edf2	analysis/ghidra-wave-keys.txt
+CSRGameMob::AddStageMonster (00a0d194)	group	01d658fa	analysis/ghidra-wave-keys.txt
+CSRGameMob::AddStageMonster (00a0d194)	next_spawn_ms	01d76bdf	analysis/ghidra-wave-keys.txt
+CSRGameMob::AddStageMonster (00a0d194)	show_thumbnail	01d76bed	analysis/ghidra-wave-keys.txt
+CSRSyncMStage::ReqTargetStageMonsterCB (00b4606c)	ret_data	01d689bb	analysis/ghidra-wave-keys.txt
+CSRSyncMStage::ReqMonsterCB (00b4514c)	ret_data	01d689bb	analysis/ghidra-reqmonster-keys.txt
+CSRSyncMStage::RequestStart (00b39d2a)	deck_inst_id_1	01d7b212	analysis/native-all-strings.tsv
+CSRSyncMStage::RequestStart (00b39d2a)	deck_inst_id_2	01d7b221	analysis/native-all-strings.tsv
+CSRSyncMStage::RequestStart (00b39d2a)	deck_inst_id_3	01d7b230	analysis/native-all-strings.tsv
+CSRSyncMStage::RequestStart (00b39d2a)	deck_inst_id_4	01d7b23f	analysis/native-all-strings.tsv
+CSRSyncMStage::RequestStart (00b39d2a)	/mission/Start	01d7b24e	analysis/native-all-strings.tsv
+CSRSyncMStage::RequestStart (00b39d2a)	sStageID.size() > 1	01d7b1a1	analysis/native-all-strings.tsv
+card ref table (01d6f9xx pool)	role	01d6f9d4	analysis/native-all-strings.tsv
+card ref table (01d6f9xx pool)	attr	01d6f9d9	analysis/native-all-strings.tsv
+card ref table (01d6f9xx pool)	res_prefix	01d6f9de	analysis/native-all-strings.tsv
+card ref table (01d6f9xx pool)	skill_list	01d6f9f2	analysis/native-all-strings.tsv
+card ref table (01d6fa6f pool)	base	01d6fa4f	analysis/native-all-strings.tsv
+card ref table (01d6fa6f pool)	overcome	01d6fa54	analysis/native-all-strings.tsv
+card ref table (01d6fa6f pool)	overcome_src_list	01d6fa5d	analysis/native-all-strings.tsv
+card ref table (01d6fa6f pool)	deck	01d6fa6f	analysis/native-all-strings.tsv
+card ref table (01d6fa81 pool)	awaken	01d6fa81	analysis/native-all-strings.tsv
+card ref table (01d6fa90 pool)	rank	01d6fa90	analysis/native-all-strings.tsv
+card ref table (01d6fa95 pool)	rank_up_cnt	01d6fa95	analysis/native-all-strings.tsv
+card ref table (01d6faa1 pool)	mirage_remain_hp	01d6faa1	analysis/native-all-strings.tsv
+card ref table (01d6facd pool)	skin_ref_id	01d6facd	analysis/native-all-strings.tsv
+card instance (01d6fbxx pool)	weapon_rank	01d6faf2	analysis/native-all-strings.tsv
+card instance (01d6fbxx pool)	armor_rank	01d6fb0b	analysis/native-all-strings.tsv
+card instance (01d6fbxx pool)	accessory_rank	01d6fb22	analysis/native-all-strings.tsv
+card instance (01d6fbxx pool)	skill_1_level	01d6fb41	analysis/native-all-strings.tsv
+card instance (01d6fbxx pool)	skill_2_level	01d6fb4f	analysis/native-all-strings.tsv
+card instance (01d6fbxx pool)	skill_3_level	01d6fb5d	analysis/native-all-strings.tsv
+card instance (01d6fbxx pool)	skill_4_level	01d6fb6b	analysis/native-all-strings.tsv
+card instance (01d6fbxx pool)	skill_5_level	01d6fb79	analysis/native-all-strings.tsv
+card assertion	skill_5_level_	01d8fc95	analysis/native-all-strings.tsv
+card assertion	skill_4_level_	01d8fc86	analysis/native-all-strings.tsv
+card assertion	skill_3_level_	01d8fc77	analysis/native-all-strings.tsv
+card assertion	skill_2_level_	01d8fc68	analysis/native-all-strings.tsv
+card assertion	skill_1_level_	01d8fc59	analysis/native-all-strings.tsv
+card assertion	inst_id_	01d8fc03	analysis/native-all-strings.tsv
+card assertion	ref_id_	01d8fc0c	analysis/native-all-strings.tsv
+card assertion	inst_id_leader	01d8fb08	analysis/native-all-strings.tsv
+card assertion	ref_id_leader	01d8fb17	analysis/native-all-strings.tsv
+card assertion	sRefID.length() > 0	01d6fc5c	analysis/native-all-strings.tsv
+card assertion	Cannot find Ref Data: ID:%s	01d6fb87	analysis/native-all-strings.tsv
+SRCard.cpp (assert file)	n/a	01d6fba3	analysis/native-all-strings.tsv
+SRGameMob.cpp (assert file)	n/a	01d767f2	analysis/native-all-strings.tsv
+SRGameMob.cpp	GetMonsterData	01d768a5	analysis/native-all-strings.tsv
+SRGameMob.cpp	Cannot find MonsterData	01d7688d	analysis/native-all-strings.tsv
+SRGameMob.cpp	itr != m_mMonsters.end()	01d767d9	analysis/native-all-strings.tsv
+SRGameNet.cpp (assert file)	n/a	01d76bfc	analysis/native-all-strings.tsv
+SRGameNet.cpp	wave_list	01d76bd5	analysis/native-all-strings.tsv
+SRGameNet.cpp	Cannot find Group(%s)	01d76d2d	analysis/native-all-strings.tsv
+SRMStageSync.cpp (assert file)	n/a	01d7b1b5	analysis/native-all-strings.tsv
+MakeStageInst (00b33f84)	001	01d7b141	analysis/ghidra-makestageinst-keys.txt
+MakeStageInst (00b33f84)	003	01d7b145	analysis/ghidra-makestageinst-keys.txt
+MakeStageInst (00b23f60)	episode_stage	01d75942	analysis/ghidra-makestageinst-keys.txt
+MakeStageInst (00b23f60)	episode	01d7acd3	analysis/ghidra-makestageinst-keys.txt
+MakeStageInst (00b23f60)	monster	01d7aec7	analysis/ghidra-makestageinst-keys.txt
+MakeStageInst (00a95060)	gvg_stage	01d790ce	analysis/ghidra-makestageinst-keys.txt
+MakeStageInst (009418b0)	rival_pvid	01d73290	analysis/ghidra-makestageinst-keys.txt

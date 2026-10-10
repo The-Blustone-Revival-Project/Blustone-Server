@@ -1,0 +1,139 @@
+{
+  "id": "EVCB0301",
+  "title": "EV03_E01_TITLE",
+  "stage_name": "EV03_E01_TITLE",
+  "power": "30000",
+  "game_res_id": "903",
+  "bgm": "BGM_BATTLE1",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_9203B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0201_009",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0201_004",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0301_070",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "monster",
+        "actor_id": "EVCB0102_M2",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "EVCB0102_M2",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "EVCB0102_M2",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB1501_M1",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  ]
+}

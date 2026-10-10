@@ -1,0 +1,139 @@
+﻿{
+    "packet_handle_delay" : 0,
+    "elem_bonus": 20,
+    "elem_def_bonus": 10,
+    "play_time" : 90,
+    "play_delay_time" : 1.0,
+    "exit_delay_time" : 2.5,
+    
+    "waiting_recovery_delay": 2.0,
+    "count_atk_delay" : 999.0,
+    "count_atk_delay_monster" : 0.5,
+    "atk_spd_bonus" : 0.8,
+    "global_skill_cool" : 1.0,
+
+    "ai_exchange_cool" : 2.0,
+
+    "death_time_cond_hp" : 0.0,
+    "death_time_increase_atk_ratio" : 1.30,
+    "death_time_increase_sp_per_sec" : 0.35,
+
+    "sp_increase_spd_per_sec" : 0.21,
+    "sp_increase_per_kill" : 2.0,
+    "sp_increase_per_atk" : 0.02,
+    "sp_increase_per_dmg" : 0.01,
+    "sp_max" : 10,
+    
+    "blend_critical_rgb" :{ "r":255,"g":0,"b":0,"a":230 },
+    "blend_block_rgb" :{ "r":255,"g":255,"b":255,"a":230 },
+    "blend_dur" : 0.2,
+    
+    "fever_cooltime" : 0.14,
+    "fever_increase_per_touch" : 0.7,
+    "fever_decrease_spd" : 
+	{
+        "step_1" : 1,
+        "step_2" : 1,
+        "step_3" : 1,
+        "step_4" : 1
+    },
+    "fever_decrease_cool" : 
+	{
+        "normal" : 1,
+        "step_1" : 1,
+        "step_2" : 1,
+        "step_3" : 1,
+        "step_4" : 1
+    },
+    "max_fever_point" : 30,
+    "fever_deceleration" : -16.0,
+    "fever_acceleration" : 8.0,
+    "fever_step_cond" : {
+        "step_1" : 0,
+        "step_2" : 10,
+        "step_3" : 20,
+        "step_4" : 30
+    },
+    "fever_step_spd" : {
+        "step_1" : 9,
+        "step_2" : 12,
+        "step_3" : 15,
+        "step_4" : 18
+    },
+    "fever_step_auto_dash" : {
+        "step_1" : 0.75,
+        "step_2" : 0.85,
+        "step_3" : 0.9,
+        "step_4" : 0.95
+    },
+	
+    "actor" : {
+		"def_backend_bb" : "165, 180",
+		"atk_range_scl" : "1.9"
+	},
+    
+    "left" : {
+        "first_sp" : 1.5,
+        "appear_spd" : "0, 0",
+        "run_accl" : "0, 0",
+        "run_spd" : "0, 0",
+        "run_reflection" : "0, 0",
+        "wave_spawn" : "screen/2, 550",
+        "spawn" : "screen/2, 550",
+        "moveable" : {
+            "start" : "-500, 0", 
+            "end" : "screen/2-80, 550"
+        }
+    },
+    "right" : {
+        "first_sp" : 1.45,
+        "appear_spd" : "0, 0",
+        "run_accl" : "0, 0",
+        "run_spd" : "0, 0",
+        "run_reflection" : "0, 0",
+        "wave_spawn" : "screen/2+163, 550",
+        "spawn" : "screen/2, 550",
+        "moveable" : {
+            "start" : "screen/2+80, 0", 
+            "end" : "500+screen, 550"
+        }
+    },
+    
+    "waiting" : {
+        "idle_time" : 4.0,
+        "walk_spd" : 140,
+        "run_spd" : 50,
+        "fall_spd" : 1000,
+        "spawn_y" : 100,
+        "emergency_by_remain_time" : 0.23
+    },
+    
+    "bonus" : {
+        "none" : { "hp" : 1.0, "atk" : 1.0, "def" : 1.0 },
+        "offense" : { "hp" : 1.0, "atk" : 1.0, "def" : 1.0 },
+        "deffense" : { "hp" : 1.0, "atk" : 1.0, "def" : 1.0 },
+        "bomber" : { "hp" : 0.85, "atk" : 0.95, "def" : 0.95 },
+        "support" : { "hp" : 0.8, "atk" : 0.95, "def" : 1.0 },
+
+        "atk_camp" : { "hp" : 2.0, "atk" : 2.6, "def" : 1.0, "ct_chance" : 1.0, "ct_dmg" : 1.0 },
+        "def_camp" : { "hp" : 2.0, "atk" : 2.6, "def" : 1.0, "ct_chance" : 1.0, "ct_dmg" : 1.0 },
+
+        "rank_1" : { "hp" : 2.6, "atk" : 1.4, "def" : 1.4, "ct_chance" : 1.0, "ct_dmg" : 1.0 },
+        "rank_2" : { "hp" : 2.2, "atk" : 1.3, "def" : 1.3, "ct_chance" : 1.0, "ct_dmg" : 1.0 },
+        "rank_3" : { "hp" : 1.8, "atk" : 1.2, "def" : 1.2, "ct_chance" : 1.0, "ct_dmg" : 1.0 },
+        "rank_4" : { "hp" : 1.4, "atk" : 1.1, "def" : 1.1, "ct_chance" : 1.0, "ct_dmg" : 1.0 },
+        "rank_5" : { "hp" : 1.0, "atk" : 1.0, "def" : 1.0, "ct_chance" : 1.0, "ct_dmg" : 1.0 },
+
+        "stage" :
+        {
+            "b_00_01" : {
+                "value" : { "hp" : 1.1, "atk" : 1.1, "def" : 1.1, "ct_chance" : 1.0, "ct_dmg" : 1.0 },
+                "cards" : ["051"]
+		   }
+        },
+
+        "stage_buff" :
+        {
+        }
+    }
+}

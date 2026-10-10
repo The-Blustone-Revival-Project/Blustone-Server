@@ -1,0 +1,72 @@
+tag	TITLE	DESC
+ACTIVE	Basic	Basic effect that activates when using a skill.
+ACTIVE_SUB	Assist	Supportive effect that activates when using a skill.
+BAN_CLEAR	Remove Disabled	This effect is unaffected by removal.
+BAN_IMUN	Immunity Disabled	Effect is applied even if the target has Immunity skill.
+BLEED	Bleeding DMG	Deals Bleeding Damage for a certain period of time.\nWhen the target is bleeding,\nthe amount of health recovered is halved.\nThis can be removed with the Remove Harmful Effects.
+BLEED_REPEAT	Bleeding (Repeated)	Deals repeated Bleeding Damage every second\nto the frontline enemy during the battle.
+BLEED_TEAM	Bleeding (All)	Deals Bleeding Damage every second to\nall members of the target team.
+BLITZ_TEAM_BONUS	Blitz Team Bonus	Increases the basic stat of all dispatched\nmembers of the team by 10%\nduring a Guild Blitz battle.
+BREAK_IMUN_CRITICAL	Remove CRIT DMG Immunity	Removes the opponent's Critical Damage Immunity effect.
+BUFF	Strengthen	Temporarily increases stat.\nThis can be removed with the Remove Beneficial Effects.
+BUFF_CON	Strengthen (Cont.)	Increases stat until the battle ends.\nThis can be stacked several times.\nThis can be removed with the Remove Beneficial Effects.
+BUFF_DEF_REPEAT	Strengthened DEF (Repeated)	During battle, Defense increases 2x every 3 seconds.\nThis won't be activated when Beneficial Effect is blocked.
+CLEAR_BUFF	Remove Beneficial Effects	Removes all Beneficial Effects of the target.
+CLEAR_DEBUFF	Remove Harmful Effects	Removes all Harmful Effects of the target.\nNot activated while affected by Beneficial Effect Block.
+CLEAR_DEBUFF_REPEAT	Remove Harmful Effects (Repeated)	Removes their Harmful Effects every second.\nNot activated while affected by Beneficial Effect Block.
+COUNTER_UP	Counterattack▲	The number of counterattacks against\nthe enemy's attack increases.
+DAMAGE_2000	Fixed DMG 2000	Deals 2000 damage regardless of the target's defense.\nThe amount of damage increase or decrease due to element will be reflected.
+DEBUFF	Weaken	Temporarily decreases stat.\nThis can be removed with the Remove Harmful Effects.
+DEBUFF_CON	Weaken (Cont.)	Decreases stat until the battle ends.\nThis can be stacked several times.\nThis can be removed with the Remove Harmful Effects.
+DEBUFF_REPEAT	Weaken (Stacked)	Continuously weakens the target when the battle starts.\nThis can be removed with the Remove Harmful Effects.
+DEBUFF_SELF	Weaken (Self)	Weakens self.\nThis can be removed with the Remove Harmful Effects.
+DEEP_WOUND	Deep Wound	Deals Bleeding Damage that is maintained until deactivation.\nRemoves the basic Regeneration while standing by.\nThis can be removed with the Remove Harmful Effects.
+DISABLE_CHANGE	Switch Block	Target is unable to switch out for a certain period of time.\nThe target will switch out when targeted by Force Switch effect or upon becoming unable to battle.
+DISABLE_TAP	Attack Disabled	The target cannot attack for a certain period of time.\nThis can be removed with the Remove Harmful Effects.
+DOT_HEAL	Cont. Recovery	Continuously recovers HP every second\nfor a certain period of time.\nThis can be removed with the Remove Beneficial Effects.
+DOT_HEAL_TEAM	Cont. Recovery (Team)	Continuously recovers the HP of all members of\nthe team every second for a certain period of time.\nThis can be removed with the Remove Beneficial Effects.
+ENERMY_WEAKEN	Stat Decrease	Decreases the target's stat who is\nfighting against the hunter.
+FIGHTCLUB_BOUNS	Fight Club Bonus	Increases the basic stat of self by 10%\nduring a Fight Club battle.
+FORCE_CHANGE	Force Switch	Switches out the target and retreats them.
+GAGE_DOWN	Rage Decrease	Able to decrease Rage Gauge.
+GAGE_UP	Rage Increase	Able to increase Rage Gauge.
+HALF_DEF	Halve Defense	Decreases 50% of the target's defense instantly.\nThe skill's amount of damage is calculated afterwards.
+HARD_HIT	Strike	Deals great damage to the target in an instant.
+HARD_HIT_TEAM	Strike All	Deals great damage to all members of the target team instantly.
+HEAL	Recovery	Recovers the target's HP instantly.
+HEAL_TEAM	Team Recovery	Recovers the HP of all members of the team instantly.
+IGNORE_DEF	Ignore Defense	Although the target's defense increases,\nthe amount of damage doesn't decrease.\nNot activated while affected by Beneficial Effect Block.
+IGNORE_DR	Ignore DMG▼	The amount of damage of this skill\nignores the target's Damage Reduction.
+IGNORE_INVIN	Ignore Immunity	The target engaging in battle with this hunter\ncannot benefit from Immunity.
+IMUN_BUFF	Beneficial Effect Block	Blocks the target from getting Beneficial Effects\nduring a certain period of time.
+IMUN_CRITICAL	CRIT DMG Immunity	When attacked by an opponent,\nCritical Damage is not applied.
+IMUN_DEBUFF	Harmful Effect Immunity	Immune to Harmful Effects for a certain period of time.\nThis can be removed with the Remove Beneficial Effects.
+IMUN_DEBUFF_ATK	Harmful Immunity (ATK)	Gains Immunity from attack weakening effects\namong the Harmful Effects.
+IMUN_DEBUFF_DEF	Harmful Immunity (DEF)	Gains Immunity from defense weakening effects\namong the Harmful Effects.
+IMUN_DEBUFF_DR	Harmful Immunity (DMG▼)	Gains Immunity from Damage Reduction weakening effects\namong the Harmful Effects.
+IMUN_DISABLE_TAP	ATK Disabled Immunity	Gains Immunity to Attack Disabled effects.
+IMUN_STUN	Stun Immunity	Doesn't get stunned by skill.
+IMUN_STUN_SUP	Stun Immunity (Support)	Protects the team from getting stunned by a Bomber or Support.\nIt cannot block stun from Offense or Defense.
+INVIN	Immunity	Becomes Immune to damage for a certain period of time.\nThis can be removed with the Remove Beneficial Effects.\nTakes damage from attacks with Immunity Penetration.
+INVIN_BAN	Immunity Block	Cannot become Immune for a certain period of time.\nThis can be removed with the Remove Harmful Effects.
+INVIN_BREAK	Immunity Penetration	Able to deal damage to the target with Immunity.
+INVIN_REPEAT	Immunity (Repeated)	Becomes Immune once every 3 seconds.
+INVIN_TEAM	Team Immunity	All members of the team become Immune during a\ncertain period of time. This can be removed\nwith the Remove Beneficial Effects.
+JOB	Role	The common effect that is granted\naccording to the hunter's role.
+JOB_ATT	Offense	Offense's role ability.\nOffense's attack increases when the battle starts.
+JOB_DEF	Defense	Defense's role ability.\nDefense's defense increases when the battle starts.
+JOB_GUN	Bomber	Bomber's role ability.\nThe whole team's attack increases when the battle starts.
+JOB_SUP	Support	Support's role ability.\nThe whole team's HP increases when the battle starts.
+MAXIM	Maximization	Additional effect that is activated randomly\nwhen using a skill.
+OWN_PASSIVE	Special	Hunter's special personal ability.\nThe effect is activated continuously when the battle starts.
+PASSIVE_HEAL	Natural Recovery	The target's HP recovers continuously\nwhen the battle starts.
+SELF_ENHAN	Stat Increase	Increases the target's stat when the battle starts.
+STUN	Stun	Stuns the target,\ntemporarily preventing them from taking any action.
+STUN_EX	Special Stun	Stuns the target under special conditions.
+STUN_LONG	Concussion	Stuns the target for a longer duration.\nStuns the target for half the duration if the target has stun immunity.
+STUN_MATE	Stun (Teammate)	Stuns a teammate.\nA special side effect that only some hunters have.
+STUN_SELF	Stun (Self)	Stuns self.\nA special side effect that only some hunters have.
+STUN_TEAM	Stun All	Stuns all members of the target team for a certain period of time.
+TEAM_ENHAN	Team Stat▲	Increases the stat of all members of target team\nwhen the battle starts.
+TEAM_WEAKEN	Team Stat▼	Decreases the stat of all members of target team\nwhen the battle starts.
+USE_ENEMY_ATT	Reverse	Deals damage to the opponent\nby using the opponent's attack.

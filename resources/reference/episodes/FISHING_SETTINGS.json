@@ -1,0 +1,69 @@
+﻿{
+  "common1": {
+
+    "touch_delay": "0.1",
+    "touch_dir_change": "1.0",
+    "rage_delay": "0.3",
+    "success_wait": "0.8",
+    "gage_hide_interval": "0.1",
+    "gage_hide_count": "6",
+    "gage_hide_start": "0.6",
+    "gage_hide_speed": "10.0",
+
+    "low_speed" : "3.0",
+    "high_speed": "3.0",
+    "add_speed_min": "35",
+    "add_speed_max" : "90",
+    "short_ratio": "100",
+    "middle_ratio": "100",
+    "long_ratio": "100",
+    "alert_time": "0.5",
+    "dir_same_ratio": "0.6",
+    "dir_not_same_ratio": "1.2",
+    "dir_time_min": "1.0",
+    "dir_time_max": "4.0",
+    "wait_time": {
+      "min": 1,
+      "max": 4
+    },
+    "bite_time": {
+      "min": 1,
+      "max": 4
+    },
+    "escape_time": {
+      "min": 5,
+      "max": 5
+    }
+  },
+
+  "PLC001" :
+  {
+     "NPC1": {
+      "res_id" : "CHIR",
+      "pos_x": -150,
+      "pos_y": 50,
+      "chance" : 100
+      }
+  },
+
+  "TUTO" :
+  {
+    "height1": "610",
+    "height2": "610",
+    "height3": "610",
+    "height4": "610",
+    "height5": "680",
+
+    "height6": "680",
+    "height7": "680",
+    "height8": "680",
+    "height9": "680",
+    "height10": "600",
+
+    "height11": "610",
+    "height12": "610",
+    "height13": "610",
+    "height14": "610"  
+  }
+}
+

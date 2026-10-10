@@ -1,0 +1,14 @@
+{
+  "source_path": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/R_EPISODE.jet",
+  "source_sha256": "7f4362cdf80545a6da937444094837f334c8aae4f9f791d6ff4161948d98a01e",
+  "source_bytes": 38080,
+  "resource_index_zero_based": 2,
+  "resource_variant": "rw-payload-2",
+  "resource_container": "inflated resource 3 @ 1056 (1 chunk)",
+  "native_resource_name": "S01 inferred from root id; descriptor table not yet independently decoded",
+  "root_type": "season",
+  "root_id": "S01",
+  "output_path": "analysis/recovered-reference/EPISODE_S01.json",
+  "output_sha256": "c5d70b11fbbc5c38ba608bfd73f45a50213ca7686aa8d0f32ab96a25e66f4bb0",
+  "reward_policy": "Shipped data only; not granted or enabled by extraction."
+}

@@ -1,0 +1,63 @@
+# Everything in the recovered evidence that bears on TEAM / WAVE ARITY.
+# The live blocker is: GET /reference/GetMonster {"list":"[\"\",\"\",\"\",\"\",\"\"]"}
+# — exactly five empty ids, in all seven runs, invariant to every fixture change.
+#
+# This file collects every hard number the recovered corpus offers.  The short
+# version, with the reasoning, is in analysis/research/recovered-real-data.md §1.
+
+# ---------------------------------------------------------------- native .so --
+what	value	so_addr	source	note
+CSRSyncMStage::RequestStart deck slots	4	01d7b212..01d7b23f	analysis/native-all-strings.tsv	deck_inst_id_1, _2, _3, _4 — and NOTHING for _5. The player's party is FOUR.
+CSRSyncMStage::RequestStart stage gate	sStageID.size() > 1	01d7b1a1	analysis/native-all-strings.tsv	
+ParseUserDatailInfo numbered slots	1..4	01d8fc03 + suffix loop	analysis/ghidra-userdetail.txt	inst_id_ / ref_id_ / rank_up_cnt_ / awk_step_ / overcome_cnt_ / awk_overcome_ / exp_ / skin_ref_id_ / skill_1_level_ .. skill_5_level_ — an index-appended prefix family, so the loop bound is the only source of the count.
+ParseUserDatailInfo leader slot	1	01d8fb08	analysis/native-all-strings.tsv	inst_id_leader / ref_id_leader / rank_leader / ... — ONE extra slot beside the numbered four.
+card skill slots per card	5	01d6fb41..01d6fb79	analysis/native-all-strings.tsv	skill_1_level .. skill_5_level. Five SKILLS, not five units.
+/explore/* stage skill slots	5	01d72b5a..01d72b76	analysis/native-all-strings.tsv	skill1 .. skill5 on an explore stage record.
+"Cannot find The group(%s)"	1	01d736e0	analysis/native-all-strings.tsv	
+"Cannot find Group(%s)"	1	01d76d2d	analysis/native-all-strings.tsv	
+"Cannot find the Actor(%s)"	1	01d76dac	analysis/native-all-strings.tsv	
+GAUGE_%02d	2	01d7379d	analysis/native-all-strings.tsv	battle HUD gauge index
+fWave / fShift / fStrength / fTexWidth	4	01d72e42..01d72e59	analysis/native-all-strings.tsv	CSRExploreMirage::InitBackground — parses a res name like MIRAGE_STAIR<fWave> into 4 ints.
+
+# --------------------------------------------------------- UI XML (UI_XML_RO) --
+# All from recovered-assets/phone-2026-09-18/game-assets/UI_XML_RO.db,
+# read with plyvel. The KO locale is the complete one (584 records); EN has
+# only 3. Element names are recovered verbatim.
+ui_key	elements	arity	note
+KO/SR_BATTLE/9_UI_BT_IG	GRID135 > RE_MEMBER0..RE_MEMBER4	5	THE IN-BATTLE HUD. The ally member strip has exactly FIVE slots at x=0,73,146,219,292 (65px wide, 355px panel). This is the strongest single piece of arity evidence in the whole corpus.
+KO/SR_BATTLE/9_UI_BT_IG	GRID2 > RE_MEMBER0, RE_MEMBER1	2	same strip, 2-member variant, centred at -40/+40.
+KO/SR_BATTLE/9_UI_BT_IG	GRID4 > RE_MEMBER0..RE_MEMBER3	4	same strip, 4-member variant, at x=35,109,186,259.
+KO/GVG_REAL/GVG_FIELD	RE_ENEMY_101..RE_ENEMY_110, BT_ENEMY_101..110	10	GvG world-map node buttons, NOT the battle formation. Do not read this as an enemy arity.
+KO/SR_COMMON/*  (109 records)	SLOT_BTN2, SLOT_BTN3, SLOT_BTN4, SLOT_BTN5	4	Chat channel buttons 2..5.
+KO/*	SLOT_TXT2_1..5_1	5	Unrelated slot labels.
+native	SLOT_BTN2/3/4/5	01d7d9a0..01d7d9be	analysis/native-all-strings.tsv	Same as above; also unrelated (chat).
+
+# ------------------------------------------------------ game design (FAQ doc) --
+# recovered-assets/community-notes-2026-09-30/Blustone Guide FAQ.md
+source_line	claim
+L105	"For a proper Cruise team, you should go for 1 attacker + 1 (2) bomber (s) +1 (2) healer (s) (Example: Heidi + Lantern + Diana + Joy)."  -> a FOUR-hunter team, with an optional fifth.
+L105	"Current best cruise deck is 1 attacker + Dumble + Crocus + Leon."  -> FOUR.
+L119	"The most popular one is Windblade/Genovia/Vincent, paired with either Sienna / Audrey for bombers, + Westfield/Celine/Lottery Mouse."  -> FIVE (3+2).
+L119	"Some people replace Celine / Westfield with Captain for a reliable frontline back up"  -> swapping one for one, still five.
+L45	"...if it's on the frontline and the fifth skill needs to be properly combined..."  -> "fifth SKILL", not fifth unit.
+
+# ------------------------------------------------- recovered id inventories --
+inventory	count	source
+CDN.db packs matching ^M\d{3}$	21	analysis/recovered-data/cdn-manifest/cdn-pack-groups.json  (M002..M021, M100 — M001 is APK-bundled, not CDN)
+CDN.db packs matching ^N\d{3}$	16	ditto  (N001..N013, N500..N502)
+CDN.db packs matching ^ST\d{3}$	13	ditto  (ST001..ST007, ST099, ST100, ST900..ST904)
+CDN.db packs matching ^C\d{3}[A-C]?$	155	ditto
+CHAR_STR_RO.db distinct card ids	121	analysis/recovered-data/leveldb-tables/char-str.tsv  (001-098, 901-904, 912-914, x914, and 15 _1 variants)
+SKILL_REF_RO.db distinct skill ids	113	analysis/recovered-data/leveldb-tables/skill-ref.tsv
+UserData.db BATTLE_AUTOCOMBAT keys	0,2,3,4,7,9 (+base)	analysis/recovered-data README — per-battle-slot auto-combat toggles, sparse because they are only written once used.
+
+# --------------------------------------------------------- the one real gap --
+# UNKNOWN: no recovered artefact anywhere states how many monsters a stage
+# fields in one wave.  Verified absent from:
+#   - all 839 .jet files (no text payload mentions wave_list / ref_id / enemy)
+#   - all 13 LevelDB reference tables (no stage-monster table exists)
+#   - the native string pool (no per-stage enemy roster literal)
+#   - UI_XML_RO.db (layout only, no data)
+#   - UserData.db / EtcData.db / PV.db / CDN.db (all values are opaque-encrypted;
+#     CDN.db's KEYS are plaintext but its values are not)
+# The stage -> wave -> monster roster was server-only data in 2021 and is gone.

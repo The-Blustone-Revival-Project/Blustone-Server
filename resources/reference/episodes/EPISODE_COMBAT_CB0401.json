@@ -1,0 +1,58 @@
+{
+  "id": "CB0401",
+  "title": "E04_TITLE",
+  "stage_name": "E04_S05_TITLE",
+  "power": "6000",
+  "bgm": "BGM_BATTLE2",
+  "game_res_id": "99",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_0903B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {}
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB0401_005_1",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0401_017_1",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ]
+}

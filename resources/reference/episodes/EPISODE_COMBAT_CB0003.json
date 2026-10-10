@@ -1,0 +1,109 @@
+{
+  "id": "CB0003",
+  "title": "E00_TITLE",
+  "stage_name": "E00_S00_TITLE",
+  "combat_base": "mission",
+  "power": "1000",
+  "game_res_id": "2",
+  "bgm": "BGM_BATTLE3",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "AD00005B2",
+  "lose_dialog": "AD00005B2",
+  "lose_dialog2": "AD00005B2",
+  "left": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB0001_C009",
+        "thumb": {
+          "level": 1,
+          "rank": 1,
+          "hyper": 0,
+          "attr": 3
+        },
+        "state": {
+          "init_hpratio": 0.3
+        },
+        "skill": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0003_C001",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0003_C021",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0003_C003",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "monster",
+        "actor_id": "CB0003_BOSS",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ]
+}

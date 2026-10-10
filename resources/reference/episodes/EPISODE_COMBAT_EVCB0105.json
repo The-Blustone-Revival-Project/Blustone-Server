@@ -1,0 +1,126 @@
+{
+  "id": "EVCB0105",
+  "title": "EV01_E05_TITLE",
+  "stage_name": "EV01_E05_TITLE",
+  "power": "50000",
+  "game_res_id": "901",
+  "bgm": "BGM_BATTLE2",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_9014B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {},
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0101_078",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0101_029A",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0103_034",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0103_072A",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0105_059",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0105_060",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  ]
+}

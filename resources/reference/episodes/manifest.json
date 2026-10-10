@@ -1,0 +1,50 @@
+{
+  "CHAR_STR": {
+    "records": 1033,
+    "source": "recovered-assets\\phone-2026-09-18\\game-assets\\CHAR_STR_RO.db\\000005.ldb",
+    "sourceSha256": "a4d40f0739316e998ef1a6817d1b98c10ca2a8c246d9d89683d331a0b6b5ef36",
+    "exportSha256": "79537f24a5e4ce9fbf34cb58d5d3cb6a6d4abb8f26e19071c395946c081c64a1"
+  },
+  "INGAME_TALK": {
+    "records": 231,
+    "source": "recovered-assets\\phone-2026-09-18\\game-assets\\INGAME_TALK_RO.db\\000005.ldb",
+    "sourceSha256": "189a66d3e930945997ed75d2ba219d5d1cd6abb4dd0d13f9cbe4a4b02f3fe65c",
+    "exportSha256": "275511e298ed457e125f2e7a49267b6172afa49535d91b752d15991fbff68a6e"
+  },
+  "SKILL_DESC": {
+    "records": 5,
+    "source": "recovered-assets\\phone-2026-09-18\\game-assets\\SKILL_DESC_RO.db\\000005.ldb",
+    "sourceSha256": "31a23fa956b399e376482911cd5d2ad84625acce426f8da4709a9ffc22e52462",
+    "exportSha256": "323154b77fcfb43672795274cefa4d571a307601d87b12d0014fb7790c661125"
+  },
+  "SKILL_EFFECT": {
+    "records": 230,
+    "source": "recovered-assets\\phone-2026-09-18\\game-assets\\SKILL_EFFECT_RO.db\\000005.ldb",
+    "sourceSha256": "9a6711744f8cf5f0a85f9268afa8268d0e4737bc978b465b222d25ed78624ebf",
+    "exportSha256": "92b81f08f2cac6ff7b35c9782efde54310f001b21586c9730117e08aef879cbc"
+  },
+  "SKILL_REF": {
+    "records": 1070,
+    "source": "recovered-assets\\phone-2026-09-18\\game-assets\\SKILL_REF_RO.db\\000005.ldb",
+    "sourceSha256": "52aad4d0068ae5f2d3cb3fd284984019793662576a5069282a5d07b201aa10f8",
+    "exportSha256": "50ad32940affdd74f070a59ebc0a99727fa1c35a386f1526ce17c3a9291ebf70"
+  },
+  "SKILL_TAG": {
+    "records": 565,
+    "source": "recovered-assets\\phone-2026-09-18\\game-assets\\SKILL_TAG_RO.db\\000005.ldb",
+    "sourceSha256": "b448f23608473dcc33e330fdf5b241b09e2a2bc23a02145b474ecbd8c9d1c6fd",
+    "exportSha256": "81d0ea2d038d078efd2196471fe9e669a9117c53edda1b3263ca8d5eddd73942"
+  },
+  "TAG_REF": {
+    "records": 142,
+    "source": "recovered-assets\\phone-2026-09-18\\game-assets\\TAG_REF_RO.db\\000005.ldb",
+    "sourceSha256": "84b7ce8fe5bae0c9986299792c32976e0455977c74f0f71146b617f70534604b",
+    "exportSha256": "8b6c3d6a877b748fa99e87d4324419d05669dce3c758408f1ba56f0ed2a28847"
+  },
+  "UI_EPISODE": {
+    "records": 297,
+    "source": "recovered-assets\\phone-2026-09-18\\game-assets\\UI_EPISODE_RO.db\\000005.ldb",
+    "sourceSha256": "20b9515438ce5761ffb22e526cb83d578bcedbeac3a39327d30746b369e9478c",
+    "exportSha256": "2f1f6e6ce3d11c9a1fa7f71760b5542e6cc7d71b41a358f3bfa86c5911713e2a"
+  }
+}

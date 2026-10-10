@@ -1,0 +1,58 @@
+{
+  "id": "CB0902",
+  "title": "E09_TITLE",
+  "stage_name": "E09_S06_TITLE",
+  "bgm": "BGM_BATTLE2",
+  "power": "60000",
+  "game_res_id": "99",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_1606B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {}
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB0902_041_1",
+        "thumb": {
+          "level": 10,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0902_020_1",
+        "thumb": {
+          "level": 10,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          1
+        ]
+      }
+    ]
+  ]
+}

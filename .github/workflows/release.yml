@@ -1,0 +1,44 @@
+name: Publish server release
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: server-release
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Import previous pinned resource bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p local/bundles
+          gh release download --pattern 'Blustone-Server-Resources-*.zip' --dir local/bundles
+          RESOURCE_BUNDLE=$(find local/bundles -maxdepth 1 -name 'Blustone-Server-Resources-*.zip' -print -quit)
+          python scripts/resources/bundle.py import "$RESOURCE_BUNDLE"
+          echo "RESOURCE_BUNDLE=$RESOURCE_BUNDLE" >> "$GITHUB_ENV"
+      - name: Validate and build
+        run: |
+          npm ci
+          npm test
+          npm run build
+          npm run resources:verify
+          node scripts/verify-independent.mjs
+      - name: Publish regular Latest semver release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          python scripts/releases/publish.py --resources "$RESOURCE_BUNDLE"

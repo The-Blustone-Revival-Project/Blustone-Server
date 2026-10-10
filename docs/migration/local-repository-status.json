@@ -1,0 +1,20 @@
+[
+  {
+    "repository": "Server",
+    "head": "5007bd28126e12339c0590fd72c0e4ec9a79e63e",
+    "modified_tracked": 1,
+    "untracked_publishable_files": 241
+  },
+  {
+    "repository": "Instrumented",
+    "head": "1695fb418ffe1fa1b714fb357d9a8bf87b78199e",
+    "modified_tracked": 2,
+    "untracked_publishable_files": 407
+  },
+  {
+    "repository": "DataDump",
+    "head": "c532e73765e1e53328a29c63507743f5f56dcc20",
+    "modified_tracked": 1,
+    "untracked_publishable_files": 2600
+  }
+]

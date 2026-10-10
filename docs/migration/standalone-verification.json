@@ -1,0 +1,13 @@
+{
+  "compiled_process": true,
+  "unrelated_working_directory": true,
+  "encrypted_ecdh_hmac_aes": true,
+  "authenticated_lobby_and_references": true,
+  "episode_log": true,
+  "resource_packages": 139,
+  "resource_range_206": true,
+  "compiled_portrait": true,
+  "persisted_transport_and_credentials": true,
+  "preserved_existing_games": 3,
+  "apk_install_or_device_actions": false
+}

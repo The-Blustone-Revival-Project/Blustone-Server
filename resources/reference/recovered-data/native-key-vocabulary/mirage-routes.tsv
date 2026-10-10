@@ -1,0 +1,61 @@
+# /mirage/* and /explore/* route literals, verbatim from libnative_core.so
+# Source: analysis/native-all-strings.tsv (address, string)
+# Every address is the resolved Thumb pc-relative literal target inside the
+# stripped ELF's string pool. Re-verify with
+# analysis/ghidra-scripts/ResolvePcRelativeStrings.java.
+#
+# request_keys / response_keys columns are the keys the client SENDS / PARSES,
+# resolved per-parser by analysis/ghidra-mirage-strings-{07,08,09,11,12,13,14}.txt
+# and analysis/ghidra-makestageinst-keys.txt.  A blank cell means UNKNOWN:
+# the parser for that key was not decompiled in this project.
+so_addr	route	request_keys	response_keys
+0092b30c	/mirage/GetInfo	app_code, app_ver, market, pvid, otp, reset, stay, entry, inst_base, inst_enemy, ref_stair_list, ref_hero	entry, inst_base, inst_enemy, ref_stair, ref_hero
+0092ed08	/mirage/End	app_code, app_ver, market, pvid, otp, inst_id, hp_percent, floor, stair, remain_deck_hp, remain_enemy_hp
+0092fed0	/mirage/RegisterDeck	app_code, app_ver, market, pvid, otp, inst_list
+0092f9c	/mirage/Revive
+0092fab	/mirage/GetFriendInfo
+0092fc1	/mirage/GetNextFloor
+0092fd6	/mirage/Reward
+0172979	/explore/GetRef
+017297a	/explore/GetInst
+01729e0	/explore/Begin
+0172a81	/explore/End
+0172a8e	/explore/Reward
+0172ab8	/explore/Retry
+0172ac7	/explore/Reset
+0172ad8	/explore/Entrust
+0172c54	/lobby/GetAbyss
+0172c6d	/abyss/Start
+0172c8e	/abyss/Complete
+0172d06	/abyss/Reset
+0172d28	/abyss/GetHelperList
+
+# Notes
+# ----
+# /mirage/GetInfo response parsers, in the order the native code resolves them:
+#   00933aec Parse_Entry      -> id, mirage_remain_hp
+#   00933d80 Parse_InstBase   -> bg_res, dlg_begin, dlg_end, new_record, floor,
+#                                stair, state, deck, tier_percent, highest,
+#                                revive_price, begin_ltime
+#   009343b4 ParseStairInfo   -> res_prefix, res_postfix_list, list, grade, balance
+#   009347f8 ParseHeroInfo    -> bonus, end_ltime, cur, next
+#   00934c00 ParseFriendInfo  -> floor, nick_list
+#   0092dff4 Parse_InstEnemy  -> n, ref_id, rank, rank_up_cnt, overcome_cnt,
+#                                exp, skill_1_level..skill_5_level
+#   009359ac (dispatcher)     -> ret_data x2, achievement x2, entry x2,
+#                                inst_base x2, inst_enemy x2, ref_stair x2,
+#                                ref_hero x2
+#
+# The dispatcher resolves each of entry / inst_base / inst_enemy / ref_stair /
+# ref_hero TWICE at consecutive slots, which is the signature of
+# "if (json.contains(k)) { ... } else { ... }" i.e. each block is optional.
+# An absent block is therefore survivable; a present-but-empty one is not.
+#
+# resource-name literals used by the mirage scene:
+#   01d7307d  MIRAGE/MIRAGE_STAIR     (UI key)
+#   01d730bb  MIRAGE_                 (res prefix)
+#   01d730dd  MIRAGE_COMPLETE
+#   01d730ed  STAGE           (note trailing space)
+#   01d730ff  MIRAGE_STAGE
+#   01d72e42  fShift / 01d72e49 fWave / 01d72e4f fStrength / 01d72e59 fTexWidth
+#   01d72e63  [0-9]+         (regex to split them off a res name)

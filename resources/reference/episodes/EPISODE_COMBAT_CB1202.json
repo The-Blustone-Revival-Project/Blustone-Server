@@ -1,0 +1,92 @@
+{
+  "id": "CB1202",
+  "title": "E12_TITLE",
+  "stage_name": "E12_S04_TITLE",
+  "bgm": "BGM_BATTLE2",
+  "power": "100000",
+  "game_res_id": "7",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_1904B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {},
+      {
+        "type": "hunter",
+        "actor_id": "CB1201_C054",
+        "thumb": {
+          "level": 10,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB1202_C036",
+        "thumb": {
+          "level": 10,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB1202_C040",
+        "thumb": {
+          "level": 10,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB1202_C057",
+        "thumb": {
+          "level": 10,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ]
+}

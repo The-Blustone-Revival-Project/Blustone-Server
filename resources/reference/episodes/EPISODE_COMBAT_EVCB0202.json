@@ -1,0 +1,108 @@
+{
+  "id": "EVCB0202",
+  "title": "EV02_E03_TITLE",
+  "stage_name": "EV02_E03_TITLE",
+  "power": "45000",
+  "game_res_id": "99",
+  "bgm": "BGM_TRAIN",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_9108B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0201_042",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 1
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0201_082",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0201_005",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0201_032",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "EVCB0201_080",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  ]
+}

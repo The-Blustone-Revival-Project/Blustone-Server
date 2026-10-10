@@ -1,0 +1,123 @@
+{
+  "id": "CB0001",
+  "title": "E00_TITLE",
+  "stage_name": "E00_S00_TITLE",
+  "power": "1000",
+  "combat_base": "mission",
+  "game_res_id": "2",
+  "bgm": "BGM_BATTLE1",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "AD00002B2",
+  "lose_dialog": "AD00002C",
+  "lose_dialog2": "AD00002C",
+  "left": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB0001_C009",
+        "thumb": {
+          "level": 1,
+          "rank": 1,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "monster",
+        "actor_id": "CB0001_M01",
+        "thumb": {
+          "level": 1,
+          "rank": 1,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0001_M01",
+        "thumb": {
+          "level": 1,
+          "rank": 1,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0001_M01",
+        "thumb": {
+          "level": 1,
+          "rank": 1,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0001_M01",
+        "thumb": {
+          "level": 1,
+          "rank": 1,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0001_BOSS",
+        "thumb": {
+          "level": 1,
+          "rank": 1,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  ]
+}

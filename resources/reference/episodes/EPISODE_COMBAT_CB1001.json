@@ -1,0 +1,58 @@
+{
+  "id": "CB1001",
+  "title": "E10_TITLE",
+  "stage_name": "E10_S04_TITLE",
+  "bgm": "BGM_TRAIN",
+  "power": "65000",
+  "game_res_id": "7",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_1704B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {}
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB1001_012_1",
+        "thumb": {
+          "level": 20,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB1001_030_1",
+        "thumb": {
+          "level": 20,
+          "rank": 5,
+          "hyper": 1,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ]
+}

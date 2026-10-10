@@ -1,0 +1,480 @@
+{
+  "source": "analysis\\extracted\\assets\\LEVELING.jet",
+  "chunk": 0,
+  "chunk_name": "common.JSON (CMGE analytics event-key table)",
+  "sha256": "11f902a20b4beed58359da5ae9486ac4246424255fd41041f8e578cb29f2a65d",
+  "note": "This is an ANALYTICS EVENT-KEY TABLE, not campaign metadata. It proves the exact id enumeration and order and nothing else: there are no titles, ap_cost, recommend levels, monster groups or area records in it.",
+  "expedition_stage_count": 50,
+  "area_ids": [
+    "n_01",
+    "n_02",
+    "n_03",
+    "n_04",
+    "n_05"
+  ],
+  "tutorial_keys": [
+    "Tuto_n0002_00",
+    "Tuto_n0002_01",
+    "Tuto_n0002_02",
+    "Tuto_n0002_03",
+    "Tuto_n0002_04",
+    "Tuto_n0002_05",
+    "Tuto_n0002_06",
+    "Tuto_n0002_07",
+    "Tuto_n0002_08",
+    "Tuto_n0002_09",
+    "Tuto_n0002_10"
+  ],
+  "stages": [
+    {
+      "stage_id": "n_01_01",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 1,
+      "cmge_pv": 1100001,
+      "cmge_global": "aamt1w",
+      "cmge_cmge": "q1gmu9"
+    },
+    {
+      "stage_id": "n_01_02",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 2,
+      "cmge_pv": 1100002,
+      "cmge_global": "vuedyb",
+      "cmge_cmge": "6lehxa"
+    },
+    {
+      "stage_id": "n_01_03",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 3,
+      "cmge_pv": 1100003,
+      "cmge_global": "v51ol6",
+      "cmge_cmge": "cn5lqy"
+    },
+    {
+      "stage_id": "n_01_04",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 4,
+      "cmge_pv": 1100004,
+      "cmge_global": "s8rbeb",
+      "cmge_cmge": "yq7nga"
+    },
+    {
+      "stage_id": "n_01_05",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 5,
+      "cmge_pv": 1100005,
+      "cmge_global": "2c3a58",
+      "cmge_cmge": "4qz3jf"
+    },
+    {
+      "stage_id": "n_01_06",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 6,
+      "cmge_pv": 1100006,
+      "cmge_global": "j8y9u5",
+      "cmge_cmge": "uw8a48"
+    },
+    {
+      "stage_id": "n_01_07",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 7,
+      "cmge_pv": 1100007,
+      "cmge_global": "fnjp79",
+      "cmge_cmge": "u6149n"
+    },
+    {
+      "stage_id": "n_01_08",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 8,
+      "cmge_pv": 1100008,
+      "cmge_global": "4sug23",
+      "cmge_cmge": "waht3h"
+    },
+    {
+      "stage_id": "n_01_09",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 9,
+      "cmge_pv": 1100009,
+      "cmge_global": "ypb1ec",
+      "cmge_cmge": "nxhpkz"
+    },
+    {
+      "stage_id": "n_01_10",
+      "area_id": "n_01",
+      "area_serial": 1,
+      "stage_serial_in_area": 10,
+      "cmge_pv": 1100010,
+      "cmge_global": "yx5n5y",
+      "cmge_cmge": "o9mcf1"
+    },
+    {
+      "stage_id": "n_02_01",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 1,
+      "cmge_pv": 1100011,
+      "cmge_global": "5t7yoy",
+      "cmge_cmge": "c94eyq"
+    },
+    {
+      "stage_id": "n_02_02",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 2,
+      "cmge_pv": 1100012,
+      "cmge_global": "xer516",
+      "cmge_cmge": "g8o597"
+    },
+    {
+      "stage_id": "n_02_03",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 3,
+      "cmge_pv": 1100013,
+      "cmge_global": "w8hjlh",
+      "cmge_cmge": "1v28az"
+    },
+    {
+      "stage_id": "n_02_04",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 4,
+      "cmge_pv": 1100014,
+      "cmge_global": "okdorg",
+      "cmge_cmge": "pylq3f"
+    },
+    {
+      "stage_id": "n_02_05",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 5,
+      "cmge_pv": 1100015,
+      "cmge_global": "oaa5pu",
+      "cmge_cmge": "63awsj"
+    },
+    {
+      "stage_id": "n_02_06",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 6,
+      "cmge_pv": 1100016,
+      "cmge_global": "qjpiz7",
+      "cmge_cmge": "si1mvy"
+    },
+    {
+      "stage_id": "n_02_07",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 7,
+      "cmge_pv": 1100017,
+      "cmge_global": "slemy6",
+      "cmge_cmge": "55z1d3"
+    },
+    {
+      "stage_id": "n_02_08",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 8,
+      "cmge_pv": 1100018,
+      "cmge_global": "74aem6",
+      "cmge_cmge": "c1cnbc"
+    },
+    {
+      "stage_id": "n_02_09",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 9,
+      "cmge_pv": 1100019,
+      "cmge_global": "5u04ym",
+      "cmge_cmge": "6dd47o"
+    },
+    {
+      "stage_id": "n_02_10",
+      "area_id": "n_02",
+      "area_serial": 2,
+      "stage_serial_in_area": 10,
+      "cmge_pv": 1100020,
+      "cmge_global": "ta6hbq",
+      "cmge_cmge": "xfhrlp"
+    },
+    {
+      "stage_id": "n_03_01",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 1,
+      "cmge_pv": 1100021,
+      "cmge_global": "9queip",
+      "cmge_cmge": "uaq21p"
+    },
+    {
+      "stage_id": "n_03_02",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 2,
+      "cmge_pv": 1100022,
+      "cmge_global": "3wpokg",
+      "cmge_cmge": "u4xb22"
+    },
+    {
+      "stage_id": "n_03_03",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 3,
+      "cmge_pv": 1100023,
+      "cmge_global": "y6jw2s",
+      "cmge_cmge": "emgr85"
+    },
+    {
+      "stage_id": "n_03_04",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 4,
+      "cmge_pv": 1100024,
+      "cmge_global": "p8bbtu",
+      "cmge_cmge": "br4ywn"
+    },
+    {
+      "stage_id": "n_03_05",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 5,
+      "cmge_pv": 1100025,
+      "cmge_global": "a71pab",
+      "cmge_cmge": "ur8315"
+    },
+    {
+      "stage_id": "n_03_06",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 6,
+      "cmge_pv": 1100026,
+      "cmge_global": "fabmzg",
+      "cmge_cmge": "ekjyw0"
+    },
+    {
+      "stage_id": "n_03_07",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 7,
+      "cmge_pv": 1100027,
+      "cmge_global": "jvghq1",
+      "cmge_cmge": "q7glf8"
+    },
+    {
+      "stage_id": "n_03_08",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 8,
+      "cmge_pv": 1100028,
+      "cmge_global": "fcp4mo",
+      "cmge_cmge": "rz4qpn"
+    },
+    {
+      "stage_id": "n_03_09",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 9,
+      "cmge_pv": 1100029,
+      "cmge_global": "f42gqf",
+      "cmge_cmge": "8qc9ec"
+    },
+    {
+      "stage_id": "n_03_10",
+      "area_id": "n_03",
+      "area_serial": 3,
+      "stage_serial_in_area": 10,
+      "cmge_pv": 1100030,
+      "cmge_global": "hv2wiw",
+      "cmge_cmge": "t93b0f"
+    },
+    {
+      "stage_id": "n_04_01",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 1,
+      "cmge_pv": 1100031,
+      "cmge_global": "kw1nwn",
+      "cmge_cmge": "3vqxv1"
+    },
+    {
+      "stage_id": "n_04_02",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 2,
+      "cmge_pv": 1100032,
+      "cmge_global": "uuu822",
+      "cmge_cmge": "2phfwb"
+    },
+    {
+      "stage_id": "n_04_03",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 3,
+      "cmge_pv": 1100033,
+      "cmge_global": "f0lb18",
+      "cmge_cmge": "ftymt0"
+    },
+    {
+      "stage_id": "n_04_04",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 4,
+      "cmge_pv": 1100034,
+      "cmge_global": "hx2m1i",
+      "cmge_cmge": "s9w8i9"
+    },
+    {
+      "stage_id": "n_04_05",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 5,
+      "cmge_pv": 1100035,
+      "cmge_global": "tuldk6",
+      "cmge_cmge": "wtu6gh"
+    },
+    {
+      "stage_id": "n_04_06",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 6,
+      "cmge_pv": 1100036,
+      "cmge_global": "otfttm",
+      "cmge_cmge": "vg3mj7"
+    },
+    {
+      "stage_id": "n_04_07",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 7,
+      "cmge_pv": 1100037,
+      "cmge_global": "c01ulo",
+      "cmge_cmge": "2o30b1"
+    },
+    {
+      "stage_id": "n_04_08",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 8,
+      "cmge_pv": 1100038,
+      "cmge_global": "ua6mxt",
+      "cmge_cmge": "a78g9h"
+    },
+    {
+      "stage_id": "n_04_09",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 9,
+      "cmge_pv": 1100039,
+      "cmge_global": "3zdtox",
+      "cmge_cmge": "x1kp4t"
+    },
+    {
+      "stage_id": "n_04_10",
+      "area_id": "n_04",
+      "area_serial": 4,
+      "stage_serial_in_area": 10,
+      "cmge_pv": 1100040,
+      "cmge_global": "nmwfcl",
+      "cmge_cmge": "wzdxbq"
+    },
+    {
+      "stage_id": "n_05_01",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 1,
+      "cmge_pv": 1100041,
+      "cmge_global": "wafp53",
+      "cmge_cmge": "v20ych"
+    },
+    {
+      "stage_id": "n_05_02",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 2,
+      "cmge_pv": 1100042,
+      "cmge_global": "vqootg",
+      "cmge_cmge": "rhcxiq"
+    },
+    {
+      "stage_id": "n_05_03",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 3,
+      "cmge_pv": 1100043,
+      "cmge_global": "quaket",
+      "cmge_cmge": "g9hvyp"
+    },
+    {
+      "stage_id": "n_05_04",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 4,
+      "cmge_pv": 1100044,
+      "cmge_global": "9x6ug0",
+      "cmge_cmge": "l8hczt"
+    },
+    {
+      "stage_id": "n_05_05",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 5,
+      "cmge_pv": 1100045,
+      "cmge_global": "ybmlzr",
+      "cmge_cmge": "35nimc"
+    },
+    {
+      "stage_id": "n_05_06",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 6,
+      "cmge_pv": 1100046,
+      "cmge_global": "fni2dm",
+      "cmge_cmge": "x2yeid"
+    },
+    {
+      "stage_id": "n_05_07",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 7,
+      "cmge_pv": 1100047,
+      "cmge_global": "bcmj1a",
+      "cmge_cmge": "mskz4y"
+    },
+    {
+      "stage_id": "n_05_08",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 8,
+      "cmge_pv": 1100048,
+      "cmge_global": "j8jg5h",
+      "cmge_cmge": "rg3hpe"
+    },
+    {
+      "stage_id": "n_05_09",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 9,
+      "cmge_pv": 1100049,
+      "cmge_global": "tcn7gy",
+      "cmge_cmge": "nw8g2b"
+    },
+    {
+      "stage_id": "n_05_10",
+      "area_id": "n_05",
+      "area_serial": 5,
+      "stage_serial_in_area": 10,
+      "cmge_pv": 1100050,
+      "cmge_global": "t7lo6k",
+      "cmge_cmge": "1yvfxa"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "CB0201",
+  "title": "E02_TITLE",
+  "stage_name": "E02_S03_TITLE",
+  "power": "2700",
+  "bgm": "BGM_TRAIN",
+  "game_res_id": "2",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_0503B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {}
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "monster",
+        "actor_id": "CB0201_M1",
+        "thumb": {
+          "level": 5,
+          "rank": 2,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0201_M1",
+        "thumb": {
+          "level": 5,
+          "rank": 2,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0201_M1",
+        "thumb": {
+          "level": 5,
+          "rank": 2,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0201_049_1",
+        "thumb": {
+          "level": 1,
+          "rank": 3,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          0,
+          0
+        ]
+      }
+    ]
+  ]
+}

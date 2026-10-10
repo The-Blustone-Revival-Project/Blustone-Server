@@ -1,0 +1,91 @@
+# Resolved JSON keys for /mirage/GetInfo, per native parser.
+# Verbatim from analysis/ghidra-mirage-strings-{07,08,09,11,12,13,14}.txt
+# (which are themselves outputs of ResolvePcRelativeStrings.java against the
+# relocated string pool). `so_addr` is the literal's address in the .so.
+parser_fn	parser_addr	key	so_addr	confidence
+RequestInfo	0092b30c	reset	01d72ecf	RECOVERED
+RequestInfo	0092b30c	stay	01d72ed5	RECOVERED
+RequestInfo	0092b30c	entry	01d72eda	RECOVERED
+RequestInfo	0092b30c	inst_base	01d72ee0	RECOVERED
+RequestInfo	0092b30c	inst_enemy	01d72eea	RECOVERED
+RequestInfo	0092b30c	ref_stair_list	01d72ef5	RECOVERED
+RequestInfo	0092b30c	ref_hero	01d72f04	RECOVERED
+dispatcher	009359ac	ret_data	01d689bb	RECOVERED
+dispatcher	009359ac	achievement	01d6ee96	RECOVERED
+dispatcher	009359ac	entry	01d72eda	RECOVERED
+dispatcher	009359ac	inst_base	01d72ee0	RECOVERED
+dispatcher	009359ac	inst_enemy	01d72eea	RECOVERED
+dispatcher	009359ac	ref_stair	01d73068	RECOVERED
+dispatcher	009359ac	ref_hero	01d72f04	RECOVERED
+Parse_Entry	00933aec	id	01d676c3	RECOVERED
+Parse_Entry	00933aec	mirage_remain_hp	01d6faa1	RECOVERED
+Parse_InstBase	00933d80	bg_res	01d72fe5	RECOVERED
+Parse_InstBase	00933d80	dlg_begin	01d72fec	RECOVERED
+Parse_InstBase	00933d80	dlg_end	01d72ff6	RECOVERED
+Parse_InstBase	00933d80	new_record	01d72ffe	RECOVERED
+Parse_InstBase	00933d80	floor	01d72f46	RECOVERED
+Parse_InstBase	00933d80	stair	01d72f4c	RECOVERED
+Parse_InstBase	00933d80	state	01d69a8f	RECOVERED
+Parse_InstBase	00933d80	deck	01d6fa6f	RECOVERED
+Parse_InstBase	00933d80	tier_percent	01d73009	RECOVERED
+Parse_InstBase	00933d80	highest	01d73016	RECOVERED
+Parse_InstBase	00933d80	revive_price	01d72f2f	RECOVERED
+Parse_InstBase	00933d80	begin_ltime	01d7301e	RECOVERED
+ParseStairInfo	009343b4	res_prefix	01d6f9de	RECOVERED
+ParseStairInfo	009343b4	res_postfix_list	01d7302a	RECOVERED
+ParseStairInfo	009343b4	list	01d6a8ff	RECOVERED
+ParseStairInfo	009343b4	grade	01d7303b	RECOVERED
+ParseStairInfo	009343b4	balance	01d73041	RECOVERED
+ParseHeroInfo	009347f8	bonus	01d73049	RECOVERED
+ParseHeroInfo	009347f8	end_ltime	01d7304f	RECOVERED
+ParseHeroInfo	009347f8	cur	01d6eea2	RECOVERED
+ParseHeroInfo	009347f8	next	01d73059	RECOVERED
+ParseFriendInfo	00934c00	floor	01d72f46	RECOVERED
+ParseFriendInfo	00934c00	nick_list	01d7305e	RECOVERED
+Parse_InstEnemy	0092dff4	n	01d6f95a	RECOVERED (single char, see note)
+Parse_InstEnemy	0092dff4	ref_id	01d6edf2	RECOVERED
+Parse_InstEnemy	0092dff4	rank	01d6fa90	RECOVERED
+Parse_InstEnemy	0092dff4	rank_up_cnt	01d6fa95	RECOVERED
+Parse_InstEnemy	0092dff4	overcome_cnt	01d6fa26	RECOVERED
+Parse_InstEnemy	0092dff4	exp	01d6ede1	RECOVERED
+Parse_InstEnemy	0092dff4	skill_1_level	01d6fb41	RECOVERED
+Parse_InstEnemy	0092dff4	skill_2_level	01d6fb4f	RECOVERED
+Parse_InstEnemy	0092dff4	skill_3_level	01d6fb5d	RECOVERED
+Parse_InstEnemy	0092dff4	skill_4_level	01d6fb6b	RECOVERED
+Parse_InstEnemy	0092dff4	skill_5_level	01d6fb79	RECOVERED
+Parse_End	0092c64c	state	01d69a8f	RECOVERED
+Parse_End	0092c64c	deck	01d6fa6f	RECOVERED
+Parse_End	0092c64c	inst_id	01d6eec9	RECOVERED
+Parse_End	0092c64c	remain_hp_percent	01d72f1d	RECOVERED
+Parse_HealHunter	0092c8e0	inst_id	01d6eec9	RECOVERED
+Parse_HealHunter	0092c8e0	mirage_remain_hp	01d6faa1	RECOVERED
+Parse_HealHunter	0092c8e0	revive_price	01d72f2f	RECOVERED
+Parse_HealHunter	0092c8e0	user	01d6ef58	RECOVERED
+Parse_HealHunter	0092c8e0	iap	01d6edee	RECOVERED
+Parse_HealHunter	0092c8e0	free_iap_qty	01d72d1b	RECOVERED
+Parse_HealHunter	0092c8e0	iap_qty	01d72d13	RECOVERED
+
+# Notes
+# ----
+# "n" at 0x1d6f95a: the literal pool overlaps the tail of the previous string
+# ("hp_percent" ends at 0x1d6f95c in the same pool), so the single-byte read
+# is either a genuine 1-char key or a suffix fragment. analysis/
+# ghidra-mirage-strings-11.txt records the same slot also decoding as
+# "n_ref_id"/"f_id", which is a pointer-arithmetic artefact, not two more
+# keys. Treat the key set of Parse_InstEnemy as {ref_id, rank, rank_up_cnt,
+# overcome_cnt, exp, skill_1_level..skill_5_level} and treat "n" as UNKNOWN.
+#
+# Parse_InstEnemy's per-entry field set is a CARD instance field set, not a
+# monster stat set: it is the same vocabulary as ParseUserDatailInfo
+# (analysis/ghidra-userdetail.txt). That is what "inst_enemy" means -- the
+# enemy TEAM'S CARD INSTANCES. It is not /reference/GetMonster and does not
+# carry hp/atk/def.
+#
+# Confirmed accessor functions (analysis/ghidra-mirage-ranges-07.txt):
+#   0092e8bc GetBaseInfo    body=536
+#   0092eb58 GetEnemyInfo   body=4
+#   0092eb5c GetStairInfo   body=4
+#   0092eb60 GetHeroInfo    body=4
+#   0092eb64 GetFriendInfo  body=4
+#   0092eb68 GetResName     body=4
+#   0092eb6c IsMirageEntry  body=34

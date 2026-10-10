@@ -1,0 +1,75 @@
+{
+  "id": "CB0102",
+  "title": "E01_TITLE",
+  "stage_name": "E01_S04_TITLE",
+  "power": "2200",
+  "game_res_id": "7",
+  "bgm": "BGM_GULLVEIG",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_0401B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {}
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "monster",
+        "actor_id": "CB0102_M1",
+        "thumb": {
+          "level": 5,
+          "rank": 1,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0102_M1",
+        "thumb": {
+          "level": 5,
+          "rank": 1,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0102_005_1",
+        "thumb": {
+          "level": 1,
+          "rank": 2,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  ]
+}

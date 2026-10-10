@@ -1,0 +1,63 @@
+{
+  "id": "CB1702",
+  "title": "E17_TITLE",
+  "stage_name": "E17_S04_TITLE",
+  "bgm": "BGM_BATTLE3",
+  "power": "150000",
+  "game_res_id": "901",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_2404B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "show_skill": true,
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {},
+      {
+        "type": "hunter",
+        "actor_id": "CB1702_C509",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 3,
+          "attr": 1,
+          "awake_step": 1,
+          "awake_hyper": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          1
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB1702_C510",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 3,
+          "attr": 2,
+          "awake_step": 1,
+          "awake_hyper": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          1
+        ]
+      }
+    ]
+  ]
+}

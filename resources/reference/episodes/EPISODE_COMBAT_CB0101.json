@@ -1,0 +1,54 @@
+{
+  "id": "CB0101",
+  "title": "E01_TITLE",
+  "stage_name": "E01_S02_TITLE",
+  "power": "1500",
+  "game_res_id": "99",
+  "bgm": "BGM_TRAIN",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_0302B",
+  "lose_dialog": "EP_0302B",
+  "lose_dialog2": "EP_0302B",
+  "left": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB0101_009_1",
+        "thumb": {
+          "level": 15,
+          "rank": 2,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB0101_003_1",
+        "thumb": {
+          "level": 1,
+          "rank": 3,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ]
+}

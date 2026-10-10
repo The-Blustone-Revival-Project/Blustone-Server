@@ -1,0 +1,504 @@
+{
+  "source_path": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/R_EPISODE.jet",
+  "source_sha256": "7f4362cdf80545a6da937444094837f334c8aae4f9f791d6ff4161948d98a01e",
+  "source_bytes": 38080,
+  "entries": [
+    {
+      "resource_index_zero_based": 3,
+      "variant": "rw-payload-3",
+      "root_id": null,
+      "output": "analysis/recovered-reference/EPISODE_STAT_ACTORS.json",
+      "sha256": "f3b8cb90372c89490467e75ed0564bfc3f8a4d094370264caa2c821b0eb13b56",
+      "context": "Episode-only actor STAT table; not ordinary hunter card-base stats"
+    },
+    {
+      "resource_index_zero_based": 5,
+      "variant": "rw-payload-5",
+      "root_id": "CB0001",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0001.json",
+      "sha256": "1e01515c04d8f5b6d631a7f267a476287cd162a6c5e733ca9eeba1cad493eeee",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 6,
+      "variant": "rw-payload-6",
+      "root_id": "CB0002",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0002.json",
+      "sha256": "10bc3d8303958de9cf2ffd1b5e22d88ed588f3720ab1327805c8c85d4d9583a3",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 7,
+      "variant": "rw-payload-7",
+      "root_id": "CB0003",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0003.json",
+      "sha256": "6c2e0d60e9a8a272733b98f12e6a0b2476abd1e67ec249cf5fadeb72867a5bc1",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 8,
+      "variant": "rw-payload-8",
+      "root_id": "CB0004",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0004.json",
+      "sha256": "8c6f4eefe9298ef873b40b004164b585d0e905fd9d2626453fd60d11fd5b28e4",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 9,
+      "variant": "rw-payload-9",
+      "root_id": "CB0101",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0101.json",
+      "sha256": "1e86be916cf6933c0740f508273092dad3605d30e6b4c76be86e683cd653f469",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 10,
+      "variant": "rw-payload-10",
+      "root_id": "CB0102",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0102.json",
+      "sha256": "0cafceb7872d6743bca831d3c413004de056d74f42e513fc7a1b600767e6e96b",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 11,
+      "variant": "rw-payload-11",
+      "root_id": "CB0103",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0103.json",
+      "sha256": "bd546cbc9638bd09d3eaec4376f11cb417bbdba0f6e636f34e4a749bc0e4dbbe",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 12,
+      "variant": "rw-payload-12",
+      "root_id": "CB0201",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0201.json",
+      "sha256": "a222b5baee3b9851e53ac395bf310db5b9e64e7f6575680d595309e40058f71b",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 13,
+      "variant": "rw-payload-13",
+      "root_id": "CB0202",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0202.json",
+      "sha256": "7d6ebbcfc8bfb59d709b67de545a73783dee83fba333188f14ca82c59edd000b",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 14,
+      "variant": "rw-payload-14",
+      "root_id": "CB0301",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0301.json",
+      "sha256": "4b4e7bfccd6da609b97d03bd13edd7f4a2953bb6297eab6a4c0c04b89e32f737",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 15,
+      "variant": "rw-payload-15",
+      "root_id": "CB0302",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0302.json",
+      "sha256": "f45e4affbb494bb1560672a3723c401c0ff4b661df8ffba0ea5010ab31598156",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 16,
+      "variant": "rw-payload-16",
+      "root_id": "CB0401",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0401.json",
+      "sha256": "8b4947181fdc83eb4e110389285abdf55c4fa8556c8ded73b1c62fdf8acf6370",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 17,
+      "variant": "rw-payload-17",
+      "root_id": "CB0501",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0501.json",
+      "sha256": "c03f21258976a65936cf35dd602842bec4221a359b0341fbfcb2fef5a628ef74",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 18,
+      "variant": "rw-payload-18",
+      "root_id": "CB0502",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0502.json",
+      "sha256": "a9876cb98d7b408c0d1e39813674c6c77314145558874737f74bf0276f2700c3",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 19,
+      "variant": "rw-payload-19",
+      "root_id": "CB0601",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0601.json",
+      "sha256": "b0632d14e66592b298cb9b304ff3f4a57e2b9fa6544bf586656846c2dd278e29",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 20,
+      "variant": "rw-payload-20",
+      "root_id": "CB0602",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0602.json",
+      "sha256": "cbba3914e6e413ed008a9f67d81a7c1ac89c2c266c5577e79b6cd68259d596e9",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 21,
+      "variant": "rw-payload-21",
+      "root_id": "CB0701",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0701.json",
+      "sha256": "7930fb5ba20f7db35d9bd92447de3b313da6246e46802c13ab2c560192269fd4",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 22,
+      "variant": "rw-payload-22",
+      "root_id": "CB0702",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0702.json",
+      "sha256": "aeeb4db77b8969f3e8a1f982e4ede72601d1e3adef8fff3a6008f7e139e82a36",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 23,
+      "variant": "rw-payload-23",
+      "root_id": "CB0801",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0801.json",
+      "sha256": "9f42b218183cb9a5a15ec69018f979faf238ebd60c0586351e61889f9203263d",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 24,
+      "variant": "rw-payload-24",
+      "root_id": "CB0802",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0802.json",
+      "sha256": "7fcdf35167655ba9453df34bf21f7ffef3130724d687c1133502e28b48bb7226",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 25,
+      "variant": "rw-payload-25",
+      "root_id": "CB0901",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0901.json",
+      "sha256": "7f0a7f22354ec406a764f79e5adc478509a43a736ca23aa256a101e5e199d110",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 26,
+      "variant": "rw-payload-26",
+      "root_id": "CB0902",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB0902.json",
+      "sha256": "7f48da9b08c36a54e1eba4d5917868038d4cf063ec3a5cb7abfaf9c215707d61",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 27,
+      "variant": "rw-payload-27",
+      "root_id": "CB1001",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1001.json",
+      "sha256": "48d8565682d779f14aaf84ae941b1705a5fc1cc49a48a532bbd7a79eed459ede",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 28,
+      "variant": "rw-payload-28",
+      "root_id": "CB1002",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1002.json",
+      "sha256": "7ba691b9b0e2a39d5e592ffb2c089866ae50bb9e91e6fee4b1b77eeca7fd6697",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 29,
+      "variant": "rw-payload-29",
+      "root_id": "CB1101",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1101.json",
+      "sha256": "cd6a420218af96c618cdc5ec6eed1c4cd03684468905bc0ce0f7e9819e1cd154",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 30,
+      "variant": "rw-payload-30",
+      "root_id": "CB1102",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1102.json",
+      "sha256": "062346909cdf91ab448f10c1372cc0ff8b8f3d22bd2616f0f58d556dd049e9d5",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 31,
+      "variant": "rw-payload-31",
+      "root_id": "CB1201",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1201.json",
+      "sha256": "4e07208c10e7a03a38a7acfce16f42fb49606cef5bddd0fe89a713699bbf99e3",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 32,
+      "variant": "rw-payload-32",
+      "root_id": "CB1202",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1202.json",
+      "sha256": "6ba874e61ceaeecc002668abf7beb0f2ff8a57a752daebf1dd1548226fb8848e",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 33,
+      "variant": "rw-payload-33",
+      "root_id": "CB1301",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1301.json",
+      "sha256": "a97cb7e13c82d0d2a7b67eb233048eaf1689aaeea8f2c91037fe9ab473637afb",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 34,
+      "variant": "rw-payload-34",
+      "root_id": "CB1302",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1302.json",
+      "sha256": "237e9011e9d1f5fda0ae89796717b5e5707e9c86650e62a11d8f9530fa259c2c",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 35,
+      "variant": "rw-payload-35",
+      "root_id": "CB1303",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1303.json",
+      "sha256": "c8847777e5596cd47f7dc99ffe27595b845fb3d9a014658ff2465463cf9a610f",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 36,
+      "variant": "rw-payload-36",
+      "root_id": "CB1304",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1304.json",
+      "sha256": "56d7d61fbbc50f1ed8ef36d8addd0a6195efb1840a65f37799e45f4e11a8c142",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 37,
+      "variant": "rw-payload-37",
+      "root_id": "CB1305",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1305.json",
+      "sha256": "3ada756484919a9604376ff7b0bb24199a04a72ffb10ab99e32a3f5a06dd1693",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 38,
+      "variant": "rw-payload-38",
+      "root_id": "CB1401",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1401.json",
+      "sha256": "c9c2fc51d7faa5a54684f79aa584f3e3cdac1b09bdac3ef86224b733a7accb84",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 39,
+      "variant": "rw-payload-39",
+      "root_id": "CB1402",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1402.json",
+      "sha256": "d83e2575ef4e459709a457a8e27f168046e736b4871edaeef00b456f15ed06b2",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 40,
+      "variant": "rw-payload-40",
+      "root_id": "CB1501",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1501.json",
+      "sha256": "9c51e45aee7013b863a5a19a305294fb264662a3b1440e4e7d4a474d98907774",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 41,
+      "variant": "rw-payload-41",
+      "root_id": "CB1502",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1502.json",
+      "sha256": "1f905195762deed4de2653f510339c123d5ea2f74aec183f393ed04531c27e33",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 42,
+      "variant": "rw-payload-42",
+      "root_id": "CB1601",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1601.json",
+      "sha256": "1366973f9337d499e06bcb7c4e96962befc0806793d683427028ac4ec360d10f",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 43,
+      "variant": "rw-payload-43",
+      "root_id": "CB1602",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1602.json",
+      "sha256": "018390a7ff0de299b76f172f892ffd56506d312a9bb7f55b05dba105841e48aa",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 44,
+      "variant": "rw-payload-44",
+      "root_id": "CB1603",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1603.json",
+      "sha256": "3137ece5a7f761fa1ea87b26e0c83044dfc294d4fa1c5868f88a2dd9d10642b3",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 45,
+      "variant": "rw-payload-45",
+      "root_id": "CB1604",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1604.json",
+      "sha256": "0e9006fe77ba00764fb1f370d69fb896b6b4f542701a9e4b63f3c91e8dc119a2",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 46,
+      "variant": "rw-payload-46",
+      "root_id": "CB1701",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1701.json",
+      "sha256": "49ed8bc71967fe28feee0bd99bfc02d87235b4f52ef691ba563842d0d1f80432",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 47,
+      "variant": "rw-payload-47",
+      "root_id": "CB1702",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1702.json",
+      "sha256": "6baea7e99ed21e3a713785b849db8d6ba4e59d175a08335ce8b75a031642f379",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 48,
+      "variant": "rw-payload-48",
+      "root_id": "CB1703",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1703.json",
+      "sha256": "29a4208344a38f13c844db7e57769a327263321f60bba891940ef5788d891fb3",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 49,
+      "variant": "rw-payload-49",
+      "root_id": "CB1704",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1704.json",
+      "sha256": "a5be92b49d30cbad3a41ff330d62dbf99c6b4121f74cc7de435f6ea55e3b677a",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 50,
+      "variant": "rw-payload-50",
+      "root_id": "CB1705",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1705.json",
+      "sha256": "f026181a66dfe6c97171b024df35c1af36abe0a58f1bb0462a02d6eda1ce69ad",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 51,
+      "variant": "rw-payload-51",
+      "root_id": "CB1706",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_CB1706.json",
+      "sha256": "7536ea0e86c23d85a5e4db6ebd320913793d590dc2b085d18f6105ae3aaac63e",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 52,
+      "variant": "rw-payload-52",
+      "root_id": "EVCB0101",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0101.json",
+      "sha256": "8d4f6fdceb4dd6f92ac08ab5a0108b5a0c3d09e6f9471bbead38b1028096b8ff",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 53,
+      "variant": "rw-payload-53",
+      "root_id": "EVCB0102",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0102.json",
+      "sha256": "6a1eef0ffe79a68f8ddff6057fa2d669f12add33adb57ff64118fe9d12b077e4",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 54,
+      "variant": "rw-payload-54",
+      "root_id": "EVCB0103",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0103.json",
+      "sha256": "56ee225eddbe50b04677ba3510689525ee61bf9052cf64c3fab685915d8dc158",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 55,
+      "variant": "rw-payload-55",
+      "root_id": "EVCB0104",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0104.json",
+      "sha256": "b710058bb7b0bc52c064f767c541f07f3b49a51de3ca3af5d433ba355be410f5",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 56,
+      "variant": "rw-payload-56",
+      "root_id": "EVCB0105",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0105.json",
+      "sha256": "4129cf20093255797418e9d8c831a28e6e7d1801e4cca7f19997dc4b089c4c8d",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 57,
+      "variant": "rw-payload-57",
+      "root_id": "EVCB0201",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0201.json",
+      "sha256": "ae6e99ef4aedbb1e2234f2ce2bef14d0e74ef6deea46fefea0e12fc9c53b2407",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 58,
+      "variant": "rw-payload-58",
+      "root_id": "EVCB0202",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0202.json",
+      "sha256": "2872bad8933a538f2f46ba9f781ee07f6377ca8792622dad4a478d78d42f6881",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 59,
+      "variant": "rw-payload-59",
+      "root_id": "EVCB0203",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0203.json",
+      "sha256": "04a6cf29e6e7bccfdcafc2a1d7cadc5b6f33925277951721795bdbef860412de",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 60,
+      "variant": "rw-payload-60",
+      "root_id": "EVCB0204",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0204.json",
+      "sha256": "f097af0bdb035e4feef7e4976a7d92eebd5088b0eacee53fe3b9445b122d4644",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 61,
+      "variant": "rw-payload-61",
+      "root_id": "EVCB0205",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0205.json",
+      "sha256": "e6d322bcb51e248812ae26865800cdd0a747641b2edf6c399120ff2a29bed19f",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 62,
+      "variant": "rw-payload-62",
+      "root_id": "EVCB0301",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0301.json",
+      "sha256": "44ef3e9169947076d64009cd9c411325b6a3a8468757318c44907139885c8565",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 63,
+      "variant": "rw-payload-63",
+      "root_id": "EVCB0302",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0302.json",
+      "sha256": "9d334ca439cdc3c35b7b4f2fe20a5bf37125f40a04ba91019a75a3f0374fc51d",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 64,
+      "variant": "rw-payload-64",
+      "root_id": "EVCB0303",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0303.json",
+      "sha256": "f5a3aecc28fa38ad8132e3052f6390080060f645f9e6d2b9fdc8246b501a35e3",
+      "context": "Shipped episode COMBAT record"
+    },
+    {
+      "resource_index_zero_based": 65,
+      "variant": "rw-payload-65",
+      "root_id": "EVCB0304",
+      "output": "analysis/recovered-reference/EPISODE_COMBAT_EVCB0304.json",
+      "sha256": "05f934459cbb7888c9124100f390ff624f25a711ef79a0589e7abae7b52465c1",
+      "context": "Shipped episode COMBAT record"
+    }
+  ],
+  "limits": "No resources enabled, rewards granted, actor refs merged or server source edited."
+}

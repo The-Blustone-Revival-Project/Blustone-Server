@@ -1,0 +1,1363 @@
+﻿[
+	{
+		"key": "BeforeAppInit",
+		"global": "udrni5",
+		"cmge": "rqf1dm",
+		"pv": 999997
+	},
+	{
+		"key": "AfterAppInit",
+		"global": "o2lgm0",
+		"cmge": "5hf298",
+		"pv": 999998
+	},
+	{
+		"key": "Continue",
+		"global": "",
+		"cmge": "",
+		"pv": 999999
+	},
+	{
+		"key": "EntryPoint_RMCreateApp",
+		"global": "r84aj5",
+		"cmge": "tet0ik",
+		"pv": 1000000
+	},
+	{
+		"key": "LaunchScene_Init",
+		"global": "9cs1r6",
+		"cmge": "ytndu1",
+		"pv": 1000001
+	},
+	{
+		"key": "CSRTitleScene_Init",
+		"global": "45l6hi",
+		"cmge": "pyu4of",
+		"pv": 1000002
+	},
+	{
+		"key": "CSRTitleScene_TitlePopupOpen",
+		"global": "h0degh",
+		"cmge": "7bxqx2",
+		"pv": 1000003
+	},
+	{
+		"key": "CSRTitlePopup_BT_START",
+		"global": "7ngv05",
+		"cmge": "jikfhg",
+		"pv": 1000004
+	},
+	{
+		"key": "CSRTitleScene_ResRegistGuest",
+		"global": "mcyqjh",
+		"cmge": "rquh5f",
+		"pv": 1000005
+	},
+	{
+		"key": "CSRTitleScene_InstSyncEnd",
+		"global": "o670hg",
+		"cmge": "5rupvl",
+		"pv": 1000006
+	},
+	{
+		"key": "DialogPopup_Video_START_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000007
+	},
+	{
+		"key": "DialogPopup_Video_START_E",
+		"global": "4tl6ur",
+		"cmge": "uud09l",
+		"pv": 1000008
+	},
+	{
+		"key": "DialogPopup_AD00001A_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000009
+	},
+	{
+		"key": "DialogPopup_AD00001A_E",
+		"global": "p5vhoi",
+		"cmge": "uo9l3s",
+		"pv": 1000010
+	},
+	{
+		"key": "DialogPopup_AD00001B_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000011
+	},
+	{
+		"key": "DialogPopup_AD00001B_E",
+		"global": "i96opq",
+		"cmge": "ar1nsz",
+		"pv": 1000012
+	},
+	{
+		"key": "CSRFrontendNormal_00_01_Win",
+		"global": "y2p8pn",
+		"cmge": "6wo39j",
+		"pv": 1000013
+	},
+	{
+		"key": "DialogPopup_AD00002A_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000014
+	},
+	{
+		"key": "DialogPopup_AD00002A_E",
+		"global": "boptqa",
+		"cmge": "gar1ge",
+		"pv": 1000015
+	},
+	{
+		"key": "DialogPopup_AD00002B_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000016
+	},
+	{
+		"key": "DialogPopup_AD00002B_E",
+		"global": "ki5a6j",
+		"cmge": "a9zuok",
+		"pv": 1000017
+	},
+	{
+		"key": "CSRFrontendNormal_00_02_Win",
+		"global": "dyinpv",
+		"cmge": "l2nmip",
+		"pv": 1000018
+	},
+	{
+		"key": "DialogPopup_AD00004A_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000019
+	},
+	{
+		"key": "DialogPopup_AD00004A_E",
+		"global": "rosouz",
+		"cmge": "t2k2i1",
+		"pv": 1000020
+	},
+	{
+		"key": "DialogPopup_Video_USER_LOSE_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000021
+	},
+	{
+		"key": "DialogPopup_Video_USER_LOSE_E",
+		"global": "fk8mpp",
+		"cmge": "r5syho",
+		"pv": 1000022
+	},
+	{
+		"key": "DialogPopup_Video_ORNITHOPTER_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000023
+	},
+	{
+		"key": "DialogPopup_Video_ORNITHOPTER_E",
+		"global": "kfa0v3",
+		"cmge": "c2ep4e",
+		"pv": 1000024
+	},
+	{
+		"key": "DialogPopup_AD00004B_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000025
+	},
+	{
+		"key": "DialogPopup_AD00004B_E",
+		"global": "gl1fac",
+		"cmge": "6byyiw",
+		"pv": 1000026
+	},
+	{
+		"key": "DialogPopup_Video_TAG_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000027
+	},
+	{
+		"key": "DialogPopup_Video_TAG_E",
+		"global": "x03pzr",
+		"cmge": "apl4rm",
+		"pv": 1000028
+	},
+	{
+		"key": "DialogPopup_AD00004C_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000029
+	},
+	{
+		"key": "DialogPopup_AD00004C_E",
+		"global": "yzyzmv",
+		"cmge": "uedx24",
+		"pv": 1000030
+	},
+	{
+		"key": "DialogPopup_AD00005B_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000031
+	},
+	{
+		"key": "DialogPopup_AD00005B_E",
+		"global": "191xva",
+		"cmge": "3uru2m",
+		"pv": 1000032
+	},
+	{
+		"key": "CSRFrontendNormal_00_03_Win",
+		"global": "9brt6s",
+		"cmge": "lnw8be",
+		"pv": 1000033
+	},
+	{
+		"key": "DialogPopup_Video_LIGHT_ON_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000034
+	},
+	{
+		"key": "DialogPopup_Video_LIGHT_ON_E",
+		"global": "geevh6",
+		"cmge": "a0t50k",
+		"pv": 1000035
+	},
+	{
+		"key": "DialogPopup_AD00006A_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000036
+	},
+	{
+		"key": "DialogPopup_AD00006A_E",
+		"global": "2oebei",
+		"cmge": "zhdbav",
+		"pv": 1000037
+	},
+	{
+		"key": "DialogPopup_Video_GO_UPMENU_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000038
+	},
+	{
+		"key": "DialogPopup_Video_GO_UPMENU_E",
+		"global": "ysbb0b",
+		"cmge": "m3k4cs",
+		"pv": 1000039
+	},
+	{
+		"key": "DialogPopup_AD00007A_B",
+		"global": "",
+		"cmge": "",
+		"pv": 1000040
+	},
+	{
+		"key": "DialogPopup_AD00007A_E",
+		"global": "2rqs82",
+		"cmge": "qju1xr",
+		"pv": 1000041
+	},
+	{
+		"key": "TitleScene_NewPlayer0",
+		"global": "",
+		"cmge": "",
+		"pv": 1000100
+	},
+	{
+		"key": "TitleScene_NewPlayer1",
+		"global": "",
+		"cmge": "",
+		"pv": 1000101
+	},
+	{
+		"key": "TitleScene_NewPlayer2",
+		"global": "",
+		"cmge": "",
+		"pv": 1000102
+	},
+	{
+		"key": "TitleScene_CDN0",
+		"global": "",
+		"cmge": "",
+		"pv": 1000103
+	},
+	{
+		"key": "TitleScene_CDN1",
+		"global": "",
+		"cmge": "",
+		"pv": 1000104
+	},
+	{
+		"key": "TitleScene_CDN2",
+		"global": "",
+		"cmge": "",
+		"pv": 1000105
+	},
+	{
+		"key": "TitleScene_CDN3",
+		"global": "",
+		"cmge": "",
+		"pv": 1000106
+	},
+	{
+		"key": "TitleScene_CDN4",
+		"global": "",
+		"cmge": "",
+		"pv": 1000107
+	},
+	{
+		"key": "TitleScene_CDN5",
+		"global": "",
+		"cmge": "",
+		"pv": 1000108
+	},
+	{
+		"key": "TitleScene_CDN6",
+		"global": "",
+		"cmge": "",
+		"pv": 1000109
+	},
+	{
+		"key": "TitleScene_CDN7",
+		"global": "",
+		"cmge": "",
+		"pv": 1000110
+	},
+	{
+		"key": "TitleScene_CDN8",
+		"global": "",
+		"cmge": "",
+		"pv": 1000111
+	},
+	{
+		"key": "TitleScene_CDN_NO",
+		"global": "",
+		"cmge": "",
+		"pv": 1000112
+	},
+	{
+		"key": "TitleScene_CDN_External",
+		"global": "",
+		"cmge": "",
+		"pv": 1000113
+	},
+	{
+		"key": "TitleScene_CDN_NotEnough0",
+		"global": "",
+		"cmge": "",
+		"pv": 1000114
+	},
+	{
+		"key": "TitleScene_CDN_NotEnough1",
+		"global": "",
+		"cmge": "",
+		"pv": 1000115
+	},
+	{
+		"key": "Tuto_n0002_00",
+		"global": "",
+		"cmge": "",
+		"pv": 1000200
+	},
+	{
+		"key": "Tuto_n0002_01",
+		"global": "",
+		"cmge": "",
+		"pv": 1000201
+	},
+	{
+		"key": "Tuto_n0002_02",
+		"global": "",
+		"cmge": "",
+		"pv": 1000202
+	},
+	{
+		"key": "Tuto_n0002_03",
+		"global": "",
+		"cmge": "",
+		"pv": 1000203
+	},
+	{
+		"key": "Tuto_n0002_04",
+		"global": "",
+		"cmge": "",
+		"pv": 1000204
+	},
+	{
+		"key": "Tuto_n0002_05",
+		"global": "",
+		"cmge": "",
+		"pv": 1000205
+	},
+	{
+		"key": "Tuto_n0002_06",
+		"global": "",
+		"cmge": "",
+		"pv": 1000206
+	},
+	{
+		"key": "Tuto_n0002_07",
+		"global": "",
+		"cmge": "",
+		"pv": 1000207
+	},
+	{
+		"key": "Tuto_n0002_08",
+		"global": "",
+		"cmge": "",
+		"pv": 1000208
+	},
+	{
+		"key": "Tuto_n0002_09",
+		"global": "",
+		"cmge": "",
+		"pv": 1000209
+	},
+	{
+		"key": "Tuto_n0002_10",
+		"global": "",
+		"cmge": "",
+		"pv": 1000210
+	},
+	{
+		"key": "TitleScene_Bind0",
+		"global": "",
+		"cmge": "",
+		"pv": 1000300
+	},
+	{
+		"key": "TitleScene_Bind1",
+		"global": "",
+		"cmge": "",
+		"pv": 1000301
+	},
+	{
+		"key": "TitleScene_Bind2",
+		"global": "",
+		"cmge": "",
+		"pv": 1000302
+	},
+	{
+		"key": "TitleScene_Bind3",
+		"global": "",
+		"cmge": "",
+		"pv": 1000303
+	},
+	{
+		"key": "TitleScene_Bind4",
+		"global": "",
+		"cmge": "",
+		"pv": 1000304
+	},
+	{
+		"key": "TitleScene_Bind5",
+		"global": "",
+		"cmge": "",
+		"pv": 1000305
+	},
+	{
+		"key": "TitleScene_Bind6",
+		"global": "",
+		"cmge": "",
+		"pv": 1000306
+	},
+	{
+		"key": "FirstEnter0",
+		"global": "",
+		"cmge": "",
+		"pv": 1000400
+	},
+	{
+		"key": "FirstEnter1",
+		"global": "",
+		"cmge": "",
+		"pv": 1000401
+	},
+	{
+		"key": "FirstEnter2",
+		"global": "",
+		"cmge": "",
+		"pv": 1000402
+	},
+	{
+		"key": "FirstEnter3",
+		"global": "",
+		"cmge": "",
+		"pv": 1000403
+	},
+	{
+		"key": "FirstEnter4",
+		"global": "",
+		"cmge": "",
+		"pv": 1000404
+	},
+	{
+		"key": "FirstEnter5",
+		"global": "",
+		"cmge": "",
+		"pv": 1000405
+	},
+	{
+		"key": "FirstEnter6",
+		"global": "",
+		"cmge": "",
+		"pv": 1000406
+	},
+	{
+		"key": "FirstEnter7",
+		"global": "",
+		"cmge": "",
+		"pv": 1000407
+	},
+	{
+		"key": "FirstEnter8",
+		"global": "",
+		"cmge": "",
+		"pv": 1000408
+	},
+	{
+		"key": "FirstEnter9",
+		"global": "",
+		"cmge": "",
+		"pv": 1000409
+	},
+	{
+		"key": "FirstEnter10",
+		"global": "",
+		"cmge": "",
+		"pv": 1000410
+	},
+	{
+		"key": "FirstEnter11",
+		"global": "",
+		"cmge": "",
+		"pv": 1000411
+	},
+	{
+		"key": "FirstEnter12",
+		"global": "",
+		"cmge": "",
+		"pv": 1000419
+	},
+	{
+		"key": "FirstEnter13",
+		"global": "",
+		"cmge": "",
+		"pv": 1000420
+	},
+	{
+		"key": "FirstEnter14",
+		"global": "",
+		"cmge": "",
+		"pv": 1000421
+	},
+	{
+		"key": "FirstEnter15",
+		"global": "",
+		"cmge": "",
+		"pv": 1000412
+	},
+	{
+		"key": "FirstEnter16",
+		"global": "",
+		"cmge": "",
+		"pv": 1000413
+	},
+	{
+		"key": "FirstEnter17",
+		"global": "",
+		"cmge": "",
+		"pv": 1000414
+	},
+	{
+		"key": "FirstEnter18",
+		"global": "",
+		"cmge": "",
+		"pv": 1000415
+	},
+	{
+		"key": "FirstEnter19",
+		"global": "",
+		"cmge": "",
+		"pv": 1000416
+	},
+	{
+		"key": "FirstEnter20",
+		"global": "",
+		"cmge": "",
+		"pv": 1000417
+	},
+	{
+		"key": "FirstEnter21",
+		"global": "",
+		"cmge": "",
+		"pv": 1000418
+	},
+	{
+		"key": "NameInput0",
+		"global": "",
+		"cmge": "",
+		"pv": 1000500
+	},
+	{
+		"key": "NameInput1",
+		"global": "",
+		"cmge": "",
+		"pv": 1000501
+	},
+	{
+		"key": "NameInput2",
+		"global": "",
+		"cmge": "",
+		"pv": 1000502
+	},
+	{
+		"key": "Flow_NewUser",
+		"global": "",
+		"cmge": "",
+		"pv": 1000600
+	},
+	{
+		"key": "Flow_ServerSelect",
+		"global": "",
+		"cmge": "",
+		"pv": 1000601
+	},
+	{
+		"key": "Flow_Start",
+		"global": "",
+		"cmge": "",
+		"pv": 1000602
+	},
+	{
+		"key": "MissionCompleteReq",
+		"global": "",
+		"cmge": "",
+		"pv": 1000700
+	},
+	{
+		"key": "MissionCompleteRes1",
+		"global": "",
+		"cmge": "",
+		"pv": 1000701
+	},
+	{
+		"key": "MissionCompleteRes2",
+		"global": "",
+		"cmge": "",
+		"pv": 1000702
+	},
+	{
+		"key": "MissionCompleteRes3",
+		"global": "",
+		"cmge": "",
+		"pv": 1000703
+	},
+	{
+		"key": "n_01_01",
+		"global": "aamt1w",
+		"cmge": "q1gmu9",
+		"pv": 1100001
+	},
+	{
+		"key": "n_01_02",
+		"global": "vuedyb",
+		"cmge": "6lehxa",
+		"pv": 1100002
+	},
+	{
+		"key": "n_01_03",
+		"global": "v51ol6",
+		"cmge": "cn5lqy",
+		"pv": 1100003
+	},
+	{
+		"key": "n_01_04",
+		"global": "s8rbeb",
+		"cmge": "yq7nga",
+		"pv": 1100004
+	},
+	{
+		"key": "n_01_05",
+		"global": "2c3a58",
+		"cmge": "4qz3jf",
+		"pv": 1100005
+	},
+	{
+		"key": "n_01_06",
+		"global": "j8y9u5",
+		"cmge": "uw8a48",
+		"pv": 1100006
+	},
+	{
+		"key": "n_01_07",
+		"global": "fnjp79",
+		"cmge": "u6149n",
+		"pv": 1100007
+	},
+	{
+		"key": "n_01_08",
+		"global": "4sug23",
+		"cmge": "waht3h",
+		"pv": 1100008
+	},
+	{
+		"key": "n_01_09",
+		"global": "ypb1ec",
+		"cmge": "nxhpkz",
+		"pv": 1100009
+	},
+	{
+		"key": "n_01_10",
+		"global": "yx5n5y",
+		"cmge": "o9mcf1",
+		"pv": 1100010
+	},
+	{
+		"key": "n_02_01",
+		"global": "5t7yoy",
+		"cmge": "c94eyq",
+		"pv": 1100011
+	},
+	{
+		"key": "n_02_02",
+		"global": "xer516",
+		"cmge": "g8o597",
+		"pv": 1100012
+	},
+	{
+		"key": "n_02_03",
+		"global": "w8hjlh",
+		"cmge": "1v28az",
+		"pv": 1100013
+	},
+	{
+		"key": "n_02_04",
+		"global": "okdorg",
+		"cmge": "pylq3f",
+		"pv": 1100014
+	},
+	{
+		"key": "n_02_05",
+		"global": "oaa5pu",
+		"cmge": "63awsj",
+		"pv": 1100015
+	},
+	{
+		"key": "n_02_06",
+		"global": "qjpiz7",
+		"cmge": "si1mvy",
+		"pv": 1100016
+	},
+	{
+		"key": "n_02_07",
+		"global": "slemy6",
+		"cmge": "55z1d3",
+		"pv": 1100017
+	},
+	{
+		"key": "n_02_08",
+		"global": "74aem6",
+		"cmge": "c1cnbc",
+		"pv": 1100018
+	},
+	{
+		"key": "n_02_09",
+		"global": "5u04ym",
+		"cmge": "6dd47o",
+		"pv": 1100019
+	},
+	{
+		"key": "n_02_10",
+		"global": "ta6hbq",
+		"cmge": "xfhrlp",
+		"pv": 1100020
+	},
+	{
+		"key": "n_03_01",
+		"global": "9queip",
+		"cmge": "uaq21p",
+		"pv": 1100021
+	},
+	{
+		"key": "n_03_02",
+		"global": "3wpokg",
+		"cmge": "u4xb22",
+		"pv": 1100022
+	},
+	{
+		"key": "n_03_03",
+		"global": "y6jw2s",
+		"cmge": "emgr85",
+		"pv": 1100023
+	},
+	{
+		"key": "n_03_04",
+		"global": "p8bbtu",
+		"cmge": "br4ywn",
+		"pv": 1100024
+	},
+	{
+		"key": "n_03_05",
+		"global": "a71pab",
+		"cmge": "ur8315",
+		"pv": 1100025
+	},
+	{
+		"key": "n_03_06",
+		"global": "fabmzg",
+		"cmge": "ekjyw0",
+		"pv": 1100026
+	},
+	{
+		"key": "n_03_07",
+		"global": "jvghq1",
+		"cmge": "q7glf8",
+		"pv": 1100027
+	},
+	{
+		"key": "n_03_08",
+		"global": "fcp4mo",
+		"cmge": "rz4qpn",
+		"pv": 1100028
+	},
+	{
+		"key": "n_03_09",
+		"global": "f42gqf",
+		"cmge": "8qc9ec",
+		"pv": 1100029
+	},
+	{
+		"key": "n_03_10",
+		"global": "hv2wiw",
+		"cmge": "t93b0f",
+		"pv": 1100030
+	},
+	{
+		"key": "n_04_01",
+		"global": "kw1nwn",
+		"cmge": "3vqxv1",
+		"pv": 1100031
+	},
+	{
+		"key": "n_04_02",
+		"global": "uuu822",
+		"cmge": "2phfwb",
+		"pv": 1100032
+	},
+	{
+		"key": "n_04_03",
+		"global": "f0lb18",
+		"cmge": "ftymt0",
+		"pv": 1100033
+	},
+	{
+		"key": "n_04_04",
+		"global": "hx2m1i",
+		"cmge": "s9w8i9",
+		"pv": 1100034
+	},
+	{
+		"key": "n_04_05",
+		"global": "tuldk6",
+		"cmge": "wtu6gh",
+		"pv": 1100035
+	},
+	{
+		"key": "n_04_06",
+		"global": "otfttm",
+		"cmge": "vg3mj7",
+		"pv": 1100036
+	},
+	{
+		"key": "n_04_07",
+		"global": "c01ulo",
+		"cmge": "2o30b1",
+		"pv": 1100037
+	},
+	{
+		"key": "n_04_08",
+		"global": "ua6mxt",
+		"cmge": "a78g9h",
+		"pv": 1100038
+	},
+	{
+		"key": "n_04_09",
+		"global": "3zdtox",
+		"cmge": "x1kp4t",
+		"pv": 1100039
+	},
+	{
+		"key": "n_04_10",
+		"global": "nmwfcl",
+		"cmge": "wzdxbq",
+		"pv": 1100040
+	},
+	{
+		"key": "n_05_01",
+		"global": "wafp53",
+		"cmge": "v20ych",
+		"pv": 1100041
+	},
+	{
+		"key": "n_05_02",
+		"global": "vqootg",
+		"cmge": "rhcxiq",
+		"pv": 1100042
+	},
+	{
+		"key": "n_05_03",
+		"global": "quaket",
+		"cmge": "g9hvyp",
+		"pv": 1100043
+	},
+	{
+		"key": "n_05_04",
+		"global": "9x6ug0",
+		"cmge": "l8hczt",
+		"pv": 1100044
+	},
+	{
+		"key": "n_05_05",
+		"global": "ybmlzr",
+		"cmge": "35nimc",
+		"pv": 1100045
+	},
+	{
+		"key": "n_05_06",
+		"global": "fni2dm",
+		"cmge": "x2yeid",
+		"pv": 1100046
+	},
+	{
+		"key": "n_05_07",
+		"global": "bcmj1a",
+		"cmge": "mskz4y",
+		"pv": 1100047
+	},
+	{
+		"key": "n_05_08",
+		"global": "j8jg5h",
+		"cmge": "rg3hpe",
+		"pv": 1100048
+	},
+	{
+		"key": "n_05_09",
+		"global": "tcn7gy",
+		"cmge": "nw8g2b",
+		"pv": 1100049
+	},
+	{
+		"key": "n_05_10",
+		"global": "t7lo6k",
+		"cmge": "1yvfxa",
+		"pv": 1100050
+	},
+	{
+		"key": "_TitlePopupOpen",
+		"global": "",
+		"cmge": "",
+		"pv": 2000000
+	},
+	{
+		"key": "_TitlePopup_Newuser",
+		"global": "",
+		"cmge": "",
+		"pv": 2000001
+	},
+	{
+		"key": "_LoginPopup_Open",
+		"global": "",
+		"cmge": "",
+		"pv": 2000002
+	},
+	{
+		"key": "_TitlePopup_Server",
+		"global": "",
+		"cmge": "",
+		"pv": 2000003
+	},
+	{
+		"key": "_TitlePopup_Start",
+		"global": "",
+		"cmge": "",
+		"pv": 2000004
+	},
+	{
+		"key": "_TitleScene_ReqRegisterGuest",
+		"global": "",
+		"cmge": "",
+		"pv": 2000005
+	},
+	{
+		"key": "_TitleScene_ResRegisterGuest1",
+		"global": "",
+		"cmge": "",
+		"pv": 2000006
+	},
+	{
+		"key": "_TitleScene_ResRegisterGuest2",
+		"global": "",
+		"cmge": "",
+		"pv": 2000007
+	},
+	{
+		"key": "_TitleScene_ResRegisterGuest3",
+		"global": "",
+		"cmge": "",
+		"pv": 2000008
+	},
+	{
+		"key": "_TitleScene_ResRegisterGuest1",
+		"global": "",
+		"cmge": "",
+		"pv": 2000009
+	},
+	{
+		"key": "_TitleScene_ReqCdnList",
+		"global": "",
+		"cmge": "",
+		"pv": 2000010
+	},
+	{
+		"key": "_TitleScene_ResCdnList",
+		"global": "",
+		"cmge": "",
+		"pv": 2000011
+	},
+	{
+		"key": "_PatchSystem_HasData1",
+		"global": "",
+		"cmge": "",
+		"pv": 2000012
+	},
+	{
+		"key": "_PatchSystem_HasData2",
+		"global": "",
+		"cmge": "",
+		"pv": 2000013
+	},
+	{
+		"key": "_TitleScene_CdnCheck1",
+		"global": "",
+		"cmge": "",
+		"pv": 2000014
+	},
+	{
+		"key": "_TitleScene_CdnCheck2",
+		"global": "",
+		"cmge": "",
+		"pv": 2000015
+	},
+	{
+		"key": "_TitleScene_CdnCheck3",
+		"global": "",
+		"cmge": "",
+		"pv": 2000016
+	},
+	{
+		"key": "_TitleScene_TryMoveToExternal",
+		"global": "",
+		"cmge": "",
+		"pv": 2000017
+	},
+	{
+		"key": "_TitleScene_NotEnoughStorage",
+		"global": "",
+		"cmge": "",
+		"pv": 2000018
+	},
+	{
+		"key": "_TitleScene_CdnPopupOpen",
+		"global": "",
+		"cmge": "",
+		"pv": 2000019
+	},
+	{
+		"key": "_TitleScene_CdnDownloadTry1",
+		"global": "",
+		"cmge": "",
+		"pv": 2000020
+	},
+	{
+		"key": "_TitleScene_CdnDownloadTry2",
+		"global": "",
+		"cmge": "",
+		"pv": 2000021
+	},
+	{
+		"key": "_TitleScene_CdnDownloadTry3",
+		"global": "",
+		"cmge": "",
+		"pv": 2000022
+	},
+	{
+		"key": "_TitleScene_CdnDownloadTry4",
+		"global": "",
+		"cmge": "",
+		"pv": 2000023
+	},
+	{
+		"key": "_TitleScene_RefSyncDone",
+		"global": "",
+		"cmge": "",
+		"pv": 2000024
+	},
+	{
+		"key": "_TitleScene_InstSyncDone",
+		"global": "",
+		"cmge": "",
+		"pv": 2000025
+	},
+	{
+		"key": "_TitleScene_AuthCheck1",
+		"global": "",
+		"cmge": "",
+		"pv": 2000026
+	},
+	{
+		"key": "_TitleScene_AuthCheck2",
+		"global": "",
+		"cmge": "",
+		"pv": 2000027
+	},
+	{
+		"key": "_TitleScene_BindEnter",
+		"global": "",
+		"cmge": "",
+		"pv": 2000028
+	},
+	{
+		"key": "_BindPopup_GuestPopup",
+		"global": "",
+		"cmge": "",
+		"pv": 2000029
+	},
+	{
+		"key": "_BindPopup_MailPopup",
+		"global": "",
+		"cmge": "",
+		"pv": 2000030
+	},
+	{
+		"key": "_TitleScene_BindSns",
+		"global": "",
+		"cmge": "",
+		"pv": 2000031
+	},
+	{
+		"key": "_TitleScene_BindEmail",
+		"global": "",
+		"cmge": "",
+		"pv": 2000032
+	},
+	{
+		"key": "_TitleScene_UnpackCheck1",
+		"global": "",
+		"cmge": "",
+		"pv": 2000033
+	},
+	{
+		"key": "_TitleScene_UnpackCheck2",
+		"global": "",
+		"cmge": "",
+		"pv": 2000034
+	},
+	{
+		"key": "_TitleScene_UnpackCheck3",
+		"global": "",
+		"cmge": "",
+		"pv": 2000035
+	},
+	{
+		"key": "_TitleScene_UnpackCheck4",
+		"global": "",
+		"cmge": "",
+		"pv": 2000036
+	},
+	{
+		"key": "_TitleScene_LastDelay1",
+		"global": "",
+		"cmge": "",
+		"pv": 2000037
+	},
+	{
+		"key": "_TitleScene_LastDelay2",
+		"global": "",
+		"cmge": "",
+		"pv": 2000038
+	},
+	{
+		"key": "_TitleScene_Done",
+		"global": "",
+		"cmge": "",
+		"pv": 2000039
+	},
+	{
+		"key": "_EmailPopup_EmailOpen",
+		"global": "",
+		"cmge": "",
+		"pv": 2000101
+	},
+	{
+		"key": "_EmailPopup_EmailClose",
+		"global": "",
+		"cmge": "",
+		"pv": 2000102
+	},
+	{
+		"key": "_EmailPopup_PassOpen",
+		"global": "",
+		"cmge": "",
+		"pv": 2000103
+	},
+	{
+		"key": "_EmailPopup_PassClose",
+		"global": "",
+		"cmge": "",
+		"pv": 2000104
+	},
+	{
+		"key": "_EmailPopup_Done",
+		"global": "",
+		"cmge": "",
+		"pv": 2000105
+	},
+	{
+		"key": "_NameInputPopup_Open",
+		"global": "",
+		"cmge": "",
+		"pv": 2000106
+	},
+	{
+		"key": "_NameInputPopup_Close",
+		"global": "",
+		"cmge": "",
+		"pv": 2000107
+	},
+	{
+		"key": "_NameInputPopup_Done",
+		"global": "",
+		"cmge": "",
+		"pv": 2000108
+	}
+
+	,{
+		"key": "_ReleaseTitleScene",
+		"global": "",
+		"cmge": "",
+		"pv": 5000000
+	}
+
+	,{
+		"key": "_MakeMainScene",
+		"global": "",
+		"cmge": "",
+		"pv": 5000001
+	}
+
+	,{
+		"key": "_InitMainScene",
+		"global": "",
+		"cmge": "",
+		"pv": 5000002
+	}
+
+	,{
+		"key": "SRGetInstData()->GetAuto().IsMainSceneAutoNoti()",
+		"global": "",
+		"cmge": "",
+		"pv": 5000003
+	}
+
+	,{
+		"key": "SetRightSideIcon",
+		"global": "",
+		"cmge": "",
+		"pv": 5000004
+	}
+
+
+	,{
+		"key": "FadeInEndOfMainScene",
+		"global": "",
+		"cmge": "",
+		"pv": 5000005
+	}
+
+
+	,{
+		"key": "CreateFirstPopup()",
+		"global": "",
+		"cmge": "",
+		"pv": 5000006
+	}
+
+	,{
+		"key": "_ResetMainScene",
+		"global": "",
+		"cmge": "",
+		"pv": 5000007
+	}
+
+	,{
+		"key": "Start_GuerrillaCallback",
+		"global": "",
+		"cmge": "",
+		"pv": 5000008
+	}
+
+	,{
+		"key": "End_GuerrillaCallback",
+		"global": "",
+		"cmge": "",
+		"pv": 5000009
+	}
+
+	,{
+		"key": "UpdateFirstMain",
+		"global": "",
+		"cmge": "",
+		"pv": 5000010
+	}
+
+	,{
+		"key": "CreateSecondPopup()",
+		"global": "",
+		"cmge": "",
+		"pv": 5000011
+	}
+
+	,{
+		"key": "FrontbannerWebTokenCallback",
+		"global": "",
+		"cmge": "",
+		"pv": 5000012
+	}
+
+	,{
+		"key": "OpenFrontbannerView",
+		"global": "",
+		"cmge": "",
+		"pv": 5000013
+	}
+
+	,{
+		"key": "CloseFrontbannerView",
+		"global": "",
+		"cmge": "",
+		"pv": 5000014
+	}
+]

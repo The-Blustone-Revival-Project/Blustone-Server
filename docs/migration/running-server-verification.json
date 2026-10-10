@@ -1,0 +1,8 @@
+{
+  "running": true,
+  "port": 8080,
+  "resource_packages": 139,
+  "manifest_sha256": "c9e9307c47b3b5034e36ded495f2bf5d79c2b900ab4b42c9ba82e742888d6513",
+  "preserved_games": 3,
+  "gameplay_states_exact": true
+}

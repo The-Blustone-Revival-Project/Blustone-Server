@@ -1,0 +1,54 @@
+{
+  "id": "CB1302",
+  "title": "E13_TITLE",
+  "stage_name": "E13_S02_TITLE",
+  "bgm": "BGM_BATTLE3",
+  "power": "25000",
+  "game_res_id": "7",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_2002B",
+  "lose_dialog": "EP_2002B",
+  "lose_dialog2": "EP_2002B",
+  "left": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB1302_C009",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB1302_C010",
+        "thumb": {
+          "level": 1,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ]
+}

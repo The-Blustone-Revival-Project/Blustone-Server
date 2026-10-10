@@ -1,0 +1,126 @@
+{
+  "id": "CB0602",
+  "title": "E06_TITLE",
+  "stage_name": "E05_S05_TITLE",
+  "bgm": "BGM_BATTLE2",
+  "power": "26000",
+  "game_res_id": "7",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_1204B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {},
+      {
+        "type": "hunter",
+        "actor_id": "CB0601_012_1",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "monster",
+        "actor_id": "CB0602_M1",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0602_M1",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0602_M1",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0602_M1",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB0602_040_1",
+        "thumb": {
+          "level": 10,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  ]
+}

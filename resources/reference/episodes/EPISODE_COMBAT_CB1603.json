@@ -1,0 +1,77 @@
+{
+  "id": "CB1603",
+  "title": "E16_TITLE",
+  "stage_name": "E16_S07_TITLE",
+  "bgm": "BGM_BATTLE3",
+  "power": "54000",
+  "game_res_id": "902",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_2307B",
+  "lose_dialog": "EP_2307B",
+  "lose_dialog2": "EP_2307B",
+  "left": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB1601_C009",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 3
+        },
+        "state": {
+          "init_hpratio": 0.4
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "type": "hunter",
+        "actor_id": "CB1602_C056",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 2
+        },
+        "state": {
+          "init_hpratio": 0.4
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          1
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB1603_C010",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ]
+}

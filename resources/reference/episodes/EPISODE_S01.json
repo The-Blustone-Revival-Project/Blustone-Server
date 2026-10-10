@@ -1,0 +1,2323 @@
+{
+  "type": "season",
+  "id": "S01",
+  "title": "S01_TITLE",
+  "desc": "",
+  "res1": "RES1",
+  "res2": "RES2",
+  "childs": [
+    {
+      "type": "episode",
+      "id": "E01",
+      "title": "E01_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_01",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "GC2",
+            "qty": 3
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E01_S01",
+          "title": "E01_S01_TITLE",
+          "desc": "",
+          "res1": "EP_DIA_4",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_0301A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E01_S02",
+          "title": "E01_S02_TITLE",
+          "desc": "",
+          "res1": "EP_DIA_4",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_GYM",
+            "x": 1225,
+            "y": 1160
+          },
+          "entrypoint": "EP_0302A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0101"
+        },
+        {
+          "type": "story",
+          "id": "E01_S03",
+          "title": "E01_S03_TITLE",
+          "desc": "",
+          "res1": "EP_DIA_4",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_0303A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E01_S04",
+          "title": "E01_S04_TITLE",
+          "desc": "",
+          "res1": "EP_DIA_5",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_EASTSNOW",
+            "x": 1340,
+            "y": 1180
+          },
+          "entrypoint": "EP_0401A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0102"
+        },
+        {
+          "type": "story",
+          "id": "E01_S05",
+          "title": "E01_S05_TITLE",
+          "desc": "",
+          "res1": "EP_DIA_5",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_EASTSNOW",
+            "x": 1340,
+            "y": 1180
+          },
+          "entrypoint": "EP_0402A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E01_S06",
+          "title": "E01_S06_TITLE",
+          "desc": "",
+          "res1": "EP_DIA_5",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_EASTSNOW",
+            "x": 1340,
+            "y": 1180
+          },
+          "entrypoint": "EP_0403A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0103"
+        },
+        {
+          "type": "story",
+          "id": "E01_S07",
+          "title": "E01_S07_TITLE",
+          "desc": "",
+          "res1": "EP_DIA_4",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_0404A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E02",
+      "title": "E02_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_02",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "FMD1",
+            "qty": 30
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E02_S01",
+          "title": "E02_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_0501A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E02_S02",
+          "title": "E02_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_ICEWOOD",
+            "x": 1300,
+            "y": 1070
+          },
+          "entrypoint": "EP_0502A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E02_S03",
+          "title": "E02_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_ICEWOOD",
+            "x": 1300,
+            "y": 1070
+          },
+          "entrypoint": "EP_0503A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0201"
+        },
+        {
+          "type": "story",
+          "id": "E02_S04",
+          "title": "E02_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_ICEWOOD",
+            "x": 1300,
+            "y": 1070
+          },
+          "entrypoint": "EP_0601A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E02_S05",
+          "title": "E02_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_AGIT",
+            "x": 1220,
+            "y": 1020
+          },
+          "entrypoint": "EP_0602A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0202"
+        },
+        {
+          "type": "story",
+          "id": "E02_S06",
+          "title": "E02_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_AGIT",
+            "x": 1220,
+            "y": 1020
+          },
+          "entrypoint": "EP_0603A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E02_S07",
+          "title": "E02_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_0604A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E02_S08",
+          "title": "E02_S08_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_0605A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E03",
+      "title": "E03_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_03",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "GC3",
+            "qty": 3
+          },
+          {
+            "ref_id": "GC4",
+            "qty": 3
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E03_S01",
+          "title": "E03_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_0701A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E03_S02",
+          "title": "E03_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_REDHILL",
+            "x": 1040,
+            "y": 1150
+          },
+          "entrypoint": "EP_0702A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0301"
+        },
+        {
+          "type": "story",
+          "id": "E03_S03",
+          "title": "E03_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_DENALI",
+            "x": 1060,
+            "y": 1060
+          },
+          "entrypoint": "EP_0704A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E03_S04",
+          "title": "E03_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_DENALI",
+            "x": 1060,
+            "y": 1060
+          },
+          "entrypoint": "EP_0801A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E03_S05",
+          "title": "E03_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_DENALI",
+            "x": 1060,
+            "y": 1060
+          },
+          "entrypoint": "EP_0802A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0302"
+        },
+        {
+          "type": "story",
+          "id": "E03_S06",
+          "title": "E03_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_REDHILL",
+            "x": 1080,
+            "y": 1140
+          },
+          "entrypoint": "EP_0803A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E03_S07",
+          "title": "E03_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_0804A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E04",
+      "title": "E04_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_04",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "GC8",
+            "qty": 1
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E04_S01",
+          "title": "E04_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_0901A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E04_S02",
+          "title": "E04_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_BREAD",
+            "x": 1205,
+            "y": 1145
+          },
+          "entrypoint": "EP_0902A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E04_S03",
+          "title": "E04_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_BREAD",
+            "x": 1205,
+            "y": 1145
+          },
+          "entrypoint": "EP_0903A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0401"
+        },
+        {
+          "type": "story",
+          "id": "E04_S04",
+          "title": "E04_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_BREAD",
+            "x": 1205,
+            "y": 1145
+          },
+          "entrypoint": "EP_0904A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E05",
+      "title": "E05_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_05",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "AIRSHIP_TICKET",
+            "qty": 20
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E05_S01",
+          "title": "E05_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1001A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E05_S02",
+          "title": "E05_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MISSINGTOWN",
+            "x": 840,
+            "y": 1260
+          },
+          "entrypoint": "EP_1002B",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E05_S03",
+          "title": "E05_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MISSINGTOWN",
+            "x": 840,
+            "y": 1260
+          },
+          "entrypoint": "EP_1003A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E05_S04",
+          "title": "E05_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CAMP",
+            "x": 900,
+            "y": 1210
+          },
+          "entrypoint": "EP_1004A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0501"
+        },
+        {
+          "type": "story",
+          "id": "E05_S05",
+          "title": "E05_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CAMP",
+            "x": 900,
+            "y": 1210
+          },
+          "entrypoint": "EP_1005A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E05_S06",
+          "title": "E05_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_GREYWOOD",
+            "x": 860,
+            "y": 1130
+          },
+          "entrypoint": "EP_1102A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0502"
+        },
+        {
+          "type": "story",
+          "id": "E05_S07",
+          "title": "E05_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_GREYWOOD",
+            "x": 860,
+            "y": 1130
+          },
+          "entrypoint": "EP_1103A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E05_S08",
+          "title": "E05_S08_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_GREYWOOD",
+            "x": 860,
+            "y": 1130
+          },
+          "entrypoint": "EP_1201A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E06",
+      "title": "E06_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_06",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "OV1",
+            "qty": 10
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E06_S01",
+          "title": "E06_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_GREYWOOD",
+            "x": 860,
+            "y": 1130
+          },
+          "entrypoint": "EP_1201B",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E06_S02",
+          "title": "E06_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_3BEAR",
+            "x": 790,
+            "y": 1050
+          },
+          "entrypoint": "EP_1201C",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0601"
+        },
+        {
+          "type": "story",
+          "id": "E06_S03",
+          "title": "E06_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_3BEAR",
+            "x": 790,
+            "y": 1050
+          },
+          "entrypoint": "EP_1203A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E06_S04",
+          "title": "E06_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_GREYWOOD",
+            "x": 860,
+            "y": 1130
+          },
+          "entrypoint": "EP_1204A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0602"
+        },
+        {
+          "type": "story",
+          "id": "E06_S05",
+          "title": "E06_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CAMP",
+            "x": 900,
+            "y": 1210
+          },
+          "entrypoint": "EP_1301A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E06_S06",
+          "title": "E06_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CAMP",
+            "x": 900,
+            "y": 1210
+          },
+          "entrypoint": "EP_1302A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E06_S07",
+          "title": "E06_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_REDHILL",
+            "x": 1080,
+            "y": 1140
+          },
+          "entrypoint": "EP_1303A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E07",
+      "title": "E07_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_07",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "CERUM01",
+            "qty": 20
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E07_S01",
+          "title": "E07_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1401A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E07_S02",
+          "title": "E07_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_BRUCE",
+            "x": 1255,
+            "y": 1155
+          },
+          "entrypoint": "EP_1402A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0701"
+        },
+        {
+          "type": "story",
+          "id": "E07_S03",
+          "title": "E07_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_???",
+            "x": 1255,
+            "y": 1155
+          },
+          "entrypoint": "EP_1403A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E07_S04",
+          "title": "E07_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_???",
+            "x": 1255,
+            "y": 1155
+          },
+          "entrypoint": "EP_1404A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0702"
+        },
+        {
+          "type": "story",
+          "id": "E07_S05",
+          "title": "E07_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_BRUCE",
+            "x": 1255,
+            "y": 1155
+          },
+          "entrypoint": "EP_1405A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E08",
+      "title": "E08_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_08",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "CERUM02",
+            "qty": 20
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E08_S01",
+          "title": "E08_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1501A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E08_S02",
+          "title": "E08_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MAIL",
+            "x": 1225,
+            "y": 1150
+          },
+          "entrypoint": "EP_1502A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E08_S03",
+          "title": "E08_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MAIL",
+            "x": 1225,
+            "y": 1150
+          },
+          "entrypoint": "EP_1503A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E08_S04",
+          "title": "E08_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_JOTUNSNOW",
+            "x": 1255,
+            "y": 1360
+          },
+          "entrypoint": "EP_1504A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0801"
+        },
+        {
+          "type": "story",
+          "id": "E08_S05",
+          "title": "E08_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_JOTUNSNOW",
+            "x": 1255,
+            "y": 1360
+          },
+          "entrypoint": "EP_1505A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E08_S06",
+          "title": "E08_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_WHITECAVE",
+            "x": 1160,
+            "y": 1330
+          },
+          "entrypoint": "EP_1506A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0802"
+        },
+        {
+          "type": "story",
+          "id": "E08_S07",
+          "title": "E08_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1507A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E09",
+      "title": "E09_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_09",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "CERUM03",
+            "qty": 20
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E09_S01",
+          "title": "E09_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1601A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E09_S02",
+          "title": "E09_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_LOKECASH",
+            "x": 1225,
+            "y": 1150
+          },
+          "entrypoint": "EP_1602A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E09_S03",
+          "title": "E09_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_LOKECASH",
+            "x": 1225,
+            "y": 1150
+          },
+          "entrypoint": "EP_1603A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0901"
+        },
+        {
+          "type": "story",
+          "id": "E09_S04",
+          "title": "E09_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1604A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E09_S05",
+          "title": "E09_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CREATION",
+            "x": 1215,
+            "y": 910
+          },
+          "entrypoint": "EP_1605A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E09_S06",
+          "title": "E09_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CREATION",
+            "x": 1215,
+            "y": 910
+          },
+          "entrypoint": "EP_1606A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB0902"
+        },
+        {
+          "type": "story",
+          "id": "E09_S07",
+          "title": "E09_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CREATION",
+            "x": 1215,
+            "y": 910
+          },
+          "entrypoint": "EP_1607A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E10",
+      "title": "E10_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_10",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "SK13",
+            "qty": 30
+          },
+          {
+            "ref_id": "SK23",
+            "qty": 30
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E10_S01",
+          "title": "E10_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CREATION",
+            "x": 1215,
+            "y": 910
+          },
+          "entrypoint": "EP_1701A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E10_S02",
+          "title": "E10_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CREATION",
+            "x": 1215,
+            "y": 910
+          },
+          "entrypoint": "EP_1702A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E10_S03",
+          "title": "E10_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CREATION",
+            "x": 1215,
+            "y": 910
+          },
+          "entrypoint": "EP_1703A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E10_S04",
+          "title": "E10_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CREATIONSNOW",
+            "x": 1060,
+            "y": 850
+          },
+          "entrypoint": "EP_1704A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1001"
+        },
+        {
+          "type": "story",
+          "id": "E10_S05",
+          "title": "E10_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_ABYSS",
+            "x": 900,
+            "y": 900
+          },
+          "entrypoint": "EP_1705A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E10_S06",
+          "title": "E10_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_ABYSS",
+            "x": 900,
+            "y": 900
+          },
+          "entrypoint": "EP_1706A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1002"
+        },
+        {
+          "type": "story",
+          "id": "E10_S07",
+          "title": "E10_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CREATION",
+            "x": 1215,
+            "y": 910
+          },
+          "entrypoint": "EP_1707A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E11",
+      "title": "E11_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_11",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "SK33",
+            "qty": 30
+          },
+          {
+            "ref_id": "SK43",
+            "qty": 30
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E11_S01",
+          "title": "E11_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDAIR",
+            "x": 1228,
+            "y": 1120
+          },
+          "entrypoint": "EP_1801A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E11_S02",
+          "title": "E11_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDAIR",
+            "x": 1228,
+            "y": 1120
+          },
+          "entrypoint": "EP_1802A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E11_S03",
+          "title": "E11_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDAIR",
+            "x": 1228,
+            "y": 1120
+          },
+          "entrypoint": "EP_1803A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1101"
+        },
+        {
+          "type": "story",
+          "id": "E11_S04",
+          "title": "E11_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1804A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E11_S05",
+          "title": "E11_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDAIR",
+            "x": 1228,
+            "y": 1120
+          },
+          "entrypoint": "EP_1805A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E11_S06",
+          "title": "E11_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDAIR",
+            "x": 1228,
+            "y": 1120
+          },
+          "entrypoint": "EP_1806A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E11_S07",
+          "title": "E11_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDCAFE",
+            "x": 1210,
+            "y": 1155
+          },
+          "entrypoint": "EP_1807A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E11_S08",
+          "title": "E11_S08_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDPUB",
+            "x": 1230,
+            "y": 1140
+          },
+          "entrypoint": "EP_1808A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1102"
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E12",
+      "title": "E12_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_12",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "EM02",
+            "qty": 2000
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E12_S01",
+          "title": "E12_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1901A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E12_S02",
+          "title": "E12_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_EASTSNOW",
+            "x": 1340,
+            "y": 1180
+          },
+          "entrypoint": "EP_1902A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1201"
+        },
+        {
+          "type": "story",
+          "id": "E12_S03",
+          "title": "E12_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_EASTSNOW",
+            "x": 1340,
+            "y": 1180
+          },
+          "entrypoint": "EP_1903A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E12_S04",
+          "title": "E12_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_ICEWOOD",
+            "x": 1300,
+            "y": 1070
+          },
+          "entrypoint": "EP_1904A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1202"
+        },
+        {
+          "type": "story",
+          "id": "E12_S05",
+          "title": "E12_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_ICEWOOD",
+            "x": 1300,
+            "y": 1070
+          },
+          "entrypoint": "EP_1905A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E12_S06",
+          "title": "E12_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1906A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E12_S07",
+          "title": "E12_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_1907A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E13",
+      "title": "E13_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_13",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "LCOIN",
+            "qty": 20
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E13_S01",
+          "title": "E13_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_REDHILL",
+            "x": 1040,
+            "y": 1150
+          },
+          "entrypoint": "EP_2001A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1301"
+        },
+        {
+          "type": "story",
+          "id": "E13_S02",
+          "title": "E13_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_DENALI",
+            "x": 1060,
+            "y": 1060
+          },
+          "entrypoint": "EP_2002A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1302"
+        },
+        {
+          "type": "story",
+          "id": "E13_S03",
+          "title": "E13_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_2003A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E13_S04",
+          "title": "E13_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_2004A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E13_S05",
+          "title": "E13_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_2005A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E13_S06",
+          "title": "E13_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_2006A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E13_S07",
+          "title": "E13_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_ICEWOOD",
+            "x": 1300,
+            "y": 1070
+          },
+          "entrypoint": "EP_2007A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1303"
+        },
+        {
+          "type": "story",
+          "id": "E13_S08",
+          "title": "E13_S08_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_2008A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E14",
+      "title": "E14_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_14",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "OV1",
+            "qty": 30
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E14_S01",
+          "title": "E14_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_REDHILL",
+            "x": 1065,
+            "y": 1050
+          },
+          "entrypoint": "EP_2101A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E14_S02",
+          "title": "E14_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDSNOW",
+            "x": 1005,
+            "y": 900
+          },
+          "entrypoint": "EP_2102A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E14_S03",
+          "title": "E14_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDSNOW",
+            "x": 970,
+            "y": 850
+          },
+          "entrypoint": "EP_2103A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1401"
+        },
+        {
+          "type": "story",
+          "id": "E14_S04",
+          "title": "E14_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARDSNOW",
+            "x": 950,
+            "y": 800
+          },
+          "entrypoint": "EP_2104A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E14_S05",
+          "title": "E14_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE",
+            "x": 950,
+            "y": 750
+          },
+          "entrypoint": "EP_2105A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1402"
+        },
+        {
+          "type": "story",
+          "id": "E14_S06",
+          "title": "E14_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE",
+            "x": 950,
+            "y": 700
+          },
+          "entrypoint": "EP_2106A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E14_S07",
+          "title": "E14_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE",
+            "x": 850,
+            "y": 650
+          },
+          "entrypoint": "EP_2107A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E15",
+      "title": "E15_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_15",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "GC9",
+            "qty": 1
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E15_S01",
+          "title": "E15_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 890,
+            "y": 690
+          },
+          "entrypoint": "EP_2201A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E15_S02",
+          "title": "E15_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 880,
+            "y": 680
+          },
+          "entrypoint": "EP_2202A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1501"
+        },
+        {
+          "type": "story",
+          "id": "E15_S03",
+          "title": "E15_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 870,
+            "y": 670
+          },
+          "entrypoint": "EP_2203A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E15_S04",
+          "title": "E15_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 860,
+            "y": 660
+          },
+          "entrypoint": "EP_2204A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E15_S05",
+          "title": "E15_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 850,
+            "y": 650
+          },
+          "entrypoint": "EP_2205A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1502"
+        },
+        {
+          "type": "story",
+          "id": "E15_S06",
+          "title": "E15_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 840,
+            "y": 640
+          },
+          "entrypoint": "EP_2206A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E15_S07",
+          "title": "E15_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 830,
+            "y": 630
+          },
+          "entrypoint": "EP_2207A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E15_S08",
+          "title": "E15_S08_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2208A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E16",
+      "title": "E16_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_16",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "GC10",
+            "qty": 1
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E16_S01",
+          "title": "E16_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2301A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E16_S02",
+          "title": "E16_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2302A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E16_S03",
+          "title": "E16_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2303A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1601"
+        },
+        {
+          "type": "story",
+          "id": "E16_S04",
+          "title": "E16_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2304A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E16_S05",
+          "title": "E16_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2305A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E16_S06",
+          "title": "E16_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2306A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1602"
+        },
+        {
+          "type": "story",
+          "id": "E16_S07",
+          "title": "E16_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2307A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1603"
+        },
+        {
+          "type": "story",
+          "id": "E16_S08",
+          "title": "E16_S08_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2308A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1604"
+        },
+        {
+          "type": "story",
+          "id": "E16_S09",
+          "title": "E16_S09_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2309A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E17",
+      "title": "E17_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_17",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "GC11",
+            "qty": 1
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E17_S01",
+          "title": "E17_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE_B",
+            "x": 820,
+            "y": 620
+          },
+          "entrypoint": "EP_2401A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E17_S02",
+          "title": "E17_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_WEATHERCONTROL",
+            "x": 815,
+            "y": 615
+          },
+          "entrypoint": "EP_2402A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E17_S03",
+          "title": "E17_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_WEATHERCONTROL",
+            "x": 815,
+            "y": 615
+          },
+          "entrypoint": "EP_2403A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1701"
+        },
+        {
+          "type": "story",
+          "id": "E17_S04",
+          "title": "E17_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_WEATHERCONTROL",
+            "x": 815,
+            "y": 615
+          },
+          "entrypoint": "EP_2404A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1702"
+        },
+        {
+          "type": "story",
+          "id": "E17_S05",
+          "title": "E17_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_WEATHERCONTROL",
+            "x": 815,
+            "y": 615
+          },
+          "entrypoint": "EP_2405A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E17_S06",
+          "title": "E17_S06_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE",
+            "x": 815,
+            "y": 610
+          },
+          "entrypoint": "EP_2406A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E17_S07",
+          "title": "E17_S07_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_CENTRALPOLE",
+            "x": 815,
+            "y": 610
+          },
+          "entrypoint": "EP_2407A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1703"
+        },
+        {
+          "type": "story",
+          "id": "E17_S08",
+          "title": "E17_S08_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_FIRESTORM",
+            "x": 790,
+            "y": 590
+          },
+          "entrypoint": "EP_2408A",
+          "battle": true,
+          "linkedcombatonlyforref": "CB1706"
+        },
+        {
+          "type": "story",
+          "id": "E17_S09",
+          "title": "E17_S09_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_FIRESTORM",
+            "x": 790,
+            "y": 590
+          },
+          "entrypoint": "EP_2409A",
+          "battle": false
+        }
+      ]
+    },
+    {
+      "type": "episode",
+      "id": "E18",
+      "title": "E18_TITLE",
+      "desc": "",
+      "res1": "EP_BTN_18",
+      "res2": "C003_DIALOG",
+      "reward": {
+        "item": [
+          {
+            "ref_id": "RP1",
+            "qty": 100000
+          }
+        ],
+        "free_iap": 0
+      },
+      "childs": [
+        {
+          "type": "story",
+          "id": "E18_S01",
+          "title": "E18_S01_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_???",
+            "x": 790,
+            "y": 590
+          },
+          "entrypoint": "EP_2501A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E18_S02",
+          "title": "E18_S02_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_2502A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E18_S03",
+          "title": "E18_S03_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C003_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_2503A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E18_S04",
+          "title": "E18_S04_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_2504A",
+          "battle": false
+        },
+        {
+          "type": "story",
+          "id": "E18_S05",
+          "title": "E18_S05_TITLE",
+          "desc": "",
+          "res1": "RES1",
+          "res2": "C005_DIALOG",
+          "pos": {
+            "localname": "local_MIDGARD",
+            "x": 1235,
+            "y": 1150
+          },
+          "entrypoint": "EP_2505A",
+          "battle": false
+        }
+      ]
+    }
+  ]
+}

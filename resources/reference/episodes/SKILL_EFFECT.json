@@ -1,0 +1,2072 @@
+{
+  "001|2": {
+    "NORMAL": "C001_DLG01",
+    "ANGRY": "C001_DLG01",
+    "KO": "무적 관통\\n방어력▼",
+    "EN": "Penetrate Invincible\\nDefense▼",
+    "JA": "無敵貫通\\n防御力▼",
+    "SC": "无敌穿透\\n防御力▼",
+    "TC": "無敵穿透\\n防禦力▼"
+  },
+  "001|4": {
+    "NORMAL": "C001_DLG01",
+    "ANGRY": "C001_DLG01",
+    "KO": "추가 피해\\n방어력▼(지속)",
+    "EN": "Extra Damage\\nDefense▼(Continuous)",
+    "JA": "追加ダメージ\\n防御力▼(持続)",
+    "SC": "追加伤害\\n防御力▼(持续)",
+    "TC": "追加傷害\\n防禦力▼(持續)"
+  },
+  "002|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "출혈 피해",
+    "EN": "Bleed Damage",
+    "JA": "出血ダメージ",
+    "SC": "失血伤害",
+    "TC": "失血傷害"
+  },
+  "002|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "003|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절\\n공격 속도▲",
+    "EN": "Stun\\nAttack Speed▲",
+    "JA": "気絶\\n攻撃スピード▲",
+    "SC": "昏厥\\n攻击速度▲",
+    "TC": "暈厥\\n攻擊速度▲"
+  },
+  "003|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "지속 회복\\n약화 해제(4초)",
+    "EN": "Continuous Recovery\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "持続回復\\n弱化解除（4秒）",
+    "SC": "持续恢复\\n解除弱化(4秒)",
+    "TC": "持續恢復\\n解除弱化(4秒)"
+  },
+  "004_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "치명타 확률▲\\n지속 회복\\n약화 해제(4초)",
+    "EN": "Critical Chance▲\\nContinuous Recovery\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "致命打率▲\\n持続回復\\n弱化解除（4秒）",
+    "SC": "暴击概率▲\\n持续恢复\\n解除弱化(4秒)",
+    "TC": "爆擊機率▲\\n持續恢復\\n解除弱化(4秒)"
+  },
+  "004_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해",
+    "EN": "Extra Damage",
+    "JA": "追加ダメージ",
+    "SC": "追加伤害",
+    "TC": "追加傷害"
+  },
+  "004|2": {
+    "NORMAL": "C004_DLG01",
+    "ANGRY": "C004_DLG05",
+    "KO": "치명타 확률▲",
+    "EN": "Critical Chance▲",
+    "JA": "致命打率▲",
+    "SC": "暴击概率▲",
+    "TC": "爆擊機率▲"
+  },
+  "004|4": {
+    "NORMAL": "C004_DLG01",
+    "ANGRY": "C004_DLG05",
+    "KO": "지속 회복\\n약화 해제(4초)",
+    "EN": "Continuous Recovery\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "持続回復\\n弱化解除（4秒）",
+    "SC": "持续恢复\\n解除弱化(4秒)",
+    "TC": "持續恢復\\n解除弱化(4秒)"
+  },
+  "005_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절\\n공격력▼(지속)\\n분노 -1",
+    "EN": "Stun\\nAttack▼(Continuous)\\nRage-1",
+    "JA": "気絶\\n攻撃力▼(持続)\\nアンガゲージ-1",
+    "SC": "昏厥\\n攻击力▼(持续)\\n愤怒值-1",
+    "TC": "暈厥\\n攻擊力▼(持續)\\n憤怒值-1"
+  },
+  "005_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "회복\\n공격력▲(지속)\\n방어력▲(지속)",
+    "EN": "Recovery\\nAttack▲(Continuous)\\nDefense▲(Continuous)",
+    "JA": "回復\\n攻撃力▲(持続)\\n防御力▲(持続)",
+    "SC": "恢复\\n攻击力▲(持续)\\n防御力▲(持续)",
+    "TC": "恢復\\n攻擊力▲(持續)\\n防禦力▲(持續)"
+  },
+  "005|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▼",
+    "EN": "Attack▼",
+    "JA": "攻撃力▼",
+    "SC": "攻击力▼",
+    "TC": "攻擊力▼"
+  },
+  "005|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절\\n추가 피해",
+    "EN": "Stun\\nExtra Damage",
+    "JA": "気絶\\n追加ダメージ",
+    "SC": "昏厥\\n追加伤害",
+    "TC": "暈厥\\n追加傷害"
+  },
+  "006|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▲",
+    "EN": "Attack▲",
+    "JA": "攻撃力▲",
+    "SC": "攻击力▲",
+    "TC": "攻擊力▲"
+  },
+  "006|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n기절",
+    "EN": "Extra Damage\\nStun",
+    "JA": "追加ダメージ\\n気絶",
+    "SC": "追加伤害\\n昏厥",
+    "TC": "追加傷害\\n暈厥"
+  },
+  "007|2": {
+    "NORMAL": "C007_DLG01",
+    "ANGRY": "C007_DLG05",
+    "KO": "무적 관통\\n출혈 피해",
+    "EN": "Penetrate Invincible\\nBleed Damage",
+    "JA": "無敵貫通\\n出血ダメージ",
+    "SC": "无敌穿透\\n失血伤害",
+    "TC": "無敵穿透\\n失血傷害"
+  },
+  "007|4": {
+    "NORMAL": "C007_DLG01",
+    "ANGRY": "C007_DLG05",
+    "KO": "추가 피해",
+    "EN": "Extra Damage",
+    "JA": "追加ダメージ",
+    "SC": "追加伤害",
+    "TC": "追加傷害"
+  },
+  "008|2": {
+    "NORMAL": "C008_DLG01",
+    "ANGRY": "C008_DLG06",
+    "KO": "공격 속도▲",
+    "EN": "Attack Speed▲",
+    "JA": "攻撃スピード▲",
+    "SC": "攻击速度▲",
+    "TC": "攻擊速度▲"
+  },
+  "008|4": {
+    "NORMAL": "C008_DLG01",
+    "ANGRY": "C008_DLG06",
+    "KO": "무적",
+    "EN": "Invincible",
+    "JA": "無敵",
+    "SC": "无敌",
+    "TC": "無敵"
+  },
+  "009_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 금지(10초)\\n막기 확률▲\\n공격 속도▲",
+    "EN": "Invincible DISABLED(10 sec)\\nBlock Chance▲\\nAttack Speed▲",
+    "JA": "無敵禁止（10秒）\\nブロック率▲\\n攻撃スピード▲",
+    "SC": "禁止无敌(10秒)\\n阻挡概率▲\\n攻击速度▲",
+    "TC": "禁止無敵(10秒)\\n阻擋機率▲\\n攻擊速度▲"
+  },
+  "009_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "회복▲\\n약화 해제(4초)\\n관통력▲",
+    "EN": "Recovery\\nREMOVE Harmful Effect(4 sec)\\nArmor Penetration▲",
+    "JA": "回復\\n弱化解除（4秒）\\n貫通力▲",
+    "SC": "恢复\\n解除弱化(4秒)\\n穿透力▲",
+    "TC": "恢復\\n解除弱化(4秒)\\n穿透力▲"
+  },
+  "009|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 금지(10초)\\n막기 확률▲",
+    "EN": "Invincible DISABLED(10 sec)\\nBlock Chance▲",
+    "JA": "無敵禁止（10秒）\\nブロック率▲",
+    "SC": "禁止无敌(10秒)\\n阻挡概率▲",
+    "TC": "禁止無敵(10秒)\\n阻擋機率▲"
+  },
+  "009|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격 속도▲\\n추가 피해",
+    "EN": "Attack Speed▲\\nExtra Damage",
+    "JA": "攻撃スピード▲\\n追加ダメージ",
+    "SC": "攻击速度▲\\n追加伤害",
+    "TC": "攻擊速度▲\\n追加傷害"
+  },
+  "010_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 금지(10초)\\n무적\\n공격 속도▲",
+    "EN": "Invincible DISABLED(10 sec)\\nInvincible\\nAttack Speed▲",
+    "JA": "無敵禁止（10秒）\\n無敵\\n攻撃スピード▲",
+    "SC": "禁止无敌(10秒)\\n无敌\\n攻击速度▲",
+    "TC": "禁止無敵(10秒)\\n無敵\\n攻擊速度▲"
+  },
+  "010_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "적 전체 피해\\n적 전체 공격력▼(지속)\\n적 전체 방어력▼(지속)",
+    "EN": "Damage to ALL\\nALL Attack▼(Continuous)\\nALL Defense▼(Continuous)",
+    "JA": "全体ダメージ\\n全体攻撃力▼(持続)\\n全体防御力▼(持続)",
+    "SC": "全体伤害\\n全體攻擊力▼(持續)\\n全体防御力▼(持续)",
+    "TC": "全體傷害\\n全體攻擊力▼(持續)\\n全體防禦力▼(持續)"
+  },
+  "010|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 금지(10초)\\n무적",
+    "EN": "Invincible DISABLED(10 sec)\\nInvincible",
+    "JA": "無敵禁止（10秒）\\n無敵",
+    "SC": "禁止无敌(10秒)\\n无敌",
+    "TC": "禁止無敵(10秒)\\n無敵"
+  },
+  "010|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격 속도▲\\n추가 피해",
+    "EN": "Attack Speed▲\\nExtra Damage",
+    "JA": "攻撃スピード▲\\n追加ダメージ",
+    "SC": "攻击速度▲\\n追加伤害",
+    "TC": "攻擊速度▲\\n追加傷害"
+  },
+  "011_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적\\n공격력▲",
+    "EN": "Invincible\\nAttack▲",
+    "JA": "無敵\\n攻撃力▲",
+    "SC": "无敌\\n攻击力▲",
+    "TC": "無敵\\n攻擊力▲"
+  },
+  "011_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "약화 해제(4초)\\n공격력▲\\n반격▲",
+    "EN": "REMOVE Harmful Effect(4 sec)\\nAttack▲\\nCounter▲",
+    "JA": "弱化解除（4秒）\\n攻撃力▲\\n反撃▲",
+    "SC": "解除弱化(4秒)\\n攻击力▲\\n反击▲",
+    "TC": "解除弱化(4秒)\\n攻擊力▲\\n反擊▲"
+  },
+  "011|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적",
+    "EN": "Invincible",
+    "JA": "無敵",
+    "SC": "无敌",
+    "TC": "無敵"
+  },
+  "011|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▲\\n추가 피해",
+    "EN": "Attack▲\\nExtra Damage",
+    "JA": "攻撃力▲\\n追加ダメージ",
+    "SC": "攻击力▲\\n追加伤害",
+    "TC": "攻擊力▲\\n追加傷害"
+  },
+  "012|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 금지(10초)\\n공격 속도▲",
+    "EN": "Invincible DISABLED(10 sec)\\nAttack Speed▲",
+    "JA": "無敵禁止（10秒）\\n攻撃スピード▲",
+    "SC": "禁止无敌(10秒)\\n攻击速度▲",
+    "TC": "禁止無敵(10秒)\\n攻擊速度▲"
+  },
+  "012|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절\\n치명타 피해량▲",
+    "EN": "Stun\\nCritical Damage▲",
+    "JA": "気絶\\n致命打ダメージ量▲",
+    "SC": "昏厥\\n暴击伤害▲",
+    "TC": "暈厥\\n爆擊傷害▲"
+  },
+  "013|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▲\\n약화 해제",
+    "EN": "Attack▲\\nREMOVE Harmful Effect",
+    "JA": "攻撃力▲\\n弱化解除",
+    "SC": "攻击力▲\\n解除弱化",
+    "TC": "攻擊力▲\\n解除弱化"
+  },
+  "013|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "전체 회복\\n전체 약화 해제",
+    "EN": "ALL Recovery\\nALL REMOVE Harmful Effect",
+    "JA": "全体回復\\n全体弱化解除",
+    "SC": "全体恢复\\n全体解除弱化",
+    "TC": "全體恢復\\n全體解除弱化"
+  },
+  "014|2": {
+    "NORMAL": "C014_DLG06",
+    "ANGRY": "C014_DLG01",
+    "KO": "무적 관통\\n방어력▼",
+    "EN": "Penetrate Invincible\\nDefense▼",
+    "JA": "無敵貫通\\n防御力▼",
+    "SC": "无敌穿透\\n防御力▼",
+    "TC": "無敵穿透\\n防禦力▼"
+  },
+  "014|4": {
+    "NORMAL": "C014_DLG06",
+    "ANGRY": "C014_DLG01",
+    "KO": "깊은 상처",
+    "EN": "Deep Wound",
+    "JA": "深手",
+    "SC": "深层伤害",
+    "TC": "深度傷害"
+  },
+  "015|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n공격력▼",
+    "EN": "Penetrate Invincible\\nAttack▼",
+    "JA": "無敵貫通\\n攻撃力▼",
+    "SC": "无敌穿透\\n攻击力▼",
+    "TC": "無敵穿透\\n攻擊力▼"
+  },
+  "015|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "적 전체 피해",
+    "EN": "Damage to ALL",
+    "JA": "全体ダメージ",
+    "SC": "全体伤害",
+    "TC": "全體傷害"
+  },
+  "016|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "막기 확률▲",
+    "EN": "Block Chance▲",
+    "JA": "ブロック率▲",
+    "SC": "阻挡概率▲",
+    "TC": "阻擋機率▲"
+  },
+  "016|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "지속 회복",
+    "EN": "Continuous Recovery",
+    "JA": "持続回復",
+    "SC": "持续恢复",
+    "TC": "持續恢復"
+  },
+  "017_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "깊은 상처\\n치명타 확률▲",
+    "EN": "Deep Wound\\nCritical Chance▲",
+    "JA": "深手\\n致命打率▲",
+    "SC": "深层伤害\\n暴击概率▲",
+    "TC": "深度傷害\\n爆擊機率▲"
+  },
+  "017_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "치명타 피해량▲\\n추가 피해",
+    "EN": "Critical Damage▲\\nExtra Damage",
+    "JA": "致命打ダメージ量▲\\n追加ダメージ",
+    "SC": "暴击伤害▲\\n追加伤害",
+    "TC": "爆擊傷害▲\\n追加傷害"
+  },
+  "017|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "치명타 확률▲",
+    "EN": "Critical Chance▲",
+    "JA": "致命打率▲",
+    "SC": "暴击概率▲",
+    "TC": "爆擊機率▲"
+  },
+  "017|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "치명타 피해량▲\\n추가 피해",
+    "EN": "Critical Damage▲\\nExtra Damage",
+    "JA": "致命打ダメージ量▲\\n追加ダメージ",
+    "SC": "暴击伤害▲\\n追加伤害",
+    "TC": "爆擊傷害▲\\n追加傷害"
+  },
+  "018|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "지속 회복",
+    "EN": "Continuous Recovery",
+    "JA": "持続回復",
+    "SC": "持续恢复",
+    "TC": "持續恢復"
+  },
+  "018|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "치명타 확률▲",
+    "EN": "Critical Chance▲",
+    "JA": "致命打率▲",
+    "SC": "暴击概率▲",
+    "TC": "爆擊機率▲"
+  },
+  "019_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적\\n방어력▼",
+    "EN": "Invincible\\nDefense▼",
+    "JA": "無敵\\n防御力▼",
+    "SC": "无敌\\n防御力▼",
+    "TC": "無敵\\n防禦力▼"
+  },
+  "019_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n분노 -2",
+    "EN": "Extra Damage\\nRage -2",
+    "JA": "追加ダメージ\\nアンガゲージ-2",
+    "SC": "追加伤害\\n愤怒值-2",
+    "TC": "追加傷害\\n憤怒值-2"
+  },
+  "019|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적",
+    "EN": "Invincible",
+    "JA": "無敵",
+    "SC": "无敌",
+    "TC": "無敵"
+  },
+  "019|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "020_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n기절\\n방어력▼",
+    "EN": "Penetrate Invincible\\nStun\\nDefense▼",
+    "JA": "無敵貫通\\n気絶\\n防御力▼",
+    "SC": "无敌穿透\\n昏厥\\n防御力▼",
+    "TC": "無敵穿透\\n暈厥\\n防禦力▼"
+  },
+  "020_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가피해\\n피해 감소량▼(해제불가)",
+    "EN": "Extra Damage\\nDamage Reduction▼",
+    "JA": "追加ダメージ\\nダメージ減少量▼(解除不可)",
+    "SC": "追加伤害\\n伤害减少量▼(解除不可)",
+    "TC": "追加傷害\\n傷害減少量▼(解除不可)"
+  },
+  "020|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n기절",
+    "EN": "Penetrate Invincible\\nStun",
+    "JA": "無敵貫通\\n気絶",
+    "SC": "无敌穿透\\n昏厥",
+    "TC": "無敵穿透\\n暈厥"
+  },
+  "020|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "021_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "출혈 피해",
+    "EN": "Bleed Damage",
+    "JA": "出血ダメージ",
+    "SC": "失血伤害",
+    "TC": "失血傷害"
+  },
+  "021_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "뇌진탕\\n강화 해제",
+    "EN": "Concussion\\nREMOVE Beneficial Effect",
+    "JA": "脳震盪\\n強化解除",
+    "SC": "脑震荡\\n解除强化",
+    "TC": "腦震盪\\n解除強化"
+  },
+  "021|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "출혈 피해",
+    "EN": "Bleed Damage",
+    "JA": "出血ダメージ",
+    "SC": "失血伤害",
+    "TC": "失血傷害"
+  },
+  "021|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절",
+    "EN": "Stun",
+    "JA": "気絶",
+    "SC": "昏厥",
+    "TC": "暈厥"
+  },
+  "022|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▲",
+    "EN": "Defense▲",
+    "JA": "防御力▲",
+    "SC": "防御力▲",
+    "TC": "防禦力▲"
+  },
+  "022|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "지속 회복",
+    "EN": "Continuous Recovery",
+    "JA": "持続回復",
+    "SC": "持续恢复",
+    "TC": "持續恢復"
+  },
+  "023|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "023|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "막기 확률▼\\n추가 피해",
+    "EN": "Block Chance▼\\nExtra Damage",
+    "JA": "ブロック率▼\\n追加ダメージ",
+    "SC": "阻挡概率▼\\n追加伤害",
+    "TC": "阻擋機率▼\\n追加傷害"
+  },
+  "024_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "막기 확률▲\\n방어력▼",
+    "EN": "Block Chance▲\\nDefense▼",
+    "JA": "ブロック率▲\\n防御力▼",
+    "SC": "阻挡概率▲\\n防御力▼",
+    "TC": "阻擋機率▲\\n防禦力▼"
+  },
+  "024_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n교체금지\\n공격 불가",
+    "EN": "Extra Damage\\nReplace DISABLED\\nAttack DISABLED",
+    "JA": "追加ダメージ\\n交代禁止\\n攻撃不可",
+    "SC": "追加伤害\\n禁止更换\\n无法攻击",
+    "TC": "追加傷害\\n禁止更換\\n無法攻擊"
+  },
+  "024|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "막기 확률▲",
+    "EN": "Block Chance▲",
+    "JA": "ブロック率▲",
+    "SC": "阻挡概率▲",
+    "TC": "阻擋機率▲"
+  },
+  "024|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼\\n추가 피해",
+    "EN": "Defense▼\\nExtra Damage",
+    "JA": "防御力▼\\n追加ダメージ",
+    "SC": "防御力▼\\n追加伤害",
+    "TC": "防禦力▼\\n追加傷害"
+  },
+  "025|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n출혈 피해",
+    "EN": "Penetrate Invincible\\nBleed Damage",
+    "JA": "無敵貫通\\n出血ダメージ",
+    "SC": "无敌穿透\\n失血伤害",
+    "TC": "無敵穿透\\n失血傷害"
+  },
+  "025|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절",
+    "EN": "Stun",
+    "JA": "気絶",
+    "SC": "昏厥",
+    "TC": "暈厥"
+  },
+  "026_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "치명타 확률▲\\n지속 회복\\n약화 해제(4초)",
+    "EN": "Critical Chance▲\\nContinuous Recovery\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "致命打率▲\\n持続回復\\n弱化解除（4秒）",
+    "SC": "暴击概率▲\\n持续恢复\\n解除弱化(4秒)",
+    "TC": "爆擊機率▲\\n持續恢復\\n解除弱化(4秒)"
+  },
+  "026_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해",
+    "EN": "Extra Damage",
+    "JA": "追加ダメージ",
+    "SC": "追加伤害",
+    "TC": "追加傷害"
+  },
+  "026|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "치명타 확률▲",
+    "EN": "Critical Chance▲",
+    "JA": "致命打率▲",
+    "SC": "暴击概率▲",
+    "TC": "爆擊機率▲"
+  },
+  "026|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "지속 회복\\n약화 해제(4초)",
+    "EN": "Continuous Recovery\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "持続回復\\n弱化解除（4秒）",
+    "SC": "持续恢复\\n解除弱化(4秒)",
+    "TC": "持續恢復\\n解除弱化(4秒)"
+  },
+  "027|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "피해 감소량▲",
+    "EN": "Damage Reduction▲",
+    "JA": "ダメージ減少量▲",
+    "SC": "伤害减少量▲",
+    "TC": "傷害減少量▲"
+  },
+  "027|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼\\n강화 금지(4초)\\n추가 피해",
+    "EN": "Defense▼\\nBlock Beneficial Effect(4 sec)\\nExtra Damage",
+    "JA": "防御力▼\\n強化不可（4秒）\\n追加ダメージ",
+    "SC": "防御力▼\\n禁止强化(4秒)\\n追加伤害",
+    "TC": "防禦力▼\\n禁止強化(4秒)\\n追加傷害"
+  },
+  "028|2": {
+    "NORMAL": "C028_DLG01",
+    "ANGRY": "C028_DLG06",
+    "KO": "기절",
+    "EN": "Stun",
+    "JA": "気絶",
+    "SC": "昏厥",
+    "TC": "暈厥"
+  },
+  "028|4": {
+    "NORMAL": "C028_DLG01",
+    "ANGRY": "C028_DLG06",
+    "KO": "출혈 피해\\n▼속성 저항",
+    "EN": "Bleed Damage\\nEL RES▼",
+    "JA": "出血ダメージ\\n属性耐性▼",
+    "SC": "失血伤害\\n属性耐性▼",
+    "TC": "失血傷害\\n屬性耐性▼"
+  },
+  "029|2": {
+    "NORMAL": "C029_DLG04",
+    "ANGRY": "C029_DLG01",
+    "KO": "공격력▼\\n공격 속도▼",
+    "EN": "Attack▼\\nAttack Speed▼",
+    "JA": "攻撃力▼\\n攻撃スピード▼",
+    "SC": "攻击力▼\\n攻击速度▼",
+    "TC": "攻擊力▼\\n攻擊速度▼"
+  },
+  "029|4": {
+    "NORMAL": "C029_DLG04",
+    "ANGRY": "C029_DLG01",
+    "KO": "추가 피해",
+    "EN": "Extra Damage",
+    "JA": "追加ダメージ",
+    "SC": "追加伤害",
+    "TC": "追加傷害"
+  },
+  "030|2": {
+    "NORMAL": "C030_DLG01",
+    "ANGRY": "C030_DLG05",
+    "KO": "치명타 확률▲",
+    "EN": "Critical Chance▲",
+    "JA": "致命打率▲",
+    "SC": "暴击概率▲",
+    "TC": "爆擊機率▲"
+  },
+  "030|4": {
+    "NORMAL": "C030_DLG01",
+    "ANGRY": "C030_DLG05",
+    "KO": "지속 회복",
+    "EN": "Continuous Recovery",
+    "JA": "持続回復",
+    "SC": "持续恢复",
+    "TC": "持續恢復"
+  },
+  "031|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n기절",
+    "EN": "Penetrate Invincible\\nStun",
+    "JA": "無敵貫通\\n気絶",
+    "SC": "无敌穿透\\n昏厥",
+    "TC": "無敵穿透\\n暈厥"
+  },
+  "031|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "출혈 피해",
+    "EN": "Bleed Damage",
+    "JA": "出血ダメージ",
+    "SC": "失血伤害",
+    "TC": "失血傷害"
+  },
+  "032|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "032|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해",
+    "EN": "Extra Damage",
+    "JA": "追加ダメージ",
+    "SC": "追加伤害",
+    "TC": "追加傷害"
+  },
+  "033|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n출혈 피해\\n공격 속도▼",
+    "EN": "Penetrate Invincible\\nBleed Damage\\nAttack Speed▼",
+    "JA": "無敵貫通\\n出血ダメージ\\n攻撃スピード▼",
+    "SC": "无敌穿透\\n失血伤害\\n攻击速度▼",
+    "TC": "無敵穿透\\n失血傷害\\n攻擊速度▼"
+  },
+  "033|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "지속 회복",
+    "EN": "Continuous Recovery",
+    "JA": "持続回復",
+    "SC": "持续恢复",
+    "TC": "持續恢復"
+  },
+  "034_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "막기 확률▲\\n방어력▼",
+    "EN": "Block Chance▲\\nDefense▼",
+    "JA": "ブロック率▲\\n防御力▼",
+    "SC": "阻挡概率▲\\n防御力▼",
+    "TC": "阻擋機率▲\\n防禦力▼"
+  },
+  "034_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n교체금지\\n공격 불가",
+    "EN": "Extra Damage\\nReplace DISABLED\\nAttack DISABLED",
+    "JA": "追加ダメージ\\n交代禁止\\n攻撃不可",
+    "SC": "追加伤害\\n禁止更换\\n无法攻击",
+    "TC": "追加傷害\\n禁止更換\\n無法攻擊"
+  },
+  "034|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "막기 확률▲",
+    "EN": "Block Chance▲",
+    "JA": "ブロック率▲",
+    "SC": "阻挡概率▲",
+    "TC": "阻擋機率▲"
+  },
+  "034|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼\\n추가 피해",
+    "EN": "Defense▼\\nExtra Damage",
+    "JA": "防御力▼\\n追加ダメージ",
+    "SC": "防御力▼\\n追加伤害",
+    "TC": "防禦力▼\\n追加傷害"
+  },
+  "035|2": {
+    "NORMAL": "C035_DLG01",
+    "ANGRY": "C035_DLG05",
+    "KO": "치명타 확률▲",
+    "EN": "Critical Chance▲",
+    "JA": "致命打率▲",
+    "SC": "暴击概率▲",
+    "TC": "爆擊機率▲"
+  },
+  "035|4": {
+    "NORMAL": "C035_DLG01",
+    "ANGRY": "C035_DLG05",
+    "KO": "지속 회복",
+    "EN": "Continuous Recovery",
+    "JA": "持続回復",
+    "SC": "持续恢复",
+    "TC": "持續恢復"
+  },
+  "036A|2": {
+    "NORMAL": "C036A_DLG01",
+    "ANGRY": "C036A_DLG01",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "036A|4": {
+    "NORMAL": "C036A_DLG01",
+    "ANGRY": "C036A_DLG01",
+    "KO": "회복\\n약화 해제(4초)",
+    "EN": "Recovery\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "回復\\n弱化解除（4秒）",
+    "SC": "恢复\\n解除弱化(4秒)",
+    "TC": "恢復\\n解除弱化(4秒)"
+  },
+  "036B|2": {
+    "NORMAL": "C036B_DLG01",
+    "ANGRY": "C036B_DLG01",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "036B|4": {
+    "NORMAL": "C036B_DLG01",
+    "ANGRY": "C036B_DLG01",
+    "KO": "회복\\n약화 해제(4초)",
+    "EN": "Recovery\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "回復\\n弱化解除（4秒）",
+    "SC": "恢复\\n解除弱化(4秒)",
+    "TC": "恢復\\n解除弱化(4秒)"
+  },
+  "036|2": {
+    "NORMAL": "C036_DLG01",
+    "ANGRY": "C036_DLG01",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "036|4": {
+    "NORMAL": "C036_DLG01",
+    "ANGRY": "C036_DLG01",
+    "KO": "회복\\n약화 해제(4초)",
+    "EN": "Recovery\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "回復\\n弱化解除（4秒）",
+    "SC": "恢复\\n解除弱化(4秒)",
+    "TC": "恢復\\n解除弱化(4秒)"
+  },
+  "037|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 금지(10초)\\n막기 확률▼",
+    "EN": "Invincible DISABLED(10 sec)\\nBlock Chance▼",
+    "JA": "無敵禁止（10秒）\\nブロック率▼",
+    "SC": "禁止无敌(10秒)\\n阻挡概率▼",
+    "TC": "禁止無敵(10秒)\\n阻擋機率▼"
+  },
+  "037|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "038_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "출혈 피해",
+    "EN": "Bleed Damage",
+    "JA": "出血ダメージ",
+    "SC": "失血伤害",
+    "TC": "失血傷害"
+  },
+  "038_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "뇌진탕\\n강화 해제",
+    "EN": "Concussion\\nREMOVE Beneficial Effect",
+    "JA": "脳震盪\\n強化解除",
+    "SC": "脑震荡\\n解除强化",
+    "TC": "腦震盪\\n解除強化"
+  },
+  "038|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "출혈 피해",
+    "EN": "Bleed Damage",
+    "JA": "出血ダメージ",
+    "SC": "失血伤害",
+    "TC": "失血傷害"
+  },
+  "038|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절",
+    "EN": "Stun",
+    "JA": "気絶",
+    "SC": "昏厥",
+    "TC": "暈厥"
+  },
+  "039|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n공격 불가",
+    "EN": "Penetrate Invincible\\nAttack DISABLED",
+    "JA": "無敵貫通\\n攻撃不可",
+    "SC": "无敌穿透\\n无法攻击",
+    "TC": "無敵穿透\\n無法攻擊"
+  },
+  "039|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "출혈 피해\\n기절",
+    "EN": "Bleed Damage\\nStun",
+    "JA": "出血ダメージ\\n気絶",
+    "SC": "失血伤害\\n昏厥",
+    "TC": "失血傷害\\n暈厥"
+  },
+  "040|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▲",
+    "EN": "Attack▲",
+    "JA": "攻撃力▲",
+    "SC": "攻击力▲",
+    "TC": "攻擊力▲"
+  },
+  "040|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해",
+    "EN": "Extra Damage",
+    "JA": "追加ダメージ",
+    "SC": "追加伤害",
+    "TC": "追加傷害"
+  },
+  "041|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼",
+    "EN": "Defense▼",
+    "JA": "防御力▼",
+    "SC": "防御力▼",
+    "TC": "防禦力▼"
+  },
+  "041|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적\\n공격 속도▲",
+    "EN": "Invincible\\nAttack Speed▲",
+    "JA": "無敵\\n攻撃スピード▲",
+    "SC": "无敌\\n攻击速度▲",
+    "TC": "無敵\\n攻擊速度▲"
+  },
+  "042|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▲",
+    "EN": "Attack▲",
+    "JA": "攻撃力▲",
+    "SC": "攻击力▲",
+    "TC": "攻擊力▲"
+  },
+  "042|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n기절",
+    "EN": "Extra Damage\\nStun",
+    "JA": "追加ダメージ\\n気絶",
+    "SC": "追加伤害\\n昏厥",
+    "TC": "追加傷害\\n暈厥"
+  },
+  "043|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절\\n막기 확률▲",
+    "EN": "Stun\\nBlock Chance▲",
+    "JA": "気絶\\nブロック率▲",
+    "SC": "昏厥\\n阻挡概率▲",
+    "TC": "暈厥\\n阻擋機率▲"
+  },
+  "043|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n피해 감소량▲",
+    "EN": "Extra Damage\\nDamage Reduction▲",
+    "JA": "追加ダメージ\\nダメージ減少量▲",
+    "SC": "追加伤害\\n伤害减少量▲",
+    "TC": "追加傷害\\n傷害減少量▲"
+  },
+  "044|2": {
+    "NORMAL": "C044_DLG01",
+    "ANGRY": "C044_DLG06",
+    "KO": "지속 회복",
+    "EN": "Continuous Recovery",
+    "JA": "持続回復",
+    "SC": "持续恢复",
+    "TC": "持續恢復"
+  },
+  "044|4": {
+    "NORMAL": "C044_DLG01",
+    "ANGRY": "C044_DLG06",
+    "KO": "출혈 피해\\n공격 불가",
+    "EN": "Bleed Damage\\nAttack DISABLED",
+    "JA": "出血ダメージ\\n攻撃不可",
+    "SC": "失血伤害\\n无法攻击",
+    "TC": "失血傷害\\n無法攻擊"
+  },
+  "045|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적",
+    "EN": "Invincible",
+    "JA": "無敵",
+    "SC": "无敌",
+    "TC": "無敵"
+  },
+  "045|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▲\\n강화 해제",
+    "EN": "Attack▲\\nREMOVE Beneficial Effect",
+    "JA": "攻撃力▲\\n強化解除",
+    "SC": "攻击力▲\\n解除强化",
+    "TC": "攻擊力▲\\n解除強化"
+  },
+  "046|2": {
+    "NORMAL": "C046_DLG01",
+    "ANGRY": "C046_DLG07",
+    "KO": "공격 불가\\n방어력▲\\n막기 확률▲",
+    "EN": "Attack DISABLED\\nDefense▲\\nBlock Chance▲",
+    "JA": "攻撃不可\\n防御力▲\\nブロック率▲",
+    "SC": "无法攻击\\n防御力▲\\n阻挡概率▲",
+    "TC": "無法攻擊\\n防禦力▲\\n阻擋機率▲"
+  },
+  "046|4": {
+    "NORMAL": "C046_DLG01",
+    "ANGRY": "C046_DLG07",
+    "KO": "깊은 상처\\n무적 금지(10초)",
+    "EN": "Deep Wound\\nInvincible DISABLED(10 sec)",
+    "JA": "深手\\n無敵禁止（10秒）",
+    "SC": "深层伤害\\n禁止无敌(10秒)",
+    "TC": "深度傷害\\n禁止無敵(10秒)"
+  },
+  "047|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절\\n지속 회복\\n공격 속도▲",
+    "EN": "Stun\\nContinuous Recovery\\nAttack Speed▲",
+    "JA": "気絶\\n持続回復\\n攻撃スピード▲",
+    "SC": "昏厥\\n持续恢复\\n攻击速度▲",
+    "TC": "暈厥\\n持續恢復\\n攻擊速度▲"
+  },
+  "047|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해",
+    "EN": "Extra Damage",
+    "JA": "追加ダメージ",
+    "SC": "追加伤害",
+    "TC": "追加傷害"
+  },
+  "048|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "막기 확률▲",
+    "EN": "Block Chance▲",
+    "JA": "ブロック率▲",
+    "SC": "阻挡概率▲",
+    "TC": "阻擋機率▲"
+  },
+  "048|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해",
+    "EN": "Extra Damage",
+    "JA": "追加ダメージ",
+    "SC": "追加伤害",
+    "TC": "追加傷害"
+  },
+  "049|2": {
+    "NORMAL": "C049_DLG03",
+    "ANGRY": "C049_DLG05",
+    "KO": "공격력▼\\n분노 -1",
+    "EN": "Attack▼\\nRage -1",
+    "JA": "攻撃力▼\\nアンガゲージ-1",
+    "SC": "攻击力▼\\n愤怒值-1",
+    "TC": "攻擊力▼\\n憤怒值-1"
+  },
+  "049|4": {
+    "NORMAL": "C049_DLG03",
+    "ANGRY": "C049_DLG05",
+    "KO": "전체 지속 회복",
+    "EN": "ALL Continuous Recovery",
+    "JA": "全体持続回復",
+    "SC": "全体持续恢复",
+    "TC": "全體持續恢復"
+  },
+  "050|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▲\\n약화 해제",
+    "EN": "Defense▲\\nREMOVE Harmful Effect",
+    "JA": "防御力▲\\n弱化解除",
+    "SC": "防御力▲\\n解除弱化",
+    "TC": "防禦力▲\\n解除弱化"
+  },
+  "050|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▲",
+    "EN": "Attack▲",
+    "JA": "攻撃力▲",
+    "SC": "攻击力▲",
+    "TC": "攻擊力▲"
+  },
+  "051|2": {
+    "NORMAL": "C051_DLG02",
+    "ANGRY": "C051_DLG01",
+    "KO": "공격 속도▲",
+    "EN": "Attack Speed▲",
+    "JA": "攻撃スピード▲",
+    "SC": "攻击速度▲",
+    "TC": "攻擊速度▲"
+  },
+  "051|4": {
+    "NORMAL": "C051_DLG02",
+    "ANGRY": "C051_DLG01",
+    "KO": "기절\\n방어력▼",
+    "EN": "Stun\\nDefense▼",
+    "JA": "気絶\\n防御力▼",
+    "SC": "昏厥\\n防御力▼",
+    "TC": "暈厥\\n防禦力▼"
+  },
+  "052|2": {
+    "NORMAL": "C052_DLG01",
+    "ANGRY": "C052_DLG05",
+    "KO": "기절",
+    "EN": "Stun",
+    "JA": "気絶",
+    "SC": "昏厥",
+    "TC": "暈厥"
+  },
+  "052|4": {
+    "NORMAL": "C052_DLG01",
+    "ANGRY": "C052_DLG05",
+    "KO": "무적 관통\\n방어력 반감",
+    "EN": "Penetrate Invincible\\nDefense HALVED",
+    "JA": "無敵貫通\\n防御力半減",
+    "SC": "无敌穿透\\n防御力减半",
+    "TC": "無敵穿透\\n防禦力減半"
+  },
+  "053|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n공격 속도▲",
+    "EN": "Penetrate Invincible\\nAttack Speed▲",
+    "JA": "無敵貫通\\n攻撃スピード▲",
+    "SC": "无敌穿透\\n攻击速度▲",
+    "TC": "無敵穿透\\n攻擊速度▲"
+  },
+  "053|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n기절",
+    "EN": "Extra Damage\\nStun",
+    "JA": "追加ダメージ\\n気絶",
+    "SC": "追加伤害\\n昏厥",
+    "TC": "追加傷害\\n暈厥"
+  },
+  "054|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n공격 불가",
+    "EN": "Penetrate Invincible\\nAttack DISABLED",
+    "JA": "無敵貫通\\n攻撃不可",
+    "SC": "无敌穿透\\n无法攻击",
+    "TC": "無敵穿透\\n無法攻擊"
+  },
+  "054|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "전체 출혈 피해",
+    "EN": "ALL Bleed Damage",
+    "JA": "全体出血ダメージ",
+    "SC": "全体失血伤害",
+    "TC": "全體失血傷害"
+  },
+  "055|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강화 금지(4초)\\n공격력▲",
+    "EN": "Block Beneficial Effect(4 sec)\\nAttack▲",
+    "JA": "強化不可（4秒）\\n攻撃力▲",
+    "SC": "禁止强化(4秒)\\n攻击力▲",
+    "TC": "禁止強化(4秒)\\n攻擊力▲"
+  },
+  "055|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n피해 감소량▼",
+    "EN": "Extra Damage\\nDamage Reduction▼",
+    "JA": "追加ダメージ\\nダメージ減少量▼",
+    "SC": "追加伤害\\n伤害减少量▼",
+    "TC": "追加傷害\\n傷害減少量▼"
+  },
+  "056_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강화 금지(4초)\\n교체금지(4초)\\n속성 저항▼",
+    "EN": "Block Beneficial Effect(4 sec)\\nReplace DISABLED(4 sec)\\nEL RES▼",
+    "JA": "強化不可（4秒）\\n交代禁止（4秒）\\n属性耐性▼",
+    "SC": "禁止强化(4秒)\\n禁止更换(4秒)\\n属性耐性▼",
+    "TC": "禁止強化(4秒)\\n禁止更換(4秒)\\n屬性耐性▼"
+  },
+  "056_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n막기확률▼\\n치명타 확률▼",
+    "EN": "Extra Damage\\nBlock Chance▼\\nCritical Chance▼",
+    "JA": "追加ダメージ\\n致命打率▼\\nブロック率▼",
+    "SC": "追加伤害\\n暴击概率▼\\n阻挡概率▼",
+    "TC": "追加傷害\\n爆擊機率▼\\n阻擋機率▼"
+  },
+  "056|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강화 금지(4초)\\n피해 감소량▼",
+    "EN": "Block Beneficial Effect(4 sec)\\nDamage Reduction▼",
+    "JA": "強化不可（4秒）\\nダメージ減少量▼",
+    "SC": "禁止强化(4秒)\\n伤害减少量▼",
+    "TC": "禁止強化(4秒)\\n傷害減少量▼"
+  },
+  "056|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n교체금지",
+    "EN": "Extra Damage\\nReplace DISABLED",
+    "JA": "追加ダメージ\\n交代禁止",
+    "SC": "追加伤害\\n禁止更换",
+    "TC": "追加傷害\\n禁止更換"
+  },
+  "057|2": {
+    "NORMAL": "C057_DLG01",
+    "ANGRY": "C057_DLG05",
+    "KO": "공격 불가",
+    "EN": "Attack DISABLED",
+    "JA": "攻撃不可",
+    "SC": "无法攻击",
+    "TC": "無法攻擊"
+  },
+  "057|4": {
+    "NORMAL": "C057_DLG01",
+    "ANGRY": "C057_DLG05",
+    "KO": "지속 회복",
+    "EN": "Continuous Recovery",
+    "JA": "持続回復",
+    "SC": "持续恢复",
+    "TC": "持續恢復"
+  },
+  "058|2": {
+    "NORMAL": "C058_DLG02",
+    "ANGRY": "C058_DLG01",
+    "KO": "공격력▲",
+    "EN": "Attack▲",
+    "JA": "攻撃力▲",
+    "SC": "攻击力▲",
+    "TC": "攻擊力▲"
+  },
+  "058|4": {
+    "NORMAL": "C058_DLG02",
+    "ANGRY": "C058_DLG01",
+    "KO": "추가 피해",
+    "EN": "Extra Damage",
+    "JA": "追加ダメージ",
+    "SC": "追加伤害",
+    "TC": "追加傷害"
+  },
+  "059|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n방어력▼",
+    "EN": "Penetrate Invincible\\nDefense▼",
+    "JA": "無敵貫通\\n防御力▼",
+    "SC": "无敌穿透\\n防御力▼",
+    "TC": "無敵穿透\\n防禦力▼"
+  },
+  "059|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n방어력▼",
+    "EN": "Extra Damage\\nDefense▼",
+    "JA": "追加ダメージ\\n防御力▼",
+    "SC": "追加伤害\\n防御力▼",
+    "TC": "追加傷害\\n防禦力▼"
+  },
+  "060|2": {
+    "NORMAL": "C060_DLG03",
+    "ANGRY": "C060_DLG05",
+    "KO": "공격력▲\\n약화 해제",
+    "EN": "Attack▲\\nREMOVE Harmful Effect",
+    "JA": "攻撃力▲\\n弱化解除",
+    "SC": "攻击力▲\\n解除弱化",
+    "TC": "攻擊力▲\\n解除弱化"
+  },
+  "060|4": {
+    "NORMAL": "C060_DLG03",
+    "ANGRY": "C060_DLG05",
+    "KO": "전체 회복\\n전체 약화 해제",
+    "EN": "ALL Recovery\\nALL REMOVE Harmful Effect",
+    "JA": "全体回復\\n全体弱化解除",
+    "SC": "全体恢复\\n全体解除弱化",
+    "TC": "全體恢復\\n全體解除弱化"
+  },
+  "061|2": {
+    "NORMAL": "C061_DLG01",
+    "ANGRY": "C061_DLG05",
+    "KO": "기절",
+    "EN": "Stun",
+    "JA": "気絶",
+    "SC": "昏厥",
+    "TC": "暈厥"
+  },
+  "061|4": {
+    "NORMAL": "C061_DLG01",
+    "ANGRY": "C061_DLG05",
+    "KO": "공격 속도▲\\n치명타 확률▲",
+    "EN": "Attack Speed▲\\nCritical Chance▲",
+    "JA": "攻撃スピード▲\\n致命打率▲",
+    "SC": "攻击速度▲\\n暴击概率▲",
+    "TC": "攻擊速度▲\\n爆擊機率▲"
+  },
+  "062|2": {
+    "NORMAL": "C062_DLG01",
+    "ANGRY": "C062_DLG04",
+    "KO": "막기 확률▼\\n피해 감소량▼",
+    "EN": "Block Chance▼\\nDamage Reduction▼",
+    "JA": "ブロック率▼\\nダメージ減少量▼",
+    "SC": "阻挡概率▼\\n伤害减少量▼",
+    "TC": "阻擋機率▼\\n傷害減少量▼"
+  },
+  "062|4": {
+    "NORMAL": "C062_DLG01",
+    "ANGRY": "C062_DLG04",
+    "KO": "추가 피해\\n공격 불가",
+    "EN": "Extra Damage\\nAttack DISABLED",
+    "JA": "追加ダメージ\\n攻撃不可",
+    "SC": "追加伤害\\n无法攻击",
+    "TC": "追加傷害\\n無法攻擊"
+  },
+  "063|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▼\\n방어력▼",
+    "EN": "Attack▼\\nDefense▼",
+    "JA": "攻撃力▼\\n防御力▼",
+    "SC": "攻击力▼\\n防御力▼",
+    "TC": "攻擊力▼\\n防禦力▼"
+  },
+  "063|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격력▲\\n방어력▲",
+    "EN": "Attack▲\\nDefense▲",
+    "JA": "攻撃力▲\\n防御力▲",
+    "SC": "攻击力▲\\n防御力▲",
+    "TC": "攻擊力▲\\n防禦力▲"
+  },
+  "064|2": {
+    "NORMAL": "C064_DLG01",
+    "ANGRY": "C064_DLG05",
+    "KO": "무적 관통\\n깊은 상처\\n방어력▼(지속)",
+    "EN": "Penetrate Invincible\\nDeep Wound\\nDefense▼(Continuous)",
+    "JA": "無敵貫通\\n深手\\n防御力▼(持続)",
+    "SC": "无敌穿透\\n深层伤害\\n防御力▼(持续)",
+    "TC": "無敵穿透\\n深度傷害\\n防禦力▼(持續)"
+  },
+  "064|4": {
+    "NORMAL": "C064_DLG01",
+    "ANGRY": "C064_DLG05",
+    "KO": "강제 교체\\n기절",
+    "EN": "Force Switch\\nStun",
+    "JA": "強制交代\\n気絶",
+    "SC": "强行换人\\n昏厥",
+    "TC": "強行替換\\n暈厥"
+  },
+  "065|2": {
+    "NORMAL": "C065_DLG01",
+    "ANGRY": "C065_DLG05",
+    "KO": "회복\\n막기 확률▲(지속)",
+    "EN": "Recovery\\nBlock Chance▲(Continuous)",
+    "JA": "回復\\nブロック率▲(持続)",
+    "SC": "恢复\\n阻挡概率▲(持续)",
+    "TC": "恢復\\n阻擋機率▲(持續)"
+  },
+  "065|4": {
+    "NORMAL": "C065_DLG01",
+    "ANGRY": "C065_DLG05",
+    "KO": "전체 회복",
+    "EN": "ALL Recovery",
+    "JA": "全体回復",
+    "SC": "全体恢复",
+    "TC": "全體恢復"
+  },
+  "066|2": {
+    "NORMAL": "C066_DLG01",
+    "ANGRY": "C066_DLG05",
+    "KO": "속성 저항▼(지속)\\n막기 확률▼",
+    "EN": "EL RES▼(Continuous)\\nBlock Chance▼",
+    "JA": "属性耐性▼(持続)\\nブロック率▼",
+    "SC": "属性耐性▼(持续)\\n阻挡概率▼",
+    "TC": "屬性耐性▼(持續)\\n阻擋機率▼"
+  },
+  "066|4": {
+    "NORMAL": "C066_DLG01",
+    "ANGRY": "C066_DLG05",
+    "KO": "교체금지\\n깊은 상처\\n공격 속도▲",
+    "EN": "Replace DISABLED\\nDeep Wound\\nAttack Speed▲",
+    "JA": "交代禁止\\n深手\\n攻撃スピード▲",
+    "SC": "禁止更换\\n深层伤害\\n攻击速度▲",
+    "TC": "禁止更換\\n深度傷害\\n攻擊速度▲"
+  },
+  "067|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "전체 출혈 피해\\n적 전체 기절\\n분노 -1",
+    "EN": "ALL Bleed Damage\\nStun to ALL\\nRage -1",
+    "JA": "全体出血ダメージ\\n全体気絶\\nアンガゲージ-1",
+    "SC": "全体失血伤害\\n全体昏厥\\n愤怒值-1",
+    "TC": "全體失血傷害\\n全體暈厥\\n憤怒值-1"
+  },
+  "067|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n고정 피해\\n분노 -1",
+    "EN": "Penetrate Invincible\\nFixed Damage\\nRage -1",
+    "JA": "無敵貫通\\n固定ダメージ\\nアンガゲージ-1",
+    "SC": "无敌穿透\\n固定伤害\\n愤怒值-1",
+    "TC": "無敵穿透\\n固定傷害\\n憤怒值-1"
+  },
+  "068|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n출혈 피해\\n분노 +1",
+    "EN": "Penetrate Invincible\\nBleed Damage\\nRage +1",
+    "JA": "無敵貫通\\n出血ダメージ\\nアンガゲージ+1",
+    "SC": "无敌穿透\\n失血伤害\\n愤怒值+1",
+    "TC": "無敵穿透\\n失血傷害\\n憤怒值+1"
+  },
+  "068|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n추가 피해",
+    "EN": "Penetrate Invincible\\nExtra Damage",
+    "JA": "無敵貫通\\n追加ダメージ",
+    "SC": "无敌穿透\\n追加伤害",
+    "TC": "無敵穿透\\n追加傷害"
+  },
+  "069|2": {
+    "NORMAL": "C069_DLG01",
+    "ANGRY": "C069_DLG02",
+    "KO": "전체 지속 회복",
+    "EN": "ALL Continuous Recovery",
+    "JA": "全体持続回復",
+    "SC": "全体持续恢复",
+    "TC": "全體持續恢復"
+  },
+  "069|4": {
+    "NORMAL": "C069_DLG01",
+    "ANGRY": "C069_DLG02",
+    "KO": "공격력▲\\n치명타 확률▲\\n치명타 피해량▲",
+    "EN": "Attack▲\\nCritical Chance▲\\nCritical Damage▲",
+    "JA": "攻撃力▲\\n致命打率▲\\n致命打ダメージ量▲",
+    "SC": "攻击力▲\\n暴击概率▲\\n暴击伤害▲",
+    "TC": "攻擊力▲\\n爆擊機率▲\\n爆擊傷害▲"
+  },
+  "070|2": {
+    "NORMAL": "C070_DLG01",
+    "ANGRY": "C070_DLG03",
+    "KO": "공격 속도▲\\n약화 해제(4초)",
+    "EN": "Attack Speed▲\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "攻撃スピード▲\\n弱化解除（4秒）",
+    "SC": "攻击速度▲\\n解除弱化(4秒)",
+    "TC": "攻擊速度▲\\n解除弱化(4秒)"
+  },
+  "070|4": {
+    "NORMAL": "C070_DLG01",
+    "ANGRY": "C070_DLG03",
+    "KO": "기절\\n지속 회복\\n분노 +2",
+    "EN": "Stun\\nContinuous Recovery\\nRage +2",
+    "JA": "気絶\\n持続回復\\nアンガゲージ+2",
+    "SC": "昏厥\\n持续恢复\\n愤怒值+2",
+    "TC": "暈厥\\n持續恢復\\n憤怒值+2"
+  },
+  "071|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강제 교체\\n기절\\n약화 해제(4초)",
+    "EN": "Force Switch\\nStun\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "強制交代\\n気絶\\n弱化解除（4秒）",
+    "SC": "强行换人\\n昏厥\\n解除弱化(4秒)",
+    "TC": "強行替換\\n暈厥\\n解除弱化(4秒)"
+  },
+  "071|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "회복\\n공격 속도▲",
+    "EN": "Recovery\\nAttack Speed▲",
+    "JA": "回復\\n攻撃スピード▲",
+    "SC": "恢复\\n攻击速度▲",
+    "TC": "恢復\\n攻擊速度▲"
+  },
+  "072|2": {
+    "NORMAL": "C072_DLG01",
+    "ANGRY": "C072_DLG02",
+    "KO": "출혈 피해\\n무적 금지(10초)\\n교체금지",
+    "EN": "Bleed Damage\\nInvincible DISABLED(10 sec)\\nReplace DISABLED",
+    "JA": "出血ダメージ\\n無敵禁止（10秒）\\n交代禁止",
+    "SC": "失血伤害\\n禁止无敌(10秒)\\n禁止更换",
+    "TC": "失血傷害\\n禁止無敵(10秒)\\n禁止更換"
+  },
+  "072|4": {
+    "NORMAL": "C072_DLG01",
+    "ANGRY": "C072_DLG02",
+    "KO": "고정 피해",
+    "EN": "Fixed Damage",
+    "JA": "固定ダメージ",
+    "SC": "固定伤害",
+    "TC": "固定傷害"
+  },
+  "073|2": {
+    "NORMAL": "C073_DLG01",
+    "ANGRY": "C073_DLG05",
+    "KO": "무적",
+    "EN": "Invincible",
+    "JA": "無敵",
+    "SC": "无敌",
+    "TC": "無敵"
+  },
+  "073|4": {
+    "NORMAL": "C073_DLG01",
+    "ANGRY": "C073_DLG05",
+    "KO": "전체 회복\\n약화 해제\\n강화 해제",
+    "EN": "ALL Recovery\\nREMOVE Harmful Effect\\nREMOVE Beneficial Effect",
+    "JA": "全体回復\\n弱化解除\\n強化解除",
+    "SC": "全体恢复\\n解除弱化\\n解除强化",
+    "TC": "全體恢復\\n解除弱化\\n解除強化"
+  },
+  "074|2": {
+    "NORMAL": "C074_DLG01",
+    "ANGRY": "C074_DLG01",
+    "KO": "약화 해제\\n치명타 확률▲\\n분노 +1",
+    "EN": "REMOVE Harmful Effect\\nCritical Chance▲\\nRage +1",
+    "JA": "弱化解除\\n致命打率▲\\nアンガゲージ+1",
+    "SC": "解除弱化\\n暴击概率▲\\n愤怒值+1",
+    "TC": "解除弱化\\n爆擊機率▲\\n憤怒值+1"
+  },
+  "074|4": {
+    "NORMAL": "C074_DLG01",
+    "ANGRY": "C074_DLG01",
+    "KO": "무적\\n공격력▲\\n공격 속도▲",
+    "EN": "Invincible\\nAttack▲\\nAttack Speed▲",
+    "JA": "無敵\\n攻撃力▲\\n攻撃スピード▲",
+    "SC": "无敌\\n攻击力▲\\n攻击速度▲",
+    "TC": "無敵\\n攻擊力▲\\n攻擊速度▲"
+  },
+  "075|2": {
+    "NORMAL": "C075_DLG01",
+    "ANGRY": "C075_DLG01",
+    "KO": "공격 속도▲\\n깊은 상처",
+    "EN": "Attack Speed▲\\nDeep Wound",
+    "JA": "攻撃スピード▲\\n深手",
+    "SC": "攻击速度▲\\n深层伤害",
+    "TC": "攻擊速度▲\\n深度傷害"
+  },
+  "075|4": {
+    "NORMAL": "C075_DLG01",
+    "ANGRY": "C075_DLG01",
+    "KO": "무적\\n공격력▲(지속)\\n공격 속도▲(지속)",
+    "EN": "Invincible\\nAttack▲(Continuous)\\nAttack Speed▲(Continuous)",
+    "JA": "無敵\\n攻撃力▲(持続)\\n攻撃スピード▲(持続)",
+    "SC": "无敌\\n攻击力▲(持续)\\n攻击速度▲(持续)",
+    "TC": "無敵\\n攻擊力▲(持續)\\n攻擊速度▲(持續)"
+  },
+  "076|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격 속도▼\\n방어력▲\\n치명타 피해량▲",
+    "EN": "Attack Speed▼\\nDefense▲\\nCritical Damage▲",
+    "JA": "攻撃スピード▼\\n防御力▲\\n致命打ダメージ量▲",
+    "SC": "攻击速度▼\\n防御力▲\\n暴击伤害▲",
+    "TC": "攻擊速度▼\\n防禦力▲\\n爆擊傷害▲"
+  },
+  "076|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "약화 해제\\n무적\\n지속 회복",
+    "EN": "REMOVE Harmful Effect\\nInvincible\\nContinuous Recovery",
+    "JA": "弱化解除\\n無敵\\n持続回復",
+    "SC": "解除弱化\\n无敌\\n持续恢复",
+    "TC": "解除弱化\\n無敵\\n持續恢復"
+  },
+  "077|2": {
+    "NORMAL": "C077_DLG4",
+    "ANGRY": "C077_DLG01",
+    "KO": "무적 관통\\n전체 출혈 피해\\n적 전체 방어력▼",
+    "EN": "Penetrate Invincible\\nALL Bleed Damage\\nDefense▼",
+    "JA": "無敵貫通\\n全体出血ダメージ\\n全体防御力▼",
+    "SC": "无敌穿透\\n全体失血伤害\\n全体防御力▼",
+    "TC": "無敵穿透\\n全體失血傷害\\n全體防禦力▼"
+  },
+  "077|4": {
+    "NORMAL": "C077_DLG4",
+    "ANGRY": "C077_DLG01",
+    "KO": "피해 감소량▼\\n기절",
+    "EN": "Damage Reduction▼\\nStun",
+    "JA": "ダメージ減少量▼\\n気絶",
+    "SC": "伤害减少量▼\\n昏厥",
+    "TC": "傷害減少量▼\\n暈厥"
+  },
+  "078|2": {
+    "NORMAL": "C078_DLG01",
+    "ANGRY": "C078_DLG5",
+    "KO": "회복\\치명타 확률▲(지속)",
+    "EN": "Recovery\\nCritical Chance▲(Continuous)",
+    "JA": "回復\\n致命打率▲(持続)",
+    "SC": "恢复\\n暴击概率▲(持续)",
+    "TC": "恢復\\n暴擊機率▲(持續)"
+  },
+  "078|4": {
+    "NORMAL": "C078_DLG01",
+    "ANGRY": "C078_DLG5",
+    "KO": "전체 회복",
+    "EN": "ALL Recovery",
+    "JA": "全体回復",
+    "SC": "全体恢复",
+    "TC": "全體恢復"
+  },
+  "079|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강화 해제\\n적 전체 기절\\n피해 감소량▲",
+    "EN": "REMOVE Beneficial Effect\\nStun to ALL\\nDamage Reduction▲",
+    "JA": "強化解除\\n全体気絶\\nダメージ減少量▲",
+    "SC": "解除强化\\n全体昏厥\\n伤害减少量▲",
+    "TC": "解除強化\\n全體暈厥\\n傷害減少量▲"
+  },
+  "079|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "피해 감소량▼(해제불가)\\n공격력▲(해제불가)\\n공격 속도▲(해제불가)",
+    "EN": "Damage Reduction▼\\nAttack▲\\nAttack Speed▲",
+    "JA": "ダメージ減少量▼(解除不可)\\n攻撃力▲(解除不可)\\n攻撃スピード▲(解除不可)",
+    "SC": "伤害减少量▼(解除不可)\\n攻击力▲(解除不可)\\n攻击速度▲(解除不可)",
+    "TC": "傷害減少量▼(解除不可)\\n攻擊力▲(解除不可)\\n攻擊速度▲(解除不可)"
+  },
+  "080|2": {
+    "NORMAL": "C080_DLG01",
+    "ANGRY": "C080_DLG02",
+    "KO": "약화 해제\\n공격력▲\\n방어력▲",
+    "EN": "REMOVE Harmful Effect\\nAttack▲\\nDefense▲",
+    "JA": "弱化解除\\n攻撃力▲\\n防御力▲",
+    "SC": "解除弱化\\n攻击力▲\\n防御力▲",
+    "TC": "解除弱化\\n攻擊力▲\\n防禦力▲"
+  },
+  "080|4": {
+    "NORMAL": "C080_DLG01",
+    "ANGRY": "C080_DLG02",
+    "KO": "교체금지\\n공격력▼\\n방어력▼",
+    "EN": "Replace DISABLED\\nAttack▼\\nDefense▼",
+    "JA": "交代禁止\\n攻撃力▼\\n防御力▼",
+    "SC": "禁止更换\\n攻击力▼\\n防御力▼",
+    "TC": "禁止更換\\n攻擊力▼\\n防禦力▼"
+  },
+  "081|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 금지(10초)\\n반격▲\\n공격력▲ 방어력▲",
+    "EN": "Invincible DISABLED(10 sec)\\nCounter▲\\nAttack▲ Defense▲",
+    "JA": "無敵禁止（10秒）\\n反撃▲\\n攻撃力▲ 防御力▲",
+    "SC": "禁止无敌(10秒)\\n反击▲\\n攻击力▲ 防御力▲",
+    "TC": "禁止無敵(10秒)\\n反擊▲\\n攻擊力▲ 防禦力▲"
+  },
+  "081|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가피해\\n반격▲\\n막기 확률▲",
+    "EN": "Extra Damage\\nCounter▲\\nBlock Chance▲",
+    "JA": "追加ダメージ\\n反撃▲\\nブロック率▲",
+    "SC": "追加伤害\\n反击▲\\n阻挡概率▲",
+    "TC": "追加傷害\\n反擊▲\\n阻擋機率▲"
+  },
+  "082|2": {
+    "NORMAL": "C082_DLG02",
+    "ANGRY": "C082_DLG01",
+    "KO": "속성 저항▼(지속)\\n피해 감소량▼",
+    "EN": "EL RES▼(Continuous)\\nDamage Reduction▼",
+    "JA": "属性耐性▼(持続)\\nダメージ減少量▼",
+    "SC": "属性耐性▼(持续)\\n伤害减少量▼",
+    "TC": "屬性耐性▼(持續)\\n傷害減少量▼"
+  },
+  "082|4": {
+    "NORMAL": "C082_DLG02",
+    "ANGRY": "C082_DLG01",
+    "KO": "교체금지\\n깊은 상처\\n공격 속도▲",
+    "EN": "Replace DISABLED\\nDeep Wound\\nAttack Speed▲",
+    "JA": "交代禁止\\n深手\\n攻撃スピード▲",
+    "SC": "禁止更换\\n深层伤害\\n攻击速度▲",
+    "TC": "禁止更換\\n深度傷害\\n攻擊速度▲"
+  },
+  "083|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "깊은 상처\\n공격력▼(지속)\\n공격 속도▼(지속)",
+    "EN": "Deep Wound\\nAttack▼(Continuous)\\nAttack Speed▼(Continuous)",
+    "JA": "深手\\n攻撃力▼(持続)\\n攻撃スピード▼(持続)",
+    "SC": "深层伤害\\n攻击力▼(持续)\\n攻击速度▼(持续)",
+    "TC": "深度傷害\\n攻擊力▼(持續)\\n攻擊速度▼(持續)"
+  },
+  "083|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "기절\\n고정 피해\\n무적 관통",
+    "EN": "Stun\\nFixed Damage\\nPenetrate Invincible",
+    "JA": "気絶\\n固定ダメージ\\n無敵貫通",
+    "SC": "昏厥\\n固定伤害\\n无敌穿透",
+    "TC": "暈厥\\n固定傷害\\n無敵穿透"
+  },
+  "084|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강제교체\\n회복\\n약화 해제",
+    "EN": "Force Switch\\nRecovery\\nREMOVE Harmful Effect",
+    "JA": "強制交代\\n回復\\n弱化解除",
+    "SC": "强行换人\\n恢复\\n解除弱化",
+    "TC": "強行替換\\n恢復\\n解除弱化"
+  },
+  "084|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n공격력▲\\n방어력▲",
+    "EN": "Extra Damage\\nAttack▲\\nDefense▲",
+    "JA": "追加ダメージ\\n攻撃力▲\\n防御力▲",
+    "SC": "追加伤害\\n攻击力▲\\n防御力▲",
+    "TC": "追加傷害\\n攻擊力▲\\n防禦力▲"
+  },
+  "085|2": {
+    "NORMAL": "C085_DLG01",
+    "ANGRY": "C085_DLG03",
+    "KO": "공격 속도▲\\n약화 해제(4초)",
+    "EN": "Attack Speed▲\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "攻撃スピード▲\\n弱化解除（4秒）",
+    "SC": "攻击速度▲\\n解除弱化(4秒)",
+    "TC": "攻擊速度▲\\n解除弱化(4秒)"
+  },
+  "085|4": {
+    "NORMAL": "C085_DLG01",
+    "ANGRY": "C085_DLG03",
+    "KO": "기절\\n지속 회복\\n분노 +1 -1",
+    "EN": "Stun\\nContinuous Recovery\\nRage +1 -1",
+    "JA": "気絶\\n持続回復\\nアンガゲージ+1 -1",
+    "SC": "昏厥\\n持续恢复\\n愤怒值+1 -1",
+    "TC": "暈厥\\n持續恢復\\n憤怒值+1 -1"
+  },
+  "086_1|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강화 금지(4초)\\n교체금지(4초)\\n속성 저항▼",
+    "EN": "Block Beneficial Effect(4 sec)\\nReplace DISABLED(4 sec)\\nEL RES▼",
+    "JA": "強化不可（4秒）\\n交代禁止（4秒）\\n属性耐性▼",
+    "SC": "禁止强化(4秒)\\n禁止更换(4秒)\\n属性耐性▼",
+    "TC": "禁止強化(4秒)\\n禁止更換(4秒)\\n屬性耐性▼"
+  },
+  "086_1|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n막기확률▼\\n치명타 확률▼",
+    "EN": "Extra Damage\\nBlock Chance▼\\nCritical Chance▼",
+    "JA": "追加ダメージ\\n致命打率▼\\nブロック率▼",
+    "SC": "追加伤害\\n暴击概率▼\\n阻挡概率▼",
+    "TC": "追加傷害\\n爆擊機率▼\\n阻擋機率▼"
+  },
+  "086|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강화 금지(4초)\\n피해 감소량▼",
+    "EN": "Block Beneficial Effect(4 sec)\\nDamage Reduction▼",
+    "JA": "強化不可（4秒）\\nダメージ減少量▼",
+    "SC": "禁止强化(4秒)\\n伤害减少量▼",
+    "TC": "禁止強化(4秒)\\n傷害減少量▼"
+  },
+  "086|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n교체금지",
+    "EN": "Extra Damage\\nReplace DISABLED",
+    "JA": "追加ダメージ\\n交代禁止",
+    "SC": "追加伤害\\n禁止更换",
+    "TC": "追加傷害\\n禁止更換"
+  },
+  "087|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "전체 출혈 피해\\n적 전체 기절\\n분노 +1",
+    "EN": "ALL Bleed Damage\\nStun to ALL\\nRage+1",
+    "JA": "全体出血ダメージ\\n全体気絶\\nアンガゲージ+1",
+    "SC": "全体失血伤害\\n全体昏厥\\n愤怒值+1",
+    "TC": "全體失血傷害\\n全體暈厥\\n憤怒值+1"
+  },
+  "087|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n고정 피해\\n분노 +1",
+    "EN": "Penetrate Invincible\\nFixed Damage\\nRage+1",
+    "JA": "無敵貫通\\n固定ダメージ\\nアンガゲージ+1",
+    "SC": "无敌穿透\\n固定伤害\\n愤怒值+1",
+    "TC": "無敵穿透\\n固定傷害\\n憤怒值+1"
+  },
+  "088|2": {
+    "NORMAL": "C088_DLG01",
+    "ANGRY": "C088_DLG07",
+    "KO": "기절\\n방어력▲",
+    "EN": "Stun\\nDefense▲",
+    "JA": "気絶\\n防御力▲",
+    "SC": "昏厥\\n防御力▲",
+    "TC": "暈厥\\n防禦力▲"
+  },
+  "088|4": {
+    "NORMAL": "C088_DLG01",
+    "ANGRY": "C088_DLG07",
+    "KO": "깊은 상처\\n무적 금지(10초)",
+    "EN": "Deep Wound\\nInvincible DISABLED(10 sec)",
+    "JA": "深手\\n無敵禁止（10秒）",
+    "SC": "深层伤害\\n禁止无敌(10秒)",
+    "TC": "深度傷害\\n禁止無敵(10秒)"
+  },
+  "089|2": {
+    "NORMAL": "C089_DLG01",
+    "ANGRY": "C089_DLG01",
+    "KO": "회복\\n공격 속도▲\\n막기확률▲",
+    "EN": "Recovery\\nAttack Speed▲\\nBlock Chance▲",
+    "JA": "回復\\n攻撃スピード▲\\nブロック率▲",
+    "SC": "恢复\\n攻击速度▲\\n阻挡概率▲",
+    "TC": "恢復\\n攻擊速度▲\\n阻擋機率▲"
+  },
+  "089|4": {
+    "NORMAL": "C089_DLG01",
+    "ANGRY": "C089_DLG01",
+    "KO": "추가 피해\\n강화 해제\\n기절",
+    "EN": "Extra Damage\\nREMOVE Beneficial Effect\\nStun",
+    "JA": "追加ダメージ\\n強化解除\\n気絶",
+    "SC": "追加伤害\\n解除强化\\n昏厥",
+    "TC": "追加傷害\\n解除強化\\n暈厥"
+  },
+  "090|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n깊은 상처\\n속성 저항▼(지속)",
+    "EN": "Penetrate Invincible\\nDeep Wound\\nEL RES▼(Continuous)",
+    "JA": "無敵貫通\\n深手\\n属性耐性▼(持続)",
+    "SC": "无敌穿透\\n深层伤害\\n属性耐性▼(持续)",
+    "TC": "無敵穿透\\n深度傷害\\n屬性耐性▼(持續)"
+  },
+  "090|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼\\n분노 +1",
+    "EN": "Defense▼\\nRage+1",
+    "JA": "防御力▼\\nアンガゲージ+1",
+    "SC": "防御力▼\\n愤怒值+1",
+    "TC": "防禦力▼\\n憤怒值+1"
+  },
+  "091|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강제 교체\\n기절\\n약화 해제(4초)",
+    "EN": "Force Switch\\nStun\\nREMOVE Harmful Effect(4 sec)",
+    "JA": "強制交代\\n気絶\\n弱化解除（4秒）",
+    "SC": "强行换人\\n昏厥\\n解除弱化(4秒)",
+    "TC": "強行替換\\n暈厥\\n解除弱化(4秒)"
+  },
+  "091|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "회복\\n공격 속도▲",
+    "EN": "Recovery\\nAttack Speed▲",
+    "JA": "回復\\n攻撃スピード▲",
+    "SC": "恢复\\n攻击速度▲",
+    "TC": "恢復\\n攻擊速度▲"
+  },
+  "092|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n깊은 상처",
+    "EN": "Penetrate Invincible\\nDeep Wound",
+    "JA": "無敵貫通\\n深手",
+    "SC": "无敌穿透\\n深层伤害",
+    "TC": "無敵穿透\\n深度傷害"
+  },
+  "092|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가피해\\n피해 감소량▼(해제불가)",
+    "EN": "Extra Damage\\nDamage Reduction▼",
+    "JA": "追加ダメージ\\nダメージ減少量▼(解除不可)",
+    "SC": "追加伤害\\n伤害减少量▼(解除不可)",
+    "TC": "追加傷害\\n傷害減少量▼(解除不可)"
+  },
+  "093|2": {
+    "NORMAL": "C093_DLG01",
+    "ANGRY": "C093_DLG01",
+    "KO": "공격 속도▲\\n깊은 상처",
+    "EN": "Attack Speed▲\\nDeep Wound",
+    "JA": "攻撃スピード▲\\n深手",
+    "SC": "攻击速度▲\\n深层伤害",
+    "TC": "攻擊速度▲\\n深度傷害"
+  },
+  "093|4": {
+    "NORMAL": "C093_DLG01",
+    "ANGRY": "C093_DLG01",
+    "KO": "무적\\n공격력▲(지속)\\n공격 속도▲(지속)",
+    "EN": "Invincible\\nAttack▲(Continuous)\\nAttack Speed▲(Continuous)",
+    "JA": "無敵\\n攻撃力▲(持続)\\n攻撃スピード▲(持続)",
+    "SC": "无敌\\n攻击力▲(持续)\\n攻击速度▲(持续)",
+    "TC": "無敵\\n攻擊力▲(持續)\\n攻擊速度▲(持續)"
+  },
+  "094|2": {
+    "NORMAL": "C094_DLG01",
+    "ANGRY": "C094_DLG05",
+    "KO": "약화 해제\\n치명타 확률▲\\n분노 +1",
+    "EN": "REMOVE Harmful Effect\\nCritical Chance▲\\nRage +1",
+    "JA": "弱化解除\\n致命打率▲\\nアンガゲージ+1",
+    "SC": "解除弱化\\n暴击概率▲\\n愤怒值+1",
+    "TC": "解除弱化\\n爆擊機率▲\\n憤怒值+1"
+  },
+  "094|4": {
+    "NORMAL": "C094_DLG01",
+    "ANGRY": "C094_DLG05",
+    "KO": "무적\\n공격력▲\\n공격 속도▲",
+    "EN": "Invincible\\nAttack▲\\nAttack Speed▲",
+    "JA": "無敵\\n攻撃力▲\\n攻撃スピード▲",
+    "SC": "无敌\\n攻击力▲\\n攻击速度▲",
+    "TC": "無敵\\n攻擊力▲\\n攻擊速度▲"
+  },
+  "095|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "강화 해제\\n기절\\n치명타 피해량▲",
+    "EN": "REMOVE Beneficial Effect\\nStun\\nCritical Damage▲",
+    "JA": "強化解除\\n気絶\\n致命打ダメージ量▲",
+    "SC": "解除强化\\n昏厥\\n暴击伤害▲",
+    "TC": "解除強化\\n暈厥\\n爆擊傷害▲"
+  },
+  "095|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "피해 감소량▼(해제불가)\\n공격력▲(해제불가)\\n공격 속도▲(해제불가)",
+    "EN": "Damage Reduction▼\\nAttack▲\\nAttack Speed▲",
+    "JA": "ダメージ減少量▼(解除不可)\\n攻撃力▲(解除不可)\\n攻撃スピード▲(解除不可)",
+    "SC": "伤害减少量▼(解除不可)\\n攻击力▲(解除不可)\\n攻击速度▲(解除不可)",
+    "TC": "傷害減少量▼(解除不可)\\n攻擊力▲(解除不可)\\n攻擊速度▲(解除不可)"
+  },
+  "096|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "공격속도▲\\n교체금지\\n공격 불가",
+    "EN": "Attack Speed▲\\nReplace DISABLED\\nAttack DISABLED",
+    "JA": "攻撃スピード▲\\n交代禁止\\n攻撃不可",
+    "SC": "攻击速度▲\\n禁止更换\\n无法攻击",
+    "TC": "攻擊速度▲\\n禁止更換\\n無法攻擊"
+  },
+  "096|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "방어력▼\\n분노 -1",
+    "EN": "Defense▼\\nRage-1",
+    "JA": "防御力▼\\nアンガゲージ-1",
+    "SC": "防御力▼\\n愤怒值-1",
+    "TC": "防禦力▼\\n憤怒值-1"
+  },
+  "097|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "지속 회복\\n공격 속도▲",
+    "EN": "Continuous Recovery\\nAttack Speed▲",
+    "JA": "持続回復\\n攻撃スピード▲",
+    "SC": "持续恢复\\n攻击速度▲",
+    "TC": "持續恢復\\n攻擊速度▲"
+  },
+  "097|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "추가 피해\\n기절",
+    "EN": "Extra Damage\\nStun",
+    "JA": "追加ダメージ\\n気絶",
+    "SC": "追加伤害\\n昏厥",
+    "TC": "追加傷害\\n暈厥"
+  },
+  "098|2": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n출혈 피해\\n분노 +1",
+    "EN": "Penetrate Invincible\\nBleed Damage\\nRage +1",
+    "JA": "無敵貫通\\n出血ダメージ\\nアンガゲージ+1",
+    "SC": "无敌穿透\\n失血伤害\\n愤怒值+1",
+    "TC": "無敵穿透\\n失血傷害\\n憤怒值+1"
+  },
+  "098|4": {
+    "NORMAL": "nan",
+    "ANGRY": "nan",
+    "KO": "무적 관통\\n추가 피해",
+    "EN": "Penetrate Invincible\\nExtra Damage",
+    "JA": "無敵貫通\\n追加ダメージ",
+    "SC": "无敌穿透\\n追加伤害",
+    "TC": "無敵穿透\\n追加傷害"
+  }
+}

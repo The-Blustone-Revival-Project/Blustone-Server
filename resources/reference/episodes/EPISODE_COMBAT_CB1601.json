@@ -1,0 +1,54 @@
+{
+  "id": "CB1601",
+  "title": "E16_TITLE",
+  "stage_name": "E16_S03_TITLE",
+  "bgm": "BGM_BATTLE2",
+  "power": "25000",
+  "game_res_id": "901",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_2303B",
+  "lose_dialog": "EP_2303B",
+  "lose_dialog2": "EP_2303B",
+  "left": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB1601_C009",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 3
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "hunter",
+        "actor_id": "CB1601_C023",
+        "thumb": {
+          "level": 30,
+          "rank": 5,
+          "hyper": 2,
+          "attr": 1
+        },
+        "skill": [
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      }
+    ]
+  ]
+}

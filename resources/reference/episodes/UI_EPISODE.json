@@ -1,0 +1,2081 @@
+{
+  "E01_S01_TITLE": {
+    "KO": "캡틴 자격 시험",
+    "EN": "Captain Qualification Test",
+    "JA": "キャプテン資格試験",
+    "SC": "队长资格考试",
+    "TC": "隊長資格考試"
+  },
+  "E01_S02_TITLE": {
+    "KO": "한판 붙자!",
+    "EN": "Bring It On!",
+    "JA": "一勝負してこうぜ!",
+    "SC": "决一胜负吧!",
+    "TC": "一決勝負吧!"
+  },
+  "E01_S03_TITLE": {
+    "KO": "승리의 첫걸음",
+    "EN": "First Step for Victory",
+    "JA": "勝利への第一歩",
+    "SC": "胜利的第一步",
+    "TC": "勝利的第一步"
+  },
+  "E01_S04_TITLE": {
+    "KO": "실력 체크",
+    "EN": "What Have You Got?",
+    "JA": "実力チェック",
+    "SC": "实力测试",
+    "TC": "實力測驗"
+  },
+  "E01_S05_TITLE": {
+    "KO": "훈련을 빙자한 구타",
+    "EN": "A Beating Under Training",
+    "JA": "特訓にかこつけた度突き",
+    "SC": "以训练为借口的殴打",
+    "TC": "以訓練為藉口的毆打"
+  },
+  "E01_S06_TITLE": {
+    "KO": "갑작스런 위험",
+    "EN": "Sudden Danger",
+    "JA": "突然の危険",
+    "SC": "突如其来的危险",
+    "TC": "突如其來的危險"
+  },
+  "E01_S07_TITLE": {
+    "KO": "허망한 일",
+    "EN": "Fight in Vain",
+    "JA": "不毛な事",
+    "SC": "荒谬的事",
+    "TC": "荒謬的事"
+  },
+  "E01_TITLE": {
+    "KO": "갑작스런 시험",
+    "EN": "A Sudden Test",
+    "JA": "突然の試験",
+    "SC": "突如其來的考验",
+    "TC": "突如其來的考驗"
+  },
+  "E02_S01_TITLE": {
+    "KO": "시작된 시험",
+    "EN": "Test Started",
+    "JA": "試験開始",
+    "SC": "考试开始",
+    "TC": "考試開始"
+  },
+  "E02_S02_TITLE": {
+    "KO": "들통난 비법",
+    "EN": "Secret Revealed",
+    "JA": "バレた秘法",
+    "SC": "被揭露的秘诀",
+    "TC": "被揭露的秘訣"
+  },
+  "E02_S03_TITLE": {
+    "KO": "불조심",
+    "EN": "Watch Out for Fire",
+    "JA": "火の用心",
+    "SC": "小心火烛",
+    "TC": "小心火燭"
+  },
+  "E02_S04_TITLE": {
+    "KO": "생김새의 중요성",
+    "EN": "Don't Judge by the Looks",
+    "JA": "見た目の重要さ",
+    "SC": "长相的重要性",
+    "TC": "長相的重要性"
+  },
+  "E02_S05_TITLE": {
+    "KO": "약탈자의 아지트",
+    "EN": "Looters' Hideout",
+    "JA": "略奪者のアジト",
+    "SC": "掠夺者的据点",
+    "TC": "掠奪者的據點"
+  },
+  "E02_S06_TITLE": {
+    "KO": "푸른 보석",
+    "EN": "Blue Jewel",
+    "JA": "蒼い宝石",
+    "SC": "蓝色宝石",
+    "TC": "藍色寶石"
+  },
+  "E02_S07_TITLE": {
+    "KO": "메트론 결정체 등장!",
+    "EN": "A Metron Crystal!",
+    "JA": "メトロン結晶体登場!",
+    "SC": "迈特伦结晶体登场!",
+    "TC": "邁特倫結晶體登場!"
+  },
+  "E02_S08_TITLE": {
+    "KO": "예상 밖의 승리",
+    "EN": "Unexpected Victory",
+    "JA": "予想外の勝利",
+    "SC": "预料之外的胜利",
+    "TC": "預料之外的勝利"
+  },
+  "E02_TITLE": {
+    "KO": "승리의 푸른빛",
+    "EN": "Blue of Victory",
+    "JA": "勝利の青",
+    "SC": "胜利的蓝色",
+    "TC": "勝利的藍色"
+  },
+  "E03_S01_TITLE": {
+    "KO": "라나의 부탁",
+    "EN": "Lana's Request",
+    "JA": "ラナのお願い",
+    "SC": "拉娜的请求",
+    "TC": "拉娜的請求"
+  },
+  "E03_S02_TITLE": {
+    "KO": "기다리는 소녀",
+    "EN": "A Girl Who Waits",
+    "JA": "待ちわびる少女",
+    "SC": "等待的少女",
+    "TC": "等待的少女"
+  },
+  "E03_S03_TITLE": {
+    "KO": "캡틴의 설득",
+    "EN": "Captain's Persuasion",
+    "JA": "キャプテンの説得",
+    "SC": "队长的劝说",
+    "TC": "隊長的勸說"
+  },
+  "E03_S04_TITLE": {
+    "KO": "계획의 일부",
+    "EN": "Part of the Plan",
+    "JA": "計画の一部",
+    "SC": "计划的一部分",
+    "TC": "計畫的一部分"
+  },
+  "E03_S05_TITLE": {
+    "KO": "도망은 치르치르가 친다!",
+    "EN": "Tyltyl is the One to Get Away!",
+    "JA": "逃げるのはチルチル!",
+    "SC": "逃跑的是蒂蒂尔!",
+    "TC": "逃跑的是蒂蒂爾!"
+  },
+  "E03_S06_TITLE": {
+    "KO": "간발의 탈출",
+    "EN": "A Close Escape",
+    "JA": "間一髪の脱出劇",
+    "SC": "千钧一发的逃脱",
+    "TC": "千鈞一髮的逃脫"
+  },
+  "E03_S07_TITLE": {
+    "KO": "세상의 요동",
+    "EN": "Trembling World",
+    "JA": "揺れ動く世界",
+    "SC": "世界的波动",
+    "TC": "世界的波動"
+  },
+  "E03_TITLE": {
+    "KO": "피할 수 없는 적",
+    "EN": "Inescapable Enemy",
+    "JA": "避けられない敵",
+    "SC": "不可避免的敌人",
+    "TC": "不可避免的敵人"
+  },
+  "E04_S01_TITLE": {
+    "KO": "불길한 소리",
+    "EN": "Hint of Trouble",
+    "JA": "不吉な音",
+    "SC": "不详的声音",
+    "TC": "不詳的聲音"
+  },
+  "E04_S02_TITLE": {
+    "KO": "마지막 빵",
+    "EN": "The Last Pastry",
+    "JA": "最後のパン",
+    "SC": "最后一个面包",
+    "TC": "最後一個麵包"
+  },
+  "E04_S03_TITLE": {
+    "KO": "빵이 아니면 죽음을 달라!",
+    "EN": "Give Me Pastry or Give Me Death!",
+    "JA": "パンをくれないなら殺してくれ!",
+    "SC": "没面包| 毋宁死!",
+    "TC": "沒麵包| 毋寧死!"
+  },
+  "E04_S04_TITLE": {
+    "KO": "다이어트 중",
+    "EN": "On a Diet",
+    "JA": "ダイエット中",
+    "SC": "减肥中",
+    "TC": "減肥中"
+  },
+  "E04_TITLE": {
+    "KO": "치르치르의 날",
+    "EN": "The Day of Tyltyl",
+    "JA": "チルチルの日",
+    "SC": "蒂蒂尔之日",
+    "TC": "蒂蒂爾之日"
+  },
+  "E05_S01_TITLE": {
+    "KO": "이 세상의 본 모습",
+    "EN": "This is the Actual World",
+    "JA": "この世の真の姿",
+    "SC": "世界的本来面目",
+    "TC": "這世界的原貌"
+  },
+  "E05_S02_TITLE": {
+    "KO": "사라진 마을",
+    "EN": "The Disappeared Village",
+    "JA": "消えた村",
+    "SC": "消失的村庄",
+    "TC": "消失的村莊"
+  },
+  "E05_S03_TITLE": {
+    "KO": "전쟁의 상처",
+    "EN": "The Wounds of War",
+    "JA": "戦争の傷跡",
+    "SC": "战争的伤口",
+    "TC": "戰爭的傷痕"
+  },
+  "E05_S04_TITLE": {
+    "KO": "혹한의 세계",
+    "EN": "The World of Icy Weather",
+    "JA": "極寒の世界",
+    "SC": "严寒的世界",
+    "TC": "嚴寒的世界"
+  },
+  "E05_S05_TITLE": {
+    "KO": "아세로라의 부탁",
+    "EN": "Acerola's Request",
+    "JA": "アセロラの頼み",
+    "SC": "奥赛罗拉的请求",
+    "TC": "奧賽蘿拉的請求"
+  },
+  "E05_S06_TITLE": {
+    "KO": "칼슈타이너의 습격",
+    "EN": "Karl Steiner's Attack",
+    "JA": "カルシュタイナーの襲撃",
+    "SC": "卡尔斯坦纳的袭击",
+    "TC": "卡爾斯坦納的襲擊"
+  },
+  "E05_S07_TITLE": {
+    "KO": "또 한명의 캡틴",
+    "EN": "Yet Another Captain",
+    "JA": "もうひとりのキャプテン",
+    "SC": "另一位队长",
+    "TC": "另一位隊長"
+  },
+  "E05_S08_TITLE": {
+    "KO": "쿨하지 않아!",
+    "EN": "Not Cool at All!",
+    "JA": "カッコよくない!",
+    "SC": "一点也不酷!",
+    "TC": "一點也不酷!"
+  },
+  "E05_TITLE": {
+    "KO": "혹한의 세계",
+    "EN": "The World of Icy Weather",
+    "JA": "極寒の世界",
+    "SC": "严寒的世界",
+    "TC": "嚴寒的世界"
+  },
+  "E06_S01_TITLE": {
+    "KO": "검은 무리",
+    "EN": "The Dark Gang",
+    "JA": "黒の集団",
+    "SC": "黑衣党",
+    "TC": "黑衣黨"
+  },
+  "E06_S02_TITLE": {
+    "KO": "곰 세마리",
+    "EN": "The Three Bears",
+    "JA": "3匹のクマ",
+    "SC": "三只熊",
+    "TC": "三隻熊"
+  },
+  "E06_S03_TITLE": {
+    "KO": "추격자들",
+    "EN": "The Chasers",
+    "JA": "追撃者",
+    "SC": "追击者们",
+    "TC": "追擊者們"
+  },
+  "E06_S04_TITLE": {
+    "KO": "또 다른 인연",
+    "EN": "Yet Another Encounter",
+    "JA": "また別の縁",
+    "SC": "另一种缘分",
+    "TC": "另一種緣分"
+  },
+  "E06_S05_TITLE": {
+    "KO": "진실이 숨겨진 곳",
+    "EN": "Where the Truth is Hidden",
+    "JA": "真実が隠された場所",
+    "SC": "隐藏真相的地方",
+    "TC": "隱藏真相的地方"
+  },
+  "E06_S06_TITLE": {
+    "KO": "예상치 못한 동행자",
+    "EN": "Unexpected Company",
+    "JA": "予期せぬ同行者",
+    "SC": "意想不到的同伴",
+    "TC": "預料之外的同伴"
+  },
+  "E06_S07_TITLE": {
+    "KO": "또 한 명의 천재",
+    "EN": "Yet Another Genius",
+    "JA": "もうひとりの天才",
+    "SC": "另一位天才",
+    "TC": "另一位天才"
+  },
+  "E06_TITLE": {
+    "KO": "잿빛 늑대의 생존자",
+    "EN": "The Survivor of the Gray Wolves",
+    "JA": "グレー・オオカミの生存者",
+    "SC": "灰狼的幸存者",
+    "TC": "灰狼的倖存者"
+  },
+  "E07_S01_TITLE": {
+    "KO": "쓰러진 슈만",
+    "EN": "Fallen Schumann",
+    "JA": "倒れたシューマン",
+    "SC": "晕倒的秀曼",
+    "TC": "暈倒的秀曼"
+  },
+  "E07_S02_TITLE": {
+    "KO": "기타를 뺏어라!",
+    "EN": "Take Away the Guitar!",
+    "JA": "ギターを奪え!",
+    "SC": "抢走吉他!",
+    "TC": "搶走吉他!"
+  },
+  "E07_S03_TITLE": {
+    "KO": "무의식의 세계로",
+    "EN": "Into the Unconscious World",
+    "JA": "無意識の世界へ",
+    "SC": "前往无意识的世界",
+    "TC": "前往無意識的世界"
+  },
+  "E07_S04_TITLE": {
+    "KO": "무의식 속의 적",
+    "EN": "The Enemy in the Unconscious",
+    "JA": "無意識の敵",
+    "SC": "无意识中的敌人",
+    "TC": "無意識中的敵人"
+  },
+  "E07_S05_TITLE": {
+    "KO": "감동의 앵콜송",
+    "EN": "An Encore",
+    "JA": "感動のアンコール曲",
+    "SC": "感动的安可曲",
+    "TC": "感動的安可曲"
+  },
+  "E07_TITLE": {
+    "KO": "러브 & 데스",
+    "EN": "Love & Death",
+    "JA": "ラブ＆デス",
+    "SC": "爱&死",
+    "TC": "Love&Death"
+  },
+  "E08_S01_TITLE": {
+    "KO": "미뤄뒀던 일",
+    "EN": "The To-Do List",
+    "JA": "後回しにしたこと",
+    "SC": "被推迟的事情",
+    "TC": "被拖延的事"
+  },
+  "E08_S02_TITLE": {
+    "KO": "팬더호크의 눈",
+    "EN": "The Eyes of Pandahawk",
+    "JA": "パンダホークの目",
+    "SC": "熊鹰之眼",
+    "TC": "熊鷹之眼"
+  },
+  "E08_S03_TITLE": {
+    "KO": "유일한 단서",
+    "EN": "The Only Clue",
+    "JA": "唯一の手がかり",
+    "SC": "唯一的线索",
+    "TC": "唯一的線索"
+  },
+  "E08_S04_TITLE": {
+    "KO": "칼바람의 보답",
+    "EN": "Windblade's Token of Appreciation",
+    "JA": "ストームのお返し",
+    "SC": "剑风的报答",
+    "TC": "劍風的報答"
+  },
+  "E08_S05_TITLE": {
+    "KO": "새로운 단서",
+    "EN": "A New Clue",
+    "JA": "新しい手がかり",
+    "SC": "新线索",
+    "TC": "新線索"
+  },
+  "E08_S06_TITLE": {
+    "KO": "짙은 어둠 속에서",
+    "EN": "In the Thick Darkness",
+    "JA": "深い闇の中で",
+    "SC": "深深的黑暗中",
+    "TC": "深深的黑暗中"
+  },
+  "E08_S07_TITLE": {
+    "KO": "행운의 부적",
+    "EN": "The Lucky Charm",
+    "JA": "幸運のお守り",
+    "SC": "幸运符",
+    "TC": "幸運符"
+  },
+  "E08_TITLE": {
+    "KO": "헤르메스 찾기",
+    "EN": "Finding Hermes",
+    "JA": "ヘルメス探し",
+    "SC": "寻找赫尔墨斯",
+    "TC": "尋找赫爾墨斯"
+  },
+  "E09_S01_TITLE": {
+    "KO": "독촉장",
+    "EN": "Reminder",
+    "JA": "催促状",
+    "SC": "催款单",
+    "TC": "催款單"
+  },
+  "E09_S02_TITLE": {
+    "KO": "로크 앤 캐쉬",
+    "EN": "Locke and Cash",
+    "JA": "ロック＆キャッシュ",
+    "SC": "洛克和现金",
+    "TC": "洛克與現金"
+  },
+  "E09_S03_TITLE": {
+    "KO": "로크 앤 캐쉬의 결투",
+    "EN": "The Battle of Locke and Cash",
+    "JA": "ロック＆キャッシュの決闘",
+    "SC": "洛克和现金的决斗",
+    "TC": "洛克與現金的決鬥"
+  },
+  "E09_S04_TITLE": {
+    "KO": "이어지는 단서",
+    "EN": "Another Clue",
+    "JA": "つながる手がかり",
+    "SC": "后续线索",
+    "TC": "後續線索"
+  },
+  "E09_S05_TITLE": {
+    "KO": "창조의 터",
+    "EN": "The Site of Creation",
+    "JA": "創造の場所",
+    "SC": "创造的基地",
+    "TC": "創造的基地"
+  },
+  "E09_S06_TITLE": {
+    "KO": "로봇 공학자 에드워드",
+    "EN": "Edward the Robot Engineer",
+    "JA": "ロボット工学者エドワード",
+    "SC": "机器人工学家爱德华",
+    "TC": "機器人工學家愛德華"
+  },
+  "E09_S07_TITLE": {
+    "KO": "뜻밖의 재회",
+    "EN": "Unexpected Reunion",
+    "JA": "思いがけない再会",
+    "SC": "意外的再会",
+    "TC": "意外的再會"
+  },
+  "E09_TITLE": {
+    "KO": "창조의 터. 크라시옹",
+    "EN": "The Site of Creation",
+    "JA": "創造の場所",
+    "SC": "创造的基地",
+    "TC": "創造的基地"
+  },
+  "E10_S01_TITLE": {
+    "KO": "원대한 목표",
+    "EN": "Far-Reaching Goal",
+    "JA": "壮大な目標",
+    "SC": "远大的目标",
+    "TC": "遠大的目標"
+  },
+  "E10_S02_TITLE": {
+    "KO": "시동기",
+    "EN": "Starting Engine",
+    "JA": "始動機",
+    "SC": "启动器",
+    "TC": "啟動器"
+  },
+  "E10_S03_TITLE": {
+    "KO": "부탁? 협박?",
+    "EN": "A Favor? Or a Threat?",
+    "JA": "お願い？脅し？",
+    "SC": "请求？威胁？",
+    "TC": "請求? 威脅?"
+  },
+  "E10_S04_TITLE": {
+    "KO": "말하는 약초",
+    "EN": "A Talking Herb",
+    "JA": "しゃべる薬草",
+    "SC": "会说话的药草",
+    "TC": "會說話的藥草"
+  },
+  "E10_S05_TITLE": {
+    "KO": "어비스 유적",
+    "EN": "Abyss Ruins",
+    "JA": "アビス遺跡",
+    "SC": "阿比斯遗迹",
+    "TC": "阿比斯遺跡"
+  },
+  "E10_S06_TITLE": {
+    "KO": "정체불명의 적",
+    "EN": "Mysterious Enemies",
+    "JA": "正体不明の敵",
+    "SC": "身份不明的敌人",
+    "TC": "身份不明的敵人"
+  },
+  "E10_S07_TITLE": {
+    "KO": "크라시옹의 영웅",
+    "EN": "Cracion's Heroes",
+    "JA": "クラシオンの英雄",
+    "SC": "创造之地的英雄",
+    "TC": "創造之地的英雄"
+  },
+  "E10_TITLE": {
+    "KO": "원대한 목표",
+    "EN": "Far-Reaching Goal",
+    "JA": "壮大な目標",
+    "SC": "远大的目标",
+    "TC": "遠大的目標"
+  },
+  "E11_S01_TITLE": {
+    "KO": "로크의 천적",
+    "EN": "Locke's Nemesis",
+    "JA": "ロックの天敵 ",
+    "SC": "洛克的天敌",
+    "TC": "洛克的天敵"
+  },
+  "E11_S02_TITLE": {
+    "KO": "스토킹",
+    "EN": "Stalking",
+    "JA": "ストーカー",
+    "SC": "跟踪",
+    "TC": "跟蹤"
+  },
+  "E11_S03_TITLE": {
+    "KO": "일방적인 싸움",
+    "EN": "A One-Sided Battle",
+    "JA": "一方的な喧嘩",
+    "SC": "单方面作战",
+    "TC": "單方面作戰"
+  },
+  "E11_S04_TITLE": {
+    "KO": "인생을 망쳐놓은 사람",
+    "EN": "The Person Who Ruined My Life",
+    "JA": "人生をめちゃくちゃにした人",
+    "SC": "人生毁灭者",
+    "TC": "人生毀滅者"
+  },
+  "E11_S05_TITLE": {
+    "KO": "스토커의 스토커",
+    "EN": "Stalker of the Stalker",
+    "JA": "ストーカーのストーカー",
+    "SC": "跟踪狂的跟踪狂",
+    "TC": "跟蹤狂的跟蹤狂"
+  },
+  "E11_S06_TITLE": {
+    "KO": "난 선생이고 넌 제자야!",
+    "EN": "I'm a Teacher| You're a Student!",
+    "JA": "私は先生であなたは弟子よッ!",
+    "SC": "我是老师，你是学生!",
+    "TC": "我是老師| 你是學生!"
+  },
+  "E11_S07_TITLE": {
+    "KO": "더 나은 방법",
+    "EN": "A Better Way",
+    "JA": "もっと良い方法",
+    "SC": "更好的方法",
+    "TC": "更好的方法"
+  },
+  "E11_S08_TITLE": {
+    "KO": "미드가드 대표 솔로",
+    "EN": "Midgard's Solo Rep",
+    "JA": "ミッドガルドのソロ代表",
+    "SC": "米德加尔特单身代表",
+    "TC": "米德加爾特單身代表"
+  },
+  "E11_TITLE": {
+    "KO": "진실을 마주해야할 때",
+    "EN": "Time to Face the Truth",
+    "JA": "真実に向き合う時",
+    "SC": "面对真相时",
+    "TC": "面對真相時"
+  },
+  "E12_S01_TITLE": {
+    "KO": "진지한 기후 조사",
+    "EN": "A Thorough Weather Forecast",
+    "JA": "徹底的な気候調査",
+    "SC": "彻底的气候调查",
+    "TC": "徹底的氣候調查"
+  },
+  "E12_S02_TITLE": {
+    "KO": "변해가는 세계",
+    "EN": "The Everchanging World",
+    "JA": "変わりゆく世界",
+    "SC": "逐渐变化的世界",
+    "TC": "變化的世界"
+  },
+  "E12_S03_TITLE": {
+    "KO": "이상한 증거들",
+    "EN": "Strange Evidence",
+    "JA": "おかしな証拠",
+    "SC": "奇怪的证据",
+    "TC": "奇怪的證據"
+  },
+  "E12_S04_TITLE": {
+    "KO": "또 다시 마주친 악연",
+    "EN": "Another Encounter with Ill Fate",
+    "JA": "再び衝突する悪縁",
+    "SC": "再次相遇的孽缘",
+    "TC": "再次相遇的孽緣"
+  },
+  "E12_S05_TITLE": {
+    "KO": "희망과 절망",
+    "EN": "Hope and Despair",
+    "JA": "希望と絶望",
+    "SC": "希望与绝望",
+    "TC": "希望與絕望"
+  },
+  "E12_S06_TITLE": {
+    "KO": "문제의 인물",
+    "EN": "The Person of Trouble",
+    "JA": "問題人物",
+    "SC": "问题人物",
+    "TC": "問題人物"
+  },
+  "E12_S07_TITLE": {
+    "KO": "다시 붉은 협곡으로",
+    "EN": "Back to the Crimson Chasm",
+    "JA": "再び赤い峡谷に",
+    "SC": "再次前往红色峡谷",
+    "TC": "再次前往紅色峽谷"
+  },
+  "E12_TITLE": {
+    "KO": "변해가는 세계",
+    "EN": "The Everchanging World",
+    "JA": "変わりゆく世界",
+    "SC": "逐渐变化的世界",
+    "TC": "變化的世界"
+  },
+  "E13_S01_TITLE": {
+    "KO": "끈질긴 추격자",
+    "EN": "A Relentless Pursuer",
+    "JA": "しつこい追撃者",
+    "SC": "执着的追击者",
+    "TC": "執著的追擊者"
+  },
+  "E13_S02_TITLE": {
+    "KO": "또 한번의 대결",
+    "EN": "Another Battle",
+    "JA": "再対決",
+    "SC": "再次对决",
+    "TC": "再次對決"
+  },
+  "E13_S03_TITLE": {
+    "KO": "노골적인 함정",
+    "EN": "A Blatant Trap",
+    "JA": "露骨な罠",
+    "SC": "明显的陷阱",
+    "TC": "明顯的陷阱"
+  },
+  "E13_S04_TITLE": {
+    "KO": "치르치르의 진심",
+    "EN": "Tyltyl's Earnest Feelings",
+    "JA": "チルチルの本心",
+    "SC": "蒂蒂尔的真心",
+    "TC": "蒂蒂爾的真心"
+  },
+  "E13_S05_TITLE": {
+    "KO": "헌터들의 응원",
+    "EN": "Hunter's Support",
+    "JA": "ハンター達の応援",
+    "SC": "猎人的支持",
+    "TC": "獵人的支持"
+  },
+  "E13_S06_TITLE": {
+    "KO": "든든한 사람",
+    "EN": "A Reliable Person",
+    "JA": "心強い人",
+    "SC": "坚实可靠的人",
+    "TC": "堅實可靠的人"
+  },
+  "E13_S07_TITLE": {
+    "KO": "쉴 틈 없는 대련",
+    "EN": "Sparring Without End",
+    "JA": "休みない鍛錬",
+    "SC": "不停歇的对练",
+    "TC": "不停歇的對練"
+  },
+  "E13_S08_TITLE": {
+    "KO": "중앙 극점을 향해!",
+    "EN": "Towards the Central Pole",
+    "JA": "中央極点に向けて!",
+    "SC": "前往中央极点!",
+    "TC": "前往中央極點!"
+  },
+  "E13_TITLE": {
+    "KO": "모든 것이 결정될 곳",
+    "EN": "The Place Where It's Decided",
+    "JA": "全てが決まる場所",
+    "SC": "决定一切之处",
+    "TC": "決定一切之處"
+  },
+  "E14_S01_TITLE": {
+    "KO": "따뜻함을 위한 연구",
+    "EN": "Research for Warmth",
+    "JA": "温暖のための研究",
+    "SC": "以温暖为目的的研究",
+    "TC": "為了溫暖的研究"
+  },
+  "E14_S02_TITLE": {
+    "KO": "뜻밖의 합류",
+    "EN": "Unexpected Accompaniment",
+    "JA": "予想外の合流",
+    "SC": "意外的加入",
+    "TC": "意外的加入"
+  },
+  "E14_S03_TITLE": {
+    "KO": "이상한 조짐",
+    "EN": "Strange Omen",
+    "JA": "異常な兆候",
+    "SC": "奇怪的征兆",
+    "TC": "奇怪的徵兆"
+  },
+  "E14_S04_TITLE": {
+    "KO": "알 수 없는 길",
+    "EN": "Mysterious Path",
+    "JA": "知り得ない道",
+    "SC": "未知的路",
+    "TC": "未知的路"
+  },
+  "E14_S05_TITLE": {
+    "KO": "막아서는 자들",
+    "EN": "The Hindrances",
+    "JA": "制止する者達",
+    "SC": "阻挡者们",
+    "TC": "阻擋者們"
+  },
+  "E14_S06_TITLE": {
+    "KO": "대책 없는 녀석들",
+    "EN": "Idiots with No Counterplan",
+    "JA": "無計画な奴ら",
+    "SC": "毫无对策的家伙们",
+    "TC": "毫無對策的傢伙們"
+  },
+  "E14_S07_TITLE": {
+    "KO": "스파키는 언제나 옳다",
+    "EN": "Sparky is Always Right",
+    "JA": "常に正しいスパーキー",
+    "SC": "斯帕奇永远都是对的",
+    "TC": "斯帕奇永遠都是對的"
+  },
+  "E14_TITLE": {
+    "KO": "막아서는 자들",
+    "EN": "The Hindrances",
+    "JA": "制止する者達",
+    "SC": "阻挡者们",
+    "TC": "阻擋者們"
+  },
+  "E15_S01_TITLE": {
+    "KO": "달라진 것",
+    "EN": "What's Changed",
+    "JA": "違い",
+    "SC": "变动",
+    "TC": "變動"
+  },
+  "E15_S02_TITLE": {
+    "KO": "폭주",
+    "EN": "Run Wild",
+    "JA": "暴走",
+    "SC": "暴走",
+    "TC": "暴走"
+  },
+  "E15_S03_TITLE": {
+    "KO": "과거의 메시지",
+    "EN": "Message from the Past",
+    "JA": "過去のメッセージ",
+    "SC": "过去的信息",
+    "TC": "過去的訊息"
+  },
+  "E15_S04_TITLE": {
+    "KO": "디노의 행방",
+    "EN": "Dino's Whereabouts",
+    "JA": "ディノの行方",
+    "SC": "迪诺的下落",
+    "TC": "迪諾的下落"
+  },
+  "E15_S05_TITLE": {
+    "KO": "두 명의 디노",
+    "EN": "Two Dinos",
+    "JA": "二人のディノ",
+    "SC": "两个迪诺",
+    "TC": "兩個迪諾"
+  },
+  "E15_S06_TITLE": {
+    "KO": "새로운 길잡이",
+    "EN": "New Guide",
+    "JA": "新たな道案内人",
+    "SC": "新探路者",
+    "TC": "新的帶頭"
+  },
+  "E15_S07_TITLE": {
+    "KO": "최종 저지선",
+    "EN": "Last Restriction Line",
+    "JA": "最終阻止線",
+    "SC": "最终防线",
+    "TC": "最終防線"
+  },
+  "E15_S08_TITLE": {
+    "KO": "진퇴양난",
+    "EN": "Quandary",
+    "JA": "板挟み",
+    "SC": "进退两难",
+    "TC": "進退兩難"
+  },
+  "E15_TITLE": {
+    "KO": "과거의 메시지",
+    "EN": "Message from the Past",
+    "JA": "過去のメッセージ",
+    "SC": "过去的信息",
+    "TC": "過去的訊息"
+  },
+  "E16_S01_TITLE": {
+    "KO": "계획대로",
+    "EN": "As Planned",
+    "JA": "プラン通り",
+    "SC": "按计划行事",
+    "TC": "按照計劃"
+  },
+  "E16_S02_TITLE": {
+    "KO": "오래된 습성",
+    "EN": "Old Habit",
+    "JA": "古い習性",
+    "SC": "旧习",
+    "TC": "舊習"
+  },
+  "E16_S03_TITLE": {
+    "KO": "엇갈린 분노",
+    "EN": "Mingled Anger",
+    "JA": "すれ違う怒り",
+    "SC": "交织的愤怒",
+    "TC": "交織的憤怒"
+  },
+  "E16_S04_TITLE": {
+    "KO": "절대로 믿을 수 없는 이유",
+    "EN": "Reason Not to Trust",
+    "JA": "絶対に信用できない理由",
+    "SC": "无法置信的理由",
+    "TC": "無法置信的理由"
+  },
+  "E16_S05_TITLE": {
+    "KO": "시작의 비밀",
+    "EN": "Secret of Start",
+    "JA": "始まりの秘密",
+    "SC": "开始的秘密",
+    "TC": "開始的秘密"
+  },
+  "E16_S06_TITLE": {
+    "KO": "싸워야할 이유",
+    "EN": "Reason to Fight",
+    "JA": "戦うべき理由",
+    "SC": "不得不战的理由",
+    "TC": "不得不戰的理由"
+  },
+  "E16_S07_TITLE": {
+    "KO": "아주 조금",
+    "EN": "Very Little",
+    "JA": "ほんの少し",
+    "SC": "只有一点",
+    "TC": "只有一點"
+  },
+  "E16_S08_TITLE": {
+    "KO": "미지의 힘",
+    "EN": "Unknown Strength",
+    "JA": "未知の力",
+    "SC": "未知之力",
+    "TC": "未知之力"
+  },
+  "E16_S09_TITLE": {
+    "KO": "최악의 시나리오",
+    "EN": "Worst Scenario",
+    "JA": "最悪のシナリオ",
+    "SC": "最烂的剧本",
+    "TC": "最糟的劇本"
+  },
+  "E16_TITLE": {
+    "KO": "엇갈린 분노",
+    "EN": "Mingled Anger",
+    "JA": "すれ違う怒り",
+    "SC": "交织的愤怒",
+    "TC": "交織的憤怒"
+  },
+  "E17_S01_TITLE": {
+    "KO": "위험한 온기",
+    "EN": "Dangerous Warmth",
+    "JA": "危険な温暖",
+    "SC": "危险的温度",
+    "TC": "危險的溫度"
+  },
+  "E17_S02_TITLE": {
+    "KO": "장본인",
+    "EN": "The Very Person",
+    "JA": "張本人",
+    "SC": "罪魁祸首",
+    "TC": "罪魁禍首"
+  },
+  "E17_S03_TITLE": {
+    "KO": "원죄",
+    "EN": "Original Sin",
+    "JA": "原罪",
+    "SC": "原罪",
+    "TC": "原罪"
+  },
+  "E17_S04_TITLE": {
+    "KO": "벗어날 수 없는 운명",
+    "EN": "Unavoidable Fate",
+    "JA": "逃れられない運命",
+    "SC": "无法摆脱的命运",
+    "TC": "無法擺脫的命運"
+  },
+  "E17_S05_TITLE": {
+    "KO": "세상을 태울 불길",
+    "EN": "Flame to Burn Up the World",
+    "JA": "世界を燃やす炎",
+    "SC": "燃烧世界的火焰",
+    "TC": "燃燒世界的火焰"
+  },
+  "E17_S06_TITLE": {
+    "KO": "잔혹한 열기",
+    "EN": "Vicious Heat",
+    "JA": "残酷な炎",
+    "SC": "严酷的热气",
+    "TC": "嚴酷的熱氣"
+  },
+  "E17_S07_TITLE": {
+    "KO": "소용돌이",
+    "EN": "Whirlpool",
+    "JA": "渦",
+    "SC": "旋涡",
+    "TC": "漩渦"
+  },
+  "E17_S08_TITLE": {
+    "KO": "꺼지지 않는 불꽃",
+    "EN": "Eternal Flame",
+    "JA": "消えない炎",
+    "SC": "不灭的火花",
+    "TC": "不滅的火花"
+  },
+  "E17_S09_TITLE": {
+    "KO": "두 개의 심장",
+    "EN": "Two Hearts",
+    "JA": "二つの心臓",
+    "SC": "两颗心脏",
+    "TC": "兩顆心臟"
+  },
+  "E17_TITLE": {
+    "KO": "시즌 최종화. 꺼지지 않는 불꽃",
+    "EN": "Season finale. Eternal Flame",
+    "JA": "シーズン最終話。消えない炎",
+    "SC": "本季最终话。不灭的火花",
+    "TC": "本季最終話。不滅的火花"
+  },
+  "E18_S01_TITLE": {
+    "KO": "잠꼬대",
+    "EN": "Sleep Talking",
+    "JA": "寝言",
+    "SC": "梦话",
+    "TC": "夢話"
+  },
+  "E18_S02_TITLE": {
+    "KO": "세상을 구한 영웅",
+    "EN": "The Hero Who Saved the World",
+    "JA": "世界を救った英雄",
+    "SC": "拯救世界的英雄",
+    "TC": "拯救世界的英雄"
+  },
+  "E18_S03_TITLE": {
+    "KO": "잃어버린 연결고리",
+    "EN": "Missing Link",
+    "JA": "失われた繋がり",
+    "SC": "遗失的纽带",
+    "TC": "遺失的紐帶"
+  },
+  "E18_S04_TITLE": {
+    "KO": "진짜 영웅들",
+    "EN": "True Hero",
+    "JA": "真の英雄",
+    "SC": "真正的英雄",
+    "TC": "真正的英雄"
+  },
+  "E18_S05_TITLE": {
+    "KO": "새로운 출발선",
+    "EN": "New Starting Line",
+    "JA": "新たなスタートライン",
+    "SC": "新的起点",
+    "TC": "新的起點"
+  },
+  "E18_TITLE": {
+    "KO": "에필로그",
+    "EN": "Epilogue",
+    "JA": "エピローグ",
+    "SC": "结语",
+    "TC": "結語"
+  },
+  "EV01_E01_S01_TITLE": {
+    "KO": "할로윈의 만남",
+    "EN": "Meeting on Halloween",
+    "JA": "ハロウィンの出会い",
+    "SC": "万圣节的邂逅",
+    "TC": "萬聖節的邂逅"
+  },
+  "EV01_E01_S02_TITLE": {
+    "KO": "전설을 찾아서",
+    "EN": "Finding Legends",
+    "JA": "伝説を探して",
+    "SC": "寻找传说",
+    "TC": "尋找傳說"
+  },
+  "EV01_E01_S03_TITLE": {
+    "KO": "죽음의 묘약",
+    "EN": "Potion of Death",
+    "JA": "死の妙薬",
+    "SC": "死亡灵药",
+    "TC": "死亡靈藥"
+  },
+  "EV01_E01_TITLE": {
+    "KO": "죽음의 묘약",
+    "EN": "Potion of Death",
+    "JA": "死の妙薬",
+    "SC": "死亡灵药",
+    "TC": "死亡靈藥"
+  },
+  "EV01_E02_S01_TITLE": {
+    "KO": "헤매임의 연속",
+    "EN": "Continuous Wandering",
+    "JA": "迷いの連続",
+    "SC": "无尽的彷徨",
+    "TC": "無盡的仿徨"
+  },
+  "EV01_E02_S02_TITLE": {
+    "KO": "할로윈 히트 상품",
+    "EN": "Halloween Hot Item",
+    "JA": "ハロウィンのヒット商品",
+    "SC": "万圣节热门商品",
+    "TC": "萬聖節熱門商品"
+  },
+  "EV01_E02_S03_TITLE": {
+    "KO": "포기할 수 없는 것",
+    "EN": "What Can't Be Given Up",
+    "JA": "諦めきれないもの",
+    "SC": "无法放弃之物",
+    "TC": "無法放棄之物"
+  },
+  "EV01_E02_TITLE": {
+    "KO": "포기할 수 없는 것",
+    "EN": "What Can't Be Given Up",
+    "JA": "諦めきれないもの",
+    "SC": "无法放弃之物",
+    "TC": "無法放棄之物"
+  },
+  "EV01_E03_S01_TITLE": {
+    "KO": "의문의 화살",
+    "EN": "Suspicious Arrow",
+    "JA": "謎の矢",
+    "SC": "可疑的箭",
+    "TC": "可疑的箭"
+  },
+  "EV01_E03_S02_TITLE": {
+    "KO": "예상 밖의 습격",
+    "EN": "Unexpected Attack",
+    "JA": "予想外の襲撃",
+    "SC": "意料之外的袭击",
+    "TC": "意料之外的襲擊"
+  },
+  "EV01_E03_S03_TITLE": {
+    "KO": "천생연분",
+    "EN": "Meant for Each Other",
+    "JA": "運命の相手",
+    "SC": "天赐良缘",
+    "TC": "天賜良緣"
+  },
+  "EV01_E03_TITLE": {
+    "KO": "의문의 화살",
+    "EN": "Suspicious Arrow",
+    "JA": "謎の矢",
+    "SC": "可疑的箭",
+    "TC": "可疑的箭"
+  },
+  "EV01_E04_S01_TITLE": {
+    "KO": "죽음의 잔",
+    "EN": "Goblet of Death",
+    "JA": "死の杯",
+    "SC": "死亡之杯",
+    "TC": "死亡之杯"
+  },
+  "EV01_E04_S02_TITLE": {
+    "KO": "마지막 경쟁자",
+    "EN": "Last Competitor",
+    "JA": "最後のライバル",
+    "SC": "最后的竞争者",
+    "TC": "最後的競爭者"
+  },
+  "EV01_E04_S03_TITLE": {
+    "KO": "그의 과거",
+    "EN": "His Past",
+    "JA": "彼の過去",
+    "SC": "他的过往",
+    "TC": "他的過往"
+  },
+  "EV01_E04_TITLE": {
+    "KO": "마지막 경쟁자",
+    "EN": "Last Competitor",
+    "JA": "最後のライバル",
+    "SC": "最后的竞争者",
+    "TC": "最後的競爭者"
+  },
+  "EV01_E05_S01_TITLE": {
+    "KO": "진짜 효능",
+    "EN": "True Effect",
+    "JA": "本当の効能",
+    "SC": "真正药效",
+    "TC": "真正藥效"
+  },
+  "EV01_E05_S02_TITLE": {
+    "KO": "죽음의 시험",
+    "EN": "Test of Death",
+    "JA": "死の試練",
+    "SC": "死亡考验",
+    "TC": "死亡考驗"
+  },
+  "EV01_E05_S03_TITLE": {
+    "KO": "똑같은 마음",
+    "EN": "Same Mind",
+    "JA": "同じ気持ち",
+    "SC": "同样的心情",
+    "TC": "同樣的心情"
+  },
+  "EV01_E05_TITLE": {
+    "KO": "죽음의 시험",
+    "EN": "Test of Death",
+    "JA": "死の試練",
+    "SC": "死亡考验",
+    "TC": "死亡考驗"
+  },
+  "EV01_TITLE": {
+    "KO": "할로윈 특집! 죽음의 묘약을 찾아라!",
+    "EN": "Find the Potion of Death!",
+    "JA": "ハロウィン特集！死の妙薬を探せ！",
+    "SC": "万圣节特辑！寻找死亡灵药！",
+    "TC": "萬聖節特輯! 尋找死亡靈藥!"
+  },
+  "EV02_E01_S01_TITLE": {
+    "KO": "메리의 첫 크리스마스",
+    "EN": "Mary's First Christmas",
+    "JA": "メリーの初クリスマス",
+    "SC": "梅莉的第一个圣诞节",
+    "TC": "梅莉的第一個聖誕節"
+  },
+  "EV02_E01_S02_TITLE": {
+    "KO": "작은 기대",
+    "EN": "Little Expectation",
+    "JA": "小さな期待",
+    "SC": "小小的期待",
+    "TC": "小小的期待"
+  },
+  "EV02_E01_S03_TITLE": {
+    "KO": "선택 받은 자",
+    "EN": "The Chosen One",
+    "JA": "選ばれし者",
+    "SC": "天选之人",
+    "TC": "天選之人"
+  },
+  "EV02_E01_TITLE": {
+    "KO": "선택 받은 자",
+    "EN": "The Chosen One",
+    "JA": "選ばれし者",
+    "SC": "天选之人",
+    "TC": "天選之人"
+  },
+  "EV02_E02_S01_TITLE": {
+    "KO": "산타 포스의 조건",
+    "EN": "Conditions of the Santa Force",
+    "JA": "サンタフォースの条件",
+    "SC": "圣诞之力的条件",
+    "TC": "聖誕之力的條件"
+  },
+  "EV02_E02_S02_TITLE": {
+    "KO": "첫 타겟",
+    "EN": "First Target",
+    "JA": "最初の標的",
+    "SC": "第一个目标",
+    "TC": "第一個目標"
+  },
+  "EV02_E02_S03_TITLE": {
+    "KO": "안전한 귀가",
+    "EN": "A Safe Return",
+    "JA": "安全な帰宅",
+    "SC": "平安回家",
+    "TC": "平安回家"
+  },
+  "EV02_E02_TITLE": {
+    "KO": "첫 타겟",
+    "EN": "First Target",
+    "JA": "最初の標的",
+    "SC": "第一个目标",
+    "TC": "第一個目標"
+  },
+  "EV02_E03_S01_TITLE": {
+    "KO": "악의 축",
+    "EN": "Evil Force",
+    "JA": "悪の中枢",
+    "SC": "罪恶的轴心",
+    "TC": "罪惡的軸心"
+  },
+  "EV02_E03_S02_TITLE": {
+    "KO": "산타의 주 수입원",
+    "EN": "Santa's Main Source of Income",
+    "JA": "サンタの主な収入源",
+    "SC": "圣诞老人的主要收入来源",
+    "TC": "聖誕老人的主要收入來源"
+  },
+  "EV02_E03_S03_TITLE": {
+    "KO": "좋은 변명거리",
+    "EN": "Good Excuse",
+    "JA": "うまい口実",
+    "SC": "不错的借口",
+    "TC": "不錯的藉口"
+  },
+  "EV02_E03_TITLE": {
+    "KO": "산타의 주 수입원",
+    "EN": "Santa's Main Source of Income",
+    "JA": "サンタの主な収入源",
+    "SC": "圣诞老人的主要收入来源",
+    "TC": "聖誕老人的主要收入來源"
+  },
+  "EV02_E04_S01_TITLE": {
+    "KO": "만악의 근원",
+    "EN": "Source of All Misdeeds",
+    "JA": "諸悪の根源",
+    "SC": "万恶之源",
+    "TC": "萬惡之源"
+  },
+  "EV02_E04_S02_TITLE": {
+    "KO": "비즈니스 대성공",
+    "EN": "A Very Successful Business",
+    "JA": "ビジネス大成功",
+    "SC": "业绩辉煌",
+    "TC": "業績輝煌"
+  },
+  "EV02_E04_S03_TITLE": {
+    "KO": "산타의 심판",
+    "EN": "Santa's Judgment",
+    "JA": "サンタの審判",
+    "SC": "圣诞老人的审判！",
+    "TC": "聖誕老人的審判!"
+  },
+  "EV02_E04_TITLE": {
+    "KO": "만악의 근원",
+    "EN": "Source of All Misdeeds",
+    "JA": "諸悪の根源",
+    "SC": "万恶之源",
+    "TC": "萬惡之源"
+  },
+  "EV02_E05_S01_TITLE": {
+    "KO": "불균형",
+    "EN": "Imbalance",
+    "JA": "アンバランス",
+    "SC": "不平衡",
+    "TC": "不平衡"
+  },
+  "EV02_E05_S02_TITLE": {
+    "KO": "마지막 목표",
+    "EN": "Last Target",
+    "JA": "最後の標的",
+    "SC": "最后的目标",
+    "TC": "最後的目標"
+  },
+  "EV02_E05_S03_TITLE": {
+    "KO": "숨겨진 진실",
+    "EN": "Hidden Truth",
+    "JA": "隠された真実",
+    "SC": "隐藏的真相",
+    "TC": "隱藏的真相"
+  },
+  "EV02_E05_TITLE": {
+    "KO": "마지막 목표",
+    "EN": "Last Target",
+    "JA": "最後の標的",
+    "SC": "最后的目标",
+    "TC": "最後的目標"
+  },
+  "EV02_E06_S01_TITLE": {
+    "KO": "마지막 선택받은 자",
+    "EN": "Last Chosen One",
+    "JA": "最後に選ばれし者",
+    "SC": "最后的天选之人",
+    "TC": "最後的天選之人"
+  },
+  "EV02_E06_S02_TITLE": {
+    "KO": "메리의 선택",
+    "EN": "Mary's Choice",
+    "JA": "メリーの選択",
+    "SC": "梅莉的选择",
+    "TC": "梅莉的選擇"
+  },
+  "EV02_E06_S03_TITLE": {
+    "KO": "메리 크리스마스!",
+    "EN": "Merry Christmas!",
+    "JA": "メリークリスマス！",
+    "SC": "Merry Christmas！",
+    "TC": "Merry Christmas!"
+  },
+  "EV02_E06_TITLE": {
+    "KO": "메리 크리스마스!",
+    "EN": "Merry Christmas!",
+    "JA": "メリークリスマス！",
+    "SC": "Merry Christmas！",
+    "TC": "Merry Christmas!"
+  },
+  "EV02_TITLE": {
+    "KO": "메리의 크리스마스!",
+    "EN": "Mary's Christmas!",
+    "JA": "メリーのクリスマス！",
+    "SC": "梅莉Christmas！",
+    "TC": "梅莉的Christmas!"
+  },
+  "EV03_E01_S01_TITLE": {
+    "KO": "어른이 되고 싶어요!",
+    "EN": "I Want to Grow Up!",
+    "JA": "大人になりたい！",
+    "SC": "想变成大人！",
+    "TC": "想變成大人!"
+  },
+  "EV03_E01_S02_TITLE": {
+    "KO": "고대인들의 신년 기념 의식",
+    "EN": "Ancient New Year Ritual",
+    "JA": "古代人達の新年記念儀式",
+    "SC": "古代人们的新年纪念仪式",
+    "TC": "古代人們的新年紀念儀式"
+  },
+  "EV03_E01_S03_TITLE": {
+    "KO": "뜻밖의 행운",
+    "EN": "Unexpected Luck",
+    "JA": "予想外の幸運",
+    "SC": "从天而降的幸运",
+    "TC": "從天而降的幸運"
+  },
+  "EV03_E01_TITLE": {
+    "KO": "어른이 되고 싶어요!",
+    "EN": "I Want to Grow Up!",
+    "JA": "大人になりたい！",
+    "SC": "想变成大人！",
+    "TC": "想變成大人!"
+  },
+  "EV03_E02_S01_TITLE": {
+    "KO": "의식의 효과",
+    "EN": "Effects of Consciousness",
+    "JA": "儀式の効果",
+    "SC": "仪式的效果",
+    "TC": "儀式的效果"
+  },
+  "EV03_E02_S02_TITLE": {
+    "KO": "치열한 경쟁",
+    "EN": "Fierce Competition",
+    "JA": "熾烈な争い",
+    "SC": "激烈的竞争",
+    "TC": "激烈的競爭"
+  },
+  "EV03_E02_S03_TITLE": {
+    "KO": "경쟁의 이유",
+    "EN": "Reason of Competition",
+    "JA": "争いの理由",
+    "SC": "竞争的理由",
+    "TC": "競爭的理由"
+  },
+  "EV03_E02_TITLE": {
+    "KO": "치열한 경쟁",
+    "EN": "Fierce Competition",
+    "JA": "熾烈な争い",
+    "SC": "激烈的竞争",
+    "TC": "激烈的競爭"
+  },
+  "EV03_E03_S01_TITLE": {
+    "KO": "충격과 공포의 재료",
+    "EN": "Ingredient of Shock and Awe",
+    "JA": "衝撃と恐怖の食材",
+    "SC": "心惊胆颤的材料",
+    "TC": "心驚膽顫的材料"
+  },
+  "EV03_E03_S02_TITLE": {
+    "KO": "거절할 수 없는 보상",
+    "EN": "Irresistible Reward",
+    "JA": "拒否できない報酬",
+    "SC": "无法拒绝的奖励",
+    "TC": "無法拒絕的獎勵"
+  },
+  "EV03_E03_S03_TITLE": {
+    "KO": "피할 수 없는 승부",
+    "EN": "Unavoidable Fight",
+    "JA": "避けられない勝負",
+    "SC": "躲不开的胜负对决",
+    "TC": "躲不開的勝負對決"
+  },
+  "EV03_E03_TITLE": {
+    "KO": "충격과 공포의 재료",
+    "EN": "Ingredient of Shock and Awe",
+    "JA": "衝撃と恐怖の食材",
+    "SC": "心惊胆颤的材料",
+    "TC": "心驚膽顫的材料"
+  },
+  "EV03_E04_S01_TITLE": {
+    "KO": "정체불명의 장닭",
+    "EN": "Mysterious Rooster",
+    "JA": "正体不明の雄鳥",
+    "SC": "来历不明的公鸡",
+    "TC": "來歷不明的公雞"
+  },
+  "EV03_E04_S02_TITLE": {
+    "KO": "진실의 시간",
+    "EN": "Time of Truth",
+    "JA": "真実の時間",
+    "SC": "真相大白之时",
+    "TC": "真相大白之時"
+  },
+  "EV03_E04_S03_TITLE": {
+    "KO": "사건의 전말",
+    "EN": "Whole Story of the Incident",
+    "JA": "事件の顛末",
+    "SC": "事件的来龙去脉",
+    "TC": "事件的始末"
+  },
+  "EV03_E04_TITLE": {
+    "KO": "정체불명의 장닭",
+    "EN": "Mysterious Rooster",
+    "JA": "正体不明の雄鳥",
+    "SC": "来历不明的公鸡",
+    "TC": "來歷不明的公雞"
+  },
+  "EV03_E05_S01_TITLE": {
+    "KO": "음력 1월 1일",
+    "EN": "First Day of the Lunar New Year",
+    "JA": "旧暦1月1日",
+    "SC": "阴历1月1日",
+    "TC": "農曆1月1日"
+  },
+  "EV03_E05_S02_TITLE": {
+    "KO": "진짜 어른",
+    "EN": "True Adult",
+    "JA": "真の大人",
+    "SC": "真正的大人",
+    "TC": "真正的大人"
+  },
+  "EV03_E05_S03_TITLE": {
+    "KO": "알리아의 희망",
+    "EN": "Alia's Hope",
+    "JA": "アリーアの望み",
+    "SC": "艾丽娅的希望",
+    "TC": "艾麗婭的希望"
+  },
+  "EV03_E05_TITLE": {
+    "KO": "알리아의 희망",
+    "EN": "Alia's Hope",
+    "JA": "アリーアの望み",
+    "SC": "艾丽娅的希望",
+    "TC": "艾麗婭的希望"
+  },
+  "EV03_TITLE": {
+    "KO": "알리아의 설날!",
+    "EN": "Alia's Lunar New Year!",
+    "JA": "アリーアの旧正月！",
+    "SC": "艾丽娅的春节！",
+    "TC": "艾麗婭的春節!"
+  },
+  "EV04_E01_S01_TITLE": {
+    "KO": "할로윈의 만남",
+    "EN": "Meeting on Halloween",
+    "JA": "ハロウィンの出会い",
+    "SC": "万圣节的邂逅",
+    "TC": "萬聖節的邂逅"
+  },
+  "EV04_E01_S02_TITLE": {
+    "KO": "전설을 찾아서",
+    "EN": "Finding Legends",
+    "JA": "伝説を探して",
+    "SC": "寻找传说",
+    "TC": "尋找傳說"
+  },
+  "EV04_E01_S03_TITLE": {
+    "KO": "죽음의 묘약",
+    "EN": "Potion of Death",
+    "JA": "死の妙薬",
+    "SC": "死亡灵药",
+    "TC": "死亡靈藥"
+  },
+  "EV04_E01_TITLE": {
+    "KO": "죽음의 묘약",
+    "EN": "Potion of Death",
+    "JA": "死の妙薬",
+    "SC": "死亡灵药",
+    "TC": "死亡靈藥"
+  },
+  "EV04_E02_S01_TITLE": {
+    "KO": "헤매임의 연속",
+    "EN": "Continuous Wandering",
+    "JA": "迷いの連続",
+    "SC": "无尽的彷徨",
+    "TC": "無盡的仿徨"
+  },
+  "EV04_E02_S02_TITLE": {
+    "KO": "할로윈 히트 상품",
+    "EN": "Halloween Hot Item",
+    "JA": "ハロウィンのヒット商品",
+    "SC": "万圣节热门商品",
+    "TC": "萬聖節熱門商品"
+  },
+  "EV04_E02_S03_TITLE": {
+    "KO": "포기할 수 없는 것",
+    "EN": "What Can't Be Given Up",
+    "JA": "諦めきれないもの",
+    "SC": "无法放弃之物",
+    "TC": "無法放棄之物"
+  },
+  "EV04_E02_TITLE": {
+    "KO": "포기할 수 없는 것",
+    "EN": "What Can't Be Given Up",
+    "JA": "諦めきれないもの",
+    "SC": "无法放弃之物",
+    "TC": "無法放棄之物"
+  },
+  "EV04_E03_S01_TITLE": {
+    "KO": "의문의 화살",
+    "EN": "Suspicious Arrow",
+    "JA": "謎の矢",
+    "SC": "可疑的箭",
+    "TC": "可疑的箭"
+  },
+  "EV04_E03_S02_TITLE": {
+    "KO": "예상 밖의 습격",
+    "EN": "Unexpected Attack",
+    "JA": "予想外の襲撃",
+    "SC": "意料之外的袭击",
+    "TC": "意料之外的襲擊"
+  },
+  "EV04_E03_S03_TITLE": {
+    "KO": "천생연분",
+    "EN": "Meant for Each Other",
+    "JA": "運命の相手",
+    "SC": "天赐良缘",
+    "TC": "天賜良緣"
+  },
+  "EV04_E03_TITLE": {
+    "KO": "의문의 화살",
+    "EN": "Suspicious Arrow",
+    "JA": "謎の矢",
+    "SC": "可疑的箭",
+    "TC": "可疑的箭"
+  },
+  "EV04_E04_S01_TITLE": {
+    "KO": "죽음의 잔",
+    "EN": "Goblet of Death",
+    "JA": "死の杯",
+    "SC": "死亡之杯",
+    "TC": "死亡之杯"
+  },
+  "EV04_E04_S02_TITLE": {
+    "KO": "마지막 경쟁자",
+    "EN": "Last Competitor",
+    "JA": "最後のライバル",
+    "SC": "最后的竞争者",
+    "TC": "最後的競爭者"
+  },
+  "EV04_E04_S03_TITLE": {
+    "KO": "그의 과거",
+    "EN": "His Past",
+    "JA": "彼の過去",
+    "SC": "他的过往",
+    "TC": "他的過往"
+  },
+  "EV04_E04_TITLE": {
+    "KO": "마지막 경쟁자",
+    "EN": "Last Competitor",
+    "JA": "最後のライバル",
+    "SC": "最后的竞争者",
+    "TC": "最後的競爭者"
+  },
+  "EV04_E05_S01_TITLE": {
+    "KO": "진짜 효능",
+    "EN": "True Effect",
+    "JA": "本当の効能",
+    "SC": "真正药效",
+    "TC": "真正藥效"
+  },
+  "EV04_E05_S02_TITLE": {
+    "KO": "죽음의 시험",
+    "EN": "Test of Death",
+    "JA": "死の試練",
+    "SC": "死亡考验",
+    "TC": "死亡考驗"
+  },
+  "EV04_E05_S03_TITLE": {
+    "KO": "똑같은 마음",
+    "EN": "Same Mind",
+    "JA": "同じ気持ち",
+    "SC": "同样的心情",
+    "TC": "同樣的心情"
+  },
+  "EV04_E05_TITLE": {
+    "KO": "죽음의 시험",
+    "EN": "Test of Death",
+    "JA": "死の試練",
+    "SC": "死亡考验",
+    "TC": "死亡考驗"
+  },
+  "EV04_TITLE": {
+    "KO": "할로윈 특집! 죽음의 묘약을 찾아라!",
+    "EN": "Find the Potion of Death!",
+    "JA": "ハロウィン特集！死の妙薬を探せ！",
+    "SC": "万圣节特辑！寻找死亡灵药！",
+    "TC": "萬聖節特輯! 尋找死亡靈藥!"
+  },
+  "EV05_E01_S01_TITLE": {
+    "KO": "메리의 첫 크리스마스",
+    "EN": "Mary's First Christmas",
+    "JA": "メリーの初クリスマス",
+    "SC": "梅莉的第一个圣诞节",
+    "TC": "梅莉的第一個聖誕節"
+  },
+  "EV05_E01_S02_TITLE": {
+    "KO": "작은 기대",
+    "EN": "Little Expectation",
+    "JA": "小さな期待",
+    "SC": "小小的期待",
+    "TC": "小小的期待"
+  },
+  "EV05_E01_S03_TITLE": {
+    "KO": "선택 받은 자",
+    "EN": "The Chosen One",
+    "JA": "選ばれし者",
+    "SC": "天选之人",
+    "TC": "天選之人"
+  },
+  "EV05_E01_TITLE": {
+    "KO": "선택 받은 자",
+    "EN": "The Chosen One",
+    "JA": "選ばれし者",
+    "SC": "天选之人",
+    "TC": "天選之人"
+  },
+  "EV05_E02_S01_TITLE": {
+    "KO": "산타 포스의 조건",
+    "EN": "Conditions of the Santa Force",
+    "JA": "サンタフォースの条件",
+    "SC": "圣诞之力的条件",
+    "TC": "聖誕之力的條件"
+  },
+  "EV05_E02_S02_TITLE": {
+    "KO": "첫 타겟",
+    "EN": "First Target",
+    "JA": "最初の標的",
+    "SC": "第一个目标",
+    "TC": "第一個目標"
+  },
+  "EV05_E02_S03_TITLE": {
+    "KO": "안전한 귀가",
+    "EN": "A Safe Return",
+    "JA": "安全な帰宅",
+    "SC": "平安回家",
+    "TC": "平安回家"
+  },
+  "EV05_E02_TITLE": {
+    "KO": "첫 타겟",
+    "EN": "First Target",
+    "JA": "最初の標的",
+    "SC": "第一个目标",
+    "TC": "第一個目標"
+  },
+  "EV05_E03_S01_TITLE": {
+    "KO": "악의 축",
+    "EN": "Evil Force",
+    "JA": "悪の中枢",
+    "SC": "罪恶的轴心",
+    "TC": "罪惡的軸心"
+  },
+  "EV05_E03_S02_TITLE": {
+    "KO": "산타의 주 수입원",
+    "EN": "Santa's Main Source of Income",
+    "JA": "サンタの主な収入源",
+    "SC": "圣诞老人的主要收入来源",
+    "TC": "聖誕老人的主要收入來源"
+  },
+  "EV05_E03_S03_TITLE": {
+    "KO": "좋은 변명거리",
+    "EN": "Good Excuse",
+    "JA": "うまい口実",
+    "SC": "不错的借口",
+    "TC": "不錯的藉口"
+  },
+  "EV05_E03_TITLE": {
+    "KO": "산타의 주 수입원",
+    "EN": "Santa's Main Source of Income",
+    "JA": "サンタの主な収入源",
+    "SC": "圣诞老人的主要收入来源",
+    "TC": "聖誕老人的主要收入來源"
+  },
+  "EV05_E04_S01_TITLE": {
+    "KO": "만악의 근원",
+    "EN": "Source of All Misdeeds",
+    "JA": "諸悪の根源",
+    "SC": "万恶之源",
+    "TC": "萬惡之源"
+  },
+  "EV05_E04_S02_TITLE": {
+    "KO": "비즈니스 대성공",
+    "EN": "A Very Successful Business",
+    "JA": "ビジネス大成功",
+    "SC": "业绩辉煌",
+    "TC": "業績輝煌"
+  },
+  "EV05_E04_S03_TITLE": {
+    "KO": "산타의 심판",
+    "EN": "Santa's Judgment",
+    "JA": "サンタの審判",
+    "SC": "圣诞老人的审判！",
+    "TC": "聖誕老人的審判!"
+  },
+  "EV05_E04_TITLE": {
+    "KO": "만악의 근원",
+    "EN": "Source of All Misdeeds",
+    "JA": "諸悪の根源",
+    "SC": "万恶之源",
+    "TC": "萬惡之源"
+  },
+  "EV05_E05_S01_TITLE": {
+    "KO": "불균형",
+    "EN": "Imbalance",
+    "JA": "アンバランス",
+    "SC": "不平衡",
+    "TC": "不平衡"
+  },
+  "EV05_E05_S02_TITLE": {
+    "KO": "마지막 목표",
+    "EN": "Last Target",
+    "JA": "最後の標的",
+    "SC": "最后的目标",
+    "TC": "最後的目標"
+  },
+  "EV05_E05_S03_TITLE": {
+    "KO": "숨겨진 진실",
+    "EN": "Hidden Truth",
+    "JA": "隠された真実",
+    "SC": "隐藏的真相",
+    "TC": "隱藏的真相"
+  },
+  "EV05_E05_TITLE": {
+    "KO": "마지막 목표",
+    "EN": "Last Target",
+    "JA": "最後の標的",
+    "SC": "最后的目标",
+    "TC": "最後的目標"
+  },
+  "EV05_E06_S01_TITLE": {
+    "KO": "마지막 선택받은 자",
+    "EN": "Last Chosen One",
+    "JA": "最後に選ばれし者",
+    "SC": "最后的天选之人",
+    "TC": "最後的天選之人"
+  },
+  "EV05_E06_S02_TITLE": {
+    "KO": "메리의 선택",
+    "EN": "Mary's Choice",
+    "JA": "メリーの選択",
+    "SC": "梅莉的选择",
+    "TC": "梅莉的選擇"
+  },
+  "EV05_E06_S03_TITLE": {
+    "KO": "메리 크리스마스!",
+    "EN": "Merry Christmas!",
+    "JA": "メリークリスマス！",
+    "SC": "Merry Christmas！",
+    "TC": "Merry Christmas!"
+  },
+  "EV05_E06_TITLE": {
+    "KO": "메리 크리스마스!",
+    "EN": "Merry Christmas!",
+    "JA": "メリークリスマス！",
+    "SC": "Merry Christmas！",
+    "TC": "Merry Christmas!"
+  },
+  "EV05_TITLE": {
+    "KO": "메리의 크리스마스!",
+    "EN": "Mary's Christmas!",
+    "JA": "メリーのクリスマス！",
+    "SC": "梅莉Christmas！",
+    "TC": "梅莉的Christmas!"
+  },
+  "S01_TITLE": {
+    "KO": "시즌1. 메트론 헌터",
+    "EN": "Season 1. Metron Hunter",
+    "JA": "シーズン1.メトロンハンター",
+    "SC": "第1季. 迈特伦猎人",
+    "TC": "第1季. 邁特倫獵人"
+  },
+  "S02_DESC": {
+    "KO": "???",
+    "EN": "???",
+    "JA": "???",
+    "SC": "???",
+    "TC": "???"
+  },
+  "S02_TITLE": {
+    "KO": "???",
+    "EN": "???",
+    "JA": "???",
+    "SC": "???",
+    "TC": "???"
+  },
+  "UPDATE": {
+    "KO": "%Y년 %m월 %d일 업데이트 예정",
+    "EN": "New update coming on %m.%d.%Y",
+    "JA": "%Y年%m月%d日　アップデート予定",
+    "SC": "预计于%Y年 %m月 %d日更新",
+    "TC": "預計於%Y年 %m月 %d日更新"
+  },
+  "local_3BEAR": {
+    "KO": "곰 세마리",
+    "EN": "The Three Bears",
+    "JA": "3匹のクマ",
+    "SC": "三只熊",
+    "TC": "三隻熊"
+  },
+  "local_???": {
+    "KO": "???",
+    "EN": "???",
+    "JA": "???",
+    "SC": "???",
+    "TC": "???"
+  },
+  "local_ABYSS": {
+    "KO": "어비스 유적",
+    "EN": "Abyss Ruins",
+    "JA": "アビス遺跡",
+    "SC": "阿比斯遗迹",
+    "TC": "阿比斯遺跡"
+  },
+  "local_ACIENTRUIN": {
+    "KO": "고대 유적",
+    "EN": "Ancient ruins",
+    "JA": "古代遺跡",
+    "SC": "古代遗迹",
+    "TC": "古代遺跡"
+  },
+  "local_AGIT": {
+    "KO": "약탈자 아지트",
+    "EN": "Looters' Hideout",
+    "JA": "略奪者のアジト",
+    "SC": "掠夺者据点",
+    "TC": "掠奪者據點"
+  },
+  "local_BREAD": {
+    "KO": "치르치르의 빵집",
+    "EN": "Tyltyl's Bakery",
+    "JA": "チルチルパン屋",
+    "SC": "蒂蒂尔烘培坊",
+    "TC": "蒂蒂爾烘培坊"
+  },
+  "local_BRUCE": {
+    "KO": "브루스방의 거처",
+    "EN": "Bruce Bang's Abode",
+    "JA": "ブルース・バンの住居",
+    "SC": "布鲁斯棒的住所",
+    "TC": "布魯斯棒的住所"
+  },
+  "local_CAMP": {
+    "KO": "피난민 캠프",
+    "EN": "Refugee Camps",
+    "JA": "避難民キャンプ",
+    "SC": "难民营地",
+    "TC": "難民營地"
+  },
+  "local_CENTRALPOLE": {
+    "KO": "중앙 극점",
+    "EN": "Central Pole",
+    "JA": "中央極点",
+    "SC": "中央极点",
+    "TC": "中央極點"
+  },
+  "local_CENTRALPOLE_B": {
+    "KO": "중앙 극점 지하",
+    "EN": "Central Pole Basement",
+    "JA": "中央極点地下",
+    "SC": "中央极点地下",
+    "TC": "中央極點地下"
+  },
+  "local_CONCERT": {
+    "KO": "셀린의 공연장",
+    "EN": "Celine's Concert Hall",
+    "JA": "セリナの会場",
+    "SC": "席琳的音乐厅",
+    "TC": "席琳的音樂廳"
+  },
+  "local_CREATION": {
+    "KO": "크라시옹",
+    "EN": "Cracion",
+    "JA": "クラシオン",
+    "SC": "创造之地",
+    "TC": "創造之地"
+  },
+  "local_CREATIONSNOW": {
+    "KO": "크라시옹 설원",
+    "EN": "Cracion Snowfield",
+    "JA": "クラシオン雪原",
+    "SC": "创造之地雪原",
+    "TC": "創造之地雪原"
+  },
+  "local_DENALI": {
+    "KO": "데날리의 거처",
+    "EN": "Denali's Abode",
+    "JA": "テナリの住居",
+    "SC": "德诺利的住所",
+    "TC": "德諾利的住所"
+  },
+  "local_EASTSNOW": {
+    "KO": "동쪽 설원",
+    "EN": "East Snowfields",
+    "JA": "東方の雪原",
+    "SC": "东部雪原",
+    "TC": "東部雪原"
+  },
+  "local_FIGHTCLUB": {
+    "KO": "파이트클럽",
+    "EN": "Fight Club",
+    "JA": "ファイトクラブ",
+    "SC": "搏击俱乐部",
+    "TC": "鬥陣俱樂部"
+  },
+  "local_FIRESTORM": {
+    "KO": "소용돌이 앞",
+    "EN": "Whirlpool",
+    "JA": "渦の前",
+    "SC": "旋涡前",
+    "TC": "漩渦前"
+  },
+  "local_GACHA": {
+    "KO": "추첨쥐의 흥신소",
+    "EN": "Suspicious Shop",
+    "JA": "探偵社",
+    "SC": "特侦探所",
+    "TC": "偵探社"
+  },
+  "local_GREYWOOD": {
+    "KO": "잿빛늑대의 숲",
+    "EN": "Gray Wolves' Forest",
+    "JA": "グレー・\\nオオカミの森",
+    "SC": "灰狼的森林",
+    "TC": "灰狼的森林"
+  },
+  "local_GYM": {
+    "KO": "헌터 체육관",
+    "EN": "Hunter Gym",
+    "JA": "ジム",
+    "SC": "猎人体育馆",
+    "TC": "獵人體育館"
+  },
+  "local_HALLOWEEN_RUIN": {
+    "KO": "할로윈 유적",
+    "EN": "Halloween Ruins",
+    "JA": "ハロウィン遺跡",
+    "SC": "万圣节遗迹",
+    "TC": "萬聖節遺跡"
+  },
+  "local_ICEWOOD": {
+    "KO": "얼음숲",
+    "EN": "Ice Forest",
+    "JA": "氷の森",
+    "SC": "冰之森",
+    "TC": "冰雪森林"
+  },
+  "local_JOTUNSNOW": {
+    "KO": "요툰헤임 설원",
+    "EN": "Jotunheim Snowfields",
+    "JA": "ヨトゥンヘイムの雪原",
+    "SC": "约顿海姆雪原",
+    "TC": "約頓海姆雪原"
+  },
+  "local_LOKECASH": {
+    "KO": "로크 앤 캐쉬",
+    "EN": "Locke and Cash",
+    "JA": "ロック＆キャッシュ",
+    "SC": "洛克和现金",
+    "TC": "洛克與現金"
+  },
+  "local_MAIL": {
+    "KO": "우편물 보관소",
+    "EN": "Post Office",
+    "JA": "郵便物保管所",
+    "SC": "邮局",
+    "TC": "郵局"
+  },
+  "local_MIDGARD": {
+    "KO": "미드가드",
+    "EN": "Midgard",
+    "JA": "ミッドガルド",
+    "SC": "米德加尔特",
+    "TC": "米德加爾特"
+  },
+  "local_MIDGARDAIR": {
+    "KO": "미드가드 출격장",
+    "EN": "Midgard Platform",
+    "JA": "ミッドガルド プラットホーム",
+    "SC": "米德加尔特出击场",
+    "TC": "米德加爾特出擊場"
+  },
+  "local_MIDGARDCAFE": {
+    "KO": "미드가드 카페",
+    "EN": "Midgard Cafe",
+    "JA": "ミッドガルドカフェ",
+    "SC": "米德加尔特咖啡馆",
+    "TC": "米德加爾特咖啡館"
+  },
+  "local_MIDGARDPUB": {
+    "KO": "미드가드 술집",
+    "EN": "Midgard Bar",
+    "JA": "ミッドガルド酒場",
+    "SC": "米德加尔特酒吧",
+    "TC": "米德加爾特酒吧"
+  },
+  "local_MIDGARDSNOW": {
+    "KO": "미드가드 설원",
+    "EN": "Midgard Snowfield",
+    "JA": "ミッドガルド雪原",
+    "SC": "米德加尔特雪原",
+    "TC": "米德加爾特雪原"
+  },
+  "local_MISSINGTOWN": {
+    "KO": "외곽 마을",
+    "EN": "Outskirts Village",
+    "JA": "外れの村",
+    "SC": "周边村庄",
+    "TC": "周圍村子"
+  },
+  "local_REDHILL": {
+    "KO": "붉은 협곡",
+    "EN": "Crimson Chasm",
+    "JA": "赤い峡谷",
+    "SC": "血红的山谷",
+    "TC": "紅色峽谷"
+  },
+  "local_WEATHERCONTROL": {
+    "KO": "기후조절실",
+    "EN": "Climate Modification Room",
+    "JA": "気候コントロール室",
+    "SC": "气候调节室",
+    "TC": "氣候調節室"
+  },
+  "local_WHITECAVE": {
+    "KO": "흰 바위 동굴",
+    "EN": "White Rock Cave",
+    "JA": "白い岩の洞窟",
+    "SC": "白色岩石洞窟",
+    "TC": "白色岩石洞窟"
+  }
+}

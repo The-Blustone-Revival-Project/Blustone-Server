@@ -1,0 +1,996 @@
+{
+  "ACTIVE_SUB|DESC": {
+    "KO": "특기 사용 시 작동하는 보조적인 효과입니다.",
+    "EN": "Supportive effect that activates when using a skill.",
+    "JA": "スキル使用時に発揮する補助的な効果。",
+    "SC": "使用特技时发挥的辅助效果。",
+    "TC": "使用技能時發揮的輔助效果。"
+  },
+  "ACTIVE_SUB|TITLE": {
+    "KO": "보조",
+    "EN": "Assist",
+    "JA": "補助",
+    "SC": "辅助",
+    "TC": "輔助"
+  },
+  "ACTIVE|DESC": {
+    "KO": "특기 사용 시 작동하는 기본적인 효과입니다.",
+    "EN": "Basic effect that activates when using a skill.",
+    "JA": "スキル使用時に発揮する基本的な効果。",
+    "SC": "使用特技时发挥的基本效果。",
+    "TC": "使用技能時發揮的基本效果。"
+  },
+  "ACTIVE|TITLE": {
+    "KO": "기본",
+    "EN": "Basic",
+    "JA": "基本",
+    "SC": "基本",
+    "TC": "基本"
+  },
+  "BAN_CLEAR|DESC": {
+    "KO": "이 효과는 해제를 통해 제거되지 않습니다.",
+    "EN": "This effect is unaffected by removal.",
+    "JA": "解除スキルによる無効化を阻止。",
+    "SC": "该效果无法被解除。",
+    "TC": "該效果不能被解除。"
+  },
+  "BAN_CLEAR|TITLE": {
+    "KO": "해제 불가",
+    "EN": "Remove Disabled",
+    "JA": "解除不可",
+    "SC": "禁止解除",
+    "TC": "禁止解除"
+  },
+  "BAN_IMUN|DESC": {
+    "KO": "해당 약화에 면역이 있더라도 효과를 적용합니다.",
+    "EN": "Effect is applied even if the target has Immunity skill.",
+    "JA": "対象が免疫スキルを持っていても効果が適用。",
+    "SC": "即使目标有免疫特技，仍可发挥效果。",
+    "TC": "即使對弱化免疫, 該效果也依然適用。"
+  },
+  "BAN_IMUN|TITLE": {
+    "KO": "면역 불가",
+    "EN": "Immunity Disabled",
+    "JA": "免疫不可",
+    "SC": "禁止免疫",
+    "TC": "禁止免疫"
+  },
+  "BLEED_REPEAT|DESC": {
+    "KO": "상대하는 적에게 매초마다 반복해서 출혈 피해를 줍니다.",
+    "EN": "Deals repeated Bleeding Damage every second\\nto the frontline enemy during the battle.",
+    "JA": "バトル中、前方の敵に毎秒出血ダメージを繰り返し付与。",
+    "SC": "战斗中，每秒反复造成前方敌人失血伤害。",
+    "TC": "戰鬥中, 每秒反覆造成前方敵人失血傷害。"
+  },
+  "BLEED_REPEAT|TITLE": {
+    "KO": "출혈(반복)",
+    "EN": "Bleeding (Repeated)",
+    "JA": "出血 (反復)",
+    "SC": "失血（反复）",
+    "TC": "失血(反覆)"
+  },
+  "BLEED_TEAM|DESC": {
+    "KO": "대상 팀 전체에 매초마다 출혈 피해를 줍니다.",
+    "EN": "Deals Bleeding Damage every second to\\nall members of the target team.",
+    "JA": "対象チーム全体に、毎秒出血ダメージを付与。",
+    "SC": "每秒造成目标队伍全体失血伤害。",
+    "TC": "每秒對該隊伍造成全體失血傷害。"
+  },
+  "BLEED_TEAM|TITLE": {
+    "KO": "전체 출혈",
+    "EN": "Bleeding (All)",
+    "JA": "出血 (全体)",
+    "SC": "全体失血",
+    "TC": "全體失血"
+  },
+  "BLEED|DESC": {
+    "KO": "지속시간 동안 출혈 피해를 줍니다.\\n출혈 중인 경우 회복량이 절반이 됩니다.\\n약화 해제로 제거 가능합니다.",
+    "EN": "Deals Bleeding Damage for a certain period of time.\\nWhen the target is bleeding,\\nthe amount of health recovered is halved.\\nThis can be removed with the Remove Harmful Effects.",
+    "JA": "スキル適用中、出血ダメージを付与。\\n出血中は回復量が半減。\\n弱化解除で無効化が可能。",
+    "SC": "持续造成失血伤害。\\n在失血状态时恢复量减半。\\n可被解除弱化特技解除。",
+    "TC": "持續造成失血傷害。\\n失血狀態時恢復量減半。\\n可被解除弱化技能解除。"
+  },
+  "BLEED|TITLE": {
+    "KO": "출혈 피해",
+    "EN": "Bleeding DMG",
+    "JA": "出血",
+    "SC": "失血伤害",
+    "TC": "失血傷害"
+  },
+  "BLITZ_TEAM_BONUS|DESC": {
+    "KO": "협회전 전투 시,\\n출격한 팀 전체의 기본 능력치를 10% 증가시킵니다.",
+    "EN": "Increases the basic stat of all dispatched\\nmembers of the team by 10%\\nduring a Guild Blitz battle.",
+    "JA": "ギルド戦バトル時、\\n出撃チームの全体能力値を10%増加。",
+    "SC": "公会战时，\\n出击队伍全体的基本能力值增加10%。",
+    "TC": "公會戰時, \\n增加出擊的全體隊伍10%基本能力值。"
+  },
+  "BLITZ_TEAM_BONUS|TITLE": {
+    "KO": "협회전 팀 보너스",
+    "EN": "Blitz Team Bonus",
+    "JA": "ギルド戦チームボーナス",
+    "SC": "公会战队伍奖励",
+    "TC": "公會戰隊伍獎勵"
+  },
+  "BREAK_IMUN_CRITICAL|DESC": {
+    "KO": "상대의 치명타 면역 효과를 제거합니다.",
+    "EN": "Removes the opponent's Critical Damage Immunity effect.",
+    "JA": "相手の致命打免疫スキルを無効化。",
+    "SC": "解除对方的暴击免疫效果。",
+    "TC": "解除對方的暴擊免疫效果。"
+  },
+  "BREAK_IMUN_CRITICAL|TITLE": {
+    "KO": "치명타 면역 파괴",
+    "EN": "Remove CRIT DMG Immunity",
+    "JA": "致命打免疫破壊",
+    "SC": "破坏暴击免疫",
+    "TC": "破壞暴擊免疫"
+  },
+  "BUFF_CON|DESC": {
+    "KO": "전투가 끝날 때까지 능력을 강화시킵니다.\\n여러번 중첩 가능합니다.\\n강화 해제로 제거 가능합니다.",
+    "EN": "Increases stat until the battle ends.\\nThis can be stacked several times.\\nThis can be removed with the Remove Beneficial Effects.",
+    "JA": "バトル終了時まで能力を強化。\\n複数回の重複適用も可。\\n強化解除で無効化が可能。",
+    "SC": "使能力强化直至战斗结束。\\n可多次叠加。\\n可被解除强化特技解除。",
+    "TC": "使能力強化至戰鬥結束爲止。\\n可多次曡加。\\n可被解除強化技能解除。"
+  },
+  "BUFF_CON|TITLE": {
+    "KO": "강화(지속)",
+    "EN": "Strengthen (Cont.)",
+    "JA": "強化 (持続)",
+    "SC": "强化（持续）",
+    "TC": "強化(持續)"
+  },
+  "BUFF_DEF_REPEAT|DESC": {
+    "KO": "전투 중, 3초마다 방어력이 2배로 강화됩니다.\\n강화 금지인 경우 작동하지 않습니다.",
+    "EN": "During battle, Defense increases 2x every 3 seconds.\\nThis won't be activated when Beneficial Effect is blocked.",
+    "JA": "バトル中、3秒ごとに防御力が2倍に強化。\\n強化禁止がかかる場合、効果が発揮できない状態に。",
+    "SC": "战斗中，防御力每3秒强化2倍。\\n在禁止强化的情况下不可触发。",
+    "TC": "戰鬥中, 防禦力每3秒強化2倍。\\n在禁止強化的情況下不會被觸發。"
+  },
+  "BUFF_DEF_REPEAT|TITLE": {
+    "KO": "방어 강화(반복)",
+    "EN": "Strengthened DEF (Repeated)",
+    "JA": "防御強化 (反復)",
+    "SC": "防御强化（反复）",
+    "TC": "防禦強化(反覆)"
+  },
+  "BUFF|DESC": {
+    "KO": "일시적으로 능력을 강화시킵니다.\\n강화 해제로 제거 가능합니다.",
+    "EN": "Temporarily increases stat.\\nThis can be removed with the Remove Beneficial Effects.",
+    "JA": "一時的に能力を強化。\\n強化解除で無効化が可能。",
+    "SC": "暂时使能力强化。\\n可被解除强化特技解除。",
+    "TC": "暫時使能力強化。\\n可被解除強化技能解除。"
+  },
+  "BUFF|TITLE": {
+    "KO": "강화",
+    "EN": "Strengthen",
+    "JA": "強化",
+    "SC": "强化",
+    "TC": "強化"
+  },
+  "CLEAR_BUFF|DESC": {
+    "KO": "대상의 강화를 모두 제거합니다.",
+    "EN": "Removes all Beneficial Effects of the target.",
+    "JA": "対象の強化スキルをすべて無効化。",
+    "SC": "解除目标的所有强化效果。",
+    "TC": "解除目標對象的所有強化效果。"
+  },
+  "CLEAR_BUFF|TITLE": {
+    "KO": "강화 해제",
+    "EN": "Remove Beneficial Effects",
+    "JA": "強化解除",
+    "SC": "解除强化",
+    "TC": "解除強化"
+  },
+  "CLEAR_DEBUFF_REPEAT|DESC": {
+    "KO": "매초 자신의 약화를 해제합니다.\\n강화 금지 상태에서는 작동하지 않습니다.",
+    "EN": "Removes their Harmful Effects every second.\\nNot activated while affected by Beneficial Effect Block.",
+    "JA": "毎秒ごとに自身への弱化スキルを無効化。\\n強化禁止がかかる場合、効果が発揮できない状態に。",
+    "SC": "每秒解除自身弱化效果。\\n在禁止强化状态下不可触发。",
+    "TC": "每秒解除自身的弱化效果。\\n在禁止強化狀態下無法被觸發。"
+  },
+  "CLEAR_DEBUFF_REPEAT|TITLE": {
+    "KO": "약화 해제(반복)",
+    "EN": "Remove Harmful Effects (Repeated)",
+    "JA": "弱化解除 (反復)",
+    "SC": "解除弱化（反复）",
+    "TC": "解除弱化(反覆)"
+  },
+  "CLEAR_DEBUFF|DESC": {
+    "KO": "대상의 약화를 모두 제거합니다.\\n강화 금지인 경우 작동하지 않습니다.",
+    "EN": "Removes all Harmful Effects of the target.\\nNot activated while affected by Beneficial Effect Block.",
+    "JA": "対象の弱化スキルをすべて無効化。\\n強化禁止がかかる場合、効果が発揮できない状態に。",
+    "SC": "解除目标的所有弱化效果。\\n禁止强化时不可触发。",
+    "TC": "解除目標對象的所有弱化效果。\\n禁止強化時, 該效果無法被觸發。"
+  },
+  "CLEAR_DEBUFF|TITLE": {
+    "KO": "약화 해제",
+    "EN": "Remove Harmful Effects",
+    "JA": "弱化解除",
+    "SC": "解除弱化",
+    "TC": "解除弱化"
+  },
+  "COUNTER_UP|DESC": {
+    "KO": "적의 탭 공격에 대한 반격 횟수가 증가합니다.",
+    "EN": "The number of counterattacks against\\nthe enemy's attack increases.",
+    "JA": "敵のタップ攻撃に対する反撃数が増加。",
+    "SC": "针对敌人的攻击增加反击次数。",
+    "TC": "對敵人的攻擊增加反擊次數。"
+  },
+  "COUNTER_UP|TITLE": {
+    "KO": "반격 증가",
+    "EN": "Counterattack▲",
+    "JA": "反撃増加",
+    "SC": "增加反击",
+    "TC": "增加反擊"
+  },
+  "DAMAGE_2000|DESC": {
+    "KO": "대상의 방어 능력과 관계 없이 2000의 피해를 줍니다.\\n속성에 의한 피해량 증감은 반영됩니다.\\n대상의 피해 감소량을 약화시킬 수 없는 경우, 피해가 감소됩니다.",
+    "EN": "Deals 2000 damage regardless of the target's defense.\\nThe amount of damage increase or decrease due to element will be reflected.",
+    "JA": "対象の防御力に関係なく、2000のダメージを付与。\\n属性によるダメージ量の増減は適用。",
+    "SC": "与目标的防御能力无关，造成2000的伤害。\\n根据属性显示伤害量的增减。",
+    "TC": "與目標對象的防禦能力無關, 即可造成2000的傷害。\\n依據其屬性來反應傷害量的增減。"
+  },
+  "DAMAGE_2000|TITLE": {
+    "KO": "고정 피해 2000",
+    "EN": "Fixed DMG 2000",
+    "JA": "固定ダメージ2000",
+    "SC": "定值伤害2000",
+    "TC": "固定傷害2000"
+  },
+  "DEBUFF_CON|DESC": {
+    "KO": "전투가 끝날 때까지 능력을 약화시킵니다.\\n여러번 중첩 가능합니다.\\n약화 해제로 제거 가능합니다.",
+    "EN": "Decreases stat until the battle ends.\\nThis can be stacked several times.\\nThis can be removed with the Remove Harmful Effects.",
+    "JA": "バトル終了時まで能力を弱化。\\n複数回の重複適用も可。\\n弱化解除で無効化が可能。",
+    "SC": "使能力弱化直至战斗结束。\\n可多次叠加。\\n可被解除弱化特技解除。",
+    "TC": "使能力弱化至戰鬥結束爲止。\\n可多次曡加。\\n可被解除弱化技能解除。"
+  },
+  "DEBUFF_CON|TITLE": {
+    "KO": "약화(지속)",
+    "EN": "Weaken (Cont.)",
+    "JA": "弱化 (持続)",
+    "SC": "弱化（持续）",
+    "TC": "弱化(持續)"
+  },
+  "DEBUFF_REPEAT|DESC": {
+    "KO": "전투 시작 시, 대상에게 약화를 반복적으로 사용합니다.\\n약화 해제로 제거 가능합니다.",
+    "EN": "Continuously weakens the target when the battle starts.\\nThis can be removed with the Remove Harmful Effects.",
+    "JA": "バトル開始時、対象に弱化効果を繰り返し適用。\\n弱化解除で無効化が可能。",
+    "SC": "战斗开始时，反复使目标弱化。\\n可被解除弱化特技解除。",
+    "TC": "戰鬥開始時, 反覆使目標對象弱化。\\n可被解除弱化技能解除。"
+  },
+  "DEBUFF_REPEAT|TITLE": {
+    "KO": "약화 중첩",
+    "EN": "Weaken (Stacked)",
+    "JA": "弱化重複",
+    "SC": "弱化叠加",
+    "TC": "弱化疊加"
+  },
+  "DEBUFF_SELF|DESC": {
+    "KO": "자기 자신을 약화하는 효과입니다.\\n약화 해제로 제거 가능합니다.",
+    "EN": "Weakens self.\\nThis can be removed with the Remove Harmful Effects.",
+    "JA": "自分自身を弱化させる効果。\\n弱化解除で無効化が可能。",
+    "SC": "使自身弱化的效果。\\n可被解除弱化特技解除。",
+    "TC": "使自身弱化之效果。\\n可被解除弱化技能解除。"
+  },
+  "DEBUFF_SELF|TITLE": {
+    "KO": "약화(자신)",
+    "EN": "Weaken (Self)",
+    "JA": "弱化 (自身)",
+    "SC": "弱化（自身）",
+    "TC": "弱化(自身)"
+  },
+  "DEBUFF|DESC": {
+    "KO": "일시적으로 능력을 약화시킵니다.\\n약화 해제로 제거 가능합니다.",
+    "EN": "Temporarily decreases stat.\\nThis can be removed with the Remove Harmful Effects.",
+    "JA": "一時的に能力を弱化。\\n弱化解除で無効化が可能。",
+    "SC": "暂时使能力弱化。\\n可被解除弱化特技解除。",
+    "TC": "暫時使能力弱化。\\n可被解除弱化技能解除。"
+  },
+  "DEBUFF|TITLE": {
+    "KO": "약화",
+    "EN": "Weaken",
+    "JA": "弱化",
+    "SC": "弱化",
+    "TC": "弱化"
+  },
+  "DEEP_WOUND|DESC": {
+    "KO": "해제 전까지 계속 출혈 피해를 줍니다.\\n대기실의 기본 재생량도 사라집니다.\\n약화 해제로 제거 가능합니다.",
+    "EN": "Deals Bleeding Damage that is maintained until deactivation.\\nRemoves the basic Regeneration while standing by.\\nThis can be removed with the Remove Harmful Effects.",
+    "JA": "スキルが解除されるまで、常時出血ダメージを付与。\\n待機中の基本再生量も発揮できない状態に。\\n弱化解除で無効化が可能。",
+    "SC": "持续造成失血伤害直至解除。\\n待机时的基本恢复量也会消失。\\n可被解除强化特技解除。",
+    "TC": "至解除前止, 持續造成失血傷害。\\n待機中的基本恢復量消失。\\n可被解除強化技能解除。"
+  },
+  "DEEP_WOUND|TITLE": {
+    "KO": "깊은 상처",
+    "EN": "Deep Wound",
+    "JA": "深手",
+    "SC": "深层伤害",
+    "TC": "深度傷害"
+  },
+  "DISABLE_CHANGE|DESC": {
+    "KO": "지속시간 동안 대상을 교체하지 못합니다.\\n대상이 전투불능이 되거나, 강제교체 시에는 교체됩니다.",
+    "EN": "Target is unable to switch out for a certain period of time.\\nThe target will switch out when targeted by Force Switch effect or upon becoming unable to battle.",
+    "JA": "スキル適用中、対象を交代できない状態に。\\n対象が戦闘不能、または強制交代になった場合のみ交代可能。",
+    "SC": "持续时间无法替换目标。\\n目标无法战斗，或强制换人时可替换。",
+    "TC": "持續時間內無法替換對象。\\n對象無法戰鬥, 或強制換人時可替換。"
+  },
+  "DISABLE_CHANGE|TITLE": {
+    "KO": "교체 금지",
+    "EN": "Switch Block",
+    "JA": "交代禁止",
+    "SC": "禁止换人",
+    "TC": "禁止替換"
+  },
+  "DISABLE_TAP|DESC": {
+    "KO": "지속시간 동안 대상은 탭 공격을 할 수 없게 됩니다.\\n약화 해제로 제거 가능합니다.",
+    "EN": "The target cannot attack for a certain period of time.\\nThis can be removed with the Remove Harmful Effects.",
+    "JA": "スキル適用中、対象はタップ攻撃が不可能な状態に。\\n弱化解除で無効化が可能。",
+    "SC": "持续时间内目标无法进行攻击。\\n可被解除弱化特技解除。",
+    "TC": "持續時間內目標對象無法進行攻擊。\\n可被解除弱化技能解除。"
+  },
+  "DISABLE_TAP|TITLE": {
+    "KO": "공격 불가",
+    "EN": "Attack Disabled",
+    "JA": "攻撃不可",
+    "SC": "禁止攻击",
+    "TC": "禁止攻擊"
+  },
+  "DOT_HEAL_TEAM|DESC": {
+    "KO": "지속시간 동안 매초 팀 전체의 생명력을 회복시킵니다.\\n강화 해제로 제거 가능합니다.",
+    "EN": "Continuously recovers the HP of all members of\\nthe team every second for a certain period of time.\\nThis can be removed with the Remove Beneficial Effects.",
+    "JA": "スキル適用中、毎秒チーム全体のHPを回復。\\n強化解除で無効化が可能。",
+    "SC": "持续时间内每秒恢复全队HP。\\n可被解除强化特技解除。",
+    "TC": "持續時間內恢復全隊HP。\\n可被解除強化技能解除。"
+  },
+  "DOT_HEAL_TEAM|TITLE": {
+    "KO": "팀 지속 회복",
+    "EN": "Cont. Recovery (Team)",
+    "JA": "チーム回復 (持続)",
+    "SC": "队伍持续恢复",
+    "TC": "隊伍持續恢復"
+  },
+  "DOT_HEAL|DESC": {
+    "KO": "지속시간 동안 매초 생명력을 회복합니다.\\n강화 해제로 제거 가능합니다.",
+    "EN": "Continuously recovers HP every second\\nfor a certain period of time.\\nThis can be removed with the Remove Beneficial Effects.",
+    "JA": "スキル適用中、毎秒HPを回復。\\n強化解除で無効化が可能。",
+    "SC": "持续时间内每秒恢复HP。\\n可被解除强化特技解除。",
+    "TC": "持續時間內每秒恢復HP。\\n可被解除強化技能解除。"
+  },
+  "DOT_HEAL|TITLE": {
+    "KO": "지속 회복",
+    "EN": "Cont. Recovery",
+    "JA": "回復 (持続)",
+    "SC": "持续恢复",
+    "TC": "持續恢復"
+  },
+  "ENERMY_WEAKEN|DESC": {
+    "KO": "해당 헌터와 싸우고 있는 대상의 능력치를 감소시킵니다.",
+    "EN": "Decreases the target's stat who is\\nfighting against the hunter.",
+    "JA": "スキル保有ハンターとバトル中の、対象の能力値を減少。",
+    "SC": "减少该猎人对战目标的能力值。",
+    "TC": "減少該獵人戰鬥對象之能力值。"
+  },
+  "ENERMY_WEAKEN|TITLE": {
+    "KO": "능력치 감소",
+    "EN": "Stat Decrease",
+    "JA": "能力値減少",
+    "SC": "减少能力值",
+    "TC": "減少能力值"
+  },
+  "FIGHTCLUB_BOUNS|DESC": {
+    "KO": "파이트클럽 대결 시,\\n자신의 기본 능력치를 10% 증가시킵니다.",
+    "EN": "Increases the basic stat of self by 10%\\nduring a Fight Club battle.",
+    "JA": "ファイトクラブバトル時、\\n自身の基本能力値を10%増加。",
+    "SC": "搏击俱乐部对决时，\\n自身的基本能力值增加10%。",
+    "TC": "鬥陣俱樂部對決時, \\n增加自身的基本能力值10%。"
+  },
+  "FIGHTCLUB_BOUNS|TITLE": {
+    "KO": "파이트클럽 보너스",
+    "EN": "Fight Club Bonus",
+    "JA": "ファイトクラブボーナス",
+    "SC": "搏击俱乐部奖励",
+    "TC": "鬥陣俱樂部獎勵"
+  },
+  "FORCE_CHANGE|DESC": {
+    "KO": "대상을 강제로 교체시켜 후방으로 보냅니다.",
+    "EN": "Switches out the target and retreats them.",
+    "JA": "対象を強制的に交代させる、退却効果が発動。",
+    "SC": "强制替换目标至后方。",
+    "TC": "強制替換對象後送至後方。"
+  },
+  "FORCE_CHANGE|TITLE": {
+    "KO": "강제 교체",
+    "EN": "Force Switch",
+    "JA": "強制交代",
+    "SC": "强制换人",
+    "TC": "強制替換"
+  },
+  "GAGE_DOWN|DESC": {
+    "KO": "분노 게이지를 감소시킬 수 있습니다.",
+    "EN": "Able to decrease Rage Gauge.",
+    "JA": "アンガーゲージを減少。",
+    "SC": "可减少愤怒值。",
+    "TC": "可減少憤怒值。"
+  },
+  "GAGE_DOWN|TITLE": {
+    "KO": "분노 감소",
+    "EN": "Rage Decrease",
+    "JA": "アンガー減少",
+    "SC": "减少愤怒值",
+    "TC": "減少憤怒值"
+  },
+  "GAGE_UP|DESC": {
+    "KO": "분노 게이지를 증가시킬 수 있습니다.",
+    "EN": "Able to increase Rage Gauge.",
+    "JA": "アンガーゲージを増加。",
+    "SC": "可增加愤怒值。",
+    "TC": "可增加憤怒值。"
+  },
+  "GAGE_UP|TITLE": {
+    "KO": "분노 증가",
+    "EN": "Rage Increase",
+    "JA": "アンガー増加",
+    "SC": "增加愤怒值",
+    "TC": "增加憤怒值"
+  },
+  "HALF_DEF|DESC": {
+    "KO": "대상의 방어력을 순간적으로 50% 감소시킨 후,\\n특기의 피해량을 계산합니다.",
+    "EN": "Decreases 50% of the target's defense instantly.\\nThe skill's amount of damage is calculated afterwards.",
+    "JA": "対象の防御力を瞬間的に50%減少後、\\n半減値をもとにスキルダメージ量を計算。",
+    "SC": "瞬间减少目标50%的防御力后，\\n计算特技的伤害量。",
+    "TC": "瞬間減少目標對象的50%防禦力後, \\n再計算技能的傷害量。"
+  },
+  "HALF_DEF|TITLE": {
+    "KO": "방어 반감",
+    "EN": "Halve Defense",
+    "JA": "防御半減",
+    "SC": "防御减半",
+    "TC": "防禦減半"
+  },
+  "HARD_HIT_TEAM|DESC": {
+    "KO": "대상 팀 전체에 순간적으로 큰 피해를 줍니다.",
+    "EN": "Deals great damage to all members of the target team instantly.",
+    "JA": "対象のチーム全体に、瞬間的な大ダメージを付与。",
+    "SC": "瞬间给目标队伍全体造成巨大伤害。",
+    "TC": "瞬間造成敵方全隊巨大傷害。"
+  },
+  "HARD_HIT_TEAM|TITLE": {
+    "KO": "전체 강타",
+    "EN": "Strike All",
+    "JA": "全体強打",
+    "SC": "全体强击",
+    "TC": "全體強擊"
+  },
+  "HARD_HIT|DESC": {
+    "KO": "대상에게 순간적으로 큰 피해를 줍니다.",
+    "EN": "Deals great damage to the target in an instant.",
+    "JA": "対象に瞬間的な大ダメージを付与。",
+    "SC": "瞬间给目标造成巨大伤害。",
+    "TC": "瞬間對目標對象造成巨大傷害。"
+  },
+  "HARD_HIT|TITLE": {
+    "KO": "강타",
+    "EN": "Strike",
+    "JA": "強打",
+    "SC": "强击",
+    "TC": "強擊"
+  },
+  "HEAL_TEAM|DESC": {
+    "KO": "팀 전체의 생명력을 순간적으로 회복시킵니다.",
+    "EN": "Recovers the HP of all members of the team instantly.",
+    "JA": "チーム全体のHPを瞬間的に回復。",
+    "SC": "瞬间恢复全队HP。",
+    "TC": "瞬間恢復全隊HP。"
+  },
+  "HEAL_TEAM|TITLE": {
+    "KO": "팀 회복",
+    "EN": "Team Recovery",
+    "JA": "チーム回復",
+    "SC": "队伍恢复",
+    "TC": "隊伍恢復"
+  },
+  "HEAL|DESC": {
+    "KO": "대상의 생명력을 순간적으로 회복시킵니다.",
+    "EN": "Recovers the target's HP instantly.",
+    "JA": "対象のHPを瞬間的に回復。",
+    "SC": "瞬间恢复目标的HP。",
+    "TC": "瞬間恢復目標對象之HP。"
+  },
+  "HEAL|TITLE": {
+    "KO": "회복",
+    "EN": "Recovery",
+    "JA": "回復",
+    "SC": "恢复",
+    "TC": "恢復"
+  },
+  "IGNORE_DEF|DESC": {
+    "KO": "대상의 방어력이 높아져도 피해량이 줄어들지 않습니다.\\n강화 금지 상태에서는 작동하지 않습니다.",
+    "EN": "Although the target's defense increases,\\nthe amount of damage doesn't decrease.\\nNot activated while affected by Beneficial Effect Block.",
+    "JA": "対象の防御力が増加しても、ダメージ量を維持したまま付与可能。\\n強化禁止がかかる場合、効果が発揮できない状態に。",
+    "SC": "即使目标的防御力增高，伤害也不会减少。\\n禁止强化状态下不可触发。",
+    "TC": "即使目標對象的防禦力變高, 傷害也不會變少。\\n禁止強化狀態下無法被觸發。"
+  },
+  "IGNORE_DEF|TITLE": {
+    "KO": "방어무시",
+    "EN": "Ignore Defense",
+    "JA": "防御無視",
+    "SC": "无视防御",
+    "TC": "無視防禦"
+  },
+  "IGNORE_DR|DESC": {
+    "KO": "이 특기의 피해량은 대상의 피해 감소량을 무시합니다.",
+    "EN": "The amount of damage of this skill\\nignores the target's Damage Reduction.",
+    "JA": "このスキルのダメージ量は、対象のダメージ減少量を無視して適用。",
+    "SC": "此特技的伤害量可无视对目标的伤害减少量。",
+    "TC": "此技能之傷害能無視目標對象的傷害減少量。"
+  },
+  "IGNORE_DR|TITLE": {
+    "KO": "피해 감소량 무시",
+    "EN": "Ignore DMG▼",
+    "JA": "ダメージ減少量無視",
+    "SC": "无视伤害减少量",
+    "TC": "無視傷害減少量"
+  },
+  "IGNORE_INVIN|DESC": {
+    "KO": "해당 헌터와 싸우는 대상은 피해면역이 될 수 없습니다.",
+    "EN": "The target engaging in battle with this hunter\\ncannot benefit from Immunity.",
+    "JA": "スキル保有ハンターとバトル中の対象は、ダメージ免疫が通用しない状態に。",
+    "SC": "该猎人的对战目标无法进入伤害免疫状态。",
+    "TC": "該獵人戰鬥對象無法進入損傷免疫狀態。"
+  },
+  "IGNORE_INVIN|TITLE": {
+    "KO": "피해면역 무시",
+    "EN": "Ignore Immunity",
+    "JA": "ダメージ免疫無視",
+    "SC": "无视伤害免疫",
+    "TC": "無視損傷免疫"
+  },
+  "IMUN_BUFF|DESC": {
+    "KO": "지속시간 동안 대상이 강화 효과를 받지 못하게 합니다.",
+    "EN": "Blocks the target from getting Beneficial Effects\\nduring a certain period of time.",
+    "JA": "スキル適用中、対象の強化効果を無効化。",
+    "SC": "持续时间内使目标无法获得强化效果。",
+    "TC": "持續時間內使目標對象無法獲得強化效果。"
+  },
+  "IMUN_BUFF|TITLE": {
+    "KO": "강화 금지",
+    "EN": "Beneficial Effect Block",
+    "JA": "強化禁止",
+    "SC": "禁止强化",
+    "TC": "禁止強化"
+  },
+  "IMUN_CRITICAL|DESC": {
+    "KO": "상대의 탭 공격을 맞았을 때, 치명타가 발생하지 않습니다.",
+    "EN": "When attacked by an opponent,\\nCritical Damage is not applied.",
+    "JA": "相手からタップ攻撃を受けても、致命打が発生しない状態に。",
+    "SC": "受到对方攻击时，可免受暴击。",
+    "TC": "受到對方攻擊時, 不會發生暴擊。"
+  },
+  "IMUN_CRITICAL|TITLE": {
+    "KO": "치명타 면역",
+    "EN": "CRIT DMG Immunity",
+    "JA": "致命打免疫",
+    "SC": "暴击免疫",
+    "TC": "暴擊免疫"
+  },
+  "IMUN_DEBUFF_ATK|DESC": {
+    "KO": "약화 효과 중, 공격력 약화의 영향을 받지 않습니다.",
+    "EN": "Gains Immunity from attack weakening effects\\namong the Harmful Effects.",
+    "JA": "弱化スキルのうち、攻撃力への弱化効果を無効化。",
+    "SC": "在弱化效果中，不受攻击力弱化的影响。",
+    "TC": "在弱化效果中, 不受弱化攻擊力之影響。"
+  },
+  "IMUN_DEBUFF_ATK|TITLE": {
+    "KO": "약화 면역(공격력)",
+    "EN": "Harmful Immunity (ATK)",
+    "JA": "弱化免疫 (攻撃力)",
+    "SC": "弱化免疫（攻击力）",
+    "TC": "弱化免疫(攻擊力)"
+  },
+  "IMUN_DEBUFF_DEF|DESC": {
+    "KO": "약화 효과 중, 방어력 약화의 영향을 받지 않습니다.",
+    "EN": "Gains Immunity from defense weakening effects\\namong the Harmful Effects.",
+    "JA": "弱化スキルのうち、防御力への弱化効果を無効化。",
+    "SC": "在弱化效果中，不受防御力弱化的影响。",
+    "TC": "在弱化效果中, 不受防禦力弱化之影響。"
+  },
+  "IMUN_DEBUFF_DEF|TITLE": {
+    "KO": "약화 면역(방어력)",
+    "EN": "Harmful Immunity (DEF)",
+    "JA": "弱化免疫 (防御力)",
+    "SC": "弱化免疫（防御力）",
+    "TC": "弱化免疫(防禦力)"
+  },
+  "IMUN_DEBUFF_DR|DESC": {
+    "KO": "약화 효과 중, 피해 감소량 약화의 영향을 받지 않습니다.",
+    "EN": "Gains Immunity from Damage Reduction weakening effects\\namong the Harmful Effects.",
+    "JA": "弱化スキルのうち、ダメージ減少量への弱化効果を無効化。",
+    "SC": "在弱化效果中，不受伤害减少量弱化的影响。",
+    "TC": "在弱化效果中, 不受弱化傷害減少量之影響。"
+  },
+  "IMUN_DEBUFF_DR|TITLE": {
+    "KO": "약화 면역(피해 감소량)",
+    "EN": "Harmful Immunity (DMG▼)",
+    "JA": "弱化免疫 (ダメージ減少量)",
+    "SC": "弱化免疫（伤害减少量）",
+    "TC": "弱化免疫(傷害減少量)"
+  },
+  "IMUN_DEBUFF|DESC": {
+    "KO": "지속시간 동안 약화 효과를 받지 않습니다.\\n강화 해제로 제거 가능합니다.",
+    "EN": "Immune to Harmful Effects for a certain period of time.\\nThis can be removed with the Remove Beneficial Effects.",
+    "JA": "スキル適用中、弱化効果を無効化。\\n強化解除で無効化が可能。",
+    "SC": "持续时间内不受弱化效果影响。\\n可被解除强化特技解除。",
+    "TC": "持續時間內不受弱化效果影響。\\n可被解除強化技能解除。"
+  },
+  "IMUN_DEBUFF|TITLE": {
+    "KO": "약화 면역",
+    "EN": "Harmful Effect Immunity",
+    "JA": "弱化免疫",
+    "SC": "弱化免疫",
+    "TC": "弱化免疫"
+  },
+  "IMUN_DISABLE_TAP|DESC": {
+    "KO": "공격불가 상태가 되지 않습니다.",
+    "EN": "Gains Immunity to Attack Disabled effects.",
+    "JA": "攻撃不可効果が、通用しない状態に。",
+    "SC": "不会陷入无法攻击的状态。",
+    "TC": "不會進入無法攻擊之狀態。"
+  },
+  "IMUN_DISABLE_TAP|TITLE": {
+    "KO": "공격불가 면역",
+    "EN": "ATK Disabled Immunity",
+    "JA": "攻撃不可免疫",
+    "SC": "无法攻击免疫",
+    "TC": "無法攻擊免疫"
+  },
+  "IMUN_STUN_SUP|DESC": {
+    "KO": "폭격수나 도우미에 의한 기절로부터 팀을 보호합니다.\\n공격수나 수비수에 의한 기절은 막지 못합니다.",
+    "EN": "Protects the team from getting stunned by a Bomber or Support.\\nIt cannot block stun from Offense or Defense.",
+    "JA": "爆撃手やヘルパーによる気絶効果からチームを防衛。\\n攻撃手や守備手による気絶は防衛不可。",
+    "SC": "保护队伍免受轰炸队员或小帮手造成的晕厥。\\n但无法阻挡攻击手或防守员造成的晕厥。",
+    "TC": "保護隊伍免遭爆擊手或小幫手之暈厥效果。\\n但無法阻擋攻擊手或守備手的暈厥效果。"
+  },
+  "IMUN_STUN_SUP|TITLE": {
+    "KO": "기절 면역(지원)",
+    "EN": "Stun Immunity (Support)",
+    "JA": "気絶免疫 (支援)",
+    "SC": "晕厥免疫（支援）",
+    "TC": "暈厥免疫(支援)"
+  },
+  "IMUN_STUN|DESC": {
+    "KO": "특기에 의해 기절 당하지 않습니다.",
+    "EN": "Doesn't get stunned by skill.",
+    "JA": "スキルによる気絶効果が、通用しない状態に。",
+    "SC": "此特技可避免陷入晕厥。",
+    "TC": "不受暈厥技能影響。"
+  },
+  "IMUN_STUN|TITLE": {
+    "KO": "기절 면역",
+    "EN": "Stun Immunity",
+    "JA": "気絶免疫",
+    "SC": "晕厥免疫",
+    "TC": "暈厥免疫"
+  },
+  "INVIN_BAN|DESC": {
+    "KO": "지속시간 동안 피해면역 상태가 되지 못합니다.\\n약화 해제로 제거 가능합니다.",
+    "EN": "Cannot become Immune for a certain period of time.\\nThis can be removed with the Remove Harmful Effects.",
+    "JA": "スキル適用中、対象のダメージ免疫効果を禁止。\\n弱化解除で無効化が可能。",
+    "SC": "持续时间内无法进入伤害免疫状态。\\n可被解除弱化特技解除。",
+    "TC": "使用技能時, 持續時間內無法進入損傷免疫狀態。\\n可被解除弱化技能解除。"
+  },
+  "INVIN_BAN|TITLE": {
+    "KO": "피해면역 금지",
+    "EN": "Immunity Block",
+    "JA": "ダメージ免疫禁止",
+    "SC": "禁止伤害免疫",
+    "TC": "禁止損傷免疫"
+  },
+  "INVIN_BREAK|DESC": {
+    "KO": "피해면역인 대상에게도 피해를 줄 수 있습니다.",
+    "EN": "Able to deal damage to the target with Immunity.",
+    "JA": "ダメージ免疫を持つ対象にも、ダメージ付与が可能。",
+    "SC": "可给处于伤害免疫的目标造成伤害。",
+    "TC": "對損傷免疫者也能造成傷害。"
+  },
+  "INVIN_BREAK|TITLE": {
+    "KO": "피해면역 관통",
+    "EN": "Immunity Penetration",
+    "JA": "ダメージ免疫貫通",
+    "SC": "穿透伤害免疫",
+    "TC": "穿透損傷免疫"
+  },
+  "INVIN_REPEAT|DESC": {
+    "KO": "3초마다 한번씩 피해면역 상태가 됩니다.",
+    "EN": "Becomes Immune once every 3 seconds.",
+    "JA": "3秒ごとに一度、ダメージ免疫状態に。",
+    "SC": "每3秒形成一次伤害免疫。",
+    "TC": "每3秒形成一次損傷免疫。"
+  },
+  "INVIN_REPEAT|TITLE": {
+    "KO": "피해면역(반복)",
+    "EN": "Immunity (Repeated)",
+    "JA": "ダメージ免疫 (反復)",
+    "SC": "伤害免疫（反复）",
+    "TC": "損傷免疫(反覆)"
+  },
+  "INVIN_TEAM|DESC": {
+    "KO": "팀 전체가 지속시간 동안 피해면역 됩니다.\\n강화 해제로 제거 가능합니다.",
+    "EN": "All members of the team become Immune during a\\ncertain period of time. This can be removed\\nwith the Remove Beneficial Effects.",
+    "JA": "スキル適用中、チーム全体がダメージ免疫状態に。\\n強化解除で無効化が可能。",
+    "SC": "全队在持续时间内进入伤害免疫状态。\\n可被解除强化特技解除。",
+    "TC": "持續時間內全隊為損傷免疫狀態。\\n可被解除強化技能解除。"
+  },
+  "INVIN_TEAM|TITLE": {
+    "KO": "팀 피해면역",
+    "EN": "Team Immunity",
+    "JA": "チームダメージ免疫",
+    "SC": "队伍伤害免疫",
+    "TC": "隊伍損傷免疫"
+  },
+  "INVIN|DESC": {
+    "KO": "지속시간 동안 피해를 받지 않습니다.\\n강화 해제로 제거 가능합니다.\\n피해면역 관통 공격에는 피해를 받습니다.",
+    "EN": "Becomes Immune to damage for a certain period of time.\\nThis can be removed with the Remove Beneficial Effects.\\nTakes damage from attacks with Immunity Penetration.",
+    "JA": "スキル適用中、ダメージを受けない状態に。\\n強化解除で無効化が可能。\\nダメージ免疫貫通攻撃によるダメージは適用。",
+    "SC": "持续时间内免受伤害。\\n可被解除强化特技解除。\\n在穿透伤害免疫的攻击下伤害有效。",
+    "TC": "持續時間內免遭傷害。\\n可被解除強化技能解除。\\n但可受穿透損傷免疫之傷害。"
+  },
+  "INVIN|TITLE": {
+    "KO": "피해면역",
+    "EN": "Immunity",
+    "JA": "ダメージ免疫",
+    "SC": "伤害免疫",
+    "TC": "損傷免疫"
+  },
+  "JOB_ATT|DESC": {
+    "KO": "공격수의 직업 능력.\\n전투 시작 시, 자신의 공격력이 증가합니다.",
+    "EN": "Offense's role ability.\\nOffense's attack increases when the battle starts.",
+    "JA": "攻撃手の職業能力。\\nバトル開始時、自身の攻撃力が増加。",
+    "SC": "攻击手的职业能力。\\n战斗开始时，自身攻击力增加。",
+    "TC": "攻擊手的職業能力。\\n戰鬥開始時, 增加自身攻擊力。"
+  },
+  "JOB_ATT|TITLE": {
+    "KO": "공격수",
+    "EN": "Offense",
+    "JA": "攻撃手",
+    "SC": "攻击手",
+    "TC": "攻擊手"
+  },
+  "JOB_DEF|DESC": {
+    "KO": "수비수의 직업 능력.\\n전투 시작 시, 자신의 방어력이 증가합니다.",
+    "EN": "Defense's role ability.\\nDefense's defense increases when the battle starts.",
+    "JA": "守備手の職業能力。\\nバトル開始時、自身の防御力が増加。",
+    "SC": "防守员的职业能力。\\n战斗开始时，自身防御力增加。",
+    "TC": "守備手的職業能力。\\n戰鬥開始時, 增加自身防禦力。"
+  },
+  "JOB_DEF|TITLE": {
+    "KO": "수비수",
+    "EN": "Defense",
+    "JA": "守備手",
+    "SC": "防守员",
+    "TC": "守備手"
+  },
+  "JOB_GUN|DESC": {
+    "KO": "폭격수의 직업 능력.\\n전투 시작 시, 팀 전체의 공격력이 증가합니다.",
+    "EN": "Bomber's role ability.\\nThe whole team's attack increases when the battle starts.",
+    "JA": "爆撃手の職業能力。\\nバトル開始時、チーム全体の攻撃力が増加。",
+    "SC": "轰炸队员的职业能力。\\n战斗开始时，全队攻击力增加。",
+    "TC": "爆擊手的職業能力。\\n戰鬥開始時, 增加全隊攻擊力。"
+  },
+  "JOB_GUN|TITLE": {
+    "KO": "폭격수",
+    "EN": "Bomber",
+    "JA": "爆撃手",
+    "SC": "轰炸队员",
+    "TC": "爆擊手"
+  },
+  "JOB_SUP|DESC": {
+    "KO": "도우미의 직업 능력.\\n전투 시작 시, 팀 전체의 생명력이 증가합니다.",
+    "EN": "Support's role ability.\\nThe whole team's HP increases when the battle starts.",
+    "JA": "ヘルパーの職業能力。\\nバトル開始時、チーム全体のHPが増加。",
+    "SC": "小帮手的职业能力。\\n战斗开始时，全队HP增加HP。",
+    "TC": "小幫手的職業能力。\\n戰鬥開始時, 增加全隊HP。"
+  },
+  "JOB_SUP|TITLE": {
+    "KO": "도우미",
+    "EN": "Support",
+    "JA": "ヘルパー",
+    "SC": "小帮手",
+    "TC": "小幫手"
+  },
+  "JOB|DESC": {
+    "KO": "헌터의 직업에 따라 주어지는 공통적인 효과입니다.",
+    "EN": "The common effect that is granted\\naccording to the hunter's role.",
+    "JA": "ハンターの職種に応じて与えられる共通の効果。",
+    "SC": "根据猎人职业，具有的共同效果。",
+    "TC": "依獵人職業, 共同具備之效果。"
+  },
+  "JOB|TITLE": {
+    "KO": "직업",
+    "EN": "Role",
+    "JA": "職業",
+    "SC": "职业",
+    "TC": "職業"
+  },
+  "MAXIM|DESC": {
+    "KO": "특기 사용 시, 확률적으로 발동되는 추가 효과입니다.",
+    "EN": "Additional effect that is activated randomly\\nwhen using a skill.",
+    "JA": "スキル使用時、確率発動する追加効果。",
+    "SC": "使用特技时，随机发动的追加效果。",
+    "TC": "使用技能時, 有機率觸發的追加效果"
+  },
+  "MAXIM|TITLE": {
+    "KO": "극대화",
+    "EN": "Maximization",
+    "JA": "極大化",
+    "SC": "最大化",
+    "TC": "最大值"
+  },
+  "OWN_PASSIVE|DESC": {
+    "KO": "헌터의 개인적인 특별한 능력.\\n전투 시작 시, 지속적으로 효과를 발휘합니다.",
+    "EN": "Hunter's special personal ability.\\nThe effect is activated continuously when the battle starts.",
+    "JA": "ハンター個々が持つ特別能力。\\nバトル開始時、持続的に効果を発揮。",
+    "SC": "猎人的个人特别能力。\\n战斗开始时，持续发挥效果。",
+    "TC": "獵人的個人特別能力。\\n戰鬥開始時, 持續發揮效果。"
+  },
+  "OWN_PASSIVE|TITLE": {
+    "KO": "특별",
+    "EN": "Special",
+    "JA": "特別",
+    "SC": "特别",
+    "TC": "特別"
+  },
+  "PASSIVE_HEAL|DESC": {
+    "KO": "전투 시작 시, 대상의 생명력이 지속적으로 회복됩니다.",
+    "EN": "The target's HP recovers continuously\\nwhen the battle starts.",
+    "JA": "バトル開始時、対象のHPが持続的に回復。",
+    "SC": "战斗开始时，目标的HP持续恢复。",
+    "TC": "戰鬥開始時, 目標對象的HP持續恢復。"
+  },
+  "PASSIVE_HEAL|TITLE": {
+    "KO": "자연 회복",
+    "EN": "Natural Recovery",
+    "JA": "自然回復",
+    "SC": "自然恢复",
+    "TC": "自然恢復"
+  },
+  "SELF_ENHAN|DESC": {
+    "KO": "전투 시작 시, 대상의 능력치를 증가시킵니다.",
+    "EN": "Increases the target's stat when the battle starts.",
+    "JA": "バトル開始時、対象の能力値を増加。",
+    "SC": "战斗开始时，增加目标的能力值。",
+    "TC": "戰鬥開始時, 增加目標對象之能力值。"
+  },
+  "SELF_ENHAN|TITLE": {
+    "KO": "능력치 증가",
+    "EN": "Stat Increase",
+    "JA": "能力値増加",
+    "SC": "增加能力值",
+    "TC": "增加能力值"
+  },
+  "STUN_EX|DESC": {
+    "KO": "특수한 조건에 따라 대상을 기절시킵니다.",
+    "EN": "Stuns the target under special conditions.",
+    "JA": "特殊な条件下で対象を気絶状態に。",
+    "SC": "在特殊条件下使目标晕厥。",
+    "TC": "在特殊條件下使目標對象暈厥。"
+  },
+  "STUN_EX|TITLE": {
+    "KO": "특수 기절",
+    "EN": "Special Stun",
+    "JA": "特殊気絶",
+    "SC": "特殊晕厥",
+    "TC": "特殊暈厥"
+  },
+  "STUN_LONG|DESC": {
+    "KO": "대상을 더 길게 기절시킵니다.\\n기절면역인 경우도 절반의 시간동안 기절시킵니다.",
+    "EN": "Stuns the target for a longer duration.\\nStuns the target for half the duration if the target has stun immunity.",
+    "JA": "対象をより長時間気絶させる。相手が気絶免疫を持つ場合、免疫発揮時間の半分の間は気絶状態に。",
+    "SC": "可延长对方晕厥时间。\\n即使对方免疫晕厥，也能使其晕厥一半的时间。",
+    "TC": "可延長對方暈厥時間。\\n即使對方有暈厥免疫, 也能使其暈厥一半的時間。"
+  },
+  "STUN_LONG|TITLE": {
+    "KO": "뇌진탕",
+    "EN": "Concussion",
+    "JA": "脳震盪",
+    "SC": "脑震荡",
+    "TC": "腦震盪"
+  },
+  "STUN_MATE|DESC": {
+    "KO": "아군 팀원을 기절시킵니다.\\n일부 헌터만 가진 특수한 부작용입니다.",
+    "EN": "Stuns a teammate.\\nA special side effect that only some hunters have.",
+    "JA": "味方メンバーを気絶状態に。\\n一部のハンターだけが持つ、特殊な副作用。",
+    "SC": "使我方队员晕厥。\\n仅部分猎人有此特殊副作用。",
+    "TC": "使我方隊員暈厥。\\n僅部分獵人具備的特殊副作用。"
+  },
+  "STUN_MATE|TITLE": {
+    "KO": "기절(아군)",
+    "EN": "Stun (Teammate)",
+    "JA": "気絶 (味方)",
+    "SC": "晕厥（我方）",
+    "TC": "暈厥(我方)"
+  },
+  "STUN_SELF|DESC": {
+    "KO": "자기 자신을 기절시킵니다.\\n일부 헌터만 가진 특수한 부작용입니다.",
+    "EN": "Stuns self.\\nA special side effect that only some hunters have.",
+    "JA": "自分自身を気絶状態に。\\n一部のハンターだけが持つ、特殊な副作用。",
+    "SC": "使自身晕厥。\\n仅部分猎人有此特殊副作用。",
+    "TC": "使自身暈厥。\\n僅部分獵人具備的特殊副作用。"
+  },
+  "STUN_SELF|TITLE": {
+    "KO": "기절(자신)",
+    "EN": "Stun (Self)",
+    "JA": "気絶 (自身)",
+    "SC": "晕厥（自身）",
+    "TC": "暈厥(自身)"
+  },
+  "STUN_TEAM|DESC": {
+    "KO": "대상 팀 전체를 지속시간동안 기절시킵니다.",
+    "EN": "Stuns all members of the target team for a certain period of time.",
+    "JA": "対象チーム全体を、持続的な気絶状態に。",
+    "SC": "使目标队伍全体持续晕厥。",
+    "TC": "使目標隊伍全體持續暈厥。"
+  },
+  "STUN_TEAM|TITLE": {
+    "KO": "전체 기절",
+    "EN": "Stun All",
+    "JA": "気絶 (全体)",
+    "SC": "全体晕厥",
+    "TC": "全體暈厥"
+  },
+  "STUN|DESC": {
+    "KO": "대상을 기절시켜 일시적으로 아무것도 할 수 없게 합니다.",
+    "EN": "Stuns the target,\\ntemporarily preventing them from taking any action.",
+    "JA": "対象を気絶させ、一時的な攻撃不可状態に。",
+    "SC": "使目标晕厥并暂时无法行动。",
+    "TC": "使對方暈厥, 讓其暫時無法動作。"
+  },
+  "STUN|TITLE": {
+    "KO": "기절",
+    "EN": "Stun",
+    "JA": "気絶",
+    "SC": "晕厥",
+    "TC": "暈厥"
+  },
+  "TEAM_ENHAN|DESC": {
+    "KO": "전투 시작 시, 대상 팀 전체의 능력치를 증가시킵니다.",
+    "EN": "Increases the stat of all members of target team\\nwhen the battle starts.",
+    "JA": "バトル開始時、対象チーム全体の能力値を増加。",
+    "SC": "战斗开始时，增加目标队伍全体的能力值。",
+    "TC": "戰鬥開始時, 增加該全隊能力值。"
+  },
+  "TEAM_ENHAN|TITLE": {
+    "KO": "팀 능력치 증가",
+    "EN": "Team Stat▲",
+    "JA": "チーム能力値増加",
+    "SC": "队伍能力值增加",
+    "TC": "增加隊伍能力值"
+  },
+  "TEAM_WEAKEN|DESC": {
+    "KO": "전투 시작 시, 대상 팀 전체의 능력치를 감소시킵니다.",
+    "EN": "Decreases the stat of all members of target team\\nwhen the battle starts.",
+    "JA": "バトル開始時、対象チーム全体の能力値を減少。",
+    "SC": "战斗开始时，减少目标队伍全体的能力值。",
+    "TC": "戰鬥開始時, 減少該全隊能力值。"
+  },
+  "TEAM_WEAKEN|TITLE": {
+    "KO": "팀 능력치 감소",
+    "EN": "Team Stat▼",
+    "JA": "チーム能力値減少",
+    "SC": "队伍能力值减少",
+    "TC": "減少隊伍能力值"
+  },
+  "USE_ENEMY_ATT|DESC": {
+    "KO": "상대의 공격력을 이용하여 상대에게 피해를 줍니다.",
+    "EN": "Deals damage to the opponent\\nby using the opponent's attack.",
+    "JA": "相手の攻撃力を利用し、相手にダメージを付与。",
+    "SC": "利用对方的攻击力攻击对方。",
+    "TC": "利用對方的攻擊力攻擊對方。"
+  },
+  "USE_ENEMY_ATT|TITLE": {
+    "KO": "역이용",
+    "EN": "Reverse",
+    "JA": "逆手",
+    "SC": "还施彼身",
+    "TC": "反利用"
+  }
+}

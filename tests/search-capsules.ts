@@ -1,0 +1,60 @@
+import assert from "node:assert/strict";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { ServerState } from "./legacy-state-fixture.js";
+import { SEARCH_CAPSULE_ID, explicitSearchCapsuleVictory } from "../src/search-capsules.js";
+import { itemReference } from "../src/hunter-traces.js";
+
+const folder = mkdtempSync(path.join(tmpdir(), "blustone-search-capsules-"));
+const filename = path.join(folder, "state.json");
+try {
+  let state = new ServerState("http://localhost", filename);
+  const auth = state.registerGuest({ device_id: "capsule-earn" }, {}).ret_data as { otp: string };
+  let game = state.gameFor(state.accountFor(auth, {}));
+  const count = () => game.items.filter((row) => row.ref_id === SEARCH_CAPSULE_ID).reduce((n, row) => n + row.qty, 0);
+  const start = () => state.startMission({ ...auth, stage_id: "n_01_01" }, {});
+  const finish = (clear: number, stage_id = "n_01_01") => state.completeMission({ ...auth, stage_id,
+    play_info: JSON.stringify({ clear, clear_time: 10, dead_cnt: 0 }) }, {}).ret_data as { item: Array<{ inst_id: number; ref_id: string; added: number }> };
+  assert.equal(count(), 0, "existing/new accounts are never prefilled");
+  for (const raw of [undefined, "bad JSON", "{}", [], null, { clear: 2 }])
+    assert.equal(explicitSearchCapsuleVictory(raw), false, "legacy fixture win default cannot earn real items");
+  assert.ok(itemReference().item.some((row) => row.id === SEARCH_CAPSULE_ID));
+  finish(1);
+  assert.equal(count(), 0, "standalone Complete cannot manufacture capsules");
+  start();
+  assert.deepEqual(finish(0).item, []);
+  assert.equal(count(), 0, "defeat pays no capsules");
+  start();
+  assert.deepEqual(finish(1, "n_01_02").item, []);
+  assert.equal(count(), 0, "mismatched stage cannot award capsules");
+  const first = finish(1).item;
+  assert.equal(first.length, 1);
+  assert.equal(first[0].ref_id, SEARCH_CAPSULE_ID);
+  assert.equal(first[0].added, 1, "native AddItem consumes an additive delta");
+  assert.equal(count(), 1);
+  assert.deepEqual(finish(1).item, []);
+  assert.equal(count(), 1, "duplicate receipt cannot repeat the award");
+  start();
+  const replay = finish(1).item;
+  assert.equal(count(), 2, "new accepted replay victory can earn another capsule");
+  assert.equal(replay[0].inst_id, first[0].inst_id, "stack identity remains stable");
+  assert.equal(replay[0].added, 1, "stack total must not be sent as the delta");
+  state = new ServerState("http://localhost", filename);
+  game = state.gameFor(state.accountFor(auth, {}));
+  assert.equal(count(), 2, "earned inventory survives restart");
+  const other = state.registerGuest({ device_id: "capsule-other" }, {}).ret_data as { otp: string };
+  assert.equal(state.gameFor(state.accountFor(other, {})).items.length, 0, "rewards remain account-local");
+  game.items.find((row) => row.ref_id === SEARCH_CAPSULE_ID)!.qty = 0xffffffff;
+  start();
+  assert.deepEqual(finish(1).item, [], "native uint quantity must not overflow");
+  assert.equal(count(), 0xffffffff);
+  const cappedAuth = state.registerGuest({ device_id: "capsule-id-capacity" }, {}).ret_data as { otp: string };
+  const cappedGame = state.gameFor(state.accountFor(cappedAuth, {}));
+  cappedGame.next_item_inst_id = Number.MAX_SAFE_INTEGER;
+  state.startMission({ ...cappedAuth, stage_id: "n_01_01" }, {});
+  const cappedResult = state.completeMission({ ...cappedAuth, stage_id: "n_01_01", play_info: '{"clear":1}' }, {}).ret_data as { item: unknown[] };
+  assert.deepEqual(cappedResult.item, []);
+  assert.equal(cappedGame.next_item_inst_id, Number.MAX_SAFE_INTEGER, "new capsule allocator must remain reloadable at capacity");
+  console.log("Search capsules: native ID, earned matching victories, replay/defeat isolation, additive stack, restart and overflow passed; UI unverified.");
+} finally { rmSync(folder, { recursive: true, force: true }); }

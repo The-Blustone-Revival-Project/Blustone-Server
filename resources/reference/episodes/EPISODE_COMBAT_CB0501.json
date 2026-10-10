@@ -1,0 +1,109 @@
+{
+  "id": "CB0501",
+  "title": "E05_TITLE",
+  "stage_name": "E05_S05_TITLE",
+  "power": "9000",
+  "game_res_id": "7",
+  "bgm": "BGM_BATTLE2",
+  "field_bg_res": "BG_RES",
+  "win_dialog": "EP_1004B",
+  "lose_dialog": "EP_0000A",
+  "lose_dialog2": "EP_0000B",
+  "left": [
+    [
+      {},
+      {},
+      {},
+      {}
+    ]
+  ],
+  "right": [
+    [
+      {
+        "type": "monster",
+        "actor_id": "CB0501_M1",
+        "thumb": {
+          "level": 20,
+          "rank": 3,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0501_M2",
+        "thumb": {
+          "level": 20,
+          "rank": 3,
+          "hyper": 0,
+          "attr": 2
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0501_M3",
+        "thumb": {
+          "level": 20,
+          "rank": 3,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0501_M4",
+        "thumb": {
+          "level": 20,
+          "rank": 3,
+          "hyper": 0,
+          "attr": 3
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "type": "monster",
+        "actor_id": "CB0501_BOSS",
+        "thumb": {
+          "level": 1,
+          "rank": 4,
+          "hyper": 0,
+          "attr": 1
+        },
+        "skill": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  ]
+}

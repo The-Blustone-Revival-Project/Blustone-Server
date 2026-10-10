@@ -1,0 +1,609 @@
+{
+  "analysis": {
+    "files": 64368,
+    "bytes": 120985405349,
+    "groups": [
+      {
+        "name": "patched",
+        "files": 28986,
+        "bytes": 69172345574
+      },
+      {
+        "name": "avd",
+        "files": 145,
+        "bytes": 31515841102
+      },
+      {
+        "name": "testing",
+        "files": 8598,
+        "bytes": 6219723015
+      },
+      {
+        "name": "instrumented-apk",
+        "files": 32,
+        "bytes": 5476541324
+      },
+      {
+        "name": "ghidra-project",
+        "files": 10,
+        "bytes": 2171733067
+      },
+      {
+        "name": "jadx",
+        "files": 9363,
+        "bytes": 1128736117
+      },
+      {
+        "name": "extracted",
+        "files": 844,
+        "bytes": 1101564403
+      },
+      {
+        "name": "(root files)",
+        "files": 2548,
+        "bytes": 1093066598
+      },
+      {
+        "name": "VSFan",
+        "files": 8551,
+        "bytes": 1062217097
+      },
+      {
+        "name": "capture",
+        "files": 838,
+        "bytes": 671340509
+      },
+      {
+        "name": "research",
+        "files": 2496,
+        "bytes": 368285149
+      },
+      {
+        "name": "r015",
+        "files": 399,
+        "bytes": 241194474
+      },
+      {
+        "name": "r017",
+        "files": 34,
+        "bytes": 117784180
+      },
+      {
+        "name": "in-game-stats",
+        "files": 113,
+        "bytes": 93226471
+      },
+      {
+        "name": "r018",
+        "files": 13,
+        "bytes": 73979425
+      },
+      {
+        "name": "r014",
+        "files": 37,
+        "bytes": 71988805
+      },
+      {
+        "name": "r012",
+        "files": 44,
+        "bytes": 48800991
+      },
+      {
+        "name": "r016",
+        "files": 38,
+        "bytes": 39486833
+      },
+      {
+        "name": "r010",
+        "files": 6,
+        "bytes": 38142687
+      },
+      {
+        "name": "r011",
+        "files": 13,
+        "bytes": 27042609
+      },
+      {
+        "name": "r013",
+        "files": 34,
+        "bytes": 22039014
+      },
+      {
+        "name": "recovered-data",
+        "files": 20,
+        "bytes": 16168959
+      }
+    ],
+    "largest": [
+      [
+        10737418240,
+        "analysis\\avd\\blustone-api30-translation.avd\\userdata-qemu.img"
+      ],
+      [
+        5566627840,
+        "analysis\\avd\\blustone-api33.avd\\userdata-qemu.img.qcow2"
+      ],
+      [
+        4152426496,
+        "analysis\\avd\\blustone-api30-translation.avd\\userdata-qemu.img.qcow2"
+      ],
+      [
+        2147549184,
+        "analysis\\avd\\blustone-playstore-api33.avd\\snapshots\\default_boot\\ram.img"
+      ],
+      [
+        2147549184,
+        "analysis\\avd\\blustone-api33.avd\\snapshots\\default_boot\\ram.img"
+      ],
+      [
+        2147549184,
+        "analysis\\avd\\blustone-api30-translation.avd\\snapshots\\default_boot\\ram.img"
+      ]
+    ]
+  },
+  "recovered-assets": {
+    "files": 11956,
+    "bytes": 35102477032,
+    "groups": [
+      {
+        "name": "emulator-host-recovery-2026-10-05",
+        "files": 11,
+        "bytes": 29748159202
+      },
+      {
+        "name": "phone-2026-09-18",
+        "files": 2600,
+        "bytes": 2375152730
+      },
+      {
+        "name": "a51-2026-09-20",
+        "files": 387,
+        "bytes": 1213454440
+      },
+      {
+        "name": "cdn-cache-20261010",
+        "files": 534,
+        "bytes": 1101839107
+      },
+      {
+        "name": "forum-en-2026-10-05",
+        "files": 4300,
+        "bytes": 329785180
+      },
+      {
+        "name": "phone-history-2026-09-20",
+        "files": 1675,
+        "bytes": 180685922
+      },
+      {
+        "name": "refund-native-20261006",
+        "files": 2,
+        "bytes": 66559934
+      },
+      {
+        "name": "phone-evidence-2026-09-19",
+        "files": 1166,
+        "bytes": 45266445
+      },
+      {
+        "name": "community-notes-2026-09-30",
+        "files": 2,
+        "bytes": 13108921
+      },
+      {
+        "name": "emulator-2026-10-04-telemetry-fault",
+        "files": 900,
+        "bytes": 11725440
+      },
+      {
+        "name": "campaign-receipts-20261009",
+        "files": 97,
+        "bytes": 4495899
+      },
+      {
+        "name": "vsfan-reward-2026-10-09",
+        "files": 157,
+        "bytes": 4341352
+      },
+      {
+        "name": "bootstrap-crash-20261007",
+        "files": 20,
+        "bytes": 1725778
+      },
+      {
+        "name": "search-battle-2026-10-05",
+        "files": 8,
+        "bytes": 790063
+      },
+      {
+        "name": "capsule-funded-search-2026-10-05",
+        "files": 12,
+        "bytes": 737321
+      },
+      {
+        "name": "apk-archive-hunt",
+        "files": 21,
+        "bytes": 720465
+      },
+      {
+        "name": "replica-activation-20261005",
+        "files": 6,
+        "bytes": 556492
+      },
+      {
+        "name": "fishing-progression-20261006",
+        "files": 7,
+        "bytes": 442384
+      },
+      {
+        "name": "episode-complete-20261009",
+        "files": 7,
+        "bytes": 422865
+      },
+      {
+        "name": "bootstrap-control-20261005",
+        "files": 5,
+        "bytes": 401364
+      },
+      {
+        "name": "emulator-2026-10-05-search-guide-failure",
+        "files": 1,
+        "bytes": 260844
+      },
+      {
+        "name": "map-render-20261009",
+        "files": 5,
+        "bytes": 209390
+      }
+    ],
+    "largest": [
+      [
+        29746003968,
+        "recovered-assets\\emulator-host-recovery-2026-10-05\\Data.vhdx"
+      ],
+      [
+        1094791799,
+        "recovered-assets\\cdn-cache-20261010\\pre-migration\\BLUSTONE-Instrumented-plus12.apk"
+      ],
+      [
+        1065628952,
+        "recovered-assets\\phone-2026-09-18\\apks\\split_PADResource.apk"
+      ],
+      [
+        1065628952,
+        "recovered-assets\\a51-2026-09-20\\apks\\split_PADResource.apk"
+      ],
+      [
+        62093526,
+        "recovered-assets\\refund-native-20261006\\battle-a.mp4"
+      ],
+      [
+        60349952,
+        "recovered-assets\\phone-history-2026-09-20\\capture\\private-current.tar"
+      ]
+    ]
+  },
+  "tools": {
+    "files": 34113,
+    "bytes": 35021217245,
+    "groups": [
+      {
+        "name": "android-sdk",
+        "files": 20372,
+        "bytes": 28464725968
+      },
+      {
+        "name": "downloads",
+        "files": 8,
+        "bytes": 4773534939
+      },
+      {
+        "name": "ghidra",
+        "files": 5218,
+        "bytes": 905553502
+      },
+      {
+        "name": "python-venv",
+        "files": 7780,
+        "bytes": 352666969
+      },
+      {
+        "name": "jdk",
+        "files": 490,
+        "bytes": 343823876
+      },
+      {
+        "name": "frida-server",
+        "files": 2,
+        "bytes": 85567568
+      },
+      {
+        "name": "jadx",
+        "files": 7,
+        "bytes": 78273694
+      },
+      {
+        "name": "apktool",
+        "files": 1,
+        "bytes": 15478013
+      },
+      {
+        "name": "(root files)",
+        "files": 186,
+        "bytes": 997040
+      },
+      {
+        "name": "jet-viewer",
+        "files": 12,
+        "bytes": 190304
+      },
+      {
+        "name": "__pycache__",
+        "files": 17,
+        "bytes": 184110
+      },
+      {
+        "name": "skill-button-templates",
+        "files": 6,
+        "bytes": 131575
+      },
+      {
+        "name": "tests",
+        "files": 10,
+        "bytes": 73593
+      },
+      {
+        "name": "research",
+        "files": 4,
+        "bytes": 16094
+      }
+    ],
+    "largest": [
+      [
+        8601468928,
+        "tools\\android-sdk\\system-images\\android-33\\google_apis\\x86_64\\system.img"
+      ],
+      [
+        8601468928,
+        "tools\\android-sdk\\system-images\\android-33\\google_apis\\arm64-v8a\\system.img"
+      ],
+      [
+        3736512576,
+        "tools\\downloads\\BlueStacksFullInstaller_5.22.166.1003_amd64_native.exe"
+      ],
+      [
+        3273654272,
+        "tools\\android-sdk\\system-images\\android-33\\google_apis_playstore\\x86_64\\system.img"
+      ],
+      [
+        3232759808,
+        "tools\\android-sdk\\system-images\\android-30\\google_apis\\x86_64\\system.img"
+      ],
+      [
+        569445154,
+        "tools\\downloads\\ghidra_12.1.3_PUBLIC_20260817.zip"
+      ]
+    ]
+  },
+  "instrumentation": {
+    "files": 17895,
+    "bytes": 8885944943,
+    "groups": [
+      {
+        "name": "collector",
+        "files": 17679,
+        "bytes": 8818204295
+      },
+      {
+        "name": "assets",
+        "files": 201,
+        "bytes": 67645175
+      },
+      {
+        "name": "src",
+        "files": 7,
+        "bytes": 73742
+      },
+      {
+        "name": "native",
+        "files": 4,
+        "bytes": 17143
+      },
+      {
+        "name": "(root files)",
+        "files": 2,
+        "bytes": 3523
+      },
+      {
+        "name": "stubs",
+        "files": 2,
+        "bytes": 1065
+      }
+    ],
+    "largest": [
+      [
+        3057387892,
+        "instrumentation\\collector\\data\\events.ndjson"
+      ],
+      [
+        299237084,
+        "instrumentation\\collector\\data\\notable.ndjson"
+      ],
+      [
+        9591148,
+        "instrumentation\\collector\\data\\artifacts.ndjson"
+      ],
+      [
+        9321947,
+        "instrumentation\\collector\\data\\artifacts\\ffdc2ed8-6613-437f-a05f-43c994b143f6\\local__UI_MAIN.jet"
+      ],
+      [
+        9321947,
+        "instrumentation\\collector\\data\\artifacts\\fc899385-2703-4dc0-8bb8-035561c30962\\local__UI_MAIN.jet"
+      ],
+      [
+        9321947,
+        "instrumentation\\collector\\data\\artifacts\\fbe04796-712a-47ea-8805-1e9a6921d8a5\\local__UI_MAIN.jet"
+      ]
+    ]
+  },
+  "server-ts": {
+    "files": 3404,
+    "bytes": 80515725,
+    "groups": [
+      {
+        "name": "node_modules",
+        "files": 3003,
+        "bytes": 71757808
+      },
+      {
+        "name": "logs",
+        "files": 82,
+        "bytes": 2702600
+      },
+      {
+        "name": "(root files)",
+        "files": 9,
+        "bytes": 1825916
+      },
+      {
+        "name": "dist",
+        "files": 184,
+        "bytes": 1714032
+      },
+      {
+        "name": "data",
+        "files": 28,
+        "bytes": 1374960
+      },
+      {
+        "name": "src",
+        "files": 40,
+        "bytes": 725904
+      },
+      {
+        "name": "tests",
+        "files": 49,
+        "bytes": 367842
+      },
+      {
+        "name": "assets",
+        "files": 3,
+        "bytes": 35179
+      },
+      {
+        "name": "scripts",
+        "files": 4,
+        "bytes": 9334
+      },
+      {
+        "name": "recovered-assets",
+        "files": 1,
+        "bytes": 1075
+      },
+      {
+        "name": "server-ts",
+        "files": 1,
+        "bytes": 1075
+      }
+    ],
+    "largest": [
+      [
+        24520544,
+        "server-ts\\node_modules\\@typescript\\typescript-win32-x64\\lib\\tsc.exe"
+      ],
+      [
+        11694592,
+        "server-ts\\node_modules\\@esbuild\\win32-x64\\esbuild.exe"
+      ],
+      [
+        2349483,
+        "server-ts\\node_modules\\@typescript\\typescript-win32-x64\\lib\\lib.dom.d.ts"
+      ],
+      [
+        1920878,
+        "server-ts\\node_modules\\swagger-ui-dist\\swagger-ui-bundle.js.map"
+      ],
+      [
+        1912421,
+        "server-ts\\node_modules\\swagger-ui-dist\\swagger-ui-es-bundle.js.map"
+      ],
+      [
+        1658349,
+        "server-ts\\node_modules\\swagger-ui-dist\\swagger-ui-es-bundle-core.js.map"
+      ]
+    ]
+  },
+  ".git": {
+    "files": 536,
+    "bytes": 17201267362,
+    "groups": [
+      {
+        "name": "objects",
+        "files": 65,
+        "bytes": 10464875831
+      },
+      {
+        "name": "lost-found",
+        "files": 444,
+        "bytes": 6735517953
+      },
+      {
+        "name": "(root files)",
+        "files": 6,
+        "bytes": 646324
+      },
+      {
+        "name": "logs",
+        "files": 2,
+        "bytes": 199660
+      },
+      {
+        "name": "hooks",
+        "files": 14,
+        "bytes": 26788
+      },
+      {
+        "name": "info",
+        "files": 2,
+        "bytes": 683
+      },
+      {
+        "name": "refs",
+        "files": 3,
+        "bytes": 123
+      }
+    ],
+    "largest": [
+      [
+        5279042001,
+        ".git\\objects\\pack\\pack-237e7853014cb506d85ae6b497616d83323b3f8a.pack"
+      ],
+      [
+        2147549184,
+        ".git\\lost-found\\other\\8445549e6aa16876213ba881ab45ee85c0e0e99a"
+      ],
+      [
+        2147483648,
+        ".git\\lost-found\\other\\7fc33fd5d38847332d70905a5c7a2b914a1fce2f"
+      ],
+      [
+        2147483648,
+        ".git\\lost-found\\other\\3805d15abdf69bfcff2ca16991faaf4fb9d5acb7"
+      ],
+      [
+        1642246144,
+        ".git\\objects\\be\\tmp_obj_vjHFvf"
+      ],
+      [
+        1082318848,
+        ".git\\objects\\be\\tmp_obj_ntr6EX"
+      ]
+    ]
+  },
+  "git": {
+    "modified": 21,
+    "untracked": 17380,
+    "tracked": 5312
+  }
+}

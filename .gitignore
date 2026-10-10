@@ -1,0 +1,19 @@
+
+# Migration preservation and private inputs: never publish.
+/local/
+/var/
+/.env
+__pycache__/
+*.pyc
+*.jks
+*.keystore
+
+
+/node_modules/
+/dist/
+/resources/runtime/
+/resources/test-fixtures/
+
+# Runtime logs are private and regenerated.
+*.log
+/logs/
