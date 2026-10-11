@@ -1,6 +1,7 @@
 import { CARD_REFERENCE_PROFILE, starterReference, starterStages } from "./bootstrap.js";
 import { fuelItemReference } from "./shop-fuel.js";
 import { SEARCH_CAPSULE_ID, searchCapsuleReference } from "./search-capsules.js";
+import { ARENA_HONOR_DISPLAY_REFERENCE } from "./arena-honor-reference.js";
 
 /** Native use_type3 binds item.effect (hunter ID) to CardInfo's trace item ID.
  * Original item IDs, thresholds and drop tables are missing. These are local
@@ -51,7 +52,7 @@ export const VETERAN_EXP_DISPLAY_REFERENCE = Object.freeze({
 export function itemReference() {
   const fuel = fuelItemReference();
   const available = HUNTER_TRACE_ITEMS.filter((item) => starterReference.some((card) => card.base.id === item.cardId));
-  return { ...fuel, item: [...fuel.item, searchCapsuleReference, GOLD_DISPLAY_REFERENCE, { ...VETERAN_EXP_DISPLAY_REFERENCE }, ...available.map(({ cardId, ...item }) => ({ ...item,
+  return { ...fuel, item: [...fuel.item, searchCapsuleReference, GOLD_DISPLAY_REFERENCE, { ...VETERAN_EXP_DISPLAY_REFERENCE }, { ...ARENA_HONOR_DISPLAY_REFERENCE }, ...available.map(({ cardId, ...item }) => ({ ...item,
     use_type: 3, sell_price: 0, thumbnail_id: "", effect: cardId,
     desc: cardId === "006" ? "Collect Sylvester traces in Hunter Search to recruit a hunter." :
       "Gerard traces. Acquisition is not available yet." })), ...libraryNavigationTraceItems()],

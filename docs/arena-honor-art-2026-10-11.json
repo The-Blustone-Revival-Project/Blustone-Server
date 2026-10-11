@@ -1,0 +1,61 @@
+{
+  "package": "UI_ITEM.jet",
+  "bytes": 1655400,
+  "sha256": "4b4350559330947254764f795902b2f66ea48826290316b9eb2bd295bd446eda",
+  "native_records": 391,
+  "exact_eof": true,
+  "art": [
+    {
+      "resource": "IT_BT",
+      "resource_id": "0x255cd8b",
+      "s2_header": 1649137,
+      "s2_packed_bytes": 34,
+      "s2_inflated_sha256": "5dc8d4687652461a26aa102aaa0e7f1b9fd49496f0e77c1225870f128051feb5",
+      "image_id": "0xef38dfb7",
+      "i2_header": 646875,
+      "i2_packed_bytes": 13209,
+      "i2_inflated_sha256": "d989f56fdaad584a9422f6f04c6aedf993651b4cf6e3d1f69ddb12bc81162095",
+      "pixel_format": 4,
+      "width": 150,
+      "height": 150,
+      "positive_alpha_pixels": 5730
+    },
+    {
+      "resource": "IT_BT_M",
+      "resource_id": "0xd2bfb69a0",
+      "s2_header": 1649195,
+      "s2_packed_bytes": 34,
+      "s2_inflated_sha256": "55e477c9b0738b30396dbd7d9e109aa27ac350702198551ea7c95497db3f2e76",
+      "image_id": "0xefa0e253",
+      "i2_header": 796026,
+      "i2_packed_bytes": 7774,
+      "i2_inflated_sha256": "61821dc3ece995012fe9336c3124fc05bb5ecd432792aa72bae59fa0da8e8225",
+      "pixel_format": 4,
+      "width": 68,
+      "height": 68,
+      "positive_alpha_pixels": 2983
+    },
+    {
+      "resource": "IT_BT_S",
+      "resource_id": "0xd2bfb69a6",
+      "s2_header": 1649253,
+      "s2_packed_bytes": 34,
+      "s2_inflated_sha256": "95764e6f0532738827435e8883b627a05b1e948ae0c590171287b991f8287923",
+      "image_id": "0xf95f88d3",
+      "i2_header": 843283,
+      "i2_packed_bytes": 2831,
+      "i2_inflated_sha256": "49466f94983a5d91976d24ff2c106941809afb1089233bc921ef2b4fc54b7ebd",
+      "pixel_format": 4,
+      "width": 34,
+      "height": 34,
+      "positive_alpha_pixels": 820
+    }
+  ],
+  "ui": {
+    "source": "sources/client-tables/recovered-data/leveldb-tables/all-tables.json",
+    "key": "KO/BATTLE/BT_LOBBY",
+    "xml_utf8_sha256": "1cbeccc33e7ff83f8aa1e77835d112551432e4fabb169f5901acf61c02893666",
+    "button": "BT_MY_CHIP",
+    "child_resource": "IT_BT_S"
+  }
+}

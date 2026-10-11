@@ -1,0 +1,61 @@
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00bfadcc <_ZN10CSRPopUpFC6OnInitEv>:
+  bfae3e: 495e         	ldr	r1, [pc, #0x178]        @ 0xbfafb8 <_ZN10CSRPopUpFC6OnInitEv+0x1ec>
+  bfae40: f204 6254    	addw	r2, r4, #0x654
+  bfae44: 4620         	mov	r0, r4
+  bfae46: 4479         	add	r1, pc
+  bfae48: f311 ff00    	bl	0xf0cc4c <_ZN14CSRFramedScene8LoadViewEPKcPN8CMUIBase8ListenerE> @ imm = #0x311e00
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00bfc7b0 <_ZN10CSRPopUpFC13OnButtonClickEP8CMUIViewP8CMUIBase>:
+  bfc964: 4a73         	ldr	r2, [pc, #0x1cc]        @ 0xbfcb34 <_ZN10CSRPopUpFC13OnButtonClickEP8CMUIViewP8CMUIBase+0x384>
+  bfc966: 2009         	movs	r0, #0x9
+  bfc968: 2100         	movs	r1, #0x0
+  bfc96a: 2500         	movs	r5, #0x0
+  bfc96c: 447a         	add	r2, pc
+  bfc96e: f6d2 f443    	bl	0x6cf1f8 <_ZN8CMHashID5Crc32EyPKc> @ imm = #-0x52d77a
+  bfc972: e9d4 129a    	ldrd	r1, r2, [r4, #616]
+  bfc976: 4048         	eors	r0, r1
+  bfc978: ea62 0000    	orn	r0, r2, r0
+  bfc97c: 2800         	cmp	r0, #0x0
+  bfc97e: d165         	bne	0xbfca4c <_ZN10CSRPopUpFC13OnButtonClickEP8CMUIViewP8CMUIBase+0x29c> @ imm = #0xca
+  bfc980: 4668         	mov	r0, sp
+  bfc982: f468 ff9d    	bl	0x8658c0 <_ZNSt6__ndk110shared_ptrI18CSRPopUpItemDetailE11make_sharedIJEEES2_DpOT_> @ imm = #-0x3970c6
+  bfc986: 486c         	ldr	r0, [pc, #0x1b0]        @ 0xbfcb38 <_ZN10CSRPopUpFC13OnButtonClickEP8CMUIViewP8CMUIBase+0x388>
+  bfc988: efc0 0050    	vmov.i32	q8, #0x0
+  bfc98c: 2114         	movs	r1, #0x14
+  bfc98e: 9510         	str	r5, [sp, #0x40]
+  bfc990: 4478         	add	r0, pc
+  bfc992: 6804         	ldr	r4, [r0]
+  bfc994: a80c         	add	r0, sp, #0x30
+  bfc996: 4602         	mov	r2, r0
+  bfc998: f942 0ac1    	vst1.64	{d16, d17}, [r2], r1
+  bfc99c: 6015         	str	r5, [r2]
+  bfc99e: 4621         	mov	r1, r4
+  bfc9a0: f6cb f2ac    	bl	0x6c7efc <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2ERKS5_> @ imm = #-0x534aa8
+  bfc9a4: 300c         	adds	r0, #0xc
+  bfc9a6: 4621         	mov	r1, r4
+  bfc9a8: f6cb f2a8    	bl	0x6c7efc <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2ERKS5_> @ imm = #-0x534ab0
+  bfc9ac: 4963         	ldr	r1, [pc, #0x18c]        @ 0xbfcb3c <_ZN10CSRPopUpFC13OnButtonClickEP8CMUIViewP8CMUIBase+0x38c>
+  bfc9ae: 4479         	add	r1, pc
+  bfc9b0: a80c         	add	r0, sp, #0x30
+  bfc9b2: 2203         	movs	r2, #0x3
+  bfc9b4: f6cb f49e    	bl	0x6c82f4 <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKcj> @ imm = #-0x5346c4
+  bfc9b8: 9800         	ldr	r0, [sp]
+  bfc9ba: 6801         	ldr	r1, [r0]
+  bfc9bc: 688a         	ldr	r2, [r1, #0x8]
+  bfc9be: a90c         	add	r1, sp, #0x30
+  bfc9c0: 4790         	blx	r2
+  bfc9c2: f079 f5ff    	bl	0x10765c4 <_ZN17CSRUIModalHandler3getEv> @ imm = #0x479bfe
+  bfc9c6: e9dd 2100    	ldrd	r2, r1, [sp]
+  bfc9ca: e9cd 2106    	strd	r2, r1, [sp, #24]
+  bfc9ce: b139         	cbz	r1, 0xbfc9e0 <_ZN10CSRPopUpFC13OnButtonClickEP8CMUIViewP8CMUIBase+0x230> @ imm = #0xe
+  bfc9d0: 3104         	adds	r1, #0x4
+  bfc9d2: e851 2f00    	ldrex	r2, [r1]
