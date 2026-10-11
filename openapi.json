@@ -18657,10 +18657,10 @@
     },
     "/relation/GetLikeCnt": {
       "post": {
-        "summary": "Recovered /relation/GetLikeCnt route",
-        "description": "The route literal **/relation/GetLikeCnt** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "GetLikeCnt",
+        "description": "Authenticated target_pvid operation over actual same-server, mutually nonblocked local accounts. GetLikeCnt returns {target_pvid,cnt:uint32}; ToggleLike returns {target_pvid,is_like:0|1}. Each accepted ToggleLike changes the caller's directed edge and persists atomically; the native request has no desired state or nonce, so repeated requests toggle again. Counts and viewer-specific flags remain coherent across friend, discovery and brief/self profiles. No reward, fuel, original global totals or quota is invented.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -18731,9 +18731,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-likes-2026-10-11.md; tests/social-likes-state.ts",
+        "x-runtime-confidence": "Encrypted compiled toggle/profile/restart tested; native UI pending"
       }
     },
     "/relation/GetList": {
@@ -19706,10 +19706,10 @@
     },
     "/relation/ToggleLike": {
       "post": {
-        "summary": "Recovered /relation/ToggleLike route",
-        "description": "The route literal **/relation/ToggleLike** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "ToggleLike",
+        "description": "Authenticated target_pvid operation over actual same-server, mutually nonblocked local accounts. GetLikeCnt returns {target_pvid,cnt:uint32}; ToggleLike returns {target_pvid,is_like:0|1}. Each accepted ToggleLike changes the caller's directed edge and persists atomically; the native request has no desired state or nonce, so repeated requests toggle again. Counts and viewer-specific flags remain coherent across friend, discovery and brief/self profiles. No reward, fuel, original global totals or quota is invented.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -19780,9 +19780,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-likes-2026-10-11.md; tests/social-likes-state.ts",
+        "x-runtime-confidence": "Encrypted compiled toggle/profile/restart tested; native UI pending"
       }
     },
     "/relation/Unblock": {
