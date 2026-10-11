@@ -1,0 +1,809 @@
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00b1eb9c <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE>:
+  b1eb9c: b5f0         	push	{r4, r5, r6, r7, lr}
+  b1eb9e: af03         	add	r7, sp, #0xc
+  b1eba0: e92d 0f00    	push.w	{r8, r9, r10, r11}
+  b1eba4: b091         	sub	sp, #0x44
+  b1eba6: 4604         	mov	r4, r0
+  b1eba8: 48c6         	ldr	r0, [pc, #0x318]        @ 0xb1eec4 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x328>
+  b1ebaa: 460d         	mov	r5, r1
+  b1ebac: 4478         	add	r0, pc
+  b1ebae: 6800         	ldr	r0, [r0]
+  b1ebb0: 9004         	str	r0, [sp, #0x10]
+  b1ebb2: 6800         	ldr	r0, [r0]
+  b1ebb4: 49c4         	ldr	r1, [pc, #0x310]        @ 0xb1eec8 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x32c>
+  b1ebb6: 9010         	str	r0, [sp, #0x40]
+  b1ebb8: 4628         	mov	r0, r5
+  b1ebba: 4479         	add	r1, pc
+  b1ebbc: f464 fa9c    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x39bac8
+  b1ebc0: 7801         	ldrb	r1, [r0]
+  b1ebc2: 3903         	subs	r1, #0x3
+  b1ebc4: 2904         	cmp	r1, #0x4
+  b1ebc6: d81d         	bhi	0xb1ec04 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x68> @ imm = #0x3a
+  b1ebc8: e8df f001    	tbb	[pc, r1]
+  b1ebcc: 1909         	adds	r1, r1, r4
+  b1ebce: 0303         	lsls	r3, r0, #0xc
+  b1ebd0: 0006         	movs	r6, r0
+  b1ebd2: f8d0 a008    	ldr.w	r10, [r0, #0x8]
+  b1ebd6: e017         	b	0xb1ec08 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x6c> @ imm = #0x2e
+  b1ebd8: edd0 0b02    	vldr	d16, [r0, #8]
+  b1ebdc: e00a         	b	0xb1ebf4 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x58> @ imm = #0x14
+  b1ebde: 6880         	ldr	r0, [r0, #0x8]
+  b1ebe0: 7801         	ldrb	r1, [r0]
+  b1ebe2: 07c9         	lsls	r1, r1, #0x1f
+  b1ebe4: bf0c         	ite	eq
+  b1ebe6: 3001         	addeq	r0, #0x1
+  b1ebe8: 6880         	ldrne	r0, [r0, #0x8]
+  b1ebea: 2100         	movs	r1, #0x0
+  b1ebec: f6f2 e7ac    	blx	0x611b48 <.plt+0x98>    @ imm = #-0x50d0a8
+  b1ebf0: ec41 0b30    	vmov	d16, r0, r1
+  b1ebf4: eebd 0be0    	vcvt.s32.f64	s0, d16
+  b1ebf8: ee10 aa10    	vmov	r10, s0
+  b1ebfc: e004         	b	0xb1ec08 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x6c> @ imm = #0x8
+  b1ebfe: f890 a008    	ldrb.w	r10, [r0, #0x8]
+  b1ec02: e001         	b	0xb1ec08 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x6c> @ imm = #0x2
+  b1ec04: f04f 0a00    	mov.w	r10, #0x0
+  b1ec08: 49c4         	ldr	r1, [pc, #0x310]        @ 0xb1ef1c <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x380>
+  b1ec0a: 4628         	mov	r0, r5
+  b1ec0c: 4479         	add	r1, pc
+  b1ec0e: f464 fa73    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x39bb1a
+  b1ec12: 7801         	ldrb	r1, [r0]
+  b1ec14: 9405         	str	r4, [sp, #0x14]
+  b1ec16: 3903         	subs	r1, #0x3
+  b1ec18: 2904         	cmp	r1, #0x4
+  b1ec1a: d81d         	bhi	0xb1ec58 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0xbc> @ imm = #0x3a
+  b1ec1c: e8df f001    	tbb	[pc, r1]
+  b1ec20: 1909         	adds	r1, r1, r4
+  b1ec22: 0303         	lsls	r3, r0, #0xc
+  b1ec24: 0006         	movs	r6, r0
+  b1ec26: f8d0 8008    	ldr.w	r8, [r0, #0x8]
+  b1ec2a: e017         	b	0xb1ec5c <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0xc0> @ imm = #0x2e
+  b1ec2c: edd0 0b02    	vldr	d16, [r0, #8]
+  b1ec30: e00a         	b	0xb1ec48 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0xac> @ imm = #0x14
+  b1ec32: 6880         	ldr	r0, [r0, #0x8]
+  b1ec34: 7801         	ldrb	r1, [r0]
+  b1ec36: 07c9         	lsls	r1, r1, #0x1f
+  b1ec38: bf0c         	ite	eq
+  b1ec3a: 3001         	addeq	r0, #0x1
+  b1ec3c: 6880         	ldrne	r0, [r0, #0x8]
+  b1ec3e: 2100         	movs	r1, #0x0
+  b1ec40: f6f2 e782    	blx	0x611b48 <.plt+0x98>    @ imm = #-0x50d0fc
+  b1ec44: ec41 0b30    	vmov	d16, r0, r1
+  b1ec48: eebd 0be0    	vcvt.s32.f64	s0, d16
+  b1ec4c: ee10 8a10    	vmov	r8, s0
+  b1ec50: e004         	b	0xb1ec5c <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0xc0> @ imm = #0x8
+  b1ec52: f890 8008    	ldrb.w	r8, [r0, #0x8]
+  b1ec56: e001         	b	0xb1ec5c <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0xc0> @ imm = #0x2
+  b1ec58: f04f 0800    	mov.w	r8, #0x0
+  b1ec5c: 49b0         	ldr	r1, [pc, #0x2c0]        @ 0xb1ef20 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x384>
+  b1ec5e: 4628         	mov	r0, r5
+  b1ec60: 4479         	add	r1, pc
+  b1ec62: f464 fa49    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x39bb6e
+  b1ec66: 7801         	ldrb	r1, [r0]
+  b1ec68: 2400         	movs	r4, #0x0
+  b1ec6a: 3903         	subs	r1, #0x3
+  b1ec6c: 2904         	cmp	r1, #0x4
+  b1ec6e: d81b         	bhi	0xb1eca8 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x10c> @ imm = #0x36
+  b1ec70: e8df f001    	tbb	[pc, r1]
+  b1ec74: 1808         	adds	r0, r1, r0
+  b1ec76: 0303         	lsls	r3, r0, #0xc
+  b1ec78: 0005         	movs	r5, r0
+  b1ec7a: 6886         	ldr	r6, [r0, #0x8]
+  b1ec7c: e015         	b	0xb1ecaa <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x10e> @ imm = #0x2a
+  b1ec7e: edd0 0b02    	vldr	d16, [r0, #8]
+  b1ec82: e00a         	b	0xb1ec9a <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0xfe> @ imm = #0x14
+  b1ec84: 6880         	ldr	r0, [r0, #0x8]
+  b1ec86: 7801         	ldrb	r1, [r0]
+  b1ec88: 07c9         	lsls	r1, r1, #0x1f
+  b1ec8a: bf0c         	ite	eq
+  b1ec8c: 3001         	addeq	r0, #0x1
+  b1ec8e: 6880         	ldrne	r0, [r0, #0x8]
+  b1ec90: 2100         	movs	r1, #0x0
+  b1ec92: f6f2 e75a    	blx	0x611b48 <.plt+0x98>    @ imm = #-0x50d14c
+  b1ec96: ec41 0b30    	vmov	d16, r0, r1
+  b1ec9a: eebc 0be0    	vcvt.u32.f64	s0, d16
+  b1ec9e: ee10 6a10    	vmov	r6, s0
+  b1eca2: e002         	b	0xb1ecaa <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x10e> @ imm = #0x4
+  b1eca4: 7a06         	ldrb	r6, [r0, #0x8]
+  b1eca6: e000         	b	0xb1ecaa <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x10e> @ imm = #0x0
+  b1eca8: 2600         	movs	r6, #0x0
+  b1ecaa: 499e         	ldr	r1, [pc, #0x278]        @ 0xb1ef24 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x388>
+  b1ecac: 4628         	mov	r0, r5
+  b1ecae: 4479         	add	r1, pc
+  b1ecb0: f464 fa22    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x39bbbc
+  b1ecb4: e9cd 440c    	strd	r4, r4, [sp, #48]
+  b1ecb8: 940e         	str	r4, [sp, #0x38]
+  b1ecba: a90c         	add	r1, sp, #0x30
+  b1ecbc: f7f9 f724    	bl	0x718b08 <_ZN8nlohmann6detail9from_jsonINS_10basic_jsonINSt6__ndk13mapENS3_6vectorENS3_12basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEEbxydS9_NS_14adl_serializerENS5_IhNS9_IhEEEEEEEEvRKT_RNSG_8string_tE> @ imm = #-0x4061b8
+  b1ecc0: 2018         	movs	r0, #0x18
+  b1ecc2: f2dc eade    	blx	0xdfb280 <_ZN11CSRSceneGem9SetToggleEh+0x198> @ imm = #0x2dc5bc
+  b1ecc6: 4683         	mov	r11, r0
+  b1ecc8: 4897         	ldr	r0, [pc, #0x25c]        @ 0xb1ef28 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x38c>
+  b1ecca: 2100         	movs	r1, #0x0
+  b1eccc: 46c1         	mov	r9, r8
+  b1ecce: 4478         	add	r0, pc
+  b1ecd0: f8cb 1008    	str.w	r1, [r11, #0x8]
+  b1ecd4: f8cb 8010    	str.w	r8, [r11, #0x10]
+  b1ecd8: 465d         	mov	r5, r11
+  b1ecda: 6800         	ldr	r0, [r0]
+  b1ecdc: 46d8         	mov	r8, r11
+  b1ecde: f8cb 6014    	str.w	r6, [r11, #0x14]
+  b1ece2: f100 0208    	add.w	r2, r0, #0x8
+  b1ece6: f89d 0030    	ldrb.w	r0, [sp, #0x30]
+  b1ecea: f8cb 2000    	str.w	r2, [r11]
+  b1ecee: f845 1f04    	str	r1, [r5, #4]!
+  b1ecf2: f848 af0c    	str	r10, [r8, #12]!
+  b1ecf6: 07c0         	lsls	r0, r0, #0x1f
+  b1ecf8: e9cd 1106    	strd	r1, r1, [sp, #24]
+  b1ecfc: 9602         	str	r6, [sp, #0x8]
+  b1ecfe: 9108         	str	r1, [sp, #0x20]
+  b1ed00: f8cd a00c    	str.w	r10, [sp, #0xc]
+  b1ed04: 9201         	str	r2, [sp, #0x4]
+  b1ed06: d106         	bne	0xb1ed16 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x17a> @ imm = #0xc
+  b1ed08: eddd 0b0c    	vldr	d16, [sp, #48]
+  b1ed0c: 980e         	ldr	r0, [sp, #0x38]
+  b1ed0e: 9008         	str	r0, [sp, #0x20]
+  b1ed10: edcd 0b06    	vstr	d16, [sp, #24]
+  b1ed14: e024         	b	0xb1ed60 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x1c4> @ imm = #0x48
+  b1ed16: 9e0d         	ldr	r6, [sp, #0x34]
+  b1ed18: f116 0f10    	cmn.w	r6, #0x10
+  b1ed1c: f080 80b5    	bhs.w	0xb1ee8a <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x2ee> @ imm = #0x16a
+  b1ed20: 990e         	ldr	r1, [sp, #0x38]
+  b1ed22: 2e0b         	cmp	r6, #0xb
+  b1ed24: d207         	bhs	0xb1ed36 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x19a> @ imm = #0xe
+  b1ed26: 0070         	lsls	r0, r6, #0x1
+  b1ed28: f88d 0018    	strb.w	r0, [sp, #0x18]
+  b1ed2c: a806         	add	r0, sp, #0x18
+  b1ed2e: f100 0401    	add.w	r4, r0, #0x1
+  b1ed32: b97e         	cbnz	r6, 0xb1ed54 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x1b8> @ imm = #0x1e
+  b1ed34: e012         	b	0xb1ed5c <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x1c0> @ imm = #0x24
+  b1ed36: f106 0010    	add.w	r0, r6, #0x10
+  b1ed3a: 9100         	str	r1, [sp]
+  b1ed3c: f020 0a0f    	bic	r10, r0, #0xf
+  b1ed40: 4650         	mov	r0, r10
+  b1ed42: f2dc ea9e    	blx	0xdfb280 <_ZN11CSRSceneGem9SetToggleEh+0x198> @ imm = #0x2dc53c
+  b1ed46: 4604         	mov	r4, r0
+  b1ed48: 9607         	str	r6, [sp, #0x1c]
+  b1ed4a: f04a 0001    	orr	r0, r10, #0x1
+  b1ed4e: 9006         	str	r0, [sp, #0x18]
+  b1ed50: 9408         	str	r4, [sp, #0x20]
+  b1ed52: 9900         	ldr	r1, [sp]
+  b1ed54: 4620         	mov	r0, r4
+  b1ed56: 4632         	mov	r2, r6
+  b1ed58: f6f2 e6cc    	blx	0x611af4 <.plt+0x44>    @ imm = #-0x50d268
+  b1ed5c: 2000         	movs	r0, #0x0
+  b1ed5e: 55a0         	strb	r0, [r4, r6]
+  b1ed60: 9e05         	ldr	r6, [sp, #0x14]
+  b1ed62: e9cd 8b09    	strd	r8, r11, [sp, #36]
+  b1ed66: 46b2         	mov	r10, r6
+  b1ed68: 3604         	adds	r6, #0x4
+  b1ed6a: a90f         	add	r1, sp, #0x3c
+  b1ed6c: aa06         	add	r2, sp, #0x18
+  b1ed6e: 4630         	mov	r0, r6
+  b1ed70: f003 ffa4    	bl	0xb22cbc <_ZNSt6__ndk16__treeINS_12__value_typeINS_12basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEENS_10shared_ptrIN11CSRMFishing5INVENEEEEENS_19__map_value_compareIS7_SC_NS_4lessIS7_EELb1EEENS5_ISC_EEE12__find_equalIS7_EERPNS_16__tree_node_baseIPvEERPNS_15__tree_end_nodeISN_EERKT_> @ imm = #0x3f48
+  b1ed74: 6805         	ldr	r5, [r0]
+  b1ed76: 4604         	mov	r4, r0
+  b1ed78: b10d         	cbz	r5, 0xb1ed7e <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x1e2> @ imm = #0x2
+  b1ed7a: 2600         	movs	r6, #0x0
+  b1ed7c: e02a         	b	0xb1edd4 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x238> @ imm = #0x54
+  b1ed7e: 2024         	movs	r0, #0x24
+  b1ed80: f2dc ea7e    	blx	0xdfb280 <_ZN11CSRSceneGem9SetToggleEh+0x198> @ imm = #0x2dc4fc
+  b1ed84: 4605         	mov	r5, r0
+  b1ed86: eddd 0b06    	vldr	d16, [sp, #24]
+  b1ed8a: 9808         	ldr	r0, [sp, #0x20]
+  b1ed8c: 2200         	movs	r2, #0x0
+  b1ed8e: 9909         	ldr	r1, [sp, #0x24]
+  b1ed90: f105 0c18    	add.w	r12, r5, #0x18
+  b1ed94: e9cd 2206    	strd	r2, r2, [sp, #24]
+  b1ed98: 9208         	str	r2, [sp, #0x20]
+  b1ed9a: 9b0a         	ldr	r3, [sp, #0x28]
+  b1ed9c: edc5 0b04    	vstr	d16, [r5, #16]
+  b1eda0: e88c 000b    	stm.w	r12, {r0, r1, r3}
+  b1eda4: 980f         	ldr	r0, [sp, #0x3c]
+  b1eda6: e9c5 2200    	strd	r2, r2, [r5]
+  b1edaa: e9cd 2209    	strd	r2, r2, [sp, #36]
+  b1edae: 60a8         	str	r0, [r5, #0x8]
+  b1edb0: 6025         	str	r5, [r4]
+  b1edb2: 6830         	ldr	r0, [r6]
+  b1edb4: 6800         	ldr	r0, [r0]
+  b1edb6: 2800         	cmp	r0, #0x0
+  b1edb8: bf1a         	itte	ne
+  b1edba: 6030         	strne	r0, [r6]
+  b1edbc: 6821         	ldrne	r1, [r4]
+  b1edbe: 4629         	moveq	r1, r5
+  b1edc0: f8da 0008    	ldr.w	r0, [r10, #0x8]
+  b1edc4: f7a9 f533    	bl	0x6c882e <_ZNSt6__ndk127__tree_balance_after_insertIPNS_16__tree_node_baseIPvEEEEvT_S5_> @ imm = #-0x45659a
+  b1edc8: f8da 000c    	ldr.w	r0, [r10, #0xc]
+  b1edcc: 2601         	movs	r6, #0x1
+  b1edce: 3001         	adds	r0, #0x1
+  b1edd0: f8ca 000c    	str.w	r0, [r10, #0xc]
+  b1edd4: 9c0a         	ldr	r4, [sp, #0x28]
+  b1edd6: b19c         	cbz	r4, 0xb1ee00 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x264> @ imm = #0x26
+  b1edd8: 1d20         	adds	r0, r4, #0x4
+  b1edda: f3bf 8f5b    	dmb	ish
+  b1edde: e850 1f00    	ldrex	r1, [r0]
+  b1ede2: 1e4a         	subs	r2, r1, #0x1
+  b1ede4: e840 2300    	strex	r3, r2, [r0]
+  b1ede8: 2b00         	cmp	r3, #0x0
+  b1edea: d1f8         	bne	0xb1edde <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x242> @ imm = #-0x10
+  b1edec: f3bf 8f5b    	dmb	ish
+  b1edf0: b931         	cbnz	r1, 0xb1ee00 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x264> @ imm = #0xc
+  b1edf2: 6820         	ldr	r0, [r4]
+  b1edf4: 6881         	ldr	r1, [r0, #0x8]
+  b1edf6: 4620         	mov	r0, r4
+  b1edf8: 4788         	blx	r1
+  b1edfa: 4620         	mov	r0, r4
+  b1edfc: f2dc ea98    	blx	0xdfb330 <_ZN11CSRSceneGem9SetToggleEh+0x248> @ imm = #0x2dc530
+  b1ee00: f89d 0018    	ldrb.w	r0, [sp, #0x18]
+  b1ee04: 07c0         	lsls	r0, r0, #0x1f
+  b1ee06: bf1c         	itt	ne
+  b1ee08: 9808         	ldrne	r0, [sp, #0x20]
+  b1ee0a: f2dc ea22    	blxne	0xdfb250 <_ZN11CSRSceneGem9SetToggleEh+0x168> @ imm = #0x2dc444
+  b1ee0e: b18e         	cbz	r6, 0xb1ee34 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x298> @ imm = #0x22
+  b1ee10: f89d 0030    	ldrb.w	r0, [sp, #0x30]
+  b1ee14: 07c0         	lsls	r0, r0, #0x1f
+  b1ee16: bf1c         	itt	ne
+  b1ee18: 980e         	ldrne	r0, [sp, #0x38]
+  b1ee1a: f2dc ea1a    	blxne	0xdfb250 <_ZN11CSRSceneGem9SetToggleEh+0x168> @ imm = #0x2dc434
+  b1ee1e: 9810         	ldr	r0, [sp, #0x40]
+  b1ee20: 9904         	ldr	r1, [sp, #0x10]
+  b1ee22: 6809         	ldr	r1, [r1]
+  b1ee24: 1a08         	subs	r0, r1, r0
+  b1ee26: bf02         	ittt	eq
+  b1ee28: b011         	addeq	sp, #0x44
+  b1ee2a: e8bd 0f00    	popeq.w	{r8, r9, r10, r11}
+  b1ee2e: bdf0         	popeq	{r4, r5, r6, r7, pc}
+  b1ee30: f6f2 e654    	blx	0x611adc <.plt+0x2c>    @ imm = #-0x50d358
+  b1ee34: 2018         	movs	r0, #0x18
+  b1ee36: f2dc ea24    	blx	0xdfb280 <_ZN11CSRSceneGem9SetToggleEh+0x198> @ imm = #0x2dc448
+  b1ee3a: 9a02         	ldr	r2, [sp, #0x8]
+  b1ee3c: 2100         	movs	r1, #0x0
+  b1ee3e: f8c0 9010    	str.w	r9, [r0, #0x10]
+  b1ee42: 6142         	str	r2, [r0, #0x14]
+  b1ee44: 9a01         	ldr	r2, [sp, #0x4]
+  b1ee46: e9c0 2100    	strd	r2, r1, [r0]
+  b1ee4a: 6081         	str	r1, [r0, #0x8]
+  b1ee4c: 4601         	mov	r1, r0
+  b1ee4e: 9a03         	ldr	r2, [sp, #0xc]
+  b1ee50: f841 2f0c    	str	r2, [r1, #12]!
+  b1ee54: 6a2c         	ldr	r4, [r5, #0x20]
+  b1ee56: e9c5 1007    	strd	r1, r0, [r5, #28]
+  b1ee5a: 2c00         	cmp	r4, #0x0
+  b1ee5c: d0d8         	beq	0xb1ee10 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x274> @ imm = #-0x50
+  b1ee5e: 1d20         	adds	r0, r4, #0x4
+  b1ee60: f3bf 8f5b    	dmb	ish
+  b1ee64: e850 1f00    	ldrex	r1, [r0]
+  b1ee68: 1e4a         	subs	r2, r1, #0x1
+  b1ee6a: e840 2300    	strex	r3, r2, [r0]
+  b1ee6e: 2b00         	cmp	r3, #0x0
+  b1ee70: d1f8         	bne	0xb1ee64 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x2c8> @ imm = #-0x10
+  b1ee72: 2900         	cmp	r1, #0x0
+  b1ee74: f3bf 8f5b    	dmb	ish
+  b1ee78: d1ca         	bne	0xb1ee10 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x274> @ imm = #-0x6c
+  b1ee7a: 6820         	ldr	r0, [r4]
+  b1ee7c: 6881         	ldr	r1, [r0, #0x8]
+  b1ee7e: 4620         	mov	r0, r4
+  b1ee80: 4788         	blx	r1
+  b1ee82: 4620         	mov	r0, r4
+  b1ee84: f2dc ea54    	blx	0xdfb330 <_ZN11CSRSceneGem9SetToggleEh+0x248> @ imm = #0x2dc4a8
+  b1ee88: e7c2         	b	0xb1ee10 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x274> @ imm = #-0x7c
+  b1ee8a: a806         	add	r0, sp, #0x18
+  b1ee8c: f7a9 f200    	bl	0x6c8290 <_ZNKSt6__ndk121__basic_string_commonILb1EE20__throw_length_errorEv> @ imm = #-0x456c00
+  b1ee90: 4604         	mov	r4, r0
+  b1ee92: f3bf 8f5b    	dmb	ish
+  b1ee96: e855 0f00    	ldrex	r0, [r5]
+  b1ee9a: 1e41         	subs	r1, r0, #0x1
+  b1ee9c: e845 1200    	strex	r2, r1, [r5]
+  b1eea0: 2a00         	cmp	r2, #0x0
+  b1eea2: d1f8         	bne	0xb1ee96 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x2fa> @ imm = #-0x10
+  b1eea4: f3bf 8f5b    	dmb	ish
+  b1eea8: bb70         	cbnz	r0, 0xb1ef08 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x36c> @ imm = #0x5c
+  b1eeaa: f8db 0000    	ldr.w	r0, [r11]
+  b1eeae: 6881         	ldr	r1, [r0, #0x8]
+  b1eeb0: 4658         	mov	r0, r11
+  b1eeb2: 4788         	blx	r1
+  b1eeb4: 4658         	mov	r0, r11
+  b1eeb6: f2dc ea3c    	blx	0xdfb330 <_ZN11CSRSceneGem9SetToggleEh+0x248> @ imm = #0x2dc478
+  b1eeba: e025         	b	0xb1ef08 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x36c> @ imm = #0x4a
+  b1eebc: e000         	b	0xb1eec0 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x324> @ imm = #0x0
+  b1eebe: e7ff         	b	0xb1eec0 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x324> @ imm = #-0x2
+  b1eec0: 4604         	mov	r4, r0
+  b1eec2: e021         	b	0xb1ef08 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x36c> @ imm = #0x42
+  b1eec4: c434         	stm	r4!, {r2, r4, r5}
+  b1eec6: 0168         	lsls	r0, r5, #0x5
+  b1eec8: c425         	stm	r4!, {r0, r2, r5}
+  b1eeca: 0124         	lsls	r4, r4, #0x4
+  b1eecc: 9d0a         	ldr	r5, [sp, #0x28]
+  b1eece: 4604         	mov	r4, r0
+  b1eed0: b19d         	cbz	r5, 0xb1eefa <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x35e> @ imm = #0x26
+  b1eed2: 1d28         	adds	r0, r5, #0x4
+  b1eed4: f3bf 8f5b    	dmb	ish
+  b1eed8: e850 1f00    	ldrex	r1, [r0]
+  b1eedc: 1e4a         	subs	r2, r1, #0x1
+  b1eede: e840 2300    	strex	r3, r2, [r0]
+  b1eee2: 2b00         	cmp	r3, #0x0
+  b1eee4: d1f8         	bne	0xb1eed8 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x33c> @ imm = #-0x10
+  b1eee6: f3bf 8f5b    	dmb	ish
+  b1eeea: b931         	cbnz	r1, 0xb1eefa <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x35e> @ imm = #0xc
+  b1eeec: 6828         	ldr	r0, [r5]
+  b1eeee: 6881         	ldr	r1, [r0, #0x8]
+  b1eef0: 4628         	mov	r0, r5
+  b1eef2: 4788         	blx	r1
+  b1eef4: 4628         	mov	r0, r5
+  b1eef6: f2dc ea1c    	blx	0xdfb330 <_ZN11CSRSceneGem9SetToggleEh+0x248> @ imm = #0x2dc438
+  b1eefa: f89d 0018    	ldrb.w	r0, [sp, #0x18]
+  b1eefe: 07c0         	lsls	r0, r0, #0x1f
+  b1ef00: d002         	beq	0xb1ef08 <_ZN11CSRMFishing11UpdateInvenERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x36c> @ imm = #0x4
+  b1ef02: 9808         	ldr	r0, [sp, #0x20]
+  b1ef04: f2dc e9a4    	blx	0xdfb250 <_ZN11CSRSceneGem9SetToggleEh+0x168> @ imm = #0x2dc348
+  b1ef08: f89d 0030    	ldrb.w	r0, [sp, #0x30]
+  b1ef0c: 07c0         	lsls	r0, r0, #0x1f
+  b1ef0e: bf1c         	itt	ne
+  b1ef10: 980e         	ldrne	r0, [sp, #0x38]
+  b1ef12: f2dc e99e    	blxne	0xdfb250 <_ZN11CSRSceneGem9SetToggleEh+0x168> @ imm = #0x2dc33c
+  b1ef16: 4620         	mov	r0, r4
+  b1ef18: f2dc e9c2    	blx	0xdfb2a0 <_ZN11CSRSceneGem9SetToggleEh+0x1b8> @ imm = #0x2dc384
+  b1ef1c: c3d9         	stm	r3!, {r0, r3, r4, r6, r7}
+  b1ef1e: 0124         	lsls	r4, r4, #0x4
+  b1ef20: c38b         	stm	r3!, {r0, r1, r3, r7}
+  b1ef22: 0124         	lsls	r4, r4, #0x4
+  b1ef24: c2a5         	stm	r2!, {r0, r2, r5, r7}
+  b1ef26: 0124         	lsls	r4, r4, #0x4
+  b1ef28: ea2e 0168    	bic.w	r1, lr, r8, asr #1
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00b1efd0 <_ZNK11CSRMFishing7GetBaitENS_4LUREE>:
+  b1efd0: b580         	push	{r7, lr}
+  b1efd2: 466f         	mov	r7, sp
+  b1efd4: 4b04         	ldr	r3, [pc, #0x10]         @ 0xb1efe8 <_ZNK11CSRMFishing7GetBaitENS_4LUREE+0x18>
+  b1efd6: 2a00         	cmp	r2, #0x0
+  b1efd8: 4904         	ldr	r1, [pc, #0x10]         @ 0xb1efec <_ZNK11CSRMFishing7GetBaitENS_4LUREE+0x1c>
+  b1efda: 447b         	add	r3, pc
+  b1efdc: 4479         	add	r1, pc
+  b1efde: bf18         	it	ne
+  b1efe0: 4619         	movne	r1, r3
+  b1efe2: f7a7 f007    	bl	0x6c5ff4 <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2IDnEEPKc> @ imm = #-0x458ff2
+  b1efe6: bd80         	pop	{r7, pc}
+  b1efe8: c041         	stm	r0!, {r0, r6}
+  b1efea: 0124         	lsls	r4, r4, #0x4
+  b1efec: c039         	stm	r0!, {r0, r3, r4, r5}
+  b1efee: 0124         	lsls	r4, r4, #0x4
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00e5ea48 <_ZN16CSRSceneMFishing10UpdateBaitEv>:
+  e5ea80: f4c1 fb30    	bl	0xb200e4 <_ZN11CSRMFishing3getEv> @ imm = #-0x33e9a0
+  e5ea84: 4601         	mov	r1, r0
+  e5ea86: a806         	add	r0, sp, #0x18
+  e5ea88: 2201         	movs	r2, #0x1
+  e5ea8a: f4c0 faa1    	bl	0xb1efd0 <_ZNK11CSRMFishing7GetBaitENS_4LUREE> @ imm = #-0x33fabe
+  e5ea8e: a906         	add	r1, sp, #0x18
+  e5ea90: 4630         	mov	r0, r6
+  e5ea92: f47d fff5    	bl	0xadca80 <_ZN12CSRInventory14GetInstItemCntERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE> @ imm = #-0x382016
+  e5ea96: 4606         	mov	r6, r0
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00cec760 <_ZN23CSRPopUpMFishingBuyItem7SetLureEN11CSRMFishing4LUREE>:
+  cec958: f633 fbc4    	bl	0xb200e4 <_ZN11CSRMFishing3getEv> @ imm = #-0x1cc878
+  cec95c: 4601         	mov	r1, r0
+  cec95e: a832         	add	r0, sp, #0xc8
+  cec960: 462a         	mov	r2, r5
+  cec962: f632 fb35    	bl	0xb1efd0 <_ZNK11CSRMFishing7GetBaitENS_4LUREE> @ imm = #-0x1cd996
+  cec966: f5f4 ffa9    	bl	0xae18bc <_ZN11CSRItemInfo3getEv> @ imm = #-0x20b0ae
+  cec96a: a932         	add	r1, sp, #0xc8
+  cec96c: f5f4 fb96    	bl	0xae109c <_ZNK11CSRItemInfo11GetItemDataERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE> @ imm = #-0x20b8d4
+  cec970: 4681         	mov	r9, r0
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00b1f064 <_ZN11CSRMFishing7SetLureENS_4LUREE>:
+  b1f064: b5f0         	push	{r4, r5, r6, r7, lr}
+  b1f066: af03         	add	r7, sp, #0xc
+  b1f068: f84d bd04    	str	r11, [sp, #-4]!
+  b1f06c: b084         	sub	sp, #0x10
+  b1f06e: 4605         	mov	r5, r0
+  b1f070: 481e         	ldr	r0, [pc, #0x78]         @ 0xb1f0ec <_ZN11CSRMFishing7SetLureENS_4LUREE+0x88>
+  b1f072: 466c         	mov	r4, sp
+  b1f074: 2900         	cmp	r1, #0x0
+  b1f076: 4478         	add	r0, pc
+  b1f078: 6806         	ldr	r6, [r0]
+  b1f07a: 481d         	ldr	r0, [pc, #0x74]         @ 0xb1f0f0 <_ZN11CSRMFishing7SetLureENS_4LUREE+0x8c>
+  b1f07c: 6833         	ldr	r3, [r6]
+  b1f07e: 4478         	add	r0, pc
+  b1f080: 4a1c         	ldr	r2, [pc, #0x70]         @ 0xb1f0f4 <_ZN11CSRMFishing7SetLureENS_4LUREE+0x90>
+  b1f082: 9303         	str	r3, [sp, #0xc]
+  b1f084: 447a         	add	r2, pc
+  b1f086: f8c5 1090    	str.w	r1, [r5, #0x90]
+  b1f08a: bf18         	it	ne
+  b1f08c: 4602         	movne	r2, r0
+  b1f08e: 4620         	mov	r0, r4
+  b1f090: 4611         	mov	r1, r2
+  b1f092: f7a6 f7af    	bl	0x6c5ff4 <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2IDnEEPKc> @ imm = #-0x4590a2
+  b1f096: f105 005c    	add.w	r0, r5, #0x5c
+  b1f09a: 42a0         	cmp	r0, r4
+  b1f09c: d00a         	beq	0xb1f0b4 <_ZN11CSRMFishing7SetLureENS_4LUREE+0x50> @ imm = #0x14
+  b1f09e: f89d 3000    	ldrb.w	r3, [sp]
+  b1f0a2: e9dd 2101    	ldrd	r2, r1, [sp, #4]
+  b1f0a6: f013 0501    	ands	r5, r3, #0x1
+  b1f0aa: bf04         	itt	eq
+  b1f0ac: 1c61         	addeq	r1, r4, #0x1
+  b1f0ae: 085a         	lsreq	r2, r3, #0x1
+  b1f0b0: f7a9 f120    	bl	0x6c82f4 <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKcj> @ imm = #-0x456dc0
+  b1f0b4: f89d 0000    	ldrb.w	r0, [sp]
+  b1f0b8: 07c0         	lsls	r0, r0, #0x1f
+  b1f0ba: bf1c         	itt	ne
+  b1f0bc: 9802         	ldrne	r0, [sp, #0x8]
+  b1f0be: f2dc e8c8    	blxne	0xdfb250 <_ZN11CSRSceneGem9SetToggleEh+0x168> @ imm = #0x2dc190
+  b1f0c2: 9803         	ldr	r0, [sp, #0xc]
+  b1f0c4: 6831         	ldr	r1, [r6]
+  b1f0c6: 1a08         	subs	r0, r1, r0
+  b1f0c8: bf02         	ittt	eq
+  b1f0ca: b004         	addeq	sp, #0x10
+  b1f0cc: f85d bb04    	ldreq	r11, [sp], #4
+  b1f0d0: bdf0         	popeq	{r4, r5, r6, r7, pc}
+  b1f0d2: f6f2 e504    	blx	0x611adc <.plt+0x2c>    @ imm = #-0x50d5f8
+  b1f0d6: 4604         	mov	r4, r0
+  b1f0d8: f89d 0000    	ldrb.w	r0, [sp]
+  b1f0dc: 07c0         	lsls	r0, r0, #0x1f
+  b1f0de: bf1c         	itt	ne
+  b1f0e0: 9802         	ldrne	r0, [sp, #0x8]
+  b1f0e2: f2dc e8b6    	blxne	0xdfb250 <_ZN11CSRSceneGem9SetToggleEh+0x168> @ imm = #0x2dc16c
+  b1f0e6: 4620         	mov	r0, r4
+  b1f0e8: f2dc e8da    	blx	0xdfb2a0 <_ZN11CSRSceneGem9SetToggleEh+0x1b8> @ imm = #0x2dc1b4
+  b1f0ec: bf6a         	itet	vs
+  b1f0ee: 0168         	lslvs	r0, r5, #0x5
+  b1f0f0: bf9d         	ittte	ls
+  b1f0f2: 0124         	lslls	r4, r4, #0x4
+  b1f0f4: bf91         	iteee	ls
+  b1f0f6: 0124         	lslls	r4, r4, #0x4
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00b16cbc <_ZN11CSRMFishing12RequestBeginERKNSt6__ndk18functionIFviEEE>:
+  b16cbc: b5f0         	push	{r4, r5, r6, r7, lr}
+  b16cbe: af03         	add	r7, sp, #0xc
+  b16cc0: e92d 0f00    	push.w	{r8, r9, r10, r11}
+  b16cc4: f5ad 7d09    	sub.w	sp, sp, #0x224
+  b16cc8: 4683         	mov	r11, r0
+  b16cca: 48ca         	ldr	r0, [pc, #0x328]        @ 0xb16ff4 <_ZN11CSRMFishing12RequestBeginERKNSt6__ndk18functionIFviEEE+0x338>
+  b16ccc: 468a         	mov	r10, r1
+  b16cce: 4478         	add	r0, pc
+  b16cd0: 6800         	ldr	r0, [r0]
+  b16cd2: 9005         	str	r0, [sp, #0x14]
+  b16cd4: 6800         	ldr	r0, [r0]
+  b16cd6: 9088         	str	r0, [sp, #0x220]
+  b16cd8: e9db 0112    	ldrd	r0, r1, [r11, #72]
+  b16cdc: 4308         	orrs	r0, r1
+  b16cde: d11d         	bne	0xb16d1c <_ZN11CSRMFishing12RequestBeginERKNSt6__ndk18functionIFviEEE+0x60> @ imm = #0x3a
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00b16cbc <_ZN11CSRMFishing12RequestBeginERKNSt6__ndk18functionIFviEEE>:
+  b16e7e: 4967         	ldr	r1, [pc, #0x19c]        @ 0xb1701c <_ZN11CSRMFishing12RequestBeginERKNSt6__ndk18functionIFviEEE+0x360>
+  b16e80: 2200         	movs	r2, #0x0
+  b16e82: 9864         	ldr	r0, [sp, #0x190]
+  b16e84: 2607         	movs	r6, #0x7
+  b16e86: eddd 0b62    	vldr	d16, [sp, #392]
+  b16e8a: 4479         	add	r1, pc
+  b16e8c: e9cd 2262    	strd	r2, r2, [sp, #392]
+  b16e90: 9045         	str	r0, [sp, #0x114]
+  b16e92: 9264         	str	r2, [sp, #0x190]
+  b16e94: edcd 0b43    	vstr	d16, [sp, #268]
+  b16e98: f104 00a8    	add.w	r0, r4, #0xa8
+  b16e9c: f7af f0aa    	bl	0x6c5ff4 <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2IDnEEPKc> @ imm = #-0x450eac
+  b16ea0: f104 00b4    	add.w	r0, r4, #0xb4
+  b16ea4: f10b 015c    	add.w	r1, r11, #0x5c
+  b16ea8: f7b1 f028    	bl	0x6c7efc <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2ERKS5_> @ imm = #-0x44efb0
+  b16eac: f10d 0924    	add.w	r9, sp, #0x24
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00e5e444 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase>:
+  e5e444: b5f0         	push	{r4, r5, r6, r7, lr}
+  e5e446: af03         	add	r7, sp, #0xc
+  e5e448: e92d 0b00    	push.w	{r8, r9, r11}
+  e5e44c: b084         	sub	sp, #0x10
+  e5e44e: 4681         	mov	r9, r0
+  e5e450: 48aa         	ldr	r0, [pc, #0x2a8]        @ 0xe5e6fc <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2b8>
+  e5e452: 2100         	movs	r1, #0x0
+  e5e454: 4478         	add	r0, pc
+  e5e456: 6806         	ldr	r6, [r0]
+  e5e458: 6830         	ldr	r0, [r6]
+  e5e45a: 9003         	str	r0, [sp, #0xc]
+  e5e45c: 2008         	movs	r0, #0x8
+  e5e45e: e9d2 459a    	ldrd	r4, r5, [r2, #616]
+  e5e462: 4aa7         	ldr	r2, [pc, #0x29c]        @ 0xe5e700 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2bc>
+  e5e464: 447a         	add	r2, pc
+  e5e466: f470 f6c7    	bl	0x6cf1f8 <_ZN8CMHashID5Crc32EyPKc> @ imm = #-0x78f272
+  e5e46a: 4060         	eors	r0, r4
+  e5e46c: ea65 0000    	orn	r0, r5, r0
+  e5e470: b9a8         	cbnz	r0, 0xe5e49e <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x5a> @ imm = #0x2a
+  e5e472: 48a4         	ldr	r0, [pc, #0x290]        @ 0xe5e704 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2c0>
+  e5e474: 4478         	add	r0, pc
+  e5e476: 6800         	ldr	r0, [r0]
+  e5e478: 6800         	ldr	r0, [r0]
+  e5e47a: 6880         	ldr	r0, [r0, #0x8]
+  e5e47c: 9903         	ldr	r1, [sp, #0xc]
+  e5e47e: 6832         	ldr	r2, [r6]
+  e5e480: 1a51         	subs	r1, r2, r1
+  e5e482: bf01         	itttt	eq
+  e5e484: 2145         	moveq	r1, #0x45
+  e5e486: f04f 427f    	moveq.w	r2, #0xff000000
+  e5e48a: b004         	addeq	sp, #0x10
+  e5e48c: e8bd 0b00    	popeq.w	{r8, r9, r11}
+  e5e490: bf04         	itt	eq
+  e5e492: e8bd 40f0    	popeq.w	{r4, r5, r6, r7, lr}
+  e5e496: f045 bdd9    	beq.w	0xea404c <_ZN11CSRSceneMgr18PushSceneFadeOutInEN8CSRScene4TYPEEj> @ imm = #0x45bb2
+  e5e49a: f7b3 cb20    	blx	0x611adc <.plt+0x2c>    @ imm = #-0x84c9c0
+  e5e49e: 4a9a         	ldr	r2, [pc, #0x268]        @ 0xe5e708 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2c4>
+  e5e4a0: 200a         	movs	r0, #0xa
+  e5e4a2: 2100         	movs	r1, #0x0
+  e5e4a4: 447a         	add	r2, pc
+  e5e4a6: f470 f6a7    	bl	0x6cf1f8 <_ZN8CMHashID5Crc32EyPKc> @ imm = #-0x78f2b2
+  e5e4aa: 4060         	eors	r0, r4
+  e5e4ac: ea65 0000    	orn	r0, r5, r0
+  e5e4b0: b978         	cbnz	r0, 0xe5e4d2 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x8e> @ imm = #0x1e
+  e5e4b2: 9803         	ldr	r0, [sp, #0xc]
+  e5e4b4: 6831         	ldr	r1, [r6]
+  e5e4b6: 1a08         	subs	r0, r1, r0
+  e5e4b8: bf01         	itttt	eq
+  e5e4ba: 4648         	moveq	r0, r9
+  e5e4bc: 2101         	moveq	r1, #0x1
+  e5e4be: b004         	addeq	sp, #0x10
+  e5e4c0: e8bd 0b00    	popeq.w	{r8, r9, r11}
+  e5e4c4: bf04         	itt	eq
+  e5e4c6: e8bd 40f0    	popeq.w	{r4, r5, r6, r7, lr}
+  e5e4ca: f000 b92b    	beq.w	0xe5e724 <_ZN16CSRSceneMFishing20RequestBuyGlobalItemEN11CSRMFishing4LUREE> @ imm = #0x256
+  e5e4ce: f7b3 cb06    	blx	0x611adc <.plt+0x2c>    @ imm = #-0x84c9f4
+  e5e4d2: 4a8e         	ldr	r2, [pc, #0x238]        @ 0xe5e70c <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2c8>
+  e5e4d4: 2007         	movs	r0, #0x7
+  e5e4d6: 2100         	movs	r1, #0x0
+  e5e4d8: 447a         	add	r2, pc
+  e5e4da: f470 f68d    	bl	0x6cf1f8 <_ZN8CMHashID5Crc32EyPKc> @ imm = #-0x78f2e6
+  e5e4de: 4060         	eors	r0, r4
+  e5e4e0: ea65 0000    	orn	r0, r5, r0
+  e5e4e4: 2800         	cmp	r0, #0x0
+  e5e4e6: d142         	bne	0xe5e56e <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x12a> @ imm = #0x84
+  e5e4e8: f644 f752    	bl	0x8a3390 <_ZN10CSRDataMgr3getEv> @ imm = #-0x5bb15c
+  e5e4ec: f644 f0ea    	bl	0x8a26c4 <_ZN10CSRDataMgr11GetPlayDataEv> @ imm = #-0x5bbe2c
+  e5e4f0: e9d0 8547    	ldrd	r8, r5, [r0, #284]
+  e5e4f4: b13d         	cbz	r5, 0xe5e506 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0xc2> @ imm = #0xe
+  e5e4f6: 1d28         	adds	r0, r5, #0x4
+  e5e4f8: e850 1f00    	ldrex	r1, [r0]
+  e5e4fc: 3101         	adds	r1, #0x1
+  e5e4fe: e840 1200    	strex	r2, r1, [r0]
+  e5e502: 2a00         	cmp	r2, #0x0
+  e5e504: d1f8         	bne	0xe5e4f8 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0xb4> @ imm = #-0x10
+  e5e506: f4c1 fded    	bl	0xb200e4 <_ZN11CSRMFishing3getEv> @ imm = #-0x33e426
+  e5e50a: 4601         	mov	r1, r0
+  e5e50c: 4668         	mov	r0, sp
+  e5e50e: 2200         	movs	r2, #0x0
+  e5e510: f4c0 fd5e    	bl	0xb1efd0 <_ZNK11CSRMFishing7GetBaitENS_4LUREE> @ imm = #-0x33f544
+  e5e514: 4669         	mov	r1, sp
+  e5e516: 4640         	mov	r0, r8
+  e5e518: f47e fab2    	bl	0xadca80 <_ZN12CSRInventory14GetInstItemCntERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE> @ imm = #-0x381a9c
+  e5e51c: 4680         	mov	r8, r0
+  e5e51e: f89d 0000    	ldrb.w	r0, [sp]
+  e5e522: 07c0         	lsls	r0, r0, #0x1f
+  e5e524: bf1c         	itt	ne
+  e5e526: 9802         	ldrne	r0, [sp, #0x8]
+  e5e528: f163 d78a    	blne	0x1bc2440 <_ZdlPv>      @ imm = #0xd63f14
+  e5e52c: b19d         	cbz	r5, 0xe5e556 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x112> @ imm = #0x26
+  e5e52e: 1d28         	adds	r0, r5, #0x4
+  e5e530: f3bf 8f5b    	dmb	ish
+  e5e534: e850 1f00    	ldrex	r1, [r0]
+  e5e538: 1e4a         	subs	r2, r1, #0x1
+  e5e53a: e840 2300    	strex	r3, r2, [r0]
+  e5e53e: 2b00         	cmp	r3, #0x0
+  e5e540: d1f8         	bne	0xe5e534 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0xf0> @ imm = #-0x10
+  e5e542: f3bf 8f5b    	dmb	ish
+  e5e546: b931         	cbnz	r1, 0xe5e556 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x112> @ imm = #0xc
+  e5e548: 6828         	ldr	r0, [r5]
+  e5e54a: 6881         	ldr	r1, [r0, #0x8]
+  e5e54c: 4628         	mov	r0, r5
+  e5e54e: 4788         	blx	r1
+  e5e550: 4628         	mov	r0, r5
+  e5e552: f163 d3d3    	bl	0x1bc1cfc <_ZNSt6__ndk119__shared_weak_count14__release_weakEv> @ imm = #0xd637a6
+  e5e556: f1b8 0f00    	cmp.w	r8, #0x0
+  e5e55a: d05b         	beq	0xe5e614 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x1d0> @ imm = #0xb6
+  e5e55c: f8d9 0000    	ldr.w	r0, [r9]
+  e5e560: 6cc1         	ldr	r1, [r0, #0x4c]
+  e5e562: 4648         	mov	r0, r9
+  e5e564: 4788         	blx	r1
+  e5e566: 486b         	ldr	r0, [pc, #0x1ac]        @ 0xe5e714 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2d0>
+  e5e568: 2148         	movs	r1, #0x48
+  e5e56a: 4478         	add	r0, pc
+  e5e56c: e04c         	b	0xe5e608 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x1c4> @ imm = #0x98
+  e5e56e: 4a6a         	ldr	r2, [pc, #0x1a8]        @ 0xe5e718 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2d4>
+  e5e570: 2007         	movs	r0, #0x7
+  e5e572: 2100         	movs	r1, #0x0
+  e5e574: 447a         	add	r2, pc
+  e5e576: f470 f63f    	bl	0x6cf1f8 <_ZN8CMHashID5Crc32EyPKc> @ imm = #-0x78f382
+  e5e57a: 4060         	eors	r0, r4
+  e5e57c: ea65 0000    	orn	r0, r5, r0
+  e5e580: 2800         	cmp	r0, #0x0
+  e5e582: d16b         	bne	0xe5e65c <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x218> @ imm = #0xd6
+  e5e584: f644 f704    	bl	0x8a3390 <_ZN10CSRDataMgr3getEv> @ imm = #-0x5bb1f8
+  e5e588: f644 f09c    	bl	0x8a26c4 <_ZN10CSRDataMgr11GetPlayDataEv> @ imm = #-0x5bbec8
+  e5e58c: e9d0 8547    	ldrd	r8, r5, [r0, #284]
+  e5e590: b13d         	cbz	r5, 0xe5e5a2 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x15e> @ imm = #0xe
+  e5e592: 1d28         	adds	r0, r5, #0x4
+  e5e594: e850 1f00    	ldrex	r1, [r0]
+  e5e598: 3101         	adds	r1, #0x1
+  e5e59a: e840 1200    	strex	r2, r1, [r0]
+  e5e59e: 2a00         	cmp	r2, #0x0
+  e5e5a0: d1f8         	bne	0xe5e594 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x150> @ imm = #-0x10
+  e5e5a2: f4c1 fd9f    	bl	0xb200e4 <_ZN11CSRMFishing3getEv> @ imm = #-0x33e4c2
+  e5e5a6: 4601         	mov	r1, r0
+  e5e5a8: 4668         	mov	r0, sp
+  e5e5aa: 2201         	movs	r2, #0x1
+  e5e5ac: f4c0 fd10    	bl	0xb1efd0 <_ZNK11CSRMFishing7GetBaitENS_4LUREE> @ imm = #-0x33f5e0
+  e5e5b0: 4669         	mov	r1, sp
+  e5e5b2: 4640         	mov	r0, r8
+  e5e5b4: f47e fa64    	bl	0xadca80 <_ZN12CSRInventory14GetInstItemCntERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE> @ imm = #-0x381b38
+  e5e5b8: 4680         	mov	r8, r0
+  e5e5ba: f89d 0000    	ldrb.w	r0, [sp]
+  e5e5be: 07c0         	lsls	r0, r0, #0x1f
+  e5e5c0: bf1c         	itt	ne
+  e5e5c2: 9802         	ldrne	r0, [sp, #0x8]
+  e5e5c4: f163 d73c    	blne	0x1bc2440 <_ZdlPv>      @ imm = #0xd63e78
+  e5e5c8: b19d         	cbz	r5, 0xe5e5f2 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x1ae> @ imm = #0x26
+  e5e5ca: 1d28         	adds	r0, r5, #0x4
+  e5e5cc: f3bf 8f5b    	dmb	ish
+  e5e5d0: e850 1f00    	ldrex	r1, [r0]
+  e5e5d4: 1e4a         	subs	r2, r1, #0x1
+  e5e5d6: e840 2300    	strex	r3, r2, [r0]
+  e5e5da: 2b00         	cmp	r3, #0x0
+  e5e5dc: d1f8         	bne	0xe5e5d0 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x18c> @ imm = #-0x10
+  e5e5de: f3bf 8f5b    	dmb	ish
+  e5e5e2: b931         	cbnz	r1, 0xe5e5f2 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x1ae> @ imm = #0xc
+  e5e5e4: 6828         	ldr	r0, [r5]
+  e5e5e6: 6881         	ldr	r1, [r0, #0x8]
+  e5e5e8: 4628         	mov	r0, r5
+  e5e5ea: 4788         	blx	r1
+  e5e5ec: 4628         	mov	r0, r5
+  e5e5ee: f163 d385    	bl	0x1bc1cfc <_ZNSt6__ndk119__shared_weak_count14__release_weakEv> @ imm = #0xd6370a
+  e5e5f2: f1b8 0f00    	cmp.w	r8, #0x0
+  e5e5f6: d01c         	beq	0xe5e632 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x1ee> @ imm = #0x38
+  e5e5f8: f8d9 0000    	ldr.w	r0, [r9]
+  e5e5fc: 6cc1         	ldr	r1, [r0, #0x4c]
+  e5e5fe: 4648         	mov	r0, r9
+  e5e600: 4788         	blx	r1
+  e5e602: 4847         	ldr	r0, [pc, #0x11c]        @ 0xe5e720 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2dc>
+  e5e604: 2147         	movs	r1, #0x47
+  e5e606: 4478         	add	r0, pc
+  e5e608: 6800         	ldr	r0, [r0]
+  e5e60a: 6800         	ldr	r0, [r0]
+  e5e60c: 6880         	ldr	r0, [r0, #0x8]
+  e5e60e: f045 fdfe    	bl	0xea420e <_ZN11CSRSceneMgr17PushSceneFadeNoneEN8CSRScene4TYPEE> @ imm = #0x45bfc
+  e5e612: e023         	b	0xe5e65c <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x218> @ imm = #0x46
+  e5e614: f525 f244    	bl	0x783aa0 <_ZN10CGMDataMgr3getEv> @ imm = #-0x6dab78
+  e5e618: 4a3d         	ldr	r2, [pc, #0xf4]         @ 0xe5e710 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2cc>
+  e5e61a: 466c         	mov	r4, sp
+  e5e61c: 4601         	mov	r1, r0
+  e5e61e: 4620         	mov	r0, r4
+  e5e620: 447a         	add	r2, pc
+  e5e622: f524 f33f    	bl	0x782ca4 <_ZNK10CGMDataMgr16GetLocalizedTextEPKc> @ imm = #-0x6db982
+  e5e626: 4620         	mov	r0, r4
+  e5e628: 2100         	movs	r1, #0x0
+  e5e62a: 2200         	movs	r2, #0x0
+  e5e62c: f23d ff02    	bl	0x109c434 <_Z5ToastRKNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEEhf> @ imm = #0x23de04
+  e5e630: e00d         	b	0xe5e64e <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x20a> @ imm = #0x1a
+  e5e632: f525 f235    	bl	0x783aa0 <_ZN10CGMDataMgr3getEv> @ imm = #-0x6dab96
+  e5e636: 4a39         	ldr	r2, [pc, #0xe4]         @ 0xe5e71c <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2d8>
+  e5e638: 466c         	mov	r4, sp
+  e5e63a: 4601         	mov	r1, r0
+  e5e63c: 4620         	mov	r0, r4
+  e5e63e: 447a         	add	r2, pc
+  e5e640: f524 f330    	bl	0x782ca4 <_ZNK10CGMDataMgr16GetLocalizedTextEPKc> @ imm = #-0x6db9a0
+  e5e644: 4620         	mov	r0, r4
+  e5e646: 2100         	movs	r1, #0x0
+  e5e648: 2200         	movs	r2, #0x0
+  e5e64a: f23d fef3    	bl	0x109c434 <_Z5ToastRKNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEEhf> @ imm = #0x23dde6
+  e5e64e: f89d 0000    	ldrb.w	r0, [sp]
+  e5e652: 07c0         	lsls	r0, r0, #0x1f
+  e5e654: d002         	beq	0xe5e65c <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x218> @ imm = #0x4
+  e5e656: 9802         	ldr	r0, [sp, #0x8]
+  e5e658: f163 d6f2    	bl	0x1bc2440 <_ZdlPv>      @ imm = #0xd63de4
+  e5e65c: 9803         	ldr	r0, [sp, #0xc]
+  e5e65e: 6831         	ldr	r1, [r6]
+  e5e660: 1a08         	subs	r0, r1, r0
+  e5e662: bf02         	ittt	eq
+  e5e664: b004         	addeq	sp, #0x10
+  e5e666: e8bd 0b00    	popeq.w	{r8, r9, r11}
+  e5e66a: bdf0         	popeq	{r4, r5, r6, r7, pc}
+  e5e66c: f7b3 ca36    	blx	0x611adc <.plt+0x2c>    @ imm = #-0x84cb94
+  e5e670: e7ff         	b	0xe5e672 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x22e> @ imm = #-0x2
+  e5e672: 4604         	mov	r4, r0
+  e5e674: f89d 0000    	ldrb.w	r0, [sp]
+  e5e678: 07c0         	lsls	r0, r0, #0x1f
+  e5e67a: d03c         	beq	0xe5e6f6 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2b2> @ imm = #0x78
+  e5e67c: 9802         	ldr	r0, [sp, #0x8]
+  e5e67e: f163 d6df    	bl	0x1bc2440 <_ZdlPv>      @ imm = #0xd63dbe
+  e5e682: 4620         	mov	r0, r4
+  e5e684: f172 d6ae    	bl	0x1bd13e4 <__cxa_demangle+0x8240> @ imm = #0xd72d5c
+  e5e688: 4604         	mov	r4, r0
+  e5e68a: f89d 0000    	ldrb.w	r0, [sp]
+  e5e68e: 07c0         	lsls	r0, r0, #0x1f
+  e5e690: bf1c         	itt	ne
+  e5e692: 9802         	ldrne	r0, [sp, #0x8]
+  e5e694: f163 d6d4    	blne	0x1bc2440 <_ZdlPv>      @ imm = #0xd63da8
+  e5e698: b915         	cbnz	r5, 0xe5e6a0 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x25c> @ imm = #0x4
+  e5e69a: e02c         	b	0xe5e6f6 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2b2> @ imm = #0x58
+  e5e69c: 4604         	mov	r4, r0
+  e5e69e: b355         	cbz	r5, 0xe5e6f6 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2b2> @ imm = #0x54
+  e5e6a0: 1d28         	adds	r0, r5, #0x4
+  e5e6a2: f3bf 8f5b    	dmb	ish
+  e5e6a6: e850 1f00    	ldrex	r1, [r0]
+  e5e6aa: 1e4a         	subs	r2, r1, #0x1
+  e5e6ac: e840 2300    	strex	r3, r2, [r0]
+  e5e6b0: 2b00         	cmp	r3, #0x0
+  e5e6b2: d1f8         	bne	0xe5e6a6 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x262> @ imm = #-0x10
+  e5e6b4: e015         	b	0xe5e6e2 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x29e> @ imm = #0x2a
+  e5e6b6: 4604         	mov	r4, r0
+  e5e6b8: f89d 0000    	ldrb.w	r0, [sp]
+  e5e6bc: 07c0         	lsls	r0, r0, #0x1f
+  e5e6be: bf1c         	itt	ne
+  e5e6c0: 9802         	ldrne	r0, [sp, #0x8]
+  e5e6c2: f163 d6bd    	blne	0x1bc2440 <_ZdlPv>      @ imm = #0xd63d7a
+  e5e6c6: b915         	cbnz	r5, 0xe5e6ce <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x28a> @ imm = #0x4
+  e5e6c8: e015         	b	0xe5e6f6 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2b2> @ imm = #0x2a
+  e5e6ca: 4604         	mov	r4, r0
+  e5e6cc: b19d         	cbz	r5, 0xe5e6f6 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2b2> @ imm = #0x26
+  e5e6ce: 1d28         	adds	r0, r5, #0x4
+  e5e6d0: f3bf 8f5b    	dmb	ish
+  e5e6d4: e850 1f00    	ldrex	r1, [r0]
+  e5e6d8: 1e4a         	subs	r2, r1, #0x1
+  e5e6da: e840 2300    	strex	r3, r2, [r0]
+  e5e6de: 2b00         	cmp	r3, #0x0
+  e5e6e0: d1f8         	bne	0xe5e6d4 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x290> @ imm = #-0x10
+  e5e6e2: f3bf 8f5b    	dmb	ish
+  e5e6e6: b931         	cbnz	r1, 0xe5e6f6 <_ZN16CSRSceneMFishing13OnButtonClickEP8CMUIViewP8CMUIBase+0x2b2> @ imm = #0xc
+  e5e6e8: 6828         	ldr	r0, [r5]
+  e5e6ea: 6881         	ldr	r1, [r0, #0x8]
+  e5e6ec: 4628         	mov	r0, r5
+  e5e6ee: 4788         	blx	r1
+  e5e6f0: 4628         	mov	r0, r5
+  e5e6f2: f163 d303    	bl	0x1bc1cfc <_ZNSt6__ndk119__shared_weak_count14__release_weakEv> @ imm = #0xd63606
+  e5e6f6: 4620         	mov	r0, r4
+  e5e6f8: f172 d674    	bl	0x1bd13e4 <__cxa_demangle+0x8240> @ imm = #0xd72ce8
+  e5e6fc: cb8c         	ldm	r3, {r2, r3, r7}
+  e5e6fe: 0134         	lsls	r4, r6, #0x4
+  e5e700: 14d0         	asrs	r0, r2, #0x13
+  e5e702: 00f1         	lsls	r1, r6, #0x3
+  e5e704: cb74         	ldm	r3!, {r2, r4, r5, r6}
+  e5e706: 0134         	lsls	r4, r6, #0x4
+  e5e708: c0ea         	stm	r0!, {r1, r3, r5, r6, r7}
+  e5e70a: 00f1         	lsls	r1, r6, #0x3
+  e5e70c: c0c2         	stm	r0!, {r1, r6, r7}
+  e5e70e: 00f1         	lsls	r1, r6, #0x3
+  e5e710: bf83         	ittte	hi
+  e5e712: 00f1         	lslhi	r1, r6, #0x3
+  e5e714: ca7e         	ldmhi	r2, {r1, r2, r3, r4, r5, r6}
+  e5e716: 0134         	lslhi	r4, r6, #0x4
+  e5e718: c04a         	stmls	r0!, {r1, r3, r6}
+  e5e71a: 00f1         	lsls	r1, r6, #0x3
+  e5e71c: bf65         	ittet	vs
+  e5e71e: 00f1         	lslvs	r1, r6, #0x3
+  e5e720: c9e2         	ldmvs	r1, {r1, r5, r6, r7}
+  e5e722: 0134         	lslvc	r4, r6, #0x4
