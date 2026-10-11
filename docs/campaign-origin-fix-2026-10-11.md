@@ -58,10 +58,11 @@ unchanged against the activation snapshot. Installed+15 APK was not rebuilt or
 cleared; new client25370 booted and the native team view displayed earned levels.
 No resource/version stamp was bumped for this reference correction.
 
-Native corrected return-map verification remains PENDING: subsequent screen
-observations became inconsistent, and Windows control found BlueStacks minimized
-and failed twice to restore its captured window. Root stopped further game inputs
-and requested restoration. No new battle was started after activation. Last save
-has active_battle null/active_stage_id empty; other two games are exact. Main
-changes since activation are normal clocks/day-reset fields and the recorded
-Day7 login receipt. Do not claim the corrected native return path passed yet.
+Native corrected return is VERIFIED after the user restored BlueStacks. Fresh
+replay n_01_01 displayed Snowfield - First Expedition, ended in native Victory
+after one guarded12-pair attack burst, and returned to the correct Snowfield
+map (25/30) without the malformed origin node or another origin claim. Evidence:
+Instrumented/local/captures/testing/origin-fix-native-002/08-prep.png,
+fight/013.png,09-return-map.png and10-settled-map.png. Earned EXP increased
+600/500/500/1100 to610/510/510/1110; capsule62 to63. Gold13600 and teamEXP1500
+unchanged. Returned safely to Village; no active battle/helper.
