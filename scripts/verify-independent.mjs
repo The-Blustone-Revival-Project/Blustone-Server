@@ -115,6 +115,17 @@ try {
   if(profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials') {
     assert.deepEqual(ordinaryReferences.slice(6).map(row=>row.base.id),materialsIds);
     assert.ok(ordinaryReferences.slice(6).every(row=>row.is_main===0 && row.skill.length===5));
+    const items=(await secure('/reference/GetItem',auth)).ret_data;
+    for(const card of ordinaryReferences) {
+      const bindings=items.item.filter(item=>item.use_type===3 && item.effect===card.base.id);
+      assert.equal(bindings.length,1,'One compiled item post-processing binding per ordinary Hunter');
+      assert.ok(bindings[0].collect_qty>0,'Compiled Library navigation threshold');
+    }
+    for(const role of [1,2,3,4])
+      assert.ok(ordinaryReferences.some(card=>card.base.role===role && card.base.is_source===0),'Compiled nonempty ordinary Library role');
+    assert.ok(ordinaryReferences.slice(6).every(card=>!items.trace.some(link=>
+      link.item_id===items.item.find(item=>item.use_type===3 && item.effect===card.base.id).id)),
+      'No acquisition source manufactured for added references');
   }
   const areas=(await secure('/reference/GetArea',auth)).ret_data;
   const origin=areas.area.find(area=>area.id==='n_00');
@@ -177,6 +188,7 @@ try {
     profile:profileName,resource_stamp:stamp,exact_manifest_selection:true,manifest_restart_exact:true,
     added_original_jet_groups:verifiedOriginals,live_profile_activation:false,
     ordinary_reference_count:ordinaryReferences.length,authenticated_mirage_friend_floors:true,
+    compiled_library_navigation_bindings:profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials',native_library_rendering_verified:false,
     authenticated_lobby_and_references:true,unique_campaign_area_ownership:true,hidden_origin_rewards_absent:true,
     episode_log:true,resource_packages:rows.length,resource_range_206:true,
     compiled_portrait:true,persisted_transport_and_credentials:true,preserved_existing_games:before.gameStates.length,
