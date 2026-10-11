@@ -143,7 +143,7 @@ try {
     for (const area of starterAreas.area) {
       const entry: { achieve_cnt: number; received: number[] } | undefined = byArea[area.id];
       assert.ok(entry, `area_achieve must carry a key for "${area.id}"`);
-      assert.equal(entry.received.length, FIXTURE_CHEST_COUNT,
+      assert.equal(entry.received.length, areaAchieveRewardList(area.id).length,
         "the received array is indexed by CHEST INDEX (AREA_ACHIEVE_INFO+0x28), so it must have one "
         + "entry per drawn chest");
       assert.ok(Number.isSafeInteger(entry.achieve_cnt),
@@ -191,10 +191,11 @@ try {
 
   // The dual publication: `SetArea`'s recovered notes disagree on whether
   // `achieve_reward` hangs off `ret_data` or off each area record.
-  assert.equal(starterAreas.achieve_reward.length, starterAreas.area.length * FIXTURE_CHEST_COUNT,
+  assert.equal(starterAreas.achieve_reward.length, (starterAreas.area.length - 1) * FIXTURE_CHEST_COUNT,
     "the top-level achieve_reward[] form (AGENTS.md §11) must stay published");
   for (const area of starterAreas.area) {
-    assert.ok(Array.isArray(area.achieve_reward) && area.achieve_reward.length === FIXTURE_CHEST_COUNT,
+    const expectedCount = area.id === "n_00" ? 0 : FIXTURE_CHEST_COUNT;
+    assert.ok(Array.isArray(area.achieve_reward) && area.achieve_reward.length === expectedCount,
       `area "${area.id}" must also nest its own achieve_reward[] (chest-rewards.md §Q2 reads them per area)`);
     for (const reward of area.achieve_reward) {
       assert.equal(reward.area_id, area.id, "nested rewards carry their area_id");
@@ -293,11 +294,18 @@ try {
   {
     const { state, otp } = fixture("per-area");
     clearAllSnowfieldStages(state, otp);
+    clearAllSnowfieldStages(state, otp, "n_02");
     const snowfield = claim(state, claimForm("n_01", CHEST0, otp));
-    const village = claim(state, claimForm("n_00", 1, otp));
+    const glacier = claim(state, claimForm("n_02", CHEST0, otp));
     assert.equal(snowfield.ret_data.claimed, true);
-    assert.equal(village.ret_data.claimed, true,
-      "the key is (area_id, achieve_cnt): n_00's first chest is achieve_cnt 1, a different reward");
+    assert.equal(glacier.ret_data.claimed, true,
+      "the key is (area_id, achieve_cnt): the same threshold in Glacier is a different reward");
+    const beforeOrigin = JSON.stringify(state.gameFor(state.accountFor({ otp }, {})));
+    const origin = claim(state, claimForm("n_00", 1, otp));
+    assert.notEqual(origin.ret_data.claimed, true, "the hidden origin cannot pay a synthetic chest");
+    assert.equal(origin.ret_data.error_code, "UNKNOWN_ACHIEVE_CNT");
+    assert.equal(JSON.stringify(state.gameFor(state.accountFor({ otp }, {}))), beforeOrigin,
+      "refusing an origin reward preserves the earned real-area rewards and inventory");
   }
 
   // =========================================================================
@@ -428,7 +436,8 @@ try {
     assert.equal(afterMap.n_01.received[0], 1,
       "a claimed chest must read back as received, which is the `opened` sprite state");
     assert.equal(afterMap.n_01.received[1], 0, "its neighbours are untouched");
-    assert.equal(afterMap.n_00.received[0], 0, "another area's chest is unaffected");
+    assert.equal(afterMap.n_02.received[0], 0, "another real area's chest is unaffected");
+    assert.deepEqual(afterMap.n_00.received, [], "the hidden origin has no drawn chest slots");
 
     // The sibling container: `CSRPlayData+0x27c`, keyed by STAGE id, is the
     // source of the progress total.

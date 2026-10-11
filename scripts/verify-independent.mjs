@@ -64,6 +64,15 @@ try {
   for(const route of ['/reference/GetStage','/reference/GetCard','/lobby/GetCardInven','/episode/GetLog']) {
     const reply=await secure(route,auth);assert.ok(reply.ret_data!==undefined,route);
   }
+  const areas=(await secure('/reference/GetArea',auth)).ret_data;
+  const origin=areas.area.find(area=>area.id==='n_00');
+  assert.ok(origin,'Hidden origin ordinal must remain present');
+  assert.deepEqual(origin.stage,[],'Hidden origin must not steal a campaign stage');
+  assert.deepEqual(origin.achieve_reward,[],'Hidden origin must not publish synthetic rewards');
+  const campaignLinks=areas.area.flatMap(area=>area.stage);
+  assert.equal(campaignLinks.length,50);
+  assert.equal(new Set(campaignLinks.map(link=>link.stage_id)).size,50,'Campaign stage ownership must be unique');
+  assert.deepEqual(campaignLinks.filter(link=>link.stage_id==='n_01_01').map(link=>link.area_id),['n_01']);
   const manifest=await (await fetch(base+'/reslist_1634683.list')).text();
   const rows=manifest.trim().split(/\r?\n/).slice(3);assert.equal(rows.length,139);
   assert.ok(rows.every(row=>row.split(',')[1]==='1634683'));
@@ -79,7 +88,8 @@ try {
     assert.deepEqual(found,entry,'Existing account gameplay state changed');
   }
   const report={compiled_process:true,unrelated_working_directory:true,encrypted_ecdh_hmac_aes:true,
-    authenticated_lobby_and_references:true,episode_log:true,resource_packages:rows.length,resource_range_206:true,
+    authenticated_lobby_and_references:true,unique_campaign_area_ownership:true,hidden_origin_rewards_absent:true,
+    episode_log:true,resource_packages:rows.length,resource_range_206:true,
     compiled_portrait:true,persisted_transport_and_credentials:true,preserved_existing_games:before.gameStates.length,
     apk_install_or_device_actions:false};
   writeFileSync(path.join(folder,'standalone-verification.json'),JSON.stringify(report,null,2)+'\n');

@@ -628,6 +628,9 @@ export interface AreaRecord {
  * keys.
  */
 export function areaAchieveRewards(areaId: string, stageCount: number): AreaAchieveReward[] {
+  // The hidden cruise origin has no playable campaign stages or chest rewards.
+  // Do not manufacture three zero-threshold rewards for its empty link list.
+  if (areaId === "n_00" && stageCount === 0) return [];
   if (!Number.isSafeInteger(stageCount) || stageCount < 1) {
     throw new Error(`area "${areaId}" needs at least one stage[] link: GetStageCnt(area) is the `
       + `chest multiplier S, so S == 0 would make every label and every achieve_cnt 0 and leave the `
@@ -702,7 +705,9 @@ const LEGACY_AREA_SEEDS: AreaSeed[] = [
 const CAMPAIGN_AREA_SEEDS: AreaSeed[] = [
   { id: "n_00", type: RECOVERED_CRUISE_AREA_TYPE, serial: 0, level_limit: 0,
     title: "Village", desc: "Local origin node", dialog_id: "", explore_id: "",
-    stage_ids: ["n_01_01"] },
+    // SetMarker hides ordinal0; the recovered CSV owns n_01_01 only in n_01.
+    // A duplicate origin link misroutes the native return after its victory.
+    stage_ids: [] },
   { id: "n_01", type: RECOVERED_CRUISE_AREA_TYPE, serial: 1, level_limit: 0,
     title: "Snowfield", desc: "Local expedition test area", dialog_id: "", explore_id: "",
     stage_ids: RECOVERED_CAMPAIGN_STAGE_IDS.slice(0, 10) },
@@ -877,6 +882,7 @@ export function assertAreaChestThresholds(): void {
   for (const area of starterAreas.area) {
     const stageCount = area.stage.length;
     const rewards = areaAchieveRewardList(area.id);
+    if (area.id === "n_00" && stageCount === 0 && rewards.length === 0) continue;
     if (rewards.length !== FIXTURE_CHEST_COUNT) {
       throw new Error(`area "${area.id}" publishes ${rewards.length} achieve_reward entries but `
         + `CSRSceneMStageMap::ShowReward draws exactly ${FIXTURE_CHEST_COUNT} chests.`);

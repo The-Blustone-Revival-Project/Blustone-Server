@@ -274,12 +274,9 @@ export function minimalStageIds(): readonly string[] {
 /**
  * The stage ids `full` mode publishes: the 50 recovered campaign ids.
  *
- * The village area `n_00` links `n_01_01`, which is also `n_01`'s first link.
- * That overlap is inherited from the pre-existing fixture (`n_00` must publish
- * at least one link or `GetStageCnt(n_00) == 0` and its three chests become
- * permanently locked and un-claimable - see `areaAchieveRewards`) and is
- * harmless: the link count that matters for the map and the chest arithmetic is
- * per-area, and `n_01_10` is what actually gates `n_02`.
+ * The hidden village origin `n_00` owns no playable stages in full mode.
+ * Each CSV stage belongs to exactly one expedition area. The historical
+ * minimal-mode origin link remains isolated in the legacy fixture.
  */
 export function fullStageIds(): readonly string[] {
   return RECOVERED_CAMPAIGN_STAGE_IDS;
@@ -361,7 +358,7 @@ export function assertAreaLinksResolve(
   publishedStageIds: ReadonlySet<string>,
 ): void {
   for (const area of areas) {
-    if (area.stage.length < 1) {
+    if (area.stage.length < 1 && area.id !== "n_00") {
       throw new Error(`area "${area.id}" publishes no stage[] link. GetStageCnt(area) is the chest `
         + `multiplier S and the mission map's node count, so S == 0 makes all three chests permanently `
         + `locked and the map empty.`);

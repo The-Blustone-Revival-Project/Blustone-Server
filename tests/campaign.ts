@@ -39,6 +39,7 @@ import {
   RECOVERED_MONSTER_ART_IDS,
   FIXTURE_MONSTER_IDS,
   areaStageCount,
+  areaAchieveRewards,
   assertAreaBackdropArt,
   publishedStageIds,
   starterAreas,
@@ -125,12 +126,12 @@ assert.equal(RECOVERED_CAMPAIGN_STAGE_COUNT, 10,
   "[RECOVERED] the campaign has exactly ten stages per expedition area");
 for (const area of starterAreas.area) {
   const isVillage = area.id === "n_00";
-  const expected = isVillage ? 1 : RECOVERED_CAMPAIGN_STAGE_COUNT;
+  const expected = isVillage ? 0 : RECOVERED_CAMPAIGN_STAGE_COUNT;
   assert.equal(area.stage.length, expected,
     `area "${area.id}" publishes ${area.stage.length} stage[] links; the recovered campaign gives `
     + `every expedition area exactly ten. GetStageCnt(area) is the node count AND the chest `
     + `multiplier S, so a wrong link count silently moves every chest threshold.`
-    + (isVillage ? " n_00 is the origin node and keeps its single historical link." : ""));
+    + (isVillage ? " n_00 is the hidden origin and owns no playable stage." : ""));
   if (isVillage) continue;
   // serial must be dense and 1-based: STAGE_LINK's serial is the ORDERING key of
   // the ordered std::map<int,int> that CSRSceneMStageMap::OnInsert fills.
@@ -143,6 +144,28 @@ for (const area of starterAreas.area) {
   for (const link of area.stage) {
     assert.equal(link.area_id, area.id,
       `link ${link.stage_id} in area "${area.id}" must carry that area's own area_id`);
+  }
+}
+
+// Native return routing must have one campaign area owner per stage. The
+// historical origin duplicate let a Snowfield victory return to Village.
+{
+  const origin = starterAreas.area.find((area) => area.id === "n_00")!;
+  assert.equal(origin.serial, 0);
+  assert.deepEqual(origin.stage, [], "the hidden origin must not steal a playable stage");
+  assert.deepEqual(origin.achieve_reward, [], "the hidden origin has no zero-threshold chests");
+  assert.deepEqual(areaAchieveRewards("n_00", 0), []);
+  assert.throws(() => areaAchieveRewards("n_01", 0), /at least one stage/,
+    "a visible destination still requires stages for meaningful chest thresholds");
+  assert.ok(!starterAreas.achieve_reward.some((row) => row.area_id === "n_00"));
+  const nested = starterAreas.area.flatMap((area) => area.stage);
+  assert.equal(nested.length, 50, "exactly the recovered50 playable links, with no origin duplicate");
+  assert.equal(new Set(nested.map((link) => link.stage_id)).size, 50);
+  assert.deepEqual(starterAreas.stage, nested, "both published link forms must preserve the same unique ownership");
+  for (const row of csvRows) {
+    const owners = nested.filter((link) => link.stage_id === row.stage);
+    assert.equal(owners.length, 1, `${row.stage} must have exactly one native return destination`);
+    assert.equal(owners[0].area_id, row.area, `${row.stage} belongs to its recovered CSV area`);
   }
 }
 
@@ -394,6 +417,8 @@ for (const area of starterAreas.area) {
     /publishes no stage\[\] link/,
     "an area with zero stage[] links must be refused: S == 0 makes all three chests "
     + "permanently locked and the map empty");
+  assert.doesNotThrow(() => assertAreaLinksResolve([{ id: "n_00", stage: [] }], published),
+    "the hidden origin alone may be empty; it is not a playable map destination");
   // (c) a gap in the per-type ordinals - GetAreaData returns the EMPTY record.
   assert.throws(
     () => assertAreaSerials([

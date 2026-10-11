@@ -5,7 +5,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { createServer } from "node:http";
 import path from "node:path";
 import { createApp } from "../src/server.js";
-import { FIXTURE_STAGE_ENVIRONMENT_IDS, RECOVERED_ENVIRONMENT_IDS } from "../src/bootstrap.js";
+import { CAMPAIGN_MODE, FIXTURE_STAGE_ENVIRONMENT_IDS, RECOVERED_ENVIRONMENT_IDS } from "../src/bootstrap.js";
 
 process.env.BLUSTONE_RESOURCE_VERSION = "1";
 process.env.BLUSTONE_RESLIST_STAMP = "1634659";
@@ -223,8 +223,17 @@ try {
     assert.ok(stages.some((stage) => stage.id === link.stage_id),
       `linked stage ${link.stage_id} must exist in the stage table`);
   }
-  assert.ok(areaLinks.some((link) => link.area_id === "n_00" && link.stage_id === "n_01_01"),
-    "the persisted origin must expose the first stage to the stage-map scene");
+  if (CAMPAIGN_MODE === "full") {
+    assert.equal(areaLinks.filter((link) => link.stage_id === "n_01_01").length, 1,
+      "the first expedition stage must have one return-map owner");
+    assert.ok(areaLinks.some((link) => link.area_id === "n_01" && link.stage_id === "n_01_01"),
+      "the first expedition stage belongs to Snowfield");
+    assert.ok(!areaLinks.some((link) => link.area_id === "n_00"),
+      "the hidden origin must not expose playable stages");
+  } else {
+    assert.ok(areaLinks.some((link) => link.area_id === "n_00" && link.stage_id === "n_01_01"),
+      "minimal mode retains its historical origin link");
+  }
   for (const stage of stages) {
     assert.ok(Array.isArray(JSON.parse(stage.achieve_condition)));
     assert.ok(typeof stage.id === "string" && stage.id.length > 1, "native stage identity field is `id` and must be non-empty");
