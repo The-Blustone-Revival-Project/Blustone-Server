@@ -1,0 +1,9 @@
+[
+  {
+    "name": "GUILD.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/GUILD.jet",
+    "destination": "resources/runtime/assets/GUILD.jet",
+    "bytes": 2258272,
+    "sha256": "9a2964fa1137b4ed6d09570103397ab3a221f31c97ed462c03a94fbe01c5fe66"
+  }
+]

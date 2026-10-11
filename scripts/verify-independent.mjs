@@ -159,6 +159,19 @@ try {
     const sent=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
     assert.equal(sent.list.length,1);assert.equal(sent.list[0].friend_id,friendId);
     assert.equal(sent.list[0].target_pvid,Number(friendPeer.pvid));
+    assert.deepEqual((await secure('/relation/GetLikeCnt',{...auth,target_pvid:friendPeer.pvid})).ret_data,
+      {target_pvid:Number(friendPeer.pvid),cnt:0});
+    for(const state of [1,0,1])
+      assert.deepEqual((await secure('/relation/ToggleLike',{...auth,target_pvid:friendPeer.pvid})).ret_data,
+        {target_pvid:Number(friendPeer.pvid),is_like:state},'Repeated native request is a new toggle');
+    const likedPeer=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data.list.find(row=>row.target_pvid===Number(friendPeer.pvid));
+    assert.equal(likedPeer.like_cnt,1);assert.equal(likedPeer.is_like,1);
+    ({secret,token}=peerConnection);
+    assert.deepEqual((await secure('/relation/GetLikeCnt',{...friendPeer,target_pvid:friendPeer.pvid})).ret_data,
+      {target_pvid:Number(friendPeer.pvid),cnt:1});
+    const ownLikeView=(await secure('/relation/GetTargetUserInfo',{...friendPeer,list:JSON.stringify([Number(friendPeer.pvid)])})).ret_data.list[0];
+    assert.equal(ownLikeView.like_cnt,1);assert.equal(ownLikeView.is_like,0);
+    ({secret,token}=ownerConnection);
     assert.ok(!(await secure('/relation/GetSuggestedFriendList',{...auth,start:'0',length:'10'})).ret_data.list.some(row=>row.target_pvid===Number(friendPeer.pvid)),
       'Accepted peer must leave discovery candidates');
     const oldId=friendId;
@@ -251,7 +264,8 @@ try {
   assert.equal(resource.status,206);assert.equal((await resource.arrayBuffer()).byteLength,64);
   const verifiedOriginals=[];
   const pinManifest=profileName==='current-e7'?'episode07-originals.json':
-    profileName==='current-e6-materials18'?'character-materials18-originals.json':null;
+    profileName==='current-e6-materials18'?'character-materials18-originals.json':
+    profileName==='current-e6-guild'?'guild-originals.json':null;
   if(pinManifest) {
     const pins=JSON.parse(readFileSync(path.join(root,'resources/manifests',pinManifest),'utf8'));
     for(const pin of pins) {
@@ -272,7 +286,7 @@ try {
         assert.deepEqual(Buffer.from(await ranged.arrayBuffer()),bytes.subarray(start,end+1));
       }
     }
-    assert.equal(verifiedOriginals.length,profileName==='current-e7'?17:11);
+    assert.equal(verifiedOriginals.length,profileName==='current-e7'?17:profileName==='current-e6-guild'?1:11);
   }
   const portrait=await fetch(base+'/local-profile/replica-100.png');assert.equal(portrait.status,200);assert.match(portrait.headers.get('content-type'),/image\/png/);
   await stop(); await launch();
@@ -281,6 +295,7 @@ try {
   if(exerciseSocial) {
     const owned=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
     assert.equal(owned.list.length,1);assert.equal(owned.list[0].friend_id,friendId);
+    assert.equal(owned.list[0].like_cnt,1);assert.equal(owned.list[0].is_like,1,'Owned like must survive compiled restart');
     ({secret,token}=peerConnection);
     const peer=(await secure('/relation/GetList',{...friendPeer,type:'1'})).ret_data;
     assert.equal(peer.list.length,1);assert.equal(peer.list[0].friend_id,friendId);
@@ -310,6 +325,7 @@ try {
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
+    encrypted_social_likes_fixture:exerciseSocial,
     quest_empty_collections_and_claim_refusal:true,
     guild_flat_lobby_and_skin_empty_contracts:true,
     profile:profileName,resource_stamp:stamp,exact_manifest_selection:true,manifest_restart_exact:true,

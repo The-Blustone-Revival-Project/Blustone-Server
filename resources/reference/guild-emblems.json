@@ -1,0 +1,178 @@
+{
+  "source": {
+    "path": "resources/runtime/assets/GUILD.jet",
+    "bytes": 2258272,
+    "sha256": "9a2964fa1137b4ed6d09570103397ab3a221f31c97ed462c03a94fbe01c5fe66",
+    "fallbackSprite": "GD_IMG_1",
+    "headerOffsets": [
+      2254903,
+      2254993,
+      2255083,
+      2255173,
+      2255263,
+      2255353,
+      2255443,
+      2255533,
+      2255623,
+      2255713
+    ]
+  },
+  "ui_source": {
+    "path": "resources/runtime/packages/UI_XML_RO.db/000005.ldb",
+    "sha256": "054790fe369d381490a101a38e123de22e8ca4eb28f8255d456515b6ee25bb3e",
+    "recordSuffix": "GUILD/G_P_ICON",
+    "records": [
+      {
+        "key": "EN/GUILD/G_P_ICON",
+        "sha256": "cb33d05f90b7de0d9736750d3c61e038fff7df12c0eaef4eeba5c0b7531fe34c",
+        "bindings": [
+          {
+            "button": "BT_THUMB1",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_1"
+          },
+          {
+            "button": "BT_THUMB2",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_2"
+          },
+          {
+            "button": "BT_THUMB3",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_3"
+          },
+          {
+            "button": "BT_THUMB4",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_4"
+          },
+          {
+            "button": "BT_THUMB5",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_5"
+          },
+          {
+            "button": "BT_THUMB6",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_6"
+          }
+        ]
+      },
+      {
+        "key": "KO/GUILD/G_P_ICON",
+        "sha256": "cb33d05f90b7de0d9736750d3c61e038fff7df12c0eaef4eeba5c0b7531fe34c",
+        "bindings": [
+          {
+            "button": "BT_THUMB1",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_1"
+          },
+          {
+            "button": "BT_THUMB2",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_2"
+          },
+          {
+            "button": "BT_THUMB3",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_3"
+          },
+          {
+            "button": "BT_THUMB4",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_4"
+          },
+          {
+            "button": "BT_THUMB5",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_5"
+          },
+          {
+            "button": "BT_THUMB6",
+            "child": "SPR_RANK",
+            "res_name": "GD_IMG_6"
+          }
+        ]
+      }
+    ]
+  },
+  "verified": {
+    "originalBytes": 2258272,
+    "records": 106,
+    "fallbackSprite": "GD_IMG_1",
+    "sprites": [
+      {
+        "id": "GD_IMG_1",
+        "headerOffset": 2254903,
+        "sourceBytes": 66,
+        "picker": true,
+        "sha256": "73708fe80a723c950296fd5f65689970b9ae46e84e41d5479835bb83ce613817"
+      },
+      {
+        "id": "GD_IMG_2",
+        "headerOffset": 2254993,
+        "sourceBytes": 66,
+        "picker": true,
+        "sha256": "b8bae9d027178da7f049299293d45dcc862e6c60c80c091167bca6b766e29f05"
+      },
+      {
+        "id": "GD_IMG_3",
+        "headerOffset": 2255083,
+        "sourceBytes": 66,
+        "picker": true,
+        "sha256": "4978d87f21d3a6a595e3a277256788e8abb76bdb6b0924565776f8409763d800"
+      },
+      {
+        "id": "GD_IMG_4",
+        "headerOffset": 2255173,
+        "sourceBytes": 66,
+        "picker": true,
+        "sha256": "a1683a583af95eabfc628d67f5c647fe83e6c2eadbf036a4b23f18008833ca46"
+      },
+      {
+        "id": "GD_IMG_5",
+        "headerOffset": 2255263,
+        "sourceBytes": 66,
+        "picker": true,
+        "sha256": "1daee785c8cbac8498a6ef0b327420fe9887d7a4dd86ad3a306cce5d89fc48c5"
+      },
+      {
+        "id": "GD_IMG_6",
+        "headerOffset": 2255353,
+        "sourceBytes": 66,
+        "picker": true,
+        "sha256": "11ea367081eedafc87c39a970c4728a388048937e809288d9c2fb7002ee84a1b"
+      },
+      {
+        "id": "GD_IMG_7",
+        "headerOffset": 2255443,
+        "sourceBytes": 66,
+        "picker": false,
+        "sha256": "f78039812985a7d8cde689ecee1972a656714ddac252d4f402d131051942852b"
+      },
+      {
+        "id": "GD_IMG_8",
+        "headerOffset": 2255533,
+        "sourceBytes": 66,
+        "picker": false,
+        "sha256": "2cbd471b6265d1e820e384a117351c0e5b8015739b5c3fec19f629bfcb327425"
+      },
+      {
+        "id": "GD_IMG_9",
+        "headerOffset": 2255623,
+        "sourceBytes": 66,
+        "picker": false,
+        "sha256": "1d1392098686999b2181f39807317953481b9a8f2ad9f866b7faeea9246679de"
+      },
+      {
+        "id": "GD_IMG_10",
+        "headerOffset": 2255713,
+        "sourceBytes": 66,
+        "picker": false,
+        "sha256": "d311271ad5daaa32ef26899e01bdcf29ff6bb830833bf7495e3bfcf9c6ad3545"
+      }
+    ]
+  },
+  "numeric_guild_fees_recovered": false,
+  "native_rendering_verified": false
+}
