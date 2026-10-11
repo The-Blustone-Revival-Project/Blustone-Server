@@ -109,3 +109,10 @@ request test proves refusal only when insufficient eligible sources remain.
 Native UI verification and original numeric prices/server selection order are
 still pending; no live hunter was unlocked, consumed or promoted.
 
+
+Compiled encrypted HTTP verification passes with disposable production-namespace
+sources: forged quote refuses without mutation, valid4-to1 advancement emits
+exactcur fields/removals/gold3800, insufficient-source repeat refuses, and
+restart preserves exact projected ownership apart from lobby fuel clocks.
+--exercise-bulk requires --fixture; private preserved saves cannot be mutation
+targets. Native rendering remains pending.

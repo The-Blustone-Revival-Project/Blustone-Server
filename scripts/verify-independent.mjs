@@ -11,6 +11,9 @@ import {createServer} from 'node:net';
 import {verifySingleJet} from './resources/verify-single-jet.mjs';
 import {preflight} from './resources/verify.mjs';
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const exerciseBulk=process.argv.includes('--exercise-bulk');
+const exerciseSocial=process.argv.includes('--exercise-social');
+if((exerciseBulk || exerciseSocial) && !process.argv.includes('--fixture')) throw new Error('Transaction exercises require --fixture; private preserved saves are never mutation targets');
 const profileIndex=process.argv.indexOf('--profile');
 const profileName=profileIndex===-1?'current-e6':process.argv[profileIndex+1];
 if(typeof profileName!=='string' || !/^[\w-]+$/.test(profileName)) throw new Error('Invalid verification profile');
@@ -32,6 +35,7 @@ await requireFreePort();
 // races the port probe. Never overwrite a concurrent writer's state copy.
 const folder = mkdtempSync(path.join(outputFolder,'run-'));
 const stateFile = path.join(folder, 'state.json');
+let bulkPvid;
 const preserved = process.argv.includes('--fixture') ? '' : path.join(root, 'local/private/preserved-state.json');
 if (existsSync(preserved)) copyFileSync(preserved, stateFile);
 else {
@@ -40,6 +44,19 @@ else {
   const { ServerState } = await import(pathToFileURL(path.join(root, 'dist/src/state.js')).href);
   const fixture = new ServerState(base, stateFile);
   fixture.registerGuest({device_id:'standalone-generated-fixture'}, {});
+  if(exerciseBulk) {
+    const auth=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
+    const account=fixture.accountFor(auth,{}),game=fixture.gameFor(account);
+    bulkPvid=account.pvid;
+    // Deliberately disposable test sources, not recruitment or recovered rewards.
+    // This branch is unreachable for preserved/private-state verification.
+    game.recruited_cards=Array.from({length:4},(_,i)=>({...game.starter_cards[0],
+      inst_id:1000200+i,rank:1,rank_up_cnt:0,exp:0,lock:0,awk_step:0,awk_overcome:0,overcome_cnt:0}));
+    game.next_card_inst_id=1000300;game.gold=5000;
+    const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
+    seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===bulkPvid?game:saved]);
+    writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
+  }
 }
 const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
@@ -76,6 +93,7 @@ const stop = async () => {
   throw new Error('Verifier listener did not close; no replacement process was started');
 };
 let secret,token;
+let friendPeer,friendId,ownerConnection,peerConnection;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
   const response=await fetch(base+'/shared_secret/Exchange',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},
@@ -85,12 +103,19 @@ async function exchange() {
   assert.equal(response.headers.get('pv-signature'),crypto.createHmac('sha384',secret).update(publicBytes).digest('base64'));
   token=response.headers.get('pv-accesstoken');assert.ok(token);
 }
-async function secure(route,values) {
+async function secure(route,values,{allowPlainRefusal=false}={}) {
   const plain=Buffer.from(String(new URLSearchParams(values)));const cipher=crypto.createCipheriv('aes-256-cbc',secret.subarray(0,32),secret.subarray(32,48));
   const response=await fetch(base+route,{method:'POST',headers:{'content-type':'application/octet-stream','pv-accesstoken':token,
     'pv-signature':crypto.createHmac('sha384',secret).update(plain).digest('base64')},body:Buffer.concat([cipher.update(plain),cipher.final()])});
   assert.equal(response.status,200,route);
   const bytes=Buffer.from(await response.arrayBuffer());
+  // Native failure envelopes deliberately remain plaintext (sendResponse).
+  // Opt in only for explicit negative probes; a plaintext success is never OK.
+  if(allowPlainRefusal && response.headers.get('content-type')?.startsWith('application/json')) {
+    const refused=JSON.parse(bytes);
+    assert.ok(Number.isInteger(refused.result_code) && refused.result_code!==1,'Plain response must be an explicit refusal');
+    return refused;
+  }
   assert.ok(response.headers.get('content-type')?.startsWith('application/octet-stream'),route+' must return encrypted bytes');
   const decipher=crypto.createDecipheriv('aes-256-cbc',secret.subarray(0,32),secret.subarray(32,48));const decoded=Buffer.concat([decipher.update(bytes),decipher.final()]);
   assert.equal(response.headers.get('pv-signature'),crypto.createHmac('sha384',secret).update(decoded).digest('base64'));
@@ -101,6 +126,44 @@ try {
   const guest=await secure('/v2/account/RegisterGuest',{device_id:'standalone-migration-verification'});
   const auth={otp:String(guest.ret_data.otp),pvid:String(guest.pvid)};
   const lobby=await secure('/lobby/Enter',auth);assert.ok(lobby.ret_data);
+  if(exerciseSocial) {
+    ownerConnection={secret,token};
+    await exchange();
+    const registered=await secure('/v2/account/RegisterGuest',{device_id:'standalone-friend-verification'});
+    friendPeer={otp:String(registered.ret_data.otp),pvid:String(registered.pvid)};
+    peerConnection={secret,token};
+    assert.equal((await secure('/relation/GetFriendReceivedCount',friendPeer)).ret_data,0);
+    ({secret,token}=ownerConnection);
+    const requested=await secure('/relation/FriendRequest',{...auth,target_pvid:friendPeer.pvid});
+    assert.equal(requested.result_code,1);friendId=requested.ret_data.friend_id;
+    assert.ok(Number.isSafeInteger(friendId) && friendId>0);
+    assert.equal(requested.ret_data.target_pvid,Number(friendPeer.pvid));
+    ({secret,token}=peerConnection);
+    assert.equal((await secure('/relation/GetFriendReceivedCount',friendPeer)).ret_data,1);
+    const accepted=await secure('/relation/FriendReqAccept',{...friendPeer,target_friend_id:String(friendId)});
+    assert.deepEqual(accepted.ret_data,{friend_id:friendId});
+    assert.equal((await secure('/relation/GetFriendReceivedCount',friendPeer)).ret_data,0);
+    const received=(await secure('/relation/GetList',{...friendPeer,type:'1'})).ret_data;
+    assert.equal(received.list.length,1);assert.equal(received.list[0].target_pvid,Number(auth.pvid));
+    assert.equal(received.list[0].type,'friend');
+    ({secret,token}=ownerConnection);
+    const sent=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
+    assert.equal(sent.list.length,1);assert.equal(sent.list[0].friend_id,friendId);
+    assert.equal(sent.list[0].target_pvid,Number(friendPeer.pvid));
+  }
+  if(exerciseBulk) {
+    assert.equal(Number(auth.pvid),bulkPvid,'Only disposable seeded account may be exercised');
+    const request={...auth,src_rank:'1',src_cnt:'4',target_rank:'2',target_cnt:'1',price:'1200'};
+    const beforeBulk=JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===bulkPvid)[1];
+    const refused=await secure('/gym/RankUpBundle',{...request,price:'0'},{allowPlainRefusal:true});
+    assert.notEqual(refused.result_code,1,'Forged quote must refuse before consumption');
+    assert.deepEqual(JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===bulkPvid)[1],beforeBulk);
+    const upgraded=await secure('/gym/RankUpBundle',request);assert.equal(upgraded.result_code,1);
+    assert.deepEqual(upgraded.ret_data.card.removed_inst_id_list,[1000201,1000202,1000203]);
+    assert.deepEqual(upgraded.ret_data.card.target_list,[{inst_id:1000200,rank:{cur:2},rank_up_cnt:{cur:0},exp:{cur:0}}]);
+    assert.deepEqual(upgraded.ret_data.user.gold,{cur:3800});
+    assert.notEqual((await secure('/gym/RankUpBundle',request,{allowPlainRefusal:true})).result_code,1,'Insufficient remaining sources must refuse');
+  }
   for(const route of ['/reference/GetStage','/reference/GetCard','/lobby/GetCardInven','/episode/GetLog']) {
     const reply=await secure(route,auth);assert.ok(reply.ret_data!==undefined,route);
   }
@@ -177,21 +240,45 @@ try {
   await stop(); await launch();
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
+  if(exerciseSocial) {
+    const owned=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
+    assert.equal(owned.list.length,1);assert.equal(owned.list[0].friend_id,friendId);
+    ({secret,token}=peerConnection);
+    const peer=(await secure('/relation/GetList',{...friendPeer,type:'1'})).ret_data;
+    assert.equal(peer.list.length,1);assert.equal(peer.list[0].friend_id,friendId);
+    assert.equal(peer.list[0].target_pvid,Number(auth.pvid));
+    ({secret,token}=ownerConnection);
+  }
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
   for(const entry of before.gameStates) {
     const found=after.gameStates.find(row=>JSON.stringify(row[0])===JSON.stringify(entry[0]));
+    if(exerciseBulk && entry[0]===bulkPvid) {
+      const expected=structuredClone(entry[1]);
+      expected.gold=3800;expected.recruited_cards=[{...expected.recruited_cards[0],rank:2,exp:0,rank_up_cnt:0}];
+      expected.card_book=expected.card_book.map(row=>row.ref_id===expected.recruited_cards[0].ref_id?{...row,rank:Math.max(row.rank,2)}:row);
+      const actual=structuredClone(found[1]);
+      // Lobby legitimately advances full-fuel clocks; every other owned field
+      // must equal the exact single-promotion fixture projection after restart.
+      for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
+      assert.deepEqual(actual,expected,'Compiled bulk transaction persisted wrong ownership or unrelated gameplay');
+      continue;
+    }
     assert.deepEqual(found,entry,'Existing account gameplay state changed');
   }
   const report={compiled_process:true,unrelated_working_directory:true,encrypted_ecdh_hmac_aes:true,
     direct_compiled_process:true,launcher_process_verified:false,
+    encrypted_bulk_rank_up_fixture:exerciseBulk,
+    encrypted_social_lifecycle_fixture:exerciseSocial,
     profile:profileName,resource_stamp:stamp,exact_manifest_selection:true,manifest_restart_exact:true,
     added_original_jet_groups:verifiedOriginals,live_profile_activation:false,
     ordinary_reference_count:ordinaryReferences.length,authenticated_mirage_friend_floors:true,
     compiled_library_navigation_bindings:profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials',native_library_rendering_verified:false,
     authenticated_lobby_and_references:true,unique_campaign_area_ownership:true,hidden_origin_rewards_absent:true,
     episode_log:true,resource_packages:rows.length,resource_range_206:true,
-    compiled_portrait:true,persisted_transport_and_credentials:true,preserved_existing_games:before.gameStates.length,
+    compiled_portrait:true,persisted_transport_and_credentials:true,
+    preserved_existing_games:before.gameStates.filter(([pvid])=>!exerciseBulk || pvid!==bulkPvid).length,
+    fixture_games_intentionally_promoted:exerciseBulk?1:0,
     apk_install_or_device_actions:false};
   writeFileSync(path.join(outputFolder,'standalone-verification.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify(report));
