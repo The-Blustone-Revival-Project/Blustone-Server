@@ -337,6 +337,8 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
 
   if (["/relation/GetSuggestedFriendList", "/relation/FriendSearch"].includes(route))
     return state.socialDiscoveryAction(route, payload, headers);
+  if (["/relation/GetLikeCnt", "/relation/ToggleLike"].includes(route))
+    return state.socialLikeAction(route, payload, headers);
   if (route === "/lobby/GetGuildInfo" || route.startsWith("/guild/") || route.startsWith("/gvg/"))
     return state.guildAction(route, payload, headers);
   if (route === "/shop/GetHotDealSummaryList") return state.envelope([]);
@@ -588,7 +590,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
         reg_utc: id === account.pvid ? account.beginUtc : 0, utc: Math.floor(Date.now() / 1000),
         nick_name: id === account.pvid ? account.nickname : id === ARENA_RIVAL_PVID
           ? arenaRival().nickname : LOCAL_MAIL_SENDER.nickname,
-        country_code: "", profile_status: "", like_cnt: 0, is_like: 0,
+        country_code: "", profile_status: "", ...state.socialLikeMetadata(account.pvid, id),
         profile_url: state.baseUrl + LOCAL_MAIL_PORTRAIT_PATH })) });
     }
     // **[RECOVERED]** the profile field set is

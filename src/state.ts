@@ -6,6 +6,7 @@ import { mirageLobby, mirageFriendFloors } from "./mirage.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { socialDiscovery } from "./social-discovery.js";
+import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
 import { planGroupRankUp } from "./group-rank-up.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
@@ -487,6 +488,7 @@ export class ServerState {
   private readonly sessionPvidByAccessToken = new Map<string, number>();
   private selectedServer = 1;
   private socialFriends?: SocialFriends;
+  private socialLikes?: SocialLikes;
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean } = {}) {
@@ -520,6 +522,8 @@ export class ServerState {
       this.indexAccount(account);
       this.nextPvid = Math.max(this.nextPvid, account.pvid + 1);
     }
+    if (saved.socialLikes !== undefined)
+      this.socialLikes = normalizeSocialLikes(saved.socialLikes, (pvid) => this.socialAccountProfile(pvid));
     if (saved.socialFriends !== undefined) {
       this.socialFriends = normalizeSocialFriends(saved.socialFriends);
       for (const relation of this.socialFriends.relations) {
@@ -574,6 +578,7 @@ export class ServerState {
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
     const snapshot = { version: 1, selectedServer: this.selectedServer,
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
+      ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -1656,12 +1661,7 @@ export class ServerState {
     const account = this.accountFor(payload, headers);
     const before = this.socialFriends;
     const current = before ?? emptySocialFriends();
-    const profile = (pvid: number) => {
-      const peer = this.accountsByPvid.get(pvid);
-      return peer ? { pvid: peer.pvid, nickname: peer.nickname, serverId: peer.serverId,
-        beginUtc: peer.beginUtc, lastLoginAt: peer.lastLoginAt,
-        profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH } : undefined;
-    };
+    const profile = (pvid: number) => this.socialAccountProfile(pvid, account.pvid);
     try {
       if (route === "/relation/GetList") return this.envelope(socialFriendList(current, account.pvid, payload.type, profile));
       if (route === "/relation/GetFriendReceivedCount") return this.envelope(receivedSocialFriendCount(current, account.pvid));
@@ -1695,14 +1695,47 @@ export class ServerState {
     if (!["/relation/GetSuggestedFriendList", "/relation/FriendSearch"].includes(route))
       return this.failure(2001, "Unknown social discovery operation");
     try {
-      const profiles = [...this.accountsByPvid.values()].map((peer) => ({ pvid: peer.pvid,
-        nickname: peer.nickname, serverId: peer.serverId, beginUtc: peer.beginUtc, lastLoginAt: peer.lastLoginAt,
-        profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH }));
+      const profiles = [...this.accountsByPvid.keys()].map((pvid) => this.socialAccountProfile(pvid, account.pvid)!);
       const blocked = (a: number, b: number) => Object.hasOwn(this.accountsByPvid.get(a)?.socialBlocks ?? {}, String(b));
       return this.envelope(socialDiscovery(this.socialFriends ?? emptySocialFriends(), account.pvid,
         route === "/relation/FriendSearch" ? "search" : "suggested", payload, profiles, blocked));
     } catch (error) {
       return this.failure(2001, error instanceof Error ? error.message : "Invalid local discovery request");
+    }
+  }
+
+  private socialAccountProfile(pvid: number, viewerPvid?: number) {
+    const peer = this.accountsByPvid.get(pvid);
+    return peer ? { pvid: peer.pvid, nickname: peer.nickname, serverId: peer.serverId,
+      beginUtc: peer.beginUtc, lastLoginAt: peer.lastLoginAt,
+      profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH,
+      ...(viewerPvid === undefined ? {} : this.socialLikeMetadata(viewerPvid, pvid)) } : undefined;
+  }
+
+  /** Shared public projection; presentation-only IDs never acquire real edges. */
+  socialLikeMetadata(viewerPvid: number, targetPvid: number) {
+    const viewer = this.accountsByPvid.get(viewerPvid), peer = this.accountsByPvid.get(targetPvid);
+    if (!viewer || !peer || viewer.serverId !== peer.serverId) return { like_cnt: 0, is_like: 0 };
+    return socialLikeProjection(this.socialLikes ?? emptySocialLikes(), viewerPvid, targetPvid);
+  }
+
+  socialLikeAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
+    const account = this.accountFor(payload, headers);
+    const before = this.socialLikes;
+    const current = before ?? emptySocialLikes();
+    const context = { profile: (pvid: number) => this.socialAccountProfile(pvid),
+      blocked: (a: number, b: number) => Object.hasOwn(this.accountsByPvid.get(a)?.socialBlocks ?? {}, String(b)) };
+    try {
+      if (route === "/relation/GetLikeCnt")
+        return this.envelope(readSocialLikeCount(current, account.pvid, payload.target_pvid, context));
+      if (route !== "/relation/ToggleLike") return this.failure(2001, "Unknown like operation");
+      const plan = planSocialLikeToggle(current, account.pvid, payload.target_pvid, context);
+      this.socialLikes = plan.next;
+      try { this.persist(); }
+      catch { this.socialLikes = before; return this.failure(2001, "Unable to persist local like operation"); }
+      return this.envelope(plan.receipt);
+    } catch (error) {
+      return this.failure(2001, error instanceof Error ? error.message : "Invalid local like operation");
     }
   }
 
@@ -1717,7 +1750,7 @@ export class ServerState {
       Object.hasOwn(viewer.socialBlocks ?? {}, String(targetPvid)) ||
       Object.hasOwn(peer.socialBlocks ?? {}, String(viewerPvid))) return undefined;
     return { pvid: peer.pvid, reg_utc: peer.beginUtc, utc: Math.floor(Date.now() / 1000),
-      nick_name: peer.nickname, country_code: "", profile_status: "", like_cnt: 0, is_like: 0,
+      nick_name: peer.nickname, country_code: "", profile_status: "", ...this.socialLikeMetadata(viewerPvid, targetPvid),
       profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH };
   }
 

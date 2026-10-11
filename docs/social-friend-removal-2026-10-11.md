@@ -90,8 +90,10 @@ monotone allocation and unchanged persisted gameStates. Existing
 `tests/social-friends.ts` and TypeScript build also pass. Root owns final
 combined tests, OpenAPI and live activation.
 
-Original friend quotas, expiration, suggestions/search, invite/recommendation,
-likes, social rewards and Mirage friend-floor records remain unreconstructed.
+Original friend quotas/expiration, global suggestions/search algorithms,
+invitation/recommendation rewards, like quotas/cooldowns and Mirage friend-floor
+records remain unreconstructed. Local discovery and actual local-peer likes
+are implemented separately in their corresponding Server documents.
 
 Root compiled encrypted fixture check passed accepted unfriend, recipient
 rejection, sender cancellation, fresh same-peer requests with monotone IDs,

@@ -12,6 +12,7 @@ export interface SocialFriends { next_id: number; relations: LocalFriendRelation
 export interface FriendProfile {
   pvid: number; nickname: string; serverId: number; beginUtc: number; lastLoginAt: number;
   profile_url: string;
+  like_cnt?: number; is_like?: number;
 }
 export const emptySocialFriends = (): SocialFriends => ({ next_id: 1, relations: [] });
 
@@ -139,7 +140,8 @@ export function socialFriendList(current: SocialFriends, actor: number, rawType:
       // timestamp. Internal created_at is never presented as an original clock.
       return { friend_id: row.friend_id, target_pvid, type: type === 1 ? "friend" : type === 3 ? "received" : "request",
         reg_utc: peer.beginUtc, tick: 0, received_dtm: 0,
-        nick_name: peer.nickname, country_code: "", profile_url: peer.profile_url, profile_status: "", like_cnt: 0, is_like: 0 };
+        nick_name: peer.nickname, country_code: "", profile_url: peer.profile_url, profile_status: "",
+        like_cnt: peer.like_cnt ?? 0, is_like: peer.is_like ?? 0 };
     }).sort((a, b) => a.friend_id - b.friend_id);
   return { list };
 }

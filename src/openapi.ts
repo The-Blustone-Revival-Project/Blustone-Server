@@ -426,6 +426,17 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     };
   }
 
+  for (const action of ["GetLikeCnt", "ToggleLike"]) {
+    const route = `/relation/${action}`;
+    paths[route] = { post: {
+      ...operation(action,
+        "Authenticated target_pvid operation over actual same-server, mutually nonblocked local accounts. GetLikeCnt returns {target_pvid,cnt:uint32}; ToggleLike returns {target_pvid,is_like:0|1}. Each accepted ToggleLike changes the caller's directed edge and persists atomically; the native request has no desired state or nonce, so repeated requests toggle again. Counts and viewer-specific flags remain coherent across friend, discovery and brief/self profiles. No reward, fuel, original global totals or quota is invented.", "Social"),
+      "x-evidence": "docs/social-likes-2026-10-11.md; tests/social-likes-state.ts",
+      "x-reverse-engineering-status": "native-parser-reconstructed",
+      "x-runtime-confidence": "Encrypted compiled toggle/profile/restart tested; native UI pending",
+    } };
+    explicitlyDocumented.add(route);
+  }
   paths["/gym/RankUpBundle"] = { post: {
     ...operation("Bulk promote low-grade Hunters",
       "Native bulk request fields are src_rank, src_cnt, target_rank, target_cnt and price. Source grades1/2 use groups of grade+3 Hunters per result and destination grade+1. Native quote formula per result is2*RaisePrice(sourceGrade)+sourceGrade*RankUpPrice(sourceGrade); existing replica price fixtures produce1200/2200 gold. No max-level prerequisite applies to this separate shortcut. The replica protects locked Hunters, leader/all decks and active commitments, validates destination references and quote, and persists survivor promotions, removals, collection history and wallet together with rollback on write failure. Stable ascending instance selection is local policy; original selection order/prices are unknown. Native response uses card.target_list[].rank/exp/rank_up_cnt:{cur} and removed_inst_id_list. Native end-to-end validation remains pending; repeated accepted calls are distinct operations without a recovered nonce.", "Cards and training"),

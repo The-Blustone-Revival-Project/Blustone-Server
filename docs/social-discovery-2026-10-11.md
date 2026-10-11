@@ -72,7 +72,9 @@ refuse without writes. No randomness, score, reward or hidden fixture is added.
 
 Rows contain only actual peer PVID/name/registration mapping and public display
 fields. They use the existing original100x100 system icon as a **LOCAL fallback
-avatar**, blank country/status and neutral like/tick values. Original tick
+avatar**, blank country/status and neutral tick values. Likes now project actual
+received counts and viewer-owned status from the separate local likes graph;
+they no longer reset to0 on discovery/profile reload. Original tick
 semantics are unproved, so tick and the shared DTO's received_dtm stay0;
 login times are not copied into either. GetFriendInfo itself does not read
 received_dtm in the inspected boundary; retaining neutral0 also satisfies the
