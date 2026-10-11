@@ -13,7 +13,8 @@ function scalar(value: unknown, label: string): number {
   return num;
 }
 /** Native form fields are strings. Rank sources are JSON dumped uint64 vector;
- * this parser also admits already-decoded arrays as replica transport policy.
+ * Empty native vectors dump JSON null, normalized here to no sources. This
+ * parser also admits already-decoded arrays as replica transport policy.
  * Unsafe JS numeric IDs refuse instead of silently rounding ownership. */
 export function parseEquipmentUpgradeRequest(action: "level" | "rank", raw: unknown): EquipmentUpgradeRequest {
   if (action !== "level" && action !== "rank") throw new TypeError("Unknown equipment action");
@@ -34,7 +35,8 @@ export function parseEquipmentUpgradeRequest(action: "level" | "rank", raw: unkn
       } else sources=row.source_inst_ids;
     }
     catch { throw new TypeError("Equipment source_inst_ids must be JSON array"); }
-    if (!Array.isArray(sources)) throw new TypeError("Equipment source_inst_ids must be array");
+    if (sources === null) sources = [];
+    if (!Array.isArray(sources)) throw new TypeError("Equipment source_inst_ids must be array or native empty null");
   }
   const ids = (sources as unknown[]).map(id);
   if (ids.includes(target) || new Set(ids).size !== ids.length)

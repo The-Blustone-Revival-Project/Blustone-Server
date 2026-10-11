@@ -22,7 +22,8 @@ to_string (Gf5950a/0e and Gf5a216/21a). Wire part1/2/3 therefore means
 weapon/armor/accessory. Price_type is integer to_string; complete enum and
 accepted server currency choices are unclosed. Source vector is uint64
 elements, dumped by JSON.dump G71f754 at Gf5a278 and put into the FORM value
-source_inst_ids at Gf5a27e. It is not a comma-separated scalar or single
+source_inst_ids at Gf5a27e. Empty vectors remain JSON type0/null and dump
+`"null"`; nonempty vectors become arrays. It is not a comma-separated scalar or single
 source field. Rank request removes remembered skill selections for selected
 sources before dispatch (Gf5a12c); that client housekeeping is not successful
 server consumption evidence.
@@ -30,8 +31,9 @@ server consumption evidence.
 Decoder's strict uint64/part/signed32 checks, distinct-source/target rules,
 already-decoded-array admission and refusal of rounded unsafe JS numbers are
 replica policy. Native source count/eligibility comes from other consumers;
-empty vectors are not automatically invalid, because original card_qty may
-be zero. Caller must authenticate and resolve target/sources in one account.
+empty vectors normalize native null to[] and are not automatically invalid.
+The final popup specifically submits no Hunters. Caller must authenticate and
+resolve target/sources in one account.
 
 ## Receipts and mutations
 
@@ -50,10 +52,10 @@ parsed envelope.ret_data; failures skip settlement.
   target rank/level for each entry (Gf5bf68/Gf5c9f4). This is neither an EXP
   receipt nor a +1 scalar. Canonical production container shape of card/item
   arrays versus objects remains unclosed; native iteration supports both.
-- Rank callback iterates a captured JSON value at closure+30 and calls
-  RemoveCard Gaebc44 with uint64 serial and flag1 at Gf5cbbc. Exact capture
-  linkage to the originally submitted source vector still needs closure
-  construction review; do not fabricate a consumed_inst_list receipt key.
+- Rank callback iterates the captured original source vector JSON at closure+30
+  and calls RemoveCard Gaebc44 with uint64 serial and flag1 at Gf5cbbc. The
+  capture chain is closed in the source/capture follow-up note. Empty/null
+  values skip removal. Do not fabricate a consumed_inst_list receipt key.
 - Both pass ret_data to Achieve.ParseLobbyEnter and independently consume
   achievement via ParseAchievementsElement. These are genuine side channels,
   not sufficient justification to grant missing achievements.
@@ -76,8 +78,9 @@ PlayData.gold+154 (Gbd7c7a–80), then checks every required material reference
 against Inventory.GetInstItemCnt Gaeca80 and required quantities
 (Gbd7cee/Gbd7d22). Gold/material insufficiency refuses the UI action. It
 does not itself close source-Hunter grade/role/deck locks or server wallet
-currency validation. Needed next: source-selection/cancellation contract,
-Guild discount formula/qualification, original price/material rows and complete
-source capture, plus rank transition/level preservation policy. No safe full
+currency validation. Needed next: Guild discount formula/qualification and
+original price/material rows. The final popup's empty sources and rank/level
+preview are closed in the follow-up note; legal server transition policy remains
+distinct. No safe full
 transaction planner is claimed until those links close. Existing route
 refusals must remain; do not charge zero or use ordinary Gym fees.
