@@ -453,12 +453,41 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     explicitlyDocumented.add(route);
   }
   paths["/mirage/GetFriendInfo"] = { post: {
-    ...operation("Read Mirage friend floors", "Authenticated request with no floor selector. Native ParseFriendInfo consumes bare ret_data rows {floor,nick_list:string[]}. The replica returns an empty array because no friend relationships have been reconstructed; local accounts and arena rivals are not invented friends. This read does not enter or modify a Mirage run.", "Mirage"),
+    ...operation("Read Mirage friend floors", "Authenticated request with no floor selector. Native ParseFriendInfo consumes bare ret_data rows {floor,nick_list:string[]}. Local friendships now exist, but no friend highest-floor records have been reconstructed; the replica returns an empty array rather than inventing floor0 or ranks. This read does not enter or modify a Mirage run.", "Mirage"),
     "x-evidence": "docs/mirage-friend-floors-2026-10-11.md; tests/mirage-contract.ts",
     "x-reverse-engineering-status": "native-parser-reconstructed",
     "x-runtime-confidence": "Compiled encrypted response verified; native friend panel pending",
   } };
   explicitlyDocumented.add("/mirage/GetFriendInfo");
+  const friendRow = { type: "object", required: ["friend_id", "target_pvid", "type", "nick_name"],
+    properties: { friend_id: { type: "integer", minimum: 1 }, target_pvid: { type: "integer", minimum: 1 },
+      type: { type: "string", enum: ["friend", "request", "received", "candidate"] }, nick_name: { type: "string" },
+      reg_utc: { type: "integer" }, tick: { type: "integer", description: "Neutral0; original tick semantics not reconstructed." },
+      received_dtm: { type: "integer", description: "Neutral0; original receipt clock semantics not reconstructed." },
+      country_code: { type: "string" }, profile_url: { type: "string" }, profile_status: { type: "string" },
+      like_cnt: { type: "integer" }, is_like: { type: "integer" } } };
+  for (const [route, description, schema] of [
+    ["/relation/GetList", "Authenticated native list selector type1=friends,2=candidates,3=incoming,4=outgoing. ret_data is an OBJECT containing list, not a bare array. Only established local relationships are returned; candidate discovery is empty. Actual peer identity and original fallback portrait are supplied; social clocks/likes remain neutral local fields.", { type: "object", required: ["list"], properties: { list: { type: "array", items: friendRow } } }],
+    ["/relation/GetFriendReceivedCount", "Authenticated incoming pending-request count. Native callback consumes ret_data directly as a uint32 scalar, not {cnt}.", { type: "integer", minimum: 0, maximum: 4294967295 }],
+    ["/relation/FriendRequest", "Authenticated target_pvid request to an existing local account on the same server. Self, unknown, reverse-pending, accepted and either-party-blocked targets refuse. Receipt is {friend_id,target_pvid}. Same-direction pending repeats retain the same ID without writing; this is explicit local policy.", { type: "object", required: ["friend_id", "target_pvid"], properties: { friend_id: { type: "integer" }, target_pvid: { type: "integer" } } }],
+    ["/relation/FriendReqAccept", "Authenticated single target_friend_id acceptance by the original recipient only. Receipt is {friend_id}; the relationship becomes reciprocal and persists atomically. Repeats retain the ID. Bulk acceptance, cancel, reject and unfriend remain refused until their contracts are reconstructed.", { type: "object", required: ["friend_id"], properties: { friend_id: { type: "integer" } } }],
+  ] as const) {
+    paths[route] = { post: {
+      ...operation(route.split("/").at(-1)!, description, "Social", response("Decrypted native contract; successful native transport replies are encrypted.", {
+        allOf: [{ $ref: "#/components/schemas/ResultEnvelope" }, { type: "object", properties: { ret_data: schema } }],
+      })),
+      "x-evidence": "docs/social-friends-2026-10-11.md; tests/social-friends.ts",
+      "x-reverse-engineering-status": "native-parser-reconstructed",
+      "x-runtime-confidence": "Local lifecycle and encrypted compiled restart tested; native UI pending",
+    } };
+    explicitlyDocumented.add(route);
+  }
+  paths["/shop/SellCard"] = { post: {
+    ...operation("Hunter sale profit data unavailable", "Authenticated inst_id_list sale request refuses with result_code2001 until original GetExtra.card_sell_profit rows and reward identities are reconstructed. The final native UI uses reference minimum rank, not GetLevel.sell_price. A generic success would remove the native captured request vector even though the server retained ownership, so no mock success or guessed zero-value disposal is returned. The isolated evidence-gated planner is not enabled.", "Cards and training"),
+    "x-evidence": "docs/hunter-sale-and-growth-contract-2026-10-11.md; tests/hunter-sale.ts",
+    "x-reverse-engineering-status": "native-refusal-contract",
+  } };
+  explicitlyDocumented.add("/shop/SellCard");
   const webviewEvidenceRoutes = [
     "/webview/evaluation/GetCardList",
     "/webview/evaluation/RecordCardRecommend",
@@ -562,7 +591,7 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
   localGameArray("/lobby/GetMissionInst", "Read mission progress", "MissionInstance", "Returns persistent local mission records. The initial array is empty; mission/Start and mission/Complete create/advance stage progress independently. Daily missions and reward claim semantics remain incomplete.");
   localGameArray("/lobby/GetShopInst", "Read shop instances", "OpaqueObject", "Returns an empty shop-instance array. Shop display/purchase references are not reconstructed yet; this explicit array prevents the generic metadata object from being interpreted as a shop record.");
   localGameArray("/achievement/GetInstList", "Read achievement instances", "OpaqueObject", "Returns an empty achievement-instance array. Achievement tracking is not implemented yet.");
-  localGameArray("/relation/GetSuggestedFriendList", "Read suggested friends", "OpaqueObject", "Returns an empty social list. Friend discovery and social mutations are not implemented yet.");
+  localGameArray("/relation/GetSuggestedFriendList", "Read suggested friends", "OpaqueObject", "Returns an empty suggested list. Local request/accept relationships are implemented separately; candidate discovery is not reconstructed.");
   localGameArray("/guild/GetNotifications", "Read guild notifications", "OpaqueObject", "Returns an empty notification list. Guild state is not implemented yet.");
   localGameArray("/shop/GetHotDealSummaryList", "Read hot-deal summaries", "OpaqueObject", "Returns an empty commerce list. No purchases or real-money economy are implemented.");
   paths["/lobby/GetGemInven"] = { post: {
@@ -690,7 +719,7 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     ["/message/RemoveReceived", "Delete owned received messages", "Native target_list request is comma-separated decimal IDs with a trailing comma; response is numeric target_list ARRAY plus unread_count. Local atomic ownership checks and persistent deletion receipts make retries safe across restart. No reward/refund, arbitrary delete-all, or sent-mail deletion. Original deletion restrictions remain unknown; native UI validation pending."],
     ["/supply/RefreshSpecialList", "Read pending Special Supply", "Recovered ret_data.special[] wrapper. Durable account-owned gold-only local first-clear bonuses; no backfill or starter grants. Native portrait prefix C001 and zero unlimited expiry; gold amount is a local fixture, original rewards unknown. Native Supply UI unverified."],
     ["/supply/SpecialListReward", "Claim earned Special Supply", "Request id_list is a JSON-array encoded string of numeric supply IDs. Atomic ownership and gold-capacity checks; receipt target_inst_id is numeric ARRAY with user.gold prev/cur. Pending rewards and claims persist; retries acknowledge settled IDs without another payout. Only local gold rewards implemented; original items/cards/gems/skins and economy remain incomplete."],
-    ["/relation/GetTargetUserInfo", "Read a target brief profile", "Native CPVRelation reads ret_data.list rows containing pvid, reg_utc, utc, nick_name, country_code, profile_url, profile_status, like_cnt and is_like. The authenticated singleton list[1] publishes the explicitly local notice sender and a served original100x100 system-icon URL. It creates no account or inventory. Other target handling remains a historical party-profile fixture and is not reconstructed social functionality."],
+    ["/relation/GetTargetUserInfo", "Read a target brief profile", "Native CPVRelation reads ret_data.list rows containing pvid, reg_utc, utc, nick_name, country_code, profile_url, profile_status, like_cnt and is_like. Authenticated bounded list requests admit the requester, documented local notice/Arena fixtures, and actual same-server relationship peers. Peer names/identity come from local accounts with the original100x100 system icon as a local fallback; no private credentials or synthetic Hunter party is published. Unrelated local accounts refuse. Historical full party-profile requests remain separate fixtures."],
     ["/world/GetUserDetail", "Read the local notice sender detail", "The native profile cache requires a second stage: ret_data is a bare ARRAY of detailed party-profile rows. Only authenticated singleton list[1] is implemented as local presentation metadata; other targets refuse2001. No card/account grant or original administrative identity is implied. Native portrait completion requires an image node exactly100x100."],
     ["/episode/Read", "Acknowledge regular story reading or clearing", "Authenticated id must name one of the recovered 147 S01 graph nodes. Native r_ prefix records read state; bare id records clear state. Durable encoded read_log survives restart and deferred retries without grants or tutorial edits. Client-reported clear acknowledgment does not independently verify a story battle. Seasonal events and reward settlement are not enabled."],
     ["/episode/Reward", "Claim supported original chapter rewards", "Original E05 reward is 20 AIRSHIP_TICKET. Original E18 declares RP1x100000; RP1 is a native gold display identity. Replica policy settles E18 through user.gold{prev,cur}, not an RP1 item stack. Original E02 declares FMD1x30; replica policy credits30 through user.free_iap{prev,cur}, preserving paid currency. Currency quantities use direct wallet units without an inferred scale. Original Episode settlement remains unavailable. Authenticated claims require every descendant story recorded cleared (conservative local policy), validate inventory/gold capacity, and persist the reward plus reward_log marker together with rollback on failure. Native item receipts are additive; settled retries return item[]/user:null, never another delta. Other chapter materials remain unsupported and refuse. Native E01 through E05 story clears and both E05 battles are verified. Native E02 reward credited30 free Manda; E05 reward added20 capsules with Search count16 to36. E18 settlement remains unverified. Client-reported logs do not independently prove a battle."],

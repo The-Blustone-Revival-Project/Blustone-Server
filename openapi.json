@@ -13346,7 +13346,7 @@
     "/mirage/GetFriendInfo": {
       "post": {
         "summary": "Read Mirage friend floors",
-        "description": "Authenticated request with no floor selector. Native ParseFriendInfo consumes bare ret_data rows {floor,nick_list:string[]}. The replica returns an empty array because no friend relationships have been reconstructed; local accounts and arena rivals are not invented friends. This read does not enter or modify a Mirage run.",
+        "description": "Authenticated request with no floor selector. Native ParseFriendInfo consumes bare ret_data rows {floor,nick_list:string[]}. Local friendships now exist, but no friend highest-floor records have been reconstructed; the replica returns an empty array rather than inventing floor0 or ranks. This read does not enter or modify a Mirage run.",
         "tags": [
           "Mirage"
         ],
@@ -18032,10 +18032,10 @@
     },
     "/relation/FriendReqAccept": {
       "post": {
-        "summary": "Recovered /relation/FriendReqAccept route",
-        "description": "The route literal **/relation/FriendReqAccept** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "FriendReqAccept",
+        "description": "Authenticated single target_friend_id acceptance by the original recipient only. Receipt is {friend_id}; the relationship becomes reciprocal and persists atomically. Repeats retain the ID. Bulk acceptance, cancel, reject and unfriend remain refused until their contracts are reconstructed.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -18083,11 +18083,31 @@
         },
         "responses": {
           "200": {
-            "description": "Mock-compatible response.",
+            "description": "Decrypted native contract; successful native transport replies are encrypted.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultEnvelope"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ResultEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "ret_data": {
+                          "type": "object",
+                          "required": [
+                            "friend_id"
+                          ],
+                          "properties": {
+                            "friend_id": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -18106,9 +18126,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-friends-2026-10-11.md; tests/social-friends.ts",
+        "x-runtime-confidence": "Local lifecycle and encrypted compiled restart tested; native UI pending"
       }
     },
     "/relation/FriendReqCancel": {
@@ -18275,10 +18295,10 @@
     },
     "/relation/FriendRequest": {
       "post": {
-        "summary": "Recovered /relation/FriendRequest route",
-        "description": "The route literal **/relation/FriendRequest** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "FriendRequest",
+        "description": "Authenticated target_pvid request to an existing local account on the same server. Self, unknown, reverse-pending, accepted and either-party-blocked targets refuse. Receipt is {friend_id,target_pvid}. Same-direction pending repeats retain the same ID without writing; this is explicit local policy.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -18326,11 +18346,35 @@
         },
         "responses": {
           "200": {
-            "description": "Mock-compatible response.",
+            "description": "Decrypted native contract; successful native transport replies are encrypted.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultEnvelope"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ResultEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "ret_data": {
+                          "type": "object",
+                          "required": [
+                            "friend_id",
+                            "target_pvid"
+                          ],
+                          "properties": {
+                            "friend_id": {
+                              "type": "integer"
+                            },
+                            "target_pvid": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -18349,9 +18393,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-friends-2026-10-11.md; tests/social-friends.ts",
+        "x-runtime-confidence": "Local lifecycle and encrypted compiled restart tested; native UI pending"
       }
     },
     "/relation/FriendSearch": {
@@ -18437,10 +18481,10 @@
     },
     "/relation/GetFriendReceivedCount": {
       "post": {
-        "summary": "Recovered /relation/GetFriendReceivedCount route",
-        "description": "The route literal **/relation/GetFriendReceivedCount** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "GetFriendReceivedCount",
+        "description": "Authenticated incoming pending-request count. Native callback consumes ret_data directly as a uint32 scalar, not {cnt}.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -18488,11 +18532,25 @@
         },
         "responses": {
           "200": {
-            "description": "Mock-compatible response.",
+            "description": "Decrypted native contract; successful native transport replies are encrypted.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultEnvelope"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ResultEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "ret_data": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 4294967295
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -18511,9 +18569,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-friends-2026-10-11.md; tests/social-friends.ts",
+        "x-runtime-confidence": "Local lifecycle and encrypted compiled restart tested; native UI pending"
       }
     },
     "/relation/GetInvitationCnt": {
@@ -18680,10 +18738,10 @@
     },
     "/relation/GetList": {
       "post": {
-        "summary": "Recovered /relation/GetList route",
-        "description": "The route literal **/relation/GetList** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "GetList",
+        "description": "Authenticated native list selector type1=friends,2=candidates,3=incoming,4=outgoing. ret_data is an OBJECT containing list, not a bare array. Only established local relationships are returned; candidate discovery is empty. Actual peer identity and original fallback portrait are supplied; social clocks/likes remain neutral local fields.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -18731,11 +18789,88 @@
         },
         "responses": {
           "200": {
-            "description": "Mock-compatible response.",
+            "description": "Decrypted native contract; successful native transport replies are encrypted.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultEnvelope"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ResultEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "ret_data": {
+                          "type": "object",
+                          "required": [
+                            "list"
+                          ],
+                          "properties": {
+                            "list": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "friend_id",
+                                  "target_pvid",
+                                  "type",
+                                  "nick_name"
+                                ],
+                                "properties": {
+                                  "friend_id": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                  },
+                                  "target_pvid": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "friend",
+                                      "request",
+                                      "received",
+                                      "candidate"
+                                    ]
+                                  },
+                                  "nick_name": {
+                                    "type": "string"
+                                  },
+                                  "reg_utc": {
+                                    "type": "integer"
+                                  },
+                                  "tick": {
+                                    "type": "integer",
+                                    "description": "Neutral0; original tick semantics not reconstructed."
+                                  },
+                                  "received_dtm": {
+                                    "type": "integer",
+                                    "description": "Neutral0; original receipt clock semantics not reconstructed."
+                                  },
+                                  "country_code": {
+                                    "type": "string"
+                                  },
+                                  "profile_url": {
+                                    "type": "string"
+                                  },
+                                  "profile_status": {
+                                    "type": "string"
+                                  },
+                                  "like_cnt": {
+                                    "type": "integer"
+                                  },
+                                  "is_like": {
+                                    "type": "integer"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -18754,9 +18889,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-friends-2026-10-11.md; tests/social-friends.ts",
+        "x-runtime-confidence": "Local lifecycle and encrypted compiled restart tested; native UI pending"
       }
     },
     "/relation/GetRecommendInfo": {
@@ -18924,7 +19059,7 @@
     "/relation/GetSuggestedFriendList": {
       "post": {
         "summary": "Read suggested friends",
-        "description": "Returns an empty social list. Friend discovery and social mutations are not implemented yet.",
+        "description": "Returns an empty suggested list. Local request/accept relationships are implemented separately; candidate discovery is not reconstructed.",
         "tags": [
           "Lobby and session"
         ],
@@ -19020,7 +19155,7 @@
     "/relation/GetTargetUserInfo": {
       "post": {
         "summary": "Read a target brief profile",
-        "description": "Native CPVRelation reads ret_data.list rows containing pvid, reg_utc, utc, nick_name, country_code, profile_url, profile_status, like_cnt and is_like. The authenticated singleton list[1] publishes the explicitly local notice sender and a served original100x100 system-icon URL. It creates no account or inventory. Other target handling remains a historical party-profile fixture and is not reconstructed social functionality.",
+        "description": "Native CPVRelation reads ret_data.list rows containing pvid, reg_utc, utc, nick_name, country_code, profile_url, profile_status, like_cnt and is_like. Authenticated bounded list requests admit the requester, documented local notice/Arena fixtures, and actual same-server relationship peers. Peer names/identity come from local accounts with the original100x100 system icon as a local fallback; no private credentials or synthetic Hunter party is published. Unrelated local accounts refuse. Historical full party-profile requests remain separate fixtures.",
         "tags": [
           "Missions and combat"
         ],
@@ -21749,10 +21884,10 @@
     },
     "/shop/SellCard": {
       "post": {
-        "summary": "Recovered /shop/SellCard route",
-        "description": "The route literal **/shop/SellCard** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Hunter sale profit data unavailable",
+        "description": "Authenticated inst_id_list sale request refuses with result_code2001 until original GetExtra.card_sell_profit rows and reward identities are reconstructed. The final native UI uses reference minimum rank, not GetLevel.sell_price. A generic success would remove the native captured request vector even though the server retained ownership, so no mock success or guessed zero-value disposal is returned. The isolated evidence-gated planner is not enabled.",
         "tags": [
-          "Commerce"
+          "Cards and training"
         ],
         "parameters": [
           {
@@ -21823,8 +21958,8 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-reverse-engineering-status": "native-refusal-contract",
+        "x-evidence": "docs/hunter-sale-and-growth-contract-2026-10-11.md; tests/hunter-sale.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
