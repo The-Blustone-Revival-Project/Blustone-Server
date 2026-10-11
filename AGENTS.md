@@ -1,3 +1,15 @@
+## Release checkpoint: Server 1.1.0 (2026-10-11)
+
+User authorized a new GitHub release; minor version1.1.0 selected for additive
+social, bulk promotion and configured sale/equipment/Gem workflows. All85 checks,
+build, five resource-profile checks,968-file SHA verification and independent
+compiled encrypted protocol/restart proof passed. Existing bundle unchanged;
+prepared profiles' originals included, default remains139/stamp1634683. Public
+notes distinguish supplied data from missing original economy/native UI proof.
+Publish regular Latest via scripts/releases/publish.py after source push; verify
+remote asset digests. Instrumented remains+15 because no new APK was built.
+Release does not resume held BlueStacks inputs or change live profile/save.
+
 ## Latest continuation: explicit Gem inventory and first mounting (2026-10-11)
 
 Full85 checks/build and encrypted compiled --fixture --profile current-e6-gems
