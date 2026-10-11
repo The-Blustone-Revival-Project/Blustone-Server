@@ -426,6 +426,14 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     };
   }
 
+  paths["/gym/RankUpBundle"] = { post: {
+    ...operation("Bulk promote low-grade Hunters",
+      "Native bulk request fields are src_rank, src_cnt, target_rank, target_cnt and price. Source grades1/2 use groups of grade+3 Hunters per result and destination grade+1. Native quote formula per result is2*RaisePrice(sourceGrade)+sourceGrade*RankUpPrice(sourceGrade); existing replica price fixtures produce1200/2200 gold. No max-level prerequisite applies to this separate shortcut. The replica protects locked Hunters, leader/all decks and active commitments, validates destination references and quote, and persists survivor promotions, removals, collection history and wallet together with rollback on write failure. Stable ascending instance selection is local policy; original selection order/prices are unknown. Native response uses card.target_list[].rank/exp/rank_up_cnt:{cur} and removed_inst_id_list. Native end-to-end validation remains pending; repeated accepted calls are distinct operations without a recovered nonce.", "Cards and training"),
+    "x-evidence": "docs/group-rank-up-native-2026-10-11.md; tests/group-rank-up.ts",
+    "x-reverse-engineering-status": "native-parser-reconstructed",
+    "x-runtime-confidence": "Native fields/formula recovered; local economy and survivor policy, native UI pending",
+  } };
+  explicitlyDocumented.add("/gym/RankUpBundle");
   for (const action of ["Block", "Unblock"]) {
     const route = `/relation/${action}`;
     paths[route] = { post: {

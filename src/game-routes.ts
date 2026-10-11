@@ -303,6 +303,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/card_handler/ToggleLock") return state.toggleCardLock(payload, headers);
   if (route === "/gym/LevelUp") return state.trainCard(payload, headers);
   if (route === "/gym/RankUp") return state.rankUpCard(payload, headers);
+  if (route === "/gym/RankUpBundle") return state.groupRankUpCards(payload, headers);
   if (route === "/gym/SkillUp") return state.trainSkill(payload, headers);
   if (route === "/gym/MultiSkillUp") return state.trainSkills(payload, headers);
   if (route === "/world/SetDeck") return state.setDeck(payload, headers);

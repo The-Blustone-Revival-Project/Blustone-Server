@@ -3,6 +3,7 @@ import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors } from "./mirage.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
+import { planGroupRankUp } from "./group-rank-up.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
 import { earnSpecialSupply, specialSupplyIds, specialSupplyList } from "./special-supply.js";
@@ -1603,6 +1604,49 @@ export class ServerState {
         rank: { prev: previous.rank, cur: transition.rank },
         rank_up_cnt: { prev: previous.rank_up_cnt, cur: transition.rank_up_cnt },
         exp: { prev: previous.exp, cur: transition.exp } }, removed_inst_list: sources } });
+  }
+
+  groupRankUpCards(payload: Record<string, unknown>, headers: Record<string, string>) {
+    const account = this.accountFor(payload, headers);
+    const game = this.gameByPvid.get(account.pvid) ?? this.gameFor(account);
+    assertOwnedCardCompatibility(game);
+    const inventory = [...game.starter_cards, ...game.recruited_cards];
+    // Mirage runs/entry are currently refused. Preserve any carried HP from
+    // older evidence rather than treat an unrepresented sortie as disposable.
+    if (inventory.some((card) => card.mirage_remain_hp !== undefined && Number(card.mirage_remain_hp) !== 1000))
+      return this.failure(2001, "Carried Mirage hunter commitments are not reconstructed");
+    const protectedIds = new Set([game.leader_inst_id, ...game.decks.flatMap((deck) => deck.list),
+      ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
+      ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
+    const plan = planGroupRankUp(inventory, payload, { gold: game.gold, protectedIds,
+      ordinaryReference: (refId) => starterReference.some((ref) => ref.base.id === refId && ref.base.is_source === 0),
+      destinationSupported: (refId, rank) => starterReference.some((ref) => ref.base.id === refId &&
+        ref.stat.some((row) => row.rank === rank && row.awk_step === 0)) &&
+        starterLevels.card.some((row) => row.rank === rank && row.level === 1 && row.min_exp === 0),
+    });
+    if ("error" in plan) return this.failure(2001, plan.error!);
+    const targets = plan.updates.map((update) => inventory.find((card) => card.inst_id === update.inst_id)!);
+    // Validate potentially malformed historical book data before touching any
+    // hunter or wallet. A thrown projection must not leave destructive edits.
+    const nextBook = mergeCardBook(game.card_book, targets.map((card, index) => ({ ...card, ...plan.updates[index] })));
+    const targetBefore = targets.map((card) => ({ card, rank: card.rank, rank_up_cnt: card.rank_up_cnt, exp: card.exp }));
+    const before = { gold: game.gold, starters: game.starter_cards, recruits: game.recruited_cards, book: game.card_book };
+    const removed = new Set(plan.removedIds);
+    for (let i = 0; i < targets.length; i++) Object.assign(targets[i], plan.updates[i]);
+    game.gold = plan.gold!;
+    game.starter_cards = game.starter_cards.filter((card) => !removed.has(card.inst_id));
+    game.recruited_cards = game.recruited_cards.filter((card) => !removed.has(card.inst_id));
+    game.card_book = nextBook;
+    try { this.persist(); }
+    catch (error) {
+      for (const { card, rank, rank_up_cnt, exp } of targetBefore) Object.assign(card, { rank, rank_up_cnt, exp });
+      game.gold = before.gold;
+      game.starter_cards = before.starters;
+      game.recruited_cards = before.recruits;
+      game.card_book = before.book;
+      throw error;
+    }
+    return this.envelope(plan.data);
   }
 
   missionInventory(payload: Record<string, unknown>, headers: Record<string, string>) {
