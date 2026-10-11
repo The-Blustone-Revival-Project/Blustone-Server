@@ -43,6 +43,7 @@ export function additionalMaterialReferences<Stat extends Record<string, unknown
   packageNames: readonly string[]; publishedIds: readonly string[];
   fixtureStats: readonly Stat[];
   neutralSkillSlots: (refId: string) => Skill[];
+  projectStats?: (refId: string, stat: Stat) => Stat;
 }) {
   if (!options.fixtureStats.length || options.fixtureStats.some((row) => !Number.isInteger(row.rank)))
     throw new Error("Explicit local fixture stat rank rows required");
@@ -53,7 +54,8 @@ export function additionalMaterialReferences<Stat extends Record<string, unknown
         attr: row.attr!, role: row.role!, res_prefix: `C${row.id}`,
         is_source: 0, source_field: 0, cool_time: 1000 },
       equipment: [], dialog: [], skill: structuredClone(options.neutralSkillSlots(row.id)),
-      stat: structuredClone([...options.fixtureStats]),
+      stat: options.fixtureStats.map((stat) => options.projectStats
+        ? options.projectStats(row.id, structuredClone(stat)) : structuredClone(stat)),
     }));
 }
 export const characterIdentities: readonly CharacterIdentity[] = [

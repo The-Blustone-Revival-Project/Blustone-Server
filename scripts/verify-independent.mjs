@@ -244,6 +244,13 @@ try {
   if(profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials') {
     assert.deepEqual(ordinaryReferences.slice(6).map(row=>row.base.id),materialsIds);
     assert.ok(ordinaryReferences.slice(6).every(row=>row.is_main===0 && row.skill.length===5));
+    if(profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection') {
+      const {materialArchiveObservations}=await import(pathToFileURL(path.join(root,'dist/src/material-stat-projection.js')).href);
+      const observations=materialArchiveObservations();
+      for(const card of ordinaryReferences.slice(6)) if(observations[card.base.id])
+        for(const stat of card.stat) for(const [key,value] of Object.entries(observations[card.base.id].values))
+          assert.equal(stat[key],value,'Compiled opt-in historical field must match its pinned observation');
+    }
     const items=(await secure('/reference/GetItem',auth)).ret_data;
     for(const card of ordinaryReferences) {
       const bindings=items.item.filter(item=>item.use_type===3 && item.effect===card.base.id);
@@ -326,6 +333,9 @@ try {
   if(exerciseMonster)
     assert.deepEqual((await secure('/reference/GetMonster',{...auth,list:JSON.stringify([exerciseMonster])})).ret_data,monsterReference,
       'Exact monster identity/prefix/fixture stats must survive compiled restart');
+  if(profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection')
+    assert.deepEqual((await secure('/reference/GetCard',auth)).ret_data,ordinaryReferences,
+      'Historical reference policy must survive restart without changing records');
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
   for(const entry of before.gameStates) {
@@ -351,6 +361,7 @@ try {
     encrypted_social_discovery_fixture:exerciseSocial,
     encrypted_social_likes_fixture:exerciseSocial,
     encrypted_monster_resource_fixture:exerciseMonster??null,
+    historical_material_projection:profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection',
     quest_empty_collections_and_claim_refusal:true,
     guild_flat_lobby_and_skin_empty_contracts:true,
     profile:profileName,resource_stamp:stamp,exact_manifest_selection:true,manifest_restart_exact:true,

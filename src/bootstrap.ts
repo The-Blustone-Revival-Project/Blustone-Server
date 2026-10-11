@@ -21,6 +21,7 @@ import { fixtureSkillSlots } from "./skills.js";
 import { projectOrdinaryStats } from "./ordinary-stat-projection.js";
 import { additionalMaterialReferences } from "./character-materials.js";
 import { RECOVERED_MONSTER_NAMESPACES, requireSelectedMonsterArt } from "./monster-art.js";
+import { projectMaterialStats } from "./material-stat-projection.js";
 
 /**
  * `BLUSTONE_CAMPAIGN=full|minimal`, resolved once at import. **`full`** is the
@@ -214,7 +215,8 @@ const originalStarterReference = [...new Map([
 
 /** Opt-in reference coverage only. Original six references, owned cards and
  * recruitment pools remain unchanged. New material-backed rows deliberately
- * retain explicit local legacy stats and neutral skill slots; their original
+ * retain explicit local stats and neutral skill slots; historical projection
+ * requires its separate opt-in. Their original
  * ordinary combat magnitudes are unknown, not inferred from Episode artwork. */
 export const CARD_REFERENCE_PROFILE = process.env.BLUSTONE_CARD_REFERENCE_PROFILE ?? "starter";
 if (!["starter", "materials"].includes(CARD_REFERENCE_PROFILE))
@@ -225,6 +227,7 @@ export const starterReference = [...originalStarterReference,
     publishedIds: originalStarterReference.map((card) => card.base.id),
     fixtureStats: ordinaryRankStats(cardOneLegacyStat),
     neutralSkillSlots: fixtureSkillSlots,
+    projectStats: projectMaterialStats,
   }) : []),
 ];
 
