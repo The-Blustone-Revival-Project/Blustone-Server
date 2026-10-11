@@ -1,0 +1,63 @@
+
+CancelRequest
+G0081b5de LDR / G0081b5e0 ADD / ELF slot0080b958 -> ELF01d589d0: 'app_code'
+G0081b608 LDR / G0081b60a ADD / ELF slot0080b95c -> ELF01d589d9: 'app_ver'
+G0081b626 LDR / G0081b628 ADD / ELF slot0080b960 -> ELF01d589ee: 'market'
+G0081b64e LDR / G0081b650 ADD / ELF slot0080b964 -> ELF01d589e1: 'platform'
+G0081b67c LDR / G0081b67e ADD / ELF slot0080b968 -> ELF01d586aa: 'pvid'
+G0081b6a8 LDR / G0081b6b0 ADD / ELF slot0080b96c -> ELF01d589ea: 'otp'
+G0081b72e LDR / G0081b732 ADD / ELF slot0080b970 -> ELF01d5b166: 'target_friend_id_list'
+G0081b8d2 LDR / G0081b8d4 ADD / ELF slot0080b974 -> ELF01d5b17c: '/relation/FriendReqCancel'
+
+CancelCB
+G0081bd58 LDR / G0081bd5a ADD / ELF slot0080c0b0 -> ELF01d52940: '[ERR] [%s] '
+G0081bd62 LDR / G0081bd64 ADD / ELF slot0080c0b4 -> ELF01d5af55: 'error. http_res_code(%d), protocol_res_code(%d)'
+G0081bd8e LDR / G0081bd90 ADD / ELF slot0080c0d0 -> ELF01d5b1a5: 'ReqCancelFriendListCB'
+G0081bdfe LDR / G0081be00 ADD / ELF slot0080c0b8 -> ELF01d5898e: 'result_code'
+G0081be56 LDR / G0081be58 ADD / ELF slot0080c0bc -> ELF01d589bb: 'ret_data'
+G0081be60 LDR / G0081be62 ADD / ELF slot0080c0c0 -> ELF01d5b196: 'friend_id_list'
+G0081bf36 LDR / G0081bf38 ADD / ELF slot0080c0c4 -> ELF01d53296: '[JUC] [%s] '
+G0081bf40 LDR / G0081bf42 ADD / ELF slot0080c0c8 -> ELF01d5b13a: 'success, Friend ID : %llu'
+G0081bf68 LDR / G0081bf6a ADD / ELF slot0080c0cc -> ELF01d5b1a5: 'ReqCancelFriendListCB'
+
+RejectRequest
+G0081c10e LDR / G0081c110 ADD / ELF slot0080c488 -> ELF01d589d0: 'app_code'
+G0081c138 LDR / G0081c13a ADD / ELF slot0080c48c -> ELF01d589d9: 'app_ver'
+G0081c156 LDR / G0081c158 ADD / ELF slot0080c490 -> ELF01d589ee: 'market'
+G0081c17e LDR / G0081c180 ADD / ELF slot0080c494 -> ELF01d589e1: 'platform'
+G0081c1ac LDR / G0081c1ae ADD / ELF slot0080c498 -> ELF01d586aa: 'pvid'
+G0081c1d8 LDR / G0081c1e0 ADD / ELF slot0080c49c -> ELF01d589ea: 'otp'
+G0081c25e LDR / G0081c262 ADD / ELF slot0080c4a0 -> ELF01d5b166: 'target_friend_id_list'
+G0081c402 LDR / G0081c404 ADD / ELF slot0080c4a4 -> ELF01d5b1bb: '/relation/FriendReqReject'
+
+RejectCB
+G0081c884 LDR / G0081c886 ADD / ELF slot0080cb84 -> ELF01d52940: '[ERR] [%s] '
+G0081c88e LDR / G0081c890 ADD / ELF slot0080cb88 -> ELF01d5af55: 'error. http_res_code(%d), protocol_res_code(%d)'
+G0081c8ba LDR / G0081c8bc ADD / ELF slot0080cb8c -> ELF01d5b1d5: 'ReqRejectFriendListCB'
+G0081c8ea LDR / G0081c8ec ADD / ELF slot0080cb6c -> ELF01d5898e: 'result_code'
+G0081c942 LDR / G0081c944 ADD / ELF slot0080cb70 -> ELF01d589bb: 'ret_data'
+G0081c94c LDR / G0081c94e ADD / ELF slot0080cb74 -> ELF01d5b196: 'friend_id_list'
+G0081c9f8 LDR / G0081c9fa ADD / ELF slot0080cb78 -> ELF01d53296: '[JUC] [%s] '
+G0081ca02 LDR / G0081ca04 ADD / ELF slot0080cb7c -> ELF01d5b13a: 'success, Friend ID : %llu'
+G0081ca2e LDR / G0081ca30 ADD / ELF slot0080cb80 -> ELF01d5b1d5: 'ReqRejectFriendListCB'
+
+UnfriendRequest
+G0081cbca LDR / G0081cbcc ADD / ELF slot0080cf44 -> ELF01d589d0: 'app_code'
+G0081cbf4 LDR / G0081cbf6 ADD / ELF slot0080cf48 -> ELF01d589d9: 'app_ver'
+G0081cc12 LDR / G0081cc14 ADD / ELF slot0080cf4c -> ELF01d589ee: 'market'
+G0081cc3a LDR / G0081cc3c ADD / ELF slot0080cf50 -> ELF01d589e1: 'platform'
+G0081cc68 LDR / G0081cc6a ADD / ELF slot0080cf54 -> ELF01d586aa: 'pvid'
+G0081cc94 LDR / G0081cc9c ADD / ELF slot0080cf58 -> ELF01d589ea: 'otp'
+G0081cd1a LDR / G0081cd1e ADD / ELF slot0080cf5c -> ELF01d5b166: 'target_friend_id_list'
+G0081cebe LDR / G0081cec0 ADD / ELF slot0080cf60 -> ELF01d5b1eb: '/relation/Unfriend'
+
+UnfriendCB
+G0081d340 LDR / G0081d342 ADD / ELF slot0080d640 -> ELF01d52940: '[ERR] [%s] '
+G0081d34a LDR / G0081d34c ADD / ELF slot0080d644 -> ELF01d5af55: 'error. http_res_code(%d), protocol_res_code(%d)'
+G0081d376 LDR / G0081d378 ADD / ELF slot0080d648 -> ELF01d5b1fe: 'ReqUnfriendListCB'
+G0081d3a6 LDR / G0081d3a8 ADD / ELF slot0080d628 -> ELF01d5898e: 'result_code'
+G0081d3fe LDR / G0081d400 ADD / ELF slot0080d62c -> ELF01d589bb: 'ret_data'
+G0081d408 LDR / G0081d40a ADD / ELF slot0080d630 -> ELF01d5b196: 'friend_id_list'
+G0081d4b4 LDR / G0081d4b6 ADD / ELF slot0080d634 -> ELF01d53296: '[JUC] [%s] '
+G0081d4be LDR / G0081d4c0 ADD / ELF slot0080d638 -> ELF01d5b13a: 'success, Friend ID : %llu'
+G0081d4ea LDR / G0081d4ec ADD / ELF slot0080d63c -> ELF01d5b1fe: 'ReqUnfriendListCB'

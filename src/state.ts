@@ -3,7 +3,7 @@ import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors } from "./mirage.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
-import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
+import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { planGroupRankUp } from "./group-rank-up.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
@@ -1639,12 +1639,15 @@ export class ServerState {
     try {
       if (route === "/relation/GetList") return this.envelope(socialFriendList(current, account.pvid, payload.type, profile));
       if (route === "/relation/GetFriendReceivedCount") return this.envelope(receivedSocialFriendCount(current, account.pvid));
-      if (route !== "/relation/FriendRequest" && route !== "/relation/FriendReqAccept")
+      if (!["/relation/FriendRequest", "/relation/FriendReqAccept", "/relation/FriendReqCancel", "/relation/FriendReqReject", "/relation/Unfriend"].includes(route))
         return this.failure(2001, "This friend lifecycle receiver is not reconstructed");
-      if (payload.target_friend_id_list !== undefined)
-        return this.failure(2001, "Bulk friend acceptance is not reconstructed");
+      const isRemoval = ["/relation/FriendReqCancel", "/relation/FriendReqReject", "/relation/Unfriend"].includes(route);
+      if (!isRemoval && payload.target_friend_id_list !== undefined)
+        return this.failure(2001, "Friend request/accept uses a scalar identity, not a removal list");
       const blocked = (a: number, b: number) => Object.hasOwn(this.accountsByPvid.get(a)?.socialBlocks ?? {}, String(b));
-      const plan = planSocialFriend(current, account.pvid,
+      const plan = isRemoval ? planSocialFriendRemoval(current, account.pvid,
+        route === "/relation/FriendReqCancel" ? "cancel" : route === "/relation/FriendReqReject" ? "reject" : "unfriend",
+        payload.target_friend_id_list, profile) : planSocialFriend(current, account.pvid,
         route === "/relation/FriendRequest" ? "request" : "accept",
         route === "/relation/FriendRequest" ? payload.target_pvid : payload.target_friend_id,
         profile, blocked, Date.now());
@@ -1668,8 +1671,9 @@ export class ServerState {
   localSocialProfile(viewerPvid: number, targetPvid: number) {
     const viewer = this.accountsByPvid.get(viewerPvid), peer = this.accountsByPvid.get(targetPvid);
     if (!viewer || !peer || viewer.serverId !== peer.serverId || !this.socialFriends?.relations.some((row) =>
-      (row.from_pvid === viewerPvid && row.to_pvid === targetPvid) ||
-      (row.from_pvid === targetPvid && row.to_pvid === viewerPvid))) return undefined;
+      (row.state === "pending" || row.state === "accepted") &&
+      ((row.from_pvid === viewerPvid && row.to_pvid === targetPvid) ||
+      (row.from_pvid === targetPvid && row.to_pvid === viewerPvid)))) return undefined;
     return { pvid: peer.pvid, reg_utc: peer.beginUtc, utc: Math.floor(Date.now() / 1000),
       nick_name: peer.nickname, country_code: "", profile_status: "", like_cnt: 0, is_like: 0,
       profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH };

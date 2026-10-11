@@ -5,7 +5,7 @@ export interface LocalFriendRelation {
   friend_id: number;
   from_pvid: number;
   to_pvid: number;
-  state: "pending" | "accepted";
+  state: "pending" | "accepted" | "cancelled" | "rejected" | "removed";
   created_at: number;
 }
 export interface SocialFriends { next_id: number; relations: LocalFriendRelation[] }
@@ -35,10 +35,11 @@ export function normalizeSocialFriends(raw: unknown): SocialFriends {
       throw new TypeError("Malformed local friend relation");
     const friend_id = socialFriendId(row.friend_id), from_pvid = socialFriendId(row.from_pvid), to_pvid = socialFriendId(row.to_pvid);
     const pair = [from_pvid, to_pvid].sort((a, b) => a - b).join(":");
-    if (from_pvid === to_pvid || friend_id >= next_id || ids.has(friend_id) || pairs.has(pair) ||
-        !["pending", "accepted"].includes(row.state) || !Number.isSafeInteger(row.created_at) || row.created_at < 0)
+    const active = row.state === "pending" || row.state === "accepted";
+    if (from_pvid === to_pvid || friend_id >= next_id || ids.has(friend_id) || (active && pairs.has(pair)) ||
+        !["pending", "accepted", "cancelled", "rejected", "removed"].includes(row.state) || !Number.isSafeInteger(row.created_at) || row.created_at < 0)
       throw new TypeError("Malformed local friend relation");
-    ids.add(friend_id); pairs.add(pair);
+    ids.add(friend_id); if (active) pairs.add(pair);
     return { friend_id, from_pvid, to_pvid, state: row.state, created_at: row.created_at };
   });
   return { next_id, relations };
@@ -65,8 +66,8 @@ export function planSocialFriend(current: SocialFriends, actor: number, action: 
     if (id === actor) throw new Error("Cannot request yourself as a friend");
     sameLocalServer(actor, id, profile);
     if (blocked(actor, id) || blocked(id, actor)) throw new Error("Friend request is blocked");
-    const existing = next.relations.find((row) =>
-      (row.from_pvid === actor && row.to_pvid === id) || (row.from_pvid === id && row.to_pvid === actor));
+    const existing = next.relations.find((row) => (row.state === "pending" || row.state === "accepted") &&
+      ((row.from_pvid === actor && row.to_pvid === id) || (row.from_pvid === id && row.to_pvid === actor)));
     if (existing) {
       if (existing.state === "pending" && existing.from_pvid === actor)
         return { next, receipt: { friend_id: existing.friend_id, target_pvid: id } };
@@ -78,11 +79,47 @@ export function planSocialFriend(current: SocialFriends, actor: number, action: 
     return { next, receipt: { friend_id, target_pvid: id } };
   }
   const relation = next.relations.find((row) => row.friend_id === id);
-  if (!relation || relation.to_pvid !== actor) throw new Error("No owned incoming friend request");
+  if (!relation || relation.to_pvid !== actor || !["pending", "accepted"].includes(relation.state))
+    throw new Error("No owned incoming friend request");
   sameLocalServer(actor, relation.from_pvid, profile);
   if (blocked(actor, relation.from_pvid) || blocked(relation.from_pvid, actor)) throw new Error("Friend acceptance is blocked");
   relation.state = "accepted";
   return { next, receipt: { friend_id: relation.friend_id } };
+}
+
+/** Cancel/reject/unfriend use target_friend_id_list JSON numeric arrays, NOT
+ * account PVIDs or comma-separated text. All callbacks consume friend_id_list.
+ */
+export function socialFriendIdList(raw: unknown): number[] {
+  if (typeof raw === "string") {
+    try { raw = JSON.parse(raw); } catch { throw new TypeError("Friend IDs must be a JSON numeric array"); }
+  }
+  if (!Array.isArray(raw) || raw.length === 0 || raw.some((id) => typeof id !== "number"))
+    throw new TypeError("Friend IDs must be a nonempty numeric array");
+  return [...new Set(raw.map(socialFriendId))];
+}
+
+/** Validate every participant/state before changing a cloned graph. Tombstones
+ * retain original ownership and monotone IDs for restart-safe retry receipts.
+ * Historical row retention/idempotent cleanup is explicit local server policy.
+ */
+export function planSocialFriendRemoval(current: SocialFriends, actor: number, action: "cancel" | "reject" | "unfriend",
+  rawIds: unknown, profile: (id: number) => FriendProfile | undefined) {
+  const next = normalizeSocialFriends(current);
+  socialFriendId(actor);
+  const ids = socialFriendIdList(rawIds);
+  const finalState = action === "cancel" ? "cancelled" : action === "reject" ? "rejected" : "removed";
+  const rows = ids.map((id) => {
+    const row = next.relations.find((relation) => relation.friend_id === id);
+    if (!row || (action === "cancel" ? row.from_pvid !== actor : action === "reject" ? row.to_pvid !== actor :
+      row.from_pvid !== actor && row.to_pvid !== actor)) throw new Error("No owned friend relationship for this operation");
+    sameLocalServer(actor, row.from_pvid === actor ? row.to_pvid : row.from_pvid, profile);
+    if (row.state !== finalState && row.state !== (action === "unfriend" ? "accepted" : "pending"))
+      throw new Error("Friend relationship is not in the required lifecycle state");
+    return row;
+  });
+  for (const row of rows) row.state = finalState;
+  return { next, receipt: { friend_id_list: ids } };
 }
 
 export function socialFriendList(current: SocialFriends, actor: number, rawType: unknown,

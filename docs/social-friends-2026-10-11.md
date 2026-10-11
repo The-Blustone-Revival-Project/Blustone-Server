@@ -86,12 +86,14 @@ brief `GetTargetUserInfo.list` boundary, using their own account identity/name;
 unrelated local accounts remain refused. No private token/device/email fields
 are exposed and no synthetic hunter party is assigned to a peer.
 
-Cancel/reject/unfriend and bulk `target_friend_id_list` acceptance remain
-authenticated explicit result2001 refusals until their exact receiver boundary
-is recovered. This is intentionally incomplete friendship lifecycle coverage;
-it must not report those operations as generic success. GetSuggestedFriendList
-remains its existing empty response. Actual native request/list/accept rendering
-is not yet verified.
+Cancel/reject/unfriend are now implemented through their recovered
+`target_friend_id_list` request / `friend_id_list` receipt boundary, with owned
+atomic batches and retained tombstone history. See
+`social-friend-removal-2026-10-11.md`. The similarly named list field is **not**
+a proved bulk-accept grammar; the original exported accept receiver is scalar.
+Passing a removal list to FriendReqAccept remains an explicit refusal.
+GetSuggestedFriendList remains its existing empty response. Actual native
+request/list/accept/removal rendering is not yet verified.
 
 Mirage's friend-floor response remains `[]`: real friendship does not recover
 an earned highest floor or justify inventing floor0. The Mirage documentation
