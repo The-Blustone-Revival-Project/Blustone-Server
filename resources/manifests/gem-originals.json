@@ -1,0 +1,51 @@
+[
+  {
+    "name": "E_GEM_DEFALT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/E_GEM_DEFALT.jet",
+    "destination": "resources/runtime/assets/E_GEM_DEFALT.jet",
+    "bytes": 137674,
+    "sha256": "ce85ce2383bd6d0dbe288b59e3ce68b9bade53ca2ec9236a7d1889c93774580d"
+  },
+  {
+    "name": "GEM_CHA.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/GEM_CHA.jet",
+    "destination": "resources/runtime/assets/GEM_CHA.jet",
+    "bytes": 967765,
+    "sha256": "dcd3f8eb077ce4915e784070809cf7a2b6f72f7cdca1f366247c37f9fbe01c18"
+  },
+  {
+    "name": "GEM_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/GEM_EFT.jet",
+    "destination": "resources/runtime/assets/GEM_EFT.jet",
+    "bytes": 77742,
+    "sha256": "d08d9b033ea549414e884c4cbb1129976553a9e35346e713495eaf5251e9d8c6"
+  },
+  {
+    "name": "GEM_SELECT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/GEM_SELECT.jet",
+    "destination": "resources/runtime/assets/GEM_SELECT.jet",
+    "bytes": 821642,
+    "sha256": "95154d1a8de714f9861a53809106fa7cc8c5645ac88d390515c943cf88fc14db"
+  },
+  {
+    "name": "GEM.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/GEM.jet",
+    "destination": "resources/runtime/assets/GEM.jet",
+    "bytes": 256934,
+    "sha256": "4b3be168af304158e47a2e09f3108e272df10605d8c40dd1729aabde7da09c69"
+  },
+  {
+    "name": "MP4_GEM.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/MP4_GEM.jet",
+    "destination": "resources/runtime/assets/MP4_GEM.jet",
+    "bytes": 1563238,
+    "sha256": "6c93ea44c22e871785e1447750332eb9620f4bcd3df2692965a1462b00427b0d"
+  },
+  {
+    "name": "UI_GEM.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/UI_GEM.jet",
+    "destination": "resources/runtime/assets/UI_GEM.jet",
+    "bytes": 139293,
+    "sha256": "7f4230120aa46f0b58b20881c2727fa04858c14fdc52370033e37ed16bc6e828"
+  }
+]
