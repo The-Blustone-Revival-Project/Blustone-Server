@@ -120,6 +120,8 @@ export interface LocalGameState {
   vip_exp: number;
   honor: number;
   gem: number;
+  /** Explicit imported/seeded wire rows, never the legacy scalar gem counter. */
+  owned_gems?: Record<string, unknown>[];
   leader_inst_id: number;
   items: LocalItemInstance[];
   /** Cards awarded after the bootstrap inventory. Never gacha popup metadata. */
@@ -362,6 +364,10 @@ export function normalizeLocalGameState(raw: unknown): LocalGameState {
     })(),
     honor: Math.max(0, integer("honor", fallback.honor)),
     gem: Math.max(0, integer("gem", fallback.gem)),
+    ...(value.owned_gems===undefined?{}:{owned_gems:(()=>{
+      if(!Array.isArray(value.owned_gems)) throw new Error("Malformed owned Gem inventory; refusing to erase it");
+      return structuredClone(value.owned_gems) as Record<string,unknown>[];
+    })()}),
     leader_inst_id: integer("leader_inst_id", fallback.leader_inst_id),
     items: Array.isArray(value.items) ? value.items as LocalItemInstance[] : [],
     recruited_cards: Array.isArray(value.recruited_cards)

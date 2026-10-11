@@ -1,0 +1,51 @@
+import assert from "node:assert/strict";
+import {readFileSync,mkdtempSync,mkdirSync,rmSync} from "node:fs";
+import {tmpdir} from "node:os";
+import path from "node:path";
+import {repositoryPath} from "../src/paths.js";
+import {parseGemMountRequest} from "../src/gem-mount.js";
+const profile=JSON.parse(readFileSync(repositoryPath("config/profiles/current-e6-gems.json"),"utf8"));Object.assign(process.env,profile.env);
+const {ServerState}=await import("../src/state.js");
+const ref={id:"AUTHORED_GEM",name:"Authored",desc:"",res_id:"G_1_001_R1",set_effect_id:1,rank:1,target:1};
+const gem={ref_id:ref.id,inst_id:"9007199254740993",rank:1,level:1,position:0,target_inst_id:"0",ability:"opaque",abilities:null};
+const numeric='{"weapons":[9007199254740993,0],"armors":[0,0],"accessories":[0,0]}';
+assert.equal(parseGemMountRequest({target_inst_id:"1000001",price_type:"2",combination:numeric}).grids[0][0],gem.inst_id);
+const directory=mkdtempSync(path.join(tmpdir(),"blustone-gem-mount-"));
+try {
+  const filename=path.join(directory,"state.json"),options={gemReferences:[ref]};
+  const state=new ServerState("http://localhost",filename,options);
+  const auth=state.registerGuest({device_id:"gem-mount-owner"},{}).ret_data as any;
+  const peer=state.registerGuest({device_id:"gem-mount-peer"},{}).ret_data as any;
+  const game=state.gameFor(state.accountFor(auth,{})),other=state.gameFor(state.accountFor(peer,{}));
+  const target=game.starter_cards[0];game.owned_gems=[gem,{...gem,inst_id:"2"}];game.gem=12;(state as any).persist();
+  const beforeOther=JSON.stringify(other),resources=JSON.stringify({gold:game.gold,gem:game.gem,items:game.items,cards:game.starter_cards,decks:game.decks,book:game.card_book});
+  const request={...auth,target_inst_id:String(target.inst_id),price_type:"2",combination:numeric};
+  const mount=(patch:Record<string,unknown>={})=>state.equipGems({...request,...patch},{}) as any;
+  const refuse=(patch:Record<string,unknown>)=>{const before=JSON.stringify(game),bytes=readFileSync(filename);
+    assert.notEqual(mount(patch).result_code,1);assert.equal(JSON.stringify(game),before);assert.deepEqual(readFileSync(filename),bytes);};
+  assert.throws(()=>state.equipGems({target_inst_id:String(target.inst_id),price_type:"2",combination:numeric},{}),/authenticated/);
+  assert.throws(()=>mount({pvid:peer.pvid}),/account|identity|pvid/i);
+  refuse({combination:JSON.stringify({weapons:[0,gem.inst_id],armors:[0,0],accessories:[0,0]})});
+  refuse({combination:JSON.stringify({weapons:[0,0],armors:[gem.inst_id,0],accessories:[0,0]})});
+  game.active_battle={state:"active",deck_inst_ids:[target.inst_id]} as any;refuse({});game.active_battle=null;
+  mkdirSync(filename+".tmp");const old=JSON.stringify(game),oldArray=game.owned_gems,bytes=readFileSync(filename);
+  assert.throws(()=>mount());assert.equal(JSON.stringify(game),old);assert.equal(game.owned_gems,oldArray);assert.deepEqual(readFileSync(filename),bytes);
+  rmSync(filename+".tmp",{recursive:true});
+  const result=mount();assert.equal(result.result_code,1);assert.equal(result.ret_data.gems.length,1);
+  assert.equal(result.ret_data.gems[0].target_inst_id,String(target.inst_id));assert.equal(result.ret_data.gems[0].position,1);
+  assert.equal(result.ret_data.user.gold.cur,game.gold);assert.equal(result.ret_data.user.gdp.cur,0);
+  const mountedBytes=readFileSync(filename);const repeated=mount();assert.equal(repeated.result_code,1);
+  assert.equal(repeated.ret_data.gems[0].position,1,"no-write retry still repairs native client with full authoritative target rows");
+  assert.deepEqual(readFileSync(filename),mountedBytes,"identical full desired grid is a no-write no-op");
+  refuse({combination:JSON.stringify({weapons:[0,0],armors:[0,0],accessories:[0,0]})}); // removal fee missing
+  refuse({combination:JSON.stringify({weapons:["2",0],armors:[0,0],accessories:[0,0]})});
+  assert.equal(JSON.stringify({gold:game.gold,gem:game.gem,items:game.items,cards:game.starter_cards,decks:game.decks,book:game.card_book}),resources);
+  assert.equal(JSON.stringify(other),beforeOther);
+  const restarted=new ServerState("http://localhost",filename,options);
+  assert.equal((restarted.gemInventory(auth,{}) as any).ret_data[0].position,1);assert.deepEqual(readFileSync(filename),mountedBytes);
+  // Exact per-equipment rank unlock, not overall Hunter rank.
+  const restored=restarted.gameFor(restarted.accountFor(auth,{}));restored.starter_cards[0].weapon_rank=3;(restarted as any).persist();
+  const second=restarted.equipGems({...request,combination:JSON.stringify({weapons:[gem.inst_id,"2"],armors:[0,0],accessories:[0,0]})},{}) as any;
+  assert.equal(second.result_code,1);assert.equal(second.ret_data.gems.find((gem:any)=>gem.inst_id==="2").position,2);
+} finally {rmSync(directory,{recursive:true,force:true});}
+console.log("Free first Gem mounts: exact6-cell/lossless uint64 grid, part/position/rank ownership, active protections, unchanged wallets/legacy scalar, no-op/replacement gating, rollback and restart passed; paid removals/transfers unknown.");

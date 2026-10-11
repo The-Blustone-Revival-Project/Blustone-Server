@@ -12,6 +12,10 @@ import { cardSellProfitRows, planHunterSale, type CardSellProfit } from "./hunte
 import {equipmentLevelPrices as parseEquipmentLevelPrices, equipmentRankPrices as parseEquipmentRankPrices,
   type EquipmentLevelPrice, type EquipmentRankPrice} from "./equipment-prices.js";
 import {planEquipmentUpgrade} from "./equipment-upgrade.js";
+import {configuredGemReferences} from "./gem-reference-profile.js";
+import {parseGemInstances,type GemReference} from "./gem-instances.js";
+import {planFreeGemMount} from "./gem-mount.js";
+import {gemWireRows,parseStateWithGemIds} from "./gem-wire.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
 import { earnSpecialSupply, specialSupplyIds, specialSupplyList } from "./special-supply.js";
@@ -496,10 +500,11 @@ export class ServerState {
   private readonly hunterSaleProfits: readonly CardSellProfit[];
   private readonly equipmentLevelPrices: readonly EquipmentLevelPrice[];
   private readonly equipmentRankPrices: readonly EquipmentRankPrice[];
+  private readonly gemReferences: readonly GemReference[];
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
-      equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown } = {}) {
+      equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -515,6 +520,9 @@ export class ServerState {
       parseEquipmentLevelPrices({result_code:1,ret_data:levelPrices},knownItems)).map(row=>Object.freeze(row)));
     this.equipmentRankPrices = Object.freeze((Array.isArray(rankPrices) && rankPrices.length===0 ? [] :
       parseEquipmentRankPrices({result_code:1,ret_data:rankPrices},knownItems)).map(row=>Object.freeze(row)));
+    const gemRows=Object.hasOwn(options,"gemReferences")?options.gemReferences:
+      process.env.BLUSTONE_GEM_REFERENCE_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_REFERENCE_JSON);
+    this.gemReferences=Object.freeze(configuredGemReferences(gemRows).map(row=>Object.freeze(row)));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -525,7 +533,7 @@ export class ServerState {
 
   private restore(serialized: string) {
     let namespaceMigrated = false;
-    const saved: unknown = JSON.parse(serialized);
+    const saved: unknown = parseStateWithGemIds(serialized);
     if (!isRecord(saved) || saved.version !== 1 || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
@@ -568,6 +576,7 @@ export class ServerState {
           ? migrateCardInstanceNamespace(normalized) : normalized;
         namespaceMigrated ||= game.card_instance_namespace === 1 && normalized.card_instance_namespace !== 1;
         assertOwnedCardCompatibility(game);
+        this.validateOwnedGems(game);
         this.gameByPvid.set(Number(row[0]), game);
         if (!isRecord(row[1]) || !Number.isSafeInteger(row[1].ap_updated_at) || !Number.isSafeInteger(row[1].bp_updated_at) || !Array.isArray(row[1].recruited_cards) || !Array.isArray(row[1].starter_cards) || !Array.isArray(row[1].decks) || !isRecord(row[1].stage_achievements)) {
           this.pendingGameMigrations.add(Number(row[0]));
@@ -1567,7 +1576,8 @@ export class ServerState {
    * Non-success native callbacks skip mutation parsing; 2001 is a local
    * refusal code, not a recovered original training-error mapping. */
   trainCard(payload: Record<string, unknown>, headers: Record<string, string>) {
-    const game = this.gameFor(this.accountFor(payload, headers));
+    const account=this.accountFor(payload,headers);
+    const game=this.gameByPvid.get(account.pvid)??this.gameFor(account);
     assertOwnedCardCompatibility(game);
     const inventory = [...game.starter_cards, ...game.recruited_cards];
     const targetId = Number(payload.target_inst_id);
@@ -1584,7 +1594,7 @@ export class ServerState {
         new Set(sources).size !== sources.length || sources.includes(targetId)) {
       return refuse("invalid training sources");
     }
-    const protectedIds = new Set([game.leader_inst_id,
+    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game),
       ...game.decks.filter((deck) => [1, 2, 4, 5].includes(deck.type)).flatMap((deck) => deck.list),
       ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
       ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
@@ -1624,7 +1634,8 @@ export class ServerState {
    * Partial arithmetic, prices/bonus and EXP reset are documented local policy.
    * Preserve owned skills: callback does not parse new skill-level fields. */
   rankUpCard(payload: Record<string, unknown>, headers: Record<string, string>) {
-    const game = this.gameFor(this.accountFor(payload, headers));
+    const account=this.accountFor(payload,headers);
+    const game=this.gameByPvid.get(account.pvid)??this.gameFor(account);
     assertOwnedCardCompatibility(game);
     const inventory = [...game.starter_cards, ...game.recruited_cards];
     const targetId = Number(payload.target_inst_id);
@@ -1648,7 +1659,7 @@ export class ServerState {
     // Native synthetic credited entries have IDs below capacity and skip price.
     // Do not renumber legacy cards or accept a price-disagreeing real material.
     if (sources.some((id) => id < capacity)) return refuse("legacy source ID collides with native credited-material placeholders");
-    const protectedIds = new Set([game.leader_inst_id,
+    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game),
       ...game.decks.filter((deck) => [1, 2, 4, 5].includes(deck.type)).flatMap((deck) => deck.list),
       ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
       ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
@@ -1823,7 +1834,7 @@ export class ServerState {
     // Unrepresented historical Mirage commitments must not become disposable.
     if (inventory.some((card) => card.mirage_remain_hp !== undefined && Number(card.mirage_remain_hp) !== 1000))
       return this.failure(2001, "Carried Mirage hunter commitments are not reconstructed");
-    const protectedIds = new Set([game.leader_inst_id, ...game.decks.flatMap((deck) => deck.list),
+    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game), ...game.decks.flatMap((deck) => deck.list),
       ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
       ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
     const plan = planHunterSale(inventory, payload, { gold: game.gold, items: game.items,
@@ -1861,7 +1872,7 @@ export class ServerState {
     // older evidence rather than treat an unrepresented sortie as disposable.
     if (inventory.some((card) => card.mirage_remain_hp !== undefined && Number(card.mirage_remain_hp) !== 1000))
       return this.failure(2001, "Carried Mirage hunter commitments are not reconstructed");
-    const protectedIds = new Set([game.leader_inst_id, ...game.decks.flatMap((deck) => deck.list),
+    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game), ...game.decks.flatMap((deck) => deck.list),
       ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
       ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
     const plan = planGroupRankUp(inventory, payload, { gold: game.gold, protectedIds,
@@ -1923,11 +1934,57 @@ export class ServerState {
   }
 
   gemInventory(payload: Record<string, unknown>, headers: Record<string, string>) {
-    this.accountFor(payload, headers);
+    const account=this.accountFor(payload, headers);
     // CSRGem::ParseGemInsts consumes ret_data directly as owned instance rows.
     // The legacy scalar game.gem is not an owned jewel and must not masquerade
-    // as one. No jewel instances have been reconstructed or granted yet.
-    return this.envelope([]);
+    // as one. Only explicitly stored, validated wire rows are exposed.
+    const game=this.gameByPvid.get(account.pvid)??this.gameFor(account);
+    this.validateOwnedGems(game);
+    return this.envelope(gemWireRows(game.owned_gems??[]));
+  }
+
+  gemReferenceInventory(payload:Record<string,unknown>,headers:Record<string,string>) {
+    this.accountFor(payload,headers);
+    return this.envelope(this.gemReferences.map(row=>({...row})));
+  }
+
+  equipGems(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid)??this.gameFor(account);
+    assertOwnedCardCompatibility(game);
+    this.validateOwnedGems(game);
+    const cards=[...game.starter_cards,...game.recruited_cards];
+    if(!this.options.legacyCardIds&&(game.card_instance_namespace!==1||cards.some(card=>
+      !Number.isSafeInteger(card.inst_id)||card.inst_id<=CARD_INSTANCE_BASE||card.inst_id>=CARD_INSTANCE_LIMIT)))
+      return this.failure(2001,"Gem mounting requires production owned Hunter identities");
+    const target=cards.find(card=>String(card.inst_id)===String(payload.target_inst_id));
+    if(!target||!starterReference.some(ref=>ref.base.id===target.ref_id&&ref.base.is_source===0))
+      return this.failure(2001,"Gem target ordinary reference is missing");
+    const busy=new Set([...(game.active_battle?.state==="active"?game.active_battle.deck_inst_ids:[]),
+      ...(game.arena.active?.deck_inst_ids??[]),...(game.search.active?.deck_inst_ids??[])]);
+    const plan=planFreeGemMount(payload,cards,game.owned_gems??[],this.gemReferences,busy);
+    if("error" in plan) return this.failure(2001,plan.error!);
+    const before=game.owned_gems;
+    if(plan.changed) {
+      game.owned_gems=plan.next!;
+      try{this.persist();}catch(error){game.owned_gems=before;throw error;}
+    }
+    // GDP remains the same explicit0 policy used by lobby; legacy game.gem is
+    // not silently reinterpreted as a wallet or owned jewel count.
+    return this.envelope({user:{gold:{cur:game.gold},gdp:{cur:0},iap_qty:game.gacha_iap_qty,
+      free_iap_qty:game.gacha_free_qty,item:[]},gems:gemWireRows(plan.receipt!)});
+  }
+
+  private validateOwnedGems(game:LocalGameState) {
+    if(game.owned_gems===undefined) return;
+    parseGemInstances({result_code:1,ret_data:game.owned_gems},this.gemReferences,
+      new Set([...game.starter_cards,...game.recruited_cards].map(card=>String(card.inst_id))),
+      (id,slot)=>{const card=[...game.starter_cards,...game.recruited_cards].find(card=>String(card.inst_id)===id);
+        return card?Number(card[`${["weapon","armor","accessory"][slot]}_rank`]):undefined;});
+  }
+
+  private gemProtectedCardIds(game:LocalGameState):number[] {
+    this.validateOwnedGems(game);
+    return (game.owned_gems??[]).map(row=>Number(row.target_inst_id)).filter(id=>id>0);
   }
 
   unavailableGemAction(payload: Record<string, unknown>, headers: Record<string, string>) {

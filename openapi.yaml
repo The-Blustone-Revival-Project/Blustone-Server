@@ -2433,24 +2433,19 @@ paths:
         ARM-device capture
   /card_handler/EquipGem:
     post:
-      summary: Recovered /card_handler/EquipGem route
-      description: >-
-        The route literal **/card_handler/EquipGem** was recovered from the ARM
-        native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Install Gems into empty slots
+      description: Authenticated complete plural combination arrays
+        weapons/armors/accessories each hold2 ordered uint64 IDs; zero is an
+        empty cell. Supports owned unmounted first installs and unchanged-grid
+        no-write retries; positions1..2, matching Gem part, rank3 second-slot
+        and active target gates. Changed occupied cells require missing removal
+        fee data and refuse; transfers/gacha/level-up remain unsupported. Full
+        authoritative target Gem rows are echoed even on a no-write retry.
+        Wallets and legacy scalar unchanged; current GDP0 lobby policy is
+        preserved. Atomic persistence/rollback; exact integer wire IDs avoid
+        native string rounding.
       tags:
-        - card_handler
+        - Missions and combat
       parameters: *a1
       requestBody: *a2
       responses:
@@ -2468,10 +2463,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
-      x-runtime-confidence: route literal confirmed; payload/response shape pending
-        ARM-device capture
+      x-reverse-engineering-status: native-parser-reconstructed
+      x-evidence: analysis/research/search-entry-reference-contract.md;
+        server-ts/src/hunter-search.ts; server-ts/tests/hunter-search.ts
+      x-runtime-confidence: Server contract/no-mutation checks pass. Native Search
+        map, guide focus, partner selection, two-wave combat, successful End,
+        Search Complete2/2, trace1/10 and village return verified. Original
+        content/economics remain fixtures; normal capsule spending, dispatch and
+        recruitment remain unverified.
   /card_handler/LevelUpEquipment:
     post:
       summary: LevelUpEquipment
@@ -5858,11 +5857,12 @@ paths:
   /lobby/GetGemInven:
     post:
       summary: Read owned jewel instances
-      description: "Final-client ReqGemInstCB passes the full envelope to
-        ParseGemInsts, which iterates ret_data as jewel-instance rows. Currently
-        an authenticated empty array: no jewels are reconstructed or granted.
-        The legacy scalar gem counter is preserved and is not emitted as
-        inventory. Native jewel UI unverified."
+      description: Authenticated raw explicit owned_gems rows preserve full
+        ability/main/sub data and validated target ownership. Mounted
+        positions1..2 and per-equipment rank3 second-slot gate are checked;
+        duplicate occupancy refuses. Legacy scalar gem remains separate. Unsafe
+        string IDs are emitted as exact integer JSON tokens to avoid native
+        strtod rounding; no gems auto-granted. Native jewel UI unverified.
       tags:
         - Missions and combat
       parameters: *a1
@@ -8130,9 +8130,10 @@ paths:
   /reference/GetGem:
     post:
       summary: Read jewel definitions
-      description: Native ParseGemRefs consumes ret_data directly. Empty array while
-        final-version IDs/rank/target/art definitions remain unrecovered; no
-        historical balance values or fabricated rows loaded.
+      description: Authenticated explicitly supplied immutable Gem INFO rows with
+        selected/hash-pinned original artwork. Default empty. Original reference
+        IDs and roll distributions remain unknown; resource namespace never
+        invents a gameplay ID.
       tags:
         - Missions and combat
       parameters: *a1
@@ -12869,21 +12870,43 @@ components:
           type: integer
           minimum: 0
     GemInventory:
-      type: object
-      required:
-        - gem
-        - gem_free
-        - gem_paid
-      properties:
-        gem:
-          type: integer
-          minimum: 0
-        gem_free:
-          type: integer
-          minimum: 0
-        gem_paid:
-          type: integer
-          minimum: 0
+      type: array
+      items:
+        type: object
+        required:
+          - ref_id
+          - inst_id
+          - rank
+          - level
+          - position
+          - target_inst_id
+          - ability
+          - abilities
+        properties:
+          ref_id:
+            type: string
+          inst_id:
+            oneOf:
+              - type: integer
+                minimum: 1
+              - type: string
+          target_inst_id:
+            oneOf:
+              - type: integer
+                minimum: 0
+              - type: string
+          rank:
+            type: integer
+          level:
+            type: integer
+          position:
+            type: integer
+          ability:
+            type: string
+          abilities:
+            nullable: true
+            type: object
+            additionalProperties: true
     WeatherState:
       type: object
       required:

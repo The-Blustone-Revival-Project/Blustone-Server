@@ -14,6 +14,13 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const exerciseBulk=process.argv.includes('--exercise-bulk');
 const exerciseSale=process.argv.includes('--exercise-sale');
 const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgrade');
+const exerciseGemMount=process.argv.includes('--exercise-gem-mount');
+const exerciseGemInventory=process.argv.includes('--exercise-gem-inventory')||exerciseGemMount;
+const authoredGemReference={id:'AUTHORED_GEM',name:'Authored HP Gem',desc:'Local parser fixture',res_id:'G_1_001_R1',set_effect_id:1,rank:1,target:1};
+const authoredGemStat={rank:1,awk_step:0,hp:'10000',atk:'0',def:'0',spd:'0',crt_chance:'0',crt_dmg:'0',penetration:'0',
+  block_chance:'0',block_dec_dmg:'0',attr_enhance:'0',attr_resist:'0',hp_regen:'0',hp_up:'0',atk_up:'0',def_up:'0'};
+const authoredGem={ref_id:'AUTHORED_GEM',inst_id:'9007199254740993',rank:1,level:1,position:0,target_inst_id:'0',ability:'opaque',
+  abilities:{level_up_failed:0,main:authoredGemStat,sub:[{...authoredGemStat,hp:'0',atk:'1000'}]}};
 const exerciseEquipment=process.argv.includes('--exercise-equipment')||exerciseEquipmentUpgrade;
 const fixtureEquipmentMaterial=exerciseEquipmentUpgrade?
   (await import(pathToFileURL(path.join(root,'dist/src/search-capsules.js')).href)).SEARCH_CAPSULE_ID:'';
@@ -31,11 +38,12 @@ const monsterIndex=process.argv.indexOf('--exercise-monster');
 const exerciseMonster=monsterIndex===-1?undefined:process.argv[monsterIndex+1];
 if(monsterIndex!==-1 && (!process.argv.includes('--fixture') || typeof exerciseMonster!=='string' || !/^M[0-9]{3}$/.test(exerciseMonster)))
   throw new Error('Monster resource exercises require --fixture and one exact original namespace');
-if((exerciseBulk || exerciseSocial || exerciseSale || exerciseEquipment) && !process.argv.includes('--fixture')) throw new Error('Configured exercises require --fixture; private preserved saves are never mutation targets');
+if((exerciseBulk || exerciseSocial || exerciseSale || exerciseEquipment || exerciseGemInventory) && !process.argv.includes('--fixture')) throw new Error('Configured exercises require --fixture; private preserved saves are never mutation targets');
 const profileIndex=process.argv.indexOf('--profile');
 const profileName=profileIndex===-1?'current-e6':process.argv[profileIndex+1];
 if(typeof profileName!=='string' || !/^[\w-]+$/.test(profileName)) throw new Error('Invalid verification profile');
 const profile=JSON.parse(readFileSync(path.join(root,'config/profiles',profileName+'.json'),'utf8'));
+if(exerciseGemInventory && profileName!=='current-e6-gems') throw new Error('Gem reference fixture requires the prepared original Gem owner profile');
 preflight(root,profile);
 const stamp=profile.env.BLUSTONE_RESLIST_STAMP;
 const expectedNames=profile.env.BLUSTONE_PACKAGE_NAMES.split(',').map(name=>name.slice(0,-4));
@@ -53,7 +61,7 @@ await requireFreePort();
 // races the port probe. Never overwrite a concurrent writer's state copy.
 const folder = mkdtempSync(path.join(outputFolder,'run-'));
 const stateFile = path.join(folder, 'state.json');
-let bulkPvid, salePvid, equipmentPvid;
+let bulkPvid, salePvid, equipmentPvid, gemPvid;
 const preserved = process.argv.includes('--fixture') ? '' : path.join(root, 'local/private/preserved-state.json');
 if (existsSync(preserved)) copyFileSync(preserved, stateFile);
 else {
@@ -85,11 +93,20 @@ else {
     seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===account.pvid?game:saved]);
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
   }
+  if(exerciseGemInventory) {
+    const auth=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
+    const account=fixture.accountFor(auth,{}),game=fixture.gameFor(account);gemPvid=account.pvid;
+    game.gem=12;game.owned_gems=[authoredGem];
+    const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
+    seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===account.pvid?game:saved]);
+    writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
+  }
 }
 const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
+  if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
   if(exerciseSale) env.BLUSTONE_CARD_SELL_PROFIT_JSON=JSON.stringify([{rank:1,profit_type:2,profit_target:'',profit_qty:13}]);
   if(exerciseEquipment) env.BLUSTONE_EQUIPMENT_REFERENCE_JSON=JSON.stringify({'001':exerciseEquipmentUpgrade?
     [authoredEquipment,{...authoredEquipment,id:'AUTHORED_WEAPON2',rank:2,atk:'40000'}]:[authoredEquipment]});
@@ -155,13 +172,41 @@ async function secure(route,values,{allowPlainRefusal=false}={}) {
   assert.ok(response.headers.get('content-type')?.startsWith('application/octet-stream'),route+' must return encrypted bytes');
   const decipher=crypto.createDecipheriv('aes-256-cbc',secret.subarray(0,32),secret.subarray(32,48));const decoded=Buffer.concat([decipher.update(bytes),decipher.final()]);
   assert.equal(response.headers.get('pv-signature'),crypto.createHmac('sha384',secret).update(decoded).digest('base64'));
-  return JSON.parse(decoded);
+  const text=decoded.toString('utf8');
+  if(exerciseGemInventory && ['/lobby/GetGemInven','/card_handler/EquipGem'].includes(route) && !allowPlainRefusal)
+    assert.ok(text.includes('"inst_id":9007199254740993'),'Large Gem identity must be an exact integer JSON token, never a strtod string');
+  const {parseStateWithGemIds}=await import(pathToFileURL(path.join(root,'dist/src/gem-wire.js')).href);
+  return parseStateWithGemIds(text);
 }
 try {
   await launch(); await exchange();
   const guest=await secure('/v2/account/RegisterGuest',{device_id:'standalone-migration-verification'});
   const auth={otp:String(guest.ret_data.otp),pvid:String(guest.pvid)};
   const lobby=await secure('/lobby/Enter',auth);assert.ok(lobby.ret_data);
+  if(exerciseGemInventory) {
+    assert.equal(Number(auth.pvid),gemPvid);
+    assert.deepEqual((await secure('/reference/GetGem',auth)).ret_data,[authoredGemReference]);
+    assert.deepEqual((await secure('/lobby/GetGemInven',auth)).ret_data,[authoredGem]);
+    const beforeMount=readFileSync(stateFile);
+    assert.equal((await secure('/card_handler/EquipGem',{...auth,target_inst_id:'1000001',price_type:'2',combination:'{}'},
+      {allowPlainRefusal:true})).result_code,2001,'Inventory read support must not fake an unproved mount');
+    assert.deepEqual(readFileSync(stateFile),beforeMount);
+    if(exerciseGemMount) {
+      const current=JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===gemPvid)[1];
+      const target=current.starter_cards.find(card=>card.ref_id==='001');
+      const request={...auth,target_inst_id:String(target.inst_id),price_type:'2',
+        combination:'{"weapons":[9007199254740993,0],"armors":[0,0],"accessories":[0,0]}'};
+      const reply=await secure('/card_handler/EquipGem',request);assert.equal(reply.result_code,1);
+      assert.deepEqual(reply.ret_data.gems,[{...authoredGem,target_inst_id:String(target.inst_id),position:1}]);
+      assert.deepEqual(reply.ret_data.user,{gold:{cur:current.gold},gdp:{cur:0},iap_qty:current.gacha_iap_qty,free_iap_qty:current.gacha_free_qty,item:[]});
+      const mounted=readFileSync(stateFile);
+      assert.deepEqual((await secure('/card_handler/EquipGem',request)).ret_data.gems,reply.ret_data.gems,'No-write desired-grid retry must echo authoritative rows');
+      assert.deepEqual(readFileSync(stateFile),mounted);
+      const removed=await secure('/card_handler/EquipGem',{...request,combination:'{"weapons":[0,0],"armors":[0,0],"accessories":[0,0]}'},{allowPlainRefusal:true});
+      assert.equal(removed.result_code,2001,'Missing removal fees never mean free unmount');
+      assert.deepEqual(readFileSync(stateFile),mounted);
+    }
+  }
   if(exerciseSocial) {
     ownerConnection={secret,token};
     await exchange();
@@ -369,7 +414,7 @@ try {
   const verifiedOriginals=[];
   const pinManifest=profileName==='current-e7'?'episode07-originals.json':
     profileName==='current-e6-materials18'?'character-materials18-originals.json':
-    profileName==='current-e6-guild'?'guild-originals.json':null;
+    profileName==='current-e6-guild'?'guild-originals.json':profileName==='current-e6-gems'?'gem-originals.json':null;
   const pins=pinManifest?JSON.parse(readFileSync(path.join(root,'resources/manifests',pinManifest),'utf8')):[];
   if(exerciseEquipment) {
     const registry=JSON.parse(readFileSync(path.join(root,'resources/reference/hunter-equipment-materials.json'),'utf8'));
@@ -406,6 +451,11 @@ try {
   }
   const portrait=await fetch(base+'/local-profile/replica-100.png');assert.equal(portrait.status,200);assert.match(portrait.headers.get('content-type'),/image\/png/);
   await stop(); await launch();
+  if(exerciseGemInventory) {
+    assert.deepEqual((await secure('/reference/GetGem',auth)).ret_data,[authoredGemReference]);
+    const expectedGem=exerciseGemMount?{...authoredGem,target_inst_id:String(before.gameStates.find(([pvid])=>pvid===gemPvid)[1].starter_cards.find(card=>card.ref_id==='001').inst_id),position:1}:authoredGem;
+    assert.deepEqual((await secure('/lobby/GetGemInven',auth)).ret_data,[expectedGem]);
+  }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
   if(exerciseSocial) {
@@ -432,6 +482,13 @@ try {
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
   for(const entry of before.gameStates) {
     const found=after.gameStates.find(row=>JSON.stringify(row[0])===JSON.stringify(entry[0]));
+    if(exerciseGemInventory && entry[0]===gemPvid) {
+      const actual=structuredClone(found[1]),expected=structuredClone(entry[1]);
+      if(exerciseGemMount){expected.owned_gems[0].target_inst_id=String(expected.starter_cards.find(card=>card.ref_id==='001').inst_id);expected.owned_gems[0].position=1;}
+      for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
+      assert.deepEqual(actual,expected,'Gem read/restart must preserve full raw inventory and legacy scalar separately');
+      continue;
+    }
     if(exerciseEquipmentUpgrade&&entry[0]===equipmentPvid) {
       const expected=structuredClone(entry[1]),actual=structuredClone(found[1]);
       expected.gold=31;const target=expected.starter_cards.find(card=>card.ref_id==='001');
@@ -467,6 +524,8 @@ try {
     encrypted_hunter_sale_fixture:exerciseSale,
     configured_equipment_reference_fixture:exerciseEquipment,
     configured_equipment_upgrade_fixture:exerciseEquipmentUpgrade,
+    configured_gem_inventory_fixture:exerciseGemInventory,
+    configured_gem_mount_fixture:exerciseGemMount,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
