@@ -9,6 +9,8 @@ import { socialDiscovery } from "./social-discovery.js";
 import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
 import { planGroupRankUp } from "./group-rank-up.js";
 import { cardSellProfitRows, planHunterSale, type CardSellProfit } from "./hunter-sale.js";
+import {equipmentLevelPrices as parseEquipmentLevelPrices, equipmentRankPrices as parseEquipmentRankPrices,
+  type EquipmentLevelPrice, type EquipmentRankPrice} from "./equipment-prices.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
 import { earnSpecialSupply, specialSupplyIds, specialSupplyList } from "./special-supply.js";
@@ -491,15 +493,27 @@ export class ServerState {
   private socialFriends?: SocialFriends;
   private socialLikes?: SocialLikes;
   private readonly hunterSaleProfits: readonly CardSellProfit[];
+  private readonly equipmentLevelPrices: readonly EquipmentLevelPrice[];
+  private readonly equipmentRankPrices: readonly EquipmentRankPrice[];
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
-    private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown } = {}) {
+    private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
+      equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
     const configured = Object.hasOwn(options, "hunterSaleProfits") ? options.hunterSaleProfits : (process.env.BLUSTONE_CARD_SELL_PROFIT_JSON === undefined
       ? [] : JSON.parse(process.env.BLUSTONE_CARD_SELL_PROFIT_JSON));
     this.hunterSaleProfits = Object.freeze(cardSellProfitRows(configured).map((row) => Object.freeze(row)));
+    const readPrices = (key: "equipmentLevelPrices" | "equipmentRankPrices", envName: string): unknown =>
+      Object.hasOwn(options,key) ? options[key] : process.env[envName]===undefined ? [] : JSON.parse(process.env[envName]!);
+    const knownItems = new Set(itemReference().item.map(item=>item.id));
+    const levelPrices = readPrices("equipmentLevelPrices","BLUSTONE_EQUIPMENT_LEVEL_PRICES_JSON");
+    const rankPrices = readPrices("equipmentRankPrices","BLUSTONE_EQUIPMENT_RANK_PRICES_JSON");
+    this.equipmentLevelPrices = Object.freeze((Array.isArray(levelPrices) && levelPrices.length===0 ? [] :
+      parseEquipmentLevelPrices({result_code:1,ret_data:levelPrices},knownItems)).map(row=>Object.freeze(row)));
+    this.equipmentRankPrices = Object.freeze((Array.isArray(rankPrices) && rankPrices.length===0 ? [] :
+      parseEquipmentRankPrices({result_code:1,ret_data:rankPrices},knownItems)).map(row=>Object.freeze(row)));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -1763,6 +1777,16 @@ export class ServerState {
 
   cardSaleProfitReference(): CardSellProfit[] {
     return this.hunterSaleProfits.map((row) => ({ ...row }));
+  }
+
+  equipmentReferenceAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
+    this.accountFor(payload,headers);
+    if(route==="/reference/GetCardEquipmentLevelUpPrice")
+      return this.envelope(this.equipmentLevelPrices.map(row=>({...row})));
+    if(route==="/reference/GetCardEquipmentRankUpPrice")
+      return this.envelope(this.equipmentRankPrices.map(row=>({...row})));
+    // Reference data does not establish an authenticated upgrade settlement.
+    return this.failure(2001,"Equipment upgrade settlement is not reconstructed");
   }
 
   sellCards(payload: Record<string, unknown>, headers: Record<string, string>) {

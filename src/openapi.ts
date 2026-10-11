@@ -642,6 +642,16 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     } };
     explicitlyDocumented.add(route);
   }
+  for(const route of ["/reference/GetCardEquipmentLevelUpPrice","/reference/GetCardEquipmentRankUpPrice",
+    "/card_handler/LevelUpEquipment","/card_handler/RankUpEquipment"]) {
+    paths[route] = {post:{
+      ...operation(route.split("/").at(-1)!,
+        "Authenticated equipment reference/upgrade contract. Price reads return ret_data arrays copied from explicitly supplied immutable level or rank/attribute tables; absent tables return []. Numeric prices/materials are supplied local data, not recovered original economics. Required item IDs must exist in the published item reference. Upgrade actions refuse 2001 without state writes: quote publication does not establish source eligibility, Guild discount qualification or full settlement. Native request fields are inst_id (uint64 decimal), part (1 weapon, 2 armor, 3 accessory), price_type, and rank source_inst_ids (JSON uint64 vector).", "Equipment"),
+      "x-evidence":"docs/equipment-upgrade-native-2026-10-11.md; tests/equipment-price-state.ts",
+      "x-reverse-engineering-status":"native-parser-reconstructed",
+    }};
+    explicitlyDocumented.add(route);
+  }
   paths["/lobby/GetGuildInfo"] = { post: {
     ...operation("Read Guild boot membership", "Authenticated ret_data.my_guild is flat PLAY_DATA with guild_id/status/newbie/role/contribution, not Guild INFO. The replica has no established affiliations and publishes all five zero fields without a state write. Guild/GvG membership, fees, participants and rewards remain unreconstructed; actions refuse rather than create phantom membership or free Guilds. Native Guild art is not selected in the active profile and entry remains unverified.", "Guild"),
     "x-evidence": "docs/guild-lobby-native-2026-10-11.md; tests/guild-lobby.ts",

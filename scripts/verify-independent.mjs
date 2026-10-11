@@ -17,6 +17,9 @@ const exerciseEquipment=process.argv.includes('--exercise-equipment');
 const authoredEquipment={id:'AUTHORED_WEAPON',type:1,rank:1,awk_step:0,hp:'0',atk:'10000',def:'0',spd:'0',
   crt_chance:'0',crt_dmg:'0',penetration:'0',block_chance:'0',block_dec_dmg:'0',attr_enhance:'0',attr_resist:'0',
   hp_regen:'0',hp_up:'0',atk_up:'2000',def_up:'0'};
+const authoredEquipmentLevelPrice={level:2,price_type:2,price:17,item1_qty:0,item1_ref_id:'',item2_qty:0,item2_ref_id:'',
+  item3_qty:0,item3_ref_id:'',item4_qty:0,item4_ref_id:''};
+const authoredEquipmentRankPrice={rank:1,attr:1,price_type:2,price:23,item_qty:0,item_ref_id:'',card_qty:0};
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
 const monsterIndex=process.argv.indexOf('--exercise-monster');
@@ -77,6 +80,10 @@ const launch = async () => {
   const env={...process.env,...profile.env};
   if(exerciseSale) env.BLUSTONE_CARD_SELL_PROFIT_JSON=JSON.stringify([{rank:1,profit_type:2,profit_target:'',profit_qty:13}]);
   if(exerciseEquipment) env.BLUSTONE_EQUIPMENT_REFERENCE_JSON=JSON.stringify({'001':[authoredEquipment]});
+  if(exerciseEquipment) {
+    env.BLUSTONE_EQUIPMENT_LEVEL_PRICES_JSON=JSON.stringify([authoredEquipmentLevelPrice]);
+    env.BLUSTONE_EQUIPMENT_RANK_PRICES_JSON=JSON.stringify([authoredEquipmentRankPrice]);
+  }
   if(exerciseMonster) env.BLUSTONE_MONSTER_IDS=exerciseMonster;
   for(const key of ['BLUSTONE_PACKAGE_DIR','BLUSTONE_PACKAGE_TREE_DIR','BLUSTONE_UI_PACKAGE_TREE_DIR','BLUSTONE_RESOURCE_ASSET_DIR','BLUSTONE_CATALOG_PATH'])
     if(env[key])env[key]=path.resolve(root,env[key]);
@@ -256,6 +263,13 @@ try {
   const ordinaryReferences=(await secure('/reference/GetCard',auth)).ret_data;
   if(exerciseEquipment) {
     assert.deepEqual(ordinaryReferences.find(card=>card.base.id==='001').equipment,[authoredEquipment]);
+    assert.deepEqual((await secure('/reference/GetCardEquipmentLevelUpPrice',auth)).ret_data,[authoredEquipmentLevelPrice]);
+    assert.deepEqual((await secure('/reference/GetCardEquipmentRankUpPrice',auth)).ret_data,[authoredEquipmentRankPrice]);
+    const beforeUpgradeRefusals=readFileSync(stateFile);
+    for(const route of ['/card_handler/LevelUpEquipment','/card_handler/RankUpEquipment'])
+      assert.equal((await secure(route,{...auth,inst_id:'1000001',part:'1',price_type:'2',source_inst_ids:'[]'},
+        {allowPlainRefusal:true})).result_code,2001,'Configured quote must not imply implemented settlement');
+    assert.deepEqual(readFileSync(stateFile),beforeUpgradeRefusals,'Upgrade refusal must preserve complete account/save bytes');
     assert.ok(ordinaryReferences.filter(card=>card.base.id!=='001').every(card=>card.equipment.length===0),
       'Equipment reference input must not spread to other Hunters');
     const {parseHunterEquipment,calculateHunterEquipment}=await import(pathToFileURL(path.join(root,'dist/src/hunter-equipment.js')).href);
@@ -379,6 +393,10 @@ try {
   if(profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection' || exerciseEquipment)
     assert.deepEqual((await secure('/reference/GetCard',auth)).ret_data,ordinaryReferences,
       'Historical reference policy must survive restart without changing records');
+  if(exerciseEquipment) {
+    assert.deepEqual((await secure('/reference/GetCardEquipmentLevelUpPrice',auth)).ret_data,[authoredEquipmentLevelPrice]);
+    assert.deepEqual((await secure('/reference/GetCardEquipmentRankUpPrice',auth)).ret_data,[authoredEquipmentRankPrice]);
+  }
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
   for(const entry of before.gameStates) {

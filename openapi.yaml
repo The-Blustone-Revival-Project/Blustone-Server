@@ -2474,24 +2474,19 @@ paths:
         ARM-device capture
   /card_handler/LevelUpEquipment:
     post:
-      summary: Recovered /card_handler/LevelUpEquipment route
-      description: >-
-        The route literal **/card_handler/LevelUpEquipment** was recovered from
-        the ARM native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: LevelUpEquipment
+      description: "Authenticated equipment reference/upgrade contract. Price reads
+        return ret_data arrays copied from explicitly supplied immutable level
+        or rank/attribute tables; absent tables return []. Numeric
+        prices/materials are supplied local data, not recovered original
+        economics. Required item IDs must exist in the published item reference.
+        Upgrade actions refuse 2001 without state writes: quote publication does
+        not establish source eligibility, Guild discount qualification or full
+        settlement. Native request fields are inst_id (uint64 decimal), part (1
+        weapon, 2 armor, 3 accessory), price_type, and rank source_inst_ids
+        (JSON uint64 vector)."
       tags:
-        - card_handler
+        - Equipment
       parameters: *a1
       requestBody: *a2
       responses:
@@ -2509,30 +2504,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-reverse-engineering-status: native-parser-reconstructed
+      x-evidence: docs/equipment-upgrade-native-2026-10-11.md;
+        tests/equipment-price-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /card_handler/RankUpEquipment:
     post:
-      summary: Recovered /card_handler/RankUpEquipment route
-      description: >-
-        The route literal **/card_handler/RankUpEquipment** was recovered from
-        the ARM native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: RankUpEquipment
+      description: "Authenticated equipment reference/upgrade contract. Price reads
+        return ret_data arrays copied from explicitly supplied immutable level
+        or rank/attribute tables; absent tables return []. Numeric
+        prices/materials are supplied local data, not recovered original
+        economics. Required item IDs must exist in the published item reference.
+        Upgrade actions refuse 2001 without state writes: quote publication does
+        not establish source eligibility, Guild discount qualification or full
+        settlement. Native request fields are inst_id (uint64 decimal), part (1
+        weapon, 2 armor, 3 accessory), price_type, and rank source_inst_ids
+        (JSON uint64 vector)."
       tags:
-        - card_handler
+        - Equipment
       parameters: *a1
       requestBody: *a2
       responses:
@@ -2550,8 +2541,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-reverse-engineering-status: native-parser-reconstructed
+      x-evidence: docs/equipment-upgrade-native-2026-10-11.md;
+        tests/equipment-price-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /card_handler/SetLeader:
@@ -7796,24 +7788,19 @@ paths:
         ARM-device capture
   /reference/GetCardEquipmentLevelUpPrice:
     post:
-      summary: Recovered /reference/GetCardEquipmentLevelUpPrice route
-      description: >-
-        The route literal **/reference/GetCardEquipmentLevelUpPrice** was
-        recovered from the ARM native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: GetCardEquipmentLevelUpPrice
+      description: "Authenticated equipment reference/upgrade contract. Price reads
+        return ret_data arrays copied from explicitly supplied immutable level
+        or rank/attribute tables; absent tables return []. Numeric
+        prices/materials are supplied local data, not recovered original
+        economics. Required item IDs must exist in the published item reference.
+        Upgrade actions refuse 2001 without state writes: quote publication does
+        not establish source eligibility, Guild discount qualification or full
+        settlement. Native request fields are inst_id (uint64 decimal), part (1
+        weapon, 2 armor, 3 accessory), price_type, and rank source_inst_ids
+        (JSON uint64 vector)."
       tags:
-        - Reference data
+        - Equipment
       parameters: *a1
       requestBody: *a2
       responses:
@@ -7831,30 +7818,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-reverse-engineering-status: native-parser-reconstructed
+      x-evidence: docs/equipment-upgrade-native-2026-10-11.md;
+        tests/equipment-price-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /reference/GetCardEquipmentRankUpPrice:
     post:
-      summary: Recovered /reference/GetCardEquipmentRankUpPrice route
-      description: >-
-        The route literal **/reference/GetCardEquipmentRankUpPrice** was
-        recovered from the ARM native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: GetCardEquipmentRankUpPrice
+      description: "Authenticated equipment reference/upgrade contract. Price reads
+        return ret_data arrays copied from explicitly supplied immutable level
+        or rank/attribute tables; absent tables return []. Numeric
+        prices/materials are supplied local data, not recovered original
+        economics. Required item IDs must exist in the published item reference.
+        Upgrade actions refuse 2001 without state writes: quote publication does
+        not establish source eligibility, Guild discount qualification or full
+        settlement. Native request fields are inst_id (uint64 decimal), part (1
+        weapon, 2 armor, 3 accessory), price_type, and rank source_inst_ids
+        (JSON uint64 vector)."
       tags:
-        - Reference data
+        - Equipment
       parameters: *a1
       requestBody: *a2
       responses:
@@ -7872,8 +7855,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-reverse-engineering-status: native-parser-reconstructed
+      x-evidence: docs/equipment-upgrade-native-2026-10-11.md;
+        tests/equipment-price-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /reference/GetCardOvercome:

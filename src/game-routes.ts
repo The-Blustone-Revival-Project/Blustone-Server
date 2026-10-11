@@ -252,6 +252,9 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
       "/reference/GetGemLevelUpPrice", "/reference/GetGemDisassemblePrice"].includes(route))
     return state.envelope([]); // Native parsers consume ret_data arrays; tables remain unrecovered.
   if (route.startsWith("/gem/") || route === "/card_handler/EquipGem") return state.unavailableGemAction(payload, headers);
+  if (["/reference/GetCardEquipmentLevelUpPrice","/reference/GetCardEquipmentRankUpPrice",
+    "/card_handler/LevelUpEquipment","/card_handler/RankUpEquipment"].includes(route))
+    return state.equipmentReferenceAction(route,payload,headers);
   if (route.startsWith("/fishing/")) return state.fishingAction(route, payload, headers);
   if (route === "/reference/GetSkinRef" || route === "/lobby/GetSkinInst" || route.startsWith("/skin/"))
     return state.skinAction(route, payload, headers);
