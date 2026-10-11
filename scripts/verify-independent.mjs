@@ -12,12 +12,14 @@ import {verifySingleJet} from './resources/verify-single-jet.mjs';
 import {preflight} from './resources/verify.mjs';
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const exerciseBulk=process.argv.includes('--exercise-bulk');
+const exerciseSale=process.argv.includes('--exercise-sale');
+if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
 const monsterIndex=process.argv.indexOf('--exercise-monster');
 const exerciseMonster=monsterIndex===-1?undefined:process.argv[monsterIndex+1];
 if(monsterIndex!==-1 && (!process.argv.includes('--fixture') || typeof exerciseMonster!=='string' || !/^M[0-9]{3}$/.test(exerciseMonster)))
   throw new Error('Monster resource exercises require --fixture and one exact original namespace');
-if((exerciseBulk || exerciseSocial) && !process.argv.includes('--fixture')) throw new Error('Transaction exercises require --fixture; private preserved saves are never mutation targets');
+if((exerciseBulk || exerciseSocial || exerciseSale) && !process.argv.includes('--fixture')) throw new Error('Transaction exercises require --fixture; private preserved saves are never mutation targets');
 const profileIndex=process.argv.indexOf('--profile');
 const profileName=profileIndex===-1?'current-e6':process.argv[profileIndex+1];
 if(typeof profileName!=='string' || !/^[\w-]+$/.test(profileName)) throw new Error('Invalid verification profile');
@@ -39,7 +41,7 @@ await requireFreePort();
 // races the port probe. Never overwrite a concurrent writer's state copy.
 const folder = mkdtempSync(path.join(outputFolder,'run-'));
 const stateFile = path.join(folder, 'state.json');
-let bulkPvid;
+let bulkPvid, salePvid;
 const preserved = process.argv.includes('--fixture') ? '' : path.join(root, 'local/private/preserved-state.json');
 if (existsSync(preserved)) copyFileSync(preserved, stateFile);
 else {
@@ -48,17 +50,20 @@ else {
   const { ServerState } = await import(pathToFileURL(path.join(root, 'dist/src/state.js')).href);
   const fixture = new ServerState(base, stateFile);
   fixture.registerGuest({device_id:'standalone-generated-fixture'}, {});
-  if(exerciseBulk) {
+  if(exerciseBulk || exerciseSale) {
     const auth=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
     const account=fixture.accountFor(auth,{}),game=fixture.gameFor(account);
-    bulkPvid=account.pvid;
+    if(exerciseSale) salePvid=account.pvid;
+    else bulkPvid=account.pvid;
     // Deliberately disposable test sources, not recruitment or recovered rewards.
     // This branch is unreachable for preserved/private-state verification.
-    game.recruited_cards=Array.from({length:4},(_,i)=>({...game.starter_cards[0],
-      inst_id:1000200+i,rank:1,rank_up_cnt:0,exp:0,lock:0,awk_step:0,awk_overcome:0,overcome_cnt:0}));
+    game.recruited_cards=Array.from({length:exerciseSale?2:4},(_,i)=>({...game.starter_cards[0],
+      inst_id:1000200+i,rank:exerciseSale && i===0?5:1,rank_up_cnt:0,exp:0,lock:0,awk_step:0,awk_overcome:0,overcome_cnt:0}));
     game.next_card_inst_id=1000300;game.gold=5000;
+    if(exerciseSale) game.card_book=game.card_book.map(row=>row.ref_id===game.recruited_cards[0].ref_id
+      ? {...row,rank:Math.max(row.rank,5)}:row);
     const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
-    seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===bulkPvid?game:saved]);
+    seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===account.pvid?game:saved]);
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
   }
 }
@@ -66,6 +71,7 @@ const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
+  if(exerciseSale) env.BLUSTONE_CARD_SELL_PROFIT_JSON=JSON.stringify([{rank:1,profit_type:2,profit_target:'',profit_qty:13}]);
   if(exerciseMonster) env.BLUSTONE_MONSTER_IDS=exerciseMonster;
   for(const key of ['BLUSTONE_PACKAGE_DIR','BLUSTONE_PACKAGE_TREE_DIR','BLUSTONE_UI_PACKAGE_TREE_DIR','BLUSTONE_RESOURCE_ASSET_DIR','BLUSTONE_CATALOG_PATH'])
     if(env[key])env[key]=path.resolve(root,env[key]);
@@ -209,6 +215,23 @@ try {
     assert.deepEqual(upgraded.ret_data.user.gold,{cur:3800});
     assert.notEqual((await secure('/gym/RankUpBundle',request,{allowPlainRefusal:true})).result_code,1,'Insufficient remaining sources must refuse');
   }
+  if(exerciseSale) {
+    assert.equal(Number(auth.pvid),salePvid,'Only disposable seeded sale account may be exercised');
+    assert.deepEqual((await secure('/reference/GetExtra',auth)).ret_data.card_sell_profit,
+      [{rank:1,profit_type:2,profit_target:'',profit_qty:13}],'Published quote must match explicit authored sale policy');
+    const current=()=>JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===salePvid)[1];
+    const prior=current();
+    assert.notEqual((await secure('/shop/SellCard',{...auth,inst_id_list:JSON.stringify([prior.starter_cards[0].inst_id])},
+      {allowPlainRefusal:true})).result_code,1,'Protected main hunter must refuse');
+    assert.deepEqual(current(),prior);
+    const request={...auth,inst_id_list:JSON.stringify([1000200,1000201])};
+    const sold=await secure('/shop/SellCard',request);assert.equal(sold.result_code,1);
+    assert.deepEqual(sold.ret_data,{user:{gold:{cur:5026}},item:[]},'Sale uses reference minimum rank, despite one rank5 instance');
+    assert.equal(current().recruited_cards.length,0);
+    const settled=current();
+    assert.notEqual((await secure('/shop/SellCard',request,{allowPlainRefusal:true})).result_code,1,'Replayed sold sources cannot credit again');
+    assert.deepEqual(current(),settled);
+  }
   for(const route of ['/reference/GetStage','/reference/GetCard','/lobby/GetCardInven','/episode/GetLog']) {
     const reply=await secure(route,auth);assert.ok(reply.ret_data!==undefined,route);
   }
@@ -340,6 +363,13 @@ try {
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
   for(const entry of before.gameStates) {
     const found=after.gameStates.find(row=>JSON.stringify(row[0])===JSON.stringify(entry[0]));
+    if(exerciseSale && entry[0]===salePvid) {
+      const expected=structuredClone(entry[1]),actual=structuredClone(found[1]);
+      expected.gold=5026;expected.recruited_cards=[];
+      for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
+      assert.deepEqual(actual,expected,'Sale must persist only exact roster removals and authored gold reward after restart');
+      continue;
+    }
     if(exerciseBulk && entry[0]===bulkPvid) {
       const expected=structuredClone(entry[1]);
       expected.gold=3800;expected.recruited_cards=[{...expected.recruited_cards[0],rank:2,exp:0,rank_up_cnt:0}];
@@ -356,6 +386,7 @@ try {
   const report={compiled_process:true,unrelated_working_directory:true,encrypted_ecdh_hmac_aes:true,
     direct_compiled_process:true,launcher_process_verified:false,
     encrypted_bulk_rank_up_fixture:exerciseBulk,
+    encrypted_hunter_sale_fixture:exerciseSale,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
@@ -371,7 +402,7 @@ try {
     authenticated_lobby_and_references:true,unique_campaign_area_ownership:true,hidden_origin_rewards_absent:true,
     episode_log:true,resource_packages:rows.length,resource_range_206:true,
     compiled_portrait:true,persisted_transport_and_credentials:true,
-    preserved_existing_games:before.gameStates.filter(([pvid])=>!exerciseBulk || pvid!==bulkPvid).length,
+    preserved_existing_games:before.gameStates.filter(([pvid])=>(!exerciseBulk || pvid!==bulkPvid) && (!exerciseSale || pvid!==salePvid)).length,
     fixture_games_intentionally_promoted:exerciseBulk?1:0,
     apk_install_or_device_actions:false};
   writeFileSync(path.join(outputFolder,'standalone-verification.json'),JSON.stringify(report,null,2)+'\n');

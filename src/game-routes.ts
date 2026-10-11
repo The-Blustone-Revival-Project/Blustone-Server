@@ -307,10 +307,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/card_handler/ToggleLock") return state.toggleCardLock(payload, headers);
   if (route === "/gym/LevelUp") return state.trainCard(payload, headers);
   if (route === "/gym/RankUp") return state.rankUpCard(payload, headers);
-  if (route === "/shop/SellCard") {
-    state.accountFor(payload, headers);
-    return state.failure(2001, "Hunter sale profit references are not reconstructed");
-  }
+  if (route === "/shop/SellCard") return state.sellCards(payload, headers);
   if (route === "/gym/RankUpBundle") return state.groupRankUpCards(payload, headers);
   if (route === "/gym/SkillUp") return state.trainSkill(payload, headers);
   if (route === "/gym/MultiSkillUp") return state.trainSkills(payload, headers);
@@ -395,7 +392,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     // SetExtra passes this to CGMTime+0x28. Mirage end_ltime uses that clock.
     // UTC is explicit replica policy; original local timezone is unrecovered.
     local_time: Math.floor(Date.now() / 1000),
-    iap_bonus: [], client_option: [], card_sell_profit: [],
+    iap_bonus: [], client_option: [], card_sell_profit: state.cardSaleProfitReference(),
     maintenance: 0, battle_server_maintenance: 0, server_maintenance: 0,
   });
   if (route === "/reference/GetBattle") return state.envelope({

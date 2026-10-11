@@ -1,11 +1,12 @@
 # Hunter sale profit contract and equipped growth boundary — 2026-10-11
 
 The final client's sale economic oracle is GetExtra.card_sell_profit, not
-GetLevel.card[].sell_price. A pure, evidence-gated sale planner is implemented
-in src/hunter-sale.ts. No original profit rows are recovered or enabled, and no
-sale transaction is enabled. Root added authenticated result2001 refusal to the
-existing sale route, preventing generic mock success from erasing client targets. Missing rows refuse sale; they do
-not license silent zero-reward disposal of an owned hunter.
+GetLevel.card[].sell_price. The pure planner in src/hunter-sale.ts now has an
+explicit opt-in persisted local workflow in state.ts. No original profit rows
+are recovered or enabled by default. Missing rows produce authenticated
+result2001 refusal, preventing generic mock success from erasing client targets.
+See [the local workflow](hunter-sale-local-workflow-2026-10-11.md) for configuration,
+rollback and verification. Missing rows do not license silent zero-reward disposal.
 
 ## Fresh original native evidence
 
@@ -69,14 +70,14 @@ receipts, reused/new item identities, unchanged input, absent-row refusal,
 unknown item refusal, locks/commitments, duplicate/foreign sources and overflow.
 npx tsx tests/hunter-sale.ts and npm run build passed.
 
-Root's later seam: publish only validated evidence-backed card_sell_profit
-through GetExtra; resolve minimum from published stat rows; protect leader/all
-decks/active campaign/search/arena/Mirage entries; apply selected removals and
-reward plan atomically with persistence rollback. Preserve card-book history and
-hunter allocator; never replace selected hunters or fabricate Chu-Coin IDs.
-Until actual profit rows are available, /shop/SellCard should be explicitly
-refused rather than remain a generic successful mock. Native UI validation is
-pending, and no claim of a complete hunter-release economy is made.
+The implemented local seam publishes explicitly configured validated rows
+through GetExtra, resolves the minimum from published stat rows, protects
+leader/all decks/active campaign/search/arena/Mirage commitments and persists
+removal plus rewards atomically with rollback. It preserves card-book history
+and the Hunter allocator. Original profit data remains absent; supplied local
+prices are labelled accordingly and the default continues to refuse selling.
+Native UI validation is pending, and no claim of a complete original
+hunter-release economy is made.
 
 ## Equipment and Overcome: exact missing dependencies
 

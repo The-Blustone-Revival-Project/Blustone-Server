@@ -8,12 +8,13 @@ import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocia
 import { socialDiscovery } from "./social-discovery.js";
 import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
 import { planGroupRankUp } from "./group-rank-up.js";
+import { cardSellProfitRows, planHunterSale, type CardSellProfit } from "./hunter-sale.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
 import { earnSpecialSupply, specialSupplyIds, specialSupplyList } from "./special-supply.js";
 import { exchangeHunterTraces } from "./trace-exchange.js";
 import { hunterSearchReference } from "./hunter-search.js";
-import { HUNTER_TRACE_ITEMS } from "./hunter-traces.js";
+import { HUNTER_TRACE_ITEMS, itemReference } from "./hunter-traces.js";
 import { LOCAL_MAIL_PORTRAIT_PATH, mailboxRequest, recordVictoryNotice } from "./mail.js";
 import { LOGIN_BONUS_GOLD, LOGIN_BONUS_VIP_EXP, loginBonusInstance, observeLoginBonus } from "./login-bonus.js";
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
@@ -489,10 +490,16 @@ export class ServerState {
   private selectedServer = 1;
   private socialFriends?: SocialFriends;
   private socialLikes?: SocialLikes;
+  private readonly hunterSaleProfits: readonly CardSellProfit[];
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
-    private readonly options: { legacyCardIds?: boolean } = {}) {
+    private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    // Explicit local economy opt-in; no original profit rows are recovered.
+    // Snapshot once so GetExtra and settlement cannot disagree after env edits.
+    const configured = Object.hasOwn(options, "hunterSaleProfits") ? options.hunterSaleProfits : (process.env.BLUSTONE_CARD_SELL_PROFIT_JSON === undefined
+      ? [] : JSON.parse(process.env.BLUSTONE_CARD_SELL_PROFIT_JSON));
+    this.hunterSaleProfits = Object.freeze(cardSellProfitRows(configured).map((row) => Object.freeze(row)));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -1752,6 +1759,51 @@ export class ServerState {
     return { pvid: peer.pvid, reg_utc: peer.beginUtc, utc: Math.floor(Date.now() / 1000),
       nick_name: peer.nickname, country_code: "", profile_status: "", ...this.socialLikeMetadata(viewerPvid, targetPvid),
       profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH };
+  }
+
+  cardSaleProfitReference(): CardSellProfit[] {
+    return this.hunterSaleProfits.map((row) => ({ ...row }));
+  }
+
+  sellCards(payload: Record<string, unknown>, headers: Record<string, string>) {
+    const account = this.accountFor(payload, headers);
+    const game = this.gameByPvid.get(account.pvid) ?? this.gameFor(account);
+    if (this.hunterSaleProfits.length === 0) return this.failure(2001, "Hunter sale profit references are not reconstructed or explicitly configured");
+    assertOwnedCardCompatibility(game);
+    const inventory = [...game.starter_cards, ...game.recruited_cards];
+    if (!this.options.legacyCardIds && (game.card_instance_namespace !== 1 || inventory.some((card) =>
+      !Number.isSafeInteger(card.inst_id) || card.inst_id <= CARD_INSTANCE_BASE || card.inst_id >= CARD_INSTANCE_LIMIT)))
+      return this.failure(2001, "Hunter sale requires production owned instance identities");
+    // Unrepresented historical Mirage commitments must not become disposable.
+    if (inventory.some((card) => card.mirage_remain_hp !== undefined && Number(card.mirage_remain_hp) !== 1000))
+      return this.failure(2001, "Carried Mirage hunter commitments are not reconstructed");
+    const protectedIds = new Set([game.leader_inst_id, ...game.decks.flatMap((deck) => deck.list),
+      ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
+      ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
+    const plan = planHunterSale(inventory, payload, { gold: game.gold, items: game.items,
+      nextItemId: game.next_item_inst_id, protectedIds, profits: this.hunterSaleProfits,
+      referenceMinRank: (refId) => {
+        const ref = starterReference.find((entry) => entry.base.id === refId && entry.base.is_source === 0);
+        return ref && ref.stat.length ? Math.min(...ref.stat.map((row) => row.rank)) : undefined;
+      },
+      knownItemIds: new Set(itemReference().item.map((item) => item.id)),
+    });
+    if ("error" in plan) return this.failure(2001, plan.error!);
+    const before = { gold: game.gold, items: game.items, nextItemId: game.next_item_inst_id,
+      starters: game.starter_cards, recruits: game.recruited_cards };
+    const removed = new Set(plan.removedIds);
+    game.gold = plan.gold!; game.items = plan.items!; game.next_item_inst_id = plan.nextItemId!;
+    game.starter_cards = game.starter_cards.filter((card) => !removed.has(card.inst_id));
+    game.recruited_cards = game.recruited_cards.filter((card) => !removed.has(card.inst_id));
+    // Preserve earned book history and monotone hunter allocator. All decks
+    // were protected, so no formation repair or replacement grant is needed.
+    try { this.persist(); }
+    catch (error) {
+      game.gold = before.gold; game.items = before.items; game.next_item_inst_id = before.nextItemId;
+      game.starter_cards = before.starters; game.recruited_cards = before.recruits;
+      throw error;
+    }
+    return this.envelope(plan.data);
   }
 
   groupRankUpCards(payload: Record<string, unknown>, headers: Record<string, string>) {
