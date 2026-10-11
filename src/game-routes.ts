@@ -303,6 +303,10 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/card_handler/ToggleLock") return state.toggleCardLock(payload, headers);
   if (route === "/gym/LevelUp") return state.trainCard(payload, headers);
   if (route === "/gym/RankUp") return state.rankUpCard(payload, headers);
+  if (route === "/shop/SellCard") {
+    state.accountFor(payload, headers);
+    return state.failure(2001, "Hunter sale profit references are not reconstructed");
+  }
   if (route === "/gym/RankUpBundle") return state.groupRankUpCards(payload, headers);
   if (route === "/gym/SkillUp") return state.trainSkill(payload, headers);
   if (route === "/gym/MultiSkillUp") return state.trainSkills(payload, headers);
@@ -323,12 +327,9 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
 
   if (route.startsWith("/message/")) return state.mailAction(route, payload, headers);
 
-  if (route === "/relation/GetList") {
-    // CPVRelation::ReqFriendListCB takes list<PV_FRIEND_INFO>& for ONE
-    // PV_FRIEND_INFO::TYPE per call; the client asks for type 1 and then type 3.
-    // An empty list is a valid answer for both buckets.
-    return state.envelope([]);
-  }
+  if (["/relation/GetList", "/relation/FriendRequest", "/relation/FriendReqAccept",
+    "/relation/GetFriendReceivedCount", "/relation/FriendReqCancel", "/relation/FriendReqReject", "/relation/Unfriend"].includes(route))
+    return state.socialFriendAction(route, payload, headers);
 
   if (route === "/relation/GetSuggestedFriendList") return state.envelope([]);
   if (route === "/guild/GetNotifications") return state.envelope([]);
@@ -567,15 +568,17 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     if (Array.isArray(requestedProfiles)) {
       const account = state.accountFor(payload, headers);
       if (!requestedProfiles.length || requestedProfiles.length > 3 ||
-          requestedProfiles.some((id) => id !== LOCAL_MAIL_SENDER.pvid && id !== account.pvid && id !== ARENA_RIVAL_PVID))
-        return state.failure(2001, "Brief target profiles are only reconstructed for self and local presentation identities");
+          requestedProfiles.some((id) => id !== LOCAL_MAIL_SENDER.pvid && id !== account.pvid && id !== ARENA_RIVAL_PVID &&
+            (typeof id !== "number" || !state.localSocialProfile(account.pvid, id))))
+        return state.failure(2001, "Brief target profiles require self, a local presentation identity or an established local relationship");
       // CPVRelation.ReqUserInfoCB G8227f0 indexes ret_data.list, not the
       // detailed hunter-party grammar used by CSRSyncGlobal elsewhere.
       // Victory requests both participants in one list. CSRUserProfileDraw uses
       // profile_url, independently of the fight's hunter thumbnail. The shared
       // original system icon is a LOCAL fallback avatar, not a player upload or
       // recovered hunter avatar assignment. Same native100x100 gate as Mail.
-      return state.envelope({ list: [...new Set(requestedProfiles)].map((id) => ({ pvid: id,
+      return state.envelope({ list: [...new Set(requestedProfiles)].map((id) =>
+        state.localSocialProfile(account.pvid, id) ?? ({ pvid: id,
         reg_utc: id === account.pvid ? account.beginUtc : 0, utc: Math.floor(Date.now() / 1000),
         nick_name: id === account.pvid ? account.nickname : id === ARENA_RIVAL_PVID
           ? arenaRival().nickname : LOCAL_MAIL_SENDER.nickname,

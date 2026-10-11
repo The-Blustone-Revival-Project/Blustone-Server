@@ -1,0 +1,308 @@
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00806fa4 <_ZN11CPVRelation15ReqFriendListCBERKNSt6__ndk18functionIFviRKNS0_4listI14PV_FRIEND_INFONS0_9allocatorIS3_EEEEEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse>:
+  807080: 4940         	ldr	r1, [pc, #0x100]        @ 0x807184 <_ZN11CPVRelation15ReqFriendListCBERKNSt6__ndk18functionIFviRKNS0_4listI14PV_FRIEND_INFONS0_9allocatorIS3_EEEEEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1e0>
+  807082: 4479         	add	r1, pc
+  807084: ad04         	add	r5, sp, #0x10
+  807086: 4628         	mov	r0, r5
+  807088: f77c f836    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x83f94
+  80708c: 493e         	ldr	r1, [pc, #0xf8]         @ 0x807188 <_ZN11CPVRelation15ReqFriendListCBERKNSt6__ndk18functionIFviRKNS0_4listI14PV_FRIEND_INFONS0_9allocatorIS3_EEEEEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1e4>
+  80708e: 4479         	add	r1, pc
+  807090: f77c f832    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x83f9c
+  807094: 4601         	mov	r1, r0
+  807096: a801         	add	r0, sp, #0x4
+  807098: f000 f87e    	bl	0x807198 <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE> @ imm = #0xfc
+  80709c: ac0b         	add	r4, sp, #0x2c
+  80709e: 4620         	mov	r0, r4
+  8070a0: f00f fb52    	bl	0x816748 <_ZNSt6__ndk110__list_impI14PV_FRIEND_INFONS_9allocatorIS1_EEE5clearEv> @ imm = #0xf6a4
+  8070a4: 9803         	ldr	r0, [sp, #0xc]
+  8070a6: b180         	cbz	r0, 0x8070ca <_ZN11CPVRelation15ReqFriendListCBERKNSt6__ndk18functionIFviRKNS0_4listI14PV_FRIEND_INFONS0_9allocatorIS3_EEEEEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x126> @ imm = #0x20
+  8070a8: e9dd 1201    	ldrd	r1, r2, [sp, #4]
+  8070ac: 6813         	ldr	r3, [r2]
+  8070ae: 684e         	ldr	r6, [r1, #0x4]
+  8070b0: 605e         	str	r6, [r3, #0x4]
+  8070b2: 684e         	ldr	r6, [r1, #0x4]
+  8070b4: 6033         	str	r3, [r6]
+  8070b6: 9b0b         	ldr	r3, [sp, #0x2c]
+  8070b8: 605a         	str	r2, [r3, #0x4]
+  8070ba: 6013         	str	r3, [r2]
+  8070bc: 2200         	movs	r2, #0x0
+  8070be: 910b         	str	r1, [sp, #0x2c]
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+0080ec20 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO>:
+  80ef98: 9802         	ldr	r0, [sp, #0x8]
+  80ef9a: 2206         	movs	r2, #0x6
+  80ef9c: 4932         	ldr	r1, [pc, #0xc8]         @ 0x80f068 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x448>
+  80ef9e: 2e00         	cmp	r6, #0x0
+  80efa0: bf08         	it	eq
+  80efa2: 1c68         	addeq	r0, r5, #0x1
+  80efa4: 4479         	add	r1, pc
+  80efa6: f602 edb8    	blx	0x611b18 <.plt+0x68>    @ imm = #-0x1fd490
+  80efaa: bb28         	cbnz	r0, 0x80eff8 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x3d8> @ imm = #0x4a
+  80efac: 2001         	movs	r0, #0x1
+  80efae: e022         	b	0x80eff6 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x3d6> @ imm = #0x44
+  80efb0: 9802         	ldr	r0, [sp, #0x8]
+  80efb2: 2207         	movs	r2, #0x7
+  80efb4: 492e         	ldr	r1, [pc, #0xb8]         @ 0x80f070 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x450>
+  80efb6: 2e00         	cmp	r6, #0x0
+  80efb8: bf08         	it	eq
+  80efba: 1c68         	addeq	r0, r5, #0x1
+  80efbc: 4479         	add	r1, pc
+  80efbe: f602 edac    	blx	0x611b18 <.plt+0x68>    @ imm = #-0x1fd4a8
+  80efc2: b9c8         	cbnz	r0, 0x80eff8 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x3d8> @ imm = #0x32
+  80efc4: 2004         	movs	r0, #0x4
+  80efc6: e016         	b	0x80eff6 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x3d6> @ imm = #0x2c
+  80efc8: 9802         	ldr	r0, [sp, #0x8]
+  80efca: 2208         	movs	r2, #0x8
+  80efcc: 4929         	ldr	r1, [pc, #0xa4]         @ 0x80f074 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x454>
+  80efce: 2e00         	cmp	r6, #0x0
+  80efd0: bf08         	it	eq
+  80efd2: 1c68         	addeq	r0, r5, #0x1
+  80efd4: 4479         	add	r1, pc
+  80efd6: f602 eda0    	blx	0x611b18 <.plt+0x68>    @ imm = #-0x1fd4c0
+  80efda: b968         	cbnz	r0, 0x80eff8 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x3d8> @ imm = #0x1a
+  80efdc: 2003         	movs	r0, #0x3
+  80efde: e00a         	b	0x80eff6 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x3d6> @ imm = #0x14
+  80efe0: 9802         	ldr	r0, [sp, #0x8]
+  80efe2: 2209         	movs	r2, #0x9
+  80efe4: 4921         	ldr	r1, [pc, #0x84]         @ 0x80f06c <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x44c>
+  80efe6: 2e00         	cmp	r6, #0x0
+  80efe8: bf08         	it	eq
+  80efea: 1c68         	addeq	r0, r5, #0x1
+  80efec: 4479         	add	r1, pc
+  80efee: f602 ed94    	blx	0x611b18 <.plt+0x68>    @ imm = #-0x1fd4d8
+  80eff2: b908         	cbnz	r0, 0x80eff8 <_ZN11CPVRelation13GetFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEER14PV_FRIEND_INFO+0x3d8> @ imm = #0x2
+  80eff4: 2002         	movs	r0, #0x2
+  80eff6: 66a0         	str	r0, [r4, #0x68]
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00807198 <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE>:
+  807438: 4931         	ldr	r1, [pc, #0xc4]         @ 0x807500 <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x368>
+  80743a: 4479         	add	r1, pc
+  80743c: 4640         	mov	r0, r8
+  80743e: f77b fe5b    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x8434a
+  807442: 4602         	mov	r2, r0
+  807444: 7800         	ldrb	r0, [r0]
+  807446: 1ec3         	subs	r3, r0, #0x3
+  807448: 2000         	movs	r0, #0x0
+  80744a: 2b04         	cmp	r3, #0x4
+  80744c: f200 8150    	bhi.w	0x8076f0 <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x558> @ imm = #0x2a0
+  807450: 2100         	movs	r1, #0x0
+  807452: e8df f003    	tbb	[pc, r3]
+  807456: 1606         	asrs	r6, r0, #0x18
+  807458: 0303         	lsls	r3, r0, #0xc
+  80745a: 0010         	movs	r0, r2
+  80745c: e9d2 0102    	ldrd	r0, r1, [r2, #8]
+  807460: e00f         	b	0x807482 <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x2ea> @ imm = #0x1e
+  807462: 6890         	ldr	r0, [r2, #0x8]
+  807464: 7801         	ldrb	r1, [r0]
+  807466: 07c9         	lsls	r1, r1, #0x1f
+  807468: bf0c         	ite	eq
+  80746a: 3001         	addeq	r0, #0x1
+  80746c: 6880         	ldrne	r0, [r0, #0x8]
+  80746e: 2100         	movs	r1, #0x0
+  807470: f60a eb6a    	blx	0x611b48 <.plt+0x98>    @ imm = #-0x1f592c
+  807474: e003         	b	0x80747e <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x2e6> @ imm = #0x6
+  807476: edd2 0b02    	vldr	d16, [r2, #8]
+  80747a: ec51 0b30    	vmov	r0, r1, d16
+  80747e: f1ff ec22    	blx	0xa06cc4 <_ZN12CSRLevelData10AddItemRefENSt6__ndk110shared_ptrIKN11ACTOR_SKILL5_INFOEEE+0x81c> @ imm = #0x1ff844
+  807482: f44f 727a    	mov.w	r2, #0x3e8
+  807486: 2300         	movs	r3, #0x0
+  807488: f1ff e938    	blx	0xa066fc <_ZN12CSRLevelData10AddItemRefENSt6__ndk110shared_ptrIKN11ACTOR_SKILL5_INFOEEE+0x254> @ imm = #0x1ff270
+  80748c: 9110         	str	r1, [sp, #0x40]
+  80748e: 4606         	mov	r6, r0
+  807490: 491c         	ldr	r1, [pc, #0x70]         @ 0x807504 <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x36c>
+  807492: 4479         	add	r1, pc
+  807494: 4640         	mov	r0, r8
+  807496: f77b fe2f    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x843a2
+  80749a: 7801         	ldrb	r1, [r0]
+  80749c: 2200         	movs	r2, #0x0
+  80749e: 9218         	str	r2, [sp, #0x60]
+  8074a0: 3903         	subs	r1, #0x3
+  8074a2: 2904         	cmp	r1, #0x4
+  8074a4: f200 8126    	bhi.w	0x8076f4 <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x55c> @ imm = #0x24c
+  8074a8: 2300         	movs	r3, #0x0
+  8074aa: 9317         	str	r3, [sp, #0x5c]
+  8074ac: e8df f001    	tbb	[pc, r1]
+  8074b0: 3406         	adds	r4, #0x6
+  8074b2: 0303         	lsls	r3, r0, #0xc
+  8074b4: 002c         	movs	r4, r5
+  8074b6: e9d0 0102    	ldrd	r0, r1, [r0, #8]
+  8074ba: e02b         	b	0x807514 <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE+0x37c> @ imm = #0x56
+  8074bc: 6880         	ldr	r0, [r0, #0x8]
+  8074be: 7801         	ldrb	r1, [r0]
+  8074c0: 07c9         	lsls	r1, r1, #0x1f
+  8074c2: bf0c         	ite	eq
+  8074c4: 3001         	addeq	r0, #0x1
+  8074c6: 6880         	ldrne	r0, [r0, #0x8]
+  8074c8: 2100         	movs	r1, #0x0
+  8074ca: f60a eb3e    	blx	0x611b48 <.plt+0x98>    @ imm = #-0x1f5984
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00807198 <_ZN11CPVRelation15ParseFriendInfoERKN8nlohmann10basic_jsonINSt6__ndk13mapENS2_6vectorENS2_12basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEEbxydS8_NS0_14adl_serializerENS4_IhNS8_IhEEEEEE>:
+  807508: edd0 0b02    	vldr	d16, [r0, #8]
+  80750c: ec51 0b30    	vmov	r0, r1, d16
+  807510: f1ff ebd8    	blx	0xa06cc4 <_ZN12CSRLevelData10AddItemRefENSt6__ndk110shared_ptrIKN11ACTOR_SKILL5_INFOEEE+0x81c> @ imm = #0x1ff7b0
+  807514: e9cd 1017    	strd	r1, r0, [sp, #92]
+  807518: e9cd 590e    	strd	r5, r9, [sp, #56]
+  80751c: 46a1         	mov	r9, r4
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+0080a84c <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse>:
+  80a9dc: 4973         	ldr	r1, [pc, #0x1cc]        @ 0x80abac <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x360>
+  80a9de: 46a0         	mov	r8, r4
+  80a9e0: 4479         	add	r1, pc
+  80a9e2: a80c         	add	r0, sp, #0x30
+  80a9e4: f77a fb30    	bl	0x785048 <_ZN8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERSD_PT_> @ imm = #-0x859a0
+  80a9e8: 4971         	ldr	r1, [pc, #0x1c4]        @ 0x80abb0 <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x364>
+  80a9ea: 4604         	mov	r4, r0
+  80a9ec: 4479         	add	r1, pc
+  80a9ee: f778 fb83    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x878fa
+  80a9f2: 7801         	ldrb	r1, [r0]
+  80a9f4: f04f 0a00    	mov.w	r10, #0x0
+  80a9f8: 3903         	subs	r1, #0x3
+  80a9fa: 2904         	cmp	r1, #0x4
+  80a9fc: d842         	bhi	0x80aa84 <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x238> @ imm = #0x84
+  80a9fe: f04f 0b00    	mov.w	r11, #0x0
+  80aa02: e8df f001    	tbb	[pc, r1]
+  80aa06: 1806         	adds	r6, r0, r0
+  80aa08: 0303         	lsls	r3, r0, #0xc
+  80aa0a: 0010         	movs	r0, r2
+  80aa0c: e9d0 ab02    	ldrd	r10, r11, [r0, #8]
+  80aa10: e011         	b	0x80aa36 <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1ea> @ imm = #0x22
+  80aa12: 6880         	ldr	r0, [r0, #0x8]
+  80aa14: 7801         	ldrb	r1, [r0]
+  80aa16: 07c9         	lsls	r1, r1, #0x1f
+  80aa18: bf0c         	ite	eq
+  80aa1a: 3001         	addeq	r0, #0x1
+  80aa1c: 6880         	ldrne	r0, [r0, #0x8]
+  80aa1e: 2100         	movs	r1, #0x0
+  80aa20: f607 e892    	blx	0x611b48 <.plt+0x98>    @ imm = #-0x1f8edc
+  80aa24: e003         	b	0x80aa2e <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1e2> @ imm = #0x6
+  80aa26: edd0 0b02    	vldr	d16, [r0, #8]
+  80aa2a: ec51 0b30    	vmov	r0, r1, d16
+  80aa2e: f1fc e94a    	blx	0xa06cc4 <_ZN12CSRLevelData10AddItemRefENSt6__ndk110shared_ptrIKN11ACTOR_SKILL5_INFOEEE+0x81c> @ imm = #0x1fc294
+  80aa32: 4682         	mov	r10, r0
+  80aa34: 468b         	mov	r11, r1
+  80aa36: 495f         	ldr	r1, [pc, #0x17c]        @ 0x80abb4 <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x368>
+  80aa38: 4479         	add	r1, pc
+  80aa3a: 4620         	mov	r0, r4
+  80aa3c: f778 fb5c    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x87948
+  80aa40: 7801         	ldrb	r1, [r0]
+  80aa42: 2600         	movs	r6, #0x0
+  80aa44: 3903         	subs	r1, #0x3
+  80aa46: 2904         	cmp	r1, #0x4
+  80aa48: d81f         	bhi	0x80aa8a <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x23e> @ imm = #0x3e
+  80aa4a: 2500         	movs	r5, #0x0
+  80aa4c: 4644         	mov	r4, r8
+  80aa4e: e8df f001    	tbb	[pc, r1]
+  80aa52: 1e06         	subs	r6, r0, #0x0
+  80aa54: 0303         	lsls	r3, r0, #0xc
+  80aa56: 0010         	movs	r0, r2
+  80aa58: e9d0 6502    	ldrd	r6, r5, [r0, #8]
+  80aa5c: e017         	b	0x80aa8e <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x242> @ imm = #0x2e
+  80aa5e: 6880         	ldr	r0, [r0, #0x8]
+  80aa60: 7801         	ldrb	r1, [r0]
+  80aa62: 07c9         	lsls	r1, r1, #0x1f
+  80aa64: bf0c         	ite	eq
+  80aa66: 3001         	addeq	r0, #0x1
+  80aa68: 6880         	ldrne	r0, [r0, #0x8]
+  80aa6a: 2100         	movs	r1, #0x0
+  80aa6c: f607 e86c    	blx	0x611b48 <.plt+0x98>    @ imm = #-0x1f8f28
+  80aa70: e003         	b	0x80aa7a <_ZN11CPVRelation11ReqFriendCBERKNSt6__ndk18functionIFviyyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x22e> @ imm = #0x6
+  80aa72: edd0 0b02    	vldr	d16, [r0, #8]
+  80aa76: ec51 0b30    	vmov	r0, r1, d16
+  80aa7a: f1fc e924    	blx	0xa06cc4 <_ZN12CSRLevelData10AddItemRefENSt6__ndk110shared_ptrIKN11ACTOR_SKILL5_INFOEEE+0x81c> @ imm = #0x1fc248
+  80aa7e: 4606         	mov	r6, r0
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+0080b298 <_ZN11CPVRelation17ReqAcceptFriendCBERKNSt6__ndk18functionIFviyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse>:
+  80b414: 495b         	ldr	r1, [pc, #0x16c]        @ 0x80b584 <_ZN11CPVRelation17ReqAcceptFriendCBERKNSt6__ndk18functionIFviyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x2ec>
+  80b416: 4479         	add	r1, pc
+  80b418: a80a         	add	r0, sp, #0x28
+  80b41a: f779 fe15    	bl	0x785048 <_ZN8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERSD_PT_> @ imm = #-0x863d6
+  80b41e: 495a         	ldr	r1, [pc, #0x168]        @ 0x80b588 <_ZN11CPVRelation17ReqAcceptFriendCBERKNSt6__ndk18functionIFviyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x2f0>
+  80b420: 4479         	add	r1, pc
+  80b422: f779 fe11    	bl	0x785048 <_ZN8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERSD_PT_> @ imm = #-0x863de
+  80b426: 7801         	ldrb	r1, [r0]
+  80b428: 2500         	movs	r5, #0x0
+  80b42a: 3903         	subs	r1, #0x3
+  80b42c: 2904         	cmp	r1, #0x4
+  80b42e: d85d         	bhi	0x80b4ec <_ZN11CPVRelation17ReqAcceptFriendCBERKNSt6__ndk18functionIFviyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x254> @ imm = #0xba
+  80b430: 2400         	movs	r4, #0x0
+  80b432: e8df f001    	tbb	[pc, r1]
+  80b436: 1806         	adds	r6, r0, r0
+  80b438: 0303         	lsls	r3, r0, #0xc
+  80b43a: 0010         	movs	r0, r2
+  80b43c: e9d0 5402    	ldrd	r5, r4, [r0, #8]
+  80b440: e011         	b	0x80b466 <_ZN11CPVRelation17ReqAcceptFriendCBERKNSt6__ndk18functionIFviyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1ce> @ imm = #0x22
+  80b442: 6880         	ldr	r0, [r0, #0x8]
+  80b444: 7801         	ldrb	r1, [r0]
+  80b446: 07c9         	lsls	r1, r1, #0x1f
+  80b448: bf0c         	ite	eq
+  80b44a: 3001         	addeq	r0, #0x1
+  80b44c: 6880         	ldrne	r0, [r0, #0x8]
+  80b44e: 2100         	movs	r1, #0x0
+  80b450: f606 eb7a    	blx	0x611b48 <.plt+0x98>    @ imm = #-0x1f990c
+  80b454: e003         	b	0x80b45e <_ZN11CPVRelation17ReqAcceptFriendCBERKNSt6__ndk18functionIFviyEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1c6> @ imm = #0x6
+  80b456: edd0 0b02    	vldr	d16, [r0, #8]
+  80b45a: ec51 0b30    	vmov	r0, r1, d16
+  80b45e: f1fb ec32    	blx	0xa06cc4 <_ZN12CSRLevelData10AddItemRefENSt6__ndk110shared_ptrIKN11ACTOR_SKILL5_INFOEEE+0x81c> @ imm = #0x1fb864
+  80b462: 4605         	mov	r5, r0
+  80b464: 460c         	mov	r4, r1
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+0080dc8c <_ZN11CPVRelation24ReqReceivedFriendCountCBERKNSt6__ndk18functionIFvijEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse>:
+  80de0a: 4959         	ldr	r1, [pc, #0x164]        @ 0x80df70 <_ZN11CPVRelation24ReqReceivedFriendCountCBERKNSt6__ndk18functionIFvijEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x2e4>
+  80de0c: 4479         	add	r1, pc
+  80de0e: a80a         	add	r0, sp, #0x28
+  80de10: f775 f972    	bl	0x7830f8 <_ZNK8nlohmann10basic_jsonINSt6__ndk13mapENS1_6vectorENS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEbxydS7_NS_14adl_serializerENS3_IhNS7_IhEEEEEixIKcEERKSD_PT_> @ imm = #-0x8ad1c
+  80de14: 7801         	ldrb	r1, [r0]
+  80de16: 3903         	subs	r1, #0x3
+  80de18: 2904         	cmp	r1, #0x4
+  80de1a: d806         	bhi	0x80de2a <_ZN11CPVRelation24ReqReceivedFriendCountCBERKNSt6__ndk18functionIFvijEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x19e> @ imm = #0xc
+  80de1c: e8df f001    	tbb	[pc, r1]
+  80de20: 1307         	asrs	r7, r0, #0xc
+  80de22: 0303         	lsls	r3, r0, #0xc
+  80de24: 0015         	movs	r5, r2
+  80de26: 6880         	ldr	r0, [r0, #0x8]
+  80de28: e015         	b	0x80de56 <_ZN11CPVRelation24ReqReceivedFriendCountCBERKNSt6__ndk18functionIFvijEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1ca> @ imm = #0x2a
+  80de2a: 2000         	movs	r0, #0x0
+  80de2c: e013         	b	0x80de56 <_ZN11CPVRelation24ReqReceivedFriendCountCBERKNSt6__ndk18functionIFvijEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1ca> @ imm = #0x26
+  80de2e: 6880         	ldr	r0, [r0, #0x8]
+  80de30: 7801         	ldrb	r1, [r0]
+  80de32: 07c9         	lsls	r1, r1, #0x1f
+  80de34: bf0c         	ite	eq
+  80de36: 3001         	addeq	r0, #0x1
+  80de38: 6880         	ldrne	r0, [r0, #0x8]
+  80de3a: 2100         	movs	r1, #0x0
+  80de3c: f603 ee84    	blx	0x611b48 <.plt+0x98>    @ imm = #-0x1fc2f8
+  80de40: ec41 0b30    	vmov	d16, r0, r1
+  80de44: e003         	b	0x80de4e <_ZN11CPVRelation24ReqReceivedFriendCountCBERKNSt6__ndk18functionIFvijEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1c2> @ imm = #0x6
+  80de46: 7a00         	ldrb	r0, [r0, #0x8]
+  80de48: e005         	b	0x80de56 <_ZN11CPVRelation24ReqReceivedFriendCountCBERKNSt6__ndk18functionIFvijEEEiPK14CPVHTTPRequestPK15CPVHTTPResponse+0x1ca> @ imm = #0xa
+  80de4a: edd0 0b02    	vldr	d16, [r0, #8]
+  80de4e: eebc 0be0    	vcvt.u32.f64	s0, d16
+  80de52: ee10 0a10    	vmov	r0, s0

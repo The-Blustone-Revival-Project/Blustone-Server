@@ -3,6 +3,7 @@ import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors } from "./mirage.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
+import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { planGroupRankUp } from "./group-rank-up.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
@@ -10,7 +11,7 @@ import { earnSpecialSupply, specialSupplyIds, specialSupplyList } from "./specia
 import { exchangeHunterTraces } from "./trace-exchange.js";
 import { hunterSearchReference } from "./hunter-search.js";
 import { HUNTER_TRACE_ITEMS } from "./hunter-traces.js";
-import { mailboxRequest, recordVictoryNotice } from "./mail.js";
+import { LOCAL_MAIL_PORTRAIT_PATH, mailboxRequest, recordVictoryNotice } from "./mail.js";
 import { LOGIN_BONUS_GOLD, LOGIN_BONUS_VIP_EXP, loginBonusInstance, observeLoginBonus } from "./login-bonus.js";
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -483,6 +484,7 @@ export class ServerState {
   private readonly sharedSecretsByAccessToken = new Map<string, Buffer>();
   private readonly sessionPvidByAccessToken = new Map<string, number>();
   private selectedServer = 1;
+  private socialFriends?: SocialFriends;
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean } = {}) {
@@ -515,6 +517,14 @@ export class ServerState {
       ids.add(account.pvid);
       this.indexAccount(account);
       this.nextPvid = Math.max(this.nextPvid, account.pvid + 1);
+    }
+    if (saved.socialFriends !== undefined) {
+      this.socialFriends = normalizeSocialFriends(saved.socialFriends);
+      for (const relation of this.socialFriends.relations) {
+        const from = this.accountsByPvid.get(relation.from_pvid), to = this.accountsByPvid.get(relation.to_pvid);
+        if (!from || !to || from.serverId !== to.serverId)
+          throw new Error("Local friend relationship references unknown or different-server accounts");
+      }
     }
     if (Array.isArray(saved.gameStates)) {
       const gamePvids = new Set<number>();
@@ -561,6 +571,7 @@ export class ServerState {
     if (!this.stateFile) return;
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
     const snapshot = { version: 1, selectedServer: this.selectedServer,
+      ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -1082,8 +1093,8 @@ export class ServerState {
   mirageAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     this.accountFor(payload, headers);
     // Original callback replaces its complete friend-floor cache with this
-    // bare array. There are no established friend relationships in the replica;
-    // local accounts and Arena fixture rivals are not substitutes for friends.
+    // bare array. Local friendship alone is not a reconstructed highest-floor
+    // record; Arena fixture rivals are not substitutes for genuine friend data.
     if (route === "/mirage/GetFriendInfo") return this.envelope(mirageFriendFloors());
     if (route === "/mirage/GetInfo") {
       // Native renew: a refused GetNextFloor delegates zero, which can match
@@ -1604,6 +1615,55 @@ export class ServerState {
         rank: { prev: previous.rank, cur: transition.rank },
         rank_up_cnt: { prev: previous.rank_up_cnt, cur: transition.rank_up_cnt },
         exp: { prev: previous.exp, cur: transition.exp } }, removed_inst_list: sources } });
+  }
+
+  socialFriendAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
+    const account = this.accountFor(payload, headers);
+    const before = this.socialFriends;
+    const current = before ?? emptySocialFriends();
+    const profile = (pvid: number) => {
+      const peer = this.accountsByPvid.get(pvid);
+      return peer ? { pvid: peer.pvid, nickname: peer.nickname, serverId: peer.serverId,
+        beginUtc: peer.beginUtc, lastLoginAt: peer.lastLoginAt,
+        profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH } : undefined;
+    };
+    try {
+      if (route === "/relation/GetList") return this.envelope(socialFriendList(current, account.pvid, payload.type, profile));
+      if (route === "/relation/GetFriendReceivedCount") return this.envelope(receivedSocialFriendCount(current, account.pvid));
+      if (route !== "/relation/FriendRequest" && route !== "/relation/FriendReqAccept")
+        return this.failure(2001, "This friend lifecycle receiver is not reconstructed");
+      if (payload.target_friend_id_list !== undefined)
+        return this.failure(2001, "Bulk friend acceptance is not reconstructed");
+      const blocked = (a: number, b: number) => Object.hasOwn(this.accountsByPvid.get(a)?.socialBlocks ?? {}, String(b));
+      const plan = planSocialFriend(current, account.pvid,
+        route === "/relation/FriendRequest" ? "request" : "accept",
+        route === "/relation/FriendRequest" ? payload.target_pvid : payload.target_friend_id,
+        profile, blocked, Date.now());
+      if (JSON.stringify(plan.next) !== JSON.stringify(current)) {
+        this.socialFriends = plan.next;
+        try { this.persist(); }
+        catch { this.socialFriends = before; return this.failure(2001, "Unable to persist local friend operation"); }
+      }
+      return this.envelope(plan.receipt);
+    } catch (error) {
+      // Validation refuses without mutation; persistence failures already
+      // restored the complete graph covering both relationship participants.
+      return this.failure(2001, error instanceof Error ? error.message : "Invalid local friend operation");
+    }
+  }
+
+  /** Brief profiles only for a real relationship visible to this local account.
+   * Reuse the existing original100x100 system icon as LOCAL fallback avatar.
+   * No opponent fixture, account secrets or synthetic party/card is returned.
+   */
+  localSocialProfile(viewerPvid: number, targetPvid: number) {
+    const viewer = this.accountsByPvid.get(viewerPvid), peer = this.accountsByPvid.get(targetPvid);
+    if (!viewer || !peer || viewer.serverId !== peer.serverId || !this.socialFriends?.relations.some((row) =>
+      (row.from_pvid === viewerPvid && row.to_pvid === targetPvid) ||
+      (row.from_pvid === targetPvid && row.to_pvid === viewerPvid))) return undefined;
+    return { pvid: peer.pvid, reg_utc: peer.beginUtc, utc: Math.floor(Date.now() / 1000),
+      nick_name: peer.nickname, country_code: "", profile_status: "", like_cnt: 0, is_like: 0,
+      profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH };
   }
 
   groupRankUpCards(payload: Record<string, unknown>, headers: Record<string, string>) {

@@ -31,8 +31,9 @@ writes occurred.
 
 Wire response: `result_code:1, ret_data:[{floor:integer,nick_list:string[]},...]`.
 A successful empty array clears stale cache; a metadata object does not clear it.
-The local replica currently has no established friend relationships. Its honest
-response is therefore `[]`. Do not populate it with unrelated local accounts or
+Local-account friendships can now be established, but no original or earned
+friend highest-floor records have been reconstructed. The honest Mirage
+response remains `[]`. Do not infer floor0 from friendship or populate it with unrelated local accounts or
 Arena fixture rivals. `mirageFriendFloors` groups supplied, already established
 friends without using nickname as identity: two friends with the same name are
 retained. Descending floor order is explicitly a local presentation policy;
