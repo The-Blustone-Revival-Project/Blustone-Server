@@ -34,6 +34,7 @@ jobs:
           npm test
           npm run build
           npm run resources:verify
+          npm run test:profiles
           node scripts/verify-independent.mjs
       - name: Publish regular Latest semver release
         env:

@@ -39,6 +39,26 @@ node scripts/verify-independent.mjs
 
 The second command runs the compiled server from an unrelated working directory against a disposable private state copy. It verifies encrypted ECDH/HMAC/AES traffic, authenticated lobby/reference/Episode routes, 139 resource rows, ranged package delivery, the portrait asset, and credential/transport persistence across restart. It preserves the three existing games and does not operate the Android app.
 
+## Prepared Episode 7 resources
+
+The default remains `current-e6`. An inactive `current-e7` profile includes the
+17 additional hash-pinned original packs (156 total, coherent stamp1634684).
+It expands available art; it does not grant story progress or resolve the unknown
+CERUM01 reward metadata. Native E7 validation remains pending the earned E6 gate.
+
+```powershell
+node scripts/profiles/prepare-e7.mjs --inspect-only
+npm run test:profiles
+npm run resources:verify -- --profile current-e7
+```
+
+Preparation verifies originals and leaves the live server, save and E6 profile
+unchanged. The historical Episode7 PowerShell helper now delegates to this named
+profile preparation; sourcing it does not mutate environment selections. When
+earned progression and native validation are ready, the launcher explicitly
+selects a named profile with `--profile` or PowerShell `-Profile`. See
+[readiness evidence](docs/e7-readiness-2026-10-11.md).
+
 ## Container option
 
 `docker compose up --build -d` mounts the local imported runtime resources read-only and persists `var/`. The Node launch and tests are verified in this migration; container build/runtime validation is recorded separately in the migration report. Run one writer per state file.

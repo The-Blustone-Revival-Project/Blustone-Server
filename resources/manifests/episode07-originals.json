@@ -1,0 +1,87 @@
+[
+  {
+    "name": "C007.jet",
+    "bytes": 753975,
+    "sha256": "949be5dbd4d6451f4f50fc862a1a0f5071f591fda73e95da3a5d727690930e73"
+  },
+  {
+    "name": "C007_EFT.jet",
+    "bytes": 2137495,
+    "sha256": "8bb0c0971a56491cb3e41cd9b4279e077e295d9f1fd33919a6bbb537e9e0af3e"
+  },
+  {
+    "name": "C007_Q.jet",
+    "bytes": 57482,
+    "sha256": "8395cc442c9a41a4381766e5c8b959e6d89f8cc86ba6146efc024ceeb07192b8"
+  },
+  {
+    "name": "C011.jet",
+    "bytes": 1189575,
+    "sha256": "e2aea670ac617df79be05ad2c860074997efbd5201c1a8724e179d8bca1be944"
+  },
+  {
+    "name": "C011_EFT.jet",
+    "bytes": 1944752,
+    "sha256": "268de72b2d4e405009a7345f9c0a536d131b154194b03e9f029497e7880c88ed"
+  },
+  {
+    "name": "C011_Q.jet",
+    "bytes": 53700,
+    "sha256": "6abe741c5b180e20d6a96d171320294e978e4780d6d1cd69504ed94a978f3a41"
+  },
+  {
+    "name": "C011_SND.jet",
+    "bytes": 86588,
+    "sha256": "0cb28a36f329a90661c41bc0619258b1d03c0cfff3956187ea670dead89c5ac5"
+  },
+  {
+    "name": "C016.jet",
+    "bytes": 757670,
+    "sha256": "c35c525e4eb65a7ded346aa7baac2aacdafbc40d51c38a746debebf3d2c2436f"
+  },
+  {
+    "name": "C016_EFT.jet",
+    "bytes": 7335026,
+    "sha256": "f1347d403ac57aa855841b2307d0f596754a5c6b8dd198fc1a1abf601228c41f"
+  },
+  {
+    "name": "C016_Q.jet",
+    "bytes": 120442,
+    "sha256": "33b1e5a313ad84c990a0bbb5335304fe84bf64aaed8e12db72fb94060e073eb4"
+  },
+  {
+    "name": "C016_SND.jet",
+    "bytes": 135066,
+    "sha256": "f578b51dbf267d304a34963ec906b0eaa372486c1f2fad0c55dd68e5f4ff6f6a"
+  },
+  {
+    "name": "C018.jet",
+    "bytes": 900296,
+    "sha256": "7ab656845ab2e37448c48e073ec34301fe5d5e9dd505c384d200a4c25d95e82a"
+  },
+  {
+    "name": "C018_EFT.jet",
+    "bytes": 1147675,
+    "sha256": "a19f6f9e06468eb1c2f5ecf6b861d1e9e78c57bee6f2fef5831c7f8a1ac29181"
+  },
+  {
+    "name": "C018_Q.jet",
+    "bytes": 42481,
+    "sha256": "9eae7a673078dc1baf46c66ea935ad94f13fc48507e155197b39744a1ea57fba"
+  },
+  {
+    "name": "M020.jet",
+    "bytes": 925674,
+    "sha256": "f0acad2194ab843a3fb722176c51c93a916fab8238be19aa42ac379097e62dbb"
+  },
+  {
+    "name": "N007.jet",
+    "bytes": 3327702,
+    "sha256": "48633922e7091be83983fdff41416725f14c1631a09fac03986d17b31f9a45c7"
+  },
+  {
+    "name": "ST901.jet",
+    "bytes": 663573,
+    "sha256": "5036d6f3490eb011a0b7fc3bcb30bd56e897dc776657e11d9543f995f9725128"
+  }
+]
