@@ -4782,7 +4782,7 @@
     "/card_handler/LevelUpEquipment": {
       "post": {
         "summary": "LevelUpEquipment",
-        "description": "Authenticated equipment reference/upgrade contract. Price reads return ret_data arrays copied from explicitly supplied immutable level or rank/attribute tables; absent tables return []. Numeric prices/materials are supplied local data, not recovered original economics. Required item IDs must exist in the published item reference. Upgrade actions refuse 2001 without state writes: quote publication does not establish source eligibility, Guild discount qualification or full settlement. Native request fields are inst_id (uint64 decimal), part (1 weapon, 2 armor, 3 accessory), price_type, and rank source_inst_ids (JSON uint64 vector).",
+        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Active targets, missing data, unsupported Guild/currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
         "tags": [
           "Equipment"
         ],
@@ -4856,14 +4856,14 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/equipment-upgrade-native-2026-10-11.md; tests/equipment-price-state.ts",
+        "x-evidence": "docs/equipment-upgrade-local-workflow-2026-10-11.md; tests/equipment-upgrade-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/card_handler/RankUpEquipment": {
       "post": {
         "summary": "RankUpEquipment",
-        "description": "Authenticated equipment reference/upgrade contract. Price reads return ret_data arrays copied from explicitly supplied immutable level or rank/attribute tables; absent tables return []. Numeric prices/materials are supplied local data, not recovered original economics. Required item IDs must exist in the published item reference. Upgrade actions refuse 2001 without state writes: quote publication does not establish source eligibility, Guild discount qualification or full settlement. Native request fields are inst_id (uint64 decimal), part (1 weapon, 2 armor, 3 accessory), price_type, and rank source_inst_ids (JSON uint64 vector).",
+        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Active targets, missing data, unsupported Guild/currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
         "tags": [
           "Equipment"
         ],
@@ -4937,7 +4937,7 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/equipment-upgrade-native-2026-10-11.md; tests/equipment-price-state.ts",
+        "x-evidence": "docs/equipment-upgrade-local-workflow-2026-10-11.md; tests/equipment-upgrade-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -15583,7 +15583,7 @@
     "/reference/GetCardEquipmentLevelUpPrice": {
       "post": {
         "summary": "GetCardEquipmentLevelUpPrice",
-        "description": "Authenticated equipment reference/upgrade contract. Price reads return ret_data arrays copied from explicitly supplied immutable level or rank/attribute tables; absent tables return []. Numeric prices/materials are supplied local data, not recovered original economics. Required item IDs must exist in the published item reference. Upgrade actions refuse 2001 without state writes: quote publication does not establish source eligibility, Guild discount qualification or full settlement. Native request fields are inst_id (uint64 decimal), part (1 weapon, 2 armor, 3 accessory), price_type, and rank source_inst_ids (JSON uint64 vector).",
+        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Active targets, missing data, unsupported Guild/currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
         "tags": [
           "Equipment"
         ],
@@ -15657,14 +15657,14 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/equipment-upgrade-native-2026-10-11.md; tests/equipment-price-state.ts",
+        "x-evidence": "docs/equipment-upgrade-local-workflow-2026-10-11.md; tests/equipment-upgrade-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/reference/GetCardEquipmentRankUpPrice": {
       "post": {
         "summary": "GetCardEquipmentRankUpPrice",
-        "description": "Authenticated equipment reference/upgrade contract. Price reads return ret_data arrays copied from explicitly supplied immutable level or rank/attribute tables; absent tables return []. Numeric prices/materials are supplied local data, not recovered original economics. Required item IDs must exist in the published item reference. Upgrade actions refuse 2001 without state writes: quote publication does not establish source eligibility, Guild discount qualification or full settlement. Native request fields are inst_id (uint64 decimal), part (1 weapon, 2 armor, 3 accessory), price_type, and rank source_inst_ids (JSON uint64 vector).",
+        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Active targets, missing data, unsupported Guild/currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
         "tags": [
           "Equipment"
         ],
@@ -15738,7 +15738,7 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/equipment-upgrade-native-2026-10-11.md; tests/equipment-price-state.ts",
+        "x-evidence": "docs/equipment-upgrade-local-workflow-2026-10-11.md; tests/equipment-upgrade-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },

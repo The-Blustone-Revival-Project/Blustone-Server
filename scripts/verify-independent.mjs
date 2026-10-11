@@ -13,13 +13,18 @@ import {preflight} from './resources/verify.mjs';
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const exerciseBulk=process.argv.includes('--exercise-bulk');
 const exerciseSale=process.argv.includes('--exercise-sale');
-const exerciseEquipment=process.argv.includes('--exercise-equipment');
+const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgrade');
+const exerciseEquipment=process.argv.includes('--exercise-equipment')||exerciseEquipmentUpgrade;
+const fixtureEquipmentMaterial=exerciseEquipmentUpgrade?
+  (await import(pathToFileURL(path.join(root,'dist/src/search-capsules.js')).href)).SEARCH_CAPSULE_ID:'';
+if(exerciseEquipmentUpgrade&&(exerciseBulk||exerciseSale)) throw new Error('Use separate disposable fixtures for equipment and roster transactions');
 const authoredEquipment={id:'AUTHORED_WEAPON',type:1,rank:1,awk_step:0,hp:'0',atk:'10000',def:'0',spd:'0',
   crt_chance:'0',crt_dmg:'0',penetration:'0',block_chance:'0',block_dec_dmg:'0',attr_enhance:'0',attr_resist:'0',
   hp_regen:'0',hp_up:'0',atk_up:'2000',def_up:'0'};
-const authoredEquipmentLevelPrice={level:2,price_type:2,price:17,item1_qty:0,item1_ref_id:'',item2_qty:0,item2_ref_id:'',
+const authoredEquipmentLevelPrice={level:exerciseEquipmentUpgrade?10:2,price_type:2,price:17,item1_qty:exerciseEquipmentUpgrade?1:0,item1_ref_id:fixtureEquipmentMaterial,item2_qty:0,item2_ref_id:'',
   item3_qty:0,item3_ref_id:'',item4_qty:0,item4_ref_id:''};
-const authoredEquipmentRankPrice={rank:1,attr:1,price_type:2,price:23,item_qty:0,item_ref_id:'',card_qty:0};
+const authoredEquipmentRankPrice={rank:exerciseEquipmentUpgrade?2:1,attr:1,price_type:2,price:23,item_qty:exerciseEquipmentUpgrade?1:0,item_ref_id:fixtureEquipmentMaterial,card_qty:0};
+const authoredEquipmentPrices=exerciseEquipmentUpgrade?[authoredEquipmentLevelPrice,{...authoredEquipmentLevelPrice,level:11,price:29}]:[authoredEquipmentLevelPrice];
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
 const monsterIndex=process.argv.indexOf('--exercise-monster');
@@ -48,7 +53,7 @@ await requireFreePort();
 // races the port probe. Never overwrite a concurrent writer's state copy.
 const folder = mkdtempSync(path.join(outputFolder,'run-'));
 const stateFile = path.join(folder, 'state.json');
-let bulkPvid, salePvid;
+let bulkPvid, salePvid, equipmentPvid;
 const preserved = process.argv.includes('--fixture') ? '' : path.join(root, 'local/private/preserved-state.json');
 if (existsSync(preserved)) copyFileSync(preserved, stateFile);
 else {
@@ -57,10 +62,11 @@ else {
   const { ServerState } = await import(pathToFileURL(path.join(root, 'dist/src/state.js')).href);
   const fixture = new ServerState(base, stateFile);
   fixture.registerGuest({device_id:'standalone-generated-fixture'}, {});
-  if(exerciseBulk || exerciseSale) {
+  if(exerciseBulk || exerciseSale || exerciseEquipmentUpgrade) {
     const auth=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
     const account=fixture.accountFor(auth,{}),game=fixture.gameFor(account);
-    if(exerciseSale) salePvid=account.pvid;
+    if(exerciseEquipmentUpgrade) equipmentPvid=account.pvid;
+    else if(exerciseSale) salePvid=account.pvid;
     else bulkPvid=account.pvid;
     // Deliberately disposable test sources, not recruitment or recovered rewards.
     // This branch is unreachable for preserved/private-state verification.
@@ -69,6 +75,12 @@ else {
     game.next_card_inst_id=1000300;game.gold=5000;
     if(exerciseSale) game.card_book=game.card_book.map(row=>row.ref_id===game.recruited_cards[0].ref_id
       ? {...row,rank:Math.max(row.rank,5)}:row);
+    if(exerciseEquipmentUpgrade) {
+      game.recruited_cards=[];game.gold=100;
+      game.starter_cards.find(card=>card.ref_id==='001').weapon_rank=1;
+      game.starter_cards.find(card=>card.ref_id==='001').weapon_level=9;
+      game.items=[{inst_id:1,ref_id:fixtureEquipmentMaterial,qty:3,lock:0}];game.next_item_inst_id=2;
+    }
     const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
     seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===account.pvid?game:saved]);
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
@@ -79,9 +91,10 @@ let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
   if(exerciseSale) env.BLUSTONE_CARD_SELL_PROFIT_JSON=JSON.stringify([{rank:1,profit_type:2,profit_target:'',profit_qty:13}]);
-  if(exerciseEquipment) env.BLUSTONE_EQUIPMENT_REFERENCE_JSON=JSON.stringify({'001':[authoredEquipment]});
+  if(exerciseEquipment) env.BLUSTONE_EQUIPMENT_REFERENCE_JSON=JSON.stringify({'001':exerciseEquipmentUpgrade?
+    [authoredEquipment,{...authoredEquipment,id:'AUTHORED_WEAPON2',rank:2,atk:'40000'}]:[authoredEquipment]});
   if(exerciseEquipment) {
-    env.BLUSTONE_EQUIPMENT_LEVEL_PRICES_JSON=JSON.stringify([authoredEquipmentLevelPrice]);
+    env.BLUSTONE_EQUIPMENT_LEVEL_PRICES_JSON=JSON.stringify(authoredEquipmentPrices);
     env.BLUSTONE_EQUIPMENT_RANK_PRICES_JSON=JSON.stringify([authoredEquipmentRankPrice]);
   }
   if(exerciseMonster) env.BLUSTONE_MONSTER_IDS=exerciseMonster;
@@ -262,12 +275,13 @@ try {
       {allowPlainRefusal:true})).result_code,2001,'Missing quest data must not grant mock success');
   const ordinaryReferences=(await secure('/reference/GetCard',auth)).ret_data;
   if(exerciseEquipment) {
-    assert.deepEqual(ordinaryReferences.find(card=>card.base.id==='001').equipment,[authoredEquipment]);
-    assert.deepEqual((await secure('/reference/GetCardEquipmentLevelUpPrice',auth)).ret_data,[authoredEquipmentLevelPrice]);
+    assert.deepEqual(ordinaryReferences.find(card=>card.base.id==='001').equipment,exerciseEquipmentUpgrade?
+      [authoredEquipment,{...authoredEquipment,id:'AUTHORED_WEAPON2',rank:2,atk:'40000'}]:[authoredEquipment]);
+    assert.deepEqual((await secure('/reference/GetCardEquipmentLevelUpPrice',auth)).ret_data,authoredEquipmentPrices);
     assert.deepEqual((await secure('/reference/GetCardEquipmentRankUpPrice',auth)).ret_data,[authoredEquipmentRankPrice]);
     const beforeUpgradeRefusals=readFileSync(stateFile);
     for(const route of ['/card_handler/LevelUpEquipment','/card_handler/RankUpEquipment'])
-      assert.equal((await secure(route,{...auth,inst_id:'1000001',part:'1',price_type:'2',source_inst_ids:'[]'},
+      assert.equal((await secure(route,{...auth,inst_id:'1000001',part:'1',price_type:'0',source_inst_ids:'null'},
         {allowPlainRefusal:true})).result_code,2001,'Configured quote must not imply implemented settlement');
     assert.deepEqual(readFileSync(stateFile),beforeUpgradeRefusals,'Upgrade refusal must preserve complete account/save bytes');
     assert.ok(ordinaryReferences.filter(card=>card.base.id!=='001').every(card=>card.equipment.length===0),
@@ -276,6 +290,23 @@ try {
     const parsed=parseHunterEquipment([authoredEquipment]);
     assert.equal(calculateHunterEquipment(parsed,0,1,1).stats.atk,100);
     assert.equal(calculateHunterEquipment(parsed,0,1,10).stats.atk,280);
+    if(exerciseEquipmentUpgrade) {
+      assert.equal(Number(auth.pvid),equipmentPvid);
+      const current=()=>JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===equipmentPvid)[1];
+      const target=current().starter_cards.find(card=>card.ref_id==='001');
+      const request={...auth,inst_id:String(target.inst_id),part:'1',price_type:'2',source_inst_ids:'null'};
+      for(const [route,rank,level,gold,quantity] of [['LevelUpEquipment',1,10,83,2],['RankUpEquipment',2,10,60,1],['LevelUpEquipment',2,11,31,0]]) {
+        const reply=await secure('/card_handler/'+route,request);assert.equal(reply.result_code,1);
+        assert.equal(reply.ret_data.user.gold.cur,gold);assert.deepEqual(reply.ret_data.user.item,[{inst_id:1,qty:quantity}]);
+        assert.equal(Object.hasOwn(reply.ret_data,'item'),false,'Native equipment quantities belong inside user');
+        const card=reply.ret_data.user.card[0];assert.equal(card.inst_id,target.inst_id);
+        assert.equal(card.weapon_rank,rank);assert.equal(card.weapon_level,level);
+        assert.equal(current().gold,gold);
+      }
+      const settled=readFileSync(stateFile);
+      assert.notEqual((await secure('/card_handler/RankUpEquipment',request,{allowPlainRefusal:true})).result_code,1);
+      assert.deepEqual(readFileSync(stateFile),settled,'Post-rank replay must refuse without another charge');
+    }
   }
   let monsterReference;
   if(exerciseMonster) {
@@ -394,13 +425,22 @@ try {
     assert.deepEqual((await secure('/reference/GetCard',auth)).ret_data,ordinaryReferences,
       'Historical reference policy must survive restart without changing records');
   if(exerciseEquipment) {
-    assert.deepEqual((await secure('/reference/GetCardEquipmentLevelUpPrice',auth)).ret_data,[authoredEquipmentLevelPrice]);
+    assert.deepEqual((await secure('/reference/GetCardEquipmentLevelUpPrice',auth)).ret_data,authoredEquipmentPrices);
     assert.deepEqual((await secure('/reference/GetCardEquipmentRankUpPrice',auth)).ret_data,[authoredEquipmentRankPrice]);
   }
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
   for(const entry of before.gameStates) {
     const found=after.gameStates.find(row=>JSON.stringify(row[0])===JSON.stringify(entry[0]));
+    if(exerciseEquipmentUpgrade&&entry[0]===equipmentPvid) {
+      const expected=structuredClone(entry[1]),actual=structuredClone(found[1]);
+      expected.gold=31;const target=expected.starter_cards.find(card=>card.ref_id==='001');
+      target.weapon_rank=2;target.weapon_level=11;
+      expected.items[0].qty=0;
+      for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
+      assert.deepEqual(actual,expected,'Equipment transaction must persist only exact selected fields and authored gold fees');
+      continue;
+    }
     if(exerciseSale && entry[0]===salePvid) {
       const expected=structuredClone(entry[1]),actual=structuredClone(found[1]);
       expected.gold=5026;expected.recruited_cards=[];
@@ -426,6 +466,7 @@ try {
     encrypted_bulk_rank_up_fixture:exerciseBulk,
     encrypted_hunter_sale_fixture:exerciseSale,
     configured_equipment_reference_fixture:exerciseEquipment,
+    configured_equipment_upgrade_fixture:exerciseEquipmentUpgrade,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
@@ -441,7 +482,7 @@ try {
     authenticated_lobby_and_references:true,unique_campaign_area_ownership:true,hidden_origin_rewards_absent:true,
     episode_log:true,resource_packages:rows.length,resource_range_206:true,
     compiled_portrait:true,persisted_transport_and_credentials:true,
-    preserved_existing_games:before.gameStates.filter(([pvid])=>(!exerciseBulk || pvid!==bulkPvid) && (!exerciseSale || pvid!==salePvid)).length,
+    preserved_existing_games:before.gameStates.filter(([pvid])=>(!exerciseBulk || pvid!==bulkPvid) && (!exerciseSale || pvid!==salePvid) && (!exerciseEquipmentUpgrade || pvid!==equipmentPvid)).length,
     fixture_games_intentionally_promoted:exerciseBulk?1:0,
     apk_install_or_device_actions:false};
   writeFileSync(path.join(outputFolder,'standalone-verification.json'),JSON.stringify(report,null,2)+'\n');

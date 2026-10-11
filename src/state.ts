@@ -11,6 +11,7 @@ import { planGroupRankUp } from "./group-rank-up.js";
 import { cardSellProfitRows, planHunterSale, type CardSellProfit } from "./hunter-sale.js";
 import {equipmentLevelPrices as parseEquipmentLevelPrices, equipmentRankPrices as parseEquipmentRankPrices,
   type EquipmentLevelPrice, type EquipmentRankPrice} from "./equipment-prices.js";
+import {planEquipmentUpgrade} from "./equipment-upgrade.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
 import { earnSpecialSupply, specialSupplyIds, specialSupplyList } from "./special-supply.js";
@@ -1780,13 +1781,34 @@ export class ServerState {
   }
 
   equipmentReferenceAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
-    this.accountFor(payload,headers);
+    const account=this.accountFor(payload,headers);
     if(route==="/reference/GetCardEquipmentLevelUpPrice")
       return this.envelope(this.equipmentLevelPrices.map(row=>({...row})));
     if(route==="/reference/GetCardEquipmentRankUpPrice")
       return this.envelope(this.equipmentRankPrices.map(row=>({...row})));
-    // Reference data does not establish an authenticated upgrade settlement.
-    return this.failure(2001,"Equipment upgrade settlement is not reconstructed");
+    const action=route==="/card_handler/LevelUpEquipment"?"level":route==="/card_handler/RankUpEquipment"?"rank":undefined;
+    if(!action) return this.failure(2001,"Unknown equipment operation");
+    const game=this.gameByPvid.get(account.pvid)??this.gameFor(account);
+    assertOwnedCardCompatibility(game);
+    const cards=[...game.starter_cards,...game.recruited_cards];
+    if(!this.options.legacyCardIds && (game.card_instance_namespace!==1 || cards.some(card=>
+      !Number.isSafeInteger(card.inst_id)||card.inst_id<=CARD_INSTANCE_BASE||card.inst_id>=CARD_INSTANCE_LIMIT)))
+      return this.failure(2001,"Equipment upgrades require production owned identities");
+    const busyIds=new Set([...(game.active_battle?.state==="active"?game.active_battle.deck_inst_ids:[]),
+      ...(game.arena.active?.deck_inst_ids??[]),...(game.search.active?.deck_inst_ids??[])]);
+    const guild=(this.guildAction("/lobby/GetGuildInfo",payload,headers).ret_data as {my_guild:{guild_id:number}}).my_guild.guild_id;
+    const plan=planEquipmentUpgrade(action,payload,{cards,items:game.items,gold:game.gold,
+      guildId:guild,busyIds,levelPrices:this.equipmentLevelPrices,rankPrices:this.equipmentRankPrices,
+      reference:id=>{const row=starterReference.find(row=>row.base.id===id&&row.base.is_source===0);
+        return row?{attr:row.base.attr,equipment:row.equipment}:undefined;}});
+    if("error" in plan) return this.failure(2001,plan.error!);
+    const before={gold:game.gold,items:game.items,starters:game.starter_cards,recruits:game.recruited_cards};
+    game.gold=plan.gold!;game.items=plan.items!;
+    game.starter_cards=game.starter_cards.map(card=>card.inst_id===plan.id?plan.card!:card);
+    game.recruited_cards=game.recruited_cards.map(card=>card.inst_id===plan.id?plan.card!:card);
+    try {this.persist();}
+    catch(error){game.gold=before.gold;game.items=before.items;game.starter_cards=before.starters;game.recruited_cards=before.recruits;throw error;}
+    return this.envelope(plan.data);
   }
 
   sellCards(payload: Record<string, unknown>, headers: Record<string, string>) {
