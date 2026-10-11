@@ -300,12 +300,20 @@ try {
     assert.equal(snowfield.ret_data.claimed, true);
     assert.equal(glacier.ret_data.claimed, true,
       "the key is (area_id, achieve_cnt): the same threshold in Glacier is a different reward");
-    const beforeOrigin = JSON.stringify(state.gameFor(state.accountFor({ otp }, {})));
-    const origin = claim(state, claimForm("n_00", 1, otp));
-    assert.notEqual(origin.ret_data.claimed, true, "the hidden origin cannot pay a synthetic chest");
-    assert.equal(origin.ret_data.error_code, "UNKNOWN_ACHIEVE_CNT");
-    assert.equal(JSON.stringify(state.gameFor(state.accountFor({ otp }, {}))), beforeOrigin,
-      "refusing an origin reward preserves the earned real-area rewards and inventory");
+    // gameFor legitimately advances full-fuel clocks even on read. Hold the
+    // clock during this refusal audit so exact state equality tests the claim,
+    // rather than whether the two reads crossed a millisecond boundary.
+    const realNow = Date.now;
+    const auditTime = realNow();
+    Date.now = () => auditTime;
+    try {
+      const beforeOrigin = JSON.stringify(state.gameFor(state.accountFor({ otp }, {})));
+      const origin = claim(state, claimForm("n_00", 1, otp));
+      assert.notEqual(origin.ret_data.claimed, true, "the hidden origin cannot pay a synthetic chest");
+      assert.equal(origin.ret_data.error_code, "UNKNOWN_ACHIEVE_CNT");
+      assert.equal(JSON.stringify(state.gameFor(state.accountFor({ otp }, {}))), beforeOrigin,
+        "refusing an origin reward preserves the earned real-area rewards and inventory");
+    } finally { Date.now = realNow; }
   }
 
   // =========================================================================
