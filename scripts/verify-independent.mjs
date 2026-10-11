@@ -7,10 +7,26 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { setTimeout as delay } from 'node:timers/promises';
+import {createServer} from 'node:net';
+import {verifySingleJet} from './resources/verify-single-jet.mjs';
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const folder = path.join(root, 'local/verification'); mkdirSync(folder, {recursive:true});
+const profileIndex=process.argv.indexOf('--profile');
+const profileName=profileIndex===-1?'current-e6':process.argv[profileIndex+1];
+if(typeof profileName!=='string' || !/^[\w-]+$/.test(profileName)) throw new Error('Invalid verification profile');
+const profile=JSON.parse(readFileSync(path.join(root,'config/profiles',profileName+'.json'),'utf8'));
+const stamp=profile.env.BLUSTONE_RESLIST_STAMP;
+const expectedNames=profile.env.BLUSTONE_PACKAGE_NAMES.split(',').map(name=>name.slice(0,-4));
+const folder = path.join(root, 'local/verification',profileName); mkdirSync(folder, {recursive:true});
 const stateFile = path.join(folder, 'state.json');
 const port = 18081, base = `http://127.0.0.1:${port}`;
+const requireFreePort=async()=>{
+  const probe=createServer();
+  await new Promise((resolve,reject)=>{probe.once('error',reject);probe.listen(port,'127.0.0.1',resolve);});
+  await new Promise((resolve,reject)=>probe.close(error=>error?reject(error):resolve()));
+};
+// Do not accept a preexisting server's health response or overwrite a concurrent
+// verifier's state copy. This check sends no HTTP request and stops no process.
+await requireFreePort();
 const preserved = process.argv.includes('--fixture') ? '' : path.join(root, 'local/private/preserved-state.json');
 if (existsSync(preserved)) copyFileSync(preserved, stateFile);
 else {
@@ -23,7 +39,7 @@ else {
 const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
 const launch = async () => {
-  child = spawn(process.execPath, [path.join(root, 'scripts/start-local.mjs'), '--port', String(port), '--host', '127.0.0.1', '--base-url', base, '--state-file', stateFile],
+  child = spawn(process.execPath, [path.join(root, 'scripts/start-local.mjs'), '--profile',profileName,'--port', String(port), '--host', '127.0.0.1', '--base-url', base, '--state-file', stateFile],
     {cwd: folder, env: {...process.env}, stdio:['ignore','pipe','pipe']});
   let logs=''; child.stdout.on('data', b=>{logs+=b;}); child.stderr.on('data', b=>{logs+=b;});
   child.once('error', error => { logs+=error.message; });
@@ -34,7 +50,15 @@ const launch = async () => {
   }
   throw new Error('Compiled server startup timed out: '+logs.slice(-1500));
 };
-const stop = async () => { if(child && child.exitCode===null) { const exited=once(child,'exit'); child.kill(); await exited; } };
+const stop = async () => {
+  if(!child)return;
+  if(child.exitCode===null) {const exited=once(child,'exit');child.kill();await exited;}
+  for(let i=0;i<50;i++) {
+    try {await requireFreePort();return;} catch(error) {if(error.code!=='EADDRINUSE')throw error;}
+    await delay(100);
+  }
+  throw new Error('Verifier listener did not close; no replacement process was started');
+};
 let secret,token;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
@@ -64,6 +88,15 @@ try {
   for(const route of ['/reference/GetStage','/reference/GetCard','/lobby/GetCardInven','/episode/GetLog']) {
     const reply=await secure(route,auth);assert.ok(reply.ret_data!==undefined,route);
   }
+  const friendFloors=await secure('/mirage/GetFriendInfo',auth);
+  assert.equal(friendFloors.result_code,1);assert.deepEqual(friendFloors.ret_data,[]);
+  const ordinaryReferences=(await secure('/reference/GetCard',auth)).ret_data;
+  const expectedReferenceCount=profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials'?14:6;
+  assert.equal(ordinaryReferences.length,expectedReferenceCount,'Compiled ordinary reference profile');
+  if(expectedReferenceCount===14) {
+    assert.deepEqual(ordinaryReferences.slice(6).map(row=>row.base.id),['009','010','012','013','017','036','040','049']);
+    assert.ok(ordinaryReferences.slice(6).every(row=>row.is_main===0 && row.skill.length===5));
+  }
   const areas=(await secure('/reference/GetArea',auth)).ret_data;
   const origin=areas.area.find(area=>area.id==='n_00');
   assert.ok(origin,'Hidden origin ordinal must remain present');
@@ -73,21 +106,55 @@ try {
   assert.equal(campaignLinks.length,50);
   assert.equal(new Set(campaignLinks.map(link=>link.stage_id)).size,50,'Campaign stage ownership must be unique');
   assert.deepEqual(campaignLinks.filter(link=>link.stage_id==='n_01_01').map(link=>link.area_id),['n_01']);
-  const manifest=await (await fetch(base+'/reslist_1634683.list')).text();
-  const rows=manifest.trim().split(/\r?\n/).slice(3);assert.equal(rows.length,139);
-  assert.ok(rows.every(row=>row.split(',')[1]==='1634683'));
-  const first=rows[0].split(',')[0];const resource=await fetch(base+'/'+first+'_1634683.pkg',{headers:{Range:'bytes=0-63'}});
+  const manifestReply=await fetch(base+'/reslist_'+stamp+'.list');assert.equal(manifestReply.status,200);
+  const manifest=await manifestReply.text();
+  const lines=manifest.trim().split(/\r?\n/),rows=lines.slice(3);
+  assert.equal(lines[0],stamp);assert.equal(Number(lines[1]),profile.expectedPackages);
+  assert.equal(rows.length,profile.expectedPackages);
+  const columns=rows.map(row=>row.split(','));
+  assert.deepEqual(columns.map(row=>row[0]),expectedNames,'Exact ordered package selection');
+  assert.ok(columns.every(row=>row.length===6 && row[1]===stamp && row[3]==='0' &&
+    Number.isSafeInteger(Number(row[2])) && Number(row[2])>=20 && /^[a-f0-9]{32}$/i.test(row[4]) && /^[a-f0-9]{32}$/i.test(row[5])));
+  assert.equal(Number(lines[2]),columns.reduce((sum,row)=>sum+Number(row[2]),0),'Manifest total package bytes');
+  const first=columns[0][0];const resource=await fetch(base+'/'+first+'_'+stamp+'.pkg',{headers:{Range:'bytes=0-63'}});
   assert.equal(resource.status,206);assert.equal((await resource.arrayBuffer()).byteLength,64);
+  const verifiedOriginals=[];
+  if(profileName==='current-e7') {
+    const pins=JSON.parse(readFileSync(path.join(root,'resources/manifests/episode07-originals.json'),'utf8'));
+    for(const pin of pins) {
+      const row=columns.find(row=>row[0]===pin.name.slice(0,-4));assert.ok(row,'Missing E7 manifest row');
+      const file=[profile.env.BLUSTONE_PACKAGE_DIR,profile.env.BLUSTONE_RESOURCE_ASSET_DIR]
+        .map(dir=>path.resolve(root,dir,pin.name)).find(file=>existsSync(file));assert.ok(file);
+      const url=base+'/'+row[0]+'_'+stamp+'.pkg';
+      const reply=await fetch(url);assert.equal(reply.status,200);
+      const bytes=Buffer.from(await reply.arrayBuffer());
+      assert.equal(Number(reply.headers.get('content-length')),bytes.length);
+      verifiedOriginals.push(verifySingleJet(bytes,row,pin,readFileSync(file)));
+      for(const [start,end,range] of [[0,63,'bytes=0-63'],[bytes.length-64,bytes.length-1,`bytes=${bytes.length-64}-`]]) {
+        const ranged=await fetch(url,{headers:{Range:range}});
+        assert.equal(ranged.status,206);
+        assert.equal(ranged.headers.get('content-range'),`bytes ${start}-${end}/${bytes.length}`);
+        assert.equal(ranged.headers.get('accept-ranges'),'bytes');
+        assert.equal(Number(ranged.headers.get('content-length')),64);
+        assert.deepEqual(Buffer.from(await ranged.arrayBuffer()),bytes.subarray(start,end+1));
+      }
+    }
+    assert.equal(verifiedOriginals.length,17);
+  }
   const portrait=await fetch(base+'/local-profile/replica-100.png');assert.equal(portrait.status,200);assert.match(portrait.headers.get('content-type'),/image\/png/);
   await stop(); await launch();
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
+  assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
   for(const entry of before.gameStates) {
     const found=after.gameStates.find(row=>JSON.stringify(row[0])===JSON.stringify(entry[0]));
     assert.deepEqual(found,entry,'Existing account gameplay state changed');
   }
   const report={compiled_process:true,unrelated_working_directory:true,encrypted_ecdh_hmac_aes:true,
+    profile:profileName,resource_stamp:stamp,exact_manifest_selection:true,manifest_restart_exact:true,
+    added_original_jet_groups:verifiedOriginals,live_profile_activation:false,
+    ordinary_reference_count:ordinaryReferences.length,authenticated_mirage_friend_floors:true,
     authenticated_lobby_and_references:true,unique_campaign_area_ownership:true,hidden_origin_rewards_absent:true,
     episode_log:true,resource_packages:rows.length,resource_range_206:true,
     compiled_portrait:true,persisted_transport_and_credentials:true,preserved_existing_games:before.gameStates.length,
