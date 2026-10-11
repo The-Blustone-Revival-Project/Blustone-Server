@@ -13,6 +13,10 @@ import {preflight} from './resources/verify.mjs';
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const exerciseBulk=process.argv.includes('--exercise-bulk');
 const exerciseSocial=process.argv.includes('--exercise-social');
+const monsterIndex=process.argv.indexOf('--exercise-monster');
+const exerciseMonster=monsterIndex===-1?undefined:process.argv[monsterIndex+1];
+if(monsterIndex!==-1 && (!process.argv.includes('--fixture') || typeof exerciseMonster!=='string' || !/^M[0-9]{3}$/.test(exerciseMonster)))
+  throw new Error('Monster resource exercises require --fixture and one exact original namespace');
 if((exerciseBulk || exerciseSocial) && !process.argv.includes('--fixture')) throw new Error('Transaction exercises require --fixture; private preserved saves are never mutation targets');
 const profileIndex=process.argv.indexOf('--profile');
 const profileName=profileIndex===-1?'current-e6':process.argv[profileIndex+1];
@@ -62,6 +66,7 @@ const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
+  if(exerciseMonster) env.BLUSTONE_MONSTER_IDS=exerciseMonster;
   for(const key of ['BLUSTONE_PACKAGE_DIR','BLUSTONE_PACKAGE_TREE_DIR','BLUSTONE_UI_PACKAGE_TREE_DIR','BLUSTONE_RESOURCE_ASSET_DIR','BLUSTONE_CATALOG_PATH'])
     if(env[key])env[key]=path.resolve(root,env[key]);
   Object.assign(env,{BLUSTONE_PORT:String(port),BLUSTONE_BIND_HOST:'127.0.0.1',BLUSTONE_BASE_URL:base,BLUSTONE_STATE_FILE:stateFile});
@@ -221,6 +226,16 @@ try {
     assert.equal((await secure(route,{...auth,daily_quest_id:'TEST_ONLY_QUEST',id:'TEST_ONLY_QUEST',serial:'1',target_val:'5'},
       {allowPlainRefusal:true})).result_code,2001,'Missing quest data must not grant mock success');
   const ordinaryReferences=(await secure('/reference/GetCard',auth)).ret_data;
+  let monsterReference;
+  if(exerciseMonster) {
+    monsterReference=(await secure('/reference/GetMonster',{...auth,list:JSON.stringify([exerciseMonster])})).ret_data;
+    assert.deepEqual(Object.keys(monsterReference),[exerciseMonster]);
+    assert.equal(monsterReference[exerciseMonster]._server,exerciseMonster);
+    assert.equal(monsterReference[exerciseMonster].res_prefix,exerciseMonster,'Native draw prefix is the actor namespace, not its owner package');
+    assert.equal(monsterReference[exerciseMonster].hp,'100','Resource widening must preserve neutral fixture balance');
+    assert.equal(monsterReference[exerciseMonster].atk,'10');
+    assert.equal(monsterReference[exerciseMonster].def,'5');
+  }
   const materialsIds=profileName==='current-e6-materials18'
     ? ['009','010','012','013','014','017','030','036','040','048','049','054']
     : ['009','010','012','013','017','036','040','049'];
@@ -266,10 +281,16 @@ try {
   const pinManifest=profileName==='current-e7'?'episode07-originals.json':
     profileName==='current-e6-materials18'?'character-materials18-originals.json':
     profileName==='current-e6-guild'?'guild-originals.json':null;
-  if(pinManifest) {
-    const pins=JSON.parse(readFileSync(path.join(root,'resources/manifests',pinManifest),'utf8'));
+  const pins=pinManifest?JSON.parse(readFileSync(path.join(root,'resources/manifests',pinManifest),'utf8')):[];
+  if(exerciseMonster) {
+    const registry=JSON.parse(readFileSync(path.join(root,'resources/reference/monster-art-namespaces.json'),'utf8'));
+    const owner=registry.packs.find(pack=>Object.hasOwn(pack.namespaces,exerciseMonster));
+    assert.ok(owner,'Missing exact original monster owner');
+    if(!pins.some(pin=>pin.name===owner.package)) pins.push({name:owner.package,bytes:owner.bytes,sha256:owner.sha256});
+  }
+  if(pins.length) {
     for(const pin of pins) {
-      const row=columns.find(row=>row[0]===pin.name.slice(0,-4));assert.ok(row,'Missing E7 manifest row');
+      const row=columns.find(row=>row[0]===pin.name.slice(0,-4));assert.ok(row,'Verification requires a separately selected original owner manifest row');
       const file=[profile.env.BLUSTONE_PACKAGE_DIR,profile.env.BLUSTONE_RESOURCE_ASSET_DIR]
         .map(dir=>path.resolve(root,dir,pin.name)).find(file=>existsSync(file));assert.ok(file);
       const url=base+'/'+row[0]+'_'+stamp+'.pkg';
@@ -286,7 +307,7 @@ try {
         assert.deepEqual(Buffer.from(await ranged.arrayBuffer()),bytes.subarray(start,end+1));
       }
     }
-    assert.equal(verifiedOriginals.length,profileName==='current-e7'?17:profileName==='current-e6-guild'?1:11);
+    assert.equal(verifiedOriginals.length,pins.length);
   }
   const portrait=await fetch(base+'/local-profile/replica-100.png');assert.equal(portrait.status,200);assert.match(portrait.headers.get('content-type'),/image\/png/);
   await stop(); await launch();
@@ -302,6 +323,9 @@ try {
     assert.equal(peer.list[0].target_pvid,Number(auth.pvid));
     ({secret,token}=ownerConnection);
   }
+  if(exerciseMonster)
+    assert.deepEqual((await secure('/reference/GetMonster',{...auth,list:JSON.stringify([exerciseMonster])})).ret_data,monsterReference,
+      'Exact monster identity/prefix/fixture stats must survive compiled restart');
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
   for(const entry of before.gameStates) {
@@ -326,6 +350,7 @@ try {
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
     encrypted_social_likes_fixture:exerciseSocial,
+    encrypted_monster_resource_fixture:exerciseMonster??null,
     quest_empty_collections_and_claim_refusal:true,
     guild_flat_lobby_and_skin_empty_contracts:true,
     profile:profileName,resource_stamp:stamp,exact_manifest_selection:true,manifest_restart_exact:true,

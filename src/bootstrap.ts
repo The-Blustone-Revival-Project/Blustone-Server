@@ -20,6 +20,7 @@ import { ordinaryHunterLevels } from "./hunter-levels.js";
 import { fixtureSkillSlots } from "./skills.js";
 import { projectOrdinaryStats } from "./ordinary-stat-projection.js";
 import { additionalMaterialReferences } from "./character-materials.js";
+import { RECOVERED_MONSTER_NAMESPACES, requireSelectedMonsterArt } from "./monster-art.js";
 
 /**
  * `BLUSTONE_CAMPAIGN=full|minimal`, resolved once at import. **`full`** is the
@@ -1250,7 +1251,8 @@ export function publishedStageIds(): string[] {
  */
 /**
  * **[RECOVERED]** the monster art namespace shipped by the recovered PAD pack:
- * `M001`..`M021` plus `M100` (`M001.jet` is the pack that was recovered).
+ * `M001`..`M063` plus `M100`. Original packs M001.jet..M021.jet
+ * each contain three actor namespaces; M008.jet owns M022/M023/M024.
  *
  * **It is published only as far as `BLUSTONE_MONSTER_IDS` asks for, and the
  * default is `M001` alone.** That is deliberate and is NOT an oversight:
@@ -1268,10 +1270,7 @@ export function publishedStageIds(): string[] {
  * `/reference/GetMonster` will not answer - which is the `SRGameMob.cpp:38`
  * assert.
  */
-export const RECOVERED_MONSTER_ART_IDS: readonly string[] = [
-  ...Array.from({ length: 21 }, (_unused, index) => `M${String(index + 1).padStart(3, "0")}`),
-  "M100",
-];
+export const RECOVERED_MONSTER_ART_IDS: readonly string[] = RECOVERED_MONSTER_NAMESPACES;
 
 export const FIXTURE_MONSTER_IDS: readonly string[] = (() => {
   const requested = (process.env.BLUSTONE_MONSTER_IDS ?? "").trim();
@@ -1281,12 +1280,13 @@ export const FIXTURE_MONSTER_IDS: readonly string[] = (() => {
     if (!RECOVERED_MONSTER_ART_IDS.includes(id)) {
       throw new Error(
         `BLUSTONE_MONSTER_IDS="${id}" is not in the recovered monster art namespace `
-        + `{${RECOVERED_MONSTER_ART_IDS.join(",")}}. Any id outside it has no art package to draw, and `
+        + `{${RECOVERED_MONSTER_ART_IDS.join(",")}}. Actor IDs and owner pack basenames are separate, and `
         + `a wave whose \`ref_id\` names an unpublished monster asserts at SRGameMob.cpp:38 `
         + `(CSRGameMob::GetMonsterData is a std::map::find keyed on \`_server\`) and kills the process `
         + `31-45 ms later.`,
       );
     }
+    requireSelectedMonsterArt(id);
   }
   return ids;
 })();
@@ -1336,8 +1336,8 @@ export function starterMonsterFor(monsterId: string) {
     title: monsterId === "M001" ? "Snowfield Beast" : `${monsterId} Beast`,
     attr: 1,
     role: 1,
-    // [RECOVERED] `res_prefix` is read; the value is the resource-pack prefix,
-    // and `M001.jet` is the pack that was recovered.
+    // [RECOVERED] `res_prefix` is the actor namespace. Its owner package is
+    // separate: M022_* animation records reside in M008.jet, not M022.jet.
     res_prefix: monsterId,
     rank: 1,
     level: 1,

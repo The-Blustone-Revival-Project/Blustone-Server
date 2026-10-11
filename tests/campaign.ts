@@ -295,7 +295,7 @@ for (const area of starterAreas.area) {
   assert.equal(FIXTURE_MONSTER_IDS.length, 1,
     "the published monster set stays M001 alone by default: show_thumbnail IS the GetMonster "
     + "`list`, so widening it is an unmeasured change to the one working battle path. "
-    + "BLUSTONE_MONSTER_IDS widens it inside the recovered M001..M021/M100 namespace.");
+    + "BLUSTONE_MONSTER_IDS widens it inside the recovered M001..M063/M100 namespace with selected original owner packs.");
 
   // The route seam answers for a REAL stage id with BOTH keys.
   const state = new ServerState("http://127.0.0.1:8080");
