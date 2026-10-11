@@ -134,6 +134,15 @@ try {
     peerConnection={secret,token};
     assert.equal((await secure('/relation/GetFriendReceivedCount',friendPeer)).ret_data,0);
     ({secret,token}=ownerConnection);
+    const suggested=(await secure('/relation/GetSuggestedFriendList',{...auth,start:'0',length:'10'})).ret_data;
+    assert.equal(suggested.start,0);assert.equal(suggested.length,suggested.list.length);
+    assert.ok(suggested.list.some(row=>row.target_pvid===Number(friendPeer.pvid) && row.type==='candidate' && row.friend_id===0));
+    const brief=(await secure('/relation/GetTargetUserInfo',{...auth,list:JSON.stringify([Number(friendPeer.pvid)])})).ret_data.list[0];
+    assert.equal(brief.pvid,Number(friendPeer.pvid));assert.ok(brief.nick_name);
+    assert.ok(!('otp' in brief) && !('device_id' in brief) && !('ref_id_leader' in brief),'Candidate brief must not expose credentials or a synthetic party');
+    const searched=(await secure('/relation/FriendSearch',{...auth,target_nick_name:brief.nick_name,start:'0',end:'10'})).ret_data;
+    assert.equal(searched.start,0);assert.equal(searched.length,searched.list.length);
+    assert.ok(searched.list.some(row=>row.target_pvid===Number(friendPeer.pvid)));
     const requested=await secure('/relation/FriendRequest',{...auth,target_pvid:friendPeer.pvid});
     assert.equal(requested.result_code,1);friendId=requested.ret_data.friend_id;
     assert.ok(Number.isSafeInteger(friendId) && friendId>0);
@@ -150,6 +159,8 @@ try {
     const sent=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
     assert.equal(sent.list.length,1);assert.equal(sent.list[0].friend_id,friendId);
     assert.equal(sent.list[0].target_pvid,Number(friendPeer.pvid));
+    assert.ok(!(await secure('/relation/GetSuggestedFriendList',{...auth,start:'0',length:'10'})).ret_data.list.some(row=>row.target_pvid===Number(friendPeer.pvid)),
+      'Accepted peer must leave discovery candidates');
     const oldId=friendId;
     assert.deepEqual((await secure('/relation/Unfriend',{...auth,target_friend_id_list:JSON.stringify([oldId])})).ret_data,{friend_id_list:[oldId]});
     friendId=(await secure('/relation/FriendRequest',{...auth,target_pvid:friendPeer.pvid})).ret_data.friend_id;
@@ -185,6 +196,12 @@ try {
   }
   const friendFloors=await secure('/mirage/GetFriendInfo',auth);
   assert.equal(friendFloors.result_code,1);assert.deepEqual(friendFloors.ret_data,[]);
+  assert.deepEqual((await secure('/lobby/GetGuildInfo',auth)).ret_data,
+    {my_guild:{guild_id:0,status:0,newbie:0,role:0,contribution:0}},'Guild boot membership is flat PLAY_DATA');
+  assert.equal((await secure('/guild/Found',auth,{allowPlainRefusal:true})).result_code,2001,'Missing fees must not create a free Guild');
+  assert.deepEqual((await secure('/reference/GetSkinRef',auth)).ret_data,{skin:[],bonus:[]});
+  assert.deepEqual((await secure('/lobby/GetSkinInst',auth)).ret_data,{skin:[]});
+  assert.equal((await secure('/skin/Buy',auth,{allowPlainRefusal:true})).result_code,2001,'Missing paid skin data must not grant mock ownership');
   for(const route of ['/dailyquest/GetRefList','/dailyquest/GetInstList'])
     assert.deepEqual((await secure(route,auth)).ret_data,[],'Absent quest data must use native collections');
   for(const route of ['/dailyquest/RequestReward','/linearquest/Reward'])
@@ -292,7 +309,9 @@ try {
     encrypted_bulk_rank_up_fixture:exerciseBulk,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
+    encrypted_social_discovery_fixture:exerciseSocial,
     quest_empty_collections_and_claim_refusal:true,
+    guild_flat_lobby_and_skin_empty_contracts:true,
     profile:profileName,resource_stamp:stamp,exact_manifest_selection:true,manifest_restart_exact:true,
     added_original_jet_groups:verifiedOriginals,live_profile_activation:false,
     ordinary_reference_count:ordinaryReferences.length,authenticated_mirage_friend_floors:true,

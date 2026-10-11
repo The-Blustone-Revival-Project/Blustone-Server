@@ -11818,10 +11818,10 @@
     },
     "/lobby/GetGuildInfo": {
       "post": {
-        "summary": "Recovered /lobby/GetGuildInfo route",
-        "description": "The route literal **/lobby/GetGuildInfo** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Read Guild boot membership",
+        "description": "Authenticated ret_data.my_guild is flat PLAY_DATA with guild_id/status/newbie/role/contribution, not Guild INFO. The replica has no established affiliations and publishes all five zero fields without a state write. Guild/GvG membership, fees, participants and rewards remain unreconstructed; actions refuse rather than create phantom membership or free Guilds. Native Guild art is not selected in the active profile and entry remains unverified.",
         "tags": [
-          "Lobby and session"
+          "Guild"
         ],
         "parameters": [
           {
@@ -11892,8 +11892,8 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/guild-lobby-native-2026-10-11.md; tests/guild-lobby.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -12280,10 +12280,10 @@
     },
     "/lobby/GetSkinInst": {
       "post": {
-        "summary": "Recovered /lobby/GetSkinInst route",
-        "description": "The route literal **/lobby/GetSkinInst** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "GetSkinInst",
+        "description": "Authenticated Skin contract. Canonical empty reference payload is {skin:[],bonus:[]}; instance payload is {skin:[]}. Original native factories derive Default_<cardRef> references and default instances from actual CardInfo/ownership; this response grants no paid skin. Existing non-default saved style/instance fields refuse reads rather than being cleared. Original paid IDs/prices/bonuses are missing, so mutations refuse2001. Removing a skin also uses native PutOn with target_card_ref/inst_id; a fabricated PutOff route is not exposed. Native Boutique rendering remains pending.",
         "tags": [
-          "Lobby and session"
+          "Skins"
         ],
         "parameters": [
           {
@@ -12354,8 +12354,8 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/skin-materials-2026-10-11.md; tests/skin-materials.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -17646,10 +17646,10 @@
     },
     "/reference/GetSkinRef": {
       "post": {
-        "summary": "Recovered /reference/GetSkinRef route",
-        "description": "The route literal **/reference/GetSkinRef** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "GetSkinRef",
+        "description": "Authenticated Skin contract. Canonical empty reference payload is {skin:[],bonus:[]}; instance payload is {skin:[]}. Original native factories derive Default_<cardRef> references and default instances from actual CardInfo/ownership; this response grants no paid skin. Existing non-default saved style/instance fields refuse reads rather than being cleared. Original paid IDs/prices/bonuses are missing, so mutations refuse2001. Removing a skin also uses native PutOn with target_card_ref/inst_id; a fabricated PutOff route is not exposed. Native Boutique rendering remains pending.",
         "tags": [
-          "Reference data"
+          "Skins"
         ],
         "parameters": [
           {
@@ -17720,8 +17720,8 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/skin-materials-2026-10-11.md; tests/skin-materials.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -18400,10 +18400,10 @@
     },
     "/relation/FriendSearch": {
       "post": {
-        "summary": "Recovered /relation/FriendSearch route",
-        "description": "The route literal **/relation/FriendSearch** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "FriendSearch",
+        "description": "Authenticated discovery over actual local accounts on the same server. Suggested takes start/length; Search takes target_nick_name/start/end. Both return ret_data:{start,length,list}; length is the actual returned count. Self, pending/accepted peers and either-party blocks are excluded. PVID ordering, max50, NFKC case-insensitive substring matching and exclusive search end are explicit local policy. Candidate friend_id0 is a no-relationship sentinel supported by native zero/type2 parsing, not an allocated original-server ID. Candidate brief profiles expose actual public identity and an original fallback avatar, never credentials or a synthetic party.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -18474,9 +18474,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-discovery-2026-10-11.md; tests/social-discovery.ts",
+        "x-runtime-confidence": "Encrypted discovery/brief/request flow tested; native UI pending"
       }
     },
     "/relation/GetFriendReceivedCount": {
@@ -19058,10 +19058,10 @@
     },
     "/relation/GetSuggestedFriendList": {
       "post": {
-        "summary": "Read suggested friends",
-        "description": "Returns an empty suggested list. Local request/accept relationships are implemented separately; candidate discovery is not reconstructed.",
+        "summary": "GetSuggestedFriendList",
+        "description": "Authenticated discovery over actual local accounts on the same server. Suggested takes start/length; Search takes target_nick_name/start/end. Both return ret_data:{start,length,list}; length is the actual returned count. Self, pending/accepted peers and either-party blocks are excluded. PVID ordering, max50, NFKC case-insensitive substring matching and exclusive search end are explicit local policy. Candidate friend_id0 is a no-relationship sentinel supported by native zero/type2 parsing, not an allocated original-server ID. Candidate brief profiles expose actual public identity and an original fallback avatar, never credentials or a synthetic party.",
         "tags": [
-          "Lobby and session"
+          "Social"
         ],
         "parameters": [
           {
@@ -19109,26 +19109,11 @@
         },
         "responses": {
           "200": {
-            "description": "Persistent local-game response; encrypted on native transport.",
+            "description": "Mock-compatible response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ResultEnvelope"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "ret_data": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/OpaqueObject"
-                          }
-                        }
-                      }
-                    }
-                  ]
+                  "$ref": "#/components/schemas/ResultEnvelope"
                 }
               }
             }
@@ -19147,15 +19132,15 @@
             }
           }
         },
-        "x-reverse-engineering-status": "local-game-contract",
-        "x-evidence": "server-ts/src/game.ts; server-ts/src/state.ts",
-        "x-runtime-confidence": "Replica behavior implemented; original production semantics incomplete"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-discovery-2026-10-11.md; tests/social-discovery.ts",
+        "x-runtime-confidence": "Encrypted discovery/brief/request flow tested; native UI pending"
       }
     },
     "/relation/GetTargetUserInfo": {
       "post": {
         "summary": "Read a target brief profile",
-        "description": "Native CPVRelation reads ret_data.list rows containing pvid, reg_utc, utc, nick_name, country_code, profile_url, profile_status, like_cnt and is_like. Authenticated bounded list requests admit the requester, documented local notice/Arena fixtures, and actual same-server relationship peers. Peer names/identity come from local accounts with the original100x100 system icon as a local fallback; no private credentials or synthetic Hunter party is published. Unrelated local accounts refuse. Historical full party-profile requests remain separate fixtures.",
+        "description": "Native CPVRelation reads ret_data.list rows containing pvid, reg_utc, utc, nick_name, country_code, profile_url, profile_status, like_cnt and is_like. Authenticated bounded list requests admit the requester, documented local notice/Arena fixtures, and actual mutually nonblocked same-server peers, including discovery candidates. Peer names/identity come from local accounts with the original100x100 system icon as a local fallback; no private credentials or synthetic Hunter party is published. Unknown, blocked and different-server peers refuse. Historical full party-profile requests remain separate fixtures.",
         "tags": [
           "Missions and combat"
         ],
@@ -22046,10 +22031,10 @@
     },
     "/skin/Buy": {
       "post": {
-        "summary": "Recovered /skin/Buy route",
-        "description": "The route literal **/skin/Buy** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Buy",
+        "description": "Authenticated Skin contract. Canonical empty reference payload is {skin:[],bonus:[]}; instance payload is {skin:[]}. Original native factories derive Default_<cardRef> references and default instances from actual CardInfo/ownership; this response grants no paid skin. Existing non-default saved style/instance fields refuse reads rather than being cleared. Original paid IDs/prices/bonuses are missing, so mutations refuse2001. Removing a skin also uses native PutOn with target_card_ref/inst_id; a fabricated PutOff route is not exposed. Native Boutique rendering remains pending.",
         "tags": [
-          "skin"
+          "Skins"
         ],
         "parameters": [
           {
@@ -22120,17 +22105,17 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/skin-materials-2026-10-11.md; tests/skin-materials.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/skin/Gacha": {
       "post": {
-        "summary": "Recovered /skin/Gacha route",
-        "description": "The route literal **/skin/Gacha** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Gacha",
+        "description": "Authenticated Skin contract. Canonical empty reference payload is {skin:[],bonus:[]}; instance payload is {skin:[]}. Original native factories derive Default_<cardRef> references and default instances from actual CardInfo/ownership; this response grants no paid skin. Existing non-default saved style/instance fields refuse reads rather than being cleared. Original paid IDs/prices/bonuses are missing, so mutations refuse2001. Removing a skin also uses native PutOn with target_card_ref/inst_id; a fabricated PutOff route is not exposed. Native Boutique rendering remains pending.",
         "tags": [
-          "skin"
+          "Skins"
         ],
         "parameters": [
           {
@@ -22201,17 +22186,17 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/skin-materials-2026-10-11.md; tests/skin-materials.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/skin/PutOn": {
       "post": {
-        "summary": "Recovered /skin/PutOn route",
-        "description": "The route literal **/skin/PutOn** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "PutOn",
+        "description": "Authenticated Skin contract. Canonical empty reference payload is {skin:[],bonus:[]}; instance payload is {skin:[]}. Original native factories derive Default_<cardRef> references and default instances from actual CardInfo/ownership; this response grants no paid skin. Existing non-default saved style/instance fields refuse reads rather than being cleared. Original paid IDs/prices/bonuses are missing, so mutations refuse2001. Removing a skin also uses native PutOn with target_card_ref/inst_id; a fabricated PutOff route is not exposed. Native Boutique rendering remains pending.",
         "tags": [
-          "skin"
+          "Skins"
         ],
         "parameters": [
           {
@@ -22282,17 +22267,17 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/skin-materials-2026-10-11.md; tests/skin-materials.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/skin/Seen": {
       "post": {
-        "summary": "Recovered /skin/Seen route",
-        "description": "The route literal **/skin/Seen** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Seen",
+        "description": "Authenticated Skin contract. Canonical empty reference payload is {skin:[],bonus:[]}; instance payload is {skin:[]}. Original native factories derive Default_<cardRef> references and default instances from actual CardInfo/ownership; this response grants no paid skin. Existing non-default saved style/instance fields refuse reads rather than being cleared. Original paid IDs/prices/bonuses are missing, so mutations refuse2001. Removing a skin also uses native PutOn with target_card_ref/inst_id; a fabricated PutOff route is not exposed. Native Boutique rendering remains pending.",
         "tags": [
-          "skin"
+          "Skins"
         ],
         "parameters": [
           {
@@ -22363,8 +22348,8 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/skin-materials-2026-10-11.md; tests/skin-materials.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
