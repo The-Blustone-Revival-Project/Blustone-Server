@@ -145,10 +145,9 @@ try {
   assert.equal(boundSessionReject.body.result_code, 2001, "transport session cannot switch account identities");
   for (const endpoint of ["/relation/BlockList", "/reference/GetStage", "/reference/GetCard", "/lobby/GetCardInven", "/reference/GetCardBook", "/lobby/GetCardBook"]) {
     const result = await json(endpoint, { method: "POST", headers: { "content-type": "application/json" }, body: guestAuth });
-    // GetStage/GetArea are object responses, and /relation/BlockList is a MAP
-    // keyed by pvid: CPVRelation::ReqBlockListCB takes
-    // function<void(int, map<unsigned long, basic_string>&)>. The rest are arrays.
-    if (endpoint === "/reference/GetArea" || endpoint === "/relation/BlockList") {
+    // GetArea contains a collection. GetStage and BlockList are wire arrays;
+    // ReqBlockListCB builds its C++ map only after parsing indexed JSON rows.
+    if (endpoint === "/reference/GetArea") {
       assert.ok(result.body.ret_data && typeof result.body.ret_data === "object" && !Array.isArray(result.body.ret_data),
         `${endpoint} requires an object with a collection`);
     } else {

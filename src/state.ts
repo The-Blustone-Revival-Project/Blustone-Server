@@ -1,7 +1,8 @@
 import crypto from "node:crypto";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
-import { mirageLobby } from "./mirage.js";
+import { mirageLobby, mirageFriendFloors } from "./mirage.js";
+import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
 import { earnSpecialSupply, specialSupplyIds, specialSupplyList } from "./special-supply.js";
@@ -138,6 +139,7 @@ export interface Account {
   beginUtc: number;
   lastLoginAt: number;
   passwordHash: string;
+  socialBlocks?: SocialBlocks;
 }
 
 export class NativeAuthError extends Error {
@@ -1078,6 +1080,10 @@ export class ServerState {
 
   mirageAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     this.accountFor(payload, headers);
+    // Original callback replaces its complete friend-floor cache with this
+    // bare array. There are no established friend relationships in the replica;
+    // local accounts and Arena fixture rivals are not substitutes for friends.
+    if (route === "/mirage/GetFriendInfo") return this.envelope(mirageFriendFloors());
     if (route === "/mirage/GetInfo") {
       // Native renew: a refused GetNextFloor delegates zero, which can match
       // Floor0 and request GetInfo(reset:"t", stay:"t"). Gbfdeec/Gbfd250.
@@ -1087,6 +1093,30 @@ export class ServerState {
       return this.envelope(mirageLobby());
     }
     return this.failure(2001, "Mirage runs, weekly hunters, stairs and settlement are not reconstructed");
+  }
+
+  socialBlockAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
+    const account = this.accountFor(payload, headers);
+    const before = account.socialBlocks;
+    if (route === "/relation/BlockList") return this.envelope(socialBlockRows(before ?? {}));
+    if (route !== "/relation/Block" && route !== "/relation/Unblock")
+      return this.failure(2001, "Social action is not reconstructed");
+    let next: SocialBlocks;
+    try {
+      next = changeSocialBlocks(before ?? {}, account.pvid, payload.target_list,
+        route === "/relation/Block" ? "block" : "unblock",
+        (pvid) => this.accountsByPvid.get(pvid)?.nickname);
+    } catch (error) {
+      return this.failure(2001, error instanceof Error ? error.message : "Invalid social block batch");
+    }
+    account.socialBlocks = next;
+    try { this.persist(); }
+    catch (error) {
+      if (before === undefined) delete account.socialBlocks;
+      else account.socialBlocks = before;
+      throw error;
+    }
+    return this.envelope(route === "/relation/Block" ? socialBlockRows(next) : []);
   }
 
   episodeAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>): Record<string, unknown> {
@@ -2440,6 +2470,12 @@ function stringRecord(value: unknown): Record<string, string> {
 }
 
 function normalizeStoredAccount(raw: Record<string, unknown>): Account {
+  if (raw.socialBlocks !== undefined) {
+    if (!isRecord(raw.socialBlocks)) throw new Error("Malformed social blocks; refusing to overwrite local state");
+    socialBlockRows(raw.socialBlocks as SocialBlocks);
+    if (Object.hasOwn(raw.socialBlocks, String(raw.pvid)))
+      throw new Error("Persisted self block; refusing to overwrite local state");
+  }
   const token = String(raw.token ?? "");
   const email = normalizeEmail(String(raw.email ?? ""));
   const vsToken = String(raw.vsToken ?? raw.vs_token ?? token);
@@ -2466,6 +2502,7 @@ function normalizeStoredAccount(raw: Record<string, unknown>): Account {
     beginUtc: Number.isSafeInteger(raw.beginUtc) ? Number(raw.beginUtc) : 0,
     lastLoginAt: Number.isSafeInteger(raw.lastLoginAt) ? Number(raw.lastLoginAt) : 0,
     passwordHash: String(raw.passwordHash ?? ""),
+    ...(raw.socialBlocks === undefined ? {} : { socialBlocks: { ...raw.socialBlocks as SocialBlocks } }),
   };
 }
 

@@ -8,6 +8,29 @@ const WEEK_SECONDS = 7 * DAY_SECONDS;
 // The first Monday after the Unix epoch Thursday is four days later.
 const MONDAY_OFFSET = 4 * DAY_SECONDS;
 
+/** RequestFriend callback G938298 passes ret_data directly to ParseFriendInfo
+ * G934c00. Each row groups nicknames by a floor; it does not carry account IDs.
+ * Callers must supply ONLY established friend relationships, never all local
+ * accounts or invented rivals. The replica currently has no such relationships.
+ */
+export function mirageFriendFloors(friends: readonly { nickname: string; highestFloor: number }[] = []) {
+  const floors = new Map<number, string[]>();
+  for (const friend of friends) {
+    if (!Number.isInteger(friend.highestFloor) || friend.highestFloor < 0 || friend.highestFloor > 0x7fff_ffff)
+      throw new RangeError("Mirage friend floor exceeds the native signed 32-bit range");
+    if (typeof friend.nickname !== "string" || friend.nickname.length === 0)
+      throw new TypeError("Mirage friend nickname must be a nonempty string");
+    const names = floors.get(friend.highestFloor) ?? [];
+    // Distinct friends can share a nickname; retain both rather than use it as
+    // a substitute account identifier.
+    names.push(friend.nickname);
+    floors.set(friend.highestFloor, names);
+  }
+  // Ordering is replica presentation policy; the original ranking order is
+  // unrecovered. Floors are not assigned or granted by this read-only DTO.
+  return [...floors].sort(([a], [b]) => b - a).map(([floor, nick_list]) => ({ floor, nick_list }));
+}
+
 export function mirageLobby(nowMs = Date.now()) {
   const now = Math.floor(nowMs / 1000);
   if (!Number.isSafeInteger(now) || now < 0 || now > 0x7fff_ffff - WEEK_SECONDS)

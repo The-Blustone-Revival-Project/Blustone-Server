@@ -609,13 +609,11 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
       nickname,
     });
   }
-  if (route === "/relation/BlockList") {
-    // A MAP keyed by pvid, not an array. CPVRelation::ReqBlockListCB's recovered
-    // signature is function<void(int, map<unsigned long, basic_string>&)>; the
-    // previous `[]` could not satisfy that sink. This also supersedes the
-    // workspace note listing BlockList as an array-indexing parser.
-    return state.envelope({});
-  }
+  if (["/relation/BlockList", "/relation/Block", "/relation/Unblock"].includes(route))
+    // ReqBlockListCB G8194c0 indexes ret_data numerically, reads target_pvid /
+    // target_nickname, THEN builds its internal C++ map. Wire data is an array;
+    // the historical signature-based wire-map conclusion was incorrect.
+    return state.socialBlockAction(route, payload, headers);
   if (route.startsWith("/episode/")) return state.episodeAction(route, payload, headers);
 
   // Deliberately observable fallback. It keeps the recovered route callable

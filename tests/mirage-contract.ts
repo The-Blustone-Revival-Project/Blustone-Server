@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mirageLobby } from "../src/mirage.js";
+import { mirageLobby, mirageFriendFloors } from "../src/mirage.js";
 import { ServerState } from "./legacy-state-fixture.js";
 import { gameResponse } from "../src/game-routes.js";
 
@@ -12,6 +12,23 @@ assert.equal(afterBoundary - beforeBoundary, 7 * 86400);
 assert.equal(mirageLobby(monday + 123456).ref_hero.end_ltime, afterBoundary);
 assert.throws(() => mirageLobby(0x8000_0000 * 1000), RangeError);
 
+// Native groups nicknames by floor; nickname is not a unique identity. This
+// aggregation must not erase friends who happen to share a display name.
+const friends = [
+  { nickname: "A", highestFloor: 20 }, { nickname: "B", highestFloor: 3 },
+  { nickname: "A", highestFloor: 20 }, { nickname: "C", highestFloor: 40 },
+];
+const friendsBefore = JSON.stringify(friends);
+assert.deepEqual(mirageFriendFloors(friends), [
+  { floor: 40, nick_list: ["C"] }, { floor: 20, nick_list: ["A", "A"] },
+  { floor: 3, nick_list: ["B"] },
+]);
+assert.equal(JSON.stringify(friends), friendsBefore);
+assert.deepEqual(mirageFriendFloors(), []);
+assert.throws(() => mirageFriendFloors([{ nickname: "A", highestFloor: 0x80000000 }]), RangeError);
+assert.throws(() => mirageFriendFloors([{ nickname: "A", highestFloor: 1.5 }]), RangeError);
+assert.throws(() => mirageFriendFloors([{ nickname: "", highestFloor: 1 }]), TypeError);
+
 const state = new ServerState("http://localhost");
 const auth = state.registerGuest({ device_id: "mirage-contract" }, {}).ret_data as { otp: string };
 const game = state.gameFor(state.accountFor(auth, {}));
@@ -21,6 +38,11 @@ assert.equal(info.result_code, 1);
 assert.ok(info.ret_data.ref_hero.end_ltime > Date.now() / 1000);
 assert.deepEqual(info.ret_data.ref_hero.cur, []);
 assert.deepEqual(info.ret_data.inst_base.deck, []);
+state.registerGuest({ device_id: "not-a-friend" }, {});
+const friendReply = gameResponse(state, "/mirage/GetFriendInfo", auth) as any;
+assert.equal(friendReply.result_code, 1);
+assert.deepEqual(friendReply.ret_data, [], "unrelated local accounts are not fabricated friends");
+assert.equal(JSON.stringify(game), snapshot, "friend-floor read does not enter or modify a Mirage run");
 for (const route of ["Start", "End", "RegisterDeck", "HealHunter"]) {
   assert.notEqual((gameResponse(state, `/mirage/${route}`, auth) as any).result_code, 1);
 }
