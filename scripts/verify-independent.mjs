@@ -107,10 +107,13 @@ try {
   const friendFloors=await secure('/mirage/GetFriendInfo',auth);
   assert.equal(friendFloors.result_code,1);assert.deepEqual(friendFloors.ret_data,[]);
   const ordinaryReferences=(await secure('/reference/GetCard',auth)).ret_data;
-  const expectedReferenceCount=profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials'?14:6;
+  const materialsIds=profileName==='current-e6-materials18'
+    ? ['009','010','012','013','014','017','030','036','040','048','049','054']
+    : ['009','010','012','013','017','036','040','049'];
+  const expectedReferenceCount=profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials'?6+materialsIds.length:6;
   assert.equal(ordinaryReferences.length,expectedReferenceCount,'Compiled ordinary reference profile');
-  if(expectedReferenceCount===14) {
-    assert.deepEqual(ordinaryReferences.slice(6).map(row=>row.base.id),['009','010','012','013','017','036','040','049']);
+  if(profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials') {
+    assert.deepEqual(ordinaryReferences.slice(6).map(row=>row.base.id),materialsIds);
     assert.ok(ordinaryReferences.slice(6).every(row=>row.is_main===0 && row.skill.length===5));
   }
   const areas=(await secure('/reference/GetArea',auth)).ret_data;
@@ -135,8 +138,10 @@ try {
   const first=columns[0][0];const resource=await fetch(base+'/'+first+'_'+stamp+'.pkg',{headers:{Range:'bytes=0-63'}});
   assert.equal(resource.status,206);assert.equal((await resource.arrayBuffer()).byteLength,64);
   const verifiedOriginals=[];
-  if(profileName==='current-e7') {
-    const pins=JSON.parse(readFileSync(path.join(root,'resources/manifests/episode07-originals.json'),'utf8'));
+  const pinManifest=profileName==='current-e7'?'episode07-originals.json':
+    profileName==='current-e6-materials18'?'character-materials18-originals.json':null;
+  if(pinManifest) {
+    const pins=JSON.parse(readFileSync(path.join(root,'resources/manifests',pinManifest),'utf8'));
     for(const pin of pins) {
       const row=columns.find(row=>row[0]===pin.name.slice(0,-4));assert.ok(row,'Missing E7 manifest row');
       const file=[profile.env.BLUSTONE_PACKAGE_DIR,profile.env.BLUSTONE_RESOURCE_ASSET_DIR]
@@ -155,7 +160,7 @@ try {
         assert.deepEqual(Buffer.from(await ranged.arrayBuffer()),bytes.subarray(start,end+1));
       }
     }
-    assert.equal(verifiedOriginals.length,17);
+    assert.equal(verifiedOriginals.length,profileName==='current-e7'?17:11);
   }
   const portrait=await fetch(base+'/local-profile/replica-100.png');assert.equal(portrait.status,200);assert.match(portrait.headers.get('content-type'),/image\/png/);
   await stop(); await launch();
