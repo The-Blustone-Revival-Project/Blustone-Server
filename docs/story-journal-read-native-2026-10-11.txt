@@ -1,0 +1,193 @@
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+0108b08c <_ZN9CSRUserDB9ReadStoryERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE>:
+ 108b08c: b5f0         	push	{r4, r5, r6, r7, lr}
+ 108b08e: af03         	add	r7, sp, #0xc
+ 108b090: f84d bd04    	str	r11, [sp, #-4]!
+ 108b094: b088         	sub	sp, #0x20
+ 108b096: 4605         	mov	r5, r0
+ 108b098: 4822         	ldr	r0, [pc, #0x88]         @ 0x108b124 <_ZN9CSRUserDB9ReadStoryERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE+0x98>
+ 108b09a: 460c         	mov	r4, r1
+ 108b09c: f105 0120    	add.w	r1, r5, #0x20
+ 108b0a0: 4478         	add	r0, pc
+ 108b0a2: 6806         	ldr	r6, [r0]
+ 108b0a4: 6830         	ldr	r0, [r6]
+ 108b0a6: 4a20         	ldr	r2, [pc, #0x80]         @ 0x108b128 <_ZN9CSRUserDB9ReadStoryERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE+0x9c>
+ 108b0a8: 9007         	str	r0, [sp, #0x1c]
+ 108b0aa: a801         	add	r0, sp, #0x4
+ 108b0ac: 447a         	add	r2, pc
+ 108b0ae: f63f dcbd    	bl	0x6caa2c <_ZNK14floating_point9to_stringEi+0x1c0> @ imm = #-0x9c0686
+ 108b0b2: a804         	add	r0, sp, #0x10
+ 108b0b4: 2101         	movs	r1, #0x1
+ 108b0b6: f339 df9f    	bl	0x1bc4ff8 <_ZNSt6__ndk19to_stringEi> @ imm = #0xb39f3e
+ 108b0ba: a901         	add	r1, sp, #0x4
+ 108b0bc: ab04         	add	r3, sp, #0x10
+ 108b0be: 4628         	mov	r0, r5
+ 108b0c0: 4622         	mov	r2, r4
+ 108b0c2: f6f9 dde5    	bl	0x784c90 <_ZN10CGMLevelDB3PutERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEES8_S8_> @ imm = #-0x906436
+ 108b0c6: 4604         	mov	r4, r0
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+0108b12c <_ZN9CSRUserDB11IsReadStoryERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE>:
+ 108b12c: b5f0         	push	{r4, r5, r6, r7, lr}
+ 108b12e: af03         	add	r7, sp, #0xc
+ 108b130: f84d 8d04    	str	r8, [sp, #-4]!
+ 108b134: b084         	sub	sp, #0x10
+ 108b136: 4605         	mov	r5, r0
+ 108b138: 4818         	ldr	r0, [pc, #0x60]         @ 0x108b19c <_ZN9CSRUserDB11IsReadStoryERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE+0x70>
+ 108b13a: 460c         	mov	r4, r1
+ 108b13c: f105 0120    	add.w	r1, r5, #0x20
+ 108b140: 4478         	add	r0, pc
+ 108b142: 46e8         	mov	r8, sp
+ 108b144: 6806         	ldr	r6, [r0]
+ 108b146: 6830         	ldr	r0, [r6]
+ 108b148: 4a15         	ldr	r2, [pc, #0x54]         @ 0x108b1a0 <_ZN9CSRUserDB11IsReadStoryERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE+0x74>
+ 108b14a: 9003         	str	r0, [sp, #0xc]
+ 108b14c: 4640         	mov	r0, r8
+ 108b14e: 447a         	add	r2, pc
+ 108b150: f63f dc6c    	bl	0x6caa2c <_ZNK14floating_point9to_stringEi+0x1c0> @ imm = #-0x9c0728
+ 108b154: 4628         	mov	r0, r5
+ 108b156: 4641         	mov	r1, r8
+ 108b158: 4622         	mov	r2, r4
+ 108b15a: f6fa dc4d    	bl	0x7859f8 <_ZNK10CGMLevelDB3GetIhEEKT_RKNSt6__ndk112basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEESB_> @ imm = #-0x905766
+ 108b15e: 4604         	mov	r4, r0
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+0108853c <_ZN9CSRUserDB7SetPVIDEy>:
+ 108853c: b5f0         	push	{r4, r5, r6, r7, lr}
+ 108853e: af03         	add	r7, sp, #0xc
+ 1088540: e92d 0b00    	push.w	{r8, r9, r11}
+ 1088544: b08a         	sub	sp, #0x28
+ 1088546: 4680         	mov	r8, r0
+ 1088548: 4876         	ldr	r0, [pc, #0x1d8]        @ 0x1088724 <_ZN9CSRUserDB7SetPVIDEy+0x1e8>
+ 108854a: 4478         	add	r0, pc
+ 108854c: f8d0 9000    	ldr.w	r9, [r0]
+ 1088550: f8d9 0000    	ldr.w	r0, [r9]
+ 1088554: 9009         	str	r0, [sp, #0x24]
+ 1088556: a806         	add	r0, sp, #0x18
+ 1088558: f33c de04    	bl	0x1bc5164 <_ZNSt6__ndk19to_stringEy> @ imm = #0xb3cc08
+ 108855c: f749 d83e    	bl	0x7d15dc <_ZN10CPVDataMgr3getEv> @ imm = #-0x8b6f84
+ 1088560: f8d0 10b8    	ldr.w	r1, [r0, #0xb8]
+ 1088564: ad03         	add	r5, sp, #0xc
+ 1088566: 4628         	mov	r0, r5
+ 1088568: f33c dd46    	bl	0x1bc4ff8 <_ZNSt6__ndk19to_stringEi> @ imm = #0xb3ca8c
+ 108856c: f89d 000c    	ldrb.w	r0, [sp, #0xc]
+ 1088570: e9dd 2104    	ldrd	r2, r1, [sp, #16]
+ 1088574: f010 0301    	ands	r3, r0, #0x1
+ 1088578: bf04         	itt	eq
+ 108857a: 1c69         	addeq	r1, r5, #0x1
+ 108857c: 0842         	lsreq	r2, r0, #0x1
+ 108857e: a806         	add	r0, sp, #0x18
+ 1088580: f63f df56    	bl	0x6c8430 <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKcj> @ imm = #-0x9c0154
+ 1088584: f108 0520    	add.w	r5, r8, #0x20
+ 1088588: 4285         	cmp	r5, r0
+ 108858a: d00a         	beq	0x10885a2 <_ZN9CSRUserDB7SetPVIDEy+0x66> @ imm = #0x14
+ 108858c: 7803         	ldrb	r3, [r0]
+ 108858e: e9d0 2101    	ldrd	r2, r1, [r0, #4]
+ 1088592: f013 0601    	ands	r6, r3, #0x1
+ 1088596: bf04         	itt	eq
+ 1088598: 1c41         	addeq	r1, r0, #0x1
+ 108859a: 085a         	lsreq	r2, r3, #0x1
+ 108859c: 4628         	mov	r0, r5
+ 108859e: f63f dea9    	bl	0x6c82f4 <_ZNSt6__ndk112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKcj> @ imm = #-0x9c02ae
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00fdfc40 <_ZN21CSRTableDlgCollection13MakeStoryCellENSt6__ndk110shared_ptrI10CMDrawableEERKN10CSRDlgInfo4INFOE>:
+  fe002a: f4c3 f1b1    	bl	0x8a3390 <_ZN10CSRDataMgr3getEv> @ imm = #-0x73cc9e
+  fe002e: f4c2 f355    	bl	0x8a26dc <_ZN10CSRDataMgr14GetUserLocalDBEv> @ imm = #-0x73d956
+  fe0032: f10b 0124    	add.w	r1, r11, #0x24
+  fe0036: f0ab f879    	bl	0x108b12c <_ZN9CSRUserDB11IsReadStoryERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE> @ imm = #0xab0f2
+  fe003a: 9a09         	ldr	r2, [sp, #0x24]
+  fe003c: fab0 f080    	clz	r0, r0
+  fe0040: 0941         	lsrs	r1, r0, #0x5
+  fe0042: 4610         	mov	r0, r2
+  fe0044: f798 d92c    	bl	0x7782a0 <_ZN11CMUpdatable10SetVisibleEh> @ imm = #-0x867da8
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00fe0c14 <_ZNSt6__ndk16vectorIN10CSRDlgInfo4INFOENS_9allocatorIS2_EEE21__push_back_slow_pathIRKS2_EEvOT_>:
+  fe0eea: b5b0         	push	{r4, r5, r7, lr}
+  fe0eec: af02         	add	r7, sp, #0x8
+  fe0eee: 4605         	mov	r5, r0
+  fe0ef0: 6880         	ldr	r0, [r0, #0x8]
+  fe0ef2: b358         	cbz	r0, 0xfe0f4c <_ZNSt6__ndk16vectorIN10CSRDlgInfo4INFOENS_9allocatorIS2_EEE21__push_back_slow_pathIRKS2_EEvOT_+0x338> @ imm = #0x56
+  fe0ef4: f3e0 df1c    	bl	0x1bc1d30 <_ZNSt6__ndk119__shared_weak_count4lockEv> @ imm = #0xbe0e38
+  fe0ef8: b340         	cbz	r0, 0xfe0f4c <_ZNSt6__ndk16vectorIN10CSRDlgInfo4INFOENS_9allocatorIS2_EEE21__push_back_slow_pathIRKS2_EEvOT_+0x338> @ imm = #0x50
+  fe0efa: 4604         	mov	r4, r0
+  fe0efc: 6868         	ldr	r0, [r5, #0x4]
+  fe0efe: b168         	cbz	r0, 0xfe0f1c <_ZNSt6__ndk16vectorIN10CSRDlgInfo4INFOENS_9allocatorIS2_EEE21__push_back_slow_pathIRKS2_EEvOT_+0x308> @ imm = #0x1a
+  fe0f00: f890 1270    	ldrb.w	r1, [r0, #0x270]
+  fe0f04: b951         	cbnz	r1, 0xfe0f1c <_ZNSt6__ndk16vectorIN10CSRDlgInfo4INFOENS_9allocatorIS2_EEE21__push_back_slow_pathIRKS2_EEvOT_+0x308> @ imm = #0x14
+  fe0f06: 2100         	movs	r1, #0x0
+  fe0f08: f797 d9ca    	bl	0x7782a0 <_ZN11CMUpdatable10SetVisibleEh> @ imm = #-0x868c6c
+  fe0f0c: f4c2 f240    	bl	0x8a3390 <_ZN10CSRDataMgr3getEv> @ imm = #-0x73db80
+  fe0f10: f4c1 f3e4    	bl	0x8a26dc <_ZN10CSRDataMgr14GetUserLocalDBEv> @ imm = #-0x73e838
+  fe0f14: f105 010c    	add.w	r1, r5, #0xc
+  fe0f18: f0aa f8b8    	bl	0x108b08c <_ZN9CSRUserDB9ReadStoryERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE> @ imm = #0xaa170
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+010760b4 <_ZN17CSRUIModalHandler7PushDlgERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEENS0_8functionIFvvEEE>:
+ 1076176: f104 0674    	add.w	r6, r4, #0x74
+ 107617a: 950e         	str	r5, [sp, #0x38]
+ 107617c: 4630         	mov	r0, r6
+ 107617e: f34b dea1    	bl	0x1bc1ec4 <_ZNSt6__ndk15mutex4lockEv> @ imm = #0xb4bd42
+ 1076182: 2020         	movs	r0, #0x20
+ 1076184: f34c d91e    	bl	0x1bc23c4 <_Znwj>       @ imm = #0xb4c23c
+ 1076188: 4605         	mov	r5, r0
+ 107618a: 4601         	mov	r1, r0
+ 107618c: 2200         	movs	r2, #0x0
+ 107618e: 980e         	ldr	r0, [sp, #0x38]
+ 1076190: f841 2b08    	str	r2, [r1], #8
+ 1076194: b138         	cbz	r0, 0x10761a6 <_ZN17CSRUIModalHandler7PushDlgERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEENS0_8functionIFvvEEE+0xf2> @ imm = #0xe
+ 1076196: aa0a         	add	r2, sp, #0x28
+ 1076198: 4282         	cmp	r2, r0
+ 107619a: d006         	beq	0x10761aa <_ZN17CSRUIModalHandler7PushDlgERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEENS0_8functionIFvvEEE+0xf6> @ imm = #0xc
+ 107619c: 6801         	ldr	r1, [r0]
+ 107619e: 6889         	ldr	r1, [r1, #0x8]
+ 10761a0: 4788         	blx	r1
+ 10761a2: 61a8         	str	r0, [r5, #0x18]
+ 10761a4: e005         	b	0x10761b2 <_ZN17CSRUIModalHandler7PushDlgERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEENS0_8functionIFvvEEE+0xfe> @ imm = #0xa
+ 10761a6: 61aa         	str	r2, [r5, #0x18]
+ 10761a8: e003         	b	0x10761b2 <_ZN17CSRUIModalHandler7PushDlgERKNSt6__ndk112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEENS0_8functionIFvvEEE+0xfe> @ imm = #0x6
+ 10761aa: 61a9         	str	r1, [r5, #0x18]
+ 10761ac: 6802         	ldr	r2, [r0]
+ 10761ae: 68d2         	ldr	r2, [r2, #0xc]
+ 10761b0: 4790         	blx	r2
+ 10761b2: f104 0084    	add.w	r0, r4, #0x84
+ 10761b6: 6068         	str	r0, [r5, #0x4]
+ 10761b8: f8d4 0084    	ldr.w	r0, [r4, #0x84]
+ 10761bc: 6028         	str	r0, [r5]
+ 10761be: 6045         	str	r5, [r0, #0x4]
+ 10761c0: f8d4 008c    	ldr.w	r0, [r4, #0x8c]
+ 10761c4: f8c4 5084    	str.w	r5, [r4, #0x84]
+
+C:\Users\shaha\Documents\GitHub\Blustone-DataDump\local\inputs\extracted\lib\armeabi-v7a\libnative_core.so:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+00de4c7a <_ZN8CSRScene10DeactivateEv>:
+  de4c7a: f890 1039    	ldrb.w	r1, [r0, #0x39]
+  de4c7e: 2900         	cmp	r1, #0x0
+  de4c80: bf08         	it	eq
+  de4c82: 4770         	bxeq	lr
+  de4c84: 2100         	movs	r1, #0x0
+  de4c86: f880 1039    	strb.w	r1, [r0, #0x39]
+  de4c8a: 3074         	adds	r0, #0x74
+  de4c8c: f4eb b17c    	b.w	0x6cff88 <_ZN11CMEventPoolIJEE4CallEv> @ imm = #-0x714d08
