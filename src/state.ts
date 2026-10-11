@@ -1081,6 +1081,15 @@ export class ServerState {
     return "error" in result ? this.failure(2001, result.error) : this.envelope(result.data);
   }
 
+  questAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
+    this.accountFor(payload, headers);
+    // CSRAchieve consumes ret_data itself, not generic mock metadata or a
+    // list child. No original production quest IDs/conditions are imported.
+    if (route === "/dailyquest/GetRefList" || route === "/dailyquest/GetInstList")
+      return this.envelope([]);
+    return this.failure(2001, "Production quest conditions and reward references are not reconstructed");
+  }
+
   fishingAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     this.accountFor(payload, headers);
     // CSRMFishing ParseInven/ParseRecod index ret_data numerically. Empty

@@ -1,0 +1,822 @@
+{
+  "originalLibrarySha256": "c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec",
+  "coordinateConvention": "ELF; Ghidra address=ELF+0x10000",
+  "consumers": {
+    "QuestReference": [
+      {
+        "instruction": "0x83393a",
+        "stringAddress": "0x1d589bb",
+        "text": "ret_data"
+      },
+      {
+        "instruction": "0x833a52",
+        "stringAddress": "0x1d569f5",
+        "text": "type"
+      },
+      {
+        "instruction": "0x833a58",
+        "stringAddress": "0x1d5ed87",
+        "text": "title"
+      },
+      {
+        "instruction": "0x833a62",
+        "stringAddress": "0x1d59ab8",
+        "text": "desc"
+      },
+      {
+        "instruction": "0x833b9c",
+        "stringAddress": "0x1d5ed8d",
+        "text": "desc_noti"
+      },
+      {
+        "instruction": "0x833bf0",
+        "stringAddress": "0x1d576c3",
+        "text": "id"
+      },
+      {
+        "instruction": "0x833c44",
+        "stringAddress": "0x1d5ed97",
+        "text": "npc_id"
+      },
+      {
+        "instruction": "0x833cbc",
+        "stringAddress": "0x1d5ed9e",
+        "text": "go_to"
+      },
+      {
+        "instruction": "0x833d3e",
+        "stringAddress": "0x1d5eda4",
+        "text": "serial"
+      },
+      {
+        "instruction": "0x833d8e",
+        "stringAddress": "0x1d5edab",
+        "text": "target_val"
+      },
+      {
+        "instruction": "0x833dde",
+        "stringAddress": "0x1d5edb6",
+        "text": "option_val"
+      },
+      {
+        "instruction": "0x833e2e",
+        "stringAddress": "0x1d5edc1",
+        "text": "reward"
+      },
+      {
+        "instruction": "0x833e7e",
+        "stringAddress": "0x1d5edc8",
+        "text": "vip_exp"
+      },
+      {
+        "instruction": "0x833ece",
+        "stringAddress": "0x1d5edd0",
+        "text": "ap"
+      },
+      {
+        "instruction": "0x833f1e",
+        "stringAddress": "0x1d5edd3",
+        "text": "bp"
+      },
+      {
+        "instruction": "0x833f6e",
+        "stringAddress": "0x1d5edd6",
+        "text": "gold"
+      },
+      {
+        "instruction": "0x833fe4",
+        "stringAddress": "0x1d5eddb",
+        "text": "honor"
+      },
+      {
+        "instruction": "0x834034",
+        "stringAddress": "0x1d5ede1",
+        "text": "exp"
+      },
+      {
+        "instruction": "0x834084",
+        "stringAddress": "0x1d5ede5",
+        "text": "free_iap"
+      },
+      {
+        "instruction": "0x8340d4",
+        "stringAddress": "0x1d5edee",
+        "text": "iap"
+      },
+      {
+        "instruction": "0x834124",
+        "stringAddress": "0x1d5a8a1",
+        "text": "item_list"
+      },
+      {
+        "instruction": "0x8341b4",
+        "stringAddress": "0x1d5edf2",
+        "text": "ref_id"
+      },
+      {
+        "instruction": "0x8341ca",
+        "stringAddress": "0x1d5edf9",
+        "text": "qty"
+      },
+      {
+        "instruction": "0x83431a",
+        "stringAddress": "0x1d5edfd",
+        "text": "card_list"
+      },
+      {
+        "instruction": "0x8343a8",
+        "stringAddress": "0x1d5edf2",
+        "text": "ref_id"
+      },
+      {
+        "instruction": "0x8343be",
+        "stringAddress": "0x1d5edf9",
+        "text": "qty"
+      },
+      {
+        "instruction": "0x8344ea",
+        "stringAddress": "0x1d5ee07",
+        "text": "%t"
+      },
+      {
+        "instruction": "0x834552",
+        "stringAddress": "0x1d5ee0a",
+        "text": "%o"
+      }
+    ],
+    "QuestLobby": [
+      {
+        "instruction": "0x83493e",
+        "stringAddress": "0x1d5ee0d",
+        "text": "dailyquest_min_stage"
+      },
+      {
+        "instruction": "0x83497c",
+        "stringAddress": "0x1d5ee22",
+        "text": "daily_quest"
+      },
+      {
+        "instruction": "0x834a44",
+        "stringAddress": "0x1d5ee2e",
+        "text": "linear_quest"
+      }
+    ],
+    "Daily2": [
+      {
+        "instruction": "0x834d34",
+        "stringAddress": "0x1d5ee3b",
+        "text": "daily_quest_id"
+      },
+      {
+        "instruction": "0x834eac",
+        "stringAddress": "0x1d5ee4a",
+        "text": "is_rewarded"
+      },
+      {
+        "instruction": "0x834efa",
+        "stringAddress": "0x1d5ee56",
+        "text": "cur_val"
+      },
+      {
+        "instruction": "0x834f6e",
+        "stringAddress": "0x1d5ee5e",
+        "text": "TODAY_QUEST"
+      }
+    ],
+    "Linear2": [
+      {
+        "instruction": "0x83501c",
+        "stringAddress": "0x1d5ed87",
+        "text": "title"
+      },
+      {
+        "instruction": "0x83506c",
+        "stringAddress": "0x1d59ab8",
+        "text": "desc"
+      },
+      {
+        "instruction": "0x8350c2",
+        "stringAddress": "0x1d576c3",
+        "text": "id"
+      },
+      {
+        "instruction": "0x835116",
+        "stringAddress": "0x1d5ed97",
+        "text": "npc_id"
+      },
+      {
+        "instruction": "0x83516c",
+        "stringAddress": "0x1d5ed9e",
+        "text": "go_to"
+      },
+      {
+        "instruction": "0x8351c2",
+        "stringAddress": "0x1d5eda4",
+        "text": "serial"
+      },
+      {
+        "instruction": "0x835218",
+        "stringAddress": "0x1d5edab",
+        "text": "target_val"
+      },
+      {
+        "instruction": "0x835268",
+        "stringAddress": "0x1d5edb6",
+        "text": "option_val"
+      },
+      {
+        "instruction": "0x8352e2",
+        "stringAddress": "0x1d5ee07",
+        "text": "%t"
+      },
+      {
+        "instruction": "0x835344",
+        "stringAddress": "0x1d5ee0a",
+        "text": "%o"
+      },
+      {
+        "instruction": "0x8353a8",
+        "stringAddress": "0x1d5ee56",
+        "text": "cur_val"
+      },
+      {
+        "instruction": "0x8353f8",
+        "stringAddress": "0x1d5edc1",
+        "text": "reward"
+      },
+      {
+        "instruction": "0x835446",
+        "stringAddress": "0x1d5edc8",
+        "text": "vip_exp"
+      },
+      {
+        "instruction": "0x835496",
+        "stringAddress": "0x1d5edd0",
+        "text": "ap"
+      },
+      {
+        "instruction": "0x8354e6",
+        "stringAddress": "0x1d5edd3",
+        "text": "bp"
+      },
+      {
+        "instruction": "0x835536",
+        "stringAddress": "0x1d5edd6",
+        "text": "gold"
+      },
+      {
+        "instruction": "0x835586",
+        "stringAddress": "0x1d5eddb",
+        "text": "honor"
+      },
+      {
+        "instruction": "0x8355d6",
+        "stringAddress": "0x1d5ede1",
+        "text": "exp"
+      },
+      {
+        "instruction": "0x83564e",
+        "stringAddress": "0x1d5ede5",
+        "text": "free_iap"
+      },
+      {
+        "instruction": "0x83569e",
+        "stringAddress": "0x1d5edee",
+        "text": "iap"
+      },
+      {
+        "instruction": "0x8356ee",
+        "stringAddress": "0x1d5a8a1",
+        "text": "item_list"
+      },
+      {
+        "instruction": "0x83576c",
+        "stringAddress": "0x1d5edf2",
+        "text": "ref_id"
+      },
+      {
+        "instruction": "0x835774",
+        "stringAddress": "0x1d5edf9",
+        "text": "qty"
+      },
+      {
+        "instruction": "0x8358ec",
+        "stringAddress": "0x1d5edfd",
+        "text": "card_list"
+      },
+      {
+        "instruction": "0x83596a",
+        "stringAddress": "0x1d5edf2",
+        "text": "ref_id"
+      },
+      {
+        "instruction": "0x835972",
+        "stringAddress": "0x1d5edf9",
+        "text": "qty"
+      }
+    ],
+    "DailyReward": [
+      {
+        "instruction": "0x835d1a",
+        "stringAddress": "0x1d589d0",
+        "text": "app_code"
+      },
+      {
+        "instruction": "0x835d44",
+        "stringAddress": "0x1d589d9",
+        "text": "app_ver"
+      },
+      {
+        "instruction": "0x835d62",
+        "stringAddress": "0x1d589ee",
+        "text": "market"
+      },
+      {
+        "instruction": "0x835d94",
+        "stringAddress": "0x1d586aa",
+        "text": "pvid"
+      },
+      {
+        "instruction": "0x835dc4",
+        "stringAddress": "0x1d589ea",
+        "text": "otp"
+      },
+      {
+        "instruction": "0x835dfe",
+        "stringAddress": "0x1d589d0",
+        "text": "app_code"
+      },
+      {
+        "instruction": "0x835e28",
+        "stringAddress": "0x1d589d9",
+        "text": "app_ver"
+      },
+      {
+        "instruction": "0x835e46",
+        "stringAddress": "0x1d589ee",
+        "text": "market"
+      },
+      {
+        "instruction": "0x835e78",
+        "stringAddress": "0x1d586aa",
+        "text": "pvid"
+      },
+      {
+        "instruction": "0x835eaa",
+        "stringAddress": "0x1d589ea",
+        "text": "otp"
+      },
+      {
+        "instruction": "0x835f94",
+        "stringAddress": "0x1d5eda4",
+        "text": "serial"
+      },
+      {
+        "instruction": "0x835faa",
+        "stringAddress": "0x1d576c3",
+        "text": "id"
+      },
+      {
+        "instruction": "0x835fde",
+        "stringAddress": "0x1d5edab",
+        "text": "target_val"
+      },
+      {
+        "instruction": "0x836144",
+        "stringAddress": "0x1d5ee83",
+        "text": "linearquest/Reward"
+      },
+      {
+        "instruction": "0x836294",
+        "stringAddress": "0x1d5ee3b",
+        "text": "daily_quest_id"
+      },
+      {
+        "instruction": "0x8362b8",
+        "stringAddress": "0x1d5edab",
+        "text": "target_val"
+      },
+      {
+        "instruction": "0x8363f4",
+        "stringAddress": "0x1d5ee6a",
+        "text": "dailyquest/RequestReward"
+      }
+    ],
+    "AchievementGoal": [
+      {
+        "instruction": "0x83ba74",
+        "stringAddress": "0x1d576c3",
+        "text": "id"
+      },
+      {
+        "instruction": "0x83ba82",
+        "stringAddress": "0x1d576c3",
+        "text": "id"
+      },
+      {
+        "instruction": "0x83bae6",
+        "stringAddress": "0x1d558fa",
+        "text": "group"
+      },
+      {
+        "instruction": "0x83baf4",
+        "stringAddress": "0x1d558fa",
+        "text": "group"
+      },
+      {
+        "instruction": "0x83bb50",
+        "stringAddress": "0x1d5ed97",
+        "text": "npc_id"
+      },
+      {
+        "instruction": "0x83bb5e",
+        "stringAddress": "0x1d5ed97",
+        "text": "npc_id"
+      },
+      {
+        "instruction": "0x83bbba",
+        "stringAddress": "0x1d5ef3c",
+        "text": "inst"
+      },
+      {
+        "instruction": "0x83bbce",
+        "stringAddress": "0x1d5ee56",
+        "text": "cur_val"
+      },
+      {
+        "instruction": "0x83bbdc",
+        "stringAddress": "0x1d5ee56",
+        "text": "cur_val"
+      },
+      {
+        "instruction": "0x83bc2c",
+        "stringAddress": "0x1d5ef1c",
+        "text": "target_step"
+      },
+      {
+        "instruction": "0x83bc3a",
+        "stringAddress": "0x1d5ef1c",
+        "text": "target_step"
+      },
+      {
+        "instruction": "0x83bc8a",
+        "stringAddress": "0x1d5ef41",
+        "text": "last_step"
+      },
+      {
+        "instruction": "0x83bc98",
+        "stringAddress": "0x1d5ef41",
+        "text": "last_step"
+      },
+      {
+        "instruction": "0x83bce8",
+        "stringAddress": "0x1d5ef4b",
+        "text": "ref"
+      },
+      {
+        "instruction": "0x83bcfc",
+        "stringAddress": "0x1d5ed87",
+        "text": "title"
+      },
+      {
+        "instruction": "0x83bd0c",
+        "stringAddress": "0x1d5ed87",
+        "text": "title"
+      },
+      {
+        "instruction": "0x83bda6",
+        "stringAddress": "0x1d59ab8",
+        "text": "desc"
+      },
+      {
+        "instruction": "0x83bdb4",
+        "stringAddress": "0x1d59ab8",
+        "text": "desc"
+      },
+      {
+        "instruction": "0x83be08",
+        "stringAddress": "0x1d592f8",
+        "text": "step"
+      },
+      {
+        "instruction": "0x83be16",
+        "stringAddress": "0x1d592f8",
+        "text": "step"
+      },
+      {
+        "instruction": "0x83be66",
+        "stringAddress": "0x1d5ef4f",
+        "text": "max_step"
+      },
+      {
+        "instruction": "0x83be74",
+        "stringAddress": "0x1d5ef4f",
+        "text": "max_step"
+      },
+      {
+        "instruction": "0x83bec4",
+        "stringAddress": "0x1d5edab",
+        "text": "target_val"
+      },
+      {
+        "instruction": "0x83bed2",
+        "stringAddress": "0x1d5edab",
+        "text": "target_val"
+      },
+      {
+        "instruction": "0x83bf22",
+        "stringAddress": "0x1d5edd6",
+        "text": "gold"
+      },
+      {
+        "instruction": "0x83bf30",
+        "stringAddress": "0x1d5edd6",
+        "text": "gold"
+      },
+      {
+        "instruction": "0x83bf80",
+        "stringAddress": "0x1d5edd0",
+        "text": "ap"
+      },
+      {
+        "instruction": "0x83bf8e",
+        "stringAddress": "0x1d5edd0",
+        "text": "ap"
+      },
+      {
+        "instruction": "0x83bfde",
+        "stringAddress": "0x1d5edd3",
+        "text": "bp"
+      },
+      {
+        "instruction": "0x83bfec",
+        "stringAddress": "0x1d5edd3",
+        "text": "bp"
+      },
+      {
+        "instruction": "0x83c03c",
+        "stringAddress": "0x1d5ede5",
+        "text": "free_iap"
+      },
+      {
+        "instruction": "0x83c04c",
+        "stringAddress": "0x1d5ede5",
+        "text": "free_iap"
+      },
+      {
+        "instruction": "0x83c0dc",
+        "stringAddress": "0x1d5edee",
+        "text": "iap"
+      },
+      {
+        "instruction": "0x83c0ea",
+        "stringAddress": "0x1d5edee",
+        "text": "iap"
+      },
+      {
+        "instruction": "0x83c13a",
+        "stringAddress": "0x1d5a8a1",
+        "text": "item_list"
+      },
+      {
+        "instruction": "0x83c14c",
+        "stringAddress": "0x1d5a8a1",
+        "text": "item_list"
+      },
+      {
+        "instruction": "0x83c234",
+        "stringAddress": "0x1d576c3",
+        "text": "id"
+      },
+      {
+        "instruction": "0x83c240",
+        "stringAddress": "0x1d5edf9",
+        "text": "qty"
+      },
+      {
+        "instruction": "0x83c3ea",
+        "stringAddress": "0x1d5edfd",
+        "text": "card_list"
+      },
+      {
+        "instruction": "0x83c3fc",
+        "stringAddress": "0x1d5edfd",
+        "text": "card_list"
+      },
+      {
+        "instruction": "0x83c504",
+        "stringAddress": "0x1d576c3",
+        "text": "id"
+      },
+      {
+        "instruction": "0x83c514",
+        "stringAddress": "0x1d5edf9",
+        "text": "qty"
+      }
+    ],
+    "AchievementReward": [
+      {
+        "instruction": "0x83cad6",
+        "stringAddress": "0x1d5edc1",
+        "text": "reward"
+      },
+      {
+        "instruction": "0x83cb16",
+        "stringAddress": "0x1d5ef58",
+        "text": "user"
+      },
+      {
+        "instruction": "0x83cb2a",
+        "stringAddress": "0x1d5edd6",
+        "text": "gold"
+      },
+      {
+        "instruction": "0x83cb3e",
+        "stringAddress": "0x1d5ef5d",
+        "text": "prev"
+      },
+      {
+        "instruction": "0x83cb8a",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83cbe6",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83cc36",
+        "stringAddress": "0x1d5edd0",
+        "text": "ap"
+      },
+      {
+        "instruction": "0x83cc4a",
+        "stringAddress": "0x1d5ef5d",
+        "text": "prev"
+      },
+      {
+        "instruction": "0x83cc96",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83ccf2",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83cd3e",
+        "stringAddress": "0x1d5eea6",
+        "text": "ap_charge_time"
+      },
+      {
+        "instruction": "0x83cd94",
+        "stringAddress": "0x1d5edd3",
+        "text": "bp"
+      },
+      {
+        "instruction": "0x83cda8",
+        "stringAddress": "0x1d5ef5d",
+        "text": "prev"
+      },
+      {
+        "instruction": "0x83ce2e",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83ce8a",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83ced6",
+        "stringAddress": "0x1d5eeb5",
+        "text": "bp_charge_time"
+      },
+      {
+        "instruction": "0x83cf2c",
+        "stringAddress": "0x1d5ede5",
+        "text": "free_iap"
+      },
+      {
+        "instruction": "0x83cf4e",
+        "stringAddress": "0x1d5ef5d",
+        "text": "prev"
+      },
+      {
+        "instruction": "0x83cf9a",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83cff2",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83d042",
+        "stringAddress": "0x1d5edee",
+        "text": "iap"
+      },
+      {
+        "instruction": "0x83d064",
+        "stringAddress": "0x1d5ef5d",
+        "text": "prev"
+      },
+      {
+        "instruction": "0x83d0b0",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83d108",
+        "stringAddress": "0x1d5eea2",
+        "text": "cur"
+      },
+      {
+        "instruction": "0x83d18a",
+        "stringAddress": "0x1d5eec4",
+        "text": "item"
+      },
+      {
+        "instruction": "0x83d208",
+        "stringAddress": "0x1d5eec9",
+        "text": "inst_id"
+      },
+      {
+        "instruction": "0x83d20c",
+        "stringAddress": "0x1d5eed1",
+        "text": "added"
+      },
+      {
+        "instruction": "0x83d2cc",
+        "stringAddress": "0x1d5edf2",
+        "text": "ref_id"
+      }
+    ],
+    "DailyRef": [
+      {
+        "instruction": "0xdd2ef6",
+        "stringAddress": "0x1d589bb",
+        "text": "ret_data"
+      },
+      {
+        "instruction": "0xdd2f0a",
+        "stringAddress": "0x1d5a8ff",
+        "text": "list"
+      },
+      {
+        "instruction": "0xdd300e",
+        "stringAddress": "0x1d576c3",
+        "text": "id"
+      },
+      {
+        "instruction": "0xdd3076",
+        "stringAddress": "0x1d67725",
+        "text": "area_id"
+      },
+      {
+        "instruction": "0xdd30c4",
+        "stringAddress": "0x1d78d67",
+        "text": "valid_day"
+      },
+      {
+        "instruction": "0xdd3224",
+        "stringAddress": "0x1d78d71",
+        "text": "try_cnt"
+      },
+      {
+        "instruction": "0xdd328e",
+        "stringAddress": "0x1d62b03",
+        "text": "reset_cnt"
+      },
+      {
+        "instruction": "0xdd32dc",
+        "stringAddress": "0x1d5aa6a",
+        "text": "res_id"
+      },
+      {
+        "instruction": "0xdd3326",
+        "stringAddress": "0x1d78d79",
+        "text": "reward_id_1"
+      },
+      {
+        "instruction": "0xdd3366",
+        "stringAddress": "0x1d78d85",
+        "text": "reward_id_2"
+      },
+      {
+        "instruction": "0xdd33a2",
+        "stringAddress": "0x1d78d91",
+        "text": "reward_id_3"
+      },
+      {
+        "instruction": "0xdd35fc",
+        "stringAddress": "0x1d62aeb",
+        "text": "reset_price"
+      }
+    ]
+  }
+}

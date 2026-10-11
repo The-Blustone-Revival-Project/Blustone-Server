@@ -253,6 +253,8 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     return state.envelope([]); // Native parsers consume ret_data arrays; tables remain unrecovered.
   if (route.startsWith("/gem/") || route === "/card_handler/EquipGem") return state.unavailableGemAction(payload, headers);
   if (route.startsWith("/fishing/")) return state.fishingAction(route, payload, headers);
+  if (["/dailyquest/GetRefList", "/dailyquest/GetInstList", "/dailyquest/RequestReward", "/linearquest/Reward"].includes(route))
+    return state.questAction(route, payload, headers);
   if (route.startsWith("/mirage/")) return state.mirageAction(route, payload, headers);
   // **[RECOVERED]** The expedition-map chest claim. `CSRSyncMStage::
   // RequestReward` (0xb3bf4c) builds a 7-entry
