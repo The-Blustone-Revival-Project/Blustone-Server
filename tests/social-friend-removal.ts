@@ -84,8 +84,8 @@ try {
   assert.deepEqual(call(restarted, aa, "Unfriend", { target_friend_id_list: `[${third},${fourth},${third}]` }).ret_data,
     { friend_id_list: [third, fourth] });
   assert.deepEqual(call(restarted, aa, "GetList", { type: 1 }).ret_data, { list: [] });
-  assert.notEqual(call(restarted, aa, "GetTargetUserInfo", { list: `[${bb.pvid}]` }).result_code, 1,
-    "Historical tombstones do not authorize a removed peer profile");
+  assert.equal(call(restarted, aa, "GetTargetUserInfo", { list: `[${bb.pvid}]` }).ret_data.list[0].pvid, bb.pvid,
+    "Removed peers can be ordinary public discovery candidates without resurrecting friendship");
   const removedBytes = readFileSync(filename, "utf8");
   const final = new ServerState("http://localhost", filename);
   assert.deepEqual(call(final, aa, "Unfriend", { target_friend_id_list: [third, fourth] }).ret_data,

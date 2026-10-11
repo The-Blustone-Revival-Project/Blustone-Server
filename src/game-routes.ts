@@ -253,6 +253,8 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     return state.envelope([]); // Native parsers consume ret_data arrays; tables remain unrecovered.
   if (route.startsWith("/gem/") || route === "/card_handler/EquipGem") return state.unavailableGemAction(payload, headers);
   if (route.startsWith("/fishing/")) return state.fishingAction(route, payload, headers);
+  if (route === "/reference/GetSkinRef" || route === "/lobby/GetSkinInst" || route.startsWith("/skin/"))
+    return state.skinAction(route, payload, headers);
   if (["/dailyquest/GetRefList", "/dailyquest/GetInstList", "/dailyquest/RequestReward", "/linearquest/Reward"].includes(route))
     return state.questAction(route, payload, headers);
   if (route.startsWith("/mirage/")) return state.mirageAction(route, payload, headers);
@@ -333,8 +335,10 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     "/relation/GetFriendReceivedCount", "/relation/FriendReqCancel", "/relation/FriendReqReject", "/relation/Unfriend"].includes(route))
     return state.socialFriendAction(route, payload, headers);
 
-  if (route === "/relation/GetSuggestedFriendList") return state.envelope([]);
-  if (route === "/guild/GetNotifications") return state.envelope([]);
+  if (["/relation/GetSuggestedFriendList", "/relation/FriendSearch"].includes(route))
+    return state.socialDiscoveryAction(route, payload, headers);
+  if (route === "/lobby/GetGuildInfo" || route.startsWith("/guild/") || route.startsWith("/gvg/"))
+    return state.guildAction(route, payload, headers);
   if (route === "/shop/GetHotDealSummaryList") return state.envelope([]);
 
   // Native parser-shaped static/reference responses.
@@ -572,7 +576,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
       if (!requestedProfiles.length || requestedProfiles.length > 3 ||
           requestedProfiles.some((id) => id !== LOCAL_MAIL_SENDER.pvid && id !== account.pvid && id !== ARENA_RIVAL_PVID &&
             (typeof id !== "number" || !state.localSocialProfile(account.pvid, id))))
-        return state.failure(2001, "Brief target profiles require self, a local presentation identity or an established local relationship");
+        return state.failure(2001, "Brief target profiles require self, a local presentation identity or an eligible same-server local account");
       // CPVRelation.ReqUserInfoCB G8227f0 indexes ret_data.list, not the
       // detailed hunter-party grammar used by CSRSyncGlobal elsewhere.
       // Victory requests both participants in one list. CSRUserProfileDraw uses

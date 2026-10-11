@@ -1,9 +1,11 @@
 import crypto from "node:crypto";
+import { guildLobby } from "./guild-lobby.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors } from "./mirage.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
+import { socialDiscovery } from "./social-discovery.js";
 import { planGroupRankUp } from "./group-rank-up.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
@@ -1081,6 +1083,30 @@ export class ServerState {
     return "error" in result ? this.failure(2001, result.error) : this.envelope(result.data);
   }
 
+  skinAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
+    const account = this.accountFor(payload, headers);
+    if (route === "/reference/GetSkinRef" || route === "/lobby/GetSkinInst") {
+      const game = this.gameByPvid.get(account.pvid);
+      const cards = game ? [...game.starter_cards, ...game.recruited_cards] : [];
+      if (cards.some(card => (card.skin_ref_id && card.skin_ref_id !== `Default_${card.ref_id}`) || Number(card.skin_inst_id ?? 0) !== 0))
+        return this.failure(2001, "Existing non-default skin ownership is not reconstructed");
+      // Native factories derive default references/instances from actual cards.
+      // Empty server collections do not mint paid skins or guessed bonuses.
+      if (route === "/reference/GetSkinRef") return this.envelope({ skin: [], bonus: [] });
+      return this.envelope({ skin: [] });
+    }
+    return this.failure(2001, "Paid skin references, prices and ownership are not reconstructed");
+  }
+
+  guildAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
+    const account = this.accountFor(payload, headers);
+    // This replica has no established Guild affiliations. my_guild is the
+    // flat native PLAY_DATA structure, never a fabricated Guild INFO/member.
+    if (route === "/lobby/GetGuildInfo") return this.envelope(guildLobby(account.pvid));
+    if (route === "/guild/GetNotifications") return this.envelope([]);
+    return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");
+  }
+
   questAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     this.accountFor(payload, headers);
     // CSRAchieve consumes ret_data itself, not generic mock metadata or a
@@ -1664,16 +1690,32 @@ export class ServerState {
     }
   }
 
-  /** Brief profiles only for a real relationship visible to this local account.
+  socialDiscoveryAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
+    const account = this.accountFor(payload, headers);
+    if (!["/relation/GetSuggestedFriendList", "/relation/FriendSearch"].includes(route))
+      return this.failure(2001, "Unknown social discovery operation");
+    try {
+      const profiles = [...this.accountsByPvid.values()].map((peer) => ({ pvid: peer.pvid,
+        nickname: peer.nickname, serverId: peer.serverId, beginUtc: peer.beginUtc, lastLoginAt: peer.lastLoginAt,
+        profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH }));
+      const blocked = (a: number, b: number) => Object.hasOwn(this.accountsByPvid.get(a)?.socialBlocks ?? {}, String(b));
+      return this.envelope(socialDiscovery(this.socialFriends ?? emptySocialFriends(), account.pvid,
+        route === "/relation/FriendSearch" ? "search" : "suggested", payload, profiles, blocked));
+    } catch (error) {
+      return this.failure(2001, error instanceof Error ? error.message : "Invalid local discovery request");
+    }
+  }
+
+  /** Public brief profiles for actual same-server, mutually nonblocked accounts.
+   * This includes discovery candidates before a friendship is established.
    * Reuse the existing original100x100 system icon as LOCAL fallback avatar.
    * No opponent fixture, account secrets or synthetic party/card is returned.
    */
   localSocialProfile(viewerPvid: number, targetPvid: number) {
     const viewer = this.accountsByPvid.get(viewerPvid), peer = this.accountsByPvid.get(targetPvid);
-    if (!viewer || !peer || viewer.serverId !== peer.serverId || !this.socialFriends?.relations.some((row) =>
-      (row.state === "pending" || row.state === "accepted") &&
-      ((row.from_pvid === viewerPvid && row.to_pvid === targetPvid) ||
-      (row.from_pvid === targetPvid && row.to_pvid === viewerPvid)))) return undefined;
+    if (!viewer || !peer || viewerPvid === targetPvid || viewer.serverId !== peer.serverId ||
+      Object.hasOwn(viewer.socialBlocks ?? {}, String(targetPvid)) ||
+      Object.hasOwn(peer.socialBlocks ?? {}, String(viewerPvid))) return undefined;
     return { pvid: peer.pvid, reg_utc: peer.beginUtc, utc: Math.floor(Date.now() / 1000),
       nick_name: peer.nickname, country_code: "", profile_status: "", like_cnt: 0, is_like: 0,
       profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH };

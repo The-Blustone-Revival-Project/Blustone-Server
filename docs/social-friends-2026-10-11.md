@@ -56,8 +56,10 @@ relationships {friend_id,from_pvid,to_pvid,state,created_at}. One relationship
 has two account perspectives: pending appears as sender's type4/request and
 recipient's type3/received; acceptance appears as type1/friend to both parties.
 The peer PVID/name/profile are always resolved from the actual other local
-account. Candidate2 remains empty: unrelated accounts do not become suggested
-friends, Mirage friends, or invitation rewards.
+account. The relationship graph's candidate2 bucket remains empty; dedicated
+suggestions/search now return eligible real local candidates without creating
+friendships, Mirage floor records or invitation rewards. See
+`social-discovery-2026-10-11.md`.
 
 Authentication resolves the actor independently from payload target IDs.
 Requests reject self, unknown accounts, reserved Arena/mail presentation IDs,
@@ -82,8 +84,9 @@ Reads do not add an empty field, regenerate energy or rewrite unrelated game
 state. Native friend list profile_url reuses the existing original100x100
 system image as a **LOCAL fallback avatar**, not an original uploaded user
 avatar. Real relationship participants are also admitted to the existing
-brief `GetTargetUserInfo.list` boundary, using their own account identity/name;
-unrelated local accounts remain refused. No private token/device/email fields
+brief `GetTargetUserInfo.list` boundary, using their own account identity/name.
+Eligible mutually-nonblocked same-server discovery candidates are also admitted
+before friendship; unknown, blocked or different-server peers refuse. No private token/device/email fields
 are exposed and no synthetic hunter party is assigned to a peer.
 
 Cancel/reject/unfriend are now implemented through their recovered
@@ -92,7 +95,8 @@ atomic batches and retained tombstone history. See
 `social-friend-removal-2026-10-11.md`. The similarly named list field is **not**
 a proved bulk-accept grammar; the original exported accept receiver is scalar.
 Passing a removal list to FriendReqAccept remains an explicit refusal.
-GetSuggestedFriendList remains its existing empty response. Actual native
+GetSuggestedFriendList/FriendSearch now use their separate recovered paginated
+candidate-object responses. Actual native
 request/list/accept/removal rendering is not yet verified.
 
 Mirage's friend-floor response remains `[]`: real friendship does not recover

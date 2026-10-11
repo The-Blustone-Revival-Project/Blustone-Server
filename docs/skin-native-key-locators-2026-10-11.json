@@ -1,0 +1,492 @@
+{
+  "librarySha256": "c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec",
+  "coordinateConvention": "ELF; Ghidra=ELF+0x10000",
+  "consumers": {
+    "SkinRefRow": [
+      {
+        "instruction": "0xf16aa2",
+        "stringAddress": "0x1d5edf2",
+        "text": "ref_id"
+      },
+      {
+        "instruction": "0xf16aee",
+        "stringAddress": "0x1d7e6a5",
+        "text": "target_card"
+      },
+      {
+        "instruction": "0xf16b38",
+        "stringAddress": "0x1d5f9de",
+        "text": "res_prefix"
+      },
+      {
+        "instruction": "0xf16b84",
+        "stringAddress": "0x1d5ed87",
+        "text": "title"
+      },
+      {
+        "instruction": "0xf16bd0",
+        "stringAddress": "0x1d59ab8",
+        "text": "desc"
+      },
+      {
+        "instruction": "0xf16c1c",
+        "stringAddress": "0x1d70f42",
+        "text": "victory"
+      },
+      {
+        "instruction": "0xf16c68",
+        "stringAddress": "0x1d5fa88",
+        "text": "regdate"
+      },
+      {
+        "instruction": "0xf16cbe",
+        "stringAddress": "0x1d6146f",
+        "text": "order"
+      },
+      {
+        "instruction": "0xf16d0c",
+        "stringAddress": "0x1d7e6b1",
+        "text": "dialog_list"
+      },
+      {
+        "instruction": "0xf16f60",
+        "stringAddress": "0x1d5aa71",
+        "text": "price"
+      },
+      {
+        "instruction": "0xf16fe0",
+        "stringAddress": "0x1d5317b",
+        "text": "value"
+      },
+      {
+        "instruction": "0xf16fe6",
+        "stringAddress": "0x1d59b3f",
+        "text": "begin_utc"
+      },
+      {
+        "instruction": "0xf170b6",
+        "stringAddress": "0x1d5a0d0",
+        "text": "end_utc"
+      },
+      {
+        "instruction": "0xf17110",
+        "stringAddress": "0x1d569f5",
+        "text": "type"
+      }
+    ],
+    "SkinInstRow": [
+      {
+        "instruction": "0xf17384",
+        "stringAddress": "0x1d5eec9",
+        "text": "inst_id"
+      },
+      {
+        "instruction": "0xf173d4",
+        "stringAddress": "0x1d5edf2",
+        "text": "ref_id"
+      },
+      {
+        "instruction": "0xf17416",
+        "stringAddress": "0x1d7e6bd",
+        "text": "is_seen"
+      },
+      {
+        "instruction": "0xf17468",
+        "stringAddress": "0x1d7e6c5",
+        "text": "is_equiped"
+      }
+    ],
+    "SkinRef": [
+      {
+        "instruction": "0xf18c96",
+        "stringAddress": "0x1d55a5f",
+        "text": "skin"
+      },
+      {
+        "instruction": "0xf18fc4",
+        "stringAddress": "0x1d63049",
+        "text": "bonus"
+      },
+      {
+        "instruction": "0xf19066",
+        "stringAddress": "0x1d5f8f6",
+        "text": "target_cnt"
+      },
+      {
+        "instruction": "0xf1932e",
+        "stringAddress": "0x1d52a70",
+        "text": "allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size"
+      }
+    ],
+    "SkinDefaultRef": [
+      {
+        "instruction": "0xf193ee",
+        "stringAddress": "0x1d7e6d0",
+        "text": "Default_"
+      },
+      {
+        "instruction": "0xf194da",
+        "stringAddress": "0x1d6d142",
+        "text": "1\uc2a4\ud0ac_\ud0dc\uadf8"
+      }
+    ],
+    "SkinInst": [
+      {
+        "instruction": "0xf197ee",
+        "stringAddress": "0x1d55a5f",
+        "text": "skin"
+      },
+      {
+        "instruction": "0xf19932",
+        "stringAddress": "0x1d52bec",
+        "text": "[AST] [%s] "
+      },
+      {
+        "instruction": "0xf1993c",
+        "stringAddress": "0x1d7e7b5",
+        "text": "invalid skin ref id %s"
+      },
+      {
+        "instruction": "0xf19982",
+        "stringAddress": "0x1d7e74b",
+        "text": "_(std::string(\"[AST] [%s] \")+\"invalid skin ref id %s\").c_str(), __FUNCTION__, pData->m_sSkinRefID.c_str()"
+      },
+      {
+        "instruction": "0xf19986",
+        "stringAddress": "0x1d7e6d9",
+        "text": "itrFound != m_mRefDataBySkinRefID.end()"
+      },
+      {
+        "instruction": "0xf19988",
+        "stringAddress": "0x1d7e701",
+        "text": "C:/Users/hkpark/Documents/Visual Studio 2015/Projects/ramen/SR/SRSkin.cpp"
+      },
+      {
+        "instruction": "0xf1998a",
+        "stringAddress": "0x1d7e7cc",
+        "text": "ParseInstance"
+      }
+    ],
+    "SkinDefaultInst": [],
+    "SkinPutOn": [
+      {
+        "instruction": "0xf1bb60",
+        "stringAddress": "0x1d7ea31",
+        "text": "RequestPutOn"
+      },
+      {
+        "instruction": "0xf1bba6",
+        "stringAddress": "0x1d52bec",
+        "text": "[AST] [%s] "
+      },
+      {
+        "instruction": "0xf1bbae",
+        "stringAddress": "0x1d7ea15",
+        "text": "invalid skin instance id %s"
+      },
+      {
+        "instruction": "0xf1bbec",
+        "stringAddress": "0x1d7e97c",
+        "text": "itrFound != m_mInstDataByInstID.end()"
+      },
+      {
+        "instruction": "0xf1bbf0",
+        "stringAddress": "0x1d7e9a2",
+        "text": "_(std::string(\"[AST] [%s] \")+\"invalid skin instance id %s\").c_str(), __FUNCTION__, std::to_string(iInstID).c_str()"
+      },
+      {
+        "instruction": "0xf1bbf2",
+        "stringAddress": "0x1d7e701",
+        "text": "C:/Users/hkpark/Documents/Visual Studio 2015/Projects/ramen/SR/SRSkin.cpp"
+      },
+      {
+        "instruction": "0xf1bc62",
+        "stringAddress": "0x1d52bec",
+        "text": "[AST] [%s] "
+      },
+      {
+        "instruction": "0xf1bc6a",
+        "stringAddress": "0x1d7e938",
+        "text": "invalid skin ref id!!! %s"
+      },
+      {
+        "instruction": "0xf1bc96",
+        "stringAddress": "0x1d7e8a8",
+        "text": "target_iter != m_mInstDataByCardRefID.end()"
+      },
+      {
+        "instruction": "0xf1bc9c",
+        "stringAddress": "0x1d7e8d4",
+        "text": "_(std::string(\"[AST] [%s] \")+\"invalid skin ref id!!! %s\").c_str(), __FUNCTION__, sCardRefID.c_str()"
+      },
+      {
+        "instruction": "0xf1bca0",
+        "stringAddress": "0x1d7e701",
+        "text": "C:/Users/hkpark/Documents/Visual Studio 2015/Projects/ramen/SR/SRSkin.cpp"
+      },
+      {
+        "instruction": "0xf1bd94",
+        "stringAddress": "0x1d589d0",
+        "text": "app_code"
+      },
+      {
+        "instruction": "0xf1bdbe",
+        "stringAddress": "0x1d589d9",
+        "text": "app_ver"
+      },
+      {
+        "instruction": "0xf1bddc",
+        "stringAddress": "0x1d589ee",
+        "text": "market"
+      },
+      {
+        "instruction": "0xf1be0a",
+        "stringAddress": "0x1d586aa",
+        "text": "pvid"
+      },
+      {
+        "instruction": "0xf1be40",
+        "stringAddress": "0x1d589ea",
+        "text": "otp"
+      },
+      {
+        "instruction": "0xf1bf14",
+        "stringAddress": "0x1d7e960",
+        "text": "target_card_ref"
+      },
+      {
+        "instruction": "0xf1bf38",
+        "stringAddress": "0x1d5eec9",
+        "text": "inst_id"
+      },
+      {
+        "instruction": "0xf1c0b0",
+        "stringAddress": "0x1d7e970",
+        "text": "/skin/PutOn"
+      }
+    ],
+    "SkinPutOff": [
+      {
+        "instruction": "0xf1ac28",
+        "stringAddress": "0x1d52bec",
+        "text": "[AST] [%s] "
+      },
+      {
+        "instruction": "0xf1ac30",
+        "stringAddress": "0x1d7e938",
+        "text": "invalid skin ref id!!! %s"
+      },
+      {
+        "instruction": "0xf1ac58",
+        "stringAddress": "0x1d7e8a8",
+        "text": "target_iter != m_mInstDataByCardRefID.end()"
+      },
+      {
+        "instruction": "0xf1ac60",
+        "stringAddress": "0x1d7e8d4",
+        "text": "_(std::string(\"[AST] [%s] \")+\"invalid skin ref id!!! %s\").c_str(), __FUNCTION__, sCardRefID.c_str()"
+      },
+      {
+        "instruction": "0xf1ac6a",
+        "stringAddress": "0x1d7e701",
+        "text": "C:/Users/hkpark/Documents/Visual Studio 2015/Projects/ramen/SR/SRSkin.cpp"
+      },
+      {
+        "instruction": "0xf1ac72",
+        "stringAddress": "0x1d7e952",
+        "text": "RequestPutOff"
+      },
+      {
+        "instruction": "0xf1acc8",
+        "stringAddress": "0x1d589d0",
+        "text": "app_code"
+      },
+      {
+        "instruction": "0xf1acf2",
+        "stringAddress": "0x1d589d9",
+        "text": "app_ver"
+      },
+      {
+        "instruction": "0xf1ad10",
+        "stringAddress": "0x1d589ee",
+        "text": "market"
+      },
+      {
+        "instruction": "0xf1ad3e",
+        "stringAddress": "0x1d586aa",
+        "text": "pvid"
+      },
+      {
+        "instruction": "0xf1ad70",
+        "stringAddress": "0x1d589ea",
+        "text": "otp"
+      },
+      {
+        "instruction": "0xf1adf2",
+        "stringAddress": "0x1d7e960",
+        "text": "target_card_ref"
+      },
+      {
+        "instruction": "0xf1ae14",
+        "stringAddress": "0x1d5eec9",
+        "text": "inst_id"
+      },
+      {
+        "instruction": "0xf1afca",
+        "stringAddress": "0x1d7e970",
+        "text": "/skin/PutOn"
+      }
+    ],
+    "SkinBuy": [
+      {
+        "instruction": "0xf1cab2",
+        "stringAddress": "0x1d52bec",
+        "text": "[AST] [%s] "
+      },
+      {
+        "instruction": "0xf1caba",
+        "stringAddress": "0x1d7e938",
+        "text": "invalid skin ref id!!! %s"
+      },
+      {
+        "instruction": "0xf1cae2",
+        "stringAddress": "0x1d7ea3e",
+        "text": "itr != m_mRefDataBySkinRefID.end()"
+      },
+      {
+        "instruction": "0xf1caea",
+        "stringAddress": "0x1d7ea61",
+        "text": "_(std::string(\"[AST] [%s] \")+\"invalid skin ref id!!! %s\").c_str(), __FUNCTION__, sSkinRefID.c_str()"
+      },
+      {
+        "instruction": "0xf1caf4",
+        "stringAddress": "0x1d7e701",
+        "text": "C:/Users/hkpark/Documents/Visual Studio 2015/Projects/ramen/SR/SRSkin.cpp"
+      },
+      {
+        "instruction": "0xf1cafc",
+        "stringAddress": "0x1d7eac5",
+        "text": "RequestBuy"
+      },
+      {
+        "instruction": "0xf1cb52",
+        "stringAddress": "0x1d589d0",
+        "text": "app_code"
+      },
+      {
+        "instruction": "0xf1cb7c",
+        "stringAddress": "0x1d589d9",
+        "text": "app_ver"
+      },
+      {
+        "instruction": "0xf1cb9a",
+        "stringAddress": "0x1d589ee",
+        "text": "market"
+      },
+      {
+        "instruction": "0xf1cbc8",
+        "stringAddress": "0x1d586aa",
+        "text": "pvid"
+      },
+      {
+        "instruction": "0xf1cbfa",
+        "stringAddress": "0x1d589ea",
+        "text": "otp"
+      },
+      {
+        "instruction": "0xf1cc7c",
+        "stringAddress": "0x1d5edf2",
+        "text": "ref_id"
+      },
+      {
+        "instruction": "0xf1cc9e",
+        "stringAddress": "0x1d569f5",
+        "text": "type"
+      },
+      {
+        "instruction": "0xf1ccc8",
+        "stringAddress": "0x1d5317b",
+        "text": "value"
+      },
+      {
+        "instruction": "0xf1ce9e",
+        "stringAddress": "0x1d7ead0",
+        "text": "/skin/Buy"
+      }
+    ],
+    "SkinBonus": [
+      {
+        "instruction": "0xf16a2c",
+        "stringAddress": "0x1d5f8f6",
+        "text": "target_cnt"
+      }
+    ],
+    "SkinSeen": [
+      {
+        "instruction": "0xf19f20",
+        "stringAddress": "0x1d52bec",
+        "text": "[AST] [%s] "
+      },
+      {
+        "instruction": "0xf19f28",
+        "stringAddress": "0x1d7e872",
+        "text": "invalid skin instance id!!! %s"
+      },
+      {
+        "instruction": "0xf19f64",
+        "stringAddress": "0x1d7e7da",
+        "text": "itr != m_mInstDataByInstID.end()"
+      },
+      {
+        "instruction": "0xf19f6a",
+        "stringAddress": "0x1d7e7fb",
+        "text": "_(std::string(\"[AST] [%s] \")+\"invalid skin instance id!!! %s\").c_str(), __FUNCTION__, std::to_string(uiInstID).c_str()"
+      },
+      {
+        "instruction": "0xf19f6c",
+        "stringAddress": "0x1d7e701",
+        "text": "C:/Users/hkpark/Documents/Visual Studio 2015/Projects/ramen/SR/SRSkin.cpp"
+      },
+      {
+        "instruction": "0xf19f74",
+        "stringAddress": "0x1d7e891",
+        "text": "RequestSeen"
+      },
+      {
+        "instruction": "0xf19fd2",
+        "stringAddress": "0x1d589d0",
+        "text": "app_code"
+      },
+      {
+        "instruction": "0xf19ffc",
+        "stringAddress": "0x1d589d9",
+        "text": "app_ver"
+      },
+      {
+        "instruction": "0xf1a01a",
+        "stringAddress": "0x1d589ee",
+        "text": "market"
+      },
+      {
+        "instruction": "0xf1a048",
+        "stringAddress": "0x1d586aa",
+        "text": "pvid"
+      },
+      {
+        "instruction": "0xf1a07c",
+        "stringAddress": "0x1d589ea",
+        "text": "otp"
+      },
+      {
+        "instruction": "0xf1a0fa",
+        "stringAddress": "0x1d5eec9",
+        "text": "inst_id"
+      },
+      {
+        "instruction": "0xf1a28a",
+        "stringAddress": "0x1d7e89d",
+        "text": "/skin/Seen"
+      }
+    ]
+  }
+}

@@ -65,8 +65,10 @@ has not been verified by this audit.
 Deletion retains explicit cancelled/rejected/removed tombstones, including
 original participants and relationship ID, rather than reuse IDs or lose retry
 ownership. This is local policy; original storage/retention semantics are
-unknown. Only pending/accepted rows count as active pairs, appear in lists, or
-authorize peer brief profiles. A later request to the same peer receives a fresh
+unknown. Only pending/accepted rows count as active pairs and appear in friend
+lists. Historical rows do not authorize friendship profiles; independently
+eligible public discovery candidates can still have brief identity/avatar
+profiles before friendship. A later request to the same peer receives a fresh
 monotone ID. Replaying an old deletion cannot delete that fresh relationship.
 The removed history cannot be resurrected through stale acceptance.
 
@@ -83,7 +85,7 @@ views. No account/game/wallet/card/deck/progression values are modified.
 sender/recipient/accepted ownership, numeric JSON list grammar, asymmetric
 request/receipt names, whole-batch refusal, duplicate IDs, mutual removal,
 restart history, stale deletion versus fresh requests, stale accept refusal,
-removed-profile refusal, persistence-failure rollback of all participants,
+removed-peer public candidate behavior without friendship resurrection, persistence-failure rollback of all participants,
 monotone allocation and unchanged persisted gameStates. Existing
 `tests/social-friends.ts` and TypeScript build also pass. Root owns final
 combined tests, OpenAPI and live activation.

@@ -74,7 +74,8 @@ try {
   assert.equal(peerProfile.ret_data.list[0].pvid, a.pvid);
   assert.equal(peerProfile.ret_data.list[0].nick_name, "A");
   assert.equal(peerProfile.ret_data.list[0].profile_url, "http://localhost/local-profile/replica-100.png");
-  assert.notEqual(call(b, "GetTargetUserInfo", { list: `[${c.pvid}]` }).result_code, 1, "Unrelated local accounts are not authorized social profiles");
+  assert.equal(call(b, "GetTargetUserInfo", { list: `[${c.pvid}]` }).ret_data.list[0].pvid, c.pvid,
+    "Genuine nonblocked same-server candidates have public brief profiles before friendship");
   assert.equal(call(b, "GetFriendReceivedCount").ret_data, 1);
   assert.deepEqual(call(c, "GetList", { type: 3 }).ret_data, { list: [] });
   assert.notEqual(call(c, "FriendReqAccept", { target_friend_id: 1 }).result_code, 1);
