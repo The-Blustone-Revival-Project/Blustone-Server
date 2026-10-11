@@ -470,7 +470,7 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     ["/relation/GetList", "Authenticated native list selector type1=friends,2=candidates,3=incoming,4=outgoing. ret_data is an OBJECT containing list, not a bare array. Only established local relationships are returned; candidate discovery is empty. Actual peer identity and original fallback portrait are supplied; social clocks/likes remain neutral local fields.", { type: "object", required: ["list"], properties: { list: { type: "array", items: friendRow } } }],
     ["/relation/GetFriendReceivedCount", "Authenticated incoming pending-request count. Native callback consumes ret_data directly as a uint32 scalar, not {cnt}.", { type: "integer", minimum: 0, maximum: 4294967295 }],
     ["/relation/FriendRequest", "Authenticated target_pvid request to an existing local account on the same server. Self, unknown, reverse-pending, accepted and either-party-blocked targets refuse. Receipt is {friend_id,target_pvid}. Same-direction pending repeats retain the same ID without writing; this is explicit local policy.", { type: "object", required: ["friend_id", "target_pvid"], properties: { friend_id: { type: "integer" }, target_pvid: { type: "integer" } } }],
-    ["/relation/FriendReqAccept", "Authenticated single target_friend_id acceptance by the original recipient only. Receipt is {friend_id}; the relationship becomes reciprocal and persists atomically. Repeats retain the ID. Bulk acceptance, cancel, reject and unfriend remain refused until their contracts are reconstructed.", { type: "object", required: ["friend_id"], properties: { friend_id: { type: "integer" } } }],
+    ["/relation/FriendReqAccept", "Authenticated single target_friend_id acceptance by the original recipient only. Receipt is {friend_id}; the relationship becomes reciprocal and persists atomically. Repeats retain the ID. Cancel, reject and unfriend have separate list contracts; bulk acceptance remains refused because no original list-accept grammar is established.", { type: "object", required: ["friend_id"], properties: { friend_id: { type: "integer" } } }],
   ] as const) {
     paths[route] = { post: {
       ...operation(route.split("/").at(-1)!, description, "Social", response("Decrypted native contract; successful native transport replies are encrypted.", {
@@ -479,6 +479,27 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
       "x-evidence": "docs/social-friends-2026-10-11.md; tests/social-friends.ts",
       "x-reverse-engineering-status": "native-parser-reconstructed",
       "x-runtime-confidence": "Local lifecycle and encrypted compiled restart tested; native UI pending",
+    } };
+    explicitlyDocumented.add(route);
+  }
+  for (const action of ["FriendReqCancel", "FriendReqReject", "Unfriend"]) {
+    const route = `/relation/${action}`;
+    paths[route] = { post: {
+      ...operation(action,
+        "Authenticated atomic target_friend_id_list: JSON text for numeric relation IDs. Cancel belongs to the pending sender, reject to the pending recipient, and unfriend to either accepted participant. The entire batch is validated before persistence. Native receipt is ret_data.friend_id_list, with a different key from the request. Local durable tombstones preserve monotone IDs and owned delete replays; stale IDs never remove a fresh same-peer relationship. No wallet, roster or social reward is changed.", "Social"),
+      "x-evidence": "docs/social-friend-removal-2026-10-11.md; tests/social-friend-removal.ts",
+      "x-reverse-engineering-status": "native-parser-reconstructed",
+      "x-runtime-confidence": "Encrypted compiled lifecycle/restart tested; native UI pending",
+    } };
+    explicitlyDocumented.add(route);
+  }
+  for (const route of ["/dailyquest/GetRefList", "/dailyquest/GetInstList", "/dailyquest/RequestReward", "/linearquest/Reward"]) {
+    paths[route] = { post: {
+      ...operation(route.split("/").at(-1)!,
+        "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. The replica publishes canonical empty ret_data collections for reference/instance reads because production quest IDs and conditions are missing. Reward requests refuse with result2001; no synthetic quest or reward is granted. Daily request keys are daily_quest_id/target_val, linear keys serial/id/target_val. Native reference collection iteration supports array/object values; array publication is local policy, not a captured universal container rule.", "Quests"),
+      "x-evidence": "docs/quest-contracts-2026-10-11.md; tests/quest-contracts.ts",
+      "x-reverse-engineering-status": "native-parser-reconstructed",
+      "x-runtime-confidence": "Empty collections and missing-data refusal verified; playable production quest loop absent",
     } };
     explicitlyDocumented.add(route);
   }

@@ -5024,10 +5024,10 @@
     },
     "/dailyquest/GetInstList": {
       "post": {
-        "summary": "Recovered /dailyquest/GetInstList route",
-        "description": "The route literal **/dailyquest/GetInstList** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "GetInstList",
+        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. The replica publishes canonical empty ret_data collections for reference/instance reads because production quest IDs and conditions are missing. Reward requests refuse with result2001; no synthetic quest or reward is granted. Daily request keys are daily_quest_id/target_val, linear keys serial/id/target_val. Native reference collection iteration supports array/object values; array publication is local policy, not a captured universal container rule.",
         "tags": [
-          "dailyquest"
+          "Quests"
         ],
         "parameters": [
           {
@@ -5098,17 +5098,17 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/quest-contracts-2026-10-11.md; tests/quest-contracts.ts",
+        "x-runtime-confidence": "Empty collections and missing-data refusal verified; playable production quest loop absent"
       }
     },
     "/dailyquest/GetRefList": {
       "post": {
-        "summary": "Recovered /dailyquest/GetRefList route",
-        "description": "The route literal **/dailyquest/GetRefList** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "GetRefList",
+        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. The replica publishes canonical empty ret_data collections for reference/instance reads because production quest IDs and conditions are missing. Reward requests refuse with result2001; no synthetic quest or reward is granted. Daily request keys are daily_quest_id/target_val, linear keys serial/id/target_val. Native reference collection iteration supports array/object values; array publication is local policy, not a captured universal container rule.",
         "tags": [
-          "dailyquest"
+          "Quests"
         ],
         "parameters": [
           {
@@ -5179,17 +5179,17 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/quest-contracts-2026-10-11.md; tests/quest-contracts.ts",
+        "x-runtime-confidence": "Empty collections and missing-data refusal verified; playable production quest loop absent"
       }
     },
     "/dailyquest/RequestReward": {
       "post": {
-        "summary": "Recovered /dailyquest/RequestReward route",
-        "description": "The route literal **/dailyquest/RequestReward** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "RequestReward",
+        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. The replica publishes canonical empty ret_data collections for reference/instance reads because production quest IDs and conditions are missing. Reward requests refuse with result2001; no synthetic quest or reward is granted. Daily request keys are daily_quest_id/target_val, linear keys serial/id/target_val. Native reference collection iteration supports array/object values; array publication is local policy, not a captured universal container rule.",
         "tags": [
-          "dailyquest"
+          "Quests"
         ],
         "parameters": [
           {
@@ -5260,9 +5260,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/quest-contracts-2026-10-11.md; tests/quest-contracts.ts",
+        "x-runtime-confidence": "Empty collections and missing-data refusal verified; playable production quest loop absent"
       }
     },
     "/episode/GetLog": {
@@ -11239,10 +11239,10 @@
     },
     "/linearquest/Reward": {
       "post": {
-        "summary": "Recovered /linearquest/Reward route",
-        "description": "The route literal **/linearquest/Reward** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Reward",
+        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. The replica publishes canonical empty ret_data collections for reference/instance reads because production quest IDs and conditions are missing. Reward requests refuse with result2001; no synthetic quest or reward is granted. Daily request keys are daily_quest_id/target_val, linear keys serial/id/target_val. Native reference collection iteration supports array/object values; array publication is local policy, not a captured universal container rule.",
         "tags": [
-          "linearquest"
+          "Quests"
         ],
         "parameters": [
           {
@@ -11313,9 +11313,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/quest-contracts-2026-10-11.md; tests/quest-contracts.ts",
+        "x-runtime-confidence": "Empty collections and missing-data refusal verified; playable production quest loop absent"
       }
     },
     "/lobby/Enter": {
@@ -18033,7 +18033,7 @@
     "/relation/FriendReqAccept": {
       "post": {
         "summary": "FriendReqAccept",
-        "description": "Authenticated single target_friend_id acceptance by the original recipient only. Receipt is {friend_id}; the relationship becomes reciprocal and persists atomically. Repeats retain the ID. Bulk acceptance, cancel, reject and unfriend remain refused until their contracts are reconstructed.",
+        "description": "Authenticated single target_friend_id acceptance by the original recipient only. Receipt is {friend_id}; the relationship becomes reciprocal and persists atomically. Repeats retain the ID. Cancel, reject and unfriend have separate list contracts; bulk acceptance remains refused because no original list-accept grammar is established.",
         "tags": [
           "Social"
         ],
@@ -18133,10 +18133,10 @@
     },
     "/relation/FriendReqCancel": {
       "post": {
-        "summary": "Recovered /relation/FriendReqCancel route",
-        "description": "The route literal **/relation/FriendReqCancel** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "FriendReqCancel",
+        "description": "Authenticated atomic target_friend_id_list: JSON text for numeric relation IDs. Cancel belongs to the pending sender, reject to the pending recipient, and unfriend to either accepted participant. The entire batch is validated before persistence. Native receipt is ret_data.friend_id_list, with a different key from the request. Local durable tombstones preserve monotone IDs and owned delete replays; stale IDs never remove a fresh same-peer relationship. No wallet, roster or social reward is changed.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -18207,17 +18207,17 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-friend-removal-2026-10-11.md; tests/social-friend-removal.ts",
+        "x-runtime-confidence": "Encrypted compiled lifecycle/restart tested; native UI pending"
       }
     },
     "/relation/FriendReqReject": {
       "post": {
-        "summary": "Recovered /relation/FriendReqReject route",
-        "description": "The route literal **/relation/FriendReqReject** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "FriendReqReject",
+        "description": "Authenticated atomic target_friend_id_list: JSON text for numeric relation IDs. Cancel belongs to the pending sender, reject to the pending recipient, and unfriend to either accepted participant. The entire batch is validated before persistence. Native receipt is ret_data.friend_id_list, with a different key from the request. Local durable tombstones preserve monotone IDs and owned delete replays; stale IDs never remove a fresh same-peer relationship. No wallet, roster or social reward is changed.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -18288,9 +18288,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-friend-removal-2026-10-11.md; tests/social-friend-removal.ts",
+        "x-runtime-confidence": "Encrypted compiled lifecycle/restart tested; native UI pending"
       }
     },
     "/relation/FriendRequest": {
@@ -19913,10 +19913,10 @@
     },
     "/relation/Unfriend": {
       "post": {
-        "summary": "Recovered /relation/Unfriend route",
-        "description": "The route literal **/relation/Unfriend** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Unfriend",
+        "description": "Authenticated atomic target_friend_id_list: JSON text for numeric relation IDs. Cancel belongs to the pending sender, reject to the pending recipient, and unfriend to either accepted participant. The entire batch is validated before persistence. Native receipt is ret_data.friend_id_list, with a different key from the request. Local durable tombstones preserve monotone IDs and owned delete replays; stale IDs never remove a fresh same-peer relationship. No wallet, roster or social reward is changed.",
         "tags": [
-          "Social and relation"
+          "Social"
         ],
         "parameters": [
           {
@@ -19987,9 +19987,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/social-friend-removal-2026-10-11.md; tests/social-friend-removal.ts",
+        "x-runtime-confidence": "Encrypted compiled lifecycle/restart tested; native UI pending"
       }
     },
     "/roulette/DrawRoulette": {

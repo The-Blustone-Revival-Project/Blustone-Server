@@ -150,6 +150,22 @@ try {
     const sent=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
     assert.equal(sent.list.length,1);assert.equal(sent.list[0].friend_id,friendId);
     assert.equal(sent.list[0].target_pvid,Number(friendPeer.pvid));
+    const oldId=friendId;
+    assert.deepEqual((await secure('/relation/Unfriend',{...auth,target_friend_id_list:JSON.stringify([oldId])})).ret_data,{friend_id_list:[oldId]});
+    friendId=(await secure('/relation/FriendRequest',{...auth,target_pvid:friendPeer.pvid})).ret_data.friend_id;
+    assert.ok(friendId>oldId,'Deleted relation identity must never be reused');
+    assert.deepEqual((await secure('/relation/Unfriend',{...auth,target_friend_id_list:JSON.stringify([oldId])})).ret_data,{friend_id_list:[oldId]});
+    ({secret,token}=peerConnection);
+    assert.equal((await secure('/relation/GetFriendReceivedCount',friendPeer)).ret_data,1,'Stale unfriend must not remove fresh request');
+    assert.notEqual((await secure('/relation/FriendReqCancel',{...friendPeer,target_friend_id_list:JSON.stringify([friendId])},{allowPlainRefusal:true})).result_code,1,'Recipient cannot cancel sender request');
+    assert.deepEqual((await secure('/relation/FriendReqReject',{...friendPeer,target_friend_id_list:JSON.stringify([friendId])})).ret_data,{friend_id_list:[friendId]});
+    ({secret,token}=ownerConnection);
+    friendId=(await secure('/relation/FriendRequest',{...auth,target_pvid:friendPeer.pvid})).ret_data.friend_id;
+    assert.deepEqual((await secure('/relation/FriendReqCancel',{...auth,target_friend_id_list:JSON.stringify([friendId])})).ret_data,{friend_id_list:[friendId]});
+    friendId=(await secure('/relation/FriendRequest',{...auth,target_pvid:friendPeer.pvid})).ret_data.friend_id;
+    ({secret,token}=peerConnection);
+    assert.deepEqual((await secure('/relation/FriendReqAccept',{...friendPeer,target_friend_id:String(friendId)})).ret_data,{friend_id:friendId});
+    ({secret,token}=ownerConnection);
   }
   if(exerciseBulk) {
     assert.equal(Number(auth.pvid),bulkPvid,'Only disposable seeded account may be exercised');
@@ -169,6 +185,11 @@ try {
   }
   const friendFloors=await secure('/mirage/GetFriendInfo',auth);
   assert.equal(friendFloors.result_code,1);assert.deepEqual(friendFloors.ret_data,[]);
+  for(const route of ['/dailyquest/GetRefList','/dailyquest/GetInstList'])
+    assert.deepEqual((await secure(route,auth)).ret_data,[],'Absent quest data must use native collections');
+  for(const route of ['/dailyquest/RequestReward','/linearquest/Reward'])
+    assert.equal((await secure(route,{...auth,daily_quest_id:'TEST_ONLY_QUEST',id:'TEST_ONLY_QUEST',serial:'1',target_val:'5'},
+      {allowPlainRefusal:true})).result_code,2001,'Missing quest data must not grant mock success');
   const ordinaryReferences=(await secure('/reference/GetCard',auth)).ret_data;
   const materialsIds=profileName==='current-e6-materials18'
     ? ['009','010','012','013','014','017','030','036','040','048','049','054']
@@ -270,6 +291,8 @@ try {
     direct_compiled_process:true,launcher_process_verified:false,
     encrypted_bulk_rank_up_fixture:exerciseBulk,
     encrypted_social_lifecycle_fixture:exerciseSocial,
+    encrypted_social_cleanup_fixture:exerciseSocial,
+    quest_empty_collections_and_claim_refusal:true,
     profile:profileName,resource_stamp:stamp,exact_manifest_selection:true,manifest_restart_exact:true,
     added_original_jet_groups:verifiedOriginals,live_profile_activation:false,
     ordinary_reference_count:ordinaryReferences.length,authenticated_mirage_friend_floors:true,
