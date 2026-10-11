@@ -400,8 +400,8 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
       description: "Owned card instances. CSRPlayData::ParseUserCardInven iterates ret_data directly and CSRCard::parse reads each instance. Returning scaffold metadata creates bogus cards with empty ref_id and caused the observed Cannot find Ref Data assertion. Every ref_id must resolve to a loaded card definition; inst_id identifies ownership, not the definition. Authenticated response combines the bootstrap roster with account-owned recruitment grants persisted across server restart. Card stats, costs, skills and bootstrap ownership remain fixtures; training progression is not implemented.",
       evidence: "analysis/native-card-inventory.txt; analysis/native-play-card.txt" },
     { route: "/relation/BlockList", tag: "Social", schema: "BlockedUser",
-      description: "Blocked users consumed by CPVRelation::ReqBlockListCB. ret_data is an array of target_pvid/target_nickname records. The replica returns an empty array. A generic object caused a native callback exception reported as PV_UNKNOWN. Adding/removing blocks and persistence are not implemented.",
-      evidence: "analysis/native-block-list.txt" },
+      description: "Authenticated persistent blocked users consumed by CPVRelation::ReqBlockListCB. ret_data is an array of numeric target_pvid and target_nickname records; the native callback builds its C++ map internally. Legacy accounts read as an empty array without a migration write. Block/Unblock update only the requesting account. Friend discovery and filtering other social features by blocks remain incomplete.",
+      evidence: "docs/social-blocks-native-2026-10-11.md" },
   ];
   for (const contract of arrayContracts) {
     paths[contract.route] = { post: {
@@ -426,6 +426,31 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     };
   }
 
+  for (const action of ["Block", "Unblock"]) {
+    const route = `/relation/${action}`;
+    paths[route] = { post: {
+      ...operation(`${action} local accounts`,
+        "Authenticated atomic target_list batch. The native form field contains JSON text for an array of positive account IDs. Nicknames are resolved from established local accounts. Self, unknown, repeated-state and malformed requests refuse without a partial write; duplicate IDs within one batch are deduplicated. Block returns blocked-user rows; Unblock's native callback reads only result_code. Accepted changes persist per account; original caps and fees remain unknown, and block-based filtering of other social features is not implemented.", "Social"),
+      requestBody: { required: true, content: {
+        "application/x-www-form-urlencoded": { schema: { type: "object", required: ["target_list"], additionalProperties: true,
+          properties: { target_list: { type: "string", example: "[1000002]", description: "JSON-encoded numeric target array." } } } },
+        "application/json": { schema: { type: "object", required: ["target_list"], additionalProperties: true,
+          properties: { target_list: { oneOf: [{ type: "string" }, { type: "array", minItems: 1, items: { type: "integer", minimum: 1, maximum: 9007199254740991 } }] } } } },
+        "application/octet-stream": { schema: { type: "string", format: "binary" } },
+      } },
+      "x-evidence": "docs/social-blocks-native-2026-10-11.md; tests/social-blocks.ts",
+      "x-reverse-engineering-status": "native-parser-reconstructed",
+      "x-runtime-confidence": "Persistent replica lifecycle tested; native UI validation pending",
+    } };
+    explicitlyDocumented.add(route);
+  }
+  paths["/mirage/GetFriendInfo"] = { post: {
+    ...operation("Read Mirage friend floors", "Authenticated request with no floor selector. Native ParseFriendInfo consumes bare ret_data rows {floor,nick_list:string[]}. The replica returns an empty array because no friend relationships have been reconstructed; local accounts and arena rivals are not invented friends. This read does not enter or modify a Mirage run.", "Mirage"),
+    "x-evidence": "docs/mirage-friend-floors-2026-10-11.md; tests/mirage-contract.ts",
+    "x-reverse-engineering-status": "native-parser-reconstructed",
+    "x-runtime-confidence": "Compiled encrypted response verified; native friend panel pending",
+  } };
+  explicitlyDocumented.add("/mirage/GetFriendInfo");
   const webviewEvidenceRoutes = [
     "/webview/evaluation/GetCardList",
     "/webview/evaluation/RecordCardRecommend",
@@ -988,7 +1013,7 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
         },
         BlockedUser: {
           type: "object", required: ["target_pvid", "target_nickname"],
-          properties: { target_pvid: { type: "string", description: "Blocked account identifier." }, target_nickname: { type: "string", description: "Display name supplied to the native relation model." } },
+          properties: { target_pvid: { type: "integer", minimum: 1, maximum: 9007199254740991, description: "Blocked account identifier; replica accepts positive safe integers." }, target_nickname: { type: "string", description: "Display name resolved from the established local account." } },
         },
         CardInstance: {
           type: "object", required: ["inst_id", "ref_id", "rank"], additionalProperties: true,
