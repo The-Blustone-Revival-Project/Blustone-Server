@@ -19,6 +19,7 @@ import { skillLevelRows } from "./skill-training.js";
 import { ordinaryHunterLevels } from "./hunter-levels.js";
 import { fixtureSkillSlots } from "./skills.js";
 import { projectOrdinaryStats } from "./ordinary-stat-projection.js";
+import { additionalMaterialReferences } from "./character-materials.js";
 
 /**
  * `BLUSTONE_CAMPAIGN=full|minimal`, resolved once at import. **`full`** is the
@@ -206,9 +207,25 @@ const additionalReferences = [
     .filter((row) => row.rank >= card.minRank),
 }));
 
-export const starterReference = [...new Map([
+const originalStarterReference = [...new Map([
   cardOneReference, ...(FIXTURE_GACHA_CARD_ENABLED ? gachaCardReference : []), ...additionalReferences,
 ].map((card) => [card.base.id, card])).values()];
+
+/** Opt-in reference coverage only. Original six references, owned cards and
+ * recruitment pools remain unchanged. New material-backed rows deliberately
+ * retain explicit local legacy stats and neutral skill slots; their original
+ * ordinary combat magnitudes are unknown, not inferred from Episode artwork. */
+export const CARD_REFERENCE_PROFILE = process.env.BLUSTONE_CARD_REFERENCE_PROFILE ?? "starter";
+if (!["starter", "materials"].includes(CARD_REFERENCE_PROFILE))
+  throw new Error("Unknown ordinary card reference profile");
+export const starterReference = [...originalStarterReference,
+  ...(CARD_REFERENCE_PROFILE === "materials" ? additionalMaterialReferences({
+    packageNames: (process.env.BLUSTONE_PACKAGE_NAMES ?? "").split(","),
+    publishedIds: originalStarterReference.map((card) => card.base.id),
+    fixtureStats: ordinaryRankStats(cardOneLegacyStat),
+    neutralSkillSlots: fixtureSkillSlots,
+  }) : []),
+];
 
 /** Community birth grades apply to NEW grants only; preserve old rank1 saves. */
 export const recruitBirthRanks: Record<string, number> = { "002": 2, "003": 3, "004": 1, "005": 2, "006": 1 };
