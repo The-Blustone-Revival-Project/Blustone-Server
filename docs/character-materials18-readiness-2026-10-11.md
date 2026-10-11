@@ -39,3 +39,10 @@ Root must still select the profile, validate the original native downloader and
 post-reference map, inspect every Library role and representative portraits,
 and audit private saved gameplay. This preparation performs no live activation,
 restart, UI/ADB input, save edit, DataDump edit or client rebuild.
+
+Compiled-process fixture verification passed:150 orderedmanifestgroups/stamp1634685,
+18exact ordinaryrefs, all11 PKGI1wrappedoriginals/fullpayloadSHA/inner+outerMD5,
+head/tail206range bytes, encrypted HMAC/AESresponses and restartmanifest/
+credentials preservation. The isolated generatedfixture has onegame; this is
+not a live downloader, launcher or private-three-save claim. Report retained
+under ignored local/verification/current-e6-materials18/.

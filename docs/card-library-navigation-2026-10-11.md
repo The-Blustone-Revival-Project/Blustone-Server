@@ -74,3 +74,10 @@ The 2026-10-11 release adds no normalized identity, graph, reward or symbolic
 skill rows (all change counts0). Its useful non-stat contribution is stronger
 dated cross-language/era context; it supplies no new ordinary trace IDs or
 original collection thresholds that could replace this local navigation policy.
+
+Root activated the correction under current-e6-materials, wrapper25012/
+listener39084, newclient27165; native14 reference count remains verified. Human
+Escape stopped Computer Use before Library entry could be verified. No further
+game inputs; live rendering/crash resolution remains pending. Host52tests/build
+passed prior FC1display addition. Original six + eightordinary reference metadata
+and navigation-onlyfixtures are committed; no acquisition/pool changes.
