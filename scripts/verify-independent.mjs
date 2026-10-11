@@ -13,13 +13,17 @@ import {preflight} from './resources/verify.mjs';
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const exerciseBulk=process.argv.includes('--exercise-bulk');
 const exerciseSale=process.argv.includes('--exercise-sale');
+const exerciseEquipment=process.argv.includes('--exercise-equipment');
+const authoredEquipment={id:'AUTHORED_WEAPON',type:1,rank:1,awk_step:0,hp:'0',atk:'10000',def:'0',spd:'0',
+  crt_chance:'0',crt_dmg:'0',penetration:'0',block_chance:'0',block_dec_dmg:'0',attr_enhance:'0',attr_resist:'0',
+  hp_regen:'0',hp_up:'0',atk_up:'2000',def_up:'0'};
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
 const monsterIndex=process.argv.indexOf('--exercise-monster');
 const exerciseMonster=monsterIndex===-1?undefined:process.argv[monsterIndex+1];
 if(monsterIndex!==-1 && (!process.argv.includes('--fixture') || typeof exerciseMonster!=='string' || !/^M[0-9]{3}$/.test(exerciseMonster)))
   throw new Error('Monster resource exercises require --fixture and one exact original namespace');
-if((exerciseBulk || exerciseSocial || exerciseSale) && !process.argv.includes('--fixture')) throw new Error('Transaction exercises require --fixture; private preserved saves are never mutation targets');
+if((exerciseBulk || exerciseSocial || exerciseSale || exerciseEquipment) && !process.argv.includes('--fixture')) throw new Error('Configured exercises require --fixture; private preserved saves are never mutation targets');
 const profileIndex=process.argv.indexOf('--profile');
 const profileName=profileIndex===-1?'current-e6':process.argv[profileIndex+1];
 if(typeof profileName!=='string' || !/^[\w-]+$/.test(profileName)) throw new Error('Invalid verification profile');
@@ -72,6 +76,7 @@ let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
   if(exerciseSale) env.BLUSTONE_CARD_SELL_PROFIT_JSON=JSON.stringify([{rank:1,profit_type:2,profit_target:'',profit_qty:13}]);
+  if(exerciseEquipment) env.BLUSTONE_EQUIPMENT_REFERENCE_JSON=JSON.stringify({'001':[authoredEquipment]});
   if(exerciseMonster) env.BLUSTONE_MONSTER_IDS=exerciseMonster;
   for(const key of ['BLUSTONE_PACKAGE_DIR','BLUSTONE_PACKAGE_TREE_DIR','BLUSTONE_UI_PACKAGE_TREE_DIR','BLUSTONE_RESOURCE_ASSET_DIR','BLUSTONE_CATALOG_PATH'])
     if(env[key])env[key]=path.resolve(root,env[key]);
@@ -249,6 +254,15 @@ try {
     assert.equal((await secure(route,{...auth,daily_quest_id:'TEST_ONLY_QUEST',id:'TEST_ONLY_QUEST',serial:'1',target_val:'5'},
       {allowPlainRefusal:true})).result_code,2001,'Missing quest data must not grant mock success');
   const ordinaryReferences=(await secure('/reference/GetCard',auth)).ret_data;
+  if(exerciseEquipment) {
+    assert.deepEqual(ordinaryReferences.find(card=>card.base.id==='001').equipment,[authoredEquipment]);
+    assert.ok(ordinaryReferences.filter(card=>card.base.id!=='001').every(card=>card.equipment.length===0),
+      'Equipment reference input must not spread to other Hunters');
+    const {parseHunterEquipment,calculateHunterEquipment}=await import(pathToFileURL(path.join(root,'dist/src/hunter-equipment.js')).href);
+    const parsed=parseHunterEquipment([authoredEquipment]);
+    assert.equal(calculateHunterEquipment(parsed,0,1,1).stats.atk,100);
+    assert.equal(calculateHunterEquipment(parsed,0,1,10).stats.atk,280);
+  }
   let monsterReference;
   if(exerciseMonster) {
     monsterReference=(await secure('/reference/GetMonster',{...auth,list:JSON.stringify([exerciseMonster])})).ret_data;
@@ -312,6 +326,12 @@ try {
     profileName==='current-e6-materials18'?'character-materials18-originals.json':
     profileName==='current-e6-guild'?'guild-originals.json':null;
   const pins=pinManifest?JSON.parse(readFileSync(path.join(root,'resources/manifests',pinManifest),'utf8')):[];
+  if(exerciseEquipment) {
+    const registry=JSON.parse(readFileSync(path.join(root,'resources/reference/hunter-equipment-materials.json'),'utf8'));
+    const owner=registry.packs.find(pack=>pack.records.some(record=>record.name==='C001_WEP'));
+    assert.ok(owner,'Missing exact original equipment owner');
+    if(!pins.some(pin=>pin.name===owner.package)) pins.push({name:owner.package,bytes:owner.bytes,sha256:owner.sha256});
+  }
   if(exerciseMonster) {
     const registry=JSON.parse(readFileSync(path.join(root,'resources/reference/monster-art-namespaces.json'),'utf8'));
     const owner=registry.packs.find(pack=>Object.hasOwn(pack.namespaces,exerciseMonster));
@@ -356,7 +376,7 @@ try {
   if(exerciseMonster)
     assert.deepEqual((await secure('/reference/GetMonster',{...auth,list:JSON.stringify([exerciseMonster])})).ret_data,monsterReference,
       'Exact monster identity/prefix/fixture stats must survive compiled restart');
-  if(profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection')
+  if(profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection' || exerciseEquipment)
     assert.deepEqual((await secure('/reference/GetCard',auth)).ret_data,ordinaryReferences,
       'Historical reference policy must survive restart without changing records');
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
@@ -387,6 +407,7 @@ try {
     direct_compiled_process:true,launcher_process_verified:false,
     encrypted_bulk_rank_up_fixture:exerciseBulk,
     encrypted_hunter_sale_fixture:exerciseSale,
+    configured_equipment_reference_fixture:exerciseEquipment,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,

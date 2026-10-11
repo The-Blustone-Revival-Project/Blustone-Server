@@ -22,6 +22,7 @@ import { projectOrdinaryStats } from "./ordinary-stat-projection.js";
 import { additionalMaterialReferences } from "./character-materials.js";
 import { RECOVERED_MONSTER_NAMESPACES, requireSelectedMonsterArt } from "./monster-art.js";
 import { projectMaterialStats } from "./material-stat-projection.js";
+import { configuredEquipmentReferences } from "./equipment-reference-profile.js";
 
 /**
  * `BLUSTONE_CAMPAIGN=full|minimal`, resolved once at import. **`full`** is the
@@ -221,7 +222,7 @@ const originalStarterReference = [...new Map([
 export const CARD_REFERENCE_PROFILE = process.env.BLUSTONE_CARD_REFERENCE_PROFILE ?? "starter";
 if (!["starter", "materials"].includes(CARD_REFERENCE_PROFILE))
   throw new Error("Unknown ordinary card reference profile");
-export const starterReference = [...originalStarterReference,
+export const starterReference = configuredEquipmentReferences([...originalStarterReference,
   ...(CARD_REFERENCE_PROFILE === "materials" ? additionalMaterialReferences({
     packageNames: (process.env.BLUSTONE_PACKAGE_NAMES ?? "").split(","),
     publishedIds: originalStarterReference.map((card) => card.base.id),
@@ -229,7 +230,7 @@ export const starterReference = [...originalStarterReference,
     neutralSkillSlots: fixtureSkillSlots,
     projectStats: projectMaterialStats,
   }) : []),
-];
+]);
 
 /** Community birth grades apply to NEW grants only; preserve old rank1 saves. */
 export const recruitBirthRanks: Record<string, number> = { "002": 2, "003": 3, "004": 1, "005": 2, "006": 1 };
