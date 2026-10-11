@@ -1,6 +1,6 @@
 /** Recovered native TYPE table, NOT equipment IDs or an invented reference.
  * ELF67886c initializes six libc++ strings at ELF21cf288 (24 bytes/TYPE).
- * CHAR_STR source keys and native lookup arguments are kept distinct below.
+ * GetEquipName/Desc first COPY the Hunter ID at CSRCardInfo+0.
  */
 const FIELDS = [
   { name: "WEAPON", description: "WEAPON_DESC" },
@@ -16,12 +16,14 @@ export function equipmentTextField(internalType: number, kind: EquipmentTextKind
   return FIELDS[internalType][kind];
 }
 
-/** Exact query passed to GetStrDBData(table4), not a resolved Hunter join.
+/** Exact query passed to GetStrDBData(table4), including the Hunter ID.
  * GetEquipName/Desc's selector is CSRCard.GetAwake at the popup caller.
- * No Hunter ref_id is inserted on this bounded path. */
-export function nativeEquipmentTextQuery(awake: number, internalType: number, kind: EquipmentTextKind): string {
+ * ELF86aac8/86abd4 call the string COPY constructor ELF6c7efc with this
+ * still in r1, retaining the ID before appending the optional Awake suffix. */
+export function nativeEquipmentTextQuery(refId: string, awake: number, internalType: number, kind: EquipmentTextKind): string {
+  if (typeof refId !== "string" || refId.length === 0 || /[|\0]/.test(refId)) throw new TypeError("Invalid Hunter text identity");
   if (!Number.isInteger(awake) || awake < 0 || awake > 0xffff_ffff) throw new TypeError("Invalid unsigned Awake selector");
-  return (awake === 0 ? "" : "_" + awake.toString(10)) + "|" + equipmentTextField(internalType, kind);
+  return refId + (awake === 0 ? "" : "_" + awake.toString(10)) + "|" + equipmentTextField(internalType, kind);
 }
 
 /** Proven locale table at ELF217c0e0 used by FindCharRefString. */
@@ -32,13 +34,12 @@ export function equipmentLocale(nativeLanguage: number): EquipmentLocale {
   return locales[nativeLanguage];
 }
 
-/** Exact offline CHAR_STR source lookup. This deliberately does not claim
- * nativeEquipmentTextQuery resolves through this Hunter-prefixed key. */
+/** Exact CHAR_STR source lookup. Missing locale/key stays missing; no guessed
+ * fallback, equipment-row-ID substitution or escaped line-break rewrite. */
 export function originalEquipmentText(table: Readonly<Record<string, unknown>>, refId: string,
-  internalType: number, kind: EquipmentTextKind, locale: EquipmentLocale): string | undefined {
-  if (!/^\d{3}$/.test(refId) || !["KO", "EN", "JA", "SC", "TC"].includes(locale))
-    throw new TypeError("Invalid original Hunter text identity/locale");
-  const row = table[refId + "|" + equipmentTextField(internalType, kind)];
+  internalType: number, kind: EquipmentTextKind, locale: EquipmentLocale, awake = 0): string | undefined {
+  if (!["KO", "EN", "JA", "SC", "TC"].includes(locale)) throw new TypeError("Invalid original locale");
+  const row = table[nativeEquipmentTextQuery(refId, awake, internalType, kind)];
   if (!row || typeof row !== "object" || Array.isArray(row)) return undefined;
   const text = (row as Record<string, unknown>)[locale];
   return typeof text === "string" ? text : undefined;

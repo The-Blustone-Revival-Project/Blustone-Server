@@ -16,9 +16,9 @@ Configured gameplay references require a separately selected, deliverable origin
 
 The [growth audit](hunter-equipment-growth-native-2026-10-11.md) closes native mode100 units and exact slot/rank growth. Rank1 subtracts one from level; growth uses the ten-level remainder except the exact rank-band cap, and only HP/ATK/DEF grow. The calculator is an explicit JS projection of that arithmetic, not bit-identical native decimal storage. An arbitrary global accessory curve cannot replace rank-qualified reference rows.
 
-The [localization audit](equipment-localization-native-audit-2026-10-11.md) closes six native field strings, five locale indices and the owned Awake selector. It also preserves an unresolved mismatch between the native pre-DB query and Hunter-prefixed CHAR_STR keys. The offline source lookup is not presented as a completed native name resolver. Supplying rows does not prove the popup's names or pixels render correctly.
+The [localization audit](equipment-localization-native-audit-2026-10-11.md) closes six native field strings, five locale indices, the owned Awake selector and the Hunter-ID copy. The native key is Hunter ID + optional Awake suffix + `|` + field, such as `004_1|WEAPON`. The earlier mismatch claim came from misidentifying a string-copy constructor as empty initialization; it is superseded by original-byte checks and actual Thumb copy execution. Supplying rows still does not prove the popup's names or pixels render correctly.
 
-Original id/type/rank/stat rows, legal rank/level limits, exact name-prefix binding, training materials/prices and authenticated upgrade receipts remain missing. This change does not publish zero-stat equipment, configure inferred accessory curves, add equipment to live Hunters or claim the full equipment system is revived.
+Original id/type/rank/stat rows, legal rank/level limits and training materials/prices remain missing. Upgrade request/receipt shapes are subsequently recovered in the upgrade audit, while source eligibility and Guild qualification still gate settlement. This change does not publish zero-stat equipment, configure inferred accessory curves, add equipment to live Hunters or claim the full equipment system is revived.
 
 ## Verification
 

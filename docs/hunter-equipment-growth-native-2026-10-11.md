@@ -59,5 +59,5 @@ settlement must keep exact decimal handling if integration eventually needs it.
 
 Next required data: original per-Hunter id/type/rank/stat rows and allowed
 rank/level ranges, equipment fees/materials and authenticated transaction
-receipts. The other agent owns the localized name resolver. Existing
+receipts. The other agent has closed the localized name resolver separately. Existing
 DERIVED-ESTIMATE accessory TSVs and zero fixtures do not satisfy these gates.

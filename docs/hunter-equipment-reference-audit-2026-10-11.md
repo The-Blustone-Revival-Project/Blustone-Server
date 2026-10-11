@@ -84,15 +84,18 @@ Ranger Suit/Tribe's Token. These strings are available without guessing.
 
 Native `CSRCardInfo.GetEquipName` G87aaac and GetEquipDesc G87abb8 call
 `CSRStaticData.FindCharRefString` Gf41bd8 using a global TYPE-indexed24-byte
-pair table rooted G21df288. Nonzero unsigned selector is converted with
-to_string and prefixed `_`; selector0 supplies an empty suffix. The global
-table is runtime-initialized; its exact string initializer and
-FindCharRefString's Hunter/locale/suffix composition remain unclosed in this
-bounded pass. Do not claim a GetCard equipment id equals a CHAR_STR name key.
+pair table rooted G21df288. Follow-up name lane closed the constructor:
+G87aac8/G87abd4 copy the original Hunter reference string (the initial
+empty-string interpretation was wrong). The exact lookup key is Hunter refId
+plus optional `_`+GetAwake plus `|`+TYPE field. The original initializer
+ELF67886c supplies WEAPON/WEAPON_DESC, ARMOR/ARMOR_DESC,
+ACCESSORY/ACCE_DESC. Ordinary001|WEAPON and004_1|WEAPON align with real
+original keys. This does not equate a GetCard equipment id to a CHAR_STR key.
 
 To make the real equipment popup safe, recover original per-Hunter
-equipment id/type/rank/direct-stat rows; close that localized-name resolver;
-and follow CalcStatByEquip's level formula. Existing original art needs no
+equipment id/type/rank/direct-stat rows and permitted level/rank ranges.
+Localized-name resolver and CalcStatByEquip formula are now closed by their
+separate pure helper lanes. Existing original art needs no
 fabricated equipment res_id. Unknown owned rank/level must not silently
 become1 or be granted merely because images exist. Earlier accessory
 screenshots contain only isolated observed values; new release estimates
