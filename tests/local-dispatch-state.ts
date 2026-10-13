@@ -18,6 +18,7 @@ try {
     game.recruited_cards=[cardInstance(1000101,"001"),cardInstance(1000102,"002")];game.next_card_inst_id=1000103;game.decks.push({type:2,list:[1000101,1000102,0,0,0]});}
   writeFileSync(file,JSON.stringify(saved));
   const policy={max_runs:3,gold_per_run:7,user_exp_per_run:11,card_exp_per_run:13,skip_price:1,entrust_second_per_cost:60,
+    items_per_run:[{ref_id:"AIRSHIP_TICKET",qty:2}],
     passes:{[actor.pvid]:{end_datetime:"1970-01-01 00:00:00",end_datetime_utc:0}}};
   const options={dispatchMode:"local-timed" as const,dispatchPolicy:policy},state=new ServerState("http://localhost",file,options);
   const body={...actor,stage_id:"n_01_01",deck_type:"2",cnt:"2",is_tuto:"0"};
@@ -33,6 +34,7 @@ try {
   const started=run("Entrust");assert.equal(started.result_code,1);assert.equal(game.ap,48);assert.equal(game.gold,10000);assert.equal(game.exp,0);
   const id=(state as any).dispatches.get(actor.pvid).active.snapshot.entrust_id;
   assert.ok(JSON.stringify(started.ret_data).includes('"entrust_id":'+id));assert.equal(started.ret_data.complete_second,150);
+  assert.deepEqual(JSON.parse(started.ret_data.list[0].item),["AIRSHIP_TICKET","AIRSHIP_TICKET"]);
   const pending=readFileSync(file);assert.equal(JSON.parse(pending.toString()).version,2,"Journal schema prevents an old version1 writer dropping commitments");
   assert.equal(run("Entrust").result_code,1);assert.deepEqual(readFileSync(file),pending,"Duplicate Start does not debit AP or allocate another job");
   assert.equal(run("Entrust",{cnt:true}).result_code,2001);assert.equal(run("Entrust",{is_tuto:null}).result_code,2001);
@@ -47,7 +49,17 @@ try {
   const hydrated=gameResponse(state,"/lobby/GetMissionInst",actor) as any;assert.equal(hydrated.ret_data.entrust.pass.end_datetime_utc,0);
   const activeBefore=structuredClone((state as any).dispatches.get(actor.pvid)),snapBefore=structuredClone(game),journal=(state as any).dispatches.get(actor.pvid);
   policy.gold_per_run=999;policy.passes[actor.pvid].end_datetime_utc=123;assert.equal((state as any).dispatches.get(actor.pvid).active.gold,7,"Policy snapshot detached");
+  policy.items_per_run[0].qty=99;assert.equal((state as any).dispatches.get(actor.pvid).active.items_per_run[0].qty,2);
   time+=300000;
+  const originalItems=game.items;
+  for(const ref_id of ["RP1","AIRSHIP_TICKET"]) {
+    game.items=[{inst_id:game.next_item_inst_id,ref_id,qty:0xffff_ffff,lock:0}];
+    const beforeRefusal=structuredClone(game);
+    assert.equal(run("EndEntrust",{entrust_id:id}).result_code,2001);
+    assert.deepEqual(game,beforeRefusal,"Allocator collision/item overflow cannot partially settle earlier Hunter EXP or wallet changes");
+    assert.deepEqual(readFileSync(file),pending);assert.equal((state as any).dispatches.get(actor.pvid),journal);
+  }
+  game.items=originalItems;
   mkdirSync(file+".tmp");assert.throws(()=>run("EndEntrust",{entrust_id:id}));rmdirSync(file+".tmp");
   assert.deepEqual(game,snapBefore);assert.equal((state as any).dispatches.get(actor.pvid),journal);assert.deepEqual((state as any).dispatches.get(actor.pvid),activeBefore);
   const blockedDestination=path.join(dir,"rename-blocked");mkdirSync(blockedDestination);(state as any).stateFile=blockedDestination;
@@ -58,13 +70,16 @@ try {
   assert.equal(collected.result_code,1);const result=parseEntrustEndResultJson(JSON.stringify(collected.ret_data.result));
   assert.deepEqual(result.gold,{prev:10000,cur:10014});assert.deepEqual([result.user_exp.prev,result.user_exp.cur],[0,22]);
   assert.equal(result.user_exp.ap.cur,49,"Existing lazy AP recovery is included coherently at collection");
-  assert.equal(result.card_exp.length,2);assert.ok(result.card_exp.every(row=>row.prev===0&&row.cur===26));assert.deepEqual(result.item,[]);
+  assert.equal(result.card_exp.length,2);assert.ok(result.card_exp.every(row=>row.prev===0&&row.cur===26));assert.equal(result.item.length,1);
+  assert.equal(result.item[0].ref_id,"AIRSHIP_TICKET");assert.equal(result.item[0].added,4,"Restart collects immutable pending award, not changed policy");
   assert.equal(collected.ret_data.user,null);const endBytes=readFileSync(file);
   const restored=(restart as any).gameByPvid.get(actor.pvid);restored.gold+=100;restored.recruited_cards[0].exp+=5;(restart as any).persist();const afterOther=readFileSync(file);
   const replay=gameResponse(restart,"/mission/EndEntrust",{...actor,entrust_id:id}) as any;
   assert.deepEqual(replay.ret_data.result.gold,{prev:10114,cur:10114});assert.deepEqual(replay.ret_data.result.item,[]);
   assert.deepEqual(replay.ret_data.result.card_exp,[{inst_id:1000101,prev:31,cur:31},{inst_id:1000102,prev:26,cur:26}],"Lost End reply restores current Hunter EXP without duplicate growth/rewind");
   assert.deepEqual(readFileSync(file),afterOther,"Replay repairs current snapshots without reward duplication/rewind/write");
+  const inventory=(gameResponse(restart,"/lobby/GetItemInven",actor) as any).ret_data.item;
+  assert.equal(inventory.find((row:any)=>String(row.inst_id)===result.item[0].inst_id).qty,4,"Absolute inventory refresh repairs lost additive reply");
   const latest=JSON.parse(afterOther.toString());assert.deepEqual(latest.gameStates[1],saved.gameStates[1],"Peer gameplay unchanged");
   assert.deepEqual(latest.gameStates[0][1].starter_cards,saved.gameStates[0][1].starter_cards);assert.deepEqual(latest.gameStates[0][1].stage_achievements,saved.gameStates[0][1].stage_achievements);
   const cap=trainingCurve(restored.recruited_cards[1])!.maxExp;restored.recruited_cards[0].exp=cap+100;restored.recruited_cards[1].exp=cap-1;

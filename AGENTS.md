@@ -1,4 +1,27 @@
-## Latest continuation: persistent local Expedition dispatch (2026-10-14)
+## Latest continuation: configured dispatch capsule awards (2026-10-14)
+
+Optional items_per_run admits only AIRSHIP_TICKET capsules (1..256/run);
+default omission/[] still grants none. Original dispatch drops are unknown:
+supplied rates, bounded registry, stack selection and allocator are LOCAL.
+Start/Refresh use JSON strings of repeated ref IDs, End emits actual full64
+inst/ref/added deltas. Captured award metadata survives restart/config changes.
+Collection joins lowest-ID unlocked matching stack, preserves locked stacks,
+requires new IDs above all existing IDs and refuses overflow/collision/invalid
+inventory before committing the cloned game and journal atomically.
+
+End replay emits NO item delta. Lost item reply requires separate absolute
+/lobby/GetItemInven read; native SetItem upserts rows, never clears unlisted IDs.
+No automatic End→inventory refresh is proved, no generic user.item repair.
+Original read/add source is documented in
+docs/expedition-item-award-replay-boundary-native-2026-10-14.md.
+Tests cover encrypted HTTP receipt→replay→absolute refresh, persistence failures,
+restart/immutable awards, lock/allocator/overflow and policy getter refusal.
+Same two agents reviewed; live policy/state/APK untouched. Native pixels pending.
+Full146 test programs and TypeScript build passed; independent focused reviews
+passed. Local code only, no push/release or live mode activation this checkpoint.
+Goal ACTIVE; Escape input hold and all preservation/scope constraints continue.
+
+## Historical continuation: persistent local Expedition dispatch (2026-10-14)
 
 Same two agents reused for source, independent review and regression probes.
 Full145 test programs/build and both final reviews passed. Real encrypted HTTP

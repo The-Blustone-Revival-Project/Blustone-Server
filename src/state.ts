@@ -12,7 +12,7 @@ import {planLocalGuildUpdate} from "./guild-local-update.js";
 import {planLocalGuildDonate} from "./guild-local-donate.js";
 import {nativeGuildSaleValue} from "./equipment-fee.js";
 import {parseExpeditionEntrustRequest} from "./expedition-entrust.js";
-import {dispatchPolicy,normalizeDispatch,planDispatchStart,dispatchId,dispatchStartWire,dispatchEndResult,dispatchEndWire,
+import {dispatchPolicy,normalizeDispatch,planDispatchStart,dispatchId,dispatchStartWire,dispatchEndResult,dispatchEndWire,applyDispatchItems,
   type DispatchPolicy,type DispatchJournal} from "./local-dispatch.js";
 import {guildWalletReceipt} from "./guild-wallet-receipt.js";
 import {guildMembershipPolicy,type GuildMembershipPolicy} from "./guild-membership-policy.js";
@@ -2482,7 +2482,8 @@ export class ServerState {
         const prev=Number(card.exp),cur=Math.max(prev,Math.min(curve.maxExp,prev+job.card_exp*job.snapshot.cnt));if(cur>0x7fff_ffff)throw new TypeError("Dispatch Hunter EXP exceeds safe setter range");
         card.exp=cur;return {inst_id:String(id),prev,cur};
       });
-      result=dispatchEndResult(next,rows,next.gold+job.gold*job.snapshot.cnt,next.exp+job.user_exp*job.snapshot.cnt);
+      const items=applyDispatchItems(next,job);
+      result=dispatchEndResult(next,rows,next.gold+job.gold*job.snapshot.cnt,next.exp+job.user_exp*job.snapshot.cnt,items);
       next.gold=result.gold.cur;next.exp=result.user_exp.cur;
       const data={user:null,result:dispatchEndWire(result)};
       this.commitDispatch(account.pvid,game,next,{active:null,last_id:id,last_deck:[...job.deck]},prior);return this.envelope(data);

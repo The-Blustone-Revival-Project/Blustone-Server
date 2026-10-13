@@ -13,6 +13,7 @@ const saved=JSON.parse(readFileSync(file,"utf8")),game=saved.gameStates[0][1];
 game.decks.push({type:2,list:[game.starter_cards[0].inst_id,0,0,0,0]});
 game.stage_achievements={n_01_01:[0],n_01_05:[1]};game.stage_stars={n_01_01:1,n_01_05:1};writeFileSync(file,JSON.stringify(saved));
 const options={baseUrl:"http://127.0.0.1",stateFile:file,dispatchMode:"local-timed" as const,dispatchPolicy:{max_runs:2,gold_per_run:3,user_exp_per_run:5,card_exp_per_run:7,
+  items_per_run:[{ref_id:"AIRSHIP_TICKET",qty:3}],
   skip_price:1,entrust_second_per_cost:60,passes:{[auth.pvid]:{end_datetime:"1970-01-01 00:00:00",end_datetime_utc:0}}}};
 const ctx=createApp(options),server=createServer(ctx.app);
 try {
@@ -41,14 +42,23 @@ try {
   assert.equal((await secure("/lobby/Enter",{})).result_code,1);
   const start=await secure("/mission/Entrust",{stage_id:"n_01_01",deck_type:"2",cnt:"1",is_tuto:"0"});
   assert.equal(start.result_code,1);assert.equal(start.ret_data.user.ap,49);const id=start.ret_data.entrust_id;assert.match(id,/^[1-9]\d*$/);
+  assert.deepEqual(JSON.parse(start.ret_data.list[0].item),Array(3).fill("AIRSHIP_TICKET"));
   const hydration=await secure("/lobby/GetMissionInst",{});assert.equal(hydration.ret_data.entrust.entrust_id,id);assert.equal(hydration.ret_data.entrust.pass.end_datetime_utc,0);
   assert.equal((await secure("/mission/RefreshEntrust",{entrust_id:id})).ret_data.list.length,1);
   assert.equal((await secure("/mission/EndEntrust",{entrust_id:id})).result_code,2001);
   time+=150000;
   const end=await secure("/mission/EndEntrust",{entrust_id:id});assert.equal(end.result_code,1);assert.equal(end.ret_data.user,null);
   assert.deepEqual(end.ret_data.result.gold,{prev:10000,cur:10003});assert.equal(end.ret_data.result.user_exp.ap.cur,49);assert.equal(end.ret_data.result.card_exp[0].cur,7);
+  assert.equal(end.ret_data.result.item.length,1);const award=end.ret_data.result.item[0];assert.equal(award.added,3);assert.equal(award.ref_id,"AIRSHIP_TICKET");
   const bytes=readFileSync(file),replay=await secure("/mission/EndEntrust",{entrust_id:id});assert.deepEqual(replay.ret_data.result.gold,{prev:10003,cur:10003});
   assert.deepEqual(replay.ret_data.result.card_exp[0],{inst_id:game.starter_cards[0].inst_id,prev:7,cur:7});assert.deepEqual(readFileSync(file),bytes);
+  assert.deepEqual(replay.ret_data.result.item,[],"End retry never repeats an additive item receipt");
+  const inventory=await secure("/lobby/GetItemInven",{});const absolute=inventory.ret_data.item.find((row:any)=>row.inst_id===award.inst_id);
+  assert.equal(absolute.qty,3);assert.equal(absolute.ref_id,"AIRSHIP_TICKET");
+  const lostReplyCache=new Map<number,any>();
+  for(const row of inventory.ret_data.item)lostReplyCache.set(row.inst_id,{...row});
+  for(const row of inventory.ret_data.item)lostReplyCache.set(row.inst_id,{...row});
+  assert.equal(lostReplyCache.get(award.inst_id).qty,3,"Original SetItem upsert model restores a missing stack without double granting on repeated refresh");
   const restart=new ServerState(base,file,{dispatchMode:"local-timed",dispatchPolicy:options.dispatchPolicy});
   assert.equal((restart as any).dispatches.get(auth.pvid).last_id,id);assert.equal((restart as any).gameByPvid.get(auth.pvid).gold,10003);
 }finally{

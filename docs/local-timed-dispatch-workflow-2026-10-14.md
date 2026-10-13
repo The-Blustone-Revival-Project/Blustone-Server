@@ -8,6 +8,12 @@ profile, private state, input or instrumented APK was changed by this checkpoint
 
 Policy fields are max_runs, gold_per_run, user_exp_per_run, card_exp_per_run,
 skip_price, entrust_second_per_cost and passes. Every value must be supplied.
+Optional items_per_run is an explicit array such as
+`[{"ref_id":"AIRSHIP_TICKET","qty":2}]`; omission or [] grants no items.
+Only the existing ordinary capsule loop is admitted, with1..256 per run and
+one unique reference. These limits and drops are LOCAL policy. Display-only,
+navigation-only, fish and unreconstructed trace awards are refused. No
+original dispatch drop table or original probability has been recovered.
 passes is an owner-PVID map of explicit existing entitlement snapshots:
 end_datetime in fixed calendar format plus signed32 end_datetime_utc override.
 The server validates and preserves those values; it does not infer rights from
@@ -56,14 +62,20 @@ Hunter EXP growth capped by the already published local curve. Existing
 over-cap EXP is preserved, never reduced. Unsafe signed Hunter setter values
 or wallet overflow refuse before mutation. Max AP is preserved; ordinary lazy
 resource recovery remains coherent. No new stars, stage clears, rank/skills,
-achievement, pass purchase, item drops or inferred level-up rewards are granted.
-The current supported reward policy is gold and EXP; numerical values remain
+achievement, pass purchase or inferred level-up rewards are granted.
+The supported reward policy is gold, EXP and explicitly configured capsules; numerical values remain
 authored data, not recovered original dispatch balances.
 
 The End receipt is prepared before committing: generic user:null preserves
 Manda, while result carries absolute gold/EXP pairs, correctly nested
 user_exp.max_ap/ap (effective32 charge time), full64 Hunter EXP identities and
-empty actual-item deltas. Game changes and journal collection commit together;
+actual full64 instance/ref/added item deltas. Start/Refresh preview item remains
+a JSON string of repeated reference IDs. Capsule collection joins the lowest-ID
+unlocked matching stack; locked stacks are preserved. New stacks require a
+positive safe allocator strictly above all existing IDs, with a safe successor.
+Duplicate IDs, invalid quantities/locks, stale allocators and uint32 overflow
+refuse before any live mutation. Stack choice and allocator admission are
+declared local policy. Game changes and journal collection commit together;
 write/rename failure restores both original game and journal. Restore validates
 snapshot schedule/rewards/pass and captured ownership and refuses corrupted
 journals without rewriting them. Disabling the mode does not erase an existing
@@ -77,7 +89,14 @@ version changes only when a journal is actually persisted, not on mode selection
 The latest collected ID and participant list are retained. Retrying that End
 with no newer pending job rebases current gold/user EXP/AP and remaining owned
 participants' current EXP to prev==cur snapshots. It adds no award and cannot
-rewind later progress. This repairs a lost End reply, including Hunter setters.
+rewind later progress. This repairs lost gold/EXP/AP receipts, including Hunter setters.
+Item receipts are additive: End retries deliberately send an empty item array.
+After a lost first End reply, separately request `/lobby/GetItemInven` to restore
+absolute stack quantities. Original ParseUserItemInven/SetItem upserts listed
+rows; it does not clear unlisted cached IDs. Repeated absolute reads cannot
+double-grant. Generic user.item is ignored and SyncItem is additive, so neither
+is a repair alternative. Automatic native End→inventory refresh has NOT been
+proved; this recovery requires the separate inventory read/reconnect workflow.
 Unknown/older IDs or an old ID during another pending job refuse. Legitimate
 resource recovery can persist on delayed retries; no new job/charge/reward does.
 
@@ -92,7 +111,8 @@ current-participant replay repair, cap/overflow, immutable policy, corrupt-save
 preservation and peer/roster/star isolation. Independent imported-job sale
 probe verifies captured Hunters outside all current decks cannot be consumed.
 The real encrypted HTTP test verifies P384/HMAC/AES authentication through the
-whole lifecycle, numeric64 identity, AP/EXP/gold receipts, replay and restart;
+whole lifecycle, numeric64 identity, AP/EXP/gold/item receipts, empty-delta replay,
+separate absolute inventory recovery and restart;
 successful responses must remain encrypted. Native UI validation is pending.
 
 Source: expedition-entrust-hunter-admission-native-2026-10-13.md,
