@@ -1,3 +1,31 @@
+## Latest continuation: Chat bound account/key bridge and native JSON bodies (2026-10-13)
+
+Same two agents reused. Full132 test programs/build passed. Afterreviewarray
+fix, focusedregressions/build/independentre-review passed; no remainingblocker.
+NativeConnect upgrade X-PV-AccessToken isHTTPexchange
+token. URLs new_chatTYPE0/guild_chatTYPE1joined3nonzero/chat_wholeTYPE2, not
+one genericGuildURL. Guildreadycallback onlylocalwelcome/state3; NOenterpacket.
+PublicEnterChannel TYPE0/command20000 payloadchannel1..9999. Actualresponse
+strictaccessToken/command/tag32/payload/error.code+message; Chaterror0success,
+notHTTPresult1. Guildreceivedpayloadwho64/nickname/message/type.
+
+State.chatCryptoFor readonlyLOCALadmission requirespreboundexistingkey/account,
+returnsfrozenowner/server/crypto callbacks; recheckskey/binding/accountserver
+peroperation. No OTP/PVIDfallback/roominference/accountcreation/persist. Context
+cannotretargetviaheadersmutation; peerkeys/revokedaccounts/restartkeys refuse.
+Actualnativeordering stillunverified; noSocketURL/listener advertisement.
+
+src/chat-message.ts purebodydecoder/encoder preservesexact64integer IDs,
+UTCdoubletoken, canonicalresponse32 (LOCALwidealiasrefusal), strictUTF8 and
+detachedJSON inclrawnumeric/finitefloattokens. No tag/replay/tokenallocation,
+room/readiness/messageproducer inferred. RawJSONstring/nonfinitebypass fixed;
+arrayprototype/inherited-data issue audited andregressionchecked beforecommit.
+Workflow docs/chat-session-json-workflow-2026-10-13.md; sourceconnection/response
+notes retained. No realmessage/contactsent, onlydisposable fixturepackets.
+
+No liveinputs/listener/profile/APK activation. Escapehold/DataDumpreadonly/
+original-private preservation/collectorDockerInferenceoff unchanged. GoalACTIVE.
+
 ## Latest continuation: exact encrypted Chat framing and GvG reference decoder (2026-10-13)
 
 Same two agents reused. Full130 test programs/build and both reviews passed.

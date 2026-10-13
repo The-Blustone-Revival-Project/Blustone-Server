@@ -3188,6 +3188,27 @@ export class ServerState {
     return Buffer.concat([decipher.update(body), decipher.final()]);
   }
 
+  /** Native Chat upgrades use X-PV-AccessToken from the HTTP exchange. Only an
+   * already authenticated/bound account may obtain its crypto context. This is
+   * read-only local admission; it creates no key, account, room or Guild claim.
+   * The caller must perform room/membership authorization separately. */
+  chatCryptoFor(headers:Record<string,string>) {
+    const accessToken=headers["x-pv-accesstoken"];
+    const pvid=accessToken?this.sessionPvidByAccessToken.get(accessToken):undefined;
+    const account=pvid?this.accountsByPvid.get(pvid):undefined;
+    if(!accessToken || !this.sharedSecretsByAccessToken.has(accessToken) || !account)
+      throw new NativeAuthError(2001,"Chat requires an existing bound transport account");
+    const owner=account.pvid,serverId=account.serverId;
+    const verify=()=>{
+      if(!this.sharedSecretsByAccessToken.has(accessToken) || this.sessionPvidByAccessToken.get(accessToken)!==owner ||
+        this.accountsByPvid.get(owner)?.serverId!==serverId)
+        throw new NativeAuthError(2001,"Chat transport account is no longer established");
+    };
+    return Object.freeze({pvid:owner,serverId,
+      encrypt:(body:Buffer)=>{verify();return this.encryptSecureBody(accessToken,body).body;},
+      decrypt:(body:Buffer)=>{verify();return this.decryptSecureBody(accessToken,body);}});
+  }
+
   encryptSecureBody(accessToken: string, body: Buffer): { body: Buffer; signature: string } {
     const derivedKey = this.sharedSecretsByAccessToken.get(accessToken);
     if (!derivedKey) throw new Error("unknown shared-secret access token");
