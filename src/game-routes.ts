@@ -242,6 +242,7 @@ function applyWaveRefIdMode<T>(record: T): T {
  * evidence note before it replaces the generic fallback.
  */
 export function gameResponse(state: ServerState, route: string, payload: Record<string, unknown>, headers: Record<string, string> = {}) {
+  if(state.dispatchBlocks(route,payload,headers))return state.failure(2001,"Local dispatch preserves Hunter/combat commitments until collection");
   // Persistent local-game routes.
   if (route === "/lobby/Enter") return state.lobbyEnter(payload, headers);
   if (route === "/lobby/GetItemInven") return state.itemInventory(payload, headers);
@@ -274,7 +275,8 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     }
     return state.envelope(null,{result_code:2001,code:2001});
   }
-  if(["/mission/Entrust","/mission/RefreshEntrust","/mission/EndEntrust","/mission/EntrustByIAP"].includes(route)) {
+  if(["/mission/Entrust","/mission/RefreshEntrust","/mission/EndEntrust"].includes(route))return state.dispatchAction(route,payload,headers);
+  if(route==="/mission/EntrustByIAP") {
     state.accountFor(payload,headers);
     // ReqAutoCombatCB b40088 checks application result1 before parsing the
     // timed-job body. A generic success without entrust_id/list is unsafe.

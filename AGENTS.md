@@ -1,3 +1,46 @@
+## Latest continuation: persistent local Expedition dispatch (2026-10-14)
+
+Same two agents reused for source, independent review and regression probes.
+Full145 test programs/build and both final reviews passed. Real encrypted HTTP
+test covers P384/HMAC/AES login→Start→mission hydration→Refresh→elapsed End→
+replay/restart, with success required encrypted. No native UI claim or activation.
+
+BLUSTONE_DISPATCH_MODE=local-timed defaults OFF and requires explicit
+BLUSTONE_DISPATCH_POLICY_JSON awards/limits/quote + per-owner pass snapshots.
+No guessed pass rights or original numerical rewards. Source-backed any-star
+gates selected stage + n_01_05 (TU19 is hardcoded stage, NOT tutorial flag),
+owned deck2 and150seconds/run/Guild intrust duration. Current VIP groups empty;
+native missing UNLOCK_ENTRUST group returns−1, not deny. Run limit1..100,
+one pending ordinary job, idle admission/noitems/HTTP mutation+combat freeze
+are declared LOCAL policy. Paid Skip/IAP remain safely refused.
+
+AP-funded full64 jobs persist captured deck/pass/rates/time rows. Start retries
+reuse current job without another debit; Refresh is owned preview only. End
+uses actual scheduled end, NEVER native quirky ClearCount. Configured gold/
+userEXP and current HunterEXP growth settle atomically; cap only new growth,
+never lower existing over-cap EXP. Correct nested AP receipts, user:null/Manda
+preservation, no fake stars/ranks/skills/achievements/items/pass purchases.
+Captured IDs protect direct inventory-consumption planners as well as HTTP
+freeze; imported job outside current decks cannot be sold. Actor/peer isolated.
+
+Lost End replay retains last_id/last_deck and repairs CURRENT remaining owned
+participant EXP + wallet/AP with zero deltas, without award duplication or
+rewinding later activity. A newer pending job blocks old-ID replay. Lazy energy
+recovery may persist on delayed retries. Actual temp-write/rename failures
+rollback whole game/journal plus original references/durable bytes. Restore
+validates schedules/pass/ownership and refuses corruption without rewrite.
+
+Journal-bearing state is schema2 so old schema1 writers refuse rather than
+drop commitments; ordinary no-journal saves remain1. Disabling mode preserves
+journals/protection/hydration. MissionInst ret_data.entrust publishes complete
+Start fields + explicit pass; no wrong user wrapper or null pass. No main flags,
+profile/state/APK changed. See docs/local-timed-dispatch-workflow-2026-10-14.md.
+
+Escape input hold, DataDump read-only, private/original preservation and
+collector/Docker/inference hold persist. Goal ACTIVE. Native dispatch widgets/
+timer/collection validation, original reward/pass data and paid flows remain
+pending; continue other game areas while native inputs remain held.
+
 ## Latest continuation: exact End receipt and clock/hydration semantics (2026-10-13)
 
 Same two agents reused for original source and independent code reviews.

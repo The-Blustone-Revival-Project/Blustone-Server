@@ -44,9 +44,10 @@ const coreRoutes = new Set([
   "/pv_account/register_push_token",
 ]);
 
-export function createApp(options: { baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory" } = {}): AppContext {
+export function createApp(options: { baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown } = {}): AppContext {
   const baseUrl = options.baseUrl ?? "http://127.0.0.1:8080";
-  const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds,guildChatMode:options.guildChatMode,publicChatMode:options.publicChatMode });
+  const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds,guildChatMode:options.guildChatMode,publicChatMode:options.publicChatMode,
+    ...(Object.hasOwn(options,"dispatchMode")?{dispatchMode:options.dispatchMode}:{}),...(Object.hasOwn(options,"dispatchPolicy")?{dispatchPolicy:options.dispatchPolicy}:{}) });
   const endpoints = discoverEndpoints(options.catalogPath ?? defaultCatalogPath());
   const openapi = buildOpenApi(endpoints, baseUrl);
   let runtimeReslistHeader: string | undefined;

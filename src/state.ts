@@ -11,6 +11,9 @@ import {planLocalGuildFound} from "./guild-local-found.js";
 import {planLocalGuildUpdate} from "./guild-local-update.js";
 import {planLocalGuildDonate} from "./guild-local-donate.js";
 import {nativeGuildSaleValue} from "./equipment-fee.js";
+import {parseExpeditionEntrustRequest} from "./expedition-entrust.js";
+import {dispatchPolicy,normalizeDispatch,planDispatchStart,dispatchId,dispatchStartWire,dispatchEndResult,dispatchEndWire,
+  type DispatchPolicy,type DispatchJournal} from "./local-dispatch.js";
 import {guildWalletReceipt} from "./guild-wallet-receipt.js";
 import {guildMembershipPolicy,type GuildMembershipPolicy} from "./guild-membership-policy.js";
 import {guildApplications,guildPendingLobby,guildApplicantRows,type GuildApplication} from "./guild-applications.js";
@@ -546,6 +549,9 @@ export class ServerState {
   private readonly fishingCatalogue?: FishingCatalogue;
   private readonly guildChatMode:"disabled"|"local-memory";
   private readonly publicChatMode:"disabled"|"local-memory";
+  private readonly dispatchMode:"disabled"|"local-timed";
+  private readonly dispatchPolicy?:DispatchPolicy;
+  private dispatches=new Map<number,DispatchJournal>();
   private readonly guildPrices: readonly GuildActionPrice[];
   private readonly guildCreationMode:"disabled"|"local-gold";
   private readonly guildUpdateMode:"disabled"|"local-manda-free-first";
@@ -571,8 +577,15 @@ export class ServerState {
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
-      fishingItems?:unknown;fishingCatalogue?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory" } = {}) {
+      fishingItems?:unknown;fishingCatalogue?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
+      dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    const dispatchMode=Object.hasOwn(options,"dispatchMode")?options.dispatchMode:process.env.BLUSTONE_DISPATCH_MODE??"disabled";
+    if(dispatchMode!=="disabled"&&dispatchMode!=="local-timed")throw new TypeError("Unknown dispatch mode");
+    this.dispatchMode=dispatchMode;
+    const policy=Object.hasOwn(options,"dispatchPolicy")?options.dispatchPolicy:process.env.BLUSTONE_DISPATCH_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_DISPATCH_POLICY_JSON);
+    if(policy!==undefined)this.dispatchPolicy=dispatchPolicy(policy);
+    if(dispatchMode!=="disabled"&&!this.dispatchPolicy)throw new TypeError("Local timed dispatch requires explicit reward/pass policy");
     const chatMode=options.guildChatMode??process.env.BLUSTONE_GUILD_CHAT_MODE??"disabled";
     if(chatMode!=="disabled"&&chatMode!=="local-memory") throw new TypeError("Unknown Guild Chat mode");
     this.guildChatMode=chatMode;
@@ -688,7 +701,8 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || saved.version !== 1 || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)) {
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+      saved.version===2&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
     const ids = new Set<number>();
@@ -753,6 +767,15 @@ export class ServerState {
         }
       }
     }
+    if(saved.dispatches!==undefined) {
+      if(!Array.isArray(saved.dispatches))throw new TypeError("Malformed dispatch journal collection");
+      for(const row of saved.dispatches) {
+        if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||this.dispatches.has(row[0]))throw new TypeError("Invalid dispatch journal owner");
+        const journal=normalizeDispatch(row[1]),game=this.gameByPvid.get(row[0]);
+        if(!game||journal.active&&journal.active.deck.some(id=>![...game.starter_cards,...game.recruited_cards].some(card=>card.inst_id===id)))throw new TypeError("Dispatch owned Hunter commitment unavailable");
+        this.dispatches.set(row[0],journal);
+      }
+    }
     for (const row of saved.transportKeys) {
       if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== "string" || typeof row[1] !== "string") throw new Error("Malformed transport state");
       const key = Buffer.from(row[1], "base64");
@@ -777,7 +800,9 @@ export class ServerState {
   private persist() {
     if (!this.stateFile) return;
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
-    const snapshot = { version: 1, selectedServer: this.selectedServer,
+    // Older version1 writers must refuse a journal they cannot preserve.
+    const snapshot = { version: this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(this.dispatches.size?{dispatches:[...this.dispatches]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -2038,7 +2063,7 @@ export class ServerState {
         new Set(sources).size !== sources.length || sources.includes(targetId)) {
       return refuse("invalid training sources");
     }
-    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game),
+    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game), ...(this.dispatches.get(account.pvid)?.active?.deck??[]),
       ...game.decks.filter((deck) => [1, 2, 4, 5].includes(deck.type)).flatMap((deck) => deck.list),
       ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
       ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
@@ -2107,7 +2132,7 @@ export class ServerState {
     // Native synthetic credited entries have IDs below capacity and skip price.
     // Do not renumber legacy cards or accept a price-disagreeing real material.
     if (sources.some((id) => id < capacity)) return refuse("legacy source ID collides with native credited-material placeholders");
-    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game),
+    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game), ...(this.dispatches.get(account.pvid)?.active?.deck??[]),
       ...game.decks.filter((deck) => [1, 2, 4, 5].includes(deck.type)).flatMap((deck) => deck.list),
       ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
       ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
@@ -2292,7 +2317,7 @@ export class ServerState {
     // Unrepresented historical Mirage commitments must not become disposable.
     if (inventory.some((card) => card.mirage_remain_hp !== undefined && Number(card.mirage_remain_hp) !== 1000))
       return this.failure(2001, "Carried Mirage hunter commitments are not reconstructed");
-    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game), ...game.decks.flatMap((deck) => deck.list),
+    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game), ...(this.dispatches.get(account.pvid)?.active?.deck??[]), ...game.decks.flatMap((deck) => deck.list),
       ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
       ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
     const plan = planHunterSale(inventory, payload, { gold: game.gold, items: game.items,
@@ -2330,7 +2355,7 @@ export class ServerState {
     // older evidence rather than treat an unrepresented sortie as disposable.
     if (inventory.some((card) => card.mirage_remain_hp !== undefined && Number(card.mirage_remain_hp) !== 1000))
       return this.failure(2001, "Carried Mirage hunter commitments are not reconstructed");
-    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game), ...game.decks.flatMap((deck) => deck.list),
+    const protectedIds = new Set([game.leader_inst_id, ...this.gemProtectedCardIds(game), ...(this.dispatches.get(account.pvid)?.active?.deck??[]), ...game.decks.flatMap((deck) => deck.list),
       ...(game.active_battle?.state === "active" ? game.active_battle.deck_inst_ids : []),
       ...(game.arena.active?.deck_inst_ids ?? []), ...(game.search.active?.deck_inst_ids ?? [])]);
     const plan = planGroupRankUp(inventory, payload, { gold: game.gold, protectedIds,
@@ -2367,6 +2392,9 @@ export class ServerState {
   missionInventory(payload: Record<string, unknown>, headers: Record<string, string>) {
     const account = this.accountFor(payload, headers);
     const game = this.gameFor(account);
+    const dispatch=this.dispatches.get(account.pvid)?.active;
+    if(dispatch)return this.envelope({area_achieve:this.areaRewardClaims(game),area_progress:this.areaProgressSnapshot(game),stage:stageAchieveList(game),
+      mission:game.missions,missions:game.missions,entrust:{...dispatchStartWire(dispatch.snapshot),pass:{...dispatch.pass}}});
     if (process.env.BLUSTONE_SKIP_MISSION_TUTORIAL === "1") {
       // The stage map's markers and the progress counter are driven from here.
       // An experiment that published these catalogs as JSON objects (on the
@@ -2389,6 +2417,81 @@ export class ServerState {
       });
     }
     return this.envelope(game.missions);
+  }
+
+  dispatchBlocks(route:string,payload:Record<string,unknown>,headers:Record<string,string>):boolean {
+    if(!this.dispatches.size)return false;
+    if(!(/^\/(gym|card_handler|gem)\//.test(route)||["/world/SetDeck","/shop/SellCard","/mission/Start","/arena/BattleStart","/explore/Begin"].includes(route)))return false;
+    const actor=this.accountFor(payload,headers);
+    return !!this.dispatches.get(actor.pvid)?.active;
+  }
+
+  dispatchAction(route:string,payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid);
+    if(this.dispatchMode!=="local-timed"||!game)return this.failure(2001,"Local timed dispatch is unavailable");
+    const prior=this.dispatches.get(account.pvid),journal=prior??{active:null,last_id:"0",last_deck:[]},now=Math.floor(Date.now()/1000);
+    if(route==="/mission/Entrust") {
+      if(journal.active) {
+        const job=journal.active.snapshot;
+        let request;try{request=parseExpeditionEntrustRequest(payload);}catch{return this.failure(2001,"Invalid duplicate dispatch request");}
+        if(request.stage_id!==job.stage_id||request.deck_type!==2||request.cnt!==job.cnt||request.is_tuto!==0)return this.failure(2001,"Another dispatch is pending");
+        const next=structuredClone(game),recovered=regenerateResources(next);
+        const data={...dispatchStartWire(job),user:{ap:next.ap,ap_charge_time:resourceChargeTime(next,"ap")}};
+        if(recovered)this.commitDispatch(account.pvid,game,next,journal,prior);
+        return this.envelope(data);
+      }
+      const stage=starterStages.stage.find(row=>row.id===payload.stage_id&&/^n_/.test(row.id));
+      if(!stage)return this.failure(2001,"Dispatch stage is not published ordinary content");
+      const next=structuredClone(game);regenerateResources(next);
+      let job;
+      try {
+        const guildId=this.guildPersonal(account.pvid).my_guild.guild_id;
+        const guild=this.guilds?.find(row=>row.id===guildId);
+        if(guildId&&(!guild||!this.guildLevels))throw new TypeError("Dispatch Guild duration requires complete supplied benefits");
+        const benefit=guildId?selectedGuildBenefit(this.guildLevels!,guild!.contribution,"intrust"):null;
+        let id:string;do{id=crypto.randomBytes(8).readBigUInt64LE().toString();}while(id==="0"||id===journal.last_id);
+        job=planDispatchStart(next,account.pvid,this.dispatchPolicy!,payload,id,now,stage,benefit);
+        if(next.ap>=next.max_ap)next.ap_updated_at=Date.now();next.ap-=job.snapshot.cnt*stage.ap_cost;
+        const data={...dispatchStartWire(job.snapshot),user:{ap:next.ap,ap_charge_time:resourceChargeTime(next,"ap")}};
+        this.commitDispatch(account.pvid,game,next,{active:job,last_id:journal.last_id,last_deck:journal.last_deck},prior);return this.envelope(data);
+      }catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+    }
+    let id:string;try{id=dispatchId(payload.entrust_id);}catch(error){return this.failure(2001,"Invalid dispatch identity");}
+    if(route==="/mission/RefreshEntrust") {
+      if(!journal.active||journal.active.snapshot.entrust_id!==id)return this.failure(2001,"Dispatch identity is not owned");
+      const wire=dispatchStartWire(journal.active.snapshot);
+      return this.envelope({skip_price:wire.skip_price,entrust_second_per_cost:wire.entrust_second_per_cost,list:wire.list});
+    }
+    if(route!=="/mission/EndEntrust")return this.failure(2001,"Paid dispatch operation is not reconstructed");
+    if(!journal.active) {
+      if(journal.last_id!==id||id==="0")return this.failure(2001,"Dispatch identity is not collectable");
+      const next=structuredClone(game),recovered=regenerateResources(next),owned=[...next.starter_cards,...next.recruited_cards];
+      const rows=journal.last_deck.flatMap(id=>{const card=owned.find(row=>row.inst_id===id);return card?[{inst_id:String(id),prev:Number(card.exp),cur:Number(card.exp)}]:[];});
+      if(rows.some(row=>row.cur>0x7fff_ffff))return this.failure(2001,"Dispatch replay Hunter EXP exceeds safe setter range");
+      const data={user:null,result:dispatchEndWire(dispatchEndResult(next,rows))};
+      if(recovered)this.commitDispatch(account.pvid,game,next,journal,prior);
+      return this.envelope(data);
+    }
+    const job=journal.active;
+    if(job.snapshot.entrust_id!==id||BigInt(job.snapshot.list.at(-1)!.end_utc)>BigInt(now))return this.failure(2001,"Dispatch is not complete or not owned");
+    const next=structuredClone(game);regenerateResources(next);let result;
+    try {
+      const rows=job.deck.map(id=>{
+        const card=[...next.starter_cards,...next.recruited_cards].find(row=>row.inst_id===id);if(!card)throw new TypeError("Dispatch Hunter ownership changed");
+        const curve=trainingCurve(card);if(!curve)throw new TypeError("Dispatch Hunter curve unavailable");
+        const prev=Number(card.exp),cur=Math.max(prev,Math.min(curve.maxExp,prev+job.card_exp*job.snapshot.cnt));if(cur>0x7fff_ffff)throw new TypeError("Dispatch Hunter EXP exceeds safe setter range");
+        card.exp=cur;return {inst_id:String(id),prev,cur};
+      });
+      result=dispatchEndResult(next,rows,next.gold+job.gold*job.snapshot.cnt,next.exp+job.user_exp*job.snapshot.cnt);
+      next.gold=result.gold.cur;next.exp=result.user_exp.cur;
+      const data={user:null,result:dispatchEndWire(result)};
+      this.commitDispatch(account.pvid,game,next,{active:null,last_id:id,last_deck:[...job.deck]},prior);return this.envelope(data);
+    }catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+  }
+
+  private commitDispatch(pvid:number,game:LocalGameState,next:LocalGameState,journal:DispatchJournal,prior:DispatchJournal|undefined) {
+    const before={...game};Object.assign(game,next);this.dispatches.set(pvid,journal);
+    try{this.persist();}catch(error){Object.assign(game,before);if(prior)this.dispatches.set(pvid,prior);else this.dispatches.delete(pvid);throw error;}
   }
 
   gemInventory(payload: Record<string, unknown>, headers: Record<string, string>) {

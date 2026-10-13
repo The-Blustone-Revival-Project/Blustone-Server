@@ -38,6 +38,13 @@ and the selected original Guild resource profile. This defaults disabled; counte
 increments and eligibility are declared local policy. See the
 [donation workflow](docs/guild-local-donation-workflow-2026-10-13.md).
 
+Normal timed Expedition dispatch is available with
+`BLUSTONE_DISPATCH_MODE=local-timed` and an explicit reward/pass policy. It
+persists AP-funded jobs, supports refresh and collection, and repairs lost
+responses without duplicate rewards. See the
+[local dispatch workflow](docs/local-timed-dispatch-workflow-2026-10-14.md).
+The default is disabled; paid Skip/IAP and native UI verification remain pending.
+
 Resources are repo-local and pinned by `resources/manifests/imported-files.json`. Proprietary binary trees are ignored; a fresh checkout requires the locally retained bundle or an authorized distributed copy. Download the pinned resource bundle from the [server releases](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases). The migration also retained `local/bundles/resources-e6.zip`. Import it with:
 
 ```powershell

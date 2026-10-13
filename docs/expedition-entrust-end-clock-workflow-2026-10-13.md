@@ -56,3 +56,7 @@ DTOs and display counts do not supply those producer obligations.
 
 Source: expedition-end-result-parents-native-2026-10-13.md and
 expedition-entrust-clock-hydration-native-2026-10-13.md.
+
+The normal local persistent producer is now implemented separately in
+local-timed-dispatch-workflow-2026-10-14.md. It uses actual scheduled time
+and an explicit supplied policy; the native display count is not its ledger.
