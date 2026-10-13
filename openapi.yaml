@@ -4145,22 +4145,15 @@ paths:
         ARM-device capture
   /guild/GetDetailInfo:
     post:
-      summary: Recovered /guild/GetDetailInfo route
-      description: >-
-        The route literal **/guild/GetDetailInfo** was recovered from the ARM
-        native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Read established Guild details
+      description: Authenticated guild_id is a JSON-array form STRING of exact uint64
+        query IDs, even for one Guild. ret_data.guilds contains full established
+        same-server native INFO/member rows, preserving request order and
+        omitting unknown/cross-server IDs. Imported INFO IDs must fit native
+        uint32; no truncation aliases. Personal my_guild is not updated by this
+        public detail response. Reads preserve all saves; no
+        creation/join/fee/participant/history is inferred. Native menus
+        unverified.
       tags:
         - Guild
       parameters: *a1
@@ -4180,8 +4173,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-reverse-engineering-status: native-parser-reconstructed
+      x-evidence: docs/guild-detail-native-2026-10-13.md; tests/guild-detail-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /guild/GetFuelRequests:

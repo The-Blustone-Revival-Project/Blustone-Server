@@ -658,6 +658,12 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-reverse-engineering-status": "native-parser-reconstructed",
   } };
   explicitlyDocumented.add("/lobby/GetGuildInfo");
+  paths["/guild/GetDetailInfo"] = {post:{
+    ...operation("Read established Guild details","Authenticated guild_id is a JSON-array form STRING of exact uint64 query IDs, even for one Guild. ret_data.guilds contains full established same-server native INFO/member rows, preserving request order and omitting unknown/cross-server IDs. Imported INFO IDs must fit native uint32; no truncation aliases. Personal my_guild is not updated by this public detail response. Reads preserve all saves; no creation/join/fee/participant/history is inferred. Native menus unverified.","Guild"),
+    "x-evidence":"docs/guild-detail-native-2026-10-13.md; tests/guild-detail-state.ts",
+    "x-reverse-engineering-status":"native-parser-reconstructed"
+  }};
+  explicitlyDocumented.add("/guild/GetDetailInfo");
   localGameArray("/guild/GetNotifications", "Read guild notifications", "OpaqueObject", "Returns an empty notification list. Guild state is not implemented yet.");
   localGameArray("/shop/GetHotDealSummaryList", "Read hot-deal summaries", "OpaqueObject", "Returns an empty commerce list. No purchases or real-money economy are implemented.");
   paths["/lobby/GetGemInven"] = { post: {

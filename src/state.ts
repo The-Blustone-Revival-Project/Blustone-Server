@@ -1,6 +1,8 @@
 import crypto from "node:crypto";
 import { guildLobby,type GuildRecord } from "./guild-lobby.js";
 import { establishedGuildRecords } from "./guild-records.js";
+import {parseGuildInfoQuery} from "./guild-info-query.js";
+import {guildDetailRows} from "./guild-detail-rows.js";
 import { GUILD_SPRITE_EMBLEMS } from "./guild-emblems.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
@@ -1166,6 +1168,11 @@ export class ServerState {
     // requests. my_guild is flat PLAY_DATA, distinct from full Guild INFO.
     if (route === "/lobby/GetGuildInfo") return this.envelope(guildLobby(account.pvid,this.guilds??[],
       new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS)));
+    if(route==="/guild/GetDetailInfo") {
+      let ids:string[];
+      try{ids=parseGuildInfoQuery(payload);}catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild query");}
+      return this.envelope({guilds:guildDetailRows(ids,this.guilds??[],account.serverId,this.accountsByPvid)});
+    }
     if (route === "/guild/GetNotifications") return this.envelope([]);
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");
   }

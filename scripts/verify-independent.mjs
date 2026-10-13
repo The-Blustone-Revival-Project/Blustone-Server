@@ -363,6 +363,11 @@ try {
       {my_guild:{guild_id:0,status:0,newbie:0,role:0,contribution:0}},'Guild boot membership is flat PLAY_DATA');
   if(exerciseGuildRecords) {
     const member=before.accounts.find(account=>account.deviceId==='standalone-established-guild-member');
+    const detailBytes=readFileSync(stateFile);
+    assert.deepEqual((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[7001,4294967297]'})).ret_data,{guilds:before.guilds},'Full established INFO must retain all native members and ignore unsupported unknown widths');
+    assert.deepEqual((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[]'})).ret_data,{guilds:[]});
+    assert.equal((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[7001,7001]'},{allowPlainRefusal:true})).result_code,2001);
+    assert.deepEqual(readFileSync(stateFile),detailBytes,'Detail reads do not mutate personal affiliation or gameplay');
     const leaderConnection={secret,token};await exchange();
     assert.deepEqual((await secure('/lobby/GetGuildInfo',{otp:member.otp,pvid:String(member.pvid)})).ret_data,
       {my_guild:{guild_id:7001,status:3,newbie:1,role:4,contribution:7}},'Personal contribution must not copy total Guild value');
@@ -546,7 +551,10 @@ try {
   }
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
-  if(exerciseGuildRecords) assert.deepEqual(after.guilds,before.guilds,'Established joined Guild records must survive compiled restart and unrelated writes');
+  if(exerciseGuildRecords) {
+    assert.deepEqual(after.guilds,before.guilds,'Established joined Guild records must survive compiled restart and unrelated writes');
+    assert.deepEqual((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[7001]'})).ret_data,{guilds:before.guilds},'Full details remain available across compiled restart');
+  }
   for(const entry of before.gameStates) {
     const found=after.gameStates.find(row=>JSON.stringify(row[0])===JSON.stringify(entry[0]));
     if(exerciseGemInventory && entry[0]===gemPvid) {

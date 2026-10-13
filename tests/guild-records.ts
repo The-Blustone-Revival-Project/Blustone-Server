@@ -31,7 +31,7 @@ try {
   const restart=new ServerState("http://localhost",file);
   assert.equal((gameResponse(restart,"/lobby/GetGuildInfo",member) as any).ret_data.my_guild.contribution,7);
   const valid=readFileSync(file);
-  const invalidCases=[null,[{...record,member_cnt:3}],[{...record,emblem_id:"GUESS"}],
+  const invalidCases=[null,[{...record,id:0x1_0000_0000}],[{...record,member_cnt:3}],[{...record,emblem_id:"GUESS"}],
     [{...record,invited_guests:[]}],[{...record,members:record.members.map(member=>({...member,donation_history:[]}))}],[record,{...record,id:7002}],
     [{...record,members:[{...record.members[0],pvid:999}]}]];
   for(const guilds of invalidCases){const invalid={...persisted,guilds};writeFileSync(file,JSON.stringify(invalid));const invalidBytes=readFileSync(file);

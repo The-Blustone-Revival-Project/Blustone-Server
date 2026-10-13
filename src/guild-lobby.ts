@@ -19,7 +19,9 @@ function count(value: number) { return Number.isInteger(value) && value >= 0 && 
  * silently becoming local members. This helper creates no affiliation.
  */
 export function guildInfo(record: GuildRecord, knownAccounts: ReadonlySet<number>, knownEmblems: ReadonlySet<string>) {
-  if (!safeId(record.id) || typeof record.name !== "string" || !record.name.length || ![1, 2, 3].includes(record.type) ||
+  // Guild INFO id narrows to uint32 in the original parser even though the
+  // RequestInfo ID list is uint64. Refuse aliases instead of truncating saves.
+  if (!safeId(record.id) || record.id > 0xffff_ffff || typeof record.name !== "string" || !record.name.length || ![1, 2, 3].includes(record.type) ||
       ![record.fc_point_limit, record.contribution, record.rank, record.gvg_win_cnt, record.gvg_inf_win_cnt].every(count) ||
       ![record.region, record.emblem_id, record.desc].every((value) => typeof value === "string") ||
       !knownEmblems.has(record.emblem_id) || !Array.isArray(record.members) || record.members.length === 0)
