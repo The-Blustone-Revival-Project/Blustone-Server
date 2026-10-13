@@ -73,6 +73,10 @@ selects a named profile with `--profile` or PowerShell `-Profile`. See
 
 ## Container option
 
+GvG snapshot validation and native reward lookup are available as offline tools;
+see [supplied snapshot workflow and remaining gates](docs/gvg-snapshot-workflow-2026-10-13.md).
+No season, enrollment, reward claim or GvG route is enabled by these helpers.
+
 `docker compose up --build -d` mounts the local imported runtime resources read-only and persists `var/`. The Node launch and tests are verified in this migration; container build/runtime validation is recorded separately in the migration report. Run one writer per state file.
 
 [Migration plan and report](docs/migration/) · [Legacy server implementation notes](docs/legacy-server-README.md)

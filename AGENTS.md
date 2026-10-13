@@ -1,3 +1,35 @@
+## Latest continuation: exact GvG instance snapshots and reward selection (2026-10-13)
+
+Same two agents reused for native research and independent reviews. Full137
+test programs passed; outer-envelope review correction was then rechecked by
+both agents with targeted tests and TypeScript build. No remaining review issue.
+
+src/gvg-instance.ts now validates complete supplied GetInst envelopes. Capture
+text preserves full64 commander before JS rounding; detached model uses decimal
+identity storage, not native wire string emulation. CARD uses ref_id rather than
+owned inst_id, fifteen flat stat STRINGS, encoded skill_level ARRAY STRING,
+signed level/overcome/CP and unsigned rank/awakening. Optional camp/HP absence
+is preserved; native constructor HP10000 is not fabricated into a wire row.
+Deployment camp/order/all4 slots are STRINGS. Wire order is retained, unlike
+native cache pushfront reversal. Bytes are admitted0..255, not assumed boolean.
+Missing snapshot sections refuse; explicit empties remain offline-only.
+Outer/nested descriptors reject inherited/accessor fields before executing them.
+
+src/gvg-reward.ts matches native FIRST wire row with SIGNED min<=CP<max.
+No max=-1 sentinel, fallback, sorting, CP calculation or grants. It requires a
+complete supplied GetRef and returns detached preview or undefined.
+
+GetRef success guard is positively closed: 2001 skips reference parse, unlike
+GetInst's fresh-cache replacement. Native future next_gvg cache may skip HTTP.
+Entire GvG scene minimum requirements and original populated snapshots remain
+unknown; neither helper is imported by ServerState or activated on routes.
+See docs/gvg-snapshot-workflow-2026-10-13.md and its original-source links.
+
+No live flags/profile/input/APK changes; Escape hold, DataDump read-only,
+private/original preservation and collector/Docker/inference hold persist.
+Goal ACTIVE. Next: independently established GvG data/scene consumers or another
+game-system producer, without deriving registration from ordinary membership.
+
 ## Latest continuation: HTTP-to-Chat integration and announcement/fuel boundaries (2026-10-13)
 
 Same two agents reused for bounded source work and independent test reviews.
