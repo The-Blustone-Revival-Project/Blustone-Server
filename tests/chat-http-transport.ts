@@ -1,0 +1,76 @@
+import assert from "node:assert/strict";
+import crypto from "node:crypto";
+import {createServer} from "node:http";
+import {mkdtempSync,readFileSync,rmSync} from "node:fs";
+import {tmpdir} from "node:os";
+import path from "node:path";
+import {WebSocket} from "ws";
+import {createApp} from "../src/server.js";
+import {attachLocalChat} from "../src/chat-service.js";
+import {encodeChatFrame,decodeChatFrame} from "../src/chat-frame.js";
+import {encodeChatRequest,decodeChatResponse,parseReceivedPublicPayload,type ChatResponse} from "../src/chat-message.js";
+
+const dir=mkdtempSync(path.join(tmpdir(),"blustone-chat-http-")),file=path.join(dir,"state.json");
+const context=createApp({baseUrl:"http://127.0.0.1",stateFile:file,publicChatMode:"local-memory",guildChatMode:"disabled"});
+const server=createServer(context.app),sockets:WebSocket[]=[];
+const service=attachLocalChat(server,context.state);
+const until=async(test:()=>boolean)=>{const end=Date.now()+5000;while(!test()){if(Date.now()>end)throw new Error("HTTP Chat fixture timed out");await new Promise(resolve=>setTimeout(resolve,10));}};
+try {
+  await new Promise<void>(resolve=>server.listen(0,"127.0.0.1",resolve));
+  const address=server.address();if(!address||typeof address==="string")throw new Error("No loopback port");
+  const base=`http://127.0.0.1:${address.port}`;context.state.baseUrl=base;
+  const bootstrap=await (await fetch(base+"/launcher/GetBaseInfo",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({app_ver:"28010"})})).json();
+  assert.equal(bootstrap.result_code,1);
+  const url=bootstrap.url_list.find((row:any)=>row.url_key==="new_chat")?.address;
+  assert.equal(url,base.replace("http:","ws:")+"/chat/public");
+  assert.equal(bootstrap.url_list.some((row:any)=>row.url_key==="guild_chat"||row.url_key==="chat_whole"),false);
+  const pair=crypto.generateKeyPairSync("ec",{namedCurve:"secp384r1"});
+  const exchange=await fetch(base+"/shared_secret/Exchange",{method:"POST",headers:{"content-type":"application/x-www-form-urlencoded"},body:new URLSearchParams({publicKey:pair.publicKey.export({format:"der",type:"spki"}).toString("base64url")})});
+  assert.equal(exchange.status,200);
+  const publicKey=Buffer.from(await exchange.arrayBuffer());
+  const key=crypto.createHash("sha384").update(crypto.diffieHellman({privateKey:pair.privateKey,publicKey:crypto.createPublicKey({key:publicKey,format:"der",type:"spki"})})).digest();
+  const sign=(data:Buffer)=>crypto.createHmac("sha384",key).update(data).digest("base64");
+  assert.equal(exchange.headers.get("pv-signature"),sign(publicKey));
+  const token=exchange.headers.get("pv-accesstoken");assert.ok(token);
+  const encrypt=(data:Buffer)=>{const aes=crypto.createCipheriv("aes-256-cbc",key.subarray(0,32),key.subarray(32));return Buffer.concat([aes.update(data),aes.final()]);};
+  const decrypt=(data:Buffer)=>{const aes=crypto.createDecipheriv("aes-256-cbc",key.subarray(0,32),key.subarray(32));return Buffer.concat([aes.update(data),aes.final()]);};
+  const connect=async(headers:Record<string,string>)=>{
+    const ws=new WebSocket(url,{headers,perMessageDeflate:false});sockets.push(ws);
+    const inbox:ChatResponse[]=[],faults:unknown[]=[];
+    ws.on("error",()=>{});
+    ws.on("message",data=>{try{inbox.push(decodeChatResponse(decodeChatFrame(data as Buffer,decrypt).toString("utf8")));}catch(error){faults.push(error);}});
+    await new Promise<void>((resolve,reject)=>{ws.once("open",resolve);ws.once("error",reject);});
+    return {ws,inbox,faults};
+  };
+  await assert.rejects(()=>connect({"X-PV-AccessToken":token}),/401/,"A real exchanged key alone does not authenticate an account");
+  const secure=async(route:string,values:Record<string,string>)=>{
+    const plain=Buffer.from(String(new URLSearchParams(values)));
+    const response=await fetch(base+route,{method:"POST",headers:{"content-type":"application/octet-stream","pv-accesstoken":token,"pv-signature":sign(plain)},body:new Uint8Array(encrypt(plain))});
+    assert.equal(response.status,200);assert.match(response.headers.get("content-type")??"",/^application\/octet-stream/);
+    const reply=decrypt(Buffer.from(await response.arrayBuffer()));assert.equal(response.headers.get("pv-signature"),sign(reply));
+    return JSON.parse(reply.toString("utf8"));
+  };
+  const guest=await secure("/v2/account/RegisterGuest",{device_id:"authored-chat-http",nickname:"HTTP 🧭"});
+  assert.equal(guest.result_code,1);assert.ok(guest.pvid>0);assert.ok(guest.ret_data.otp);
+  await assert.rejects(()=>connect({"X-PV-AccessToken":guest.ret_data.otp}),/401/,"Account OTP is not the exchange header");
+  await assert.rejects(()=>connect({"PV-AccessToken":token}),/401/,"Chat requires native X-PV-AccessToken header");
+  const lobby=await secure("/lobby/Enter",{otp:String(guest.ret_data.otp),pvid:String(guest.pvid)});assert.equal(lobby.result_code,1);
+  const bytes=readFileSync(file),client=await connect({"X-PV-AccessToken":token});
+  await until(()=>client.inbox.length===1);assert.equal(client.inbox[0].command,1);assert.equal(client.inbox[0].error.code,0);
+  const send=(target:typeof client,command:number,payload:unknown)=>target.ws.send(encodeChatFrame(Buffer.from(encodeChatRequest({command,tag:"7",version:"AUTHORED",utc:1,payload})),encrypt));
+  send(client,20000,{channel:12});await until(()=>client.inbox.length===2);assert.deepEqual(client.inbox[1].payload,{channel:12});
+  send(client,10010,{type:10002,message:"HTTP to WS 🔐"});await until(()=>client.inbox.length===3);
+  assert.equal(client.inbox[2].command,10002);assert.equal(client.inbox[2].error.code,0);
+  assert.deepEqual(parseReceivedPublicPayload(client.inbox[2].payload),{who:String(guest.pvid),nickname:"HTTP 🧭",message:"HTTP to WS 🔐"});
+  const reconnected=await connect({"X-PV-AccessToken":token});await until(()=>reconnected.inbox.length===1);
+  send(reconnected,10010,{type:10002,message:"must enter again"});await until(()=>reconnected.inbox.length===2);assert.equal(reconnected.inbox[1].error.code,2001);
+  send(client,10010,{type:10002,message:"existing room"});await until(()=>client.inbox.length===4);
+  assert.equal(reconnected.inbox.length,2,"A reconnect does not inherit another socket's channel");
+  assert.deepEqual(client.faults,[]);assert.deepEqual(reconnected.faults,[]);
+  assert.deepEqual(readFileSync(file),bytes,"HTTP-authenticated Chat does not change saved gameplay");
+} finally {
+  service.close();for(const socket of sockets)socket.terminate();
+  if(server.listening)await new Promise<void>((resolve,reject)=>server.close(error=>error?reject(error):resolve()));
+  rmSync(dir,{recursive:true,force:true});
+}
+console.log("HTTP→Chat: launcher URL, signed P384 exchange, encrypted registration/lobby, native header admission, text echo, reconnect entry and unchanged save passed on disposable loopback server.");

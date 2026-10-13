@@ -45,3 +45,19 @@ handler. All packets and accounts are disposable authored fixtures.
 Source evidence: native-public-chat-producer-bootstrap-2026-10-13.md and
 public-chat-channel-response-native-2026-10-13.md. These establish consumer
 behavior; original channel topology and server producer choices remain unknown.
+
+The HTTP transport integration test exercises createApp on a disposable loopback
+port: launcher URL discovery, signed P384 shared-secret exchange, encrypted guest
+registration and lobby entry, then an actual WebSocket using the returned
+exchange token. It verifies channel entry and authenticated Unicode text echo
+without seeding transport bindings directly. An exchanged but unbound key, OTP
+in the Chat header, and the HTTP-only header name are rejected. A new socket
+using the same bound key must enter its own channel; saved gameplay stays byte
+identical after Chat activity. This is backend integration proof, not native UI
+verification.
+
+Whole-stream receiver and event boundaries are recorded in
+native-whole-chat-receiver-boundary-2026-10-13.md. TYPE2 shares the social
+receiver, but original fishing announcement producers do not authorize ordinary
+public text fanout or arbitrary client reward announcements. Whole Chat remains
+disabled.

@@ -1,3 +1,30 @@
+## Latest continuation: HTTP-to-Chat integration and announcement/fuel boundaries (2026-10-13)
+
+Same two agents reused for bounded source work and independent test reviews.
+Full135 test programs and TypeScript build passed. New chat-http-transport test
+uses actual createApp HTTP launcher URL discovery, signed P384 key exchange,
+encrypted registration/lobby, then a real encrypted WebSocket. No direct seed
+of account/key bindings. Unbound exchange key, OTP-as-Chat-token and HTTP-only
+header are rejected; authenticated Unicode echo passes. Reconnected sockets
+must enter their own channel. Disposable saved gameplay remains byte identical.
+This is backend integration proof; native Chat UI remains unverified.
+
+Whole TYPE2 positively binds the SAME OnSocialMessage receiver. Fishing uses
+TYPE2/inner10021 announcements with JSON user/item or user/fish data, plus a
+separate Guild producer. This does not establish whole/public fanout or permit
+unvalidated catch/reward events. chat_whole stays disabled. See
+docs/native-whole-chat-receiver-boundary-2026-10-13.md.
+
+Fuel11011 updates matched cached supports; requester UI refreshes regdate/timer.
+Donor '+' display positively uses ContributionByAction(4), not stored fuel12.
+No AP receipt/application appears in inspected complete continuations; this is
+a bounded finding, not a global absence claim. Grants remain gated. See
+docs/guild-fuel-recipient-ap-boundary-native-2026-10-13.md.
+
+No live flags/profile/input/APK changes. Escape input hold, DataDump read-only,
+private/original preservation and collector/Docker/inference hold persist.
+Goal ACTIVE; continue original game systems and missing authoritative data.
+
 ## Latest continuation: public channel entry and encrypted text service (2026-10-13)
 
 Same two agents reused. Full134 test programs/build and both reviews passed.
