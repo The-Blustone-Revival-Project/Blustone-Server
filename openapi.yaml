@@ -4253,22 +4253,15 @@ paths:
       x-runtime-confidence: Replica behavior implemented; original production semantics incomplete
   /guild/GetRanking:
     post:
-      summary: Recovered /guild/GetRanking route
-      description: >-
-        The route literal **/guild/GetRanking** was recovered from the ARM
-        native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Read supplied Guild ranking records
+      description: Authenticated page/size signed32 decimal fields; native tab starts
+        page0,size10. Response ret_data is a BARE full Guild INFO array.
+        Preserve explicit positive stored rank, including sparse/tied values; no
+        rank recomputation or rewards. Same-server known subset, rank0 omission,
+        rank/ID ordering and subset pagination are explicit local policy, not
+        original global ladder completeness. Exact BigInt offset prevents
+        page-product rounding. Reads preserve saves/affiliations; native menus
+        remain unverified.
       tags:
         - Guild
       parameters: *a1
@@ -4289,27 +4282,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-evidence: docs/guild-ranking-native-2026-10-13.md; tests/guild-ranking-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /guild/GetRecommendations:
     post:
-      summary: Recovered /guild/GetRecommendations route
-      description: >-
-        The route literal **/guild/GetRecommendations** was recovered from the
-        ARM native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Discover established local Guilds
+      description: Authenticated native ret_data.guilds INFO/member collection. Search
+        sends plain keyword only; recommendations sends auth only, no recovered
+        page/cursor/limit fields. Explicit local policy lists known same-server
+        records with name-only case-insensitive substring matching and stable ID
+        order, without assigning membership or asserting join eligibility. Empty
+        corpus/matches returns[]. Original discovery ranking/scope/limits and
+        native menus remain unknown.
       tags:
         - Guild
       parameters: *a1
@@ -4330,7 +4315,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-evidence: docs/guild-discovery-native-2026-10-13.md; tests/guild-discovery-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /guild/GetUserGuilds:
@@ -4535,22 +4520,14 @@ paths:
         ARM-device capture
   /guild/Search:
     post:
-      summary: Recovered /guild/Search route
-      description: >-
-        The route literal **/guild/Search** was recovered from the ARM native
-        library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Discover established local Guilds
+      description: Authenticated native ret_data.guilds INFO/member collection. Search
+        sends plain keyword only; recommendations sends auth only, no recovered
+        page/cursor/limit fields. Explicit local policy lists known same-server
+        records with name-only case-insensitive substring matching and stable ID
+        order, without assigning membership or asserting join eligibility. Empty
+        corpus/matches returns[]. Original discovery ranking/scope/limits and
+        native menus remain unknown.
       tags:
         - Guild
       parameters: *a1
@@ -4571,7 +4548,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-evidence: docs/guild-discovery-native-2026-10-13.md; tests/guild-discovery-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /guild/SupportFuel:

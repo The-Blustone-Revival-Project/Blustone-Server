@@ -4,6 +4,8 @@ import { establishedGuildRecords } from "./guild-records.js";
 import {parseGuildInfoQuery} from "./guild-info-query.js";
 import {guildDetailRows} from "./guild-detail-rows.js";
 import {parseGuildUserQuery,guildUserRows} from "./guild-user-query.js";
+import {parseGuildDiscoveryRequest,guildDiscoveryRows} from "./guild-discovery.js";
+import {guildRankingRows} from "./guild-ranking.js";
 import {guildActionPrices,type GuildActionPrice} from "./guild-prices.js";
 import { GUILD_SPRITE_EMBLEMS } from "./guild-emblems.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
@@ -1184,6 +1186,15 @@ export class ServerState {
       let target:string;
       try{target=parseGuildUserQuery(payload);}catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild association query");}
       return this.envelope({user_guilds:guildUserRows(target,this.guilds??[],account.serverId,this.accountsByPvid)});
+    }
+    if(route==="/guild/Search"||route==="/guild/GetRecommendations") {
+      let query:{keyword:string|null};
+      try{query=parseGuildDiscoveryRequest(route,payload);}catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild discovery query");}
+      return this.envelope({guilds:guildDiscoveryRows(query,this.guilds??[],account.serverId,this.accountsByPvid)});
+    }
+    if(route==="/guild/GetRanking") {
+      try{return this.envelope(guildRankingRows(payload,this.guilds??[],account.serverId,this.accountsByPvid));}
+      catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild ranking query");}
     }
     if (route === "/guild/GetNotifications") return this.envelope([]);
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");

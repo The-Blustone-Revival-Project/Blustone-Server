@@ -367,6 +367,11 @@ try {
     const detailBytes=readFileSync(stateFile);
     assert.deepEqual((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[7001,4294967297]'})).ret_data,{guilds:before.guilds},'Full established INFO must retain all native members and ignore unsupported unknown widths');
     assert.deepEqual((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[]'})).ret_data,{guilds:[]});
+    assert.deepEqual((await secure('/guild/Search',{...auth,keyword:'established'})).ret_data,{guilds:before.guilds},'Keyword search returns full known Guild rows');
+    assert.deepEqual((await secure('/guild/Search',{...auth,keyword:'not present'})).ret_data,{guilds:[]});
+    assert.deepEqual((await secure('/guild/GetRecommendations',auth)).ret_data,{guilds:before.guilds},'Recommendations use known corpus without invented eligibility');
+    assert.deepEqual((await secure('/guild/GetRanking',{...auth,page:'0',size:'10'})).ret_data,before.guilds,'Ranking is native BARE array, not discovery wrapper');
+    assert.deepEqual((await secure('/guild/GetRanking',{...auth,page:'2147483647',size:'2147483647'})).ret_data,[]);
     assert.deepEqual((await secure('/reference/GetGuildPrices',auth)).ret_data,
       [{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
     const established=before.guilds[0];

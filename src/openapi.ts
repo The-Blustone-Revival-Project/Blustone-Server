@@ -674,6 +674,14 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-evidence":"docs/guild-action-reference-native-2026-10-13.md; tests/guild-price-state.ts"
   }};
   explicitlyDocumented.add("/reference/GetGuildPrices");
+  for(const route of ["/guild/Search","/guild/GetRecommendations"]) {
+    paths[route]={post:{...operation("Discover established local Guilds","Authenticated native ret_data.guilds INFO/member collection. Search sends plain keyword only; recommendations sends auth only, no recovered page/cursor/limit fields. Explicit local policy lists known same-server records with name-only case-insensitive substring matching and stable ID order, without assigning membership or asserting join eligibility. Empty corpus/matches returns[]. Original discovery ranking/scope/limits and native menus remain unknown.","Guild"),
+      "x-evidence":"docs/guild-discovery-native-2026-10-13.md; tests/guild-discovery-state.ts"}};
+    explicitlyDocumented.add(route);
+  }
+  paths["/guild/GetRanking"]={post:{...operation("Read supplied Guild ranking records","Authenticated page/size signed32 decimal fields; native tab starts page0,size10. Response ret_data is a BARE full Guild INFO array. Preserve explicit positive stored rank, including sparse/tied values; no rank recomputation or rewards. Same-server known subset, rank0 omission, rank/ID ordering and subset pagination are explicit local policy, not original global ladder completeness. Exact BigInt offset prevents page-product rounding. Reads preserve saves/affiliations; native menus remain unverified.","Guild"),
+    "x-evidence":"docs/guild-ranking-native-2026-10-13.md; tests/guild-ranking-state.ts"}};
+  explicitlyDocumented.add("/guild/GetRanking");
   localGameArray("/guild/GetNotifications", "Read guild notifications", "OpaqueObject", "Returns an empty notification list. Guild state is not implemented yet.");
   localGameArray("/shop/GetHotDealSummaryList", "Read hot-deal summaries", "OpaqueObject", "Returns an empty commerce list. No purchases or real-money economy are implemented.");
   paths["/lobby/GetGemInven"] = { post: {

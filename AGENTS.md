@@ -1,3 +1,26 @@
+## Latest continuation: Guild discovery and preserved ranking reads (2026-10-13)
+
+Previous goal turn was progress: association/action refs/Boutique audit and100
+checks. Reused same2 agents. Full105 checks/build and compiled encrypted Guild
+search/recommendation/ranking/records/restart proof pass; independent review
+found no defects. /guild/Search sends plain keyword only; recommendations auth
+only. Both exact RTTI-bound callbacks read ret_data.guilds, no pagination keys.
+Local same-server/name-only lowercase substring/stable ID corpus policy is
+explicit, not production recommendation scoring or join eligibility.
+/guild/GetRanking callback instead reads bare ret_data INFO array. Native
+page/size SIGNED32, starts0/10; explicit stored INFO.rank binds TX_GD_TX15
+display. Keep sparse/tied supplied ranks unchanged; do not recompute from
+member counts/contribution/list position. Rank0 omission/rank-ID order/known-
+subset pagination local policies; BigInt product prevents huge offset rounding.
+Auth/foreign filtering/full detached members/byte-preserving read/refusal/
+restart verified; no personal my_guild/wallet/reward/membership mutation.
+
+DataDump Latest freshly checked remains2026-10-11.2; no newer public release.
+New source remains unactivated; no live source/profile/save/client/input or
+APK changes. Escape hold persists. Server/Instrumented writable, DataDump
+read-only, original/private preserved; collector/Docker/inference offline.
+Native Guild menus, creation/join/fee/reward settlements remain pending.
+
 ## Latest continuation: Guild associations/prices and Boutique audit (2026-10-13)
 
 Previous goal turn was progress: Guild detail reads/ID-width fix and96 checks.
