@@ -1,4 +1,43 @@
-## Latest continuation: configured dispatch capsule awards (2026-10-14)
+## Latest continuation: explicit owned fishing sales (2026-10-14)
+
+Normal /fishing/SellFish is now opt-in local-bound. Default disabled; requires
+explicit type17 fish metadata, catalogue prices and per-owner fish/grade/owned
+ordinary-stack bindings. Never creates fish, catches, bait or stacks. Selected
+fish's every positive ordinary stack must be bound; grade sums must exactly
+match independently imported owned_fish b/s/g counts. Locked/missing/unrelated
+stacks, malformed IDs/counts, missing prices and overflow refuse before writes.
+Local lowest-ID allocation returns source-backed full64 inst_id/qty REMOVAL
+deltas + absolute sell_result counts and user.gold pairs. Gold plus both item/
+fish ownership namespaces persist atomically with real write/rename rollback.
+Funded repeats are additional sales: request has no nonce. Zero ordinary stack
+rows remain local repair tombstones. After lost reply inspect authoritative
+inventories/gold before retry; GetItemInven upserts quantities but GetInven
+only inserts missing fish keys, so existing native fish caches need a separately
+proved refresh/fresh-model hydration. No automatic/native recovery claim.
+
+Full148 test programs/build passed, including real P384/AES/HMAC encrypted
+sale, >uint32 stack ID, repeat/refusal, restart and peer/other-field preservation.
+Same two agents reused for independent source/review. No live flags/state/APK
+changed, no catch/original price/grade mapping/native UI milestone claimed.
+See docs/local-bound-fishing-sale-2026-10-14.md. Goal ACTIVE; Escape input hold,
+DataDump read-only, original/private preservation and offline collector remain.
+
+Mirage source now proves BT_NEXT checks cached full64 deck/owned HP!=0 then
+pushes scene0x81; it does NOT call guessed /mirage/Begin. Actual scene consumes
+cached resource/base/enemies/stair. Next seam is coherent catalogue/run cache,
+not another empty lobby. See docs/mirage-cached-combat-entry-native-2026-10-14.md.
+
+Quest source closes modern daily/linear claim: successful ret_data must include
+min-stage STRING and progress before specialized reward; currencies optional
+absolute cur (not generic user). Quest item IDs narrow to uint32, unlike normal
+Entrust End/SellFish. Daily cache upserts; linear is one slot replaced by first
+type3 match, cleared only by a complete empty-ID row (not []). Original event
+predicates/calendar/catalogue/reward magnitudes still missing. See
+docs/quest-progress-claim-cache-native-2026-10-14.md. Next work should implement
+an explicit persistent earned-progress workflow with correct receipt/cache,
+not fabricate original quest records or treat native UI counters as authority.
+
+## Historical continuation: configured dispatch capsule awards (2026-10-14)
 
 Optional items_per_run admits only AIRSHIP_TICKET capsules (1..256/run);
 default omission/[] still grants none. Original dispatch drops are unknown:

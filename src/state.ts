@@ -33,6 +33,7 @@ import { mirageLobby, mirageFriendFloors } from "./mirage.js";
 import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
 import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type FishingCatalogue} from "./fishing-catalogue.js";
 import {ownedFishingInventory} from "./fishing-inventory.js";
+import {fishingSaleBindings,planFishingSale,type FishingSaleBindings} from "./fishing-sale.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { socialDiscovery } from "./social-discovery.js";
@@ -547,6 +548,8 @@ export class ServerState {
   private readonly gemLevelPrices: readonly GemLevelPrice[];
   private readonly fishingItems: readonly Readonly<FishingItemReference>[];
   private readonly fishingCatalogue?: FishingCatalogue;
+  private readonly fishingSaleMode:"disabled"|"local-bound";
+  private readonly fishingBindings?:FishingSaleBindings;
   private readonly guildChatMode:"disabled"|"local-memory";
   private readonly publicChatMode:"disabled"|"local-memory";
   private readonly dispatchMode:"disabled"|"local-timed";
@@ -577,7 +580,7 @@ export class ServerState {
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
-      fishingItems?:unknown;fishingCatalogue?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
+      fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     const dispatchMode=Object.hasOwn(options,"dispatchMode")?options.dispatchMode:process.env.BLUSTONE_DISPATCH_MODE??"disabled";
@@ -615,6 +618,12 @@ export class ServerState {
     const fishCatalogue=Object.hasOwn(options,"fishingCatalogue")?options.fishingCatalogue:
       process.env.BLUSTONE_FISHING_CATALOGUE_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_FISHING_CATALOGUE_JSON);
     if(fishCatalogue!==undefined) this.fishingCatalogue=configuredFishingCatalogue(fishCatalogue,new Set(this.fishingItems.map(row=>row.id)));
+    const fishSaleMode=Object.hasOwn(options,"fishingSaleMode")?options.fishingSaleMode:process.env.BLUSTONE_FISHING_SALE_MODE??"disabled";
+    if(fishSaleMode!=="disabled"&&fishSaleMode!=="local-bound")throw new TypeError("Unknown fishing sale mode");this.fishingSaleMode=fishSaleMode;
+    const fishBindings=Object.hasOwn(options,"fishingSaleBindings")?options.fishingSaleBindings:
+      process.env.BLUSTONE_FISHING_SALE_BINDINGS_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_FISHING_SALE_BINDINGS_JSON);
+    if(fishBindings!==undefined)this.fishingBindings=fishingSaleBindings(fishBindings,new Set(this.fishingItems.filter(row=>row.use_type===17).map(row=>row.id)));
+    if(fishSaleMode!=="disabled"&&(!this.fishingBindings||!this.fishingCatalogue))throw new TypeError("Local fishing sale requires explicit stack bindings and prices");
     const levelPrices = readPrices("equipmentLevelPrices","BLUSTONE_EQUIPMENT_LEVEL_PRICES_JSON");
     const rankPrices = readPrices("equipmentRankPrices","BLUSTONE_EQUIPMENT_RANK_PRICES_JSON");
     this.equipmentLevelPrices = Object.freeze((Array.isArray(levelPrices) && levelPrices.length===0 ? [] :
@@ -1581,6 +1590,17 @@ export class ServerState {
 
   fishingAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     const account=this.accountFor(payload, headers);
+    if(route==="/fishing/SellFish") {
+      const game=this.gameByPvid.get(account.pvid);
+      if(this.fishingSaleMode!=="local-bound"||!this.fishingBindings||!this.fishingCatalogue||!game)return this.failure(2001,"Bound fishing sale is unavailable");
+      let plan;try{plan=planFishingSale(game,account.pvid,this.fishingBindings,this.fishingCatalogue,
+        new Set(this.fishingItems.filter(row=>row.use_type===17).map(row=>row.id)),payload);}
+      catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+      const before={items:game.items,owned_fish:game.owned_fish,gold:game.gold};
+      Object.assign(game,{items:plan.items,owned_fish:plan.owned_fish,gold:plan.gold});
+      try{this.persist();}catch(error){Object.assign(game,before);if(before.owned_fish===undefined)delete game.owned_fish;throw error;}
+      return this.envelope(plan.receipt);
+    }
     if(route==="/fishing/GetFishingPool"||route==="/fishing/GetPriceRef") {
       if(!this.fishingCatalogue) return this.failure(2001,"Fishing catalogue unavailable; explicit fish item definitions and catalogue required");
       try {

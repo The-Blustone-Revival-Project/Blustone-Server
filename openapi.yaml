@@ -3368,18 +3368,31 @@ paths:
         entry unverified
   /fishing/SellFish:
     post:
-      summary: Unreconstructed fishing operation
-      description: Authenticated operation explicitly refuses with result_code 2001.
-        Original fish identities, catch settings, pools, prices and settlement
-        are not yet reconstructed. It does not return generic mock success or
-        alter inventory/currency.
+      summary: Sell explicitly bound owned fish
+      description: "Default disabled. BLUSTONE_FISHING_SALE_MODE=local-bound requires
+        explicit type17 fish metadata, prices and per-owner
+        fish/grade/owned-stack bindings. Native request fish_id, grade1..3, qty
+        positive. Every positive selected-fish stack must be bound and unlocked;
+        all three bound grade totals must equal persisted fish counts. No
+        metadata/count-only inventory grants. Local lowest-ID allocation
+        persists gold plus both inventories atomically;
+        overflow/lock/ownership/count disagreement refuses2001. ret_data itself
+        is sale: user.gold prev/cur, item full64 inst_id/qty REMOVAL deltas,
+        sell_result absolute fish_id/b_cnt/s_cnt/g_cnt. Zero ordinary item rows
+        remain local repair tombstones. No nonce: funded identical repeats are
+        new sales; after lost receipt inspect inventories/gold before retrying.
+        GetItemInven upserts absolute item quantities, but GetInven inserts
+        missing fish keys without replacing existing native fish counts;
+        automatic stale fish-model repair is unproved. Original
+        balances/grade-stack mapping/catches and native UI remain unknown or
+        unverified."
       tags:
         - Fishing
       parameters: *a1
       requestBody: *a2
       responses:
         "200":
-          description: Unsupported fishing contract.
+          description: Bound local sale receipt or unsupported ownership/price contract.
           content:
             application/json:
               schema:
