@@ -1232,7 +1232,9 @@ export class ServerState {
       try{return this.envelope(guildRankingRows(payload,this.guilds??[],account.serverId,this.accountsByPvid));}
       catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild ranking query");}
     }
-    if (route === "/guild/GetNotifications") return this.envelope([]);
+    // RequestMsgList's exact callback selects this child before ParseNoties;
+    // a bare empty array skips the cache replacement rather than clearing it.
+    if (route === "/guild/GetNotifications") return this.envelope({guild_notifications:[]});
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");
   }
 

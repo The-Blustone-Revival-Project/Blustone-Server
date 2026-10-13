@@ -8470,10 +8470,10 @@
     },
     "/guild/GetNotifications": {
       "post": {
-        "summary": "Read guild notifications",
-        "description": "Returns an empty notification list. Guild state is not implemented yet.",
+        "summary": "Read Guild notifications",
+        "description": "Authenticated response contains ret_data.guild_notifications:[], the exact RequestMsgList child consumed by ParseNoties. This replaces the native notification cache; a bare ret_data array would skip it. No original notification instances or producer event policy have been reconstructed. Read/delete transitions remain unavailable.",
         "tags": [
-          "Lobby and session"
+          "Guild"
         ],
         "parameters": [
           {
@@ -8521,7 +8521,7 @@
         },
         "responses": {
           "200": {
-            "description": "Persistent local-game response; encrypted on native transport.",
+            "description": "Named notification collection; encrypted on native transport.",
             "content": {
               "application/json": {
                 "schema": {
@@ -8533,9 +8533,18 @@
                       "type": "object",
                       "properties": {
                         "ret_data": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/OpaqueObject"
+                          "type": "object",
+                          "required": [
+                            "guild_notifications"
+                          ],
+                          "properties": {
+                            "guild_notifications": {
+                              "type": "array",
+                              "maxItems": 0,
+                              "items": {
+                                "$ref": "#/components/schemas/OpaqueObject"
+                              }
+                            }
                           }
                         }
                       }
@@ -8559,9 +8568,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "local-game-contract",
-        "x-evidence": "server-ts/src/game.ts; server-ts/src/state.ts",
-        "x-runtime-confidence": "Replica behavior implemented; original production semantics incomplete"
+        "x-reverse-engineering-status": "recovered-native-route",
+        "x-evidence": "docs/guild-notifications-native-2026-10-13.md; tests/guild-lobby.ts",
+        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/guild/GetRanking": {

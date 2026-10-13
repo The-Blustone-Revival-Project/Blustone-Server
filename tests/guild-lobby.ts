@@ -40,7 +40,8 @@ const game = state.gameFor(state.accountFor(auth, {}));
 const saved = JSON.stringify(game);
 assert.deepEqual((gameResponse(state, "/lobby/GetGuildInfo", auth) as any).ret_data,
   { my_guild: { guild_id: 0, status: 0, newbie: 0, role: 0, contribution: 0 } });
-assert.deepEqual((gameResponse(state, "/guild/GetNotifications", auth) as any).ret_data, []);
+assert.deepEqual((gameResponse(state, "/guild/GetNotifications", auth) as any).ret_data, {guild_notifications:[]},
+  "RequestMsgList must reach ParseNoties through its named child to replace the notification cache");
 for (const route of ["/guild/Found", "/guild/Apply", "/guild/Donate", "/guild/SupportFuel", "/gvg/Start"]) {
   assert.equal((gameResponse(state, route, auth) as any).result_code, 2001, "missing membership/data cannot become mock gameplay success");
   assert.throws(() => gameResponse(state, route, {}), /authenticated account required/);

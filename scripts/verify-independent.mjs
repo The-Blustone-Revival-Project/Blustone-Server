@@ -397,6 +397,7 @@ try {
   assert.deepEqual((await secure('/lobby/GetGuildInfo',auth)).ret_data,
     exerciseGuildRecords?{my_guild:{guild_id:7001,status:3,newbie:0,role:1,contribution:3}}:
       {my_guild:{guild_id:0,status:0,newbie:0,role:0,contribution:0}},'Guild boot membership is flat PLAY_DATA');
+  assert.deepEqual((await secure('/guild/GetNotifications',auth)).ret_data,{guild_notifications:[]},'Named notification child reaches native cache replacement');
   if(exerciseGuildRecords) {
     const member=before.accounts.find(account=>account.deviceId==='standalone-established-guild-member');
     const detailBytes=readFileSync(stateFile);

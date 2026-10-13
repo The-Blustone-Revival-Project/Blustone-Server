@@ -1,5 +1,11 @@
 # Guild lobby/member contract — 2026-10-11
 
+Continuation correction (2026-10-13): `/guild/GetNotifications` returns
+`ret_data:{guild_notifications:[]}`, not a bare array. The exact callback
+selects that child before replacing its MSG cache; see
+[notification consumer proof](guild-notifications-native-2026-10-13.md).
+Later creation/settings notes also supersede this initial no-mutation scope.
+
 The first safe Guild seam is a truthful authenticated no-guild lobby plus exact
 projection of already-established guild/member records. It is implemented in
 src/guild-lobby.ts; creation/join/admin/fuel/chat transactions remain unavailable.

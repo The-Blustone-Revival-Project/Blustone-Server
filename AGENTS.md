@@ -1,3 +1,35 @@
+## Latest continuation: Guild notification correction and membership contracts (2026-10-13)
+
+Previous turn progressed stock word matching/Episode wallet fix (02b6cf9).
+Same two agents reused for membership contract recovery and independent review.
+Full 115 checks, build, regenerated OpenAPI and compiled encrypted original
+Guild-profile read/restart proof passed; notification code/source review clean.
+
+CORRECTION: GetNotifications $_32 callback Ga91fdc selects ret_data then
+GUILD_NOTIFICATIONS named child Ga921d6 -> ParseNoties Ga921e4. Its wire key
+is lowercase guild_notifications. Old bare[] skipped cache replacement; now
+ret_data:{guild_notifications:[]} reaches the native list-clear path. Optional
+my_guild/guilds are independent branches; no invented notification producer,
+wallet or membership mutation. Exact MSG field lineage documented separately.
+
+Apply sends single uint64 decimal-string guild_id + plain desc, not ID-list
+or client desired membership. Status1+matchingGuild positively means applied/
+pending; status3 routes to joined member scene. FC score+134 must meet Guild
+threshold in the Apply UI, not a founder-minimum rule. Public/permission labels
+do not prove backend transition/defaultrole/newbie/capacity/approval producer.
+CancelApplication and Leave send auth5 only, implicitly target actor state.
+Success directly zeroes personal PLAY_DATA; Leave also clears caches/chat.
+They do not parse replacement my_guild/guilds. Wallet-neutral success must omit
+user/use null; nonnull generic SyncUser requires paid/free authoritative scalars.
+Only recovered direct Leavecaller occurs in donation-error/stale-affiliation
+cleanup; ordinary leader departure/succession/dissolution/cooldown unproved.
+No membership mutation enabled; pending applications need a distinct owned
+model and complete approval lifecycle, not invented joined records/history.
+
+No live source/profile/save/client/input or APK changes. Escape hold persists;
+DataDump read-only, original/private preserved; collector/Docker/inference off.
+Server/Instrumented only writable; fresh native notification UI remains pending.
+
 ## Latest continuation: stock Guild word filter and Episode wallet preservation (2026-10-13)
 
 Previous continuation: local Guild updates, 113 checks. Same two agents reused
