@@ -1,4 +1,41 @@
-## Latest continuation: Mirage cache schema/HP and End refusal (2026-10-14)
+## Latest continuation: Mirage registration and reward transition contracts (2026-10-14)
+
+Source RegisterDeck exact auth5 +inst_list JSONSTRING numericUINT64; zero IDs
+skipped bybuilder. Success callback admits1 OR10189, then ParseDeckInfo DIRECT
+ret_data bare IDarray. No entryHP/state/floor/stair/wallet/quest initialization.
+UI5slots/living/nonempty gates recovered. CRITICAL samecharacter restriction
+compares exact base.name STRING (CardInfo+30), NOT ref_id/char_id. Readiness
+now requires explicit lossless nonempty native names and exact-name uniqueness;
+prior distinctref check remains additional LOCAL policy. No casefold/Unicode
+normalization. Unknown name cannot be substituted from filename/charalias.
+
+src/mirage-register.ts exactJSONstring/full64 codec, bare numericresponse and
+pure existing-cache party planner implemented. Numeric token provenance branded
+before Number rounding; quotedIDstrings/float/exponent/negativezero reject.
+Planner changes ONLY selecteddeck, then validates current cached combat subset;
+no HP/floor/state/enemies/references/context mutations or enrollment/newrun.
+Runtime RegisterDeck remains unsupported; no nonempty GetInfo publication.
+
+Source Reward posts signedfloor/stair; matchedcallbackguardsresult1+data.
+ParseRewardInfo optionally updates cur_stair/state S32 +enemyclone replacement,
+specializeduser currencyPAIRS/APBP32clocks/full64itemdeltas, not genericSyncUser.
+Rewardpopupclose RefreshList picksnewpostfix; terminal Completepopup also
+RefreshList. Don't invent universalReward→GetInfo. Persistent advancement must
+publish coherent inlinecache and prevent laterreplay rewind/doubleitemawards.
+No original numericrewards/floor+1/reset/firstaid policy recovered.
+
+Bounded originalMIRAGEpack/header/36literal CRCprobes did NOT establish resource
+names; standardCRCprobes heuristic, actualmappingunclosed. Don't promote opaque
+words or packpresence to names/registry. No guessed bindings published. Next
+resource proof requires actual storage/loader mapping or originalcache/source;
+complete persistence/End/Reward laws stillneeded, notanotheremptylobby milestone.
+
+Full153 programs/build pass; reused TWO agents for exactsource/review/test.
+See docs/mirage-existing-party-planner-2026-10-14.md and linkedRegister/Reward
+source notes. Goal ACTIVE; original/private/DataDump preservation, Escapeinput
+hold, offlinecollector/Docker/inference unchanged. No live/profile/APK changes.
+
+## Historical continuation: Mirage cache schema/HP and End refusal (2026-10-14)
 
 Complete pure decoder src/mirage-cache.ts covers all5supplied components,
 signed Base/Hero/Stair, byte new_record, effective32entryID/canonical signedHP,

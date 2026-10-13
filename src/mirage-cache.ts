@@ -64,7 +64,7 @@ export function mirageHpRatio(raw:number):number {return Math.fround(Math.fround
 /** Native stair balance uses signed float32 multiply by word0x38d1b717. */
 export function mirageBalanceScale(raw:number):number {return Math.fround(Math.fround(integer(raw))*Math.fround(0.00009999999747378752));}
 export interface MirageReadiness {
-  owned:ReadonlyMap<number,{ref_id:string}>;
+  owned:ReadonlyMap<number,{ref_id:string;name:string}>;
   // COMPLETE independently established membership/HP snapshot, never inferred
   // from ordinary deck or from1000 defaults. Schema checking is not provenance.
   commitments:ReadonlyMap<number,number>;
@@ -78,6 +78,8 @@ export function requireMirageCombatCache(raw:unknown,context:MirageReadiness):Mi
   const deck=base.deck.filter(id=>id!=="0");
   if(!deck.length||new Set(deck).size!==deck.length||deck.some(id=>BigInt(id)>0xffff_ffffn||!entries.has(Number(id))||entries.get(Number(id))!.mirage_remain_hp<=0)||
     new Set(deck.map(id=>context.owned.get(Number(id))!.ref_id)).size!==deck.length)throw new TypeError("Mirage sortie requires distinct living entered Hunters");
+  const names=deck.map(id=>text(context.owned.get(Number(id))!.name));
+  if(names.some(name=>!name)||new Set(names).size!==names.length)throw new TypeError("Mirage sortie requires distinct explicit native Hunter names");
   if(base.floor<1||base.stair<1||base.stair>cache.ref_stair.list.length||base.state!==1||base.revive_price<0||base.begin_ltime<0||base.highest<0||
     !Number.isInteger(context.now)||context.now<0||context.now>0x7fff_ffff||cache.ref_hero.end_ltime<context.now)throw new TypeError("Mirage combat floor/state/clock is unavailable");
   if(!cache.inst_enemy.length||cache.inst_enemy.some(enemy=>enemy.hp_percent<0||enemy.hp_percent>10000||!context.enemySupported(Object.freeze({...enemy})))||
