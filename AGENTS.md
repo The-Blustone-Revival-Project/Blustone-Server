@@ -1,3 +1,38 @@
+## Latest continuation: exact End receipt and clock/hydration semantics (2026-10-13)
+
+Same two agents reused for original source and independent code reviews.
+Full143 test programs/build and both reviews passed. No live mutations.
+
+CRITICAL End AP parent correction: result.user_exp.max_ap{prev,cur} and
+result.user_exp.ap{cur,ap_charge_time}, NOT root result.ap/chargeTime. End
+chargeTime EFFECTIVEuint32 despite SyncAP64; Start differs. Complete offline
+Endresult decoder now preserves absolutegold/userEXP pairs, nestedAP, full64
+Hunter/itemidentities and actualitemadded deltas. RawunsignedHunterEXP retained
+but nativeSetCardExp isSIGNED32—futureproducerneeds separate safeadmission.
+Genericret_data.user/achievement remain separate contracts; noaward/collection.
+
+Nativeclock helpers now close PREFIXnonzeroend low32 +remaining VECTORlength
+times complete_second withwordwrap; empty/allzero useorigin0, NOTnow. Countdown
+id0→−1; low32 due-now wraps thenSIGNEDnegativeclamp. GetClearCount scansALL
+rows, signed64end versus zeroextendedserverword, equalitycounts; ifcount0 it
+returns FULLvectorlength includingfuture/zero rows. NEVERuseforrewardeligibility.
+Tests coverbitwrap, lowwordvsfull64, signed64−1, futurefallback/prefix/empty and
+exactEndparents/full64capture/detachment. Source and earlier APwording corrected.
+
+Hydration source closes separate /lobby/GetMissionInst URI1 callback/parser,
+not guessedlobby.user.entrust. Inparserargument absententrust skips/preserves
+caches; presententrust callsStart thenUNCONDITIONALLY parsesentrust.pass.
+PasshasNOnullguard: mandatoryend_datetimeSTRING, optionalnonnullSIGNED32 UTC
+override. DoNOTpublishmissing/null/guessedpass alongjob. Genericwrapperbody
+extraction notclosedhere; no newenvelope alias. Originalpassrights/slots/reward
+producer remainsmissing. See docs/expedition-entrust-end-clock-workflow-
+2026-10-13.md. Newhelpers not importedbyServerState/routes; timedproducerpending.
+
+Escape input hold, DataDump read-only, private/original preservation and
+collector/Docker/inference hold persist. No flags/profile/save/APK changes.
+GoalACTIVE. Continue full persistentdispatcher with explicit commitments/pass/
+award/atomicledger policy or independently recovered authoritative data.
+
 ## Latest continuation: Entrust snapshots and route-specific Skip refusal (2026-10-13)
 
 Same two agents reused. Full142 test programs/build and both reviews passed;

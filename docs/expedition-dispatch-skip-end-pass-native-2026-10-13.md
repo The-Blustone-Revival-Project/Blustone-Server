@@ -66,8 +66,10 @@ Successful ret_data has:
 - **user**, passed to **generic SyncUser** Gb41ede (nonnull user must include
   authoritative paid/free quantity scalars; null is that parser's early exit);
 - **result**, passed to **ParseAutoCombatEnd G9ba0a8** at Gb41efa;
-- result **gold:{prev,cur}**, **user_exp:{prev,cur,...}**, **ap:{...,cur}**
-  and **ap_charge_time** have further specialized setter/SyncAP consumers;
+- result **gold:{prev,cur}** and **user_exp:{prev,cur,...}** have specialized
+  setters; **result.user_exp.max_ap:{prev,cur}** and nested
+  **result.user_exp.ap:{cur,ap_charge_time}** supply capacity/SyncAP;
+  End's charge time is effective uint32, unlike Start's wider clock input;
 - result **card_exp[]** uses instance identities and absolute cur EXP,
   applied via CSRInventory.SetCardExp Gae98a0 at Gb42358;
 - result **item[]:{inst_id,ref_id,added}** grants actual inventory deltas
@@ -78,6 +80,10 @@ subsequent indexes, not a presumed generic reward object. Card EXP amounts,
 reward quantities, AP capacity/level-up increases and account ownership are
 producer obligations still missing here. Do not replace the actual inventory
 item rows with Skip's serialized item-reference occurrence list.
+
+The detailed parent proof is expedition-end-result-parents-native-2026-10-13.md:
+the AP selectors use the retained user_exp object. The earlier tentative root
+result.ap/ap_charge_time interpretation is superseded by that exact trace.
 
 ParseAutoCombatEnd clears the ongoing cache **before** its result null check:
 G9ba0f0 clears+68; G9ba114 clears+78/+7c; G9ba11a clears+6c; the cached list
