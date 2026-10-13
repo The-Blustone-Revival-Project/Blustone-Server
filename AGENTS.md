@@ -1,3 +1,45 @@
+## Latest continuation: raw Guild equipment rank fees and native INFO hydration (2026-10-13)
+
+Previous turn progressed explicit progression/level benefit references (18853b5).
+Same two agents reused for rank/hydration and counter-semantic recovery plus
+independent implementation review. Full121 checks/build, focusjoined/pending
+rawfee/INFO/rollback/restart tests and compiled encrypted GuildGym full loop
+level9->10 fee15, rank1->2 RAW23, level10->11 fee26, gold100->36/material3
+consumed and exactGuild/peer/restart proof passed. No nativeUI/pixel claim.
+
+UpdateEnhancePrice Gbd65a8 branches rank*10==level; rank finds nextRank/attrib
+quote Gbd6736..748 and copies RAWprice into popup+66c Gbd6754/758. Funds check
+Gbd7c6e..80 uses thatrawvalue; no Guilddiscount or leveltable selection onrank.
+LEVEL alone TYPE1 at Gbd694c..960. Ordinary affiliatedrank nowrawgold2 quote,
+independentmissing/zero-valued levelbenefits. Source-Hunter workflows stillgated.
+NoGuildoldfees unchanged; level selectedbenefits stillrequirevalid explicitrefs.
+
+Critical hydration correction: actual RequestMyInfo $_12 callback Ga86408
+parses my_guild Ga864bc AND optionalguilds→ParseGuilds Ga8653a. Equipmentpopup
+hasno direct Info/MyInfo request; Village/ApplyScene MyInfo producer canhydrate.
+/lobby/GetGuildInfo nowpublishes flatpersonal PLUSfullmatching same-serverINFO
+onlyfornonzeroGuildid, includingpendingtarget. NoGuildresponse unchanged.
+Otherwise nativeFindBonus wouldmissing-cache/basefee while serverdiscounted.
+Fullhistory/members/counters preserved, detachedread/no savewrite/foreigndata.
+
+Countersemantic audit distinguishes PLAY_DATA.contribution(+c), MEMBER field,
+user-extra guild_contribution(+5c), and INFO AGGREGATE(+8). Mileage text andboth
+SetMileageView arguments useaggregate moduloMAX; noearned/claimedpair proved.
+Donation TX_MY_CO displaysGOLD, notpersonalcontribution. CurrentMEMBER→personal
+contribution remains explicitlyLOCAL projection; do notinferoriginalequality,
+cumulative donatedpoints orclaimmarker, no automaticmigration/ledger/reset.
+Donate/ReceiveContributionReward stay2001 untilproducerpolicy established.
+
+Source/currentdocs updated; prior progression rankgate isnowhistorical. Earlier
+latebenefitdoc NoGuild-empty versusaffiliation-refusal clarification preserved
+andcommitted. Explicitrawranktests provejoined(noGuildlevelrefs) andpending
+(zero-valued levelbenefit) bothpay23, keepgearlvl10, consumeonecapsule, rollback
+bothfields andhydratecompleteINFO throughrestart. Unrelatedgames/Guild/pending
+records unchanged; actualproof onlytargetgear/gold/material plusnormalAPBP
+registration/lobby anchors. No liveinputs/profileactivation/APKchanges.
+Escapehold persists; DataDumpread-only; originals/privatepreserved; collector/
+Docker/inferenceoff. Server/Instrumentedonlywritable. Revivalgoal broaderactive.
+
 ## Latest continuation: Guild progression references and affiliated Gym level fees (2026-10-13)
 
 Previous turn progressed invitations/mail/profilebatch5 (06b5a89). Same two

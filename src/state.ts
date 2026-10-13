@@ -1301,7 +1301,10 @@ export class ServerState {
     }
     // Imported joined records are explicit local state, never inferred from
     // requests. my_guild is flat PLAY_DATA, distinct from full Guild INFO.
-    if (route === "/lobby/GetGuildInfo") return this.envelope(this.guildPersonal(account.pvid));
+    if (route === "/lobby/GetGuildInfo") {
+      const personal=this.guildPersonal(account.pvid),id=personal.my_guild.guild_id;
+      return this.envelope({...personal,...(id===0?{}:{guilds:guildDetailRows([String(id)],this.guilds??[],account.serverId,this.accountsByPvid)})});
+    }
     if(route==="/guild/GetApplicants") {
       const own=this.guilds?.find(record=>record.members.some(member=>member.pvid===account.pvid));
       if(!own||![1,2].includes(own.members.find(member=>member.pvid===account.pvid)!.role))
@@ -2151,7 +2154,7 @@ export class ServerState {
       ...(game.arena.active?.deck_inst_ids??[]),...(game.search.active?.deck_inst_ids??[])]);
     const guild=(this.guildAction("/lobby/GetGuildInfo",payload,headers).ret_data as {my_guild:{guild_id:number}}).my_guild.guild_id;
     const guildRecord=this.guilds?.find(record=>record.id===guild);
-    const guildLevelBenefit=guild&&guildRecord&&this.guildLevels?selectedGuildBenefit(this.guildLevels,guildRecord.contribution,"equipment_level_up"):undefined;
+    const guildLevelBenefit=action==="level"&&guild&&guildRecord&&this.guildLevels?selectedGuildBenefit(this.guildLevels,guildRecord.contribution,"equipment_level_up"):undefined;
     const plan=planEquipmentUpgrade(action,payload,{cards,items:game.items,gold:game.gold,
       guildId:guild,guildLevelBenefit,busyIds,levelPrices:this.equipmentLevelPrices,rankPrices:this.equipmentRankPrices,
       reference:id=>{const row=starterReference.find(row=>row.base.id===id&&row.base.is_source===0);

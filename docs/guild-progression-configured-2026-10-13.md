@@ -1,5 +1,10 @@
 # Configured Guild progression references and equipment-level fees
 
+Continuation: [rank/hydration source](equipment-rank-fee-hydration-native-2026-10-13.md)
+now closes ordinary affiliated rank pricing as the raw quote, without a Guild
+multiplier. GetGuildInfo also hydrates full matching INFO. The earlier rank
+gate described below is historical; source-Hunter workflows remain gated.
+
 Native schemas/selection are source-backed; the numerical production tables
 remain absent from the bounded inspected client corpus. This implementation
 accepts explicit authored or recovered supplied rows without inventing defaults.

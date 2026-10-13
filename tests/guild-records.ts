@@ -15,7 +15,7 @@ try {
   const saved=JSON.parse(readFileSync(file,"utf8"));saved.guilds=[record];writeFileSync(file,JSON.stringify(saved));
   const before=readFileSync(file),state=new ServerState("http://localhost",file);
   const read=(auth:any)=>gameResponse(state,"/lobby/GetGuildInfo",auth) as any;
-  assert.deepEqual(read(member).ret_data,{my_guild:{guild_id:7001,status:3,newbie:1,role:4,contribution:7}});
+  assert.deepEqual(read(member).ret_data,{my_guild:{guild_id:7001,status:3,newbie:1,role:4,contribution:7},guilds:[{...record,member_cnt:2}]});
   assert.equal(read(leader).ret_data.my_guild.role,1);assert.equal(read(outsider).ret_data.my_guild.guild_id,0);
   assert.throws(()=>read({}),/authenticated/);read(member).ret_data.my_guild.role=1;assert.equal(read(member).ret_data.my_guild.role,4);
   assert.deepEqual(readFileSync(file),before,"startup and Guild reads are byte-preserving");

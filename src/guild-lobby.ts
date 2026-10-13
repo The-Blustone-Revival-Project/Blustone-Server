@@ -74,6 +74,9 @@ export function guildLobby(pvid: number, established: readonly GuildRecord[] = [
   if (own.length > 1) throw new TypeError("Account has conflicting guild affiliations");
   if (own.length === 0) return { my_guild: { guild_id: 0, status: 0, newbie: 0, role: 0, contribution: 0 } };
   const guild = own[0], member = guild.members.find((entry) => entry.pvid === pvid)!;
+  // This scalar projection is explicit local policy. Native PLAY_DATA,
+  // MEMBER and user guild_contribution are independent storage fields; their
+  // original producer relationship and any claim-marker meaning are unproved.
   return { my_guild: { guild_id: guild.id, status: 3, newbie: member.newbie, role: member.role, contribution: member.contribution } };
 }
 

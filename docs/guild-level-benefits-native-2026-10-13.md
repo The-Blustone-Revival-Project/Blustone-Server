@@ -149,8 +149,12 @@ the final-row cap, returning type1..4 mode1 or type5 mode0. Benefit description
 objects are independently configured using the original spellings.
 
 ServerState snapshots these options/environment tables and clones publication
-responses. Unconfigured progression references return failure2001 rather than
-successful generic mocks, empty level sentinels or zero mileage divisors.
+responses. Unconfigured references preserve the unaffiliated boot's canonical
+empty numeric arrays/description-and-points objects; a nonzero personal Guild
+ID (including pending) instead receives failure2001 before unsafe native cache
+replacement. Explicit empty configured numeric tables still refuse. Empty
+defaults do not establish safe affiliated progression UI or zero mileage
+divisors: supply valid numeric tables before entering that UI.
 Equipment **level** fees can use the validated published table and matching
 authoritative INFO aggregate contribution. A selected row without type1 yields
 null/base-price arithmetic; that is distinct from an absent table. Pending

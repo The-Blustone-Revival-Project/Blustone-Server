@@ -435,10 +435,13 @@ try {
   }
   const friendFloors=await secure('/mirage/GetFriendInfo',auth);
   assert.equal(friendFloors.result_code,1);assert.deepEqual(friendFloors.ret_data,[]);
-  assert.deepEqual((await secure('/lobby/GetGuildInfo',auth)).ret_data,
-    exerciseGuildEquipment?{my_guild:{guild_id:7001,status:3,newbie:0,role:3,contribution:0}}:
-    exerciseGuildRecords?{my_guild:{guild_id:7001,status:3,newbie:0,role:1,contribution:3}}:
-      {my_guild:{guild_id:0,status:0,newbie:0,role:0,contribution:0}},'Guild boot membership is flat PLAY_DATA');
+  const guildBoot=(await secure('/lobby/GetGuildInfo',auth)).ret_data;
+  assert.deepEqual(guildBoot.my_guild,
+    exerciseGuildEquipment?{guild_id:7001,status:3,newbie:0,role:3,contribution:0}:
+    exerciseGuildRecords?{guild_id:7001,status:3,newbie:0,role:1,contribution:3}:
+      {guild_id:0,status:0,newbie:0,role:0,contribution:0},'Guild boot membership remains flat PLAY_DATA');
+  if(guildBoot.my_guild.guild_id) assert.deepEqual(guildBoot.guilds,[before.guilds.find(record=>record.id===guildBoot.my_guild.guild_id)],'RequestMyInfo hydrates complete matching INFO cache');
+  else assert.equal(Object.hasOwn(guildBoot,'guilds'),false,'Unaffiliated bootstrap response remains unchanged');
   assert.deepEqual((await secure('/guild/GetNotifications',auth)).ret_data,{guild_notifications:[]},'Named notification child reaches native cache replacement');
   if(exerciseGuildEquipment) {
     assert.deepEqual((await secure('/reference/GetGuildLevelBenefits',auth)).ret_data,[{level:0,contribution:0},{level:1,contribution:100,equipment_level_up:900}]);
@@ -448,8 +451,9 @@ try {
     const saved=JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===equipmentPvid)[1],target=saved.starter_cards.find(card=>card.ref_id==='001');
     const request={...auth,inst_id:String(target.inst_id),part:'1',price_type:'2',source_inst_ids:'null'};
     assert.equal((await secure('/card_handler/LevelUpEquipment',request)).ret_data.user.gold.cur,85,'Guild aggregate100 selects900/1000 multiplier, native binary32 fee17→15');
+    assert.equal((await secure('/card_handler/RankUpEquipment',request)).ret_data.user.gold.cur,62,'Guild rank price23 stays raw without level multiplier');
+    assert.equal((await secure('/card_handler/LevelUpEquipment',request)).ret_data.user.gold.cur,36,'Post-rank level price29 uses900/1000→26');
     const settled=readFileSync(stateFile);
-    assert.equal((await secure('/card_handler/RankUpEquipment',request,{allowPlainRefusal:true})).result_code,2001,'Affiliated equipment rank consumer is still unproved');
     assert.equal((await secure('/guild/ReceiveContributionReward',auth,{allowPlainRefusal:true})).result_code,2001);assert.deepEqual(readFileSync(stateFile),settled);
   }
   if(exerciseGuildMembership&&!exerciseGuildInvitations) {
@@ -784,9 +788,9 @@ try {
     }
     if(exerciseEquipmentUpgrade&&entry[0]===equipmentPvid) {
       const expected=structuredClone(entry[1]),actual=structuredClone(found[1]);
-      expected.gold=exerciseGuildEquipment?85:31;const target=expected.starter_cards.find(card=>card.ref_id==='001');
-      target.weapon_rank=exerciseGuildEquipment?1:2;target.weapon_level=exerciseGuildEquipment?10:11;
-      expected.items[0].qty=exerciseGuildEquipment?2:0;
+      expected.gold=exerciseGuildEquipment?36:31;const target=expected.starter_cards.find(card=>card.ref_id==='001');
+      target.weapon_rank=2;target.weapon_level=11;
+      expected.items[0].qty=0;
       for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
       assert.deepEqual(actual,expected,'Equipment transaction must persist only exact selected fields and authored gold fees');
       continue;

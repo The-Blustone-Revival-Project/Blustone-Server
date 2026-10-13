@@ -2482,15 +2482,17 @@ paths:
         user.item[{inst_id,qty}]. Affiliated equipment LEVEL fees additionally
         support valid explicit Guild level tables selected by aggregate INFO
         contribution and native per-thousand binary32 arithmetic; absent benefit
-        in a valid table means base fee. Affiliated rank consumers remain
-        unproved and refuse. Active targets, missing data and unsupported
-        currency/source workflows refuse; persistence failure restores prior
-        arrays/wallet. Prices and stats are supplied local/recovered data, not
-        default original balances. Level requests have no recovered
-        expected-level/intent field: identical successful calls can be separate
-        upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2,
-        rank source_inst_ids null for the normal empty vector or JSON uint64
-        vector for the broader unreconstructed source workflow."
+        in a valid table means base fee. Ordinary affiliated rank upgrades use
+        the raw quoted gold2 price, with no level multiplier or required Guild
+        level table; source-Hunter workflows remain gated. Active targets,
+        missing data and unsupported currency/source workflows refuse;
+        persistence failure restores prior arrays/wallet. Prices and stats are
+        supplied local/recovered data, not default original balances. Level
+        requests have no recovered expected-level/intent field: identical
+        successful calls can be separate upgrades. Native fields: inst_id
+        decimal uint64, part1..3, price_type2, rank source_inst_ids null for the
+        normal empty vector or JSON uint64 vector for the broader
+        unreconstructed source workflow."
       tags:
         - Equipment
       parameters: *a1
@@ -2527,15 +2529,17 @@ paths:
         user.item[{inst_id,qty}]. Affiliated equipment LEVEL fees additionally
         support valid explicit Guild level tables selected by aggregate INFO
         contribution and native per-thousand binary32 arithmetic; absent benefit
-        in a valid table means base fee. Affiliated rank consumers remain
-        unproved and refuse. Active targets, missing data and unsupported
-        currency/source workflows refuse; persistence failure restores prior
-        arrays/wallet. Prices and stats are supplied local/recovered data, not
-        default original balances. Level requests have no recovered
-        expected-level/intent field: identical successful calls can be separate
-        upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2,
-        rank source_inst_ids null for the normal empty vector or JSON uint64
-        vector for the broader unreconstructed source workflow."
+        in a valid table means base fee. Ordinary affiliated rank upgrades use
+        the raw quoted gold2 price, with no level multiplier or required Guild
+        level table; source-Hunter workflows remain gated. Active targets,
+        missing data and unsupported currency/source workflows refuse;
+        persistence failure restores prior arrays/wallet. Prices and stats are
+        supplied local/recovered data, not default original balances. Level
+        requests have no recovered expected-level/intent field: identical
+        successful calls can be separate upgrades. Native fields: inst_id
+        decimal uint64, part1..3, price_type2, rank source_inst_ids null for the
+        normal empty vector or JSON uint64 vector for the broader
+        unreconstructed source workflow."
       tags:
         - Equipment
       parameters: *a1
@@ -5906,10 +5910,15 @@ paths:
         records validate known same-server accounts, unique membership/leader
         and hash-pinned original emblem IDs; unsupported history refuses instead
         of being dropped. Members receive joined status3 and personal
-        role/contribution; outsiders receive five zero fields. Read-only
-        projection and unrelated persistence preserve membership. No membership
-        is generated or assigned by a request; creation/join/GvG/fees/rewards
-        remain gated. Native Guild menus remain unverified.
+        role/contribution; outsiders receive five zero fields. Nonzero personal
+        Guild IDs additionally publish only their full matching same-server INFO
+        under guilds, hydrating the RequestMyInfo cache used by level-fee
+        lookup; unaffiliated response remains unchanged. Personal contribution
+        copying from MEMBER is local policy, not proof of an original
+        donated-points or claim-marker producer. Read-only projection and
+        unrelated persistence preserve membership. No membership is generated or
+        assigned by a request; creation/join/GvG/fees/rewards remain gated.
+        Native Guild menus remain unverified.
       tags:
         - Guild
       parameters: *a1
@@ -7817,15 +7826,17 @@ paths:
         user.item[{inst_id,qty}]. Affiliated equipment LEVEL fees additionally
         support valid explicit Guild level tables selected by aggregate INFO
         contribution and native per-thousand binary32 arithmetic; absent benefit
-        in a valid table means base fee. Affiliated rank consumers remain
-        unproved and refuse. Active targets, missing data and unsupported
-        currency/source workflows refuse; persistence failure restores prior
-        arrays/wallet. Prices and stats are supplied local/recovered data, not
-        default original balances. Level requests have no recovered
-        expected-level/intent field: identical successful calls can be separate
-        upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2,
-        rank source_inst_ids null for the normal empty vector or JSON uint64
-        vector for the broader unreconstructed source workflow."
+        in a valid table means base fee. Ordinary affiliated rank upgrades use
+        the raw quoted gold2 price, with no level multiplier or required Guild
+        level table; source-Hunter workflows remain gated. Active targets,
+        missing data and unsupported currency/source workflows refuse;
+        persistence failure restores prior arrays/wallet. Prices and stats are
+        supplied local/recovered data, not default original balances. Level
+        requests have no recovered expected-level/intent field: identical
+        successful calls can be separate upgrades. Native fields: inst_id
+        decimal uint64, part1..3, price_type2, rank source_inst_ids null for the
+        normal empty vector or JSON uint64 vector for the broader
+        unreconstructed source workflow."
       tags:
         - Equipment
       parameters: *a1
@@ -7862,15 +7873,17 @@ paths:
         user.item[{inst_id,qty}]. Affiliated equipment LEVEL fees additionally
         support valid explicit Guild level tables selected by aggregate INFO
         contribution and native per-thousand binary32 arithmetic; absent benefit
-        in a valid table means base fee. Affiliated rank consumers remain
-        unproved and refuse. Active targets, missing data and unsupported
-        currency/source workflows refuse; persistence failure restores prior
-        arrays/wallet. Prices and stats are supplied local/recovered data, not
-        default original balances. Level requests have no recovered
-        expected-level/intent field: identical successful calls can be separate
-        upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2,
-        rank source_inst_ids null for the normal empty vector or JSON uint64
-        vector for the broader unreconstructed source workflow."
+        in a valid table means base fee. Ordinary affiliated rank upgrades use
+        the raw quoted gold2 price, with no level multiplier or required Guild
+        level table; source-Hunter workflows remain gated. Active targets,
+        missing data and unsupported currency/source workflows refuse;
+        persistence failure restores prior arrays/wallet. Prices and stats are
+        supplied local/recovered data, not default original balances. Level
+        requests have no recovered expected-level/intent field: identical
+        successful calls can be separate upgrades. Native fields: inst_id
+        decimal uint64, part1..3, price_type2, rank source_inst_ids null for the
+        normal empty vector or JSON uint64 vector for the broader
+        unreconstructed source workflow."
       tags:
         - Equipment
       parameters: *a1

@@ -25,6 +25,10 @@ export function nativeGuildSaleValue(price: number, selected: { mode: number; va
  * creation, benefit lookup or alternate currency settlement is fabricated. */
 export function noGuildEquipmentLevelFee(quote: { price_type: number; price: number }, guildId: number): number {
   if (guildId !== 0) throw new TypeError("Guild equipment fee qualification is outside the no-Guild workflow");
+  return rawEquipmentGoldFee(quote);
+}
+/** Ordinary rank branch copies the raw quote regardless of affiliation. */
+export function rawEquipmentGoldFee(quote:{price_type:number;price:number}):number {
   if (quote.price_type !== EQUIPMENT_POPUP_GOLD_PRICE_TYPE) throw new TypeError("Equipment popup payment requires recovered price_type2 gold");
   return nativeGuildSaleValue(quote.price, null);
 }

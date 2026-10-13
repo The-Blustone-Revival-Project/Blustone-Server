@@ -40,4 +40,4 @@ try {
   assert.equal((gameResponse(restart,"/reference/GetGuildContributionReward",auth) as any).ret_data[0].reward.gold,1);
   const settled=readFileSync(file);assert.equal((gameResponse(restart,"/guild/ReceiveContributionReward",auth) as any).result_code,2001);assert.equal((gameResponse(restart,"/guild/Donate",{...auth,amount:"1000"}) as any).result_code,2001);assert.deepEqual(readFileSync(file),settled);
 } finally{rmSync(dir,{recursive:true,force:true});}
-console.log("Guild progression state: immutable configured references, authenticated no-mock/missing-data refusal, aggregate-derived affiliated level fee, unclosed rank/donation/claim gates, unchanged Guild/peer state and restart passed.");
+console.log("Guild progression state: immutable references, authenticated missing-data refusal, aggregate-derived level fee, missing-rank-quote/donation/claim gates, unchanged Guild/peer state and restart passed.");
