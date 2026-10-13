@@ -1,5 +1,10 @@
 # Equipment rank-up source capture and ordinary transition
 
+2026-10-13 follow-up: the pinned original full executable-segment immediate
+call/tail-branch scan found exactly this popup caller, and no alternate direct
+source selector. See [the reproducible caller audit](equipment-source-caller-closure-2026-10-13.md).
+Nonempty source eligibility remains unknown and refused.
+
 Original final ARM byte audit; same library hash and coordinates as the
 equipment upgrade note. Read-only evidence; no original price rows, inventory,
 fees or native UI actions changed. Source decoding now admits the actual

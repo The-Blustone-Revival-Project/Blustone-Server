@@ -1,3 +1,28 @@
+## Latest continuation: configured Gem replacements and set tables (2026-10-13)
+
+User requested continued revival with two reusable agents. Full88 checks/build
+and encrypted compiled --fixture --profile current-e6-gems
+--exercise-gem-replacement pass; independent review found no concrete defects.
+Explicit immutable gemCombinations/BLUSTONE_GEM_COMBINATIONS_JSON now publishes
+authenticated exact wire set rows; native mode1 applies normalization/effects.
+Explicit gemDisassemblePrices/BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON enables
+gold2 same-Hunter removal/replacement/swaps by each changed OLD Gem level.
+Missing quotes, overflow, cross-Hunter/payment4 and active/Mirage targets refuse.
+Atomic gold/placement write rollback preserves original inventory array.
+Full authoritative owned rows on no-write retries repair lost removal replies.
+Default tables empty; no original prices/rolls/IDs inferred, no auto-grants.
+Compiled authored13-gold removal/retry/free-remount/restart proof retains exact
+uint64 IDs, full Gem data and unrelated gameplay; native UI/combat unverified.
+
+DataDump Latest2026-10-11.2/sourcea1c9049 all5remote SHA digests match local;
+eight normalized datasets unchanged, added estimates not promoted as originals.
+Equipment entire original executable immediate-branch scan proves sole direct
+empty-source/gold2 caller; nonempty Hunter-source rank-up remains refused.
+Instrumented adds read-only reproducible caller audit, no APK patch/build.
+New source NOT hot-loaded; live profile/save/client and inputs unchanged.
+Inputs stay held after earlier Escape; no collector/Docker/inference use.
+Server/Instrumented writable, DataDump read-only, retained original untouched.
+
 ## Release checkpoint: Server 1.1.0 (2026-10-11)
 
 User authorized a new GitHub release; minor version1.1.0 selected for additive
