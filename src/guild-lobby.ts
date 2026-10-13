@@ -15,6 +15,9 @@ export const GUILD_MEMBER_ROLES = { leader: 1, supervisor: 2, member: 3, newcome
 
 function safeId(value: number) { return Number.isSafeInteger(value) && value > 0; }
 function count(value: number) { return Number.isInteger(value) && value >= 0 && value <= 0x7fff_ffff; }
+function wireString(value: unknown): value is string {
+  return typeof value==="string" && Buffer.from(value,"utf8").toString("utf8")===value;
+}
 
 /** Project only complete already-established guilds. The caller's account and
  * original emblem registries prevent imported private/unknown identities from
@@ -23,9 +26,9 @@ function count(value: number) { return Number.isInteger(value) && value >= 0 && 
 export function guildInfo(record: GuildRecord, knownAccounts: ReadonlySet<number>, knownEmblems: ReadonlySet<string>) {
   // Guild INFO id narrows to uint32 in the original parser even though the
   // RequestInfo ID list is uint64. Refuse aliases instead of truncating saves.
-  if (!safeId(record.id) || record.id > 0xffff_ffff || typeof record.name !== "string" || !record.name.length || ![1, 2, 3].includes(record.type) ||
+  if (!safeId(record.id) || record.id > 0xffff_ffff || !wireString(record.name) || !record.name.length || ![1, 2, 3].includes(record.type) ||
       ![record.fc_point_limit, record.contribution, record.rank, record.gvg_win_cnt, record.gvg_inf_win_cnt].every(count) ||
-      ![record.region, record.emblem_id, record.desc].every((value) => typeof value === "string") ||
+      ![record.region, record.emblem_id, record.desc].every(wireString) ||
       !knownEmblems.has(record.emblem_id) || !Array.isArray(record.members) || record.members.length === 0)
     throw new TypeError("Guild identity/reference is not established");
   const seen = new Set<number>();

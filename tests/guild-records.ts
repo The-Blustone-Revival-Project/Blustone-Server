@@ -35,7 +35,13 @@ try {
   writeFileSync(file,JSON.stringify(invitationRecord));const guestBytes=readFileSync(file),guestState=new ServerState("http://localhost",file);
   assert.deepEqual((gameResponse(guestState,"/guild/GetDetailInfo",{...leader,guild_id:"[7001]"}) as any).ret_data.guilds[0].invited_guests,[{pvid:outsider.pvid}]);
   assert.deepEqual(readFileSync(file),guestBytes,"explicit object invitation history remains byte-preserving, without inventing producer ownership");
-  const invalidCases=[null,[{...record,id:0x1_0000_0000}],[{...record,member_cnt:3}],[{...record,emblem_id:"GUESS"}],
+  const international={...record,name:"길드 🧭",desc:"復活したギルド",region:"대한민국"};
+  writeFileSync(file,JSON.stringify({...persisted,guilds:[international]}));
+  const internationalBytes=readFileSync(file),internationalState=new ServerState("http://localhost",file);
+  assert.equal((gameResponse(internationalState,"/guild/GetDetailInfo",{...leader,guild_id:"[7001]"}) as any).ret_data.guilds[0].name,international.name);
+  assert.deepEqual(readFileSync(file),internationalBytes,"Valid multilingual metadata stays byte-preserving, without local creation ASCII filtering");
+  const invalidCases=[null,...["name","desc","region","emblem_id"].map(key=>[{...record,[key]:"bad\ud800"}]),
+    [{...record,id:0x1_0000_0000}],[{...record,member_cnt:3}],[{...record,emblem_id:"GUESS"}],
     [{...record,invited_guests:[outsider.pvid]}],[{...record,members:record.members.map(member=>({...member,donation_history:[]}))}],[record,{...record,id:7002}],
     [{...record,members:[{...record.members[0],pvid:999}]}]];
   for(const guilds of invalidCases){const invalid={...persisted,guilds};writeFileSync(file,JSON.stringify(invalid));const invalidBytes=readFileSync(file);
