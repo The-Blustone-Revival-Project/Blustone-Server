@@ -20,6 +20,7 @@ const exerciseGuildRecords=process.argv.includes('--exercise-guild-records');
 const exerciseGuildUpdate=process.argv.includes('--exercise-guild-local-update');
 const exerciseGuildFound=process.argv.includes('--exercise-guild-local-found')||exerciseGuildUpdate;
 const exerciseGemLevelReference=process.argv.includes('--exercise-gem-level-reference');
+const exerciseEpisodeWallet=process.argv.includes('--exercise-episode-wallet');
 const exerciseGemMount=process.argv.includes('--exercise-gem-mount')||exerciseGemReplacement;
 const exerciseGemInventory=process.argv.includes('--exercise-gem-inventory')||exerciseGemMount||exerciseGemSale;
 if(exerciseGemSale&&exerciseGemMount) throw new Error('Gem sale and mount fixtures are distinct verification runs');
@@ -46,7 +47,8 @@ const monsterIndex=process.argv.indexOf('--exercise-monster');
 const exerciseMonster=monsterIndex===-1?undefined:process.argv[monsterIndex+1];
 if(monsterIndex!==-1 && (!process.argv.includes('--fixture') || typeof exerciseMonster!=='string' || !/^M[0-9]{3}$/.test(exerciseMonster)))
   throw new Error('Monster resource exercises require --fixture and one exact original namespace');
-if((exerciseBulk || exerciseSocial || exerciseSale || exerciseEquipment || exerciseGemInventory || exerciseGuildRecords || exerciseGuildFound || exerciseGemLevelReference) && !process.argv.includes('--fixture')) throw new Error('Configured exercises require --fixture; private preserved saves are never mutation targets');
+if((exerciseBulk || exerciseSocial || exerciseSale || exerciseEquipment || exerciseGemInventory || exerciseGuildRecords || exerciseGuildFound || exerciseGemLevelReference || exerciseEpisodeWallet) && !process.argv.includes('--fixture')) throw new Error('Configured exercises require --fixture; private preserved saves are never mutation targets');
+if(exerciseEpisodeWallet&&(exerciseGuildFound||exerciseGuildRecords||exerciseBulk||exerciseSocial||exerciseSale||exerciseEquipment||exerciseGemInventory)) throw new Error('Episode wallet proof requires a separate disposable run');
 if(exerciseGuildFound&&(exerciseGuildRecords||exerciseBulk||exerciseSocial||exerciseSale||exerciseEquipment||exerciseGemInventory)) throw new Error('Local Guild creation requires a separate disposable verification run');
 const profileIndex=process.argv.indexOf('--profile');
 const profileName=profileIndex===-1?'current-e6':process.argv[profileIndex+1];
@@ -72,7 +74,7 @@ await requireFreePort();
 // races the port probe. Never overwrite a concurrent writer's state copy.
 const folder = mkdtempSync(path.join(outputFolder,'run-'));
 const stateFile = path.join(folder, 'state.json');
-let bulkPvid, salePvid, equipmentPvid, gemPvid,founderPvid;
+let bulkPvid, salePvid, equipmentPvid, gemPvid,founderPvid,episodePvid;
 const preserved = process.argv.includes('--fixture') ? '' : path.join(root, 'local/private/preserved-state.json');
 if (existsSync(preserved)) copyFileSync(preserved, stateFile);
 else {
@@ -128,6 +130,14 @@ else {
     if(exerciseGuildUpdate){game.gacha_iap_qty=50;game.gacha_free_qty=5;}
     const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
     seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===founderPvid?game:saved]);
+    writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
+  }
+  if(exerciseEpisodeWallet) {
+    const claimant=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
+    const game=fixture.gameFor(fixture.accountFor(claimant,{}));episodePvid=claimant.pvid;game.gold=100;game.gacha_iap_qty=55;game.gacha_free_qty=20;
+    const {episodeChapters,episodeStoryIds}=await import(pathToFileURL(path.join(root,'dist/src/episode-progress.js')).href);
+    game.episode_progress.cleared_ids=[...episodeStoryIds(episodeChapters.get('E02')),...episodeStoryIds(episodeChapters.get('E18'))];
+    const seeded=JSON.parse(readFileSync(stateFile,'utf8'));seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===episodePvid?game:saved]);
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
   }
 }
@@ -225,6 +235,15 @@ try {
   const guest=await secure('/v2/account/RegisterGuest',{device_id:'standalone-migration-verification'});
   const auth={otp:String(guest.ret_data.otp),pvid:String(guest.pvid)};
   const lobby=await secure('/lobby/Enter',auth);assert.ok(lobby.ret_data);
+  if(exerciseEpisodeWallet) {
+    const free=await secure('/episode/Reward',{...auth,id:'E02'});assert.equal(free.result_code,1);
+    assert.deepEqual(free.ret_data.user,{free_iap:{prev:20,cur:50},iap_qty:55,free_iap_qty:50});
+    const gold=await secure('/episode/Reward',{...auth,id:'E18'});assert.equal(gold.result_code,1);
+    assert.deepEqual(gold.ret_data.user,{gold:{prev:100,cur:100100},iap_qty:55,free_iap_qty:50});
+    const settledBytes=readFileSync(stateFile);
+    assert.equal((await secure('/episode/Reward',{...auth,id:'E02'})).ret_data.user,null,'Null-user replay takes native early-return path');
+    assert.deepEqual(readFileSync(stateFile),settledBytes);
+  }
   if(exerciseGemInventory) {
     assert.equal(Number(auth.pvid),gemPvid);
     assert.deepEqual((await secure('/reference/GetGem',auth)).ret_data,[authoredGemReference]);
@@ -412,7 +431,7 @@ try {
   }
   assert.equal((await secure('/guild/Found',auth,{allowPlainRefusal:true})).result_code,2001,'Missing fees must not create a free Guild');
   if(exerciseGuildFound) {
-    const request={...auth,name:'New Guild',desc:'Local fixture',type:'1',fc_point_limit:'500',region:'EN',emblem_id:'GD_IMG_1'};
+    const request={...auth,name:'New Guild',desc:'Updated',type:'1',fc_point_limit:'500',region:'EN',emblem_id:'GD_IMG_1'};
     const created=await secure('/guild/Found',request);assert.equal(created.result_code,1);
     const founderBefore=before.gameStates.find(([pvid])=>pvid===founderPvid)[1];
     assert.deepEqual(created.ret_data.user,{gold:{prev:100,cur:83},iap:{prev:founderBefore.gacha_iap_qty,cur:founderBefore.gacha_iap_qty},free_iap:{prev:founderBefore.gacha_free_qty,cur:founderBefore.gacha_free_qty},iap_qty:founderBefore.gacha_iap_qty,free_iap_qty:founderBefore.gacha_free_qty},'Generic SyncUser requires coherent wallet pairs AND Manda scalars');
@@ -616,6 +635,12 @@ try {
   }
   for(const entry of before.gameStates) {
     const found=after.gameStates.find(row=>JSON.stringify(row[0])===JSON.stringify(entry[0]));
+    if(exerciseEpisodeWallet&&entry[0]===episodePvid) {
+      const actual=structuredClone(found[1]),expected=structuredClone(entry[1]);expected.gold=100100;expected.gacha_free_qty=50;
+      expected.episode_progress.reward_ids.push('E02','E18');
+      for(const key of ['ap_updated_at','bp_updated_at']){delete actual[key];delete expected[key];}
+      assert.deepEqual(actual,expected,'Only original explicit rewards/claims persist; other wallets/gameplay unchanged');continue;
+    }
     if(exerciseGemInventory && entry[0]===gemPvid) {
       const actual=structuredClone(found[1]),expected=structuredClone(entry[1]);
       if(exerciseGemMount){expected.owned_gems[0].target_inst_id=String(expected.starter_cards.find(card=>card.ref_id==='001').inst_id);expected.owned_gems[0].position=1;}
@@ -680,6 +705,7 @@ try {
     configured_guild_lobby_fixture:exerciseGuildRecords,
     configured_local_guild_creation_fixture:exerciseGuildFound,
     configured_local_guild_update_fixture:exerciseGuildUpdate,
+    episode_native_wallet_preservation_fixture:exerciseEpisodeWallet,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,

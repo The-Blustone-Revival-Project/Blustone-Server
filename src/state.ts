@@ -10,6 +10,7 @@ import {guildActionPrices,type GuildActionPrice} from "./guild-prices.js";
 import {planLocalGuildFound} from "./guild-local-found.js";
 import {planLocalGuildUpdate} from "./guild-local-update.js";
 import {guildWalletReceipt} from "./guild-wallet-receipt.js";
+import {BADWORD_SOURCE,originalBadwordMatcher} from "./badword-source.js";
 import { GUILD_SPRITE_EMBLEMS,GUILD_EMBLEM_SOURCE,verifyGuildEmblemSource } from "./guild-emblems.js";
 import {repositoryPath} from "./paths.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
@@ -526,6 +527,7 @@ export class ServerState {
   private readonly guildPrices: readonly GuildActionPrice[];
   private readonly guildCreationMode:"disabled"|"local-gold";
   private readonly guildUpdateMode:"disabled"|"local-manda-free-first";
+  private readonly guildBadwordCheck?: (text:string)=>boolean;
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
@@ -580,6 +582,8 @@ export class ServerState {
         throw new TypeError("Local Guild update requires selected original Guild resource profile");
       verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
     }
+    if(creationMode!=="disabled"||updateMode!=="disabled")
+      this.guildBadwordCheck=originalBadwordMatcher(readFileSync(repositoryPath(BADWORD_SOURCE.path)));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -1241,6 +1245,8 @@ export class ServerState {
     const id=this.nextGuildId??(Math.max(0,...(this.guilds??[]).map(record=>record.id))+1);
     const plan=planLocalGuildFound(payload,this.guilds??[],this.accountsByPvid,account,game.gold,game.arena.rating_point,id,this.guildPrices);
     if("error" in plan) return this.failure(2001,plan.error!);
+    if(this.guildBadwordCheck?.(plan.created!.name)||this.guildBadwordCheck?.(plan.created!.desc))
+      return this.failure(2001,"Guild text rejected by original stock word filter");
     let user;
     try{user=guildWalletReceipt({gold:game.gold,iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty},
       {gold:plan.gold!,iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty});}
@@ -1262,6 +1268,10 @@ export class ServerState {
     if(game.active_battle?.state==="active"||game.arena.active||game.search.active) return this.failure(2001,"Local Guild update refuses active combat commitments");
     const plan=planLocalGuildUpdate(payload,this.guilds??[],this.accountsByPvid,account,game.gacha_iap_qty,game.gacha_free_qty,this.guildPrices);
     if("error" in plan) return this.failure(2001,plan.error!);
+    const oldGuild=this.guilds!.find(record=>record.id===plan.id)!,newGuild=plan.next!.find(record=>record.id===plan.id)!;
+    if((oldGuild.name!==newGuild.name&&this.guildBadwordCheck?.(newGuild.name))||
+      (oldGuild.desc!==newGuild.desc&&this.guildBadwordCheck?.(newGuild.desc)))
+      return this.failure(2001,"Changed Guild text rejected by original stock word filter");
     const beforeWallet={gold:game.gold,iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty};
     let user;
     try{user=guildWalletReceipt(beforeWallet,{gold:game.gold,iap_qty:plan.paid!,free_iap_qty:plan.free!});}
@@ -1368,6 +1378,10 @@ export class ServerState {
         const current = previous + rewards[0].qty;
         if (!Number.isSafeInteger(previous) || previous < 0 || !Number.isSafeInteger(current) || current > 0xffffffff)
           return refuse("Episode currency capacity exceeded");
+        const freeQty=currencyReward.wallet==="gacha_free_qty"?current:game.gacha_free_qty;
+        if(![game.gacha_iap_qty,freeQty].every(value=>Number.isInteger(value)&&value>=0&&value<=0xffff_ffff))
+          return refuse("Episode native Manda wallet capacity exceeded");
+        const user={ [currencyReward.receipt]:{prev:previous,cur:current},iap_qty:game.gacha_iap_qty,free_iap_qty:freeQty };
         game[currencyReward.wallet] = current;
         game.episode_progress.reward_ids.push(chapter.id);
         try { this.persist(); }
@@ -1376,7 +1390,7 @@ export class ServerState {
           game.episode_progress.reward_ids.pop();
           return refuse("Episode reward could not be saved");
         }
-        return this.envelope({ ...neutral, item: [], user: { [currencyReward.receipt]: { prev: previous, cur: current } } });
+        return this.envelope({ ...neutral, item: [], user });
       }
       if (!rewards.length || chapter.reward.free_iap || chapter.reward.iap || rewards.some((row) =>
           row.ref_id !== SEARCH_CAPSULE_ID || !Number.isSafeInteger(row.qty) || row.qty <= 0))

@@ -1,0 +1,26 @@
+{
+  "source": {
+    "path": "resources/reference/recovered-data/leveldb-tables/all-tables.json",
+    "bytes": 15797336,
+    "sha256": "f166f857d45c6dd68e97bd4b8f055be795796400fa10ba9f040aaa1b1d8f0a78",
+    "datadump_source": "sources/client-tables/recovered-data/leveldb-tables/all-tables.json",
+    "table": "BADWORD_RO"
+  },
+  "shape": "five locale rows; row.key locale, row.raw JSON object of numeric string IDs to string values; row.json exact projection",
+  "locales": {
+    "EN": {"entries": 502, "empty_entries": 0, "raw_bytes": 9265, "raw_sha256": "b41900180c6c2b8fb24b5dda03141fede4e1b1ac1df0468b689b41e6862372ca"},
+    "JA": {"entries": 31, "empty_entries": 0, "raw_bytes": 694, "raw_sha256": "11a63bfe0a7f56d102de620efd56f711ad79f4d9f43b8f3238ba5497bfbb6d55"},
+    "KO": {"entries": 4159, "empty_entries": 0, "raw_bytes": 85119, "raw_sha256": "add444b58c358d0e69742c3bb30b00ff2c75f432d0eab1c2203994f78102883d"},
+    "SC": {"entries": 4082, "empty_entries": 0, "raw_bytes": 84468, "raw_sha256": "f191393271035d174f219cd4a96141f2dd21cc0e3e2dd0a84c80c5f4e7b6111e"},
+    "TC": {"entries": 85, "empty_entries": 0, "raw_bytes": 1630, "raw_sha256": "3a2ff4022f165964fc3f396b0cead73283fa1ab949ecafdd23336c3bd9337e49"}
+  },
+  "total_entries": 8859,
+  "native_load_order": ["KO", "EN", "JA", "SC", "TC"],
+  "native_loader_skips_empty_strings": true,
+  "native_matching": "raw case-sensitive byte substring; no current-locale filter, Unicode normalization or word-boundary matching",
+  "original_arm_sha256": "c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec",
+  "native_algorithm_byte_audited": true,
+  "native_ui_verified": false,
+  "font_admission_complete": false,
+  "contains_copied_word_list": false
+}

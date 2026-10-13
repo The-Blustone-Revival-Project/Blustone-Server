@@ -3,7 +3,9 @@
 This bounded original-byte pass closes edit-text character limits, the ordinary
 FC-point threshold slider and the Found payload. It does not recover original
 minimum founder level/points, pending-membership restrictions, name uniqueness
-normalization, bad-word locale/consumer semantics, font admission, numeric fees or server payment rules.
+normalization, font admission, numeric fees or server payment rules. The original
+bad-word source/consumer follow-up is now closed in
+[the native dictionary note](badword-source-native-2026-10-13.md).
 Any opt-in creation implementation must identify its local policies explicitly.
 Passing these pure UI checks is not permission to create a Guild.
 
@@ -25,9 +27,10 @@ CGMDataMgr.HasBadWord G793cb8 and checks font IsSupportingChar G79d4f8.
 Those are distinct validation consumers. Follow-up inspection confirms original
 BADWORD_RO data exists in the retained export: five locale records
 EN502/JA31/KO4159/SC4082/TC85 string entries. Earlier missing-corpus language
-was too broad. Locale selection, loading, matching/normalization and its exact
-admission behavior remain unreconstructed; font admission is also incomplete.
-No blacklist is promoted into the server merely from these available strings.
+was too broad. The follow-up now closes loading of ALL five locales and raw
+case-sensitive byte matching; see the native dictionary note. Font admission
+and original server validation remain incomplete. Source presence alone was
+not used to guess a locale policy or normalize the dictionary.
 
 Length validation at Gc91764 calls RMGetUTF8len G10f6a18. The preceding loop
 counts high-bit bytes; any nonzero result becomes1 at Gc91770. It loads the

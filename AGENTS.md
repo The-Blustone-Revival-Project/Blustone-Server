@@ -1,3 +1,35 @@
+## Latest continuation: stock Guild word filter and Episode wallet preservation (2026-10-13)
+
+Previous continuation: local Guild updates, 113 checks. Same two agents reused
+for original-source recovery and independent review. Full 115 checks/build,
+compiled encrypted Episode reward/replay/restart fixture and Guild Found/Update
+fixture proofs passed. Independent source/implementation reviews found no defects.
+
+BADWORD_RO recovered and hash-pinned: EN502/JA31/KO4159/SC4082/TC85, 8859 entries.
+Stock loader merges ALL five locales KO/EN/JA/SC/TC and skips empty entries.
+HasBadWord scans raw case-sensitive UTF8 byte substrings; no lowercasing,
+boundaries, whitespace or Unicode normalization. ChangeBadWord is separate.
+Snapshot matcher loads only for opt-in Guild creation/update; Found name/desc
+and changed Update name/desc refuse before fees/writes. Unchanged legacy text
+and no-op retries preserved. Font/region/minlevel/pending policy remains unknown.
+Authored benign test descriptions were changed after the original filter
+rejected them; no original words copied into fixtures, printed or whitelisted.
+
+Episode RequestReward -> ParseReward -> generic SyncUser reads mandatory
+user.iap_qty/free_iap_qty unconditionally. Positive gold/free-Manda receipts
+now contain coherent authoritative scalars alongside existing prev/cur pairs,
+prepared and uint32-validated before wallet/claim mutation. Original amounts,
+clear gates and item mappings unchanged. Missing/null user safely skips SyncUser;
+settled replay and item-only user:null kept. Oversized wallets refuse unchanged.
+Disposable encrypted fixture proved E02 free20->50/paid55 preserved and E18
+gold100->100100, exact replay/no-write and restart persistence. Fixture clear
+flags are authored admission data, not native battle evidence.
+
+No live source/profile/save/client/input/APK changes; Guild modes default off.
+Native Guild UI and fresh Episode receipt UI remain unverified. Escape input
+hold persists; DataDump read-only, original/private preserved, collector/Docker/
+inference offline. Server and Instrumented remain the only writable projects.
+
 ## Latest continuation: local Guild updates and scalar-wallet fix (2026-10-13)
 
 Previous turn was progress: local Found109 checks. Same2 agents reused;

@@ -80,6 +80,9 @@ try {
   assert.notEqual(act("Reward", "E18").result_code, 1);
   assert.equal(JSON.stringify(game), overflowGold, "overflow cannot consume the claim marker");
   game.gold = 10000;
+  const originalPaid=game.gacha_iap_qty;game.gacha_iap_qty=0x1_0000_0000;
+  const oversizedWallet=JSON.stringify(game);assert.notEqual(act("Reward","E18").result_code,1);assert.equal(JSON.stringify(game),oversizedWallet);
+  game.gacha_iap_qty=originalPaid;
   const currentPrivate = state as any;
   const currentPersist = currentPrivate.persist.bind(state);
   currentPrivate.persist = () => { throw new Error("Simulated gold settlement failure"); };
@@ -90,7 +93,7 @@ try {
   const itemsBeforeGold = JSON.stringify(game.items);
   const goldClaim = act("Reward", "E18");
   assert.equal(goldClaim.result_code, 1);
-  assert.deepEqual(goldClaim.ret_data.user, { gold: { prev: 10000, cur: 110000 } });
+  assert.deepEqual(goldClaim.ret_data.user, { gold: { prev: 10000, cur: 110000 },iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty });
   assert.deepEqual(goldClaim.ret_data.item, []);
   assert.equal(JSON.stringify(game.items), itemsBeforeGold, "RP1 is not stored as a normal item stack");
   state = new ServerState("http://localhost", file); game = state.gameFor(state.accountFor(auth, {}));
@@ -122,7 +125,7 @@ try {
   const freeGold = game.gold;
   const freeClaim = act("Reward", "E02");
   assert.equal(freeClaim.result_code, 1);
-  assert.deepEqual(freeClaim.ret_data.user, { free_iap: { prev: 20, cur: 50 } });
+  assert.deepEqual(freeClaim.ret_data.user, { free_iap: { prev: 20, cur: 50 },iap_qty:55,free_iap_qty:50 });
   assert.deepEqual(freeClaim.ret_data.item, []);
   assert.equal(game.gacha_iap_qty, 55); assert.equal(game.gold, freeGold);
   assert.equal(JSON.stringify(game.items), freeItems);

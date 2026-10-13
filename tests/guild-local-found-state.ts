@@ -12,7 +12,7 @@ try {
   const game=state.gameFor(state.accountFor(auth,{}));game.gold=100;
   const peer=state.registerGuest({device_id:"founder-peer"},{}).ret_data as any;const peerGame=state.gameFor(state.accountFor(peer,{}));
   (state as any).persist();const bytes=readFileSync(file),peerBefore=JSON.stringify(peerGame),others=JSON.stringify({...game,gold:undefined});
-  const body={...auth,name:"New Guild",desc:"Local fixture",type:"1",fc_point_limit:"500",region:"EN",emblem_id:"GD_IMG_1"};
+  const body={...auth,name:"New Guild",desc:"Updated",type:"1",fc_point_limit:"500",region:"EN",emblem_id:"GD_IMG_1"};
   const found=(extra={})=>gameResponse(state,"/guild/Found",{...body,...extra}) as any;
   assert.throws(()=>gameResponse(state,"/guild/Found",{}),/authenticated/);
   assert.throws(()=>found({pvid:peer.pvid}),/pvid does not match/);

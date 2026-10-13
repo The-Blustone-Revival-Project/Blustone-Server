@@ -2775,17 +2775,19 @@ paths:
         settles E18 through user.gold{prev,cur}, not an RP1 item stack. Original
         E02 declares FMD1x30; replica policy credits30 through
         user.free_iap{prev,cur}, preserving paid currency. Currency quantities
-        use direct wallet units without an inferred scale. Original Episode
-        settlement remains unavailable. Authenticated claims require every
-        descendant story recorded cleared (conservative local policy), validate
-        inventory/gold capacity, and persist the reward plus reward_log marker
-        together with rollback on failure. Native item receipts are additive;
-        settled retries return item[]/user:null, never another delta. Other
-        chapter materials remain unsupported and refuse. Native E01 through E05
-        story clears and both E05 battles are verified. Native E02 reward
-        credited30 free Manda; E05 reward added20 capsules with Search count16
-        to36. E18 settlement remains unverified. Client-reported logs do not
-        independently prove a battle.
+        use direct wallet units without an inferred scale. Positive user
+        receipts echo authoritative iap_qty/free_iap_qty because generic
+        SyncUser otherwise resets Manda; null-user settled/item receipts take
+        its safe early return. Original Episode settlement remains unavailable.
+        Authenticated claims require every descendant story recorded cleared
+        (conservative local policy), validate inventory/gold capacity, and
+        persist the reward plus reward_log marker together with rollback on
+        failure. Native item receipts are additive; settled retries return
+        item[]/user:null, never another delta. Other chapter materials remain
+        unsupported and refuse. Native E01 through E05 story clears and both E05
+        battles are verified. Native E02 reward credited30 free Manda; E05
+        reward added20 capsules with Search count16 to36. E18 settlement remains
+        unverified. Client-reported logs do not independently prove a battle.
       tags:
         - Missions and combat
       parameters: *a1
@@ -4608,8 +4610,9 @@ paths:
         and declared free-first Manda debit with rollback;
         members/rank/counters/allocator preserved. Full my_guild/guilds and
         currency pairs plus mandatory paid/free scalars repair lost replies on
-        no-write retries. Original debit priority, region/font/badword
-        matching/pending rules and native UI remain unverified.
+        no-write retries. Pinned stock BADWORD union/raw case-sensitive byte
+        matching protects new or changed text. Original debit priority,
+        region/font/pending rules and native UI remain unverified.
       tags:
         - Guild
       parameters: *a1

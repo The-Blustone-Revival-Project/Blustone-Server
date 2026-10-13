@@ -107,11 +107,12 @@ The retained original thirteen-table export contains BADWORD_RO, not just its
 name. Five locale records have string mappings with these entry counts:
 EN502, JA31, KO4159, SC4082, TC85. Source:
 DataDump sources/client-tables/recovered-data/leveldb-tables/all-tables.json.
-No words need publishing to establish availability. Matching, normalization,
-active locale selection and native loader ownership have not been closed in
-this unit. The available dataset is not automatically a valid server blacklist,
-and a printable-ASCII local subset does not recreate this production check.
-Earlier creation notes now distinguish available data from unknown semantics.
+No words need publishing to establish availability. The separate
+[native dictionary follow-up](badword-source-native-2026-10-13.md) now closes
+loader ownership, all-five union and exact byte matching without casefold.
+A printable-ASCII local subset alone does not recreate that check; optional
+server integration must use the proven source-backed matcher. Font support
+and broader original server admission remain incomplete.
 
 ## Verification
 

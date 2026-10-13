@@ -35,7 +35,7 @@ try {
   const restart=new ServerState("http://localhost",file,options);
   assert.equal((gameResponse(restart,"/guild/GetDetailInfo",{...users[0],guild_id:"[1]"}) as any).ret_data.guilds[0].name,"Renamed");
   assert.deepEqual(readFileSync(file),settled);
-  const supervisor=gameResponse(restart,"/guild/Update",{...body,...users[2],desc:"Supervisor edit"}) as any;
+  const supervisor=gameResponse(restart,"/guild/Update",{...body,...users[2],desc:"Original"}) as any;
   assert.equal(supervisor.result_code,1);assert.equal(supervisor.ret_data.my_guild.role,2);
   assert.equal(supervisor.ret_data.user.iap.prev,supervisor.ret_data.user.iap.cur,"other metadata has zero fee in local mode");
   const final=JSON.parse(readFileSync(file,"utf8"));assert.deepEqual(final.guilds[1],{...saved.guilds[1],member_cnt:1});
