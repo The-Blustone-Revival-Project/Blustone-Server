@@ -18,6 +18,8 @@ import { emptyLoginBonus, normalizeLoginBonus, type LoginBonusState } from "./lo
 import { emptyMail, normalizeMail, type MailState } from "./mail.js";
 import { emptySpecialSupply, normalizeSpecialSupply, type SpecialSupplyState } from "./special-supply.js";
 import { emptyEpisodeProgress, normalizeEpisodeProgress, type EpisodeProgress } from "./episode-progress.js";
+import {ownedFishingInventory} from "./fishing-inventory.js";
+import type {FishingInventoryReplacement} from "./fishing-reference.js";
 
 export interface LocalItemInstance {
   inst_id: number;
@@ -122,6 +124,8 @@ export interface LocalGameState {
   gem: number;
   /** Explicit imported/seeded wire rows, never the legacy scalar gem counter. */
   owned_gems?: Record<string, unknown>[];
+  /** Explicit owned fish counts; never created from a catalogue or bait pool. */
+  owned_fish?: FishingInventoryReplacement[];
   leader_inst_id: number;
   items: LocalItemInstance[];
   /** Cards awarded after the bootstrap inventory. Never gacha popup metadata. */
@@ -368,6 +372,7 @@ export function normalizeLocalGameState(raw: unknown): LocalGameState {
       if(!Array.isArray(value.owned_gems)) throw new Error("Malformed owned Gem inventory; refusing to erase it");
       return structuredClone(value.owned_gems) as Record<string,unknown>[];
     })()}),
+    ...(value.owned_fish===undefined?{}:{owned_fish:ownedFishingInventory(value.owned_fish)}),
     leader_inst_id: integer("leader_inst_id", fallback.leader_inst_id),
     items: Array.isArray(value.items) ? value.items as LocalItemInstance[] : [],
     recruited_cards: Array.isArray(value.recruited_cards)

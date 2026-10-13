@@ -758,8 +758,8 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
   } };
   for (const route of ["/fishing/GetInven", "/fishing/GetRecord"]) {
     paths[route] = { post: {
-      ...operation("Read local fishing collection", "Authenticated bare ret_data array. The replica has no reconstructed catches or personal fish records and currently returns an empty array. Native ParseInven/ParseRecod iterate numeric rows; metadata wrappers are incompatible. No bait, fish or rewards are granted.", "Fishing", response("Empty fishing collection.", {
-        allOf: [{ $ref: "#/components/schemas/ResultEnvelope" }, { type: "object", properties: { ret_data: { type: "array", maxItems: 0, items: { type: "object" } } } }],
+      ...operation("Read local fishing collection", "Authenticated bare ret_data array. GetInven returns explicit persisted owned_fish rows with fish_id/b_cnt/s_cnt/g_cnt, validated against separately supplied fishing item definitions; metadata and pools never grant ownership. Missing metadata for stored rows refuses2001. GetRecord remains empty because no personal catch history is reconstructed. Native ParseInven inserts missing keys and does not clear or replace existing counts; successful sale uses its separate absolute replacement receipt. No bait, catches or rewards are granted.", "Fishing", response("Explicit owned fishing collection or empty record history.", {
+        allOf: [{ $ref: "#/components/schemas/ResultEnvelope" }, { type: "object", properties: { ret_data: { type: "array", items: { type: "object" } } } }],
       })),
       "x-evidence": "analysis/ghidra-fishing-owned-parsers.txt; analysis/ghidra-fishing-inven-keys.txt; analysis/ghidra-fishing-record-keys.txt",
       "x-runtime-confidence": "Native parser recovered; server tests pass; device fishing entry unverified",

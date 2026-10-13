@@ -1,3 +1,31 @@
+## Latest continuation: explicit owned fish persistence and reads (2026-10-13)
+
+Same two agents reused for scalarSellFish and inventory/HTTPproducer evidence.
+Full126 test programs/build passed; both reviews completed. Extra imported
+row fields now refuse beforeprojection; focused byte-preservation regression
+and build passed afterfix. No silent loss of unsupported imported metadata.
+Optional LocalGameState.owned_fish now preserves explicitly imported rows
+{fish_id,b_cnt,s_cnt,g_cnt}; no defaults/catalogue/pool→ownership conversion.
+StrictlosslessUTF8/uniqueIDs/nonnegativeb/s INTMAX,g UINTMAX LOCALschema;
+malformedrestore refuseswithoutoverwrite. GetInven authenticates/existinggame
+only, joins eachstoredfish to separatelysuppliedfishmetadata, otherwise2001;
+detachedbarearray, no implicitgamecreation/persist. Peers/restart/fullsave
+preserved. Zero-countrows retained. GetRecord still[]/no derivedcatchhistory.
+
+NativeParseInven Gb2d038 insertsONLYabsentkeys/no clear/noexistingreplacement;
+do not claim cache-refresh through these reads. Sale's ONEOBJECTsell_result
+instead replacesremainingcounts. Normalbody2001 refusalSAFE: legacyEnqueue
+preprocess parsesresult_code→SetPVCode(+4), then GetResultCode returns2001
+beforeReqSellCBouterguard; earlier transport-only hypothesis disproven. Do not
+add guessed neutralreceipts or HTTPerrors. Special1001..1004 codes remap1;
+not used here. Scalarrequestfish_id/grade/qty recovered, no inventedall-sale.
+
+Original fishcount↔ordinaryiteminst ownership/removal and retryproducer remain
+unproved; SellFish/EndWithSell/Begin stillgated. No catch/grant/wallet mutation,
+no liveinputs/profile/APKchanges. Workflow docs/fishing-owned-inventory-workflow-
+2026-10-13.md; native source notes retained. DataDumpreadonly, Escapehold,
+collector/Docker/inferenceoffline, originals/private preserved. GoalACTIVE.
+
 ## Latest continuation: preserve carried Mirage evidence on lobby reads (2026-10-13)
 
 Same two agents reused, no additional delegation. Full125 test programs/build

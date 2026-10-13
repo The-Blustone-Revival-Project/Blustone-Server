@@ -27,6 +27,7 @@ import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors } from "./mirage.js";
 import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
 import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type FishingCatalogue} from "./fishing-catalogue.js";
+import {ownedFishingInventory} from "./fishing-inventory.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { socialDiscovery } from "./social-discovery.js";
@@ -1505,7 +1506,7 @@ export class ServerState {
   }
 
   fishingAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
-    this.accountFor(payload, headers);
+    const account=this.accountFor(payload, headers);
     if(route==="/fishing/GetFishingPool"||route==="/fishing/GetPriceRef") {
       if(!this.fishingCatalogue) return this.failure(2001,"Fishing catalogue unavailable; explicit fish item definitions and catalogue required");
       try {
@@ -1513,10 +1514,14 @@ export class ServerState {
           fishingPriceRows(this.fishingCatalogue,payload.fish_id));
       } catch(error) {return this.failure(2001,error instanceof Error?error.message:"Invalid fishing reference request");}
     }
-    // CSRMFishing ParseInven/ParseRecod index ret_data numerically. Empty
-    // arrays skip all fish rows; optional achievement lookup resolves null.
-    // No catches have been reconstructed or granted by this local server.
-    if (route === "/fishing/GetInven" || route === "/fishing/GetRecord") return this.envelope([]);
+    // CSRMFishing ParseInven/ParseRecod index ret_data numerically. Inventory
+    // reads publish only explicit stored ownership; catalogue rows never grant
+    // counts. No catch producer or personal record history is reconstructed.
+    if(route==="/fishing/GetInven") {
+      try {return this.envelope(ownedFishingInventory(this.gameByPvid.get(account.pvid)?.owned_fish??[],new Set(this.fishingItems.map(row=>row.id))));}
+      catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid owned fishing inventory");}
+    }
+    if(route==="/fishing/GetRecord") return this.envelope([]);
     return this.failure(2001, "Fishing catches, pools, prices and settlement are not reconstructed");
   }
 
