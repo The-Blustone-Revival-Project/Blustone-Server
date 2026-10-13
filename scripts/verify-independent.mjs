@@ -17,6 +17,7 @@ const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgra
 const exerciseGemReplacement=process.argv.includes('--exercise-gem-replacement');
 const exerciseGemSale=process.argv.includes('--exercise-gem-sale');
 const exerciseGuildRecords=process.argv.includes('--exercise-guild-records');
+const exerciseGuildMembership=process.argv.includes('--exercise-guild-membership');
 const exerciseGuildUpdate=process.argv.includes('--exercise-guild-local-update');
 const exerciseGuildFound=process.argv.includes('--exercise-guild-local-found')||exerciseGuildUpdate;
 const exerciseGemLevelReference=process.argv.includes('--exercise-gem-level-reference');
@@ -47,7 +48,8 @@ const monsterIndex=process.argv.indexOf('--exercise-monster');
 const exerciseMonster=monsterIndex===-1?undefined:process.argv[monsterIndex+1];
 if(monsterIndex!==-1 && (!process.argv.includes('--fixture') || typeof exerciseMonster!=='string' || !/^M[0-9]{3}$/.test(exerciseMonster)))
   throw new Error('Monster resource exercises require --fixture and one exact original namespace');
-if((exerciseBulk || exerciseSocial || exerciseSale || exerciseEquipment || exerciseGemInventory || exerciseGuildRecords || exerciseGuildFound || exerciseGemLevelReference || exerciseEpisodeWallet) && !process.argv.includes('--fixture')) throw new Error('Configured exercises require --fixture; private preserved saves are never mutation targets');
+if((exerciseBulk || exerciseSocial || exerciseSale || exerciseEquipment || exerciseGemInventory || exerciseGuildRecords || exerciseGuildFound || exerciseGemLevelReference || exerciseEpisodeWallet || exerciseGuildMembership) && !process.argv.includes('--fixture')) throw new Error('Configured exercises require --fixture; private preserved saves are never mutation targets');
+if(exerciseGuildMembership&&(exerciseGuildFound||exerciseGuildRecords||exerciseBulk||exerciseSocial||exerciseSale||exerciseEquipment||exerciseGemInventory||exerciseEpisodeWallet)) throw new Error('Guild membership proof requires a separate disposable run');
 if(exerciseEpisodeWallet&&(exerciseGuildFound||exerciseGuildRecords||exerciseBulk||exerciseSocial||exerciseSale||exerciseEquipment||exerciseGemInventory)) throw new Error('Episode wallet proof requires a separate disposable run');
 if(exerciseGuildFound&&(exerciseGuildRecords||exerciseBulk||exerciseSocial||exerciseSale||exerciseEquipment||exerciseGemInventory)) throw new Error('Local Guild creation requires a separate disposable verification run');
 const profileIndex=process.argv.indexOf('--profile');
@@ -57,6 +59,7 @@ const profile=JSON.parse(readFileSync(path.join(root,'config/profiles',profileNa
 if(exerciseGemInventory && profileName!=='current-e6-gems') throw new Error('Gem reference fixture requires the prepared original Gem owner profile');
 if(exerciseGuildRecords && profileName!=='current-e6-guild') throw new Error('Guild lobby fixture requires prepared original Guild owner profile');
 if(exerciseGuildFound && profileName!=='current-e6-guild') throw new Error('Local Guild creation fixture requires original Guild profile');
+if(exerciseGuildMembership && profileName!=='current-e6-guild') throw new Error('Guild membership fixture requires original Guild profile');
 preflight(root,profile);
 const stamp=profile.env.BLUSTONE_RESLIST_STAMP;
 const expectedNames=profile.env.BLUSTONE_PACKAGE_NAMES.split(',').map(name=>name.slice(0,-4));
@@ -83,6 +86,15 @@ else {
   const { ServerState } = await import(pathToFileURL(path.join(root, 'dist/src/state.js')).href);
   const fixture = new ServerState(base, stateFile,{guildCreationMode:'disabled'});
   fixture.registerGuest({device_id:'standalone-generated-fixture'}, {});
+  if(exerciseGuildMembership) {
+    const manager=fixture.registerGuest({device_id:'standalone-guild-manager'},{}).ret_data;
+    fixture.registerGuest({device_id:'standalone-migration-verification'},{});
+    const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
+    const makeGuild=(id,type,pvid)=>({id,name:'Authored Guild '+id,type,fc_point_limit:0,contribution:17,region:'EN',emblem_id:'GD_IMG_1',desc:'',rank:9,gvg_win_cnt:7,gvg_inf_win_cnt:8,
+      member_cnt:1,members:[{pvid,contribution:3,newbie:0,role:1,fc_point:0}]});
+    seeded.guilds=[makeGuild(7001,1,seeded.accounts[0].pvid),makeGuild(7002,2,manager.pvid)];
+    writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
+  }
   if(exerciseBulk || exerciseSale || exerciseEquipmentUpgrade) {
     const auth=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
     const account=fixture.accountFor(auth,{}),game=fixture.gameFor(account);
@@ -147,6 +159,8 @@ const launch = async () => {
   const env={...process.env,...profile.env};
   env.BLUSTONE_GUILD_CREATION_MODE=exerciseGuildFound?'local-gold':'disabled';
   env.BLUSTONE_GUILD_UPDATE_MODE=exerciseGuildUpdate?'local-manda-free-first':'disabled';
+  env.BLUSTONE_GUILD_MEMBERSHIP_MODE=exerciseGuildMembership?'local-public-approval':'disabled';
+  if(exerciseGuildMembership) env.BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON=JSON.stringify({maxMembers:40,memberRole:4,newbie:1});
   if(exerciseGuildFound) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17}]);
   if(exerciseGuildUpdate) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
   if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
@@ -398,6 +412,28 @@ try {
     exerciseGuildRecords?{my_guild:{guild_id:7001,status:3,newbie:0,role:1,contribution:3}}:
       {my_guild:{guild_id:0,status:0,newbie:0,role:0,contribution:0}},'Guild boot membership is flat PLAY_DATA');
   assert.deepEqual((await secure('/guild/GetNotifications',auth)).ret_data,{guild_notifications:[]},'Named notification child reaches native cache replacement');
+  if(exerciseGuildMembership) {
+    const apply=id=>secure('/guild/Apply',{...auth,guild_id:String(id),desc:''});
+    assert.equal((await apply(7001)).ret_data.my_guild.status,3);
+    let settled=readFileSync(stateFile);assert.equal((await apply(7001)).result_code,1);assert.deepEqual(readFileSync(stateFile),settled);
+    assert.equal((await secure('/guild/CancelApplication',auth,{allowPlainRefusal:true})).result_code,2001);assert.deepEqual(readFileSync(stateFile),settled);
+    assert.equal((await secure('/guild/Leave',auth)).ret_data.user,null);
+    assert.equal((await apply(7002)).ret_data.my_guild.status,1);
+    assert.equal((await secure('/guild/CancelApplication',auth)).result_code,1);
+    assert.equal((await apply(7002)).ret_data.my_guild.status,1);
+    const applicantConnection={secret,token};await exchange();
+    const manager=await secure('/v2/account/RegisterGuest',{device_id:'standalone-guild-manager'});
+    const managerAuth={pvid:String(manager.pvid),otp:String(manager.ret_data.otp)},managerConnection={secret,token};
+    let rows=(await secure('/guild/GetApplicants',managerAuth)).ret_data.applicants;assert.equal(rows.length,1);assert.equal(rows[0].pvid,Number(auth.pvid));
+    const decision={...managerAuth,target_pvid:JSON.stringify([Number(auth.pvid)]),granted:'0'};
+    assert.equal((await secure('/guild/ConfirmApplication',decision)).ret_data.applicants.length,0);
+    ({secret,token}=applicantConnection);assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.status,0);
+    assert.equal((await apply(7002)).ret_data.my_guild.status,1);
+    ({secret,token}=managerConnection);decision.granted='1';
+    assert.equal((await secure('/guild/ConfirmApplication',decision)).ret_data.guilds[0].member_cnt,2);
+    settled=readFileSync(stateFile);assert.equal((await secure('/guild/ConfirmApplication',decision)).result_code,1);assert.deepEqual(readFileSync(stateFile),settled);
+    ({secret,token}=applicantConnection);assert.deepEqual((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild,{guild_id:7002,status:3,newbie:1,role:4,contribution:0});
+  }
   if(exerciseGuildRecords) {
     const member=before.accounts.find(account=>account.deviceId==='standalone-established-guild-member');
     const detailBytes=readFileSync(stateFile);
@@ -624,6 +660,13 @@ try {
   }
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
+  if(exerciseGuildMembership) {
+    assert.deepEqual(after.guilds[0],before.guilds[0],'Public join/departure preserves the Guild and counters');
+    const expected=structuredClone(before.guilds[1]);expected.member_cnt=2;
+    expected.members.push({pvid:Number(auth.pvid),role:4,newbie:1,contribution:0,fc_point:0});
+    assert.deepEqual(after.guilds[1],expected);assert.deepEqual(after.guildPending,[]);
+    assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.status,3,'Approved ownership survives compiled restart');
+  }
   if(exerciseGuildFound) {
     assert.equal(after.nextGuildId,2);assert.equal(after.guilds.length,1);
     assert.equal(after.guilds[0].members[0].pvid,founderPvid);
@@ -678,6 +721,11 @@ try {
       assert.deepEqual(actual,expected,'Compiled bulk transaction persisted wrong ownership or unrelated gameplay');
       continue;
     }
+    if(exerciseGuildMembership&&(entry[0]===Number(auth.pvid)||entry[0]===before.accounts.find(account=>account.deviceId==='standalone-guild-manager')?.pvid)) {
+      const actual=structuredClone(found[1]),expected=structuredClone(entry[1]);
+      for(const key of ['ap_updated_at','bp_updated_at']){delete actual[key];delete expected[key];}
+      assert.deepEqual(actual,expected,'Membership preserves complete gameplay except normal registration/lobby fuel clock anchors');continue;
+    }
     if(exerciseGuildRecords&&entry[0]===Number(auth.pvid)) {
       const actual=structuredClone(found[1]),expected=structuredClone(entry[1]);
       for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
@@ -706,6 +754,7 @@ try {
     configured_guild_lobby_fixture:exerciseGuildRecords,
     configured_local_guild_creation_fixture:exerciseGuildFound,
     configured_local_guild_update_fixture:exerciseGuildUpdate,
+    configured_local_guild_membership_fixture:exerciseGuildMembership,
     episode_native_wallet_preservation_fixture:exerciseEpisodeWallet,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,

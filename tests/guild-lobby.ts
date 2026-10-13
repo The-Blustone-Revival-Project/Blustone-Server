@@ -27,7 +27,9 @@ assert.throws(() => guildLobby(1000004, records, accounts, emblems), /establishe
 assert.throws(() => guildInfo(records[0], new Set([1000001]), emblems), /member identity/);
 assert.throws(() => guildInfo(records[0], accounts, new Set()), /reference/);
 assert.throws(() => guildInfo({ ...records[0], members: [records[0].members[0], records[0].members[0]] }, accounts, emblems), /identity/);
-assert.throws(() => guildInfo({ ...records[0], members: records[0].members.map((member) => ({ ...member, role: 3 })) }, accounts, emblems), /one established leader/);
+assert.throws(() => guildInfo({ ...records[0], members: records[0].members.map((member) => ({ ...member, role: 3, newbie:0 })) }, accounts, emblems), /one established leader/);
+assert.throws(() => guildInfo({ ...records[0], members: [records[0].members[0], {...records[0].members[1],role:2}] }, accounts, emblems), /effective native role/,
+  "A newbie supervisor would become native role4; imported authorization must not diverge");
 assert.throws(() => guildLobby(1000001, [records[0], { ...records[0], id: 7002 }], accounts, emblems), /conflicting/);
 assert.throws(() => guildLobby(1000001, [records[0], records[0]], accounts, emblems), /Duplicate/);
 assert.deepEqual(GUILD_JOIN_TYPES, { public: 1, permission: 2, private: 3 });

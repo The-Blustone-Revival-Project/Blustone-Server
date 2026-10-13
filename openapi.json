@@ -7417,8 +7417,8 @@
     },
     "/guild/Apply": {
       "post": {
-        "summary": "Recovered /guild/Apply route",
-        "description": "The route literal **/guild/Apply** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Configured local Guild membership: Apply",
+        "description": "Scalar decimal guild_id plus plain desc. Local public1 joins immediately; permission2 creates durable pending status1; private3 invitation entry refuses. Same-server ownership and authoritative current FC threshold admission required. Reply returns current personal my_guild and complete affected INFO. Exact same-target retries do not duplicate members or write; another joined/pending target refuses. Default disabled. Opt-in guildMembershipMode/BLUSTONE_GUILD_MEMBERSHIP_MODE=local-public-approval requires selected/pinned original Guild art and explicit guildMembershipPolicy/BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON {maxMembers:1..40,memberRole:3|4,newbie:0|1}; newbie1 requires effective role4. Transactions are declared wallet-neutral local policy, persist atomically with rollback, require idle gameplay and preserve other Guilds, Hunters, wallets, progress, rank and counters. Original initialization/clock/history/cooldown/notifications/private invitation rules and native UI remain incomplete.",
         "tags": [
           "Guild"
         ],
@@ -7492,7 +7492,7 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-local-membership-2026-10-13.md; docs/guild-applicants-confirm-native-2026-10-13.md; docs/guild-membership-limits-native-2026-10-13.md; tests/guild-membership-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -7660,8 +7660,8 @@
     },
     "/guild/CancelApplication": {
       "post": {
-        "summary": "Recovered /guild/CancelApplication route",
-        "description": "The route literal **/guild/CancelApplication** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Configured local Guild membership: CancelApplication",
+        "description": "Auth only; removes only actor's pending application. Joined actors refuse because native success unconditionally clears personal Guild data. Truly unjoined/nonpending retries are no-write success. Native callback itself resets affiliation; reply has user:null. Default disabled. Opt-in guildMembershipMode/BLUSTONE_GUILD_MEMBERSHIP_MODE=local-public-approval requires selected/pinned original Guild art and explicit guildMembershipPolicy/BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON {maxMembers:1..40,memberRole:3|4,newbie:0|1}; newbie1 requires effective role4. Transactions are declared wallet-neutral local policy, persist atomically with rollback, require idle gameplay and preserve other Guilds, Hunters, wallets, progress, rank and counters. Original initialization/clock/history/cooldown/notifications/private invitation rules and native UI remain incomplete.",
         "tags": [
           "Guild"
         ],
@@ -7735,14 +7735,14 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-local-membership-2026-10-13.md; docs/guild-applicants-confirm-native-2026-10-13.md; docs/guild-membership-limits-native-2026-10-13.md; tests/guild-membership-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/guild/ConfirmApplication": {
       "post": {
-        "summary": "Recovered /guild/ConfirmApplication route",
-        "description": "The route literal **/guild/ConfirmApplication** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Configured local Guild membership: ConfirmApplication",
+        "description": "JSON-array form STRING target_pvid plus granted0/1. Manager role1/2 targets its own pending actors only. Entire batch admission/capacity is checked before atomic member/pending mutation. Reply contains current manager my_guild, full affected guilds and remaining applicants; native callback also removes captured requested IDs. Existing applications may be processed after a settings type change as declared local grandfather policy. Contradictory replay outcomes refuse. Default disabled. Opt-in guildMembershipMode/BLUSTONE_GUILD_MEMBERSHIP_MODE=local-public-approval requires selected/pinned original Guild art and explicit guildMembershipPolicy/BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON {maxMembers:1..40,memberRole:3|4,newbie:0|1}; newbie1 requires effective role4. Transactions are declared wallet-neutral local policy, persist atomically with rollback, require idle gameplay and preserve other Guilds, Hunters, wallets, progress, rank and counters. Original initialization/clock/history/cooldown/notifications/private invitation rules and native UI remain incomplete.",
         "tags": [
           "Guild"
         ],
@@ -7816,7 +7816,7 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-local-membership-2026-10-13.md; docs/guild-applicants-confirm-native-2026-10-13.md; docs/guild-membership-limits-native-2026-10-13.md; tests/guild-membership-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -8146,8 +8146,8 @@
     },
     "/guild/GetApplicants": {
       "post": {
-        "summary": "Recovered /guild/GetApplicants route",
-        "description": "The route literal **/guild/GetApplicants** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Read owned Guild applications",
+        "description": "Auth only; requires joined manager role1/2, as in the original request dispatch guard. Returns ret_data.applicants rows with pvid/desc/fc_point/applied. Pending actors are distinct from joined members. Applicant PVID must fit the original parser's low32 identity; applied is a low32 scalar with unrecovered original clock semantics. Local imported/application epoch-second records are explicit local state. Other Guild applications are never exposed.",
         "tags": [
           "Guild"
         ],
@@ -8221,7 +8221,7 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-applicants-confirm-native-2026-10-13.md; tests/guild-membership-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -8899,8 +8899,8 @@
     },
     "/guild/Leave": {
       "post": {
-        "summary": "Recovered /guild/Leave route",
-        "description": "The route literal **/guild/Leave** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Configured local Guild membership: Leave",
+        "description": "Auth only; removes only actor's existing nonleader membership. Leaders refuse pending original succession/dissolution reconstruction. Pending actors must Cancel instead. Neutral unjoined/nonpending retries are no-write success. Native success clears personal Guild state/caches/chat; reply has user:null. Default disabled. Opt-in guildMembershipMode/BLUSTONE_GUILD_MEMBERSHIP_MODE=local-public-approval requires selected/pinned original Guild art and explicit guildMembershipPolicy/BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON {maxMembers:1..40,memberRole:3|4,newbie:0|1}; newbie1 requires effective role4. Transactions are declared wallet-neutral local policy, persist atomically with rollback, require idle gameplay and preserve other Guilds, Hunters, wallets, progress, rank and counters. Original initialization/clock/history/cooldown/notifications/private invitation rules and native UI remain incomplete.",
         "tags": [
           "Guild"
         ],
@@ -8974,7 +8974,7 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-local-membership-2026-10-13.md; docs/guild-applicants-confirm-native-2026-10-13.md; docs/guild-membership-limits-native-2026-10-13.md; tests/guild-membership-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },

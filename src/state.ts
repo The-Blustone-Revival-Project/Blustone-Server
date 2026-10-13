@@ -10,6 +10,9 @@ import {guildActionPrices,type GuildActionPrice} from "./guild-prices.js";
 import {planLocalGuildFound} from "./guild-local-found.js";
 import {planLocalGuildUpdate} from "./guild-local-update.js";
 import {guildWalletReceipt} from "./guild-wallet-receipt.js";
+import {guildMembershipPolicy,type GuildMembershipPolicy} from "./guild-membership-policy.js";
+import {guildApplications,guildPendingLobby,guildApplicantRows,type GuildApplication} from "./guild-applications.js";
+import {planLocalGuildMembership} from "./guild-local-membership.js";
 import {BADWORD_SOURCE,originalBadwordMatcher} from "./badword-source.js";
 import { GUILD_SPRITE_EMBLEMS,GUILD_EMBLEM_SOURCE,verifyGuildEmblemSource } from "./guild-emblems.js";
 import {repositoryPath} from "./paths.js";
@@ -516,6 +519,7 @@ export class ServerState {
   private socialLikes?: SocialLikes;
   private guilds?: GuildRecord[];
   private nextGuildId?:number;
+  private guildPending?:GuildApplication[];
   private readonly hunterSaleProfits: readonly CardSellProfit[];
   private readonly equipmentLevelPrices: readonly EquipmentLevelPrice[];
   private readonly equipmentRankPrices: readonly EquipmentRankPrice[];
@@ -528,12 +532,15 @@ export class ServerState {
   private readonly guildCreationMode:"disabled"|"local-gold";
   private readonly guildUpdateMode:"disabled"|"local-manda-free-first";
   private readonly guildBadwordCheck?: (text:string)=>boolean;
+  private readonly guildMembershipMode:"disabled"|"local-public-approval";
+  private readonly guildMembershipPolicy?:Readonly<GuildMembershipPolicy>;
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
       gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown;
-      guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first" } = {}) {
+      guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first";
+      guildMembershipMode?:"disabled"|"local-public-approval";guildMembershipPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -584,6 +591,17 @@ export class ServerState {
     }
     if(creationMode!=="disabled"||updateMode!=="disabled")
       this.guildBadwordCheck=originalBadwordMatcher(readFileSync(repositoryPath(BADWORD_SOURCE.path)));
+    const membershipMode=Object.hasOwn(options,"guildMembershipMode")?options.guildMembershipMode:process.env.BLUSTONE_GUILD_MEMBERSHIP_MODE??"disabled";
+    if(membershipMode!=="disabled"&&membershipMode!=="local-public-approval") throw new TypeError("Unknown Guild membership mode");
+    this.guildMembershipMode=membershipMode;
+    const membershipPolicy=Object.hasOwn(options,"guildMembershipPolicy")?options.guildMembershipPolicy:
+      process.env.BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON);
+    if(membershipPolicy!==undefined||membershipMode!=="disabled") this.guildMembershipPolicy=guildMembershipPolicy(membershipPolicy);
+    if(membershipMode!=="disabled") {
+      if(!["pkgi1","pkgi1-tree"].includes(process.env.BLUSTONE_PACKAGE_MODE??"")||!(process.env.BLUSTONE_PACKAGE_NAMES??"").split(",").includes("GUILD.jet"))
+        throw new TypeError("Local Guild membership requires selected original Guild resource profile");
+      verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
+    }
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -616,6 +634,7 @@ export class ServerState {
     if (saved.socialLikes !== undefined)
       this.socialLikes = normalizeSocialLikes(saved.socialLikes, (pvid) => this.socialAccountProfile(pvid));
     if(saved.guilds!==undefined) this.guilds=establishedGuildRecords(saved.guilds,this.accountsByPvid);
+    if(saved.guildPending!==undefined) this.guildPending=guildApplications(saved.guildPending,this.guilds??[],this.accountsByPvid);
     if(saved.nextGuildId!==undefined) {
       const maximum=Math.max(0,...(this.guilds??[]).map(record=>record.id));
       if(typeof saved.nextGuildId!=="number"||!Number.isInteger(saved.nextGuildId)||saved.nextGuildId<=maximum||saved.nextGuildId>0x1_0000_0000)
@@ -680,6 +699,7 @@ export class ServerState {
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
       ...(this.nextGuildId === undefined ? {} : { nextGuildId: this.nextGuildId }),
+      ...(this.guildPending === undefined ? {} : { guildPending: this.guildPending }),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -1208,11 +1228,18 @@ export class ServerState {
     const account = this.accountFor(payload, headers);
     if(route==="/guild/Found") return this.foundLocalGuild(account,payload);
     if(route==="/guild/Update") return this.updateLocalGuild(account,payload);
+    if(["/guild/Apply","/guild/CancelApplication","/guild/Leave","/guild/ConfirmApplication"].includes(route))
+      return this.localGuildMembership(account,route,payload);
     if(route==="/reference/GetGuildPrices") return this.envelope(this.guildPrices.map(row=>({...row})));
     // Imported joined records are explicit local state, never inferred from
     // requests. my_guild is flat PLAY_DATA, distinct from full Guild INFO.
-    if (route === "/lobby/GetGuildInfo") return this.envelope(guildLobby(account.pvid,this.guilds??[],
-      new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS)));
+    if (route === "/lobby/GetGuildInfo") return this.envelope(this.guildPersonal(account.pvid));
+    if(route==="/guild/GetApplicants") {
+      const own=this.guilds?.find(record=>record.members.some(member=>member.pvid===account.pvid));
+      if(!own||![1,2].includes(own.members.find(member=>member.pvid===account.pvid)!.role))
+        return this.failure(2001,"Guild applicants require existing management role1or2");
+      return this.envelope({applicants:guildApplicantRows(own.id,this.guildPending??[])});
+    }
     if(route==="/guild/GetDetailInfo") {
       let ids:string[];
       try{ids=parseGuildInfoQuery(payload);}catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild query");}
@@ -1238,10 +1265,43 @@ export class ServerState {
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");
   }
 
+  private guildPersonal(pvid:number) {
+    return guildPendingLobby(pvid,this.guildPending??[])??guildLobby(pvid,this.guilds??[],
+      new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS));
+  }
+
+  private localGuildMembership(account:Account,route:string,payload:Record<string,unknown>) {
+    if(this.guildMembershipMode!=="local-public-approval") return this.failure(2001,"Local Guild membership mode is disabled");
+    const game=this.gameByPvid.get(account.pvid);
+    if(!game||game.active_battle?.state==="active"||game.arena.active||game.search.active)
+      return this.failure(2001,"Guild membership requires established idle actor gameplay");
+    let plan;
+    try {
+      const games=new Map([...this.gameByPvid].map(([pvid,game])=>[pvid,{fc_point:game.arena.rating_point,
+        active:game.active_battle?.state==="active"||!!game.arena.active||!!game.search.active}]));
+      plan=planLocalGuildMembership(route,payload,this.guilds??[],this.guildPending??[],this.accountsByPvid,account,games,
+        this.guildMembershipPolicy!,Math.floor(Date.now()/1000));
+      const next=establishedGuildRecords(plan.guilds,this.accountsByPvid);
+      plan.guilds=next;
+    } catch(error) {return this.failure(2001,error instanceof Error?error.message:"Invalid local Guild membership");}
+    if(plan.changed) {
+      const beforeGuilds=this.guilds,beforePending=this.guildPending;
+      this.guilds=plan.guilds;this.guildPending=plan.applications;
+      try{this.persist();}catch(error){this.guilds=beforeGuilds;this.guildPending=beforePending;throw error;}
+    }
+    // These native callbacks clear personal state themselves; publishing a
+    // fabricated Guild object cannot replace a persisted ownership transition.
+    if(route==="/guild/CancelApplication"||route==="/guild/Leave") return this.envelope({user:null});
+    return this.envelope({...this.guildPersonal(account.pvid),user:null,
+      guilds:plan.affectedId?guildDetailRows([String(plan.affectedId)],this.guilds??[],account.serverId,this.accountsByPvid):[],
+      ...(route==="/guild/ConfirmApplication"?{applicants:guildApplicantRows(plan.affectedId!,this.guildPending??[])}:{})});
+  }
+
   private foundLocalGuild(account:Account,payload:Record<string,unknown>) {
     if(this.guildCreationMode!=="local-gold") return this.failure(2001,"Local Guild creation mode is disabled");
     const game=this.gameByPvid.get(account.pvid);
     if(!game) return this.failure(2001,"Founder has no established game state");
+    if(this.guildPending?.some(row=>row.pvid===account.pvid)) return this.failure(2001,"Founder must cancel its pending Guild application first");
     if(game.active_battle?.state==="active"||game.arena.active||game.search.active)
       return this.failure(2001,"Local Guild creation refuses active combat commitments");
     const id=this.nextGuildId??(Math.max(0,...(this.guilds??[]).map(record=>record.id))+1);

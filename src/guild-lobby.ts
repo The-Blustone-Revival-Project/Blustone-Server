@@ -30,7 +30,8 @@ export function guildInfo(record: GuildRecord, knownAccounts: ReadonlySet<number
   const members = record.members.map((member) => {
     if (!safeId(member.pvid) || !knownAccounts.has(member.pvid) || seen.has(member.pvid) ||
         !count(member.contribution) || !count(member.fc_point) || ![0, 1].includes(member.newbie) ||
-        ![1, 2, 3, 4].includes(member.role)) throw new TypeError("Guild member identity is not established");
+        ![1, 2, 3, 4].includes(member.role)||
+        (member.newbie===1&&member.role!==1&&member.role!==4)) throw new TypeError("Guild member identity/effective native role is not established");
     seen.add(member.pvid);
     return { pvid: member.pvid, contribution: member.contribution, newbie: member.newbie, role: member.role, fc_point: member.fc_point };
   });

@@ -1,3 +1,50 @@
+## Latest continuation: explicit local Guild membership lifecycle (2026-10-13)
+
+Previous turn progressed notification correction/membership contracts (452ef6a).
+Same two agents reused: applicant/approval grammar and independent limits/
+implementation review. Full116 checks/build, added explicit low32-identity
+negative checks and compiled encrypted --fixture --profile current-e6-guild
+--exercise-guild-membership publicjoin/departure/apply/cancel/reject/reapply/
+approve/replay/restart proof passed. No live profile/client input or APK change.
+
+Recovered GetApplicants auth-only, direct joined3/role1or2 dispatch guard;
+ret_data.applicants rows pvid/desc/fc_point/applied. PVID narrows low32 and high
+word0: uint64 account publication REFUSES aliases. fc/applied uint32; original
+applied clockunit unproved. Confirm sends target_pvid JSON-array form STRING
+and granted0/1; exact callback parses my_guild/guilds/applicants/user then
+removes captured requested IDs. Full collections and current INFO now supplied.
+
+Native UI DISPLAY cap40 AND approval joined-list+selected projected<=40 proved.
+Native nonleader newbie1 forces effective role4: refuse role3/newbie1 policy
+and imported newbie supervisors/members with role2/3 instead of granting server
+permissions inconsistent with native presentation. No silent import rewriting.
+
+New defaultdisabled membershipMode local-public-approval requires selected/
+pinned GUILD art and REQUIRED explicit policy maxMembers1..40/memberRole3or4/
+newbie0or1 (newbie1 mustrole4). Public immediatejoin/permissionpending, initial
+contribution0, wallet-neutral operations and pending epochseconds LOCAL policy,
+not original backenddefaults. Durable guildPending separate from joinedmembers;
+knownunique unjoined same-server uint32 actors/target/UTF8/scalar ownership
+validated, unknown historyrefused withoutoverwrite. Personalpendingstatus1/
+joinedstatus3, manager-only applicants projection; no membership invented byread.
+
+Apply freshFCthreshold/idle/sameserver/capacity; exactretry no duplicate/write.
+Approval validates completebatch/ownmanager/currentFC/idle/capacity thenatomic
+join/remove; rejection onlypendingremove. Current fullINFO/personal/remaining
+rows repaircache, accepted/rejected compatible no-op retries. Canceljoined
+REFUSE evenabsentpending (nativeforcesclear); Leavepending REFUSE; nonleader
+Leave only, leadersuccession/dissolution unknown. Absentneutral retries safe.
+Allsuccess user:null avoids genericwalletreset; persistbotharrays beforeack,
+rollbackboth onfailure. Hunters/progress/wallets/rank/GvG/totals/otherGuilds
+unchanged. Found rejects pendingactor. Existingowned applications may be
+processed aftertypeUpdate as explicit localgrandfatherpolicy, not newinvites.
+
+Native UI remains UNVERIFIED; original defaults/expiry/cooldowns/history/
+privateinvite/notification producers/leader policies incomplete. Registration/
+lobby proof masks onlynormalAPBPclockanchors, everyothergameplayfield exact.
+Escape hold persists; DataDump read-only; original/private preserved;
+collector/Docker/inference off. Server/Instrumented only writable.
+
 ## Latest continuation: Guild notification correction and membership contracts (2026-10-13)
 
 Previous turn progressed stock word matching/Episode wallet fix (02b6cf9).
