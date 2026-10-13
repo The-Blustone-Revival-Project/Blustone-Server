@@ -1,3 +1,35 @@
+## Latest continuation: established Guilds, polishing and fishing contracts (2026-10-13)
+
+Previous goal turn was progress: atomic Gem sales and90 checks. Reused same2
+agents. Full94 checks/build and compiled encrypted current-e6-guild140/stamp
+1634686 --exercise-guild-records --exercise-gem-level-reference proof pass.
+Explicit local-save guilds records now preserve established joined membership
+and feed authenticated flat Guild lobby with personal role/contribution.
+Known same-server accounts/unique membership/one leader/pinned original emblem
+required. Unsupported top-level/member history refuses before writes; review
+caught nested history loss, fixed and independently reverified. Unrelated
+persistence retains membership; existing equipment/Gem benefit gates now see
+restored affiliation. No creation/join/fees/GvG/rewards or actual memberships
+invented/imported live; full Guild INFO requests/menu proof remain pending.
+
+Gem LevelUp price refs accept immutable gemLevelPrices or
+BLUSTONE_GEM_LEVEL_PRICES_JSON: uint32 fields/raw float64 chance/compensation/
+byte add_sub flag, default empty. Native lookup ignores currency and selects
+level only, popup queries NEXTlevel. Older notes wrongly treated popup argument
+asinstID/literal7asmaxtries; actual max_tries is an argument and7isform rowcount.
+Upgrade needs authoritative full Gem result/tries/roll/cost laws, still REFUSE.
+Fishing supplied-table pure helper closes scalar fish_id price request and
+grade1/2/3 lookup. Item-reference membership dependency/empty defaults retained;
+no original fish IDs/prices/catches/pools inferred and routes unchanged.
+
+Compiled Guild fixture tests leader/member through separate transport bindings,
+original Guild package SHA/ranges/restart and exact gameplay except legitimate
+lobby AP/BP clocks. New source NOT hot-loaded; live139/client+15/save/inputs
+unchanged. Escape input hold remains; no APK build/install/release, collector,
+Docker or inference. Server/Instrumented writable, DataDump read-only, original
+and private evidence preserved. Next native panels need resumed input control;
+offline original Guild request/fee and fishing item catalogue evidence remains.
+
 ## Latest continuation: configured single/batch Gem sales (2026-10-13)
 
 Previous goal turn was progress: configured removal/set tables changed source
