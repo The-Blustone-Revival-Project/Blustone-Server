@@ -9,6 +9,7 @@ import {guildRankingRows} from "./guild-ranking.js";
 import {guildActionPrices,type GuildActionPrice} from "./guild-prices.js";
 import {planLocalGuildFound} from "./guild-local-found.js";
 import {planLocalGuildUpdate} from "./guild-local-update.js";
+import {planLocalGuildDonate} from "./guild-local-donate.js";
 import {guildWalletReceipt} from "./guild-wallet-receipt.js";
 import {guildMembershipPolicy,type GuildMembershipPolicy} from "./guild-membership-policy.js";
 import {guildApplications,guildPendingLobby,guildApplicantRows,type GuildApplication} from "./guild-applications.js";
@@ -547,6 +548,7 @@ export class ServerState {
   private readonly guildPrices: readonly GuildActionPrice[];
   private readonly guildCreationMode:"disabled"|"local-gold";
   private readonly guildUpdateMode:"disabled"|"local-manda-free-first";
+  private readonly guildDonationMode:"disabled"|"local-gold";
   private readonly guildBadwordCheck?: (text:string)=>boolean;
   private readonly guildMembershipMode:"disabled"|"local-public-approval";
   private readonly guildMembershipPolicy?:Readonly<GuildMembershipPolicy>;
@@ -563,6 +565,7 @@ export class ServerState {
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
       gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown;
       guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first";
+      guildDonationMode?:"disabled"|"local-gold";
       guildMembershipMode?:"disabled"|"local-public-approval";guildMembershipPolicy?:unknown;
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
@@ -575,6 +578,14 @@ export class ServerState {
     const publicMode=options.publicChatMode??process.env.BLUSTONE_PUBLIC_CHAT_MODE??"disabled";
     if(publicMode!=="disabled"&&publicMode!=="local-memory") throw new TypeError("Unknown public Chat mode");
     this.publicChatMode=publicMode;
+    const donationMode=Object.hasOwn(options,"guildDonationMode")?options.guildDonationMode:process.env.BLUSTONE_GUILD_DONATION_MODE??"disabled";
+    if(donationMode!=="disabled"&&donationMode!=="local-gold")throw new TypeError("Unknown Guild donation mode");
+    if(donationMode!=="disabled") {
+      if(!["pkgi1","pkgi1-tree"].includes(process.env.BLUSTONE_PACKAGE_MODE??"")||!(process.env.BLUSTONE_PACKAGE_NAMES??"").split(",").includes("GUILD.jet"))
+        throw new TypeError("Local Guild donation requires selected original Guild resource profile");
+      verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
+    }
+    this.guildDonationMode=donationMode;
     this.chatUrls(); // Validate enabled URLs before account/save operations.
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -1302,6 +1313,7 @@ export class ServerState {
     const account = this.accountFor(payload, headers);
     if(route==="/guild/Found") return this.foundLocalGuild(account,payload);
     if(route==="/guild/Update") return this.updateLocalGuild(account,payload);
+    if(route==="/guild/Donate") return this.donateLocalGuild(account,payload);
     if(route==="/guild/Appoint"||route==="/guild/Banish") return this.localGuildManagement(account,route,payload);
     if(route==="/guild/Invite"||route==="/guild/ConfirmInvitation") return this.localGuildInvitation(account,route,payload);
     if(route==="/guild/ReadNotifications"||route==="/guild/DeleteNotifications") return this.changeGuildNotifications(account,route,payload);
@@ -1460,6 +1472,26 @@ export class ServerState {
     return this.envelope({...this.guildPersonal(account.pvid),user:null,
       guilds:plan.affectedId?guildDetailRows([String(plan.affectedId)],this.guilds??[],account.serverId,this.accountsByPvid):[],
       ...(route==="/guild/ConfirmApplication"?{applicants:guildApplicantRows(plan.affectedId!,this.guildPending??[])}:{})});
+  }
+
+  private donateLocalGuild(account:Account,payload:Record<string,unknown>) {
+    if(this.guildDonationMode!=="local-gold")return this.failure(2001,"Local Guild donation mode is disabled");
+    const game=this.gameByPvid.get(account.pvid);
+    if(!game||game.active_battle?.state==="active"||game.arena.active||game.search.active)
+      return this.failure(2001,"Guild donation requires established idle actor gameplay");
+    let plan,user,personal,details;
+    try {
+      plan=planLocalGuildDonate(payload,this.guilds??[],this.accountsByPvid,account,game.gold);
+      plan.guilds=establishedGuildRecords(plan.guilds,this.accountsByPvid);
+      user=guildWalletReceipt({gold:game.gold,iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty},
+        {gold:plan.gold,iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty});
+      personal=guildLobby(account.pvid,plan.guilds,new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS));
+      details=guildDetailRows([String(plan.id)],plan.guilds,account.serverId,this.accountsByPvid);
+    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid local donation");}
+    const beforeGuilds=this.guilds,beforeGold=game.gold;
+    this.guilds=plan.guilds;game.gold=plan.gold;
+    try{this.persist();}catch(error){this.guilds=beforeGuilds;game.gold=beforeGold;throw error;}
+    return this.envelope({...personal,guilds:details,user});
   }
 
   private foundLocalGuild(account:Account,payload:Record<string,unknown>) {

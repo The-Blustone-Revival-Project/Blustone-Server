@@ -1,3 +1,34 @@
+## Latest continuation: opt-in atomic Guild gold donations (2026-10-13)
+
+Same two agents reused for source/transaction audits and independent reviews.
+Full138 test programs, TypeScript build and both reviews passed. No live inputs,
+flags/profile/save/APK changes; this checkpoint uses disposable test accounts.
+
+BLUSTONE_GUILD_DONATION_MODE=local-gold (default disabled) restores /guild/Donate
+as a declared LOCAL gold-only transaction. Requires selected original Guild
+resource profile/pinned emblems, established idle gameplay, one joined same-server
+Guild; pending/unjoined and active battle/arena/search refuse. All joined roles
+including newcomer4 eligible under local policy. Native positive1000 steps up
+to100000/floor(amount/10) preview matched. Each request debits gold and increments
+INFO aggregate + MEMBER contribution equally as LOCAL policy, not original
+counter equality. Existing personal projection retained; no user-extra counter,
+CP, rank, GvG, membership/claims or reward grant changed.
+
+Both counters checked against existing model INT32max before mutation; no wrap.
+All complete Guild/personal/wallet receipts validated BEFORE commit. Generic
+SyncUser gets gold prev/cur plus unchanged Manda pairs and both quantity scalars.
+Commit Guildarray+gold through one persistence snapshot; real temp-write and
+rename failures verify rollback plus original durable bytes. Histories, other
+Guilds/peer games/clocks/roster preserved. Repeat accepted amount is another
+donation: native auth+amount has no proven nonce/dedup law. Restart hydrates totals.
+ReceiveContributionReward remains2001; original claim ledger/rewards unavailable.
+Backend tests pass; native donation UI/complete reference safety remain unproved.
+See docs/guild-local-donation-workflow-2026-10-13.md.
+
+Escape input hold, DataDump read-only, private/original preservation and
+collector/Docker/inference hold persist. Goal ACTIVE; next original game
+producers/data or native UI verification when control hold is lifted.
+
 ## Latest continuation: exact GvG instance snapshots and reward selection (2026-10-13)
 
 Same two agents reused for native research and independent reviews. Full137

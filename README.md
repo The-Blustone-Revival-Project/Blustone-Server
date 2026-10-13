@@ -33,6 +33,11 @@ Public channel Chat has its own opt-in flag,
 and encrypted ordinary text. See the [public Chat workflow](docs/public-chat-local-workflow-2026-10-13.md).
 Neither flag enables the whole-chat announcement service or grants rewards.
 
+Guild gold donations are available with `BLUSTONE_GUILD_DONATION_MODE=local-gold`
+and the selected original Guild resource profile. This defaults disabled; counter
+increments and eligibility are declared local policy. See the
+[donation workflow](docs/guild-local-donation-workflow-2026-10-13.md).
+
 Resources are repo-local and pinned by `resources/manifests/imported-files.json`. Proprietary binary trees are ignored; a fresh checkout requires the locally retained bundle or an authorized distributed copy. Download the pinned resource bundle from the [server releases](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases). The migration also retained `local/bundles/resources-e6.zip`. Import it with:
 
 ```powershell
