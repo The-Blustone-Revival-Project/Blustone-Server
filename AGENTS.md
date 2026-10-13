@@ -1,7 +1,7 @@
 ## Latest continuation: preserve carried Mirage evidence on lobby reads (2026-10-13)
 
-Same two agents reused, no additional delegation. Original Parse_Entry G933aec
-Full125 test programs/build and both independent guard reviews passed.
+Same two agents reused, no additional delegation. Full125 test programs/build
+and both independent guard reviews passed. Original Parse_Entry G933aec
 on ANYarray first ResetCardMirageRemainHP G933b2e→Gaea4c4 resets ALLnative
 Hunters to raw-1; entry[] thus not inertmissingdata. inst_base.deck[] also
 replaces Mirageparty. Neither HP1000 nor ordinaryparty proves entrymembership.
