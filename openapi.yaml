@@ -2436,11 +2436,13 @@ paths:
       summary: Install or replace owned Gems
       description: Authenticated six-cell plural combination, exact uint64 IDs, owned
         same-target or unmounted Gems only. Matching part, equipment rank3
-        second slot and active/Mirage protections. Explicit immutable
-        level/price_type/price quotes charge each changed old occupied cell at
-        its OLD level using gold2; absent quotes and unsigned overflow refuse.
-        Cross-Hunter/type4 transfers unsupported. Full owned Gem rows repair
-        lost removal responses on no-write retries. Atomic gold/inventory
+        second slot and active/Mirage protections. Joined, pending and
+        unaffiliated actors use identical raw fees; Guild polish TYPE2 does not
+        apply to disassembly. Empty-before mounts remain free. Explicit
+        immutable level/price_type/price quotes charge each changed old occupied
+        cell at its OLD level using gold2; absent quotes and unsigned overflow
+        refuse. Cross-Hunter/type4 transfers unsupported. Full owned Gem rows
+        repair lost removal responses on no-write retries. Atomic gold/inventory
         persistence and rollback; GDP0 lobby policy and legacy scalar remain
         separate. Original fees and native UI validation missing.
       tags:
@@ -3673,12 +3675,14 @@ paths:
       description: Authenticated singleton inst_id or inst_id_list JSON form string of
         exact uint64 IDs. Requires every ID currently owned and explicit
         rank/level gold2 quotes; mounted refusal is conservative local policy.
-        Whole-batch atomic deletion and gold credit with rollback; signed32
-        wallet bounds, duplicate/unknown/sold replay and mixed-batch refusals.
-        Native callback deletes captured request IDs; response user.gold.cur and
-        user.item[] carry absolute quantities, no invented deletion list.
-        Lost-first-response reconciliation needs inventory refresh; no universal
-        successful retry promise. Original economy/native UI unverified.
+        Single/batch sale UI uses raw quotes without Guild benefits or
+        affiliation gating. Whole-batch atomic deletion and gold credit with
+        rollback; signed32 wallet bounds, duplicate/unknown/sold replay and
+        mixed-batch refusals. Native callback deletes captured request IDs;
+        response user.gold.cur and user.item[] carry absolute quantities, no
+        invented deletion list. Lost-first-response reconciliation needs
+        inventory refresh; no universal successful retry promise. Original
+        economy/native UI unverified.
       tags:
         - Missions and combat
       parameters: *a1
@@ -8307,7 +8311,8 @@ paths:
       summary: Read jewel selling prices
       description: Authenticated immutable explicit BLUSTONE_GEM_SELL_PRICES_JSON
         rank/level/price_type/price uint32 rows, bare ret_data array; default
-        empty. Exact rank/level/gold2 quotes settle supported no-Guild sales.
+        empty. Exact rank/level/gold2 quotes settle supported sales regardless
+        of Guild affiliation; polish benefits do not alter raw proceeds.
         Original numeric prices remain missing.
       tags:
         - Missions and combat

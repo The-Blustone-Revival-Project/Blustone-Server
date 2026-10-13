@@ -48,8 +48,8 @@ export function gemSalePrices(raw:unknown):GemSalePrice[] {
  * is unavailable, not a zero-valued original quote. */
 export const gemSalePriceAt=(rows:readonly GemSalePrice[],rank:number,level:number,priceType:number)=>
   rows.find(row=>row.rank===rank&&row.level===level&&row.price_type===priceType);
-/** Configured gold-only candidate. Authentication, no-Guild qualification,
- * persistence rollback and native user.gold.cur/item[] receipt belong to caller.
+/** Configured raw gold-only quotes apply regardless of Guild affiliation.
+ * Authentication, rollback and user.gold.cur/item[] receipt belong to caller.
  * Replay containing an already removed ID refuses, never awards twice. */
 export function planGemSale(raw:unknown,gems:readonly Record<string,unknown>[],refs:readonly GemReference[],
   knownHunters:ReadonlySet<string>,prices:readonly GemSalePrice[],gold:number) {

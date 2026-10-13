@@ -17,6 +17,7 @@ const exerciseGuildEquipment=process.argv.includes('--exercise-guild-equipment')
 const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgrade')||exerciseGuildEquipment;
 const exerciseGemReplacement=process.argv.includes('--exercise-gem-replacement');
 const exerciseGemSale=process.argv.includes('--exercise-gem-sale');
+const exerciseGuildGems=process.argv.includes('--exercise-guild-gems');
 const exerciseGuildRecords=process.argv.includes('--exercise-guild-records');
 const exerciseGuildManagement=process.argv.includes('--exercise-guild-management');
 const exerciseGuildInvitations=process.argv.includes('--exercise-guild-invitations');
@@ -27,7 +28,8 @@ const exerciseGuildFound=process.argv.includes('--exercise-guild-local-found')||
 const exerciseGemLevelReference=process.argv.includes('--exercise-gem-level-reference');
 const exerciseEpisodeWallet=process.argv.includes('--exercise-episode-wallet');
 const exerciseGemMount=process.argv.includes('--exercise-gem-mount')||exerciseGemReplacement;
-const exerciseGemInventory=process.argv.includes('--exercise-gem-inventory')||exerciseGemMount||exerciseGemSale;
+const exerciseGemInventory=process.argv.includes('--exercise-gem-inventory')||exerciseGemMount||exerciseGemSale||exerciseGuildGems;
+if(exerciseGuildGems&&(exerciseGemMount||exerciseGemSale)) throw new Error('Guild Gem lifecycle uses a distinct disposable fixture');
 if(exerciseGemSale&&exerciseGemMount) throw new Error('Gem sale and mount fixtures are distinct verification runs');
 const authoredGemReference={id:'AUTHORED_GEM',name:'Authored HP Gem',desc:'Local parser fixture',res_id:'G_1_001_R1',set_effect_id:1,rank:1,target:1};
 const authoredGemStat={rank:1,awk_step:0,hp:'10000',atk:'0',def:'0',spd:'0',crt_chance:'0',crt_dmg:'0',penetration:'0',
@@ -142,6 +144,8 @@ else {
     game.gem=12;game.owned_gems=authoredGemInventory;
     const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
     seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===account.pvid?game:saved]);
+    if(exerciseGuildGems) seeded.guilds=[{id:7001,name:'Authored Guild',type:1,fc_point_limit:0,contribution:100,region:'EN',emblem_id:'GD_IMG_1',desc:'',rank:7,gvg_win_cnt:8,gvg_inf_win_cnt:9,
+      member_cnt:2,members:[{pvid:seeded.accounts[0].pvid,role:1,newbie:0,contribution:0,fc_point:0},{pvid:account.pvid,role:3,newbie:0,contribution:0,fc_point:0}]}];
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
   }
   if(exerciseGuildRecords) {
@@ -192,6 +196,11 @@ const launch = async () => {
   if(exerciseGuildUpdate) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
   if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
   if(exerciseGemSale) env.BLUSTONE_GEM_SELL_PRICES_JSON=JSON.stringify([{rank:1,level:1,price_type:2,price:13}]);
+  if(exerciseGuildGems) {
+    env.BLUSTONE_GEM_SELL_PRICES_JSON=JSON.stringify([{rank:1,level:1,price_type:2,price:13}]);
+    env.BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON=JSON.stringify([{level:1,price_type:2,price:13}]);
+    env.BLUSTONE_GUILD_LEVEL_BENEFITS_JSON=JSON.stringify([{level:0,contribution:0},{level:1,contribution:100,gem_level_up:0}]);
+  }
   if(exerciseGemLevelReference) env.BLUSTONE_GEM_LEVEL_PRICES_JSON=JSON.stringify([{level:2,price_type:2,price:17,possibility:12.5,failed_compensation:.375,add_sub_ability:1}]);
   if(exerciseGuildRecords) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
   if(exerciseGemReplacement) {
@@ -266,7 +275,7 @@ async function secure(route,values,{allowPlainRefusal=false}={}) {
   assert.equal(response.headers.get('pv-signature'),crypto.createHmac('sha384',secret).update(decoded).digest('base64'));
   const text=decoded.toString('utf8');
   if(exerciseGemInventory && ['/lobby/GetGemInven','/card_handler/EquipGem'].includes(route) && !allowPlainRefusal &&
-    !(exerciseGemSale && route==='/lobby/GetGemInven' && JSON.parse(text).ret_data?.length===0))
+    !((exerciseGemSale||exerciseGuildGems) && route==='/lobby/GetGemInven' && JSON.parse(text).ret_data?.length===0))
     assert.ok(text.includes('"inst_id":9007199254740993'),'Large Gem identity must be an exact integer JSON token, never a strtod string');
   const {parseStateWithGemIds}=await import(pathToFileURL(path.join(root,'dist/src/gem-wire.js')).href);
   return parseStateWithGemIds(text);
@@ -437,12 +446,21 @@ try {
   assert.equal(friendFloors.result_code,1);assert.deepEqual(friendFloors.ret_data,[]);
   const guildBoot=(await secure('/lobby/GetGuildInfo',auth)).ret_data;
   assert.deepEqual(guildBoot.my_guild,
-    exerciseGuildEquipment?{guild_id:7001,status:3,newbie:0,role:3,contribution:0}:
+    exerciseGuildEquipment||exerciseGuildGems?{guild_id:7001,status:3,newbie:0,role:3,contribution:0}:
     exerciseGuildRecords?{guild_id:7001,status:3,newbie:0,role:1,contribution:3}:
       {guild_id:0,status:0,newbie:0,role:0,contribution:0},'Guild boot membership remains flat PLAY_DATA');
   if(guildBoot.my_guild.guild_id) assert.deepEqual(guildBoot.guilds,[before.guilds.find(record=>record.id===guildBoot.my_guild.guild_id)],'RequestMyInfo hydrates complete matching INFO cache');
   else assert.equal(Object.hasOwn(guildBoot,'guilds'),false,'Unaffiliated bootstrap response remains unchanged');
   assert.deepEqual((await secure('/guild/GetNotifications',auth)).ret_data,{guild_notifications:[]},'Named notification child reaches native cache replacement');
+  if(exerciseGuildGems) {
+    const initial=JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===gemPvid)[1],target=String(initial.starter_cards.find(card=>card.ref_id==='001').inst_id);
+    const request=cells=>({...auth,target_inst_id:target,price_type:'2',combination:`{"weapons":[${cells}],"armors":[0,0],"accessories":[0,0]}`});
+    assert.equal((await secure('/card_handler/EquipGem',request(authoredGem.inst_id+',0'))).ret_data.user.gold.cur,initial.gold,'Guild empty-before mount fee0');
+    assert.equal((await secure('/card_handler/EquipGem',request('0,0'))).ret_data.user.gold.cur,initial.gold-13,'Guild polish0 does not reduce raw removal13');
+    let settled=readFileSync(stateFile);await secure('/card_handler/EquipGem',request('0,0'));assert.deepEqual(readFileSync(stateFile),settled);
+    assert.equal((await secure('/gem/Sell',{...auth,inst_id:authoredGem.inst_id})).ret_data.user.gold.cur,initial.gold,'Raw sale13 restores only original removal cost');
+    settled=readFileSync(stateFile);assert.equal((await secure('/gem/Sell',{...auth,inst_id:authoredGem.inst_id},{allowPlainRefusal:true})).result_code,2001);assert.deepEqual(readFileSync(stateFile),settled);
+  }
   if(exerciseGuildEquipment) {
     assert.deepEqual((await secure('/reference/GetGuildLevelBenefits',auth)).ret_data,[{level:0,contribution:0},{level:1,contribution:100,equipment_level_up:900}]);
     assert.deepEqual((await secure('/reference/GetGuildLevelBenefitsStr',auth)).ret_data,{equipment_level_up:'Authored equipment description'});
@@ -718,7 +736,7 @@ try {
   if(exerciseGemInventory) {
     assert.deepEqual((await secure('/reference/GetGem',auth)).ret_data,[authoredGemReference]);
     const expectedGem=exerciseGemMount?{...authoredGem,target_inst_id:String(before.gameStates.find(([pvid])=>pvid===gemPvid)[1].starter_cards.find(card=>card.ref_id==='001').inst_id),position:1}:authoredGem;
-    assert.deepEqual((await secure('/lobby/GetGemInven',auth)).ret_data,exerciseGemSale?[]:[expectedGem]);
+    assert.deepEqual((await secure('/lobby/GetGemInven',auth)).ret_data,exerciseGemSale||exerciseGuildGems?[]:[expectedGem]);
   }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
@@ -744,6 +762,7 @@ try {
   }
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
+  if(exerciseGuildGems) assert.deepEqual(after.guilds,before.guilds,'Gem transactions never change Guild membership or counters');
   if(exerciseGuildEquipment) assert.deepEqual(after.guilds,before.guilds,'Guild metadata, contribution and members are not changed by configured Gym fee');
   if(exerciseGuildMembership) {
     assert.deepEqual(after.guilds[0],before.guilds[0],'Public join/departure preserves the Guild and counters');
@@ -782,6 +801,7 @@ try {
       if(exerciseGemMount){expected.owned_gems[0].target_inst_id=String(expected.starter_cards.find(card=>card.ref_id==='001').inst_id);expected.owned_gems[0].position=1;}
       if(exerciseGemReplacement) expected.gold-=13;
       if(exerciseGemSale){expected.gold+=39;expected.owned_gems=[];}
+      if(exerciseGuildGems) expected.owned_gems=[];
       for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
       assert.deepEqual(actual,expected,'Gem read/restart must preserve full raw inventory and legacy scalar separately');
       continue;
@@ -843,6 +863,7 @@ try {
     configured_gem_mount_fixture:exerciseGemMount,
     configured_gem_replacement_fixture:exerciseGemReplacement,
     configured_gem_sale_fixture:exerciseGemSale,
+    configured_guild_gem_fixture:exerciseGuildGems,
     configured_gem_level_reference_fixture:exerciseGemLevelReference,
     configured_guild_lobby_fixture:exerciseGuildRecords,
     configured_local_guild_creation_fixture:exerciseGuildFound,

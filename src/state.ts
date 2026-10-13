@@ -2319,8 +2319,8 @@ export class ServerState {
     const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid)??this.gameFor(account);
     assertOwnedCardCompatibility(game);
     this.validateOwnedGems(game);
-    const guild=(this.guildAction("/lobby/GetGuildInfo",payload,headers).ret_data as {my_guild:{guild_id:number}}).my_guild.guild_id;
-    if(guild!==0) return this.failure(2001,"Gem selling with Guild affiliation is not reconstructed");
+    // Single/batch sale UI copies raw quotes; Guild polish benefits do not
+    // modify proceeds or establish a separate affiliation restriction.
     const hunters=new Set([...game.starter_cards,...game.recruited_cards].map(card=>String(card.inst_id)));
     const plan=planGemSale(payload,game.owned_gems??[],this.gemReferences,hunters,this.gemSellPrices,game.gold);
     if("error" in plan) return this.failure(2001,plan.error!);
@@ -2345,8 +2345,8 @@ export class ServerState {
       return this.failure(2001,"Gem target ordinary reference is missing");
     const busy=new Set([...(game.active_battle?.state==="active"?game.active_battle.deck_inst_ids:[]),
       ...(game.arena.active?.deck_inst_ids??[]),...(game.search.active?.deck_inst_ids??[])]);
-    const guild=(this.guildAction("/lobby/GetGuildInfo",payload,headers).ret_data as {my_guild:{guild_id:number}}).my_guild.guild_id;
-    if(guild!==0) return this.failure(2001,"Gem replacement with Guild affiliation is not reconstructed");
+    // Confirmation accumulates raw OLD-level removal quotes, including swaps.
+    // Guild TYPE2 belongs to polishing, not this cached disassembly total.
     const plan=planPaidGemMount(payload,cards,game.owned_gems??[],this.gemReferences,busy,this.gemDisassemblePrices,game.gold);
     if("error" in plan) return this.failure(2001,plan.error!);
     const before=game.owned_gems,beforeGold=game.gold;

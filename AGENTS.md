@@ -1,3 +1,43 @@
+## Latest continuation: affiliation-independent Gem mounts, removal and sales (2026-10-13)
+
+Previous turn progressed rawGuildgearRank/INFOhydration (5cb1c27). Same two
+agents reused for independent Gemremoval andsale source/review. Full122checks/
+build, focusjoined/pendingzero-polish/unsafe64/rollback/replay/restart tests and
+compiled encrypted --fixture --profile current-e6-gems --exercise-guild-gems
+proof passed. Bothreviews clean; no source-Hunter/type4/GDP scope expansion.
+
+Removalfee positivechain: SetGemInfo Gbc8baa initializesgoldcache0; changedOLD
+levelGbc9076→FindDisassembleTYPE2Gbc9084 rawcopyGa54f8e..94→ADD/STRGbc9090/92.
+Goldbutton SAMEcached+9c Gbc8606→walletcompareGbc8612/16→callbackSAMEamount
+Gbc86b0/type2Gbc86c8. Emptybefore addsnothing; swaps chargebothOLDcells.
+No Guildmodifier onthisfee. TYPE2Guild Gem benefit isPOLISH, notdisassembly.
+
+Sale singleGce755a..758c readsrawrank/level/type2quote; batchGce7eee..7f00
+sumsrawquoteprices andformatsGce7f7a/7c. FindSellPrice exactmatch/raw16bytecopy,
+no Guildscope/modifier. NativeParseSell directgoldcur andcapturedIDs deletion;
+no GDP/benefitlookup. RemovedONLYblanketGuildquery/refusal in sellGems/equipGems;
+existingrawplanners/auth/reference/ownership/slotunlock/active/Mirage/same-target/
+unmounted/mounted-sale/overflow/currency/atomic/replay protections unchanged.
+
+Joined/noGuildbenefit data andpending/explicitpolish0 bothnow supported.
+Focusrawintegerunsafe64 IDs9007199254740993/maxuint64: emptypositionsfree,
+swap13+13=26,clear26,sale26; gold100 ends74. No zero-polish multiplier applied.
+Writefailures restoreGemarray+gold; no-op removal fullinventoryrepair/no-write;
+soldreplay refusescredit. Allotherwallets/legacygem12/Hunters/Guild/pending/peer
+states preserved throughrestart. Originalfee numericrows/grants remainmissing.
+
+CompiledoneGemproof freeempty→raw13remove→raw13sale restoresoriginalgold,
+emptyinventory/safeNoop+soldreplay/INFO/Guildunchanged/restart; original7Gem
+packagehashes/ranges/146groups1634687 verified. This isGEMresource/backendproof,
+notcombinedGuildmenu ornativepixels. Twoauthoredgames preserved exceptownedGem
+consumption andnormalregistration/lobby APBPanchors. Verifierpost-sale empty
+inventory/rawIDcheck expectations corrected; actualbackendproof fullypassed.
+
+Old removal/sale noGuildonly documentation updated. CrossHunter/type4/GDP/
+polishing outcomes originalprices andnativeUI remainincomplete. No liveinputs/
+profileactivation/APKchanges. Escapehold persists; DataDumpreadonly; originals/
+privatepreserved; collector/Docker/inferenceoff. Server/Instrumentedonlywritable.
+
 ## Latest continuation: raw Guild equipment rank fees and native INFO hydration (2026-10-13)
 
 Previous turn progressed explicit progression/level benefit references (18853b5).

@@ -38,8 +38,11 @@ Each changed OLD occupied cell is priced independently: clearing two cells
 or swapping their same two IDs charges twice at each original old level.
 
 No Guild multiplier call occurs inside this bounded accumulation path; the
-helper has no Guild benefit input or extrapolated discount. Integration remains
-restricted to the supported ordinary no-Guild context. Type4's changed-old
+helper has no Guild benefit input or extrapolated discount. Subsequent complete
+quote/cache/funds/event source closure now admits known joined and pending
+Guild contexts with these same raw gold2 fees; see
+[affiliated removal proof](gem-affiliated-removal-fee-native-2026-10-13.md).
+Type4's changed-old
 count and GDP/item payment qualification are still unknown, so type4 is refused.
 Known gold2 replacement must retain existing GDP0 receipt policy, not infer GDP
 from the historical scalar `gem`. This work does not close every popup payment

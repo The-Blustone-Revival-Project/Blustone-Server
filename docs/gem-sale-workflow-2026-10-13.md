@@ -1,6 +1,6 @@
 # Authenticated configured Gem sales
 
-Native /gem/Sell now supports explicit configured no-Guild gold2 quotes from
+Native /gem/Sell supports explicit configured affiliation-independent gold2 quotes from
 `BLUSTONE_GEM_SELL_PRICES_JSON`, or constructor `gemSellPrices`. Supply an array
 of native numeric uint32 rank/level/price_type/price rows. Default is empty;
 original numeric prices remain unrecovered. Startup snapshots/canonicalizes the
