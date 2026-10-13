@@ -1,5 +1,7 @@
 import crypto from "node:crypto";
-import { guildLobby } from "./guild-lobby.js";
+import { guildLobby,type GuildRecord } from "./guild-lobby.js";
+import { establishedGuildRecords } from "./guild-records.js";
+import { GUILD_SPRITE_EMBLEMS } from "./guild-emblems.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors } from "./mirage.js";
@@ -17,6 +19,7 @@ import {parseGemInstances,type GemReference} from "./gem-instances.js";
 import {planPaidGemMount} from "./gem-paid-mount.js";
 import {gemRemovalPrices,type GemRemovalPrice} from "./gem-removal-prices.js";
 import {gemSalePrices,planGemSale,type GemSalePrice} from "./gem-sale.js";
+import {gemLevelPrices as parseGemLevelPrices,type GemLevelPrice} from "./gem-level-prices.js";
 import {configuredGemCombinations} from "./gem-combination-reference.js";
 import {gemWireRows,parseStateWithGemIds} from "./gem-wire.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
@@ -500,6 +503,7 @@ export class ServerState {
   private selectedServer = 1;
   private socialFriends?: SocialFriends;
   private socialLikes?: SocialLikes;
+  private guilds?: GuildRecord[];
   private readonly hunterSaleProfits: readonly CardSellProfit[];
   private readonly equipmentLevelPrices: readonly EquipmentLevelPrice[];
   private readonly equipmentRankPrices: readonly EquipmentRankPrice[];
@@ -507,11 +511,12 @@ export class ServerState {
   private readonly gemCombinations: readonly Readonly<Record<string,string|number>>[];
   private readonly gemDisassemblePrices: readonly GemRemovalPrice[];
   private readonly gemSellPrices: readonly GemSalePrice[];
+  private readonly gemLevelPrices: readonly GemLevelPrice[];
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
-      gemDisassemblePrices?:unknown; gemSellPrices?:unknown } = {}) {
+      gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -539,6 +544,9 @@ export class ServerState {
     const sellPrices=Object.hasOwn(options,"gemSellPrices")?options.gemSellPrices:
       process.env.BLUSTONE_GEM_SELL_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_SELL_PRICES_JSON);
     this.gemSellPrices=Object.freeze(gemSalePrices({result_code:1,ret_data:sellPrices}).map(row=>Object.freeze(row)));
+    const gemLevelPrices=Object.hasOwn(options,"gemLevelPrices")?options.gemLevelPrices:
+      process.env.BLUSTONE_GEM_LEVEL_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_LEVEL_PRICES_JSON);
+    this.gemLevelPrices=Object.freeze(parseGemLevelPrices({result_code:1,ret_data:gemLevelPrices}).map(row=>Object.freeze(row)));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -570,6 +578,7 @@ export class ServerState {
     }
     if (saved.socialLikes !== undefined)
       this.socialLikes = normalizeSocialLikes(saved.socialLikes, (pvid) => this.socialAccountProfile(pvid));
+    if(saved.guilds!==undefined) this.guilds=establishedGuildRecords(saved.guilds,this.accountsByPvid);
     if (saved.socialFriends !== undefined) {
       this.socialFriends = normalizeSocialFriends(saved.socialFriends);
       for (const relation of this.socialFriends.relations) {
@@ -626,6 +635,7 @@ export class ServerState {
     const snapshot = { version: 1, selectedServer: this.selectedServer,
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
+      ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -1152,9 +1162,10 @@ export class ServerState {
 
   guildAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     const account = this.accountFor(payload, headers);
-    // This replica has no established Guild affiliations. my_guild is the
-    // flat native PLAY_DATA structure, never a fabricated Guild INFO/member.
-    if (route === "/lobby/GetGuildInfo") return this.envelope(guildLobby(account.pvid));
+    // Imported joined records are explicit local state, never inferred from
+    // requests. my_guild is flat PLAY_DATA, distinct from full Guild INFO.
+    if (route === "/lobby/GetGuildInfo") return this.envelope(guildLobby(account.pvid,this.guilds??[],
+      new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS)));
     if (route === "/guild/GetNotifications") return this.envelope([]);
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");
   }
@@ -1977,6 +1988,11 @@ export class ServerState {
   gemSellReference(payload:Record<string,unknown>,headers:Record<string,string>) {
     this.accountFor(payload,headers);
     return this.envelope(this.gemSellPrices.map(row=>({...row})));
+  }
+
+  gemLevelReference(payload:Record<string,unknown>,headers:Record<string,string>) {
+    this.accountFor(payload,headers);
+    return this.envelope(this.gemLevelPrices.map(row=>({...row})));
   }
 
   sellGems(payload:Record<string,unknown>,headers:Record<string,string>) {

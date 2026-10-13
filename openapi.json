@@ -11819,7 +11819,7 @@
     "/lobby/GetGuildInfo": {
       "post": {
         "summary": "Read Guild boot membership",
-        "description": "Authenticated ret_data.my_guild is flat PLAY_DATA with guild_id/status/newbie/role/contribution, not Guild INFO. The replica has no established affiliations and publishes all five zero fields without a state write. Guild/GvG membership, fees, participants and rewards remain unreconstructed; actions refuse rather than create phantom membership or free Guilds. Native Guild art is not selected in the active profile and entry remains unverified.",
+        "description": "Authenticated ret_data.my_guild is flat PLAY_DATA with guild_id/status/newbie/role/contribution. Explicit local-save guilds records validate known same-server accounts, unique membership/leader and hash-pinned original emblem IDs; unsupported history refuses instead of being dropped. Members receive joined status3 and personal role/contribution; outsiders receive five zero fields. Read-only projection and unrelated persistence preserve membership. No membership is generated or assigned by a request; creation/join/GvG/fees/rewards remain gated. Native Guild menus remain unverified.",
         "tags": [
           "Guild"
         ],
@@ -11893,7 +11893,7 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/guild-lobby-native-2026-10-11.md; tests/guild-lobby.ts",
+        "x-evidence": "docs/guild-records-workflow-2026-10-13.md; tests/guild-records.ts; docs/guild-lobby-native-2026-10-11.md",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -16486,7 +16486,7 @@
     "/reference/GetGemLevelUpPrice": {
       "post": {
         "summary": "Read jewel polishing prices",
-        "description": "Native direct ret_data collection, currently empty; original prices/chance/compensation/sub-ability rolls unknown.",
+        "description": "Authenticated immutable BLUSTONE_GEM_LEVEL_PRICES_JSON native rows with level/price_type/price uint32, unscaled double possibility/failed_compensation and byte add_sub_ability. Default empty. Native lookup uses level only and the popup queries next level, so duplicate level rows refuse even across currencies. Numeric tables/outcome laws and Guild benefit2 remain missing; configured prices do not enable LevelUp or invented random rolls.",
         "tags": [
           "Missions and combat"
         ],

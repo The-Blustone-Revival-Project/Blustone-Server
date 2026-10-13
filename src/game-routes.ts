@@ -253,7 +253,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/reference/GetGemDisassemblePrice") return state.gemDisassembleReference(payload,headers);
   if (route === "/reference/GetGemSellPrice") return state.gemSellReference(payload,headers);
   if (route === "/reference/GetGemLevelUpPrice")
-    return state.envelope([]); // Native parsers consume ret_data arrays; tables remain unrecovered.
+    return state.gemLevelReference(payload,headers);
   if(route==="/card_handler/EquipGem") return state.equipGems(payload,headers);
   if(route==="/gem/Sell") return state.sellGems(payload,headers);
   if (route.startsWith("/gem/")) return state.unavailableGemAction(payload, headers);
