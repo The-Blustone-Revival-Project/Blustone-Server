@@ -4,7 +4,9 @@
 HTTP server at `/chat/guild`. Default mode is disabled. `npm start` attaches it
 and advertises only the native `guild_chat` URL in launcher/account URL lists;
 no public `new_chat` or `chat_whole` service is implied. Embedders using createApp
-and their own HTTP listener must call attachGuildChat themselves.
+and their own HTTP listener must call attachLocalChat once. attachGuildChat
+remains a compatibility entry point to that same dispatcher. Public mode is
+independent; see public-chat-local-workflow-2026-10-13.md for its separate flag.
 
 The mode requires already established local joined Guild records and bound HTTP
 exchange sessions. It creates no Guild, account or membership. Original Guild

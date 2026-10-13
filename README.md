@@ -28,6 +28,11 @@ supported, while fuel requests and persistent history remain incomplete.
 The default stays disabled. See the [Guild Chat workflow](docs/guild-chat-local-workflow-2026-10-13.md)
 for setup and the remaining native validation requirements.
 
+Public channel Chat has its own opt-in flag,
+`BLUSTONE_PUBLIC_CHAT_MODE=local-memory`. It supports explicit channel entry
+and encrypted ordinary text. See the [public Chat workflow](docs/public-chat-local-workflow-2026-10-13.md).
+Neither flag enables the whole-chat announcement service or grants rewards.
+
 Resources are repo-local and pinned by `resources/manifests/imported-files.json`. Proprietary binary trees are ignored; a fresh checkout requires the locally retained bundle or an authorized distributed copy. Download the pinned resource bundle from the [server releases](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases). The migration also retained `local/bundles/resources-e6.zip`. Import it with:
 
 ```powershell

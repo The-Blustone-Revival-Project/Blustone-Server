@@ -3,6 +3,7 @@
 export interface ChatRequest {command:number;tag:string;version:string;utc:number;payload:unknown}
 export interface ChatResponse {accessToken:string;command:number;tag:number;payload:unknown;error:{code:number;message:string}}
 export interface ReceivedGuildPayload {who:string;nickname:string;message:string;type:number}
+export interface ReceivedPublicPayload {who:string;nickname:string;message:string}
 const codec=JSON as typeof JSON&{rawJSON?:(source:string)=>unknown;isRawJSON?:(value:unknown)=>boolean};
 function rawNumber(source:string):unknown {
   if(!/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(source)||!Number.isFinite(Number(source)))
@@ -124,6 +125,16 @@ export function receivedGuildPayloadWire(raw:ReceivedGuildPayload):Record<string
   const row=object(raw,["who","nickname","message","type"]);
   return {who:rawNumber(serial(row.who,"sender",true)),nickname:text(row.nickname,"nickname"),
     message:text(row.message,"message"),type:integer(row.type,"inner command")};
+}
+/** Normal public received command10002 uses the three-field base message.
+ * Typed command10010 is a separate four-field branch; 10003 is not that branch. */
+export function parseReceivedPublicPayload(raw:unknown):ReceivedPublicPayload {
+  const row=object(raw,["who","nickname","message"]);
+  return {who:serial(row.who,"sender"),nickname:text(row.nickname,"nickname"),message:text(row.message,"message")};
+}
+export function receivedPublicPayloadWire(raw:ReceivedPublicPayload):Record<string,unknown> {
+  const row=object(raw,["who","nickname","message"]);
+  return {who:rawNumber(serial(row.who,"sender",true)),nickname:text(row.nickname,"nickname"),message:text(row.message,"message")};
 }
 /** Existing client channel selector admission only, not channel/room creation. */
 export function chatEnterPayload(raw:unknown):{channel:number} {

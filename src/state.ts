@@ -543,6 +543,7 @@ export class ServerState {
   private readonly fishingItems: readonly Readonly<FishingItemReference>[];
   private readonly fishingCatalogue?: FishingCatalogue;
   private readonly guildChatMode:"disabled"|"local-memory";
+  private readonly publicChatMode:"disabled"|"local-memory";
   private readonly guildPrices: readonly GuildActionPrice[];
   private readonly guildCreationMode:"disabled"|"local-gold";
   private readonly guildUpdateMode:"disabled"|"local-manda-free-first";
@@ -566,12 +567,15 @@ export class ServerState {
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
-      fishingItems?:unknown;fishingCatalogue?:unknown;guildChatMode?:"disabled"|"local-memory" } = {}) {
+      fishingItems?:unknown;fishingCatalogue?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory" } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     const chatMode=options.guildChatMode??process.env.BLUSTONE_GUILD_CHAT_MODE??"disabled";
     if(chatMode!=="disabled"&&chatMode!=="local-memory") throw new TypeError("Unknown Guild Chat mode");
     this.guildChatMode=chatMode;
-    this.guildChatUrls(); // Validate an enabled URL before account/save operations.
+    const publicMode=options.publicChatMode??process.env.BLUSTONE_PUBLIC_CHAT_MODE??"disabled";
+    if(publicMode!=="disabled"&&publicMode!=="local-memory") throw new TypeError("Unknown public Chat mode");
+    this.publicChatMode=publicMode;
+    this.chatUrls(); // Validate enabled URLs before account/save operations.
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
     const configured = Object.hasOwn(options, "hunterSaleProfits") ? options.hunterSaleProfits : (process.env.BLUSTONE_CARD_SELL_PROFIT_JSON === undefined
@@ -2972,7 +2976,7 @@ export class ServerState {
         { url_key: "sns_list", address: this.baseUrl, param_format: "" },
         { url_key: "cdn", address: this.baseUrl, param_format: "" },
         { url_key: "resource", address: this.baseUrl, param_format: "" },
-        ...this.guildChatUrls(),
+        ...this.chatUrls(),
       ],
       // Compatibility aliases retained for the launcher/account wrappers.
       token: account.vsToken,
@@ -3040,7 +3044,7 @@ export class ServerState {
         { url_key: "auth", address: this.baseUrl, param_format: "" },
         { url_key: "sns_list", address: this.baseUrl, param_format: "" },
         { url_key: "resource", address: this.baseUrl, param_format: "" },
-        ...this.guildChatUrls(),
+        ...this.chatUrls(),
       ],
       // The native client persists pvid, sns_list and vs_token in cloud/v2pv.acct
       // and calls /v2/account/Login on relaunch. The local server now supports
@@ -3220,6 +3224,15 @@ export class ServerState {
   }
 
   guildChatEnabled() {return this.guildChatMode==="local-memory";}
+  publicChatEnabled() {return this.publicChatMode==="local-memory";}
+
+  chatPublicFor(headers:Record<string,string>) {
+    if(!this.publicChatEnabled()) throw new NativeAuthError(2001,"Local public Chat is disabled");
+    const crypto=this.chatCryptoFor(headers),account=this.accountsByPvid.get(crypto.pvid)!;
+    if(typeof account.nickname!=="string" || Buffer.from(account.nickname,"utf8").toString("utf8")!==account.nickname)
+      throw new NativeAuthError(2001,"Public Chat nickname is not valid UTF8");
+    return Object.freeze({...crypto,nickname:account.nickname});
+  }
 
   /** Read current joined membership at upgrade AND delivery time. Pending
    * applications/invitations and old socket subscriptions grant no Guild room. */
@@ -3234,13 +3247,16 @@ export class ServerState {
     return Object.freeze({...crypto,guildId:personal.guild_id,nickname:account.nickname});
   }
 
-  private guildChatUrls() {
-    if(!this.guildChatEnabled()) return [];
-    const address=new URL("/chat/guild",this.baseUrl);
-    if(address.protocol==="http:") address.protocol="ws:";
-    else if(address.protocol==="https:") address.protocol="wss:";
-    else throw new TypeError("Guild Chat requires an HTTP(S) replica base URL");
-    return [{url_key:"guild_chat",address:address.toString(),param_format:""}];
+  private chatUrls() {
+    const endpoints=[...(this.guildChatEnabled()?[["guild_chat","/chat/guild"]]:[]),
+      ...(this.publicChatEnabled()?[["new_chat","/chat/public"]]:[])];
+    return endpoints.map(([url_key,pathname])=>{
+      const address=new URL(pathname,this.baseUrl);
+      if(address.protocol==="http:") address.protocol="ws:";
+      else if(address.protocol==="https:") address.protocol="wss:";
+      else throw new TypeError("Chat requires an HTTP(S) replica base URL");
+      return {url_key,address:address.toString(),param_format:""};
+    });
   }
 
   encryptSecureBody(accessToken: string, body: Buffer): { body: Buffer; signature: string } {

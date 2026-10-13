@@ -61,7 +61,8 @@ policy; source here does not make every signed number a valid channel.
 Social outer-command handling is not a blanket all-command echo. G8a7c9e
 subtracts10002 and checks mask0x6fd over the next11 positions. Generic social
 message commands go through message base+message parser G7d9e30. The separate
-10003 branch G8a7d72..7c uses CHAT_RECVED_PAYLOAD with inner type. Do not
+10010 branch G8a7d72..7c uses CHAT_RECVED_PAYLOAD with inner type: r1 is
+command-minus10002 and is compared with8, not the outer command itself. Do not
 assume request outer10000 is automatically the received general broadcast ID.
 That production mapping/fanout needs its own request/capture proof.
 

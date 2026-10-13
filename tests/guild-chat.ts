@@ -7,6 +7,7 @@ import path from "node:path";
 import {WebSocket} from "ws";
 import {ServerState} from "../src/state.js";
 import {attachGuildChat} from "../src/guild-chat.js";
+import {attachLocalChat} from "../src/chat-service.js";
 import {encodeChatFrame,decodeChatFrame} from "../src/chat-frame.js";
 import {encodeChatRequest,decodeChatResponse,parseReceivedGuildPayload,type ChatResponse} from "../src/chat-message.js";
 import {gameResponse} from "../src/game-routes.js";
@@ -14,7 +15,7 @@ const dir=mkdtempSync(path.join(tmpdir(),"blustone-guild-chat-"));
 const sockets:WebSocket[]=[];const server=createServer();let service:ReturnType<typeof attachGuildChat>|undefined;
 const until=async(test:()=>boolean)=>{const end=Date.now()+5000;while(!test()){if(Date.now()>end)throw new Error("Guild Chat fixture timed out");await new Promise(resolve=>setTimeout(resolve,10));}};
 try {
-  const file=path.join(dir,"state.json"),state=new ServerState("http://localhost",file,{guildChatMode:"local-memory"});
+  const file=path.join(dir,"state.json"),state=new ServerState("http://localhost",file,{guildChatMode:"local-memory",publicChatMode:"local-memory"});
   const actors=["alpha","beta","other","unjoined"].map(name=>{
     const auth=state.registerGuest({device_id:`guild-chat-${name}`,nickname:name},{}).ret_data as any;
     const pair=crypto.generateKeyPairSync("ec",{namedCurve:"secp384r1"});
@@ -36,9 +37,11 @@ try {
   assert.deepEqual((gameResponse(state,"/guild/GetChattingLog",actors[0].auth) as any).ret_data,[]);
   assert.throws(()=>gameResponse(state,"/guild/GetChattingLog",{}),/authenticated/);
   service=attachGuildChat(server,state);await new Promise<void>(resolve=>server.listen(0,"127.0.0.1",resolve));
+  assert.equal(attachLocalChat(server,state),service,"Guild compatibility/public entry points share exactly one upgrade dispatcher");
+  assert.equal(server.listenerCount("upgrade"),1);
   const url=`ws://127.0.0.1:${(server.address() as any).port}/chat/guild`;
-  const connect=async(actor:typeof actors[number],token=actor.token)=>{
-    const ws=new WebSocket(url,{headers:{"X-PV-AccessToken":token},perMessageDeflate:false});sockets.push(ws);
+  const connect=async(actor:typeof actors[number],token=actor.token,address=url)=>{
+    const ws=new WebSocket(address,{headers:{"X-PV-AccessToken":token},perMessageDeflate:false});sockets.push(ws);
     const inbox:ChatResponse[]=[],faults:unknown[]=[];let closed=false;
     ws.on("error",()=>{});ws.on("close",()=>closed=true);
     ws.on("message",data=>{try{inbox.push(decodeChatResponse(decodeChatFrame(data as Buffer,actor.decrypt).toString("utf8")));}catch(error){faults.push(error);}});
@@ -48,6 +51,12 @@ try {
   await assert.rejects(()=>connect(actors[0],"unknown"));
   await assert.rejects(()=>connect(actors[3]));
   const a=await connect(actors[0]),b=await connect(actors[1]),c=await connect(actors[2]);
+  const publicPeer=await connect(actors[0],actors[0].token,url.replace("/chat/guild","/chat/public"));
+  await until(()=>publicPeer.inbox.length===1);assert.equal(publicPeer.inbox[0].command,1);
+  publicPeer.ws.send(encodeChatFrame(Buffer.from(encodeChatRequest({command:20000,tag:"1",version:"AUTHORED",utc:1,payload:{channel:7}})),actors[0].encrypt));
+  await until(()=>publicPeer.inbox.length===2);
+  publicPeer.ws.send(encodeChatFrame(Buffer.from(encodeChatRequest({command:10010,tag:"2",version:"AUTHORED",utc:1,payload:{message:"public only",type:10002}})),actors[0].encrypt));
+  await until(()=>publicPeer.inbox.length===3);assert.equal(a.inbox.length,0);assert.equal(b.inbox.length,0);
   const malformed=await connect(actors[0]);malformed.ws.send(Buffer.from([0]));await until(()=>malformed.closed);
   const text=await connect(actors[0]);text.ws.send("plaintext");await until(()=>text.closed);
   const send=(socket:WebSocket,actor:typeof actors[number],message:string,type=11000,extra={})=>socket.send(encodeChatFrame(Buffer.from(encodeChatRequest({command:11000,tag:"18446744073709551615",version:"AUTHORED",utc:1,
@@ -58,6 +67,7 @@ try {
     assert.deepEqual(parseReceivedGuildPayload(client.inbox[0].payload),{who:String(actors[0].auth.pvid),nickname:"alpha",message:"길드 🧭 message",type:11000});
   }
   assert.equal(c.inbox.length,0);
+  assert.equal(publicPeer.inbox.length,3,"Guild/private text is never delivered to public sockets for the same account");
   send(c.ws,actors[2],"other room");await until(()=>c.inbox.length===1);assert.equal(a.inbox.length,1);assert.equal(b.inbox.length,1);
   send(a.ws,actors[0],"",11010);await until(()=>a.inbox.length===2);assert.equal(a.inbox[1].error.code,2001);assert.equal(b.inbox.length,1);
   send(a.ws,actors[0],"spoof",11000,{who:actors[1].auth.pvid,nickname:"fake"});await until(()=>a.inbox.length===3);assert.equal(a.inbox[2].error.code,2001);assert.equal(b.inbox.length,1);

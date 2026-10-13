@@ -1,3 +1,29 @@
+## Latest continuation: public channel entry and encrypted text service (2026-10-13)
+
+Same two agents reused. Full134 test programs/build and both reviews passed.
+SOURCECORRECTION typedpublicreceive is10010, NOT10003
+(offset8afterSUB10002); plain10002 uses3fieldswho/nickname/message. PublicUI
+outgoingTYPE0outer10010/inner10002; bootstrap1 ignorespayload andtriesonlyan
+existingrecentpref. No random/fixeddefaultchannel ininspectedbranches.
+
+BLUSTONE_PUBLIC_CHAT_MODE=local-memory independentGuildflag; bothdefaultoff.
+Stateadvertisesnew_chat onlypublicenabled; no chat_whole. src/chat-service.ts
+unifiesupgrade dispatcher (idempotentWeakMap), guild-chat.ts compatibility
+wrapper. Publicrequirespreboundkey/owner/server/nick, noGuildcondition. Boot1
+null thenUNSUBSCRIBED until20000/channel1..9999; ACKsamecommand/channel.
+Virtualchannel allocation isLOCALclient-selector-compatiblepolicy, notoriginal
+topology. InvalidEntrykeepsoldchannel. Publicordinarypackets->declaredLOCAL
+plain10002 response/authwho+nicks+message/ownEcho. Kind+server+channel isolate
+fromGuild/otherrealms/rooms; staleRealm closesoldsocket. No default/persistence/
+rewards/whole-service/nonce law added. Source old10003claim superseded.
+
+Real4actor/twochannel/twoserver encryptedfixtures pass; no-entry/spoof/refusal/
+switch/oldrealm/nosave proof. MixedGuild/Public sameaccount sockets haveNO
+crosskind delivery; wrapper/canonical entrypoints shareONEhandler. Backendonly,
+nativepixelsstillpending. docs/public-chat-local-workflow-2026-10-13.md hassetup.
+No liveflags/profiles/inputs/APKchanged; Escapehold/DataDumpreadonly/private
+original/collectorDockerInferenceoff persist. GoalACTIVE.
+
 ## Latest continuation: opt-in encrypted Guild text WebSocket service (2026-10-13)
 
 Same two agents reused. Full133 test programs/build and both reviews passed.
