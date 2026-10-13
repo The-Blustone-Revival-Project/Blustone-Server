@@ -1,5 +1,5 @@
 import { FIXTURE_CARD_ID, LEGACY_WAVE_REF_ID, partyProfile, starterAreas, starterBookReference, starterLevels, starterMonsterTable, starterReference, starterStageMonstersByMonsterId, starterStageMonstersByStageId, starterStages, type StageMonsterRecord } from "./bootstrap.js";
-import { ServerState } from "./state.js";
+import { NativeAuthError,ServerState } from "./state.js";
 import { campaignReceiptProjection, recordCampaignReceipt } from "./campaign-receipt-trace.js";
 import { RESOURCE_REFRESH_SECONDS } from "./game.js";
 import { rankUpRows, trainingPrices } from "./training.js";
@@ -265,7 +265,16 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (["/dailyquest/GetRefList", "/dailyquest/GetInstList", "/dailyquest/RequestReward", "/linearquest/Reward"].includes(route))
     return state.questAction(route, payload, headers);
   if (route.startsWith("/mirage/")) return state.mirageAction(route, payload, headers);
-  if(route==="/mission/Entrust") {
+  if(route==="/mission/SkipEntrust") {
+    // This callback does NOT guard application result1 before reading data.
+    // Its explicit null branch skips job and Manda writes, including auth errors.
+    try{state.accountFor(payload,headers);}catch(error){
+      if(!(error instanceof NativeAuthError))throw error;
+      return state.envelope(null,{result_code:error.code,code:error.code});
+    }
+    return state.envelope(null,{result_code:2001,code:2001});
+  }
+  if(["/mission/Entrust","/mission/RefreshEntrust","/mission/EndEntrust","/mission/EntrustByIAP"].includes(route)) {
     state.accountFor(payload,headers);
     // ReqAutoCombatCB b40088 checks application result1 before parsing the
     // timed-job body. A generic success without entrust_id/list is unsafe.

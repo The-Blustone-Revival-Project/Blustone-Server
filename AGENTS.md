@@ -1,3 +1,39 @@
+## Latest continuation: Entrust snapshots and route-specific Skip refusal (2026-10-13)
+
+Same two agents reused. Full142 test programs/build and both reviews passed;
+native item-group byte ordering correction independently rerun/confirmed.
+
+CRITICAL Skip callback DOES NOT preguard result1: nonnull failuredata still
+reaches ParseSkip and may overwrite cached quotes/Manda. /mission/SkipEntrust
+now authenticates and returns ret_data:null/data:null on both valid refusal
+and NativeAuthError, reaching the positively closed no-mutation branch. Other
+/mission/Entrust/RefreshEntrust/EndEntrust/EntrustByIAP callbacks DO preguard1;
+they authenticate and return2001 rather than generic incomplete success.
+Real HTTP tests cover allroutes, missing/wrongOTP, spoofedjob/wallet fields,
+invalid encryptedbody/unknowntransport, and exact savedstate/clocks bytes.
+
+src/expedition-entrust-snapshot.ts now decodes complete OFFLINE Start/Refresh
+job components, full64id/timestamps before JSrounding, original signedStart vs
+unsignedRefresh EXP/gold domains, strict itemJSONSTRING→STRING occurrences.
+Grouped items use lexical UTF8byte order, not first occurrence/locale sorting.
+Raw wirestrings/row order remain intact; no inventory/EXP/wallet grants.
+Native Start ignoresnull and allincoming data whilecachedid nonzero. Refresh
+serial is ARRAYINDEX (not cardID or matching stored serial); noappend, omitted/
+empty rows retained, duplicate indices lastoverwrite. Reducers are detached,
+requirecomplete supplied component fields and do not emulate missingquotes0.
+Canonical nonnegative64 model storage is local subset, not wirestring coercion.
+
+Full64 timestamp storage + derivedLOW32 end/time countdown source closed; no
+clock/job producer enabled. Pass is lobbyexpiryreader, IAP is compoundStart/
+Skip/End outcome. Clear leaves some cached quote/derived words; missingjobID
+must not be treated as establishedjob. Ordinary End reward/commitment/replay
+production remainsunreconstructed. See docs/expedition-entrust-snapshot-workflow-
+2026-10-13.md and its source links. Helpers not imported by ServerState.
+
+No live inputs/flags/profile/save/APK changes. Escape hold, DataDump read-only,
+private/original preservation and collector/Docker/inference hold persist.
+Goal ACTIVE; next coherent timedjob lifecycle/model or other original producer.
+
 ## Latest continuation: Entrust unit split and unsafe dispatch mock removed (2026-10-13)
 
 Same two agents reused for independent native/protocol audits and code reviews.

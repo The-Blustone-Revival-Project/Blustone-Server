@@ -50,3 +50,9 @@ hunter-search-reward-entrust-native-2026-10-13.md. The latter also closes Search
 Reward as item-only settlement with effective32 item instance IDs, while actual
 ownership, quantities and duplicate/replay rules remain missing. Neither route
 is declared restored to successful gameplay by this boundary checkpoint.
+
+Complete offline Start/Refresh components and lifecycle refusal guards are now
+documented in expedition-entrust-snapshot-workflow-2026-10-13.md. Refresh, End
+and IAP also refuse before their guarded native parsers. Skip specifically
+requires null data even for authentication errors; a generic failure object
+would still enter its native mutation path.
