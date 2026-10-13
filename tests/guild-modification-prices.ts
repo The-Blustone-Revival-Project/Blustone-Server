@@ -1,0 +1,21 @@
+import assert from "node:assert/strict";
+import {GUILD_ACTION_PRICE_ROUTE,GUILD_PAY_ACTIONS,guildModificationPrice} from "../src/guild-prices.js";
+const rows=[{action:1,price_type:2,price:19},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}];
+const before=structuredClone(rows);
+assert.equal(GUILD_ACTION_PRICE_ROUTE,"/reference/GetGuildPrices");
+assert.deepEqual(GUILD_PAY_ACTIONS,{creation:1,nameChange:2,countryChange:3});
+assert.equal(guildModificationPrice(rows,{name_changed:true,country_changed:false})?.client_manda_gate,23);
+assert.equal(guildModificationPrice(rows,{name_changed:false,country_changed:true})?.client_manda_gate,31);
+const both=guildModificationPrice(rows,{name_changed:true,country_changed:true})!;
+assert.equal(both.client_manda_gate,54);assert.deepEqual(both.actions,rows.slice(1));
+assert.equal(both.settlement_wallet,"unrecovered","UI wallet comparison is not server-debit authorization");
+both.actions[0].price=999;assert.deepEqual(rows,before,"detached quote does not mutate configuration");
+assert.equal(guildModificationPrice(rows.slice(0,2),{name_changed:false,country_changed:true}),undefined,"missing action3 is unavailable rather than free");
+assert.equal(guildModificationPrice([],{name_changed:true,country_changed:false}),undefined);
+assert.equal(guildModificationPrice([],{name_changed:false,country_changed:false})?.client_manda_gate,0,"zero is only the no-changed-field UI sum");
+assert.equal(guildModificationPrice([{action:2,price_type:1,price:0}],{name_changed:true,country_changed:false})?.client_manda_gate,0,"explicit zero quote distinct from unavailable");
+assert.throws(()=>guildModificationPrice([rows[1],rows[1]],{name_changed:true,country_changed:false}),/duplicate/);
+assert.throws(()=>guildModificationPrice(rows,{name_changed:1,country_changed:false} as any),/flags/);
+assert.equal(guildModificationPrice([{action:2,price_type:2,price:17}],{name_changed:true,country_changed:false})?.client_manda_gate,17,
+  "original UI sum uses amount, not an invented payment enum filter");
+console.log("Guild modification quotes: original price route and name/country actions, total-Manda UI gate, missing/explicit-zero distinctions, duplicate refusal and input preservation passed; settlement remains gated.");

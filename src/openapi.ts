@@ -664,6 +664,16 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-reverse-engineering-status":"native-parser-reconstructed"
   }};
   explicitlyDocumented.add("/guild/GetDetailInfo");
+  paths["/guild/GetUserGuilds"] = {post:{
+    ...operation("Read a user's established Guild association","Authenticated target_pvid_list is a JSON-array form STRING containing one exact uint64 target. Native callback consumes first compact USER row under ret_data.user_guilds: pvid/id/name/type/fc_point_limit/contribution/region/emblem_id. Known joined same-server targets return established Guild summary only; unknown/unjoined/cross-server targets return[]. No Hunter/private account/member role data or personal my_guild mutation. Contribution copies explicit Guild aggregate as local policy; original counter producer lineage remains unproved. Native menus unverified.","Guild"),
+    "x-evidence":"docs/guild-user-association-native-2026-10-13.md; tests/guild-association-state.ts"
+  }};
+  explicitlyDocumented.add("/guild/GetUserGuilds");
+  paths["/reference/GetGuildPrices"] = {post:{
+    ...operation("Read Guild action prices","Authenticated bare ret_data action/price_type/price rows from immutable explicit guildPrices or BLUSTONE_GUILD_ACTION_PRICES_JSON; default empty. Native action1 creation checks gold; action2 name/action3 country-change UI checks summed Manda. Original amounts, server currency/debit order and permission/settlement remain unknown; supplied quotes do not enable Found/Update mutations. Duplicate/malformed rows refuse startup before saves are restored.","Guild"),
+    "x-evidence":"docs/guild-action-reference-native-2026-10-13.md; tests/guild-price-state.ts"
+  }};
+  explicitlyDocumented.add("/reference/GetGuildPrices");
   localGameArray("/guild/GetNotifications", "Read guild notifications", "OpaqueObject", "Returns an empty notification list. Guild state is not implemented yet.");
   localGameArray("/shop/GetHotDealSummaryList", "Read hot-deal summaries", "OpaqueObject", "Returns an empty commerce list. No purchases or real-money economy are implemented.");
   paths["/lobby/GetGemInven"] = { post: {

@@ -4335,22 +4335,16 @@ paths:
         ARM-device capture
   /guild/GetUserGuilds:
     post:
-      summary: Recovered /guild/GetUserGuilds route
-      description: >-
-        The route literal **/guild/GetUserGuilds** was recovered from the ARM
-        native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Read a user's established Guild association
+      description: "Authenticated target_pvid_list is a JSON-array form STRING
+        containing one exact uint64 target. Native callback consumes first
+        compact USER row under ret_data.user_guilds:
+        pvid/id/name/type/fc_point_limit/contribution/region/emblem_id. Known
+        joined same-server targets return established Guild summary only;
+        unknown/unjoined/cross-server targets return[]. No Hunter/private
+        account/member role data or personal my_guild mutation. Contribution
+        copies explicit Guild aggregate as local policy; original counter
+        producer lineage remains unproved. Native menus unverified."
       tags:
         - Guild
       parameters: *a1
@@ -4371,7 +4365,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-evidence: docs/guild-user-association-native-2026-10-13.md;
+        tests/guild-association-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /guild/Invite:
@@ -8463,24 +8458,16 @@ paths:
         ARM-device capture
   /reference/GetGuildPrices:
     post:
-      summary: Recovered /reference/GetGuildPrices route
-      description: >-
-        The route literal **/reference/GetGuildPrices** was recovered from the
-        ARM native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Read Guild action prices
+      description: Authenticated bare ret_data action/price_type/price rows from
+        immutable explicit guildPrices or BLUSTONE_GUILD_ACTION_PRICES_JSON;
+        default empty. Native action1 creation checks gold; action2 name/action3
+        country-change UI checks summed Manda. Original amounts, server
+        currency/debit order and permission/settlement remain unknown; supplied
+        quotes do not enable Found/Update mutations. Duplicate/malformed rows
+        refuse startup before saves are restored.
       tags:
-        - Reference data
+        - Guild
       parameters: *a1
       requestBody: *a2
       responses:
@@ -8499,7 +8486,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-evidence: docs/guild-action-reference-native-2026-10-13.md;
+        tests/guild-price-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /reference/GetLevel:

@@ -126,6 +126,7 @@ const launch = async () => {
   if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
   if(exerciseGemSale) env.BLUSTONE_GEM_SELL_PRICES_JSON=JSON.stringify([{rank:1,level:1,price_type:2,price:13}]);
   if(exerciseGemLevelReference) env.BLUSTONE_GEM_LEVEL_PRICES_JSON=JSON.stringify([{level:2,price_type:2,price:17,possibility:12.5,failed_compensation:.375,add_sub_ability:1}]);
+  if(exerciseGuildRecords) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
   if(exerciseGemReplacement) {
     env.BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON=JSON.stringify([{level:authoredGem.level,price_type:2,price:13}]);
     env.BLUSTONE_GEM_COMBINATIONS_JSON=JSON.stringify([{id:1,count:2,rank:0,awk_step:0,
@@ -366,6 +367,14 @@ try {
     const detailBytes=readFileSync(stateFile);
     assert.deepEqual((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[7001,4294967297]'})).ret_data,{guilds:before.guilds},'Full established INFO must retain all native members and ignore unsupported unknown widths');
     assert.deepEqual((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[]'})).ret_data,{guilds:[]});
+    assert.deepEqual((await secure('/reference/GetGuildPrices',auth)).ret_data,
+      [{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
+    const established=before.guilds[0];
+    assert.deepEqual((await secure('/guild/GetUserGuilds',{...auth,target_pvid_list:JSON.stringify([Number(auth.pvid)])})).ret_data,
+      {user_guilds:[{pvid:Number(auth.pvid),id:established.id,name:established.name,type:established.type,
+        fc_point_limit:established.fc_point_limit,contribution:established.contribution,region:established.region,emblem_id:established.emblem_id}]});
+    assert.equal((await secure('/guild/GetUserGuilds',{...auth,target_pvid_list:'[]'},{allowPlainRefusal:true})).result_code,2001);
+    assert.equal((await secure('/guild/Update',auth,{allowPlainRefusal:true})).result_code,2001,'Supplied price does not enable unproved name/country settlement');
     assert.equal((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[7001,7001]'},{allowPlainRefusal:true})).result_code,2001);
     assert.deepEqual(readFileSync(stateFile),detailBytes,'Detail reads do not mutate personal affiliation or gameplay');
     const leaderConnection={secret,token};await exchange();

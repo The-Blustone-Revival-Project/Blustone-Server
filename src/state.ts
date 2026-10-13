@@ -3,6 +3,8 @@ import { guildLobby,type GuildRecord } from "./guild-lobby.js";
 import { establishedGuildRecords } from "./guild-records.js";
 import {parseGuildInfoQuery} from "./guild-info-query.js";
 import {guildDetailRows} from "./guild-detail-rows.js";
+import {parseGuildUserQuery,guildUserRows} from "./guild-user-query.js";
+import {guildActionPrices,type GuildActionPrice} from "./guild-prices.js";
 import { GUILD_SPRITE_EMBLEMS } from "./guild-emblems.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
@@ -514,11 +516,12 @@ export class ServerState {
   private readonly gemDisassemblePrices: readonly GemRemovalPrice[];
   private readonly gemSellPrices: readonly GemSalePrice[];
   private readonly gemLevelPrices: readonly GemLevelPrice[];
+  private readonly guildPrices: readonly GuildActionPrice[];
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
-      gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown } = {}) {
+      gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -549,6 +552,9 @@ export class ServerState {
     const gemLevelPrices=Object.hasOwn(options,"gemLevelPrices")?options.gemLevelPrices:
       process.env.BLUSTONE_GEM_LEVEL_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_LEVEL_PRICES_JSON);
     this.gemLevelPrices=Object.freeze(parseGemLevelPrices({result_code:1,ret_data:gemLevelPrices}).map(row=>Object.freeze(row)));
+    const guildPrices=Object.hasOwn(options,"guildPrices")?options.guildPrices:
+      process.env.BLUSTONE_GUILD_ACTION_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GUILD_ACTION_PRICES_JSON);
+    this.guildPrices=Object.freeze(guildActionPrices({result_code:1,ret_data:guildPrices}).map(row=>Object.freeze(row)));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -1164,6 +1170,7 @@ export class ServerState {
 
   guildAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     const account = this.accountFor(payload, headers);
+    if(route==="/reference/GetGuildPrices") return this.envelope(this.guildPrices.map(row=>({...row})));
     // Imported joined records are explicit local state, never inferred from
     // requests. my_guild is flat PLAY_DATA, distinct from full Guild INFO.
     if (route === "/lobby/GetGuildInfo") return this.envelope(guildLobby(account.pvid,this.guilds??[],
@@ -1172,6 +1179,11 @@ export class ServerState {
       let ids:string[];
       try{ids=parseGuildInfoQuery(payload);}catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild query");}
       return this.envelope({guilds:guildDetailRows(ids,this.guilds??[],account.serverId,this.accountsByPvid)});
+    }
+    if(route==="/guild/GetUserGuilds") {
+      let target:string;
+      try{target=parseGuildUserQuery(payload);}catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild association query");}
+      return this.envelope({user_guilds:guildUserRows(target,this.guilds??[],account.serverId,this.accountsByPvid)});
     }
     if (route === "/guild/GetNotifications") return this.envelope([]);
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");

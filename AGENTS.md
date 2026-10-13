@@ -1,3 +1,29 @@
+## Latest continuation: Guild associations/prices and Boutique audit (2026-10-13)
+
+Previous goal turn was progress: Guild detail reads/ID-width fix and96 checks.
+Same2 agents reused. Full100 checks/build and compiled encrypted Guild profile
+association/price/record/restart proof pass; independent state review no defects.
+/guild/GetUserGuilds takes singleton target_pvid_list JSON-array FORMSTRING,
+returns ret_data.user_guilds compact USER summary (NOT Hunter/private profile).
+Known joined same-server targets only; unknown/unjoined/foreign =>[]. Native
+callback picks firstrow, so batches refuse. Contribution copies explicit Guild
+aggregate as local policy, original producer lineage unproved. No personal
+my_guild or membership/gameplay writes, full read/restart byte preservation.
+/reference/GetGuildPrices exact enum0x21/GOT callback binding now closed;
+authenticated immutable guildPrices or BLUSTONE_GUILD_ACTION_PRICES_JSON array,
+default empty. Action1 creation gold UI gate;2name/3country summed Manda gate.
+Original numerical fees/debit priority/permissions unknown; Found/Update refuse.
+Compiled proof uses ACTUAL registered /guild/Update, not guessed /guild/Modify.
+
+Instrumented read-only Boutique placement audit now includes Thumb BLX aligned
+PC and ARM BLX H bit previously omitted. Six host tests pass, including
+independent Capstone target verification and existing actual Thumb/VFP Unicorn
+equivalence/zero cases. Original retained image SHA unchanged; candidate still
+unapproved for live execution, no native library patch/APK build/install/release.
+No live source/profile/save/client/input changes performed. Escape input hold,
+DataDump read-only, original/private preservation and no collector/Docker/
+inference use remain. Native Guild/Boutique menus and action settlements pending.
+
 ## Latest continuation: native Guild detail reads (2026-10-13)
 
 Previous goal turn was progress: established Guild persistence/polishing refs
