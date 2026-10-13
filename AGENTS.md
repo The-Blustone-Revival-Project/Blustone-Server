@@ -1,3 +1,41 @@
+## Latest continuation: Entrust unit split and unsafe dispatch mock removed (2026-10-13)
+
+Same two agents reused for independent native/protocol audits and code reviews.
+Full141 test programs/build and both reviews passed. DataDump remote Latest
+rechecked via GitHub: still2026-10-11.2, consistent with local a1c9049; no new
+data provider/release was assumed. DataDump read-only unchanged.
+
+CRITICAL: TYPE4 intrust literal150 is EXPEDITION SECONDS/RUN, NOT gold or
+Search cost. SetCharList applies multiplier once after deck loop; Calculate
+multiplies adjustedtime bycnt and separately selectedstagefuel bycnt. HMS
+formatter proves seconds; PlayAuto compares fuel/AP. src/expedition-entrust.ts
+now provides pure original150second quote with correct per-run truncation and
+independent supplied stage fuel, local nooverflow admission, no signedHMS
+formatting/elapsed/job/fee settlement inference. Request decoder is distinct
+/mission/Entrust auth5+stage_idSTRING/deck_typeINT/cntUINT/is_tuto0or1. Normal
+UI uses deck2/tuto0; dynamic VIP/fuel count limits not invented.
+
+/mission/Entrust previously fell to generic result1 mock without timed job.
+Now AUTHENTICATED2001: ReqAutoCombatCB positively guards result1 BEFORE
+ParseAutoCombatStart/AP parsing. Real HTTP tests verify valid/unauth/spoofed
+requests refuse, no fabricated job/mock, all savedstate/clocks byte identical.
+Successful producer remains gated: entrust_id/stage_id/cnt/complete_second/
+skip_price/entrust_second_per_cost/list + complete timedjob/reward lifecycle
+still needed. Actual callback has specialized absolute user.ap/chargeTime,
+NOT generic gold/SyncUser pairs. No150gold debit or auto-victory added.
+
+SEARCH /explore/Entrust separately sends owner64/type/ref_id/inst_id64 and
+success parses sibling begin thenend objects, not a timedslot. Reward uses
+account My instance, erases ownercache then ITEMONLYParseReward; effective item
+inst_id narrows32 (AddItem's highword forced0). Ownership/quantities/replay law
+remain missing; no successempty Reward/Entrust or grants added.
+See docs/expedition-entrust-workflow-2026-10-13.md and linkedsource notes.
+
+No live inputs/flags/profile/save/APK changes. Escape hold, private/original
+preservation and collector/Docker/inference hold persist. Goal ACTIVE; next
+complete Expedition timedjob/start/refresh/skip/end or Search ownedinstance
+producer/receipt, without mixing these two Entrust features.
+
 ## Latest continuation: donation-driven Hunter training and rank fees (2026-10-13)
 
 Same two agents reused. Full139 test programs/build and both reviews passed;

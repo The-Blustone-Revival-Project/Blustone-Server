@@ -111,10 +111,12 @@ windows independently establish:
   CSRCardInfoContainer.GetCardRaisePrice G87f2fc (call G101cce8).
 - Hunter rank-up: also benefit3 G1039cf4/cf6, supplied price from
   GetCardRankUpPrice G87f322 (call G1039cec).
-- Expedition entrust: benefit4 Ge7999e/9a2, literal base price150 at
-  Ge799a0 in CSRSceneMStageEntrust.SetCharList Ge794fc. This is positive
-  original caller-base-price evidence, NOT a recovered benefit magnitude,
-  payment-wallet proof or permission to enable entrust settlement.
+- Expedition entrust: benefit4 Ge7999e/9a2, literal150 at Ge799a0 in
+  CSRSceneMStageEntrust.SetCharList Ge794fc. **Later consumer closure proves
+  this is150seconds per run, NOT gold**: Calculate formats its adjusted
+  result times run count as TX_TIME. Stage-derived fuel is separate. See
+  entrust-search-expedition-unit-split-native-2026-10-13.md. This is not
+  a recovered benefit magnitude or permission to enable settlement.
 
 AP type5 is additive in the level parser; no fee call above uses it. AP cap/
 refresh interaction requires its actual consumer and must not be inferred.
