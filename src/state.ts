@@ -25,6 +25,8 @@ import {repositoryPath} from "./paths.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors } from "./mirage.js";
+import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
+import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type FishingCatalogue} from "./fishing-catalogue.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { socialDiscovery } from "./social-discovery.js";
@@ -537,6 +539,8 @@ export class ServerState {
   private readonly gemDisassemblePrices: readonly GemRemovalPrice[];
   private readonly gemSellPrices: readonly GemSalePrice[];
   private readonly gemLevelPrices: readonly GemLevelPrice[];
+  private readonly fishingItems: readonly Readonly<FishingItemReference>[];
+  private readonly fishingCatalogue?: FishingCatalogue;
   private readonly guildPrices: readonly GuildActionPrice[];
   private readonly guildCreationMode:"disabled"|"local-gold";
   private readonly guildUpdateMode:"disabled"|"local-manda-free-first";
@@ -559,7 +563,8 @@ export class ServerState {
       guildMembershipMode?:"disabled"|"local-public-approval";guildMembershipPolicy?:unknown;
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
-      guildContributionPoints?:unknown;guildContributionRewards?:unknown } = {}) {
+      guildContributionPoints?:unknown;guildContributionRewards?:unknown;
+      fishingItems?:unknown;fishingCatalogue?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -569,6 +574,12 @@ export class ServerState {
     const readPrices = (key: "equipmentLevelPrices" | "equipmentRankPrices", envName: string): unknown =>
       Object.hasOwn(options,key) ? options[key] : process.env[envName]===undefined ? [] : JSON.parse(process.env[envName]!);
     const knownItems = new Set(itemReference().item.map(item=>item.id));
+    const fishItems=Object.hasOwn(options,"fishingItems")?options.fishingItems:
+      process.env.BLUSTONE_FISHING_ITEMS_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_FISHING_ITEMS_JSON);
+    this.fishingItems=configuredFishingItems(fishItems,new Set([...knownItems,"LU001","LU003",...starterReference.map(row=>row.base.id)]));
+    const fishCatalogue=Object.hasOwn(options,"fishingCatalogue")?options.fishingCatalogue:
+      process.env.BLUSTONE_FISHING_CATALOGUE_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_FISHING_CATALOGUE_JSON);
+    if(fishCatalogue!==undefined) this.fishingCatalogue=configuredFishingCatalogue(fishCatalogue,new Set(this.fishingItems.map(row=>row.id)));
     const levelPrices = readPrices("equipmentLevelPrices","BLUSTONE_EQUIPMENT_LEVEL_PRICES_JSON");
     const rankPrices = readPrices("equipmentRankPrices","BLUSTONE_EQUIPMENT_RANK_PRICES_JSON");
     this.equipmentLevelPrices = Object.freeze((Array.isArray(levelPrices) && levelPrices.length===0 ? [] :
@@ -1495,11 +1506,23 @@ export class ServerState {
 
   fishingAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     this.accountFor(payload, headers);
+    if(route==="/fishing/GetFishingPool"||route==="/fishing/GetPriceRef") {
+      if(!this.fishingCatalogue) return this.failure(2001,"Fishing catalogue unavailable; explicit fish item definitions and catalogue required");
+      try {
+        return this.envelope(route==="/fishing/GetFishingPool"?fishingPoolRows(this.fishingCatalogue):
+          fishingPriceRows(this.fishingCatalogue,payload.fish_id));
+      } catch(error) {return this.failure(2001,error instanceof Error?error.message:"Invalid fishing reference request");}
+    }
     // CSRMFishing ParseInven/ParseRecod index ret_data numerically. Empty
     // arrays skip all fish rows; optional achievement lookup resolves null.
     // No catches have been reconstructed or granted by this local server.
     if (route === "/fishing/GetInven" || route === "/fishing/GetRecord") return this.envelope([]);
     return this.failure(2001, "Fishing catches, pools, prices and settlement are not reconstructed");
+  }
+
+  itemReferenceRows() {
+    const base=itemReference();
+    return {...base,item:[...base.item,...this.fishingItems.map(row=>({...row}))]};
   }
 
   mirageAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {

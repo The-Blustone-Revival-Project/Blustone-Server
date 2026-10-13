@@ -3214,18 +3214,21 @@ paths:
         ARM-device capture
   /fishing/GetFishingPool:
     post:
-      summary: Unreconstructed fishing operation
-      description: Authenticated operation explicitly refuses with result_code 2001.
-        Original fish identities, catch settings, pools, prices and settlement
-        are not yet reconstructed. It does not return generic mock success or
-        alter inventory/currency.
+      summary: Read explicit fishing catalogue
+      description: Authenticated bare array from an immutable supplied catalogue. Pool
+        bootstrap publishes all lure/fish rows; price lookup takes one scalar
+        fish_id and returns matching fish_id/b_price/s_price/g_price rows. Every
+        configured fish has the same explicit neutral local item definition in
+        GetItem. Missing catalogue refuses with result_code2001; original fish
+        metadata, numeric prices and pools remain missing. No inventory, bait,
+        catch or settlement is created.
       tags:
         - Fishing
       parameters: *a1
       requestBody: *a2
       responses:
         "200":
-          description: Unsupported fishing contract.
+          description: Explicit catalogue rows or unavailable reference.
           content:
             application/json:
               schema:
@@ -3284,18 +3287,21 @@ paths:
         entry unverified
   /fishing/GetPriceRef:
     post:
-      summary: Unreconstructed fishing operation
-      description: Authenticated operation explicitly refuses with result_code 2001.
-        Original fish identities, catch settings, pools, prices and settlement
-        are not yet reconstructed. It does not return generic mock success or
-        alter inventory/currency.
+      summary: Read explicit fishing catalogue
+      description: Authenticated bare array from an immutable supplied catalogue. Pool
+        bootstrap publishes all lure/fish rows; price lookup takes one scalar
+        fish_id and returns matching fish_id/b_price/s_price/g_price rows. Every
+        configured fish has the same explicit neutral local item definition in
+        GetItem. Missing catalogue refuses with result_code2001; original fish
+        metadata, numeric prices and pools remain missing. No inventory, bait,
+        catch or settlement is created.
       tags:
         - Fishing
       parameters: *a1
       requestBody: *a2
       responses:
         "200":
-          description: Unsupported fishing contract.
+          description: Explicit catalogue rows or unavailable reference.
           content:
             application/json:
               schema:

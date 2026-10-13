@@ -1,3 +1,27 @@
+## Latest continuation: explicit fishing catalogue reads (2026-10-13)
+
+Same two agents reused for fishing and Mirage targeted source investigation.
+Full124 test programs/build and independent fishing review passed.
+Fishing pure helpers now integrated: immutable fishingItems/fishingCatalogue
+options or BLUSTONE_FISHING_ITEMS_JSON/BLUSTONE_FISHING_CATALOGUE_JSON. Explicit
+fish-only item-ID admission; base item/bait/Hunter collisions refuse. Neutral
+use_type0/effectempty/collect_qty0 is LOCAL read-only metadata policy to avoid
+known AP/trace postprocessing effects, not recovered original fish metadata.
+
+GetItem preserves existing item/trace/global_item rows and appends SAMEfish
+definitions. Authenticated GetFishingPool returns entire ordered pool, no
+invented requestfilter. GetPriceRef takes scalarfish_id→matchingbarearray;
+unknownprice[], explicitzero preserved; absentcatalogue still2001. Configs and
+responses detached; exact complete save/peer/restart preservation tested.
+No fishinventory/records/bait/catches/RNG/Begin/sale/settlement enabled.
+Source and workflow: docs/fishing-read-integration-boundary-2026-10-13.md.
+
+Originalcatalogue still missing in locally inspected DataDump a1c9049;
+GitHubLatest2026-10-11.2 verified2026-10-13; no exhaustiveabsenceclaim.
+No liveinputs/profileactivation/APK.
+Escapehold persists, DataDumpread-only, Server/Instrumentedonly writable;
+collector/Docker/inferenceoffline, private/originals preserved. GoalACTIVE.
+
 ## Latest continuation: Gem polishing outcome contract (2026-10-13)
 
 Same two agents reused for independent callback and failure/ability recovery.

@@ -765,7 +765,10 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
       "x-runtime-confidence": "Native parser recovered; server tests pass; device fishing entry unverified",
     } };
   }
-  for (const route of ["/fishing/Begin", "/fishing/EndWithSell", "/fishing/SellFish", "/fishing/GetFishingPool", "/fishing/GetPriceRef"]) {
+  for (const route of ["/fishing/GetFishingPool", "/fishing/GetPriceRef"]) {
+    paths[route] = { post: operation("Read explicit fishing catalogue", "Authenticated bare array from an immutable supplied catalogue. Pool bootstrap publishes all lure/fish rows; price lookup takes one scalar fish_id and returns matching fish_id/b_price/s_price/g_price rows. Every configured fish has the same explicit neutral local item definition in GetItem. Missing catalogue refuses with result_code2001; original fish metadata, numeric prices and pools remain missing. No inventory, bait, catch or settlement is created.", "Fishing", response("Explicit catalogue rows or unavailable reference.")) };
+  }
+  for (const route of ["/fishing/Begin", "/fishing/EndWithSell", "/fishing/SellFish"]) {
     paths[route] = { post: operation("Unreconstructed fishing operation", "Authenticated operation explicitly refuses with result_code 2001. Original fish identities, catch settings, pools, prices and settlement are not yet reconstructed. It does not return generic mock success or alter inventory/currency.", "Fishing", response("Unsupported fishing contract.")) };
   }
   for (const [route, summary, description, schema] of [

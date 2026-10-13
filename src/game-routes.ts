@@ -4,7 +4,6 @@ import { campaignReceiptProjection, recordCampaignReceipt } from "./campaign-rec
 import { RESOURCE_REFRESH_SECONDS } from "./game.js";
 import { rankUpRows, trainingPrices } from "./training.js";
 import { supplyReference } from "./supply.js";
-import { itemReference } from "./hunter-traces.js";
 import { arenaReference, arenaStageReference, arenaRival, ARENA_RIVAL_PVID } from "./arena.js";
 import { hunterSearchReference } from "./hunter-search.js";
 import { searchHelperReference } from "./search-helpers.js";
@@ -304,7 +303,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/shop/GachaPremium") return state.gachaPremium(payload, headers);
   if (route === "/shop/PieceExchange") return state.pieceExchange(payload, headers);
   if (route === "/shop/BuyGlobalItem") return state.buyFuel(payload, headers);
-  if (route === "/reference/GetItem") return state.envelope(itemReference());
+  if (route === "/reference/GetItem") return state.envelope(state.itemReferenceRows());
   // RequestRef callback91abb8 indexes ret_data.ref/event_ref; RequestInst
   // callback91b22c passes ret_data directly to ParseInst. Entry reads only.
   if (route === "/explore/GetRef") return state.envelope(hunterSearchReference());
