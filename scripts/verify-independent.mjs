@@ -14,7 +14,8 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const exerciseBulk=process.argv.includes('--exercise-bulk');
 const exerciseSale=process.argv.includes('--exercise-sale');
 const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgrade');
-const exerciseGemMount=process.argv.includes('--exercise-gem-mount');
+const exerciseGemReplacement=process.argv.includes('--exercise-gem-replacement');
+const exerciseGemMount=process.argv.includes('--exercise-gem-mount')||exerciseGemReplacement;
 const exerciseGemInventory=process.argv.includes('--exercise-gem-inventory')||exerciseGemMount;
 const authoredGemReference={id:'AUTHORED_GEM',name:'Authored HP Gem',desc:'Local parser fixture',res_id:'G_1_001_R1',set_effect_id:1,rank:1,target:1};
 const authoredGemStat={rank:1,awk_step:0,hp:'10000',atk:'0',def:'0',spd:'0',crt_chance:'0',crt_dmg:'0',penetration:'0',
@@ -107,6 +108,11 @@ let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
   if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
+  if(exerciseGemReplacement) {
+    env.BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON=JSON.stringify([{level:authoredGem.level,price_type:2,price:13}]);
+    env.BLUSTONE_GEM_COMBINATIONS_JSON=JSON.stringify([{id:1,count:2,rank:0,awk_step:0,
+      ...Object.fromEntries(['hp','atk','def','spd','crt_chance','crt_dmg','penetration','block_chance','block_dec_dmg','attr_enhance','attr_resist','hp_regen','hp_up','atk_up','def_up'].map(key=>[key,'0'])),hp:'6.00'}]);
+  }
   if(exerciseSale) env.BLUSTONE_CARD_SELL_PROFIT_JSON=JSON.stringify([{rank:1,profit_type:2,profit_target:'',profit_qty:13}]);
   if(exerciseEquipment) env.BLUSTONE_EQUIPMENT_REFERENCE_JSON=JSON.stringify({'001':exerciseEquipmentUpgrade?
     [authoredEquipment,{...authoredEquipment,id:'AUTHORED_WEAPON2',rank:2,atk:'40000'}]:[authoredEquipment]});
@@ -203,8 +209,22 @@ try {
       assert.deepEqual((await secure('/card_handler/EquipGem',request)).ret_data.gems,reply.ret_data.gems,'No-write desired-grid retry must echo authoritative rows');
       assert.deepEqual(readFileSync(stateFile),mounted);
       const removed=await secure('/card_handler/EquipGem',{...request,combination:'{"weapons":[0,0],"armors":[0,0],"accessories":[0,0]}'},{allowPlainRefusal:true});
-      assert.equal(removed.result_code,2001,'Missing removal fees never mean free unmount');
-      assert.deepEqual(readFileSync(stateFile),mounted);
+      if(exerciseGemReplacement) {
+        assert.equal(removed.result_code,1);assert.equal(removed.ret_data.user.gold.cur,current.gold-13);
+        assert.deepEqual(removed.ret_data.gems,[authoredGem],'Removed Gem must retain full rolls and lossless wire identity');
+        const removedBytes=readFileSync(stateFile);
+        const emptyRequest={...request,combination:'{"weapons":[0,0],"armors":[0,0],"accessories":[0,0]}'};
+        assert.deepEqual((await secure('/card_handler/EquipGem',emptyRequest)).ret_data,removed.ret_data,'Lost removal response retry repairs native ownership');
+        assert.deepEqual(readFileSync(stateFile),removedBytes,'Removal replay must not debit or persist');
+        const quoted=(await secure('/reference/GetGemDisassemblePrice',auth)).ret_data;
+        assert.deepEqual(quoted,[{level:authoredGem.level,price_type:2,price:13}]);
+        const setRows=(await secure('/reference/GetGemCombinationEffect',auth)).ret_data;
+        assert.equal(setRows[0].hp,'6.00','Wire percentage must remain unscaled');
+        assert.equal((await secure('/card_handler/EquipGem',request)).ret_data.user.gold.cur,current.gold-13,'Fresh mount into empty slot remains free');
+      } else {
+        assert.equal(removed.result_code,2001,'Missing removal fees never mean free unmount');
+        assert.deepEqual(readFileSync(stateFile),mounted);
+      }
     }
   }
   if(exerciseSocial) {
@@ -485,6 +505,7 @@ try {
     if(exerciseGemInventory && entry[0]===gemPvid) {
       const actual=structuredClone(found[1]),expected=structuredClone(entry[1]);
       if(exerciseGemMount){expected.owned_gems[0].target_inst_id=String(expected.starter_cards.find(card=>card.ref_id==='001').inst_id);expected.owned_gems[0].position=1;}
+      if(exerciseGemReplacement) expected.gold-=13;
       for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
       assert.deepEqual(actual,expected,'Gem read/restart must preserve full raw inventory and legacy scalar separately');
       continue;
@@ -526,6 +547,7 @@ try {
     configured_equipment_upgrade_fixture:exerciseEquipmentUpgrade,
     configured_gem_inventory_fixture:exerciseGemInventory,
     configured_gem_mount_fixture:exerciseGemMount,
+    configured_gem_replacement_fixture:exerciseGemReplacement,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,

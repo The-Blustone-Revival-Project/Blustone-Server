@@ -1,9 +1,12 @@
-# Gem combination model: original native evidence, inactive
+# Gem combination model: original native evidence, explicit tables
 
 `gem-combinations.ts` implements a pure supported reference parser and set
-aggregator. Nothing is connected to routes, inventory or hunter stats. Authored
-test rows are not original balances. Existing empty Gem reference/inventory
-routes and mutation refusal remain appropriate.
+aggregator. Authored test rows are not original balances. As of2026-10-13,
+authenticated GetGemCombinationEffect accepts immutable explicit tables via
+BLUSTONE_GEM_COMBINATIONS_JSON or constructor gemCombinations. Default remains
+empty. Original wire decimal strings are preserved without server normalization;
+the native CardAnalyzer applies the effects, avoiding duplicated stat bonuses.
+Missing original numerical records are not filled from UI help or estimates.
 
 Evidence is read-only DataDump `sources/native/economy/ghidra-gem-reference.txt`,
 `ghidra-gem-reference-keys.txt`, `ghidra-gem-inventory.txt`, plus hunters

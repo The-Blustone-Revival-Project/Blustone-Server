@@ -14,7 +14,9 @@ import {equipmentLevelPrices as parseEquipmentLevelPrices, equipmentRankPrices a
 import {planEquipmentUpgrade} from "./equipment-upgrade.js";
 import {configuredGemReferences} from "./gem-reference-profile.js";
 import {parseGemInstances,type GemReference} from "./gem-instances.js";
-import {planFreeGemMount} from "./gem-mount.js";
+import {planPaidGemMount} from "./gem-paid-mount.js";
+import {gemRemovalPrices,type GemRemovalPrice} from "./gem-removal-prices.js";
+import {configuredGemCombinations} from "./gem-combination-reference.js";
 import {gemWireRows,parseStateWithGemIds} from "./gem-wire.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
 import { SEARCH_CAPSULE_ID } from "./search-capsules.js";
@@ -501,10 +503,13 @@ export class ServerState {
   private readonly equipmentLevelPrices: readonly EquipmentLevelPrice[];
   private readonly equipmentRankPrices: readonly EquipmentRankPrice[];
   private readonly gemReferences: readonly GemReference[];
+  private readonly gemCombinations: readonly Readonly<Record<string,string|number>>[];
+  private readonly gemDisassemblePrices: readonly GemRemovalPrice[];
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
-      equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown } = {}) {
+      equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
+      gemDisassemblePrices?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -523,6 +528,12 @@ export class ServerState {
     const gemRows=Object.hasOwn(options,"gemReferences")?options.gemReferences:
       process.env.BLUSTONE_GEM_REFERENCE_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_REFERENCE_JSON);
     this.gemReferences=Object.freeze(configuredGemReferences(gemRows).map(row=>Object.freeze(row)));
+    const combinations=Object.hasOwn(options,"gemCombinations")?options.gemCombinations:
+      process.env.BLUSTONE_GEM_COMBINATIONS_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_COMBINATIONS_JSON);
+    this.gemCombinations=configuredGemCombinations(combinations);
+    const removalPrices=Object.hasOwn(options,"gemDisassemblePrices")?options.gemDisassemblePrices:
+      process.env.BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON);
+    this.gemDisassemblePrices=Object.freeze(gemRemovalPrices({result_code:1,ret_data:removalPrices}).map(row=>Object.freeze(row)));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -1948,6 +1959,16 @@ export class ServerState {
     return this.envelope(this.gemReferences.map(row=>({...row})));
   }
 
+  gemCombinationReference(payload:Record<string,unknown>,headers:Record<string,string>) {
+    this.accountFor(payload,headers);
+    return this.envelope(this.gemCombinations.map(row=>({...row})));
+  }
+
+  gemDisassembleReference(payload:Record<string,unknown>,headers:Record<string,string>) {
+    this.accountFor(payload,headers);
+    return this.envelope(this.gemDisassemblePrices.map(row=>({...row})));
+  }
+
   equipGems(payload:Record<string,unknown>,headers:Record<string,string>) {
     const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid)??this.gameFor(account);
     assertOwnedCardCompatibility(game);
@@ -1961,12 +1982,15 @@ export class ServerState {
       return this.failure(2001,"Gem target ordinary reference is missing");
     const busy=new Set([...(game.active_battle?.state==="active"?game.active_battle.deck_inst_ids:[]),
       ...(game.arena.active?.deck_inst_ids??[]),...(game.search.active?.deck_inst_ids??[])]);
-    const plan=planFreeGemMount(payload,cards,game.owned_gems??[],this.gemReferences,busy);
+    const guild=(this.guildAction("/lobby/GetGuildInfo",payload,headers).ret_data as {my_guild:{guild_id:number}}).my_guild.guild_id;
+    if(guild!==0) return this.failure(2001,"Gem replacement with Guild affiliation is not reconstructed");
+    const plan=planPaidGemMount(payload,cards,game.owned_gems??[],this.gemReferences,busy,this.gemDisassemblePrices,game.gold);
     if("error" in plan) return this.failure(2001,plan.error!);
-    const before=game.owned_gems;
+    const before=game.owned_gems,beforeGold=game.gold;
     if(plan.changed) {
       game.owned_gems=plan.next!;
-      try{this.persist();}catch(error){game.owned_gems=before;throw error;}
+      game.gold=plan.gold!;
+      try{this.persist();}catch(error){game.owned_gems=before;game.gold=beforeGold;throw error;}
     }
     // GDP remains the same explicit0 policy used by lobby; legacy game.gem is
     // not silently reinterpreted as a wallet or owned jewel count.

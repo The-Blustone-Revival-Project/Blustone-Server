@@ -2433,17 +2433,16 @@ paths:
         ARM-device capture
   /card_handler/EquipGem:
     post:
-      summary: Install Gems into empty slots
-      description: Authenticated complete plural combination arrays
-        weapons/armors/accessories each hold2 ordered uint64 IDs; zero is an
-        empty cell. Supports owned unmounted first installs and unchanged-grid
-        no-write retries; positions1..2, matching Gem part, rank3 second-slot
-        and active target gates. Changed occupied cells require missing removal
-        fee data and refuse; transfers/gacha/level-up remain unsupported. Full
-        authoritative target Gem rows are echoed even on a no-write retry.
-        Wallets and legacy scalar unchanged; current GDP0 lobby policy is
-        preserved. Atomic persistence/rollback; exact integer wire IDs avoid
-        native string rounding.
+      summary: Install or replace owned Gems
+      description: Authenticated six-cell plural combination, exact uint64 IDs, owned
+        same-target or unmounted Gems only. Matching part, equipment rank3
+        second slot and active/Mirage protections. Explicit immutable
+        level/price_type/price quotes charge each changed old occupied cell at
+        its OLD level using gold2; absent quotes and unsigned overflow refuse.
+        Cross-Hunter/type4 transfers unsupported. Full owned Gem rows repair
+        lost removal responses on no-write retries. Atomic gold/inventory
+        persistence and rollback; GDP0 lobby policy and legacy scalar remain
+        separate. Original fees and native UI validation missing.
       tags:
         - Missions and combat
       parameters: *a1
@@ -8164,11 +8163,12 @@ paths:
   /reference/GetGemCombinationEffect:
     post:
       summary: Read jewel set effects
-      description: Native ParseGemCombineEffects consumes direct ret_data rows with
-        numeric id/count and stat fields. Empty array until final-version
-        numerical effects are recovered. Historical help has a localized
-        Reduction/Super Block 9-versus-5 percent conflict; not promoted to final
-        balance.
+      description: Authenticated immutable explicit BLUSTONE_GEM_COMBINATIONS_JSON
+        rows, default empty. Exact bare ret_data wire rows retain numeric
+        id/count/rank/awk_step and decimal-string stat fields; native mode1
+        parser applies percentage normalization. No UI help or estimates are
+        promoted into original tables. Native client applies set bonuses; server
+        does not duplicate their stat effects.
       tags:
         - Missions and combat
       parameters: *a1
@@ -8198,10 +8198,13 @@ paths:
         recruitment remain unverified.
   /reference/GetGemDisassemblePrice:
     post:
-      summary: Read jewel dismantling prices
-      description: Native direct ret_data collection, currently empty; original
-        dismantling economy unknown. Gem mutations explicitly refuse rather than
-        return generic mock success.
+      summary: Read jewel removal prices
+      description: Authenticated bare ret_data level/price_type/price uint32 rows from
+        immutable explicit BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON, default empty.
+        Duplicate level/payment keys refuse startup. Native exact
+        old-level/payment lookup; missing sentinel is unavailable rather than
+        free. Gold2 replacement is supported with supplied quotes; original
+        numeric economy remains missing.
       tags:
         - Missions and combat
       parameters: *a1

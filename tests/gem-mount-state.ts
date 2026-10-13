@@ -31,7 +31,7 @@ try {
   mkdirSync(filename+".tmp");const old=JSON.stringify(game),oldArray=game.owned_gems,bytes=readFileSync(filename);
   assert.throws(()=>mount());assert.equal(JSON.stringify(game),old);assert.equal(game.owned_gems,oldArray);assert.deepEqual(readFileSync(filename),bytes);
   rmSync(filename+".tmp",{recursive:true});
-  const result=mount();assert.equal(result.result_code,1);assert.equal(result.ret_data.gems.length,1);
+  const result=mount();assert.equal(result.result_code,1);assert.equal(result.ret_data.gems.length,2,"authoritative inventory includes unmounted rows for retry repair");
   assert.equal(result.ret_data.gems[0].target_inst_id,String(target.inst_id));assert.equal(result.ret_data.gems[0].position,1);
   assert.equal(result.ret_data.user.gold.cur,game.gold);assert.equal(result.ret_data.user.gdp.cur,0);
   const mountedBytes=readFileSync(filename);const repeated=mount();assert.equal(repeated.result_code,1);
