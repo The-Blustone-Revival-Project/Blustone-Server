@@ -1,3 +1,32 @@
+## Latest continuation: native Guild detail reads (2026-10-13)
+
+Previous goal turn was progress: established Guild persistence/polishing refs
+and94 checks. Reused same2 agents. Full96 checks/build and compiled encrypted
+current-e6-guild --exercise-guild-records --exercise-gem-level-reference proof
+pass; independent query/record/state review found no further defects.
+/guild/GetDetailInfo now authenticates singular guild_id JSON-array FORMSTRING
+(even singleton/empty), preserves exact uint64 query IDs, returns ret_data.guilds
+full established same-server INFO/member rows. Unknown/cross-server targets
+absent; invalid/duplicate/zero/overflow queries refuse without writes. Does not
+return personal my_guild, assign membership or infer creation/join/fees/rewards.
+Actual RequestInfo callback RTTI binding and guilds selection closed; missing/
+null members retains native cached members, []clears, so full rows are projected.
+Important width fix: native INFO.id narrows32bits while request IDs are64bits;
+Guild imports >uint32 now refuse before writes, no truncation aliases.
+Source record/history preservation and auth/server ownership still enforced.
+
+Fishing RequestPool accepts only5auth fields/no filters, returns full bare pool
+table, success ready byte+45 prevents later HTTP requests. Added detached full
+pool helper/tests and source doc. Nonempty publication still needs complete
+actual item definitions + positive fish identity admission; current currency,
+fuel, traces and capsules are NOT fish. No fishing endpoint/grant enabled.
+
+No live source/profile/save/client/input changes performed; server remains
+unactivated94/96 source locally, live selection lastseen139 and client+15.
+Escape input hold persists; no APK build/install/release/collector/Docker/
+inference. Server/Instrumented writable, DataDump read-only, original/private
+preserved. Native Guild menus and user-detail/fee/action contracts still pending.
+
 ## Latest continuation: established Guilds, polishing and fishing contracts (2026-10-13)
 
 Previous goal turn was progress: atomic Gem sales and90 checks. Reused same2

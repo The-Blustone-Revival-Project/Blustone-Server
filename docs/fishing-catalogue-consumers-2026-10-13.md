@@ -85,3 +85,46 @@ one original GetItem row and positive corroboration that its exact ID is used
 as fish_id, then original pool/price rows or explicitly declared local tables.
 No original numeric price, fish grant, game input, runtime change, save edit or
 APK build was performed.
+
+## Pool bootstrap request: publish the full explicit table
+
+Follow-up original decomp and byte review closes RequestPool Gb2b31c. Its
+signature takes only a callback. It constructs exactly five form pairs:
+`app_code`, `app_ver`, `market`, `pvid`, `otp`; the final unordered_map
+constructor receives literal count5. No requested lure_id, fish_id, place_id,
+grade, throw-distance or current inventory is serialized. The original route
+literal is `fishing/GetFishingPool`, which the replica handles at
+`/fishing/GetFishingPool` after ordinary HTTP path normalization.
+
+After authentication, the supported read response is
+`{result_code:1,ret_data:[{lure_id,fish_id},...]}` with EVERY configured
+membership row, preserving explicit row order across both supported lure IDs.
+Do not use fishingPoolMembers to filter a bootstrap response by an invented
+request predicate. `fishingPoolRows` now provides that detached full array.
+The per-lure selector remains a separate pure local lookup.
+
+Success receiver Gb324c8 sets Fishing+45 byte1 at Gb324fa BEFORE iterating
+full response.ret_data. Its strict-string decoder groups the full table into
+the native lure→vector map, appending each row. RequestPool checks byte+45==1
+at entry and returns without another HTTP request when already ready; its
+cached path is the epilogue at Gb2ba08, with no new callback invocation seen
+in this function. An empty successful pool likewise marks it ready. A caller
+must not promise live catalogue refresh through repeated native RequestPool
+calls, or describe duplicate success delivery as a destructive replacement.
+The server read can remain pure; no catch or inventory mutation follows merely
+from this bootstrap table.
+
+Current itemReference() supplies local fuel, traces, capsule and currency/
+reward display rows. Those are not genuine fishing item identities. Passing
+its entire ID set to this helper does not make RP1, VIP1 or a local Hunter trace
+a recovered fish. A nonempty integration needs separately admitted explicit
+fish item definitions, rejects collision with those existing unrelated IDs,
+and publishes the SAME definitions through GetItem. Required base item fields
+remain strict string id/name/desc/thumbnail_id/effect plus numeric
+rank/use_type/sell_price/collect_qty. Ownership, acquisition, native fish
+use_type semantics, original ID→art assignments and prices are separate gates.
+Do not grant any supplied fish reference merely to populate this read-only seam.
+
+Focused catalogue tests and strict TypeScript checks pass after this follow-up,
+including both lure groups in full detached replies and immutable repeated
+publication. No state/routes or live resources changed by this agent.

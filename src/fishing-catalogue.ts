@@ -72,3 +72,9 @@ export function fishingPoolMembers(catalogue:FishingCatalogue,lureId:unknown):st
   const id=identity(lureId);
   return catalogue.pools.filter(row=>row.lure_id===id).map(row=>row.fish_id);
 }
+/** RequestPool Gb2b31c sends auth5 only, with no lure/place/fish filter. Its
+ * success callback consumes the entire initial lure→fish membership table.
+ * Detach every explicit row for the bare ret_data array; no nested pool key. */
+export function fishingPoolRows(catalogue:FishingCatalogue):FishingPoolRow[] {
+  return catalogue.pools.map(row=>({...row}));
+}

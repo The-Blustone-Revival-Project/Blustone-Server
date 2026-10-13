@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import {configuredFishingCatalogue,fishingPriceRows,fishingPriceByGrade,fishingPoolMembers} from "../src/fishing-catalogue.js";
+import {configuredFishingCatalogue,fishingPriceRows,fishingPriceByGrade,fishingPoolMembers,fishingPoolRows} from "../src/fishing-catalogue.js";
 const itemIds=new Set(["AUTHORED_A","AUTHORED_B","AUTHORED_C"]);
 const input={pools:[{lure_id:"LU003",fish_id:"AUTHORED_B"},{lure_id:"LU003",fish_id:"AUTHORED_A"},{lure_id:"LU001",fish_id:"AUTHORED_A"}],
   prices:[{fish_id:"AUTHORED_A",b_price:0,s_price:17,g_price:0xffff_ffff},{fish_id:"AUTHORED_B",b_price:11,s_price:23,g_price:37}]};
@@ -8,6 +8,10 @@ assert.deepEqual(input,original,"admission is pure");
 input.pools[0].fish_id="CHANGED";input.prices[0].s_price=999;itemIds.clear();
 assert.deepEqual(fishingPoolMembers(catalogue,"LU003"),["AUTHORED_B","AUTHORED_A"],"original explicit membership order is retained");
 assert.deepEqual(fishingPoolMembers(catalogue,"UNKNOWN"),[]);
+const poolReply=fishingPoolRows(catalogue);
+assert.deepEqual(poolReply,original.pools,"bootstrap publishes BOTH lure groups in source order without request filtering");
+poolReply[0].fish_id="CHANGED_REPLY";poolReply.pop();
+assert.deepEqual(fishingPoolRows(catalogue),original.pools,"detached full pool reply cannot alter later publication");
 assert.equal(fishingPriceByGrade(catalogue,"AUTHORED_A",1),0,"explicit zero differs from unavailable");
 assert.equal(fishingPriceByGrade(catalogue,"AUTHORED_A",2),17);
 assert.equal(fishingPriceByGrade(catalogue,"AUTHORED_A",3),0xffff_ffff);
@@ -29,6 +33,7 @@ for(const invalid of [null,[],{},
   ...[-1,1.5,0x1_0000_0000,"17",NaN,Infinity].map(s_price=>({...original,prices:[{...original.prices[0],s_price}]}))])
   assert.throws(()=>configuredFishingCatalogue(invalid,known));
 assert.deepEqual(configuredFishingCatalogue({pools:[],prices:[]},new Set()),{pools:[],prices:[]});
+assert.deepEqual(fishingPoolRows(configuredFishingCatalogue({pools:[],prices:[]},new Set())),[]);
 const incomplete=configuredFishingCatalogue({pools:[original.pools[0]],prices:[]},known);
 assert.equal(fishingPriceByGrade(incomplete,"AUTHORED_B",1),undefined,"read-only membership does not invent settlement costs");
 console.log("Fishing supplied catalogue: scalar-ID array price replies, exact grade lookup, immutable membership ordering, item-reference gates, duplicate/invalid/overflow refusal and missing-price distinction passed; no original fish IDs or catches granted.");
