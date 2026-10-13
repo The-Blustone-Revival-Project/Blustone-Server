@@ -1,3 +1,21 @@
+## Latest continuation: preserve carried Mirage evidence on lobby reads (2026-10-13)
+
+Same two agents reused, no additional delegation. Original Parse_Entry G933aec
+Full125 test programs/build and both independent guard reviews passed.
+on ANYarray first ResetCardMirageRemainHP G933b2e→Gaea4c4 resets ALLnative
+Hunters to raw-1; entry[] thus not inertmissingdata. inst_base.deck[] also
+replaces Mirageparty. Neither HP1000 nor ordinaryparty proves entrymembership.
+Source: docs/mirage-entry-cache-preservation-native-2026-10-13.md.
+
+GetInfo nowrefuses2001/noentry/inst_base when already-established servergame
+contains presentnondefaultHP!=1000 on starterORrecruitedHunter. Matches existing
+conservative mutationguard; absent/1000 isLOCAL no-carried convention, not
+originalproducerproof. gameByPvid read only/noimplicitgamecreation orpersist.
+Resetguard retained/allsectionflags guarded; peer/FriendInfo unaffected.
+Authoredhistorical0/425/999/-1/flags/restart/exactsave/auth/defaultlobby tests
+pass. No entry/deck/run/enemy/reward/HPgenerator invented; nativeUIpending.
+No liveinputs/APK/profileactivation; Escapehold persists. GoalACTIVE.
+
 ## Latest continuation: explicit fishing catalogue reads (2026-10-13)
 
 Same two agents reused for fishing and Mirage targeted source investigation.

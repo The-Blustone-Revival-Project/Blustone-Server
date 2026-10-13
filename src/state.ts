@@ -1526,7 +1526,7 @@ export class ServerState {
   }
 
   mirageAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
-    this.accountFor(payload, headers);
+    const account=this.accountFor(payload, headers);
     // Original callback replaces its complete friend-floor cache with this
     // bare array. Local friendship alone is not a reconstructed highest-floor
     // record; Arena fixture rivals are not substitutes for genuine friend data.
@@ -1537,6 +1537,13 @@ export class ServerState {
       // Do not acknowledge a run reset by returning the read-only empty lobby.
       if (["t", "true", "1", true, 1].includes(payload.reset as string | boolean | number))
         return this.failure(2001, "Mirage run reset is not reconstructed");
+      // Parse_Entry G933aec resets ALL native owned HP to -1 before rows;
+      // entry[] would erase carried evidence while the server kept it. Do not
+      // invent entry/deck membership from HP1000 or ordinary account parties.
+      const game=this.gameByPvid.get(account.pvid);
+      if(game && [...game.starter_cards,...game.recruited_cards].some(card=>
+        card.mirage_remain_hp!==undefined && Number(card.mirage_remain_hp)!==1000))
+        return this.failure(2001,"Mirage lobby would clear unrepresented carried Hunter commitments");
       return this.envelope(mirageLobby());
     }
     return this.failure(2001, "Mirage runs, weekly hunters, stairs and settlement are not reconstructed");

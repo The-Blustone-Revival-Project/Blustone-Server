@@ -6620,29 +6620,20 @@ paths:
       x-runtime-confidence: Compiled encrypted response verified; native friend panel pending
   /mirage/GetInfo:
     post:
-      summary: Recovered /mirage/GetInfo route
-      description: >-
-        The route literal **/mirage/GetInfo** was recovered from the ARM native
-        library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Read supported empty Mirage lobby
+      description: "Authenticated starter lobby only; no reconstructed run, enemy or
+        reward data. Explicit resets refuse2001. Preserved nondefault carried
+        Hunter HP also refuses before publishing entry or inst_base: native
+        entry[] resets every owned Hunter's Mirage HP to -1. The replica's
+        absent/1000 no-carried convention is local policy, not proof of original
+        entry membership. Refusal and reads preserve saved gameplay."
       tags:
-        - mirage
+        - Mirage
       parameters: *a1
       requestBody: *a2
       responses:
         "200":
-          description: Mock-compatible response.
+          description: Empty starter lobby or unavailable preserved run.
           content:
             application/json:
               schema:
