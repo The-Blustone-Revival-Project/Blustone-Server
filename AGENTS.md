@@ -1,8 +1,32 @@
+## Latest continuation: GvG native phase arithmetic and Guild fuel defaults (2026-10-13)
+
+Same two agents reused. Source GetCurGVGPhase Gaab938 nowclosed: numeric
+schedule evidence independently reviewed; full128 test programs/build passed.
+schedule low32words interpretedSIGNED, comparespositive markers strictlypast
+inDESCpriority9..1, else0. Exact equality stayspriorphase. Native clockreturns
+low32serverseconds; AddTimeJump signeddebuglong, reset0, wrappingADD/SUB;
+not timezone. Pair secondword is ABSOLUTE nextphase timestamp−jump, notcountdown;
+phase0/9 second0. src/gvg-phase.ts implements offline schedule extraction/
+phase+timing; no route/state/referenceactivation. No dates/seasons/camps/rewards
+invented. Boundary/wrap/nonchronopriority/disabled/equality tests pass.
+Source docs/gvg-phase-clock-native-2026-10-13.md. GetRef ID/card/camp/reward/
+schedule/UIadmission stillseparate; don't callthis completeGvG revival.
+
+Guildconstructor Ga93dec POSITIVEb0=5 supports/b4=12fuel count default;
+source docs/guild-fuel-constructor-defaults-native-2026-10-13.md. No bound
+override inboundedwrite/SetExtra audit; not exhaustiveinlinewriterproof andNOT
+recipientAPcredit law. No invented GetExtra fuel_max/support_qty keys.
+Nextmissingchain requesterCreateFuelJson/Chat producer andrecipientsettlement;
+supportmutations stay2001/noAPgrants. Priorunknowninitialcount premise superseded.
+
+No liveinputs/APK/profileactivation. Escapehold/DataDumpreadonly/privateoriginal
+preservation/collectorDockerInferenceoff unchanged. GoalACTIVE.
+
 ## Latest continuation: Guild fuel request read and GvG entry recovery (2026-10-13)
 
-Same two agents reused. Source Ga7bcdc auth5 /guild/GetFuelRequests→actual
-Full127 test programs/build passed; fuel and wire-string reviews clean.
-innerGa90d90 namedret_data.fuel_requests numericrowarray; UpdateFuel upserts
+Same two agents reused. Full127 test programs/build passed; fuel and wire-string
+reviews clean. Source Ga7bcdc auth5 /guild/GetFuelRequests→actualinnerGa90d90
+namedret_data.fuel_requests numericrowarray; UpdateFuel upserts
 FULL64ownerkey, noclear. Servernowauthenticates andreturns{fuel_requests:[]}
 because localrequestproducer/records absent. Empty isNOTcacheclear; no AP,
 request/expiry/supportlimit/reward values invented. SupportFuel remains2001.

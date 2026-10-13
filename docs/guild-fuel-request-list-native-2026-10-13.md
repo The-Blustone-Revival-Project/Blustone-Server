@@ -85,6 +85,11 @@ reads manager+b4. They are stored settings, not literal original amounts.
 No original numeric values or complete initialization producer was recovered
 in this bounded audit.
 
+Follow-up constructor inspection now positively recovers initial b0=5/b4=12;
+see `guild-fuel-constructor-defaults-native-2026-10-13.md`. This supersedes
+the earlier initialization unknown, but does not establish current server
+settings, an override schema or recipient AP payout.
+
 The exact RequestMyInfo callback Ga86408 resolves my_guild, guilds, user,
 achievement and chat_option, not `fuel_max` or `support_qty`. ParseMyInfo
 Ga685f0 resolves only guild_id/status/newbie/role/contribution in its bounded
