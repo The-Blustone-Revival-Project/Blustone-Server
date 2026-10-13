@@ -7,6 +7,7 @@ export interface GuildRecord {
   id: number; name: string; type: 1 | 2 | 3; fc_point_limit: number; contribution: number;
   region: string; emblem_id: string; desc: string; rank: number;
   gvg_win_cnt: number; gvg_inf_win_cnt: number; members: GuildMember[];
+  banished?:number[];
 }
 export const GUILD_JOIN_TYPES = { public: 1, permission: 2, private: 3 } as const;
 export const GUILD_MEMBER_ROLES = { leader: 1, supervisor: 2, member: 3, newcomer: 4 } as const;
@@ -28,7 +29,7 @@ export function guildInfo(record: GuildRecord, knownAccounts: ReadonlySet<number
     throw new TypeError("Guild identity/reference is not established");
   const seen = new Set<number>();
   const members = record.members.map((member) => {
-    if (!safeId(member.pvid) || !knownAccounts.has(member.pvid) || seen.has(member.pvid) ||
+    if (!safeId(member.pvid) || member.pvid>0xffff_ffff || !knownAccounts.has(member.pvid) || seen.has(member.pvid) ||
         !count(member.contribution) || !count(member.fc_point) || ![0, 1].includes(member.newbie) ||
         ![1, 2, 3, 4].includes(member.role)||
         (member.newbie===1&&member.role!==1&&member.role!==4)) throw new TypeError("Guild member identity/effective native role is not established");
@@ -36,12 +37,18 @@ export function guildInfo(record: GuildRecord, knownAccounts: ReadonlySet<number
     return { pvid: member.pvid, contribution: member.contribution, newbie: member.newbie, role: member.role, fc_point: member.fc_point };
   });
   if (members.filter((member) => member.role === 1).length !== 1) throw new TypeError("Guild needs one established leader");
-  // Ban/invitation histories are not represented here. Omit their optional
-  // fields rather than publish empty collections as if absence were proven.
+  let banished:number[]|undefined;
+  if(record.banished!==undefined) {
+    if(!Array.isArray(record.banished)||record.banished.some(pvid=>!safeId(pvid)||pvid>0xffff_ffff||!knownAccounts.has(pvid)||seen.has(pvid))||
+      new Set(record.banished).size!==record.banished.length) throw new TypeError("Unsupported or conflicting Guild ban identity");
+    banished=[...record.banished];
+  }
+  // Only explicit scalar banished IDs are represented. Other histories stay
+  // omitted rather than publishing invented empty invitation/exit collections.
   return { id: record.id, name: record.name, type: record.type, fc_point_limit: record.fc_point_limit,
     contribution: record.contribution, region: record.region, emblem_id: record.emblem_id, desc: record.desc,
     rank: record.rank, gvg_win_cnt: record.gvg_win_cnt, gvg_inf_win_cnt: record.gvg_inf_win_cnt,
-    member_cnt: members.length, members };
+    member_cnt: members.length, members,...(banished===undefined?{}:{banished}) };
 }
 
 /** ReqGuildInstCB Gae61dc reads ret_data.my_guild and passes JUST that subtree

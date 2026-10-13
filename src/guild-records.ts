@@ -12,7 +12,7 @@ export function establishedGuildRecords(raw:unknown,accounts:ReadonlyMap<number,
   verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
   const knownAccounts=new Set(accounts.keys()),knownEmblems=new Set<string>(GUILD_SPRITE_EMBLEMS);
   const guildIds=new Set<number>(),memberIds=new Set<number>();
-  const keys=new Set(["id","name","type","fc_point_limit","contribution","region","emblem_id","desc","rank","gvg_win_cnt","gvg_inf_win_cnt","members","member_cnt"]);
+  const keys=new Set(["id","name","type","fc_point_limit","contribution","region","emblem_id","desc","rank","gvg_win_cnt","gvg_inf_win_cnt","members","member_cnt","banished"]);
   const memberKeys=new Set(["pvid","contribution","newbie","role","fc_point"]);
   return raw.map(value=>{
     if(!value||typeof value!=="object"||Array.isArray(value)||Object.keys(value).some(key=>!keys.has(key)))
@@ -26,6 +26,7 @@ export function establishedGuildRecords(raw:unknown,accounts:ReadonlyMap<number,
     if(source.member_cnt!==undefined&&source.member_cnt!==info.member_cnt) throw new TypeError("Established Guild member count mismatch");
     const serverIds=new Set(info.members.map(member=>accounts.get(member.pvid)!.serverId));
     if(serverIds.size!==1) throw new TypeError("Guild contains different-server accounts");
+    if(info.banished?.some(pvid=>!serverIds.has(accounts.get(pvid)!.serverId))) throw new TypeError("Guild ban contains different-server accounts");
     for(const member of info.members) {
       if(memberIds.has(member.pvid)) throw new TypeError("Account has conflicting Guild memberships");
       memberIds.add(member.pvid);

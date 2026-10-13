@@ -17,7 +17,8 @@ const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgra
 const exerciseGemReplacement=process.argv.includes('--exercise-gem-replacement');
 const exerciseGemSale=process.argv.includes('--exercise-gem-sale');
 const exerciseGuildRecords=process.argv.includes('--exercise-guild-records');
-const exerciseGuildMembership=process.argv.includes('--exercise-guild-membership');
+const exerciseGuildManagement=process.argv.includes('--exercise-guild-management');
+const exerciseGuildMembership=process.argv.includes('--exercise-guild-membership')||exerciseGuildManagement;
 const exerciseGuildUpdate=process.argv.includes('--exercise-guild-local-update');
 const exerciseGuildFound=process.argv.includes('--exercise-guild-local-found')||exerciseGuildUpdate;
 const exerciseGemLevelReference=process.argv.includes('--exercise-gem-level-reference');
@@ -93,6 +94,12 @@ else {
     const makeGuild=(id,type,pvid)=>({id,name:'Authored Guild '+id,type,fc_point_limit:0,contribution:17,region:'EN',emblem_id:'GD_IMG_1',desc:'',rank:9,gvg_win_cnt:7,gvg_inf_win_cnt:8,
       member_cnt:1,members:[{pvid,contribution:3,newbie:0,role:1,fc_point:0}]});
     seeded.guilds=[makeGuild(7001,1,seeded.accounts[0].pvid),makeGuild(7002,2,manager.pvid)];
+    if(exerciseGuildManagement) {
+      const subordinate=fixture.registerGuest({device_id:'standalone-guild-subordinate'},{}).ret_data;
+      const latest=JSON.parse(readFileSync(stateFile,'utf8'));seeded.accounts=latest.accounts;seeded.gameStates=latest.gameStates;
+      seeded.guilds.forEach(row=>{row.banished=[];});
+      seeded.guilds[1].members.push({pvid:subordinate.pvid,role:3,newbie:0,contribution:4,fc_point:0});seeded.guilds[1].member_cnt=2;
+    }
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
   }
   if(exerciseBulk || exerciseSale || exerciseEquipmentUpgrade) {
@@ -160,7 +167,9 @@ const launch = async () => {
   env.BLUSTONE_GUILD_CREATION_MODE=exerciseGuildFound?'local-gold':'disabled';
   env.BLUSTONE_GUILD_UPDATE_MODE=exerciseGuildUpdate?'local-manda-free-first':'disabled';
   env.BLUSTONE_GUILD_MEMBERSHIP_MODE=exerciseGuildMembership?'local-public-approval':'disabled';
-  if(exerciseGuildMembership) env.BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON=JSON.stringify({maxMembers:40,memberRole:4,newbie:1});
+  if(exerciseGuildMembership) env.BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON=JSON.stringify({maxMembers:40,memberRole:exerciseGuildManagement?3:4,newbie:exerciseGuildManagement?0:1});
+  env.BLUSTONE_GUILD_MANAGEMENT_MODE=exerciseGuildManagement?'local-management':'disabled';
+  if(exerciseGuildManagement) env.BLUSTONE_GUILD_ROLE_POLICY_JSON=JSON.stringify({formerLeaderRole:3,maxSupervisors:1});
   if(exerciseGuildFound) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17}]);
   if(exerciseGuildUpdate) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
   if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
@@ -430,9 +439,24 @@ try {
     ({secret,token}=applicantConnection);assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.status,0);
     assert.equal((await apply(7002)).ret_data.my_guild.status,1);
     ({secret,token}=managerConnection);decision.granted='1';
-    assert.equal((await secure('/guild/ConfirmApplication',decision)).ret_data.guilds[0].member_cnt,2);
+    assert.equal((await secure('/guild/ConfirmApplication',decision)).ret_data.guilds[0].member_cnt,exerciseGuildManagement?3:2);
     settled=readFileSync(stateFile);assert.equal((await secure('/guild/ConfirmApplication',decision)).result_code,1);assert.deepEqual(readFileSync(stateFile),settled);
-    ({secret,token}=applicantConnection);assert.deepEqual((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild,{guild_id:7002,status:3,newbie:1,role:4,contribution:0});
+    ({secret,token}=applicantConnection);assert.deepEqual((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild,{guild_id:7002,status:3,newbie:exerciseGuildManagement?0:1,role:exerciseGuildManagement?3:4,contribution:0});
+    if(exerciseGuildManagement) {
+      const subordinate=before.accounts.find(account=>account.deviceId==='standalone-guild-subordinate');
+      ({secret,token}=managerConnection);
+      assert.equal((await secure('/guild/Appoint',{...managerAuth,target_pvid:auth.pvid,role:'2'})).result_code,1);
+      ({secret,token}=applicantConnection);
+      const banned=await secure('/guild/Banish',{...auth,target_pvid:String(subordinate.pvid)});assert.equal(banned.ret_data.user,null);
+      assert.deepEqual(banned.ret_data.guilds[0].banished,[subordinate.pvid]);
+      settled=readFileSync(stateFile);assert.equal((await secure('/guild/Banish',{...auth,target_pvid:String(subordinate.pvid)})).result_code,1);assert.deepEqual(readFileSync(stateFile),settled);
+      ({secret,token}=managerConnection);
+      const transfer={...managerAuth,target_pvid:auth.pvid,role:'1'};
+      assert.equal((await secure('/guild/Appoint',transfer)).ret_data.my_guild.role,3);
+      settled=readFileSync(stateFile);assert.equal((await secure('/guild/Appoint',transfer)).result_code,1);assert.deepEqual(readFileSync(stateFile),settled);
+      assert.equal((await secure('/guild/Leave',managerAuth)).result_code,1);
+      ({secret,token}=applicantConnection);assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.role,1);
+    }
   }
   if(exerciseGuildRecords) {
     const member=before.accounts.find(account=>account.deviceId==='standalone-established-guild-member');
@@ -662,8 +686,10 @@ try {
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
   if(exerciseGuildMembership) {
     assert.deepEqual(after.guilds[0],before.guilds[0],'Public join/departure preserves the Guild and counters');
-    const expected=structuredClone(before.guilds[1]);expected.member_cnt=2;
-    expected.members.push({pvid:Number(auth.pvid),role:4,newbie:1,contribution:0,fc_point:0});
+    const expected=structuredClone(before.guilds[1]);expected.member_cnt=exerciseGuildManagement?1:2;
+    const joined={pvid:Number(auth.pvid),role:exerciseGuildManagement?1:4,newbie:exerciseGuildManagement?0:1,contribution:0,fc_point:0};
+    if(exerciseGuildManagement){expected.members=[joined];expected.banished=[before.accounts.find(account=>account.deviceId==='standalone-guild-subordinate').pvid];}
+    else expected.members.push(joined);
     assert.deepEqual(after.guilds[1],expected);assert.deepEqual(after.guildPending,[]);
     assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.status,3,'Approved ownership survives compiled restart');
   }
@@ -755,6 +781,7 @@ try {
     configured_local_guild_creation_fixture:exerciseGuildFound,
     configured_local_guild_update_fixture:exerciseGuildUpdate,
     configured_local_guild_membership_fixture:exerciseGuildMembership,
+    configured_local_guild_management_fixture:exerciseGuildManagement,
     episode_native_wallet_preservation_fixture:exerciseEpisodeWallet,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,

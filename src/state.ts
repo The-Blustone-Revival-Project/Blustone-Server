@@ -13,6 +13,8 @@ import {guildWalletReceipt} from "./guild-wallet-receipt.js";
 import {guildMembershipPolicy,type GuildMembershipPolicy} from "./guild-membership-policy.js";
 import {guildApplications,guildPendingLobby,guildApplicantRows,type GuildApplication} from "./guild-applications.js";
 import {planLocalGuildMembership} from "./guild-local-membership.js";
+import {guildRolePolicy,type GuildRolePolicy,planLocalGuildAppoint} from "./guild-local-roles.js";
+import {planLocalGuildBanish} from "./guild-local-banish.js";
 import {BADWORD_SOURCE,originalBadwordMatcher} from "./badword-source.js";
 import { GUILD_SPRITE_EMBLEMS,GUILD_EMBLEM_SOURCE,verifyGuildEmblemSource } from "./guild-emblems.js";
 import {repositoryPath} from "./paths.js";
@@ -534,13 +536,16 @@ export class ServerState {
   private readonly guildBadwordCheck?: (text:string)=>boolean;
   private readonly guildMembershipMode:"disabled"|"local-public-approval";
   private readonly guildMembershipPolicy?:Readonly<GuildMembershipPolicy>;
+  private readonly guildManagementMode:"disabled"|"local-management";
+  private readonly guildRolePolicy?:Readonly<GuildRolePolicy>;
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
       gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown;
       guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first";
-      guildMembershipMode?:"disabled"|"local-public-approval";guildMembershipPolicy?:unknown } = {}) {
+      guildMembershipMode?:"disabled"|"local-public-approval";guildMembershipPolicy?:unknown;
+      guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -600,6 +605,17 @@ export class ServerState {
     if(membershipMode!=="disabled") {
       if(!["pkgi1","pkgi1-tree"].includes(process.env.BLUSTONE_PACKAGE_MODE??"")||!(process.env.BLUSTONE_PACKAGE_NAMES??"").split(",").includes("GUILD.jet"))
         throw new TypeError("Local Guild membership requires selected original Guild resource profile");
+      verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
+    }
+    const managementMode=Object.hasOwn(options,"guildManagementMode")?options.guildManagementMode:process.env.BLUSTONE_GUILD_MANAGEMENT_MODE??"disabled";
+    if(managementMode!=="disabled"&&managementMode!=="local-management") throw new TypeError("Unknown Guild management mode");
+    this.guildManagementMode=managementMode;
+    const rolePolicy=Object.hasOwn(options,"guildRolePolicy")?options.guildRolePolicy:
+      process.env.BLUSTONE_GUILD_ROLE_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_GUILD_ROLE_POLICY_JSON);
+    if(rolePolicy!==undefined||managementMode!=="disabled") this.guildRolePolicy=guildRolePolicy(rolePolicy);
+    if(managementMode!=="disabled") {
+      if(!["pkgi1","pkgi1-tree"].includes(process.env.BLUSTONE_PACKAGE_MODE??"")||!(process.env.BLUSTONE_PACKAGE_NAMES??"").split(",").includes("GUILD.jet"))
+        throw new TypeError("Local Guild management requires selected original Guild resource profile");
       verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
     }
     if (stateFile && existsSync(stateFile)) {
@@ -1228,6 +1244,7 @@ export class ServerState {
     const account = this.accountFor(payload, headers);
     if(route==="/guild/Found") return this.foundLocalGuild(account,payload);
     if(route==="/guild/Update") return this.updateLocalGuild(account,payload);
+    if(route==="/guild/Appoint"||route==="/guild/Banish") return this.localGuildManagement(account,route,payload);
     if(["/guild/Apply","/guild/CancelApplication","/guild/Leave","/guild/ConfirmApplication"].includes(route))
       return this.localGuildMembership(account,route,payload);
     if(route==="/reference/GetGuildPrices") return this.envelope(this.guildPrices.map(row=>({...row})));
@@ -1268,6 +1285,27 @@ export class ServerState {
   private guildPersonal(pvid:number) {
     return guildPendingLobby(pvid,this.guildPending??[])??guildLobby(pvid,this.guilds??[],
       new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS));
+  }
+
+  private localGuildManagement(account:Account,route:string,payload:Record<string,unknown>) {
+    if(this.guildManagementMode!=="local-management") return this.failure(2001,"Local Guild management mode is disabled");
+    const game=this.gameByPvid.get(account.pvid);
+    if(!game||game.active_battle?.state==="active"||game.arena.active||game.search.active)
+      return this.failure(2001,"Guild management requires established idle actor gameplay");
+    let plan;
+    try {
+      const games=new Map([...this.gameByPvid].map(([pvid,game])=>[pvid,{active:game.active_battle?.state==="active"||!!game.arena.active||!!game.search.active}]));
+      plan=route==="/guild/Appoint"?planLocalGuildAppoint(payload,this.guilds??[],account,this.accountsByPvid,games,this.guildRolePolicy!):
+        planLocalGuildBanish(payload,this.guilds??[],account,this.accountsByPvid,games);
+      plan.guilds=establishedGuildRecords(plan.guilds,this.accountsByPvid);
+      guildApplications(this.guildPending??[],plan.guilds,this.accountsByPvid);
+    } catch(error) {return this.failure(2001,error instanceof Error?error.message:"Invalid local Guild management");}
+    if(plan.changed) {
+      const before=this.guilds;this.guilds=plan.guilds;
+      try{this.persist();}catch(error){this.guilds=before;throw error;}
+    }
+    return this.envelope({...this.guildPersonal(account.pvid),user:null,
+      guilds:guildDetailRows([String(plan.id)],this.guilds??[],account.serverId,this.accountsByPvid)});
   }
 
   private localGuildMembership(account:Account,route:string,payload:Record<string,unknown>) {

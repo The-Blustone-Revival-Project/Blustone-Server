@@ -3741,22 +3741,25 @@ paths:
         ARM-device capture
   /guild/Appoint:
     post:
-      summary: Recovered /guild/Appoint route
-      description: >-
-        The route literal **/guild/Appoint** was recovered from the ARM native
-        library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: "Configured local Guild management: Appoint"
+      description: "Scalar target_pvid plus picker role1/2/3. Current leader alone may
+        change an owned member's role; leadership transfer changes target and
+        former leader atomically while retaining one leader. Former-leader
+        demotion and supervisor cap are required explicit settings, not
+        recovered defaults. Preserve newbie flags and refuse transitions that
+        would become a different native effective role. Same-Guild already-true
+        role replies are no-write, including a former leader's lost-response
+        retry; they grant no mutation authority. Default disabled. Opt-in
+        guildManagementMode/BLUSTONE_GUILD_MANAGEMENT_MODE=local-management
+        requires selected/pinned original Guild art and explicit
+        guildRolePolicy/BLUSTONE_GUILD_ROLE_POLICY_JSON
+        {formerLeaderRole:2|3,maxSupervisors:0..39}. General service target is
+        uint64 but ordinary native member/role UI consumes uint32: supported
+        local member and ban identities refuse wider values without truncation.
+        Idle actor/target gameplay required for mutation. Success includes actor
+        my_guild, complete affected guilds and user:null; wallets, Hunters,
+        progress, rank, contribution totals, GvG counters and other Guilds
+        unchanged. Native menus and realtime synchronization unverified."
       tags:
         - Guild
       parameters: *a1
@@ -3777,27 +3780,34 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-evidence: docs/guild-appoint-native-2026-10-13.md;
+        docs/guild-banish-history-native-2026-10-13.md;
+        docs/guild-local-management-2026-10-13.md;
+        tests/guild-management-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /guild/Banish:
     post:
-      summary: Recovered /guild/Banish route
-      description: >-
-        The route literal **/guild/Banish** was recovered from the ARM native
-        library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: "Configured local Guild management: Banish"
+      description: "Scalar target_pvid only. Leader may remove a nonleader; supervisor
+        may remove subordinate role3/4 only. Self/leader/foreign/unknown targets
+        refuse. Requires explicit known-complete scalar banished history;
+        omitted history never becomes guessed empty. Atomic member removal and
+        history append, full INFO replacement, safe already-banned replay. Local
+        bans persist indefinitely and block Apply/approval; original lifetime,
+        unban, rejoin exceptions and notifications remain unknown. Fresh local
+        Found establishes known-empty history at genesis; legacy omitted fields
+        remain omitted. Default disabled. Opt-in
+        guildManagementMode/BLUSTONE_GUILD_MANAGEMENT_MODE=local-management
+        requires selected/pinned original Guild art and explicit
+        guildRolePolicy/BLUSTONE_GUILD_ROLE_POLICY_JSON
+        {formerLeaderRole:2|3,maxSupervisors:0..39}. General service target is
+        uint64 but ordinary native member/role UI consumes uint32: supported
+        local member and ban identities refuse wider values without truncation.
+        Idle actor/target gameplay required for mutation. Success includes actor
+        my_guild, complete affected guilds and user:null; wallets, Hunters,
+        progress, rank, contribution totals, GvG counters and other Guilds
+        unchanged. Native menus and realtime synchronization unverified."
       tags:
         - Guild
       parameters: *a1
@@ -3818,7 +3828,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-evidence: docs/guild-appoint-native-2026-10-13.md;
+        docs/guild-banish-history-native-2026-10-13.md;
+        docs/guild-local-management-2026-10-13.md;
+        tests/guild-management-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /guild/CancelApplication:

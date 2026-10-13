@@ -1,3 +1,52 @@
+## Latest continuation: local Guild roles, successor transfer and lasting bans (2026-10-13)
+
+Previous turn progressed complete opt-in membership lifecycle (aa4bed9).
+Same two agents reused for Appoint/hierarchy and Banish/history recovery plus
+independent implementation review. One source lane hit temporary modelcapacity;
+reused sameagent retry completed durable doc, nolostwork. Full117checks/build,
+compiled encrypted --fixture --profile current-e6-guild --exercise-guild-management
+membership/approval/supervisor/ban/transfer/replay/formerleaderLeave/restart
+proof passed. Focused rollback/identity/history tests and independent review clean.
+
+Appoint RequestNominate target_pvid scalaruint64 +roledecimal; realpicker1/2/3,
+not4. Actual callback my_guild/guilds/user/achievement, no capturedrole fallback.
+Native member-management XML menus prove leader-onlyAppoint; supervisors Banish
+subordinate3/4, noleader/selfremoval. Member.parse low32/high0 AND rolepicker
+lowword/high0: Guildmember and supportedban identities now REFUSE >uint32,
+nevertruncate account IDs. Original supervisorcap/formerleaderdemotion unknown.
+
+New defaultdisabled managementMode local-management requires selected/pinned
+GUILD and REQUIREDrolepolicy formerLeaderRole2or3/maxSupervisors0..39. Leader
+mutations only; role1 atomically transfers to ownedtarget and demotesprevious
+leader with configuredchoice, oneleaderretained. Preserve newbie/counters;
+refuse native-incoherent transitions. Configuredsupervisor cap limitsincreases,
+allowsrepair reductions/neutralcounts. Alreadytrue role echo sameGuild no-write
+repairs formerleaderretry afterlostauthority; grants no mutationprivilege.
+
+Banish scalarID history positively recovered: INFO.banished is scalaruint64
+list, NOT rows. Missing/null preservesnativecache; nonnull replacesENTIRElist.
+CheckUserStatus OWN Guild targetPVID returns5 forbanished, not targetGuildApply
+backendproof. Optionalexplicitknownscalar banished nowvalidated same-server/
+knownuint32/unique/nojoined-or-pending overlap; otherhistories stillrefused.
+Legacyomitted history staysomitted and Banish REFUSES replacement. Freshlocal
+Found genesis truthfullyestablishes[], neverretrofits legacy records.
+
+Banish onlyeligibleownednonleader with manager1/2 hierarchy, idleactors/targets;
+atomic removal+preservedpriorban append. Alreadybanned replay no-write.
+ExplicitLOCAL indefinite bans blockfuture Apply/approval; original expiry/
+unban/rejoinexceptions unknown. Full actorpersonal/affectedINFO/user:null
+receipts required; no forcedactorreset in callback, no fabricatedtarget reset
+or eventdelivery. Bothmutationwritefailures restoreoriginalGuildarray;
+Hunters/wallets/progress/Arena/clocks/rank/totals/GvG/otherGuilds unchanged.
+Formerleader mayLeave onlyafter successorpersisted; encryptedproof closesloop.
+
+Native menus/realtime target synchronization UNVERIFIED; invitations/expiry/
+newcomer lifecycle/trueproductiondefaults remain incomplete. Proof usesauthored
+records/rolechoices, fourfixturegames preserved exceptnormalregistration/lobby
+APBP clockanchors. No live source/profile/save/client/input/APK changes.
+Escape hold persists; DataDump read-only; originals/private preserved;
+collector/Docker/inference off. Server/Instrumented only writable.
+
 ## Latest continuation: explicit local Guild membership lifecycle (2026-10-13)
 
 Previous turn progressed notification correction/membership contracts (452ef6a).

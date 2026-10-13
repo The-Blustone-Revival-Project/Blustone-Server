@@ -34,6 +34,7 @@ try {
   assert.deepEqual(result.ret_data.my_guild,{guild_id:1,status:3,newbie:0,role:1,contribution:0});
   assert.equal(result.ret_data.guilds[0].member_cnt,1);assert.equal(result.ret_data.guilds[0].rank,0);
   assert.equal(result.ret_data.guilds[0].members[0].pvid,auth.pvid);
+  assert.deepEqual(result.ret_data.guilds[0].banished,[],"Fresh local Guild genesis establishes known-empty bans, never retrofits legacy histories");
   const settled=readFileSync(file);assert.equal(found().result_code,2001);assert.deepEqual(readFileSync(file),settled);
   assert.equal(JSON.stringify({...game,gold:undefined}),others);assert.equal(JSON.stringify((state as any).gameByPvid.get(peer.pvid)),peerBefore);
   const restart=new ServerState("http://localhost",file,options);

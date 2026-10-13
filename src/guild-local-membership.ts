@@ -30,7 +30,7 @@ export function planLocalGuildMembership(route:string,payload:Record<string,unkn
   let affectedId=own?.id??application?.guild_id;
   const candidate=(pvid:number,target:GuildRecord)=>{
     const account=accounts.get(pvid),game=games.get(pvid);
-    if(!account||account.serverId!==actor.serverId||!game||game.active||
+    if(!account||account.serverId!==actor.serverId||!game||game.active||target.banished?.includes(pvid)||
       !Number.isInteger(game.fc_point)||game.fc_point<target.fc_point_limit||game.fc_point>0x7fff_ffff||pvid>0xffff_ffff)
       throw new TypeError("Guild candidate fails established scope, combat or authoritative FC admission");
     return game;

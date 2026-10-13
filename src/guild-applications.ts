@@ -12,7 +12,7 @@ export function guildApplications(raw:unknown,records:readonly GuildRecord[],acc
       throw new TypeError("Malformed or unsupported Guild application record");
     const row=value as GuildApplication,target=records.find(record=>record.id===row.guild_id),actor=accounts.get(row.pvid);
     if(!Number.isSafeInteger(row.pvid)||row.pvid<1||row.pvid>0xffff_ffff||!actor||seen.has(row.pvid)||!target||
-      target.members.some(member=>accounts.get(member.pvid)?.serverId!==actor.serverId)||
+      target.members.some(member=>accounts.get(member.pvid)?.serverId!==actor.serverId)||target.banished?.includes(row.pvid)||
       records.some(record=>record.members.some(member=>member.pvid===row.pvid))||
       typeof row.desc!=="string"||Buffer.from(row.desc,"utf8").toString("utf8")!==row.desc||
       ![row.fc_point,row.applied].every(value=>Number.isInteger(value)&&value>=0&&value<=0xffff_ffff))
