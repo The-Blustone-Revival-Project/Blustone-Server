@@ -45,11 +45,11 @@ const coreRoutes = new Set([
 ]);
 
 export function createApp(options: { baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;
-  fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown } = {}): AppContext {
+  fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}): AppContext {
   const baseUrl = options.baseUrl ?? "http://127.0.0.1:8080";
   const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds,guildChatMode:options.guildChatMode,publicChatMode:options.publicChatMode,
     ...(Object.hasOwn(options,"dispatchMode")?{dispatchMode:options.dispatchMode}:{}),...(Object.hasOwn(options,"dispatchPolicy")?{dispatchPolicy:options.dispatchPolicy}:{}),
-    ...Object.fromEntries(["fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
+    ...Object.fromEntries(["fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
   const endpoints = discoverEndpoints(options.catalogPath ?? defaultCatalogPath());
   const openapi = buildOpenApi(endpoints, baseUrl);
   let runtimeReslistHeader: string | undefined;

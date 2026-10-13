@@ -33,6 +33,7 @@ import { mirageLobby, mirageFriendFloors } from "./mirage.js";
 import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
 import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type FishingCatalogue} from "./fishing-catalogue.js";
 import {ownedFishingInventory} from "./fishing-inventory.js";
+import {localQuestPolicy,localQuestJournal,beginLocalQuests,localQuestProgress,recordLocalQuestWin,planLocalQuestClaim,type LocalQuestPolicy,type LocalQuestJournal} from "./local-quests.js";
 import {fishingSaleBindings,planFishingSale,type FishingSaleBindings} from "./fishing-sale.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
@@ -555,6 +556,9 @@ export class ServerState {
   private readonly dispatchMode:"disabled"|"local-timed";
   private readonly dispatchPolicy?:DispatchPolicy;
   private dispatches=new Map<number,DispatchJournal>();
+  private quests=new Map<number,LocalQuestJournal>();
+  private readonly questMode:"disabled"|"local-fixed";
+  private readonly questPolicy?:LocalQuestPolicy;
   private readonly guildPrices: readonly GuildActionPrice[];
   private readonly guildCreationMode:"disabled"|"local-gold";
   private readonly guildUpdateMode:"disabled"|"local-manda-free-first";
@@ -581,8 +585,13 @@ export class ServerState {
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
-      dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown } = {}) {
+      dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    const questMode=Object.hasOwn(options,"questMode")?options.questMode:process.env.BLUSTONE_QUEST_MODE??"disabled";
+    if(questMode!=="disabled"&&questMode!=="local-fixed")throw new TypeError("Unknown quest mode");this.questMode=questMode;
+    const questPolicy=Object.hasOwn(options,"questPolicy")?options.questPolicy:process.env.BLUSTONE_QUEST_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_QUEST_POLICY_JSON);
+    if(questPolicy!==undefined)this.questPolicy=localQuestPolicy(questPolicy,new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
+    if(questMode!=="disabled"&&!this.questPolicy)throw new TypeError("Local fixed quests require explicit policy");
     const dispatchMode=Object.hasOwn(options,"dispatchMode")?options.dispatchMode:process.env.BLUSTONE_DISPATCH_MODE??"disabled";
     if(dispatchMode!=="disabled"&&dispatchMode!=="local-timed")throw new TypeError("Unknown dispatch mode");
     this.dispatchMode=dispatchMode;
@@ -710,8 +719,9 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
-      saved.version===2&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined) {
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+      saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
+      saved.version===3&&!Array.isArray(saved.quests)||saved.version!==3&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
     const ids = new Set<number>();
@@ -785,6 +795,12 @@ export class ServerState {
         this.dispatches.set(row[0],journal);
       }
     }
+    if(saved.quests!==undefined) {
+      for(const row of saved.quests as unknown[]) {
+        if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
+        this.quests.set(row[0],localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id))));
+      }
+    }
     for (const row of saved.transportKeys) {
       if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== "string" || typeof row[1] !== "string") throw new Error("Malformed transport state");
       const key = Buffer.from(row[1], "base64");
@@ -810,8 +826,9 @@ export class ServerState {
     if (!this.stateFile) return;
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
     // Older version1 writers must refuse a journal they cannot preserve.
-    const snapshot = { version: this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(this.dispatches.size?{dispatches:[...this.dispatches]}:{}),
+    const snapshot = { version: this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -1006,6 +1023,7 @@ export class ServerState {
   lobbyEnter(payload: Record<string, unknown>, headers: Record<string, string>) {
     const account = this.accountFor(payload, headers);
     const game = this.gameFor(account);
+    const quest=this.ensureLocalQuests(account.pvid);
     const skipMissionTutorial = process.env.BLUSTONE_SKIP_MISSION_TUTORIAL === "1";
     const skipAllTutorials = process.env.BLUSTONE_SKIP_ALL_TUTORIALS === "1";
     const baseTutorial = skipAllTutorials
@@ -1058,6 +1076,7 @@ export class ServerState {
       ...ownedPartyProfile(account.pvid, game),
       nick_name: account.nickname,
       nickname: account.nickname,
+      ...(quest?localQuestProgress(quest):{}),
       tuto: tutorial,
       // **[RECOVERED container, [INFERRED] key] `area_achieve` populates
       // `CSRPlayData+0x288` (`std::map<std::string, AREA_ACHIEVE_INFO>`), which
@@ -1146,8 +1165,8 @@ export class ServerState {
    * **[RECOVERED] `achievement` is OMITTED**, never `[]`. `ReqRewardCB :517-520`
    * guards it with `if (rd["achievement"] != null)`, an IS-NULL test on
    * nlohmann's `value_t`, and the branch calls
-   * `CSRAchieve::ParseAchievementsElement` (0x8481c4) - a
-   * `/dailyquest/GetInstList` REQUEST builder - from inside a response callback.
+   * `CSRAchieve::ParseAchievementsElement` (0x8481c4), an achievement
+   * collection parser. It is not the separate RequestDailyQuest builder.
    * `free_iap` and `iap` are omitted for the same reason: they are gated on
    * `CPVDataMgr+0x58/0x5c`, which the replica cannot know, and omitting them
    * skips the branch entirely.
@@ -1580,12 +1599,29 @@ export class ServerState {
   }
 
   questAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
-    this.accountFor(payload, headers);
+    const account=this.accountFor(payload, headers),journal=this.ensureLocalQuests(account.pvid);
     // CSRAchieve consumes ret_data itself, not generic mock metadata or a
     // list child. No original production quest IDs/conditions are imported.
-    if (route === "/dailyquest/GetRefList" || route === "/dailyquest/GetInstList")
-      return this.envelope([]);
+    if (route === "/dailyquest/GetRefList")return this.envelope(journal?structuredClone(journal.references):[]);
+    if (route === "/dailyquest/GetInstList")return this.envelope(journal?structuredClone(journal.instances):[]);
+    if(route==="/dailyquest/RequestReward"&&journal&&this.questMode==="local-fixed") {
+      const game=this.gameByPvid.get(account.pvid);
+      if(!game||(game.stage_achievements[journal.minimum_stage]?.length??game.stage_stars[journal.minimum_stage]??0)===0)return this.failure(2001,"Local quest minimum stage is not cleared");
+      let plan;try{plan=planLocalQuestClaim(journal,game.gold,payload.daily_quest_id,payload.target_val);}catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+      if(!plan.replay) {
+        const before=game.gold;game.gold=plan.gold;this.quests.set(account.pvid,plan.journal);
+        try{this.persist();}catch(error){game.gold=before;this.quests.set(account.pvid,journal);throw error;}
+      }
+      return this.envelope(plan.receipt);
+    }
     return this.failure(2001, "Production quest conditions and reward references are not reconstructed");
+  }
+
+  private ensureLocalQuests(pvid:number):LocalQuestJournal|undefined {
+    const prior=this.quests.get(pvid);if(prior)return prior;
+    if(this.questMode!=="local-fixed"||!this.questPolicy||!this.gameByPvid.has(pvid))return undefined;
+    const next=beginLocalQuests(this.questPolicy,pvid);if(!next)return undefined;
+    this.quests.set(pvid,next);try{this.persist();}catch(error){this.quests.delete(pvid);throw error;}return next;
   }
 
   fishingAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
@@ -2936,8 +2972,8 @@ export class ServerState {
    *     entirely (L2603-2817), so the AP spent at `/mission/Start` would never
    *     come back;
    *   - a present `achievement` (`[]` included) calls
-   *     `CSRAchieve::ParseAchievementsElement` (0x8481c4), which is a
-   *     `/dailyquest/GetInstList` REQUEST builder, from inside a response callback.
+   *     `CSRAchieve::ParseAchievementsElement` (0x8481c4), an independent
+   *     achievement parser, not a daily-quest refresh request builder.
    *
    * **[FIXTURE]** economy: 10 gold and 30 exp for a first clear, and a 3-star
    * clear (safe indices0..2). None of these numbers is recovered; the star *mechanism*
@@ -2949,7 +2985,8 @@ export class ServerState {
    */
   completeMission(payload: Record<string, unknown>, headers: Record<string, string>) {
     const account = this.accountFor(payload, headers);
-    const game = this.gameFor(account);
+    const liveGame = this.gameFor(account),priorQuest=this.ensureLocalQuests(account.pvid);
+    const game = priorQuest&&this.questMode==="local-fixed"?structuredClone(liveGame):liveGame;
     const requestedStageId = String(payload.stage_id ?? payload.stage ?? game.active_stage_id ?? "");
     const stageId = requestedStageId.length > 1 ? requestedStageId : (game.active_stage_id || "n_01_01");
     const battleId = String(payload.battle_id ?? game.active_battle?.battle_id ?? "");
@@ -2960,6 +2997,7 @@ export class ServerState {
     const wrongStage = active && active.stage_id !== stageId;
     if (!active || wrongStage || (battleId && battleId !== active.battle_id)) {
       return this.envelope({
+        ...(priorQuest?localQuestProgress(priorQuest):{dailyquest_min_stage:"",daily_quest:[],linear_quest:[]}),
         clear: playInfoClearFlag(payload.play_info),
         accepted: false, stage_id: stageId, battle_id: battleId,
         error_code: wrongStage ? "ACTIVE_STAGE_MISMATCH" : "BATTLE_NOT_FOUND",
@@ -3026,6 +3064,8 @@ export class ServerState {
     // standalone/repeated Complete. Search does not award campaign drops.
     const acceptedNormalVictory = explicitSearchCapsuleVictory(payload.play_info) && !!active && /^n_\d+_\d+$/.test(stageId) &&
       starterStages.stage.some((row) => row.id === stageId);
+    const nextQuest=priorQuest&&this.questMode==="local-fixed"&&acceptedNormalVictory?
+      recordLocalQuestWin(priorQuest,active!.battle_id,stageId):priorQuest;
     const itemDrops = acceptedNormalVictory ? earnSearchCapsule(game) : [];
     const rewardGold = firstClear ? FIXTURE_STAGE_CLEAR_GOLD : 0;
     const rewardExp = firstClear ? FIXTURE_STAGE_CLEAR_EXP : 0;
@@ -3067,13 +3107,17 @@ export class ServerState {
     }
     const completedBattle = game.active_battle?.stage_id === stageId ? game.active_battle : null;
     game.active_battle = null;
-    this.persist();
+    if(game!==liveGame) {
+      const before={...liveGame};Object.assign(liveGame,game);if(nextQuest)this.quests.set(account.pvid,nextQuest);
+      try{this.persist();}catch(error){Object.assign(liveGame,before);this.quests.set(account.pvid,priorQuest!);throw error;}
+    }else this.persist();
     // `achieve` carries the stars this completion granted: a first clear grants
     // indices0..2; replays may earn previously missing flags (battle-lifecycle.md
     // §5.4: answer 1 and report `prev == cur` so the second run's map state is
     // identical to the first).
     const achieve = newOrders.map((order) => ({ order }));
     return this.envelope({
+      ...(nextQuest?localQuestProgress(nextQuest):{dailyquest_min_stage:"",daily_quest:[],linear_quest:[]}),
       // [RECOVERED] string, unguarded `from_json<string_t>` (L1332-1338).
       stage_id: stageId,
       // [RECOVERED] ARRAY of {order} -> CSRPlayData::SetStageAchieve (L1808-1897).

@@ -1,5 +1,12 @@
 # Blustone TypeScript/Express server
 
+2026-10-14 correction: historical achievement omission comments below do not
+identify a daily quest refresh mechanism. ParseAchievementsElement parses
+separate achievement rows; RequestDailyQuest is the separate request builder.
+Mission Complete directly invokes ParseLobbyEnter on ret_data, now containing
+the compatible minimum-stage and daily/linear overlays. See
+quest-native-refresh-paths-2026-10-14.md and local-fixed-daily-quests-2026-10-14.md.
+
 This is the canonical local compatibility-server scaffold. It is generated from the recovered native endpoint vocabulary and exposes a heavily documented Swagger/OpenAPI contract.
 
 ## Install and run
@@ -241,7 +248,7 @@ The response body is shaped from `CSRSyncMStage::ReqCompleteCB` (**0xb426ac**), 
 - `achieve` is an **array of `{order:int}`** (L1808-1897). Each entry becomes `CSRPlayData::SetStageAchieve(stage_id, order)` — the only stage-progression write in the callback. There is no `SetStageID` here; the current-stage pointer comes from `/lobby/GetMissionInst`. The native `star` / `prev_star` / `is_first_clear` are client-derived from `GetStageAchieveCnt` and are deliberately **not** sent.
 - `user.{gold,exp,ap,bp,max_ap}` are `{prev,cur}` pairs (`prev` = before this completion, `cur` = what the client stores), plus `ap_charge_time` / `bp_charge_time` for `SyncAP` / `SyncBP`. `max_ap` and `level` are also published at the top level, because the decompile reads them off a different register than the other `user.*` keys and this module’s register allocation is known-unreliable.
 - `card` is an **object keyed by the decimal card serial** (`to_string(uint64)`, L1921), `item` is an **array** of `{inst_id, added, ref_id}`, `consumed_inst_list` is read unconditionally and `[]` is its safe no-op.
-- `detect` and `achievement` are **omitted**, and the omission is load-bearing. Their guards are **is-null tests, not emptiness tests** — the byte read is `basic_json::value_t` (`cVar1 == '\x02'` = array, `'\x01'` = object, `'\0'` = null, L1813-1833). So a present `detect` (even `{}`) skips the `user.ap`/`user.bp` resync, and a present `achievement` (even `[]`) calls `CSRAchieve::ParseAchievementsElement` (0x8481c4), which is a `/dailyquest/GetInstList` **request builder**, from inside a response callback. `scenario` is omitted for the same class of reason: a present string takes the `AddScenario` branch and sets the result flag the result screen reads as "show a cutscene".
+- `detect` and `achievement` are **omitted**, and the omission is load-bearing. Their guards are **is-null tests, not emptiness tests** — the byte read is `basic_json::value_t` (`cVar1 == '\x02'` = array, `'\x01'` = object, `'\0'` = null, L1813-1833). So a present `detect` (even `{}`) skips the `user.ap`/`user.bp` resync, and a present `achievement` (even `[]`) calls `CSRAchieve::ParseAchievementsElement` (0x8481c4), which is an independent achievement collection parser (2026-10-14 correction: RequestDailyQuest at G848410 is the separate request builder), from inside a response callback. `scenario` is omitted for the same class of reason: a present string takes the `AddScenario` branch and sets the result flag the result screen reads as "show a cutscene".
 - The request is the recovered 8-field form POST; `play_info` is a JSON **string** of `CSRGameBase::MISSIONPLAY_INFO`, and its `clear` member is the client’s own win byte (`CSRMStage::OnFinish` stores `param_1`, which `ProcessFinish` sets to `left.remain != 0`). It is the replica’s only combat telemetry.
 
 `[FIXTURE]`

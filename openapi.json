@@ -5025,7 +5025,7 @@
     "/dailyquest/GetInstList": {
       "post": {
         "summary": "GetInstList",
-        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. The replica publishes canonical empty ret_data collections for reference/instance reads because production quest IDs and conditions are missing. Reward requests refuse with result2001; no synthetic quest or reward is granted. Daily request keys are daily_quest_id/target_val, linear keys serial/id/target_val. Native reference collection iteration supports array/object values; array publication is local policy, not a captured universal container rule.",
+        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. Default empty reads/refused claims. Optional BLUSTONE_QUEST_MODE=local-fixed requires explicit local_ type2 references, fixed period/minimum stage, authoritative local mission-win rules and per-owner instances; no original quest/calendar/reward data claim. Strict matching active ordinary clear1 increments once per accepted battle snapshot; mission/progress persist atomically and inline Complete ret_data updates native daily cache. GetRefList/GetInstList remain bare arrays. Daily claim requires exact id/target, earned count and cleared minimum stage, atomically credits configured gold and marks claimed. Specialized receipt has min-stage/daily/linear progress plus reward.gold.cur, no generic user. Replay rebases current wallet/progress without another grant. Journals use schema3, survive disabled mode/restart/config changes. Linear claims remain refused. Native quest UI validation pending.",
         "tags": [
           "Quests"
         ],
@@ -5099,14 +5099,14 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/quest-contracts-2026-10-11.md; tests/quest-contracts.ts",
-        "x-runtime-confidence": "Empty collections and missing-data refusal verified; playable production quest loop absent"
+        "x-evidence": "docs/quest-contracts-2026-10-11.md; docs/quest-native-refresh-paths-2026-10-14.md; docs/local-fixed-daily-quests-2026-10-14.md",
+        "x-runtime-confidence": "Configured local backend lifecycle and encrypted HTTP verified; original data and native UI pending"
       }
     },
     "/dailyquest/GetRefList": {
       "post": {
         "summary": "GetRefList",
-        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. The replica publishes canonical empty ret_data collections for reference/instance reads because production quest IDs and conditions are missing. Reward requests refuse with result2001; no synthetic quest or reward is granted. Daily request keys are daily_quest_id/target_val, linear keys serial/id/target_val. Native reference collection iteration supports array/object values; array publication is local policy, not a captured universal container rule.",
+        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. Default empty reads/refused claims. Optional BLUSTONE_QUEST_MODE=local-fixed requires explicit local_ type2 references, fixed period/minimum stage, authoritative local mission-win rules and per-owner instances; no original quest/calendar/reward data claim. Strict matching active ordinary clear1 increments once per accepted battle snapshot; mission/progress persist atomically and inline Complete ret_data updates native daily cache. GetRefList/GetInstList remain bare arrays. Daily claim requires exact id/target, earned count and cleared minimum stage, atomically credits configured gold and marks claimed. Specialized receipt has min-stage/daily/linear progress plus reward.gold.cur, no generic user. Replay rebases current wallet/progress without another grant. Journals use schema3, survive disabled mode/restart/config changes. Linear claims remain refused. Native quest UI validation pending.",
         "tags": [
           "Quests"
         ],
@@ -5180,14 +5180,14 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/quest-contracts-2026-10-11.md; tests/quest-contracts.ts",
-        "x-runtime-confidence": "Empty collections and missing-data refusal verified; playable production quest loop absent"
+        "x-evidence": "docs/quest-contracts-2026-10-11.md; docs/quest-native-refresh-paths-2026-10-14.md; docs/local-fixed-daily-quests-2026-10-14.md",
+        "x-runtime-confidence": "Configured local backend lifecycle and encrypted HTTP verified; original data and native UI pending"
       }
     },
     "/dailyquest/RequestReward": {
       "post": {
         "summary": "RequestReward",
-        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. The replica publishes canonical empty ret_data collections for reference/instance reads because production quest IDs and conditions are missing. Reward requests refuse with result2001; no synthetic quest or reward is granted. Daily request keys are daily_quest_id/target_val, linear keys serial/id/target_val. Native reference collection iteration supports array/object values; array publication is local policy, not a captured universal container rule.",
+        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. Default empty reads/refused claims. Optional BLUSTONE_QUEST_MODE=local-fixed requires explicit local_ type2 references, fixed period/minimum stage, authoritative local mission-win rules and per-owner instances; no original quest/calendar/reward data claim. Strict matching active ordinary clear1 increments once per accepted battle snapshot; mission/progress persist atomically and inline Complete ret_data updates native daily cache. GetRefList/GetInstList remain bare arrays. Daily claim requires exact id/target, earned count and cleared minimum stage, atomically credits configured gold and marks claimed. Specialized receipt has min-stage/daily/linear progress plus reward.gold.cur, no generic user. Replay rebases current wallet/progress without another grant. Journals use schema3, survive disabled mode/restart/config changes. Linear claims remain refused. Native quest UI validation pending.",
         "tags": [
           "Quests"
         ],
@@ -5261,8 +5261,8 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/quest-contracts-2026-10-11.md; tests/quest-contracts.ts",
-        "x-runtime-confidence": "Empty collections and missing-data refusal verified; playable production quest loop absent"
+        "x-evidence": "docs/quest-contracts-2026-10-11.md; docs/quest-native-refresh-paths-2026-10-14.md; docs/local-fixed-daily-quests-2026-10-14.md",
+        "x-runtime-confidence": "Configured local backend lifecycle and encrypted HTTP verified; original data and native UI pending"
       }
     },
     "/episode/GetLog": {
@@ -11246,7 +11246,7 @@
     "/linearquest/Reward": {
       "post": {
         "summary": "Reward",
-        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. The replica publishes canonical empty ret_data collections for reference/instance reads because production quest IDs and conditions are missing. Reward requests refuse with result2001; no synthetic quest or reward is granted. Daily request keys are daily_quest_id/target_val, linear keys serial/id/target_val. Native reference collection iteration supports array/object values; array publication is local policy, not a captured universal container rule.",
+        "description": "Authenticated CSRAchieve contract, separate from daily expedition/challenge references. Default empty reads/refused claims. Optional BLUSTONE_QUEST_MODE=local-fixed requires explicit local_ type2 references, fixed period/minimum stage, authoritative local mission-win rules and per-owner instances; no original quest/calendar/reward data claim. Strict matching active ordinary clear1 increments once per accepted battle snapshot; mission/progress persist atomically and inline Complete ret_data updates native daily cache. GetRefList/GetInstList remain bare arrays. Daily claim requires exact id/target, earned count and cleared minimum stage, atomically credits configured gold and marks claimed. Specialized receipt has min-stage/daily/linear progress plus reward.gold.cur, no generic user. Replay rebases current wallet/progress without another grant. Journals use schema3, survive disabled mode/restart/config changes. Linear claims remain refused. Native quest UI validation pending.",
         "tags": [
           "Quests"
         ],
@@ -11320,8 +11320,8 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/quest-contracts-2026-10-11.md; tests/quest-contracts.ts",
-        "x-runtime-confidence": "Empty collections and missing-data refusal verified; playable production quest loop absent"
+        "x-evidence": "docs/quest-contracts-2026-10-11.md; docs/quest-native-refresh-paths-2026-10-14.md; docs/local-fixed-daily-quests-2026-10-14.md",
+        "x-runtime-confidence": "Configured local backend lifecycle and encrypted HTTP verified; original data and native UI pending"
       }
     },
     "/lobby/Enter": {
@@ -13838,7 +13838,7 @@
     "/mission/Complete": {
       "post": {
         "summary": "Complete a local expedition",
-        "description": "Response shaped from CSRSyncMStage::ReqCompleteCB (0xb426ac), analysis/native-mission-complete.txt. The request is the recovered 8-field form POST (app_code, app_ver, market, pvid, otp, stage_id, deck_type, play_info); play_info is a JSON STRING of CSRGameBase::MISSIONPLAY_INFO and its `clear` member is the client's own win byte, filled from CSRGameBase::ProcessFinish's `left.remain != 0`. [RECOVERED, load-bearing] result_code is 1 for EVERY outcome, INCLUDING A DEFEAT: CSRMStage::OnFinish has a dedicated lose branch (0xb36148, lambda $_5) that calls the same RequestComplete, and ReqCompleteCB L1133-1151 retries any non-1 code silently eight times and then discards the response without parsing it. A loss is expressed by the payload - achieve: [] and user.gold.prev == user.gold.cur - never by the code. [RECOVERED] ret_data carries achieve as an ARRAY of {order} (the only stage-progression write in the callback, via SetStageAchieve; there is no SetStageID here), user.{gold,exp,ap,bp,max_ap} as {prev,cur} pairs with ap_charge_time/bp_charge_time, card as an OBJECT keyed by the decimal card serial, item as an ARRAY of {inst_id,added,ref_id}, consumed_inst_list as [], plus level/max_ap at the top level as a hedge for the ambiguous parent register. `detect` and `achievement` are OMITTED and the omission is load-bearing: their guards are IS-NULL tests, not emptiness tests, so a present `detect` ({} included) skips the user.ap/user.bp resync and a present `achievement` ([] included) calls CSRAchieve::ParseAchievementsElement (0x8481c4), which is a /dailyquest/GetInstList REQUEST builder, from inside a response callback. `scenario` is likewise omitted: a present string takes the AddScenario branch and sets the result flag the result screen reads as 'show a cutscene'. The star rating is carried ONLY by achieve[].order; the native star/prev_star/is_first_clear are client-derived from GetStageAchieveCnt and are deliberately not sent. [FIXTURE] First-clear economy is10 gold/30XP once. Legal flags0..2 are persisted separately: completion, under60s, at most1death are local default-condition rules. Replays can earn missing flags without repaying economy; missing hand-made metrics keep legacy full-stars fixture behavior. The economy numbers are local guesses, not recovered production data. accepted/clear/result/win/stars/reward/mission/gold/ap/exp are inert local diagnostics that ReqCompleteCB never reads.",
+        "description": "Response shaped from CSRSyncMStage::ReqCompleteCB (0xb426ac), analysis/native-mission-complete.txt. The request is the recovered 8-field form POST (app_code, app_ver, market, pvid, otp, stage_id, deck_type, play_info); play_info is a JSON STRING of CSRGameBase::MISSIONPLAY_INFO and its `clear` member is the client's own win byte, filled from CSRGameBase::ProcessFinish's `left.remain != 0`. [RECOVERED, load-bearing] result_code is 1 for EVERY outcome, INCLUDING A DEFEAT: CSRMStage::OnFinish has a dedicated lose branch (0xb36148, lambda $_5) that calls the same RequestComplete, and ReqCompleteCB L1133-1151 retries any non-1 code silently eight times and then discards the response without parsing it. A loss is expressed by the payload - achieve: [] and user.gold.prev == user.gold.cur - never by the code. [RECOVERED] ret_data carries achieve as an ARRAY of {order} (the only stage-progression write in the callback, via SetStageAchieve; there is no SetStageID here), user.{gold,exp,ap,bp,max_ap} as {prev,cur} pairs with ap_charge_time/bp_charge_time, card as an OBJECT keyed by the decimal card serial, item as an ARRAY of {inst_id,added,ref_id}, consumed_inst_list as [], plus level/max_ap at the top level as a hedge for the ambiguous parent register. `detect` and `achievement` are OMITTED and the omission is load-bearing: their guards are IS-NULL tests, not emptiness tests, so a present `detect` ({} included) skips the user.ap/user.bp resync and a present `achievement` ([] included) calls CSRAchieve::ParseAchievementsElement (0x8481c4), which parses independent achievement rows rather than requesting daily quest instances. `scenario` is likewise omitted: a present string takes the AddScenario branch and sets the result flag the result screen reads as 'show a cutscene'. The star rating is carried ONLY by achieve[].order; the native star/prev_star/is_first_clear are client-derived from GetStageAchieveCnt and are deliberately not sent. [FIXTURE] First-clear economy is10 gold/30XP once. Legal flags0..2 are persisted separately: completion, under60s, at most1death are local default-condition rules. Replays can earn missing flags without repaying economy; missing hand-made metrics keep legacy full-stars fixture behavior. The economy numbers are local guesses, not recovered production data. accepted/clear/result/win/stars/reward/mission/gold/ap/exp are inert local diagnostics that ReqCompleteCB never reads.",
         "tags": [
           "Missions and combat"
         ],
@@ -14255,7 +14255,7 @@
     "/mission/ReqAchieveReward": {
       "post": {
         "summary": "Claim an expedition-map chest reward",
-        "description": "[RECOVERED] The expedition-map chest claim. Tapping a claimable chest calls `CSRSceneMStageMap::SendRewardRequest` (0xe9a168), which hands `CSRUserDB::GetCurAreaID()` and the chest index to `CSRSyncMStage::RequestReward` (0xb3bf4c); that builds a `CPVHTTPRequest::Create<..., CPVHTTPMapToEncodedURLFormTransformer<unordered_map<string,string>>>` - a URL-encoded form POST - with EXACTLY 7 entries (`unordered_map(local_118, local_d0, 7)` at ghidra-chest-01-reward-route.txt:168) and posts it to this path (0xb3c23a). THE FIELD SET IS: app_code, app_ver, market, pvid, otp, area_id, target_achieve_cnt. [RECOVERED] `target_achieve_cnt` is NOT AN INDEX: it is `std::to_string(GetRewards()[index].achieve_cnt)` (:158-160, stride 0x34), i.e. the reference value from the area's `achieve_reward[]` on /reference/GetArea. [RECOVERED] `ret_data` must be a JSON OBJECT - ReqRewardCB (0xb3c674) dispatches on `*rd` (`:586-612`, `== 1` object, `== 2` array, anything else is an error path). [RECOVERED, load-bearing] `ret_data.achieve_cnt` must EQUAL one of the area's published `achieve_reward[].achieve_cnt` values: the callback scans `GetRewards()` for that match (:526-577, :531/:566) and only then calls `SetAchieveRewardReceived(area, i)` (:570), which is what makes `found` true and hands `AchieveRewardCB` an index instead of -1 (`:1256-1263`). With -1 the callback does nothing but `Toast(); return;` (`:1776-1783`) and **the chest never reaches the `opened` sprite state**. [RECOVERED] That state matters because `SetRewardVisible(i, state)` (0xe95eb8) makes TWO of its four slots visible on `state == 1` - the `MS_RW_<L>` animation (slot +0x08) and the `MS_RW_<L>8` still (slot +0x18) - which is literally 'open and closed at the same time'; only `state == 2` clears it, and only a successful claim reaches that. [RECOVERED] `result_code` is 1 on EVERY path, refusals included: ReqRewardCB bails to `cb(-1, 0)` on any non-1 code (`:463-473`) and CPVHTTPManager::Enqueue retries - the 8x silent retry measured for /mission/Complete in analysis/testing/report-017.md. A refusal is therefore expressed by the PAYLOAD (an `achieve_cnt` that matches no published reward), never by the code. [RECOVERED] `achievement` is OMITTED, never `[]` - `:517-520` is an IS-NULL test and the branch calls `CSRAchieve::ParseAchievementsElement` (0x8481c4), a `/dailyquest/GetInstList` REQUEST builder, from inside a response callback. `free_iap`, `iap`, `supply` and `card` are omitted so their gated branches are skipped entirely. [FIXTURE] The gold amounts and the item ids come from the local chest table in src/bootstrap.ts; the item ids 912/913/914 ARE recovered CHAR_STR_RO rows ('Transcendence Ticket'), the amounts are not. Server-side bookkeeping: (area_id, achieve_cnt) is recorded on the account and persisted, so a replay is answered idempotently and pays nothing.",
+        "description": "[RECOVERED] The expedition-map chest claim. Tapping a claimable chest calls `CSRSceneMStageMap::SendRewardRequest` (0xe9a168), which hands `CSRUserDB::GetCurAreaID()` and the chest index to `CSRSyncMStage::RequestReward` (0xb3bf4c); that builds a `CPVHTTPRequest::Create<..., CPVHTTPMapToEncodedURLFormTransformer<unordered_map<string,string>>>` - a URL-encoded form POST - with EXACTLY 7 entries (`unordered_map(local_118, local_d0, 7)` at ghidra-chest-01-reward-route.txt:168) and posts it to this path (0xb3c23a). THE FIELD SET IS: app_code, app_ver, market, pvid, otp, area_id, target_achieve_cnt. [RECOVERED] `target_achieve_cnt` is NOT AN INDEX: it is `std::to_string(GetRewards()[index].achieve_cnt)` (:158-160, stride 0x34), i.e. the reference value from the area's `achieve_reward[]` on /reference/GetArea. [RECOVERED] `ret_data` must be a JSON OBJECT - ReqRewardCB (0xb3c674) dispatches on `*rd` (`:586-612`, `== 1` object, `== 2` array, anything else is an error path). [RECOVERED, load-bearing] `ret_data.achieve_cnt` must EQUAL one of the area's published `achieve_reward[].achieve_cnt` values: the callback scans `GetRewards()` for that match (:526-577, :531/:566) and only then calls `SetAchieveRewardReceived(area, i)` (:570), which is what makes `found` true and hands `AchieveRewardCB` an index instead of -1 (`:1256-1263`). With -1 the callback does nothing but `Toast(); return;` (`:1776-1783`) and **the chest never reaches the `opened` sprite state**. [RECOVERED] That state matters because `SetRewardVisible(i, state)` (0xe95eb8) makes TWO of its four slots visible on `state == 1` - the `MS_RW_<L>` animation (slot +0x08) and the `MS_RW_<L>8` still (slot +0x18) - which is literally 'open and closed at the same time'; only `state == 2` clears it, and only a successful claim reaches that. [RECOVERED] `result_code` is 1 on EVERY path, refusals included: ReqRewardCB bails to `cb(-1, 0)` on any non-1 code (`:463-473`) and CPVHTTPManager::Enqueue retries - the 8x silent retry measured for /mission/Complete in analysis/testing/report-017.md. A refusal is therefore expressed by the PAYLOAD (an `achieve_cnt` that matches no published reward), never by the code. [RECOVERED] `achievement` is OMITTED, never `[]` - `:517-520` is an IS-NULL test and the branch calls `CSRAchieve::ParseAchievementsElement` (0x8481c4), an independent achievement collection parser. `free_iap`, `iap`, `supply` and `card` are omitted so their gated branches are skipped entirely. [FIXTURE] The gold amounts and the item ids come from the local chest table in src/bootstrap.ts; the item ids 912/913/914 ARE recovered CHAR_STR_RO rows ('Transcendence Ticket'), the amounts are not. Server-side bookkeeping: (area_id, achieve_cnt) is recorded on the account and persisted, so a replay is answered idempotently and pays nothing.",
         "tags": [
           "Missions and combat"
         ],
@@ -25303,6 +25303,24 @@
         "properties": {
           "stage_id": {
             "type": "string"
+          },
+          "dailyquest_min_stage": {
+            "type": "string",
+            "description": "Native ParseLobbyEnter receives Complete ret_data; required compatible header, neutral empty when quests unavailable."
+          },
+          "daily_quest": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Absolute owned daily progress/claimed overlays; configured local mode only, otherwise empty."
+          },
+          "linear_quest": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Empty preserves existing native linear slot; no local linear producer."
           },
           "achieve": {
             "type": "array",

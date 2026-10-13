@@ -1,4 +1,47 @@
-## Latest continuation: explicit owned fishing sales (2026-10-14)
+## Latest continuation: persistent fixed local daily quests (2026-10-14)
+
+BLUSTONE_QUEST_MODE=local-fixed defaults OFF, requires explicit policy:
+local_ type2 references/gold-only rewards, fixed period/minimum published stage,
+mission-win event/stage rules and complete per-owner instances. All catalogue,
+event mapping, numerical rewards, bounds and fixed/no-reset period are LOCAL.
+No original quest data/calendar/TODAY aggregate/shortcuts inferred. Missing
+owner retains empty reads/refused claims. First initialization captures immutable
+refs/rules/period/progress without reward; no config rewrite of old journals.
+
+Only STRICT explicit clear1 of matching active ordinary attempt increments;
+legacy malformed-clear wins do NOT. New winning stage replays count, duplicates/
+wrong-stage/foreign-ID/defeat do not. Captured server battle ID, not requesttarget.
+Native no-battle-ID late same-stage completion ambiguity remains documented.
+With mode active, ALL mission mutations use detached game clone; progress plus
+game settle in one persistence transaction. Real write/rename failures restore
+old game nestedrefs, active battle, journal, wallets/items/mail and durable bytes.
+
+Gold claim checks min-stage earned stars, id/target/earned count, uint32wallet;
+claimed flag and gold persist atomically. Repeat sends CURRENT absolute gold/
+progress with no grant/rewind/write. Correct specialized ret_data progress and
+reward.gold.cur, no genericuser/Manda/EXP/item/Hunter/achievement writes.
+Schema3 requires quests+dispatches arrays; prior1/2 writers refuse rather than
+drop earned/claimed progress. Off mode preserves journal/read hydration.
+
+IMPORTANT SOURCE CORRECTION: ParseAchievementsElement G8481c4 is an actual
+achievement collection parser, NOT GetInstList request builder. RequestDailyQuest
+is G848410, called by CSRTabAchieve.OnInit; direct quest scene uses cache only.
+Native ReqCompleteCB Gb43d14 UNCONDITIONALLY ParseLobbyEnter(ret_data), so
+Complete now publishes inline daily overlay/minstage string (neutral whennone),
+including refusals. No guessed achievement refresh signal. Canonical old comments/
+OpenAPI/legacyREADME corrected; historical earlier builder claims are WRONG.
+See docs/quest-native-refresh-paths-2026-10-14.md and
+docs/local-fixed-daily-quests-2026-10-14.md. Daily upserts preserve linear cache.
+
+Full150 test programs/build and independent review pass. Real P384/AES/HMAC
+HTTP tests cover lifecycle/inlineoverlay/claims/replay/restart. Same TWO agents
+reused; no live policy/state/input/APK changed. Native quest UI/thumb/shortcut
+validation and original data remain pending; linear/calendar/other rewards absent.
+Goal ACTIVE. Escape input hold, original/private preservation, DataDump read-only,
+collector/Docker/inference offline unchanged. Next continue genuine Mirage run
+catalogue/cache hydration or other source-backed areas; no empty-lobby milestone.
+
+## Historical continuation: explicit owned fishing sales (2026-10-14)
 
 Normal /fishing/SellFish is now opt-in local-bound. Default disabled; requires
 explicit type17 fish metadata, catalogue prices and per-owner fish/grade/owned
