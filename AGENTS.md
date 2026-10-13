@@ -1,8 +1,40 @@
+## Latest continuation: exact encrypted Chat framing and GvG reference decoder (2026-10-13)
+
+Same two agents reused. Full130 test programs/build and both reviews passed.
+Chat cipher owner POSITIVE sameCPVHTTPSharedSecret,
+keyfirst32/IVderivedlast16 (no frameIVprefix). Nativeframe bytes50 56 13 00 +
+rawAEScipher +rawSHA256(PLAINTEXT UTF8)32. Receiver mincipher16/multiple16,
+decryptthenexactdigestchecks. src/chat-frame.ts nowpureencode/decode withcaller
+boundcrypto; no socketlistener/authregistry orJSONbodygenerator invented.
+DisposableECDHP384/SHA384exchange+existingHTTPAES andindependentclientAES
+proveframe52 forplaintext{} andknownSHAtrailer/UTF8/tamper/length/keyfailure/
+detachment. Source docs/native-chat-encrypted-frame-2026-10-13.md.
+
+Guildrequester ChatTYPE1 inner11010 sendsEMPTYmessage; supporterHTTPsuccess
+factory11011 sendsJSONfuelmessage. Outercommand11000, logicalpayload{message,
+type}; factorytype isCOMMANDnotFUEL_INFO.type andomitsserverresult_code. Base
+ChatJSONcommand/tag/version/utc, derivedpayload sibling; no account/keyID in
+frame. Socketmustbindexistingauthenticatedsession. ParseFuelMsg/handlers only
+cache/UI, no provedrecipientAPcredit. docs/guild-fuel-chat-producer-native-
+2026-10-13.md; Request/Supportmutations stillgated/no12APinference.
+
+GvGGetRef sourceCORRECTION: reward/inf_reward/point/camp areSIBLINGS ofgvg under
+ret_data, notinsidegvg. SRREWARD lists areJSONSTRINGarrays[{id,qty}], notdump
+directarrays/ref_id; CAMP.link_camp JSONSTRINGofIDs/nameoptionalplainSTRING.
+src/gvg-reference.ts purestrict supplieddecoder: knownrewardrefs, complete
+numeric/listfields, explicitrawstrings, CPsignedbounds, max2infinitepreviews,
+detachedgraph/coherentlinks. No defaults/season/rewards/referenceactivation;
+scene-safety/participation metadata andactualnumericcorpus remainmissing.
+Source docs/gvg-reference-wire-shapes-native-2026-10-13.md; authoredtests only.
+
+No liveinputs/listener/Serverprofile/APKchanges. Escapehold, DataDumpreadonly,
+private/originalpreservation andcollector/Docker/inferenceoff persist. GoalACTIVE.
+
 ## Latest continuation: GvG native phase arithmetic and Guild fuel defaults (2026-10-13)
 
-Same two agents reused. Source GetCurGVGPhase Gaab938 nowclosed: numeric
-schedule evidence independently reviewed; full128 test programs/build passed.
-schedule low32words interpretedSIGNED, comparespositive markers strictlypast
+Same two agents reused. Full128 test programs/build passed; source independently
+reviewed. GetCurGVGPhase Gaab938 nowclosed: numeric schedule low32words
+interpretedSIGNED, comparespositive markers strictlypast
 inDESCpriority9..1, else0. Exact equality stayspriorphase. Native clockreturns
 low32serverseconds; AddTimeJump signeddebuglong, reset0, wrappingADD/SUB;
 not timezone. Pair secondword is ABSOLUTE nextphase timestamp−jump, notcountdown;
