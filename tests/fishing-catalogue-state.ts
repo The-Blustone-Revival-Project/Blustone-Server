@@ -40,6 +40,12 @@ try {
   for(const suffix of ["Begin","EndWithSell","SellFish"])
     assert.equal(read(`/fishing/${suffix}`,{...auth,fish_id:item.id,is_win:1}).result_code,2001);
   assert.deepEqual(readFileSync(file),bytes);
+  const fish17={...item,use_type:17,effect:"explicit supplier effect",collect_qty:4};
+  const nativeType=new ServerState("http://localhost",file,{fishingItems:[fish17],fishingCatalogue:catalogue});
+  assert.deepEqual((gameResponse(nativeType,"/reference/GetItem",auth) as any).ret_data.item.at(-1),fish17);
+  assert.deepEqual((gameResponse(nativeType,"/fishing/GetInven",auth) as any).ret_data,[],"Native fish metadata does not create inventory");
+  assert.equal((gameResponse(nativeType,"/fishing/SellFish",{...auth,fish_id:item.id,grade:1,qty:1}) as any).result_code,2001);
+  assert.deepEqual(readFileSync(file),bytes);
   const restarted=new ServerState("http://localhost",file,{fishingItems:[item],fishingCatalogue:catalogue});
   assert.deepEqual((gameResponse(restarted,"/fishing/GetFishingPool",auth) as any).ret_data,catalogue.pools);
   assert.deepEqual(readFileSync(file),bytes);

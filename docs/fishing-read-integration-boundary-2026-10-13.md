@@ -1,5 +1,12 @@
 # Fishing revival: bounded source update and next read integration
 
+Follow-up: fishing-sale-owned-count-price-chain-native-2026-10-13.md positively
+closes original GetItem.use_type17→ShopSell fish row production. The later
+reference admission now supports explicitly supplied native type17 fields;
+neutral type0 remains restricted to empty effect/collect_qty0. This supersedes
+the earlier unknown-fish-enum boundary below, not the missing original metadata,
+general inventory seed, catch or settlement boundaries.
+
 ## Implemented configured read seam
 
 ServerState now snapshots `fishingItems` and `fishingCatalogue` constructor
@@ -9,8 +16,11 @@ below; catalogue is `{pools:[{lure_id,fish_id}],prices:[{fish_id,b_price,s_price
 The fish-ID admission set comes ONLY from those separately supplied item rows.
 Collision checks reject existing base items, LU001/LU003 bait identities and
 selected Hunter reference IDs. The supported read-only metadata policy requires
-use_type0, empty effect and collect_qty0; it is not a recovered original fish
-enum or production definition. Other numeric fields remain explicit uint32.
+use_type0, empty effect and collect_qty0 for the neutral LOCAL read fixture.
+Follow-up source closes genuine native fish classification as use_type17;
+that type is now admitted with all supplied effect/collect_qty fields retained.
+No original IDs, metadata values or quantities are constructed. Other numeric
+fields remain explicit uint32. Types1/3 and other unproved classifications refuse.
 
 GetItem preserves all existing sections and appends those same detached rows.
 Authenticated GetFishingPool returns the complete ordered supplied table,

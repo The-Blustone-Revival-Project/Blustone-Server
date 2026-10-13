@@ -1,6 +1,6 @@
 /** Explicit supplier-owned GetItem definitions, not resource-derived fish IDs.
- * Original metadata/use_type/art assignments remain missing. These references
- * enable catalogue reads only; they never create inventory or acquisition. */
+ * Native use_type17 is recovered; original other metadata/art remains missing.
+ * This metadata publication never creates inventory or acquisition. */
 export interface FishingItemReference {
   id: string; name: string; desc: string; thumbnail_id: string; effect: string;
   rank: number; use_type: number; sell_price: number; collect_qty: number;
@@ -24,10 +24,11 @@ export function configuredFishingItems(raw: unknown, reservedIds: ReadonlySet<st
         throw new TypeError(`Fishing item ${key} must be explicit uint32`);
       item[key] = number;
     }
-    // Local read-only admission. Types1/3 participate in fuel/Hunter trace
-    // postprocessing even without inventory grants; original fish type unknown.
-    if(item.use_type!==0 || item.effect!=="" || item.collect_qty!==0)
-      throw new TypeError("Fishing catalogue items require neutral use_type0, empty effect and collect_qty0");
+    // Native fish metadata type17: AddInven Gb2e780 and ShopSell G10471bc.
+    // Type0 remains the prior neutral local read fixture, with no fish behavior.
+    // Types1/3 participate in unrelated fuel/Hunter trace postprocessing.
+    if(item.use_type!==17 && (item.use_type!==0 || item.effect!=="" || item.collect_qty!==0))
+      throw new TypeError("Fishing items require native use_type17 or neutral local use_type0/empty effect/collect_qty0");
     return Object.freeze(item);
   });
   return Object.freeze(rows);

@@ -28,6 +28,8 @@ try {
   assert.equal(JSON.stringify(game),before);assert.equal(JSON.stringify(other),peerBefore);assert.deepEqual(readFileSync(file),bytes);
   const restart=new ServerState("http://localhost",file,options);
   assert.deepEqual(read(restart).ret_data,[row]);assert.deepEqual(readFileSync(file),bytes);
+  const fishTypeRestart=new ServerState("http://localhost",file,{fishingItems:[{...item,use_type:17}]});
+  assert.deepEqual(read(fishTypeRestart).ret_data,[row]);assert.deepEqual(readFileSync(file),bytes);
   const unavailable=new ServerState("http://localhost",file);
   assert.equal(read(unavailable).result_code,2001,"Missing metadata cannot substitute a false empty ownership read");
   assert.deepEqual(readFileSync(file),bytes);

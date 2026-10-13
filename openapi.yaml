@@ -3218,10 +3218,11 @@ paths:
       description: Authenticated bare array from an immutable supplied catalogue. Pool
         bootstrap publishes all lure/fish rows; price lookup takes one scalar
         fish_id and returns matching fish_id/b_price/s_price/g_price rows. Every
-        configured fish has the same explicit neutral local item definition in
-        GetItem. Missing catalogue refuses with result_code2001; original fish
-        metadata, numeric prices and pools remain missing. No inventory, bait,
-        catch or settlement is created.
+        configured fish has the same explicit item definition in GetItem. Native
+        fish classification use_type17 is supported; type0 is a neutral local
+        read fixture only. Missing catalogue refuses with result_code2001;
+        original other fish metadata, numeric prices and pools remain missing.
+        No inventory, bait, catch or settlement is created.
       tags:
         - Fishing
       parameters: *a1
@@ -3294,10 +3295,11 @@ paths:
       description: Authenticated bare array from an immutable supplied catalogue. Pool
         bootstrap publishes all lure/fish rows; price lookup takes one scalar
         fish_id and returns matching fish_id/b_price/s_price/g_price rows. Every
-        configured fish has the same explicit neutral local item definition in
-        GetItem. Missing catalogue refuses with result_code2001; original fish
-        metadata, numeric prices and pools remain missing. No inventory, bait,
-        catch or settlement is created.
+        configured fish has the same explicit item definition in GetItem. Native
+        fish classification use_type17 is supported; type0 is a neutral local
+        read fixture only. Missing catalogue refuses with result_code2001;
+        original other fish metadata, numeric prices and pools remain missing.
+        No inventory, bait, catch or settlement is created.
       tags:
         - Fishing
       parameters: *a1

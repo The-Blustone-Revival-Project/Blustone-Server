@@ -67,6 +67,51 @@ metadata/catalogue rows proves identity/rendering, not that an aggregate
 catch may be sold without a corresponding item debit or that one general
 item equals one grade counter. This is the concrete remaining sale boundary.
 
+## Follow-up catch classification and the separate generic receipt
+
+`ParseEnd` Gb2a560 supports generic `ret_data.user.item` rows with
+inst_id/added/ref_id; it calls CSRInventory.AddItem Gaec508 at **Gb2ab20**.
+It independently supports card additions (Gb2ac38) and later consumed item
+updates (UseItem Gaea5f8 at Gb2ae90). The actual catch fish_id/grade/length
+branch instead calls **AddInven Gb2e758 at Gb2ae3a**, followed by
+UpdateRecord Gb2e980 at Gb2ae46. These independent branches do not establish
+that the generic item row must represent the caught fish, nor that it cannot.
+No exclusive stock model or mandatory debit ratio follows from this callback.
+
+AddInven independently resolves the exact fish metadata through
+CSRItemInfo.GetItemData Gaf109c at **Gb2e77c**, then requires
+**INFO+4==17** (Gb2e780..784) before it looks up the fish-keyed INVEN map
+Gb2e790 and increments the selected grade counter. It does not allocate a
+general item instance or read one to increment that map.
+
+The metadata field binding is now positive: CSRItemInfo.SetItem Gaefe10
+resolves `use_type` at Gaeff94/98 and stores its value at stack+ac
+Gaeffe4. Raw INFO starts stack+a8 (Gaefe88/Gaefeb8). Its copy constructor
+Gaf1aa4 copies the first16 bytes unchanged (Gaf1ab6/1ac8), called with that
+raw INFO at Gaf0264..26e. GetItemData returns the map INFO value at node+1c
+Gaf10c6. Therefore INFO+4 is the actual **GetItem.use_type**, and17 is the
+native fish classification; it is not an inferred rank or resource ordinal.
+
+Configured fish metadata may now admit use_type17 with supplied effect and
+collect_qty retained. Type0 remains a prior LOCAL neutral read fixture, not
+native fish behavior. Types1/3 remain unrelated fuel/trace gates. This enum
+recovery does not recover any original fish ID/art/effect/value.
+
+The complementary positive Shop stock-chain audit
+`fishing-sale-owned-count-price-chain-native-2026-10-13.md` proves its outer
+producer iterates nonzero GENERAL inventory item records of type17, then
+uses Fishing.INVEN for grade quantities. Both are needed to expose the
+ordinary sale UI. Count-only `owned_fish` publication must not be advertised
+as playable native sale. Original stack-to-grade arithmetic, stack selection,
+debit and retry ownership remain missing.
+
+Neither the request nor the receiver supplies a transaction nonce or expected
+stock version. Absolute wallet/count replacement is naturally repeatable as
+receipt parsing, while positive general item removal rows are additive deltas.
+That is NOT server-side sale idempotency: the same qty request can legitimately
+sell another batch while stock remains. Do not add a guessed timed deduplication
+window or claim a response-loss retry cannot sell twice.
+
 ## Refusal code safety: corrected transport/application distinction
 
 ReqSellCB Gb2db30 checks CPVHTTPResponse.GetResultCode at Gb2db4c and

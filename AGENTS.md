@@ -1,3 +1,27 @@
+## Latest continuation: original fish classification type17 (2026-10-13)
+
+Same two agents reused; stronger originalpositivechain supersedes unknownfish
+type premise. Full126 tests/build passed; classification review clean.
+GetItem.SetItem use_type→rawINFO+4(copyunchanged)→GetItemData.
+AddInven Gb2e77c/780/784 acceptsEXACT17. ShopSell G1047032 generalitemlist→
+positiveqty/metadatause_type17 G10471bc→PushFish G104726c. PushFish uses
+separate Fishing.INVEN gradecounts, not generalqty, as sell availability.
+Popup copiedgradequote×selectedqty rawMUL32 Gd53caa, sendsfish_id/grade/qty.
+
+Configuredfish metadata nowadmitsproven use_type17 andpreserves allsupplied
+effect/collect_qtyfields. Legacyneutral0 stillLOCALread-only/emptyEffect/collect0;
+types1/3 unrelatedfuel/trace rejected. No defaultfishIDs/art/price/stock invented.
+Positive17 GetItem/detachedmetadata/noownership/nosale/save+importedcounts
+restart tests pass. This closesclassification, not fish-acquisitionproducer.
+
+NativeShopfishlist DOESrequirepositiveordinaryitemseed; originalrelation with
+aggregategradecounts stillunknown(no proved sum-equality/stackdebit/retrylaw).
+ParseSell emptyitembranch legal but doesnot proveproduceralwaysomitsremovals.
+No aggregate-only shortcut claimed completeoriginalUI; sale/catches stillgated.
+docs/fishing-sale-owned-count-price-chain-native-2026-10-13.md holds chain.
+No liveinputs/APK/profileactivation, Escapehold/DataDumpreadonly/privateoriginal
+preservation unchanged. GoalACTIVE.
+
 ## Latest continuation: explicit owned fish persistence and reads (2026-10-13)
 
 Same two agents reused for scalarSellFish and inventory/HTTPproducer evidence.

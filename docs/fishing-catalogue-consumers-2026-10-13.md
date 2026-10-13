@@ -121,8 +121,10 @@ a recovered fish. A nonempty integration needs separately admitted explicit
 fish item definitions, rejects collision with those existing unrelated IDs,
 and publishes the SAME definitions through GetItem. Required base item fields
 remain strict string id/name/desc/thumbnail_id/effect plus numeric
-rank/use_type/sell_price/collect_qty. Ownership, acquisition, native fish
-use_type semantics, original ID→art assignments and prices are separate gates.
+rank/use_type/sell_price/collect_qty. Later source positively closes native fish
+use_type17 (see fishing-owned-inventory-sale-boundary-native-2026-10-13.md).
+Ownership, acquisition, original ID→art/effect assignments and prices remain
+separate gates. Neutral use_type0 is only the prior local read fixture.
 Do not grant any supplied fish reference merely to populate this read-only seam.
 
 Focused catalogue tests and strict TypeScript checks pass after this follow-up,
