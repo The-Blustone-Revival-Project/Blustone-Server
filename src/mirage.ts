@@ -8,6 +8,14 @@ const WEEK_SECONDS = 7 * DAY_SECONDS;
 // The first Monday after the Unix epoch Thursday is four days later.
 const MONDAY_OFFSET = 4 * DAY_SECONDS;
 
+/** End's native callback tests KEY EXISTENCE after its failure/retry path,
+ * then parses cached HP/state even on non1. Null is not a neutral data body.
+ * Omission skips cache writes. Its caller additionally checks actual result
+ * code before success UI; this is not a successful or reconstructed End. */
+export function mirageEndRefusal(code=2001,message="Mirage End settlement is not reconstructed"):Record<string,unknown> {
+  return {result_code:code,protocol_code:0,code,error:message};
+}
+
 /** RequestFriend callback G938298 passes ret_data directly to ParseFriendInfo
  * G934c00. Each row groups nicknames by a floor; it does not carry account IDs.
  * Callers must supply ONLY established friend relationships, never all local

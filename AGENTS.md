@@ -1,4 +1,46 @@
-## Latest continuation: persistent fixed local daily quests (2026-10-14)
+## Latest continuation: Mirage cache schema/HP and End refusal (2026-10-14)
+
+Complete pure decoder src/mirage-cache.ts covers all5supplied components,
+signed Base/Hero/Stair, byte new_record, effective32entryID/canonical signedHP,
+full64deck exactJSON capture+numericwire, enemy unsigned progression/5skills.
+CRITICAL older enemy vocabulary WRONG: actual parser requires signed hp_percent,
+does NOT read n. Extra n/owned enemy IDs or guessedstat fields refuse.
+CRITICAL native full carriedHP=10000 (both sourcefloat literals0x461c4000),
+not1000. Game/bootstrap1000 remains historical LOCALplaceholder, NOT nativefull
+or entry-membership proof. No automatic heal/migration/private save changes.
+Source math helper signedfloat32/10000; stairsignedbalance multiplyword38d1b717.
+
+Separate LOCAL currentcombat readiness requires complete independently
+established commitments/ownership, livingdistinctref sortie, positivefloor/
+selectedone-basedstair/state1, grade0..3 andpositive selectedbalance, known
+resources/dialogues/hero references/actualnativeclock, supportedlivingenemy
+projection. HP0..10000bounds/collectionlimits local, not nativeclamp/catalogue.
+Predicate receives frozen detachedenemy; no mutablevalidated-row escape.
+NO GetInfo nonempty publication, actors/floors/grants or live Mirage battle.
+Pure component/readiness does not prove allfutureUI/rewardart/rotation safety.
+
+End CALLBACK CORRECTION: non1/retry still reaches KEYEXISTS ret_data branch
+and appliescapturedenemyHP/Parse_End/questparse. Genericfailure'serrorobject
+could write state0/throwheader assertion. End now returns non1body with
+NEITHER ret_data NOR data (notnull), includingaccount andglobalNativeAuthError
+path. Caller checks actualresultcode independently, notjustcallbackbyte1,
+and takeserrorUI. Sourcecache-write avoidance proved; nativeUInottested.
+Endrequest signedfloor/stair +JSONSTRING deckinst_id64/hp_percentU32 and
+enemyHPvectorU32. ReplystateU32/deckinst_id64/remain_hp_percentS32 +mandatory
+questheader. Parse_End DOESNOT advancefloor/stair or replace registereddeck.
+Rounded allzeroHP cannotuniquely inferoriginalwin; no runsettlement invented.
+
+Full152 programs/build pass; both reusedagents reviewed, independent P384/AES
+End tests +labelledglobalerrorfaultproveomission/preservedprivatefixturebytes.
+No inboundHMACverification/boundOTP-rejection hardening claim. Original MIRAGE
+pack30imagesexists; boundedlistingopaque, no inferredpostfix/resource names.
+See docs/mirage-cache-decoder-and-refusal-2026-10-14.md and linkedsourceproofs.
+Goal ACTIVE. DefaultMirage read-onlyguard stays; no profile/input/APK changes.
+Escape input hold, private/original preservation, DataDumpread-only and offline
+collector/Docker/inference remain. Next actualrun/catalogue/resource admission,
+registeredparty/HP +atomicEnd/advance/reward/revive/retry laws, no guessedBegin.
+
+## Historical continuation: persistent fixed local daily quests (2026-10-14)
 
 BLUSTONE_QUEST_MODE=local-fixed defaults OFF, requires explicit policy:
 local_ type2 references/gold-only rewards, fixed period/minimum published stage,

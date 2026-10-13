@@ -13270,10 +13270,10 @@
     },
     "/mirage/End": {
       "post": {
-        "summary": "Recovered /mirage/End route",
-        "description": "The route literal **/mirage/End** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Refuse unsupported Mirage settlement without cache writes",
+        "description": "Native End sends signed floor/stair and JSON-string remain_deck_hp full64 inst_id/hp_percent plus remain_enemy_hp uint32 values. Native carried full health is10000; the historical server1000 placeholder is local and is never auto-healed. Settlement remains unavailable. Non-success End replies omit ret_data/data ENTIRELY, including account/transport auth errors: the native callback tests key existence after failure/retry and otherwise still applies captured enemy HP, Parse_End and quest caches. Null or a generic error subtree is not preserving. Caller independently checks actual result code before success UI. No original outcome from rounded HP, state/party/floor transition or successful run/reward is inferred. Pure supplied-cache decoding/readiness support does not activate GetInfo or prove native Mirage combat.",
         "tags": [
-          "mirage"
+          "Mirage"
         ],
         "parameters": [
           {
@@ -13321,11 +13321,40 @@
         },
         "responses": {
           "200": {
-            "description": "Mock-compatible response.",
+            "description": "Non-success body with no native-parsed data subtree.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultEnvelope"
+                  "type": "object",
+                  "required": [
+                    "result_code",
+                    "protocol_code",
+                    "code",
+                    "error"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "result_code": {
+                      "type": "integer",
+                      "not": {
+                        "enum": [
+                          1
+                        ]
+                      }
+                    },
+                    "protocol_code": {
+                      "type": "integer",
+                      "enum": [
+                        0
+                      ]
+                    },
+                    "code": {
+                      "type": "integer"
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }

@@ -29,7 +29,7 @@ import { GUILD_SPRITE_EMBLEMS,GUILD_EMBLEM_SOURCE,verifyGuildEmblemSource } from
 import {repositoryPath} from "./paths.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
-import { mirageLobby, mirageFriendFloors } from "./mirage.js";
+import { mirageLobby, mirageFriendFloors,mirageEndRefusal } from "./mirage.js";
 import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
 import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type FishingCatalogue} from "./fishing-catalogue.js";
 import {ownedFishingInventory} from "./fishing-inventory.js";
@@ -1661,6 +1661,10 @@ export class ServerState {
   }
 
   mirageAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
+    if(route==="/mirage/End") {
+      try{this.accountFor(payload,headers);}catch(error){if(error instanceof NativeAuthError)return mirageEndRefusal(error.code,error.message);throw error;}
+      return mirageEndRefusal();
+    }
     const account=this.accountFor(payload, headers);
     // Original callback replaces its complete friend-floor cache with this
     // bare array. Local friendship alone is not a reconstructed highest-floor

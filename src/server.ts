@@ -10,6 +10,7 @@ import YAML from "yaml";
 import { discoverEndpoints, defaultCatalogPath, groupEndpoints } from "./catalog.js";
 import { buildOpenApi } from "./openapi.js";
 import { NativeAuthError, ServerState } from "./state.js";
+import {mirageEndRefusal} from "./mirage.js";
 import { gameResponse } from "./game-routes.js";
 import { readConfig, type ServerConfig } from "./config.js";
 import { applyBodyParsers, errorHandler, notFound, requestLogging } from "./middleware.js";
@@ -563,7 +564,8 @@ function stateCall(
   try {
     return sendResponse(req, res, state, work());
   } catch (error) {
-    if (error instanceof NativeAuthError) return sendResponse(req, res, state, state.failure(error.code, error.message));
+    if (error instanceof NativeAuthError) return sendResponse(req, res, state,
+      req.path==="/mirage/End"?mirageEndRefusal(error.code,error.message):state.failure(error.code, error.message));
     throw error;
   }
 }
