@@ -8066,7 +8066,7 @@
     "/guild/Found": {
       "post": {
         "summary": "Create an explicitly configured local Guild",
-        "description": "Default disabled. Opt-in guildCreationMode or BLUSTONE_GUILD_CREATION_MODE=local-gold requires selected/hash-pinned Guild resources and explicit action1 gold2 quote. Native request name/desc/type/fc_point_limit/region/emblem_id; no client fee/ID authority. Local printable ASCII subset, native text limits, stock picker6, nonempty region, FC slider0..4000/500, existing no-joined account and no active combat required. Atomic gold debit/sole-leader record/monotonic uint32 allocator; malformed/duplicate names, missing fee/funds, replay and exhaustion refuse with complete rollback. Receipt flat my_guild, full guilds and user.gold BOTHprevcur. New counters/rank0 and leader role1 are explicit local initialization; original badword/font/region/min-level/pending/debit policies unknown. Native callback INFO defaults despite cache update, so no playable UI claim.",
+        "description": "Default disabled. Opt-in guildCreationMode or BLUSTONE_GUILD_CREATION_MODE=local-gold requires selected/hash-pinned Guild resources and explicit action1 gold2 quote. Native request name/desc/type/fc_point_limit/region/emblem_id; no client fee/ID authority. Local printable ASCII subset, native text limits, stock picker6, nonempty region, FC slider0..4000/500, existing no-joined account and no active combat required. Atomic gold debit/sole-leader record/monotonic uint32 allocator; malformed/duplicate names, missing fee/funds, replay and exhaustion refuse with complete rollback. Receipt flat my_guild, full guilds, currency prev/cur pairs AND mandatory coherent iap_qty/free_iap_qty scalars; generic SyncUser otherwise overwrites Manda with zero. New counters/rank0 and leader role1 are explicit local initialization; original badword/font/region/min-level/pending/debit policies unknown. Native callback INFO defaults despite cache update, so no playable UI claim.",
         "tags": [
           "Guild"
         ],
@@ -9295,8 +9295,8 @@
     },
     "/guild/Update": {
       "post": {
-        "summary": "Recovered /guild/Update route",
-        "description": "The route literal **/guild/Update** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Update an explicitly configured local Guild",
+        "description": "Default disabled. Opt-in guildUpdateMode/BLUSTONE_GUILD_UPDATE_MODE=local-manda-free-first requires selected/pinned Guild art. Six settings fields target actor's existing Guild implicitly; client fee/ID/role ignored. Management roles1/2 and ASCII/text/FC/stock-change gates are explicit local authorization/subset. Name2/region3 changes require supplied Manda1 quotes; missing rows refuse instead of native display-zero fallback. Other metadata changes and exact retries have zero fee. Atomic settings and declared free-first Manda debit with rollback; members/rank/counters/allocator preserved. Full my_guild/guilds and currency pairs plus mandatory paid/free scalars repair lost replies on no-write retries. Original debit priority, region/font/badword matching/pending rules and native UI remain unverified.",
         "tags": [
           "Guild"
         ],
@@ -9370,7 +9370,7 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-update-native-2026-10-13.md; docs/guild-update-wallet-native-2026-10-13.md; tests/guild-local-update-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },

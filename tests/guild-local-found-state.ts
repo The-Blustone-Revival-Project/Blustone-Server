@@ -17,6 +17,9 @@ try {
   assert.throws(()=>gameResponse(state,"/guild/Found",{}),/authenticated/);
   assert.throws(()=>found({pvid:peer.pvid}),/pvid does not match/);
   assert.equal(found({fc_point_limit:"501"}).result_code,2001);assert.deepEqual(readFileSync(file),bytes);
+  const oldPaid=game.gacha_iap_qty;game.gacha_iap_qty=0x1_0000_0000;
+  assert.equal(found().result_code,2001,"oversized scalar wallets refuse before any Guild/gold commit");assert.equal(game.gold,100);assert.equal((state as any).guilds,undefined);
+  game.gacha_iap_qty=oldPaid;assert.deepEqual(readFileSync(file),bytes);
   const battle=game.active_battle;game.active_battle={state:"active"} as any;
   assert.equal(found().result_code,2001,"creation cannot change membership during active combat");game.active_battle=battle;
   assert.deepEqual(readFileSync(file),bytes);
@@ -27,7 +30,7 @@ try {
   assert.equal((state as any).guilds,beforeGuilds);assert.equal((state as any).nextGuildId,undefined);assert.equal(game.gold,100);assert.deepEqual(readFileSync(file),bytes);
   (state as any).persist=persist;
   const result=found({price:"0",guild_id:"99"});assert.equal(result.result_code,1);
-  assert.deepEqual(result.ret_data.user,{gold:{prev:100,cur:83}},"generic SyncUser requires prev AND cur");
+  assert.deepEqual(result.ret_data.user,{gold:{prev:100,cur:83},iap:{prev:game.gacha_iap_qty,cur:game.gacha_iap_qty},free_iap:{prev:game.gacha_free_qty,cur:game.gacha_free_qty},iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty},"generic SyncUser requires gold pair AND authoritative Manda scalars");
   assert.deepEqual(result.ret_data.my_guild,{guild_id:1,status:3,newbie:0,role:1,contribution:0});
   assert.equal(result.ret_data.guilds[0].member_cnt,1);assert.equal(result.ret_data.guilds[0].rank,0);
   assert.equal(result.ret_data.guilds[0].members[0].pvid,auth.pvid);

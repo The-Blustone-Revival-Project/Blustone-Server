@@ -8,6 +8,8 @@ import {parseGuildDiscoveryRequest,guildDiscoveryRows} from "./guild-discovery.j
 import {guildRankingRows} from "./guild-ranking.js";
 import {guildActionPrices,type GuildActionPrice} from "./guild-prices.js";
 import {planLocalGuildFound} from "./guild-local-found.js";
+import {planLocalGuildUpdate} from "./guild-local-update.js";
+import {guildWalletReceipt} from "./guild-wallet-receipt.js";
 import { GUILD_SPRITE_EMBLEMS,GUILD_EMBLEM_SOURCE,verifyGuildEmblemSource } from "./guild-emblems.js";
 import {repositoryPath} from "./paths.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
@@ -523,12 +525,13 @@ export class ServerState {
   private readonly gemLevelPrices: readonly GemLevelPrice[];
   private readonly guildPrices: readonly GuildActionPrice[];
   private readonly guildCreationMode:"disabled"|"local-gold";
+  private readonly guildUpdateMode:"disabled"|"local-manda-free-first";
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
       gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown;
-      guildCreationMode?:"disabled"|"local-gold" } = {}) {
+      guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first" } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -569,6 +572,14 @@ export class ServerState {
       !(process.env.BLUSTONE_PACKAGE_NAMES??"").split(",").includes("GUILD.jet")))
       throw new TypeError("Local Guild creation requires selected original Guild resource profile");
     if(creationMode==="local-gold") verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
+    const updateMode=Object.hasOwn(options,"guildUpdateMode")?options.guildUpdateMode:process.env.BLUSTONE_GUILD_UPDATE_MODE??"disabled";
+    if(updateMode!=="disabled"&&updateMode!=="local-manda-free-first") throw new TypeError("Unknown Guild update mode");
+    this.guildUpdateMode=updateMode;
+    if(updateMode!=="disabled") {
+      if(!["pkgi1","pkgi1-tree"].includes(process.env.BLUSTONE_PACKAGE_MODE??"")||!(process.env.BLUSTONE_PACKAGE_NAMES??"").split(",").includes("GUILD.jet"))
+        throw new TypeError("Local Guild update requires selected original Guild resource profile");
+      verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
+    }
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -1192,6 +1203,7 @@ export class ServerState {
   guildAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     const account = this.accountFor(payload, headers);
     if(route==="/guild/Found") return this.foundLocalGuild(account,payload);
+    if(route==="/guild/Update") return this.updateLocalGuild(account,payload);
     if(route==="/reference/GetGuildPrices") return this.envelope(this.guildPrices.map(row=>({...row})));
     // Imported joined records are explicit local state, never inferred from
     // requests. my_guild is flat PLAY_DATA, distinct from full Guild INFO.
@@ -1229,6 +1241,10 @@ export class ServerState {
     const id=this.nextGuildId??(Math.max(0,...(this.guilds??[]).map(record=>record.id))+1);
     const plan=planLocalGuildFound(payload,this.guilds??[],this.accountsByPvid,account,game.gold,game.arena.rating_point,id,this.guildPrices);
     if("error" in plan) return this.failure(2001,plan.error!);
+    let user;
+    try{user=guildWalletReceipt({gold:game.gold,iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty},
+      {gold:plan.gold!,iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty});}
+    catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild wallet snapshot");}
     const next=establishedGuildRecords([...(this.guilds??[]),plan.created!],this.accountsByPvid);
     const beforeGuilds=this.guilds,beforeId=this.nextGuildId,beforeGold=game.gold;
     this.guilds=next;this.nextGuildId=plan.nextId!;game.gold=plan.gold!;
@@ -1236,7 +1252,27 @@ export class ServerState {
     const created=this.guilds.find(record=>record.id===id)!;
     return this.envelope({...guildLobby(account.pvid,this.guilds,new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS)),
       guilds:guildDetailRows([String(created.id)],this.guilds,account.serverId,this.accountsByPvid),
-      user:{gold:{prev:beforeGold,cur:game.gold}}});
+      user});
+  }
+
+  private updateLocalGuild(account:Account,payload:Record<string,unknown>) {
+    if(this.guildUpdateMode!=="local-manda-free-first") return this.failure(2001,"Local Guild update mode is disabled");
+    const game=this.gameByPvid.get(account.pvid);
+    if(!game) return this.failure(2001,"Guild manager has no established game state");
+    if(game.active_battle?.state==="active"||game.arena.active||game.search.active) return this.failure(2001,"Local Guild update refuses active combat commitments");
+    const plan=planLocalGuildUpdate(payload,this.guilds??[],this.accountsByPvid,account,game.gacha_iap_qty,game.gacha_free_qty,this.guildPrices);
+    if("error" in plan) return this.failure(2001,plan.error!);
+    const beforeWallet={gold:game.gold,iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty};
+    let user;
+    try{user=guildWalletReceipt(beforeWallet,{gold:game.gold,iap_qty:plan.paid!,free_iap_qty:plan.free!});}
+    catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild wallet snapshot");}
+    const next=establishedGuildRecords(plan.next,this.accountsByPvid),beforeGuilds=this.guilds;
+    if(plan.changed) {
+      this.guilds=next;game.gacha_iap_qty=plan.paid!;game.gacha_free_qty=plan.free!;
+      try{this.persist();}catch(error){this.guilds=beforeGuilds;game.gacha_iap_qty=beforeWallet.iap_qty;game.gacha_free_qty=beforeWallet.free_iap_qty;throw error;}
+    }
+    return this.envelope({...guildLobby(account.pvid,this.guilds??[],new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS)),
+      guilds:guildDetailRows([String(plan.id!)],this.guilds??[],account.serverId,this.accountsByPvid),user});
   }
 
   questAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {

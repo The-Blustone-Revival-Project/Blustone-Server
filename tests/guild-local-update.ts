@@ -1,0 +1,21 @@
+import assert from "node:assert/strict";
+import {planLocalGuildUpdate} from "../src/guild-local-update.js";
+import type {GuildRecord} from "../src/guild-lobby.js";
+const records:GuildRecord[]=[{id:1,name:"New Guild",desc:"Original",type:1,fc_point_limit:500,region:"EN",emblem_id:"GD_IMG_1",contribution:0,rank:0,gvg_win_cnt:0,gvg_inf_win_cnt:0,
+  members:[{pvid:1,role:1,newbie:0,contribution:0,fc_point:0},{pvid:2,role:4,newbie:1,contribution:0,fc_point:0},{pvid:3,role:2,newbie:0,contribution:0,fc_point:0}]}];
+const accounts=new Map([[1,{serverId:1}],[2,{serverId:1}],[3,{serverId:1}]]),prices=[{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}];
+const body={name:"Renamed",desc:"Updated",type:"1",fc_point_limit:"0",region:"JP",emblem_id:"GD_IMG_2"};
+const before=JSON.stringify(records),plan=planLocalGuildUpdate(body,records,accounts,{pvid:1,serverId:1},50,5,prices);
+assert.equal(plan.fee,54);assert.equal(plan.paid,1);assert.equal(plan.free,0);assert.equal(plan.id,1);assert.equal(plan.changed,true);
+assert.deepEqual(plan.next![0].members,records[0].members);assert.equal(plan.next![0].rank,0);
+const retry=planLocalGuildUpdate(body,plan.next!,accounts,{pvid:1,serverId:1},1,0,[]);
+assert.equal(retry.changed,false);assert.equal(retry.fee,0);assert.equal(retry.paid,1);
+assert.match(planLocalGuildUpdate(body,records,accounts,{pvid:2,serverId:1},50,5,prices).error!,/role/);
+const free=planLocalGuildUpdate({...records[0],desc:"Metadata only"},records,accounts,{pvid:3,serverId:1},50,5,[]);
+assert.equal(free.fee,0);assert.equal(free.changed,true);
+assert.match(planLocalGuildUpdate(body,records,accounts,{pvid:1,serverId:1},50,3,prices).error!,/Insufficient/);
+assert.match(planLocalGuildUpdate(body,records,accounts,{pvid:1,serverId:1},50,5,[]).error!,/missing/);
+assert.match(planLocalGuildUpdate(body,records,accounts,{pvid:1,serverId:1},50,5,[{...prices[0],price_type:2},prices[1]]).error!,/Manda1/);
+assert.equal(planLocalGuildUpdate({...body,price:0,guild_id:99},records,accounts,{pvid:1,serverId:1},50,5,prices).fee,54);
+assert.equal(JSON.stringify(records),before);
+console.log("Local Guild settings plan: management roles, authoritative changed-name/region quotes, declared free-first debit, free metadata/no-op paths and immutable membership/rank/wallet protections passed.");

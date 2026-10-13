@@ -17,7 +17,8 @@ const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgra
 const exerciseGemReplacement=process.argv.includes('--exercise-gem-replacement');
 const exerciseGemSale=process.argv.includes('--exercise-gem-sale');
 const exerciseGuildRecords=process.argv.includes('--exercise-guild-records');
-const exerciseGuildFound=process.argv.includes('--exercise-guild-local-found');
+const exerciseGuildUpdate=process.argv.includes('--exercise-guild-local-update');
+const exerciseGuildFound=process.argv.includes('--exercise-guild-local-found')||exerciseGuildUpdate;
 const exerciseGemLevelReference=process.argv.includes('--exercise-gem-level-reference');
 const exerciseGemMount=process.argv.includes('--exercise-gem-mount')||exerciseGemReplacement;
 const exerciseGemInventory=process.argv.includes('--exercise-gem-inventory')||exerciseGemMount||exerciseGemSale;
@@ -124,6 +125,7 @@ else {
   if(exerciseGuildFound) {
     const founder=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
     const game=fixture.gameFor(fixture.accountFor(founder,{}));founderPvid=founder.pvid;game.gold=100;
+    if(exerciseGuildUpdate){game.gacha_iap_qty=50;game.gacha_free_qty=5;}
     const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
     seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===founderPvid?game:saved]);
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
@@ -134,7 +136,9 @@ let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
   env.BLUSTONE_GUILD_CREATION_MODE=exerciseGuildFound?'local-gold':'disabled';
+  env.BLUSTONE_GUILD_UPDATE_MODE=exerciseGuildUpdate?'local-manda-free-first':'disabled';
   if(exerciseGuildFound) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17}]);
+  if(exerciseGuildUpdate) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
   if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
   if(exerciseGemSale) env.BLUSTONE_GEM_SELL_PRICES_JSON=JSON.stringify([{rank:1,level:1,price_type:2,price:13}]);
   if(exerciseGemLevelReference) env.BLUSTONE_GEM_LEVEL_PRICES_JSON=JSON.stringify([{level:2,price_type:2,price:17,possibility:12.5,failed_compensation:.375,add_sub_ability:1}]);
@@ -410,7 +414,8 @@ try {
   if(exerciseGuildFound) {
     const request={...auth,name:'New Guild',desc:'Local fixture',type:'1',fc_point_limit:'500',region:'EN',emblem_id:'GD_IMG_1'};
     const created=await secure('/guild/Found',request);assert.equal(created.result_code,1);
-    assert.deepEqual(created.ret_data.user,{gold:{prev:100,cur:83}},'Generic SyncUser requires both wallet fields');
+    const founderBefore=before.gameStates.find(([pvid])=>pvid===founderPvid)[1];
+    assert.deepEqual(created.ret_data.user,{gold:{prev:100,cur:83},iap:{prev:founderBefore.gacha_iap_qty,cur:founderBefore.gacha_iap_qty},free_iap:{prev:founderBefore.gacha_free_qty,cur:founderBefore.gacha_free_qty},iap_qty:founderBefore.gacha_iap_qty,free_iap_qty:founderBefore.gacha_free_qty},'Generic SyncUser requires coherent wallet pairs AND Manda scalars');
     assert.deepEqual(created.ret_data.my_guild,{guild_id:1,status:3,newbie:0,role:1,contribution:0});
     assert.equal(created.ret_data.guilds[0].member_cnt,1);assert.equal(created.ret_data.guilds[0].rank,0);
     const createdBytes=readFileSync(stateFile);
@@ -419,6 +424,15 @@ try {
     assert.deepEqual((await secure('/lobby/GetGuildInfo',auth)).ret_data,{my_guild:created.ret_data.my_guild});
     assert.equal((await secure('/guild/Search',{...auth,keyword:'new'})).ret_data.guilds[0].id,1);
     assert.deepEqual((await secure('/guild/GetRanking',{...auth,page:'0',size:'10'})).ret_data,[],'New local Guild gets no fabricated ranking');
+    if(exerciseGuildUpdate) {
+      const update={...request,name:'Renamed',region:'JP',desc:'Updated settings'};
+      const updated=await secure('/guild/Update',update);assert.equal(updated.result_code,1);
+      assert.deepEqual(updated.ret_data.user,{gold:{prev:83,cur:83},iap:{prev:50,cur:1},free_iap:{prev:5,cur:0},iap_qty:1,free_iap_qty:0},'Generic deltas and unconditional quantity scalars must agree');
+      assert.equal(updated.ret_data.guilds[0].name,'Renamed');
+      const updatedBytes=readFileSync(stateFile),repeated=await secure('/guild/Update',update);
+      assert.equal(repeated.ret_data.user.iap_qty,1);assert.deepEqual(repeated.ret_data.user.iap,{prev:1,cur:1});
+      assert.deepEqual(readFileSync(stateFile),updatedBytes,'State-derived retry repairs receipt without another debit/write');
+    }
   }
   assert.deepEqual((await secure('/reference/GetSkinRef',auth)).ret_data,{skin:[],bonus:[]});
   assert.deepEqual((await secure('/lobby/GetSkinInst',auth)).ret_data,{skin:[]});
@@ -594,6 +608,7 @@ try {
     assert.equal(after.nextGuildId,2);assert.equal(after.guilds.length,1);
     assert.equal(after.guilds[0].members[0].pvid,founderPvid);
     assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.guild_id,1,'Creation survives compiled restart');
+    if(exerciseGuildUpdate) assert.equal((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[1]'})).ret_data.guilds[0].name,'Renamed','Updated settings survive compiled restart');
   }
   if(exerciseGuildRecords) {
     assert.deepEqual(after.guilds,before.guilds,'Established joined Guild records must survive compiled restart and unrelated writes');
@@ -645,6 +660,7 @@ try {
     }
     if(exerciseGuildFound&&entry[0]===founderPvid) {
       const actual=structuredClone(found[1]),expected=structuredClone(entry[1]);expected.gold=83;
+      if(exerciseGuildUpdate){expected.gacha_iap_qty=1;expected.gacha_free_qty=0;}
       for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
       assert.deepEqual(actual,expected,'Creation changes only configured gold fee in founder gameplay');continue;
     }
@@ -663,6 +679,7 @@ try {
     configured_gem_level_reference_fixture:exerciseGemLevelReference,
     configured_guild_lobby_fixture:exerciseGuildRecords,
     configured_local_guild_creation_fixture:exerciseGuildFound,
+    configured_local_guild_update_fixture:exerciseGuildUpdate,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,

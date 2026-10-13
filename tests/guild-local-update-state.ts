@@ -1,0 +1,44 @@
+import assert from "node:assert/strict";
+import {readFileSync,writeFileSync,mkdtempSync,rmSync} from "node:fs";
+import {tmpdir} from "node:os";
+import path from "node:path";
+import {repositoryPath} from "../src/paths.js";
+Object.assign(process.env,JSON.parse(readFileSync(repositoryPath("config/profiles/current-e6-guild.json"),"utf8")).env);
+const {ServerState}=await import("../src/state.js");const {gameResponse}=await import("../src/game-routes.js");
+const dir=mkdtempSync(path.join(tmpdir(),"blustone-guild-update-"));
+try {
+  const file=path.join(dir,"state.json"),initial=new ServerState("http://localhost",file);
+  const users=Array.from({length:4},(_,i)=>initial.registerGuest({device_id:"local-manager"+i},{}).ret_data as any);
+  const saved=JSON.parse(readFileSync(file,"utf8"));
+  saved.gameStates[0][1].gold=100;saved.gameStates[0][1].gacha_iap_qty=50;saved.gameStates[0][1].gacha_free_qty=5;
+  const record={id:1,name:"New Guild",desc:"Original",type:1,fc_point_limit:500,region:"EN",emblem_id:"GD_IMG_1",contribution:0,rank:0,gvg_win_cnt:0,gvg_inf_win_cnt:0,
+    members:[{pvid:users[0].pvid,role:1,newbie:0,contribution:0,fc_point:0},{pvid:users[1].pvid,role:4,newbie:1,contribution:0,fc_point:0},{pvid:users[2].pvid,role:2,newbie:0,contribution:0,fc_point:0}]};
+  saved.guilds=[record,{...record,id:2,name:"Taken",members:[{pvid:users[3].pvid,role:1,newbie:0,contribution:0,fc_point:0}]}];
+  writeFileSync(file,JSON.stringify(saved));
+  const options={guildUpdateMode:"local-manda-free-first" as const,guildPrices:[{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]};
+  const state=new ServerState("http://localhost",file,options),game=(state as any).gameByPvid.get(users[0].pvid);
+  const before=readFileSync(file),others=JSON.stringify({...game,gacha_iap_qty:undefined,gacha_free_qty:undefined});
+  const body={...users[0],name:"Renamed",desc:"Updated",type:"1",fc_point_limit:"0",region:"JP",emblem_id:"GD_IMG_2"};
+  const update=(extra={})=>gameResponse(state,"/guild/Update",{...body,...extra}) as any;
+  assert.throws(()=>gameResponse(state,"/guild/Update",{}),/authenticated/);
+  assert.equal(update({...users[1]}).result_code,2001);assert.equal(update({name:"Taken"}).result_code,2001);assert.deepEqual(readFileSync(file),before);
+  const disabled=new ServerState("http://localhost",file,{guildPrices:options.guildPrices});
+  assert.equal((gameResponse(disabled,"/guild/Update",body) as any).result_code,2001);assert.deepEqual(readFileSync(file),before);
+  const guilds=(state as any).guilds,persist=(state as any).persist;(state as any).persist=()=>{throw new Error("fixture disk error");};
+  assert.throws(()=>update(),/disk error/);assert.equal((state as any).guilds,guilds);assert.equal(game.gacha_iap_qty,50);assert.equal(game.gacha_free_qty,5);assert.deepEqual(readFileSync(file),before);
+  (state as any).persist=persist;
+  const result=update({guild_id:2,price:0});assert.equal(result.result_code,1);assert.equal(result.ret_data.guilds[0].id,1);
+  assert.deepEqual(result.ret_data.user,{gold:{prev:100,cur:100},iap:{prev:50,cur:1},free_iap:{prev:5,cur:0},iap_qty:1,free_iap_qty:0});
+  assert.deepEqual(result.ret_data.guilds[0].members,record.members);assert.equal(JSON.stringify({...game,gacha_iap_qty:undefined,gacha_free_qty:undefined}),others);
+  const settled=readFileSync(file),retry=update();assert.equal(retry.result_code,1);assert.equal(retry.ret_data.user.iap_qty,1);
+  assert.deepEqual(retry.ret_data.user.iap,{prev:1,cur:1});assert.deepEqual(readFileSync(file),settled,"lost-reply retry echoes current record/wallet without debit/write");
+  const restart=new ServerState("http://localhost",file,options);
+  assert.equal((gameResponse(restart,"/guild/GetDetailInfo",{...users[0],guild_id:"[1]"}) as any).ret_data.guilds[0].name,"Renamed");
+  assert.deepEqual(readFileSync(file),settled);
+  const supervisor=gameResponse(restart,"/guild/Update",{...body,...users[2],desc:"Supervisor edit"}) as any;
+  assert.equal(supervisor.result_code,1);assert.equal(supervisor.ret_data.my_guild.role,2);
+  assert.equal(supervisor.ret_data.user.iap.prev,supervisor.ret_data.user.iap.cur,"other metadata has zero fee in local mode");
+  const final=JSON.parse(readFileSync(file,"utf8"));assert.deepEqual(final.guilds[1],{...saved.guilds[1],member_cnt:1});
+  assert.deepEqual(final.gameStates.slice(1),saved.gameStates.slice(1),"other manager/member/game wallets remain unchanged");
+} finally {rmSync(dir,{recursive:true,force:true});}
+console.log("Local Guild settings state: default-disabled mode, manager ownership, coherent delta/scalar wallet receipt, atomic rollback, free-first fee, lost-response no-op/restart repair and unchanged members/other wallets passed.");

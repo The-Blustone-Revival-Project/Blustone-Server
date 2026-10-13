@@ -30,7 +30,10 @@ restores original arrays/counter/wallet before returning success. Corrupt or
 colliding saved counters refuse startup without file replacement.
 
 The receipt has flat my_guild, complete guilds[] and user.gold with BOTHprev
-andcur. Generic SyncUser ignores cur-only gold. Existing equipment level/rank
+andcur. Follow-up audit corrected a critical omission: SyncUser also reads
+iap_qty/free_iap_qty unconditionally and overwrites missing values with0.
+Both authoritative scalars and coherent unchanged paid/free currency pairs
+are now supplied and validated before commit. Generic SyncUser ignores cur-only gold. Existing equipment level/rank
 and Gem-mount callbacks are different: direct cur setters at Gf5bc1c/f5bc6a,
 Gf5c6ae/f5c6fc and Ga5cac2/a5cb12, with no bounded direct SyncUser call. Their
 cur-only receipts remain valid; do not generalize the Found receipt to them.

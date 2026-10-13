@@ -1,3 +1,34 @@
+## Latest continuation: local Guild updates and scalar-wallet fix (2026-10-13)
+
+Previous turn was progress: local Found109 checks. Same2 agents reused;
+full113 checks/build and encrypted --fixture --profile current-e6-guild
+--exercise-guild-local-update create/update/retry/restart proof pass.
+CRITICAL correction: genericSyncUser paid/free scalars are UNCONDITIONAL;
+missing iap_qty/free_iap_qty resets native wallets0! Found now renders strict
+precommit guildWalletReceipt currency pairs PLUS coherent authoritative scalars.
+Oversized wallet refuses BEFORE Guild/gold commit. Prior cur-only Found gold
+fix alone was insufficient; no live mode was activated, no live wallet affected.
+
+Update defaultdisabled; explicit guildUpdateMode/BLUSTONE_GUILD_UPDATE_MODE=
+local-manda-free-first requires selected/pinned art. Same6 setting fields,
+implicit actor-owned Guild target, role1/2 management UI access proved and
+adopted as LOCAL server policy. Name2/region3 changed quotesManda1 required;
+native missing-price0 display notfree proof. Other metadata fee0/no-op paths,
+local ASCII/text/slider/stock-change/nonempty region bounds, declared free-first
+debit, signed32 delta bound, atomic metadata/paid/free rollback. Members/rank/
+contribution/GvG/allocator/other wallets preserved. Exactretry nofee/write/full
+updatedINFO/user pairs+scalars repairs lostreply. Modify callback populates
+first INFO (Found's examined callbackdefault quirk is separate).
+Original debitpriority/region/font/pending and complete admission unproved.
+BADWORD_RO data ACTUALLY EXISTS EN502/JA31/KO4159/SC4082/TC85; matching/locale
+semantics stillunknown, not promoted as original policy. No invented minlevel.
+
+Compiled authored17gold100->83 Found,23+31Manda50paid/5free->1paid/0free Update,
+replay nocharge/write/newname/cache/restart verified. Two independent reviews
+passed plus Found precommit-width correction. No live source/profile/save/
+client/input/APK changes, bothmodesdefaultdisabled. Escape hold persists;
+DataDump read-only, original/private preserved; collector/Docker/inference off.
+
 ## Latest continuation: explicit LOCAL Guild creation backend (2026-10-13)
 
 Previous goal turn was progress: discovery/ranking105 checks. Reused same2
