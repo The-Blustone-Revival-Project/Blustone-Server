@@ -1,18 +1,19 @@
 import type {LocalCardInstance,LocalItemInstance} from "./game.js";
 import {parseEquipmentUpgradeRequest} from "./equipment-upgrade-request.js";
 import {equipmentTransition} from "./equipment-transition.js";
-import {noGuildEquipmentLevelFee} from "./equipment-fee.js";
+import {noGuildEquipmentLevelFee,nativeGuildSaleValue,EQUIPMENT_POPUP_GOLD_PRICE_TYPE} from "./equipment-fee.js";
 import {calculateHunterEquipment,parseHunterEquipment} from "./hunter-equipment.js";
 import {equipmentLevelPriceAt,equipmentRankPriceAt,type EquipmentLevelPrice,type EquipmentRankPrice} from "./equipment-prices.js";
 const parts=["weapon","armor","accessory"] as const;
 interface Context {
   cards:readonly LocalCardInstance[]; items:readonly LocalItemInstance[]; gold:number;
   guildId:number; busyIds:ReadonlySet<number>;
+  guildLevelBenefit?:{mode:number;value:number}|null;
   reference:(id:string)=>{attr:number;equipment:unknown[]}|undefined;
   levelPrices:readonly EquipmentLevelPrice[];rankPrices:readonly EquipmentRankPrice[];
 }
-/** Configured, no-Guild popup path only. No original prices/ranges granted and
- * no nonempty source-Hunter workflow inferred from the general requester. */
+/** Configured ordinary popup path. Affiliated level fees require an explicit
+ * valid Guild table; affiliated rank/source-Hunter consumers stay unclosed. */
 export function planEquipmentUpgrade(action:"level"|"rank",payload:unknown,context:Context) {
   try {
     const request=parseEquipmentUpgradeRequest(action,payload);
@@ -47,8 +48,14 @@ export function planEquipmentUpgrade(action:"level"|"rank",payload:unknown,conte
       add(quote.item_ref_id,quote.item_qty);
     }
     if(request.price_type!==quote.price_type) throw new TypeError("Equipment payment does not match quote");
-    // Both buttons use gold2. The supported no-affiliation path has no benefit.
-    const fee=noGuildEquipmentLevelFee(quote,context.guildId);
+    // Both buttons use gold2; only the level popup's Guild TYPE1 caller is closed.
+    let fee:number;
+    if(context.guildId===0) fee=noGuildEquipmentLevelFee(quote,0);
+    else {
+      if(action!=="level"||context.guildLevelBenefit===undefined) throw new TypeError("Guild equipment fee requires explicit valid level references and recovered level consumer");
+      if(quote.price_type!==EQUIPMENT_POPUP_GOLD_PRICE_TYPE) throw new TypeError("Guild equipment popup requires gold2");
+      fee=nativeGuildSaleValue(quote.price,context.guildLevelBenefit);
+    }
     if(!Number.isSafeInteger(context.gold)||context.gold<fee||context.gold>0xffff_ffff)
       throw new TypeError("Equipment gold is invalid or insufficient");
     const items=context.items.map(item=>({...item}));

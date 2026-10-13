@@ -1,3 +1,58 @@
+## Latest continuation: Guild progression references and affiliated Gym level fees (2026-10-13)
+
+Previous turn progressed invitations/mail/profilebatch5 (06b5a89). Same two
+agents reused for benefits/consumers and contribution/reward source plus review.
+Full120 checks/build, focusedschema/state/selectorreview and compiled encrypted
+--fixture --profile current-e6-guild --exercise-guild-equipment reference4/
+level9->10/gold100->85/material1/rankclaimrefusal/restart proof passed.
+
+Fourrefs nowexactlytyped/authenticated, bypass genericmetadata: LevelBenefits
+bare{level,contribution,optional equipment_level_up/gem_level_up/traning/intrust/
+ap}; BenefitsStr objectoptionalstrings; ContributionPoints objectdecimalkeys
+1..4 signed32; ContributionReward bare{contribution,reward:{ap?,gold?,item_list
+[{id,qty}]}} directJSON notstring. Explicitconstructor/env snapshots only,
+detachedresponses, no originalnumericrows recovered in bounded13clienttables/
+datasets. Unknown/duplicate/rounded/malformed data refuses; numericmileage
+needspositiveMAX, knownitemIDs; no actionpoints/defaultrewards guessed.
+
+Numericparser PUSH_FRONT reverseswireorder. Strictconfiguredascendinglevel/
+threshold and explicitbase0/threshold0 required asLOCALsupported admission.
+CalcLevel zeroC->0, positiveC intervals/caphighest. GetGuildLevelRef emptycache
+DEREFERENCES sentinel BEFOREcountguard: neverinferjoined+[] safe/fullprice.
+Mileage UI modulo/divides cachedMAX: emptyrewardcache also not safeproof.
+Unconfigured UNAFFILIATED bootstrap keepscanonicalnumeric[]/text&points{}
+successwithoutmockrows; NONZEROaffiliation/pendingID refuses unavailabledata
+beforecacheclear. This doesNOT proveemptyrefs safeforGuildUI; configurevalid
+suppliedrefs before nativeprogressionpanel validation. Explicitemptytables reject.
+
+FindBonusBenefit testsONLY personalGuildID!=0, no status/newbie/role gate;
+loads cachedGuild INFO AGGREGATE contribution (notpersonalpoints), selectedlevel
+benefit map. Missingbenefit in VALIDtable isnull/baseprice; present0 meanszero
+multiplier. FeeTYPE1..4 mode1 per-thousandbinary32multiply/truncate/saturate,
+APTYPE5mode0add. Callerclosed equipmentLEVEL TYPE1, Gem2, training+trainingrank3,
+Entrust4 literalbase150 (paymentproducerunproved). EquipmentRANK nottrainingrank:
+no affRankbonus applied/claimed; stillrefuses. Pending canqualify ifmatchingINFO.
+
+Configured affiliated equipmentLEVEL nowsettles exactselectedfee, original
+ordinaryprice/material/target guards and atomicrollback unchanged. TestGuild
+aggregate100/personal0 selects900/1000; price17 fee15 gold100->85. Nullbenefit
+fromvalidbase table remainsfullfee. No data=>affiliatedfee gate; noGuildunchanged.
+Nativequoteparity requirescurrentclientINFO/refcaches; no renderedUIproof. Other
+Gem/training/Entrust/APperk settlements remainincomplete, publicationnotgrant.
+
+Donation amountuint32/auth5, source goldslider0/step1000/maxmin(roundedgold,
+100000), exactgold->contributionfloor(amount/10) PREVIEW. Rewardclaim auth-only;
+actualcallback SyncUser/item/card/special/achievements, walletscalars needed.
+Cyclicalmaxthreshold/mileage doesNOT proveclaimledger/reset/eligibility/replay;
+Donate/ReceiveContributionReward remain2001, no inventedgrant orcontribution.
+
+Proofsource quantities/thresholds/descriptions authored, not originaleconomy.
+Guild/leader/othergameplay preserved; onlytargetfee/material/level changed plus
+normalregistration/lobby APBPanchors. No livegameinputs/profileactivation/APK
+changes. NativeprogressionUI pending underEscapehold; DataDumpread-only,
+original/private preserved; collector/Docker/inferenceoff; Server/Instrumented
+only writable. Goal remains broader than this milestone.
+
 ## Latest continuation: invitations, native Guild Mail and profile batches (2026-10-13)
 
 Previous turn progressed roles/successor/bans (b7c0bb7). Same two agents reused

@@ -344,7 +344,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     return state.socialDiscoveryAction(route, payload, headers);
   if (["/relation/GetLikeCnt", "/relation/ToggleLike"].includes(route))
     return state.socialLikeAction(route, payload, headers);
-  if (route === "/lobby/GetGuildInfo" || route === "/reference/GetGuildPrices" || route.startsWith("/guild/") || route.startsWith("/gvg/"))
+  if (route === "/lobby/GetGuildInfo" || route.startsWith("/reference/GetGuild") || route.startsWith("/guild/") || route.startsWith("/gvg/"))
     return state.guildAction(route, payload, headers);
   if (route === "/shop/GetHotDealSummaryList") return state.envelope([]);
 

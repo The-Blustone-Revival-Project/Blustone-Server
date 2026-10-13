@@ -17,6 +17,8 @@ import {guildRolePolicy,type GuildRolePolicy,planLocalGuildAppoint} from "./guil
 import {planLocalGuildBanish} from "./guild-local-banish.js";
 import {guildNotificationState,guildNotificationRows,planGuildNotificationChange,type GuildNotification} from "./guild-notification-state.js";
 import {guildInvitationState,planLocalGuildInvitation,reconcileGuildInvitationJoins,type GuildInvitation} from "./guild-invitations.js";
+import {guildLevelBenefits,guildBenefitStrings,guildContributionPoints,guildContributionRewards,selectedGuildBenefit,
+  type GuildLevelBenefit,type GuildBenefitStrings,type GuildContributionReward} from "./guild-progression-reference.js";
 import {BADWORD_SOURCE,originalBadwordMatcher} from "./badword-source.js";
 import { GUILD_SPRITE_EMBLEMS,GUILD_EMBLEM_SOURCE,verifyGuildEmblemSource } from "./guild-emblems.js";
 import {repositoryPath} from "./paths.js";
@@ -544,6 +546,10 @@ export class ServerState {
   private readonly guildManagementMode:"disabled"|"local-management";
   private readonly guildRolePolicy?:Readonly<GuildRolePolicy>;
   private readonly guildInvitationMode:"disabled"|"local-invitations";
+  private readonly guildLevels?:readonly GuildLevelBenefit[];
+  private readonly guildBenefitText?:GuildBenefitStrings;
+  private readonly guildPoints?:Readonly<Record<string,number>>;
+  private readonly guildRewards?:readonly GuildContributionReward[];
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
@@ -552,7 +558,8 @@ export class ServerState {
       guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first";
       guildMembershipMode?:"disabled"|"local-public-approval";guildMembershipPolicy?:unknown;
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
-      guildInvitationMode?:"disabled"|"local-invitations" } = {}) {
+      guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
+      guildContributionPoints?:unknown;guildContributionRewards?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -629,6 +636,14 @@ export class ServerState {
     if(invitationMode!=="disabled"&&invitationMode!=="local-invitations") throw new TypeError("Unknown Guild invitation mode");
     if(invitationMode!=="disabled"&&membershipMode!=="local-public-approval") throw new TypeError("Local Guild invitations require the complete membership mode/policy");
     this.guildInvitationMode=invitationMode;
+    const progression=(key:"guildLevelBenefits"|"guildBenefitStrings"|"guildContributionPoints"|"guildContributionRewards",env:string)=>
+      Object.hasOwn(options,key)?options[key]:process.env[env]===undefined?undefined:JSON.parse(process.env[env]!);
+    const levels=progression("guildLevelBenefits","BLUSTONE_GUILD_LEVEL_BENEFITS_JSON"),text=progression("guildBenefitStrings","BLUSTONE_GUILD_BENEFIT_STRINGS_JSON"),
+      points=progression("guildContributionPoints","BLUSTONE_GUILD_CONTRIBUTION_POINTS_JSON"),rewards=progression("guildContributionRewards","BLUSTONE_GUILD_CONTRIBUTION_REWARDS_JSON");
+    if(levels!==undefined) this.guildLevels=Object.freeze(guildLevelBenefits(levels).map(row=>Object.freeze(row)));
+    if(text!==undefined) this.guildBenefitText=Object.freeze(guildBenefitStrings(text));
+    if(points!==undefined) this.guildPoints=Object.freeze(guildContributionPoints(points));
+    if(rewards!==undefined) this.guildRewards=Object.freeze(guildContributionRewards(rewards,knownItems));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -1272,6 +1287,18 @@ export class ServerState {
     if(["/guild/Apply","/guild/CancelApplication","/guild/Leave","/guild/ConfirmApplication"].includes(route))
       return this.localGuildMembership(account,route,payload);
     if(route==="/reference/GetGuildPrices") return this.envelope(this.guildPrices.map(row=>({...row})));
+    const progression:Record<string,unknown>={"/reference/GetGuildLevelBenefits":this.guildLevels,
+      "/reference/GetGuildLevelBenefitsStr":this.guildBenefitText,"/reference/GetGuildContributionPoints":this.guildPoints,
+      "/reference/GetGuildContributionReward":this.guildRewards};
+    if(Object.hasOwn(progression,route)) {
+      if(progression[route]!==undefined) return this.envelope(structuredClone(progression[route]));
+      // Preserve the unaffiliated bootstrap's successful empty reference shape.
+      // Affiliated/pending IDs must not clear a native table whose empty lookup
+      // can dereference its sentinel or divide by a zero mileage maximum.
+      if(this.guildPersonal(account.pvid).my_guild.guild_id!==0)
+        return this.failure(2001,"Original Guild progression reference unavailable; explicit configured table required for affiliation");
+      return this.envelope(route==="/reference/GetGuildLevelBenefitsStr"||route==="/reference/GetGuildContributionPoints"?{}:[]);
+    }
     // Imported joined records are explicit local state, never inferred from
     // requests. my_guild is flat PLAY_DATA, distinct from full Guild INFO.
     if (route === "/lobby/GetGuildInfo") return this.envelope(this.guildPersonal(account.pvid));
@@ -2123,8 +2150,10 @@ export class ServerState {
     const busyIds=new Set([...(game.active_battle?.state==="active"?game.active_battle.deck_inst_ids:[]),
       ...(game.arena.active?.deck_inst_ids??[]),...(game.search.active?.deck_inst_ids??[])]);
     const guild=(this.guildAction("/lobby/GetGuildInfo",payload,headers).ret_data as {my_guild:{guild_id:number}}).my_guild.guild_id;
+    const guildRecord=this.guilds?.find(record=>record.id===guild);
+    const guildLevelBenefit=guild&&guildRecord&&this.guildLevels?selectedGuildBenefit(this.guildLevels,guildRecord.contribution,"equipment_level_up"):undefined;
     const plan=planEquipmentUpgrade(action,payload,{cards,items:game.items,gold:game.gold,
-      guildId:guild,busyIds,levelPrices:this.equipmentLevelPrices,rankPrices:this.equipmentRankPrices,
+      guildId:guild,guildLevelBenefit,busyIds,levelPrices:this.equipmentLevelPrices,rankPrices:this.equipmentRankPrices,
       reference:id=>{const row=starterReference.find(row=>row.base.id===id&&row.base.is_source===0);
         return row?{attr:row.base.attr,equipment:row.equipment}:undefined;}});
     if("error" in plan) return this.failure(2001,plan.error!);

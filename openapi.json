@@ -4782,7 +4782,7 @@
     "/card_handler/LevelUpEquipment": {
       "post": {
         "summary": "LevelUpEquipment",
-        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Active targets, missing data, unsupported Guild/currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
+        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Affiliated equipment LEVEL fees additionally support valid explicit Guild level tables selected by aggregate INFO contribution and native per-thousand binary32 arithmetic; absent benefit in a valid table means base fee. Affiliated rank consumers remain unproved and refuse. Active targets, missing data and unsupported currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
         "tags": [
           "Equipment"
         ],
@@ -4863,7 +4863,7 @@
     "/card_handler/RankUpEquipment": {
       "post": {
         "summary": "RankUpEquipment",
-        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Active targets, missing data, unsupported Guild/currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
+        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Affiliated equipment LEVEL fees additionally support valid explicit Guild level tables selected by aggregate INFO contribution and native per-thousand binary32 arithmetic; absent benefit in a valid table means base fee. Affiliated rank consumers remain unproved and refuse. Active targets, missing data and unsupported currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
         "tags": [
           "Equipment"
         ],
@@ -15591,7 +15591,7 @@
     "/reference/GetCardEquipmentLevelUpPrice": {
       "post": {
         "summary": "GetCardEquipmentLevelUpPrice",
-        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Active targets, missing data, unsupported Guild/currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
+        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Affiliated equipment LEVEL fees additionally support valid explicit Guild level tables selected by aggregate INFO contribution and native per-thousand binary32 arithmetic; absent benefit in a valid table means base fee. Affiliated rank consumers remain unproved and refuse. Active targets, missing data and unsupported currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
         "tags": [
           "Equipment"
         ],
@@ -15672,7 +15672,7 @@
     "/reference/GetCardEquipmentRankUpPrice": {
       "post": {
         "summary": "GetCardEquipmentRankUpPrice",
-        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Active targets, missing data, unsupported Guild/currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
+        "description": "Authenticated equipment reference/upgrade contract. Price reads return explicit immutable native arrays; absent tables return []. Configured ordinary references and prices permit no-Guild gold2 level-up and exact-cap rank-up with no source Hunters/card_qty0. Rank-up preserves level. Required unlocked material quantities and gold debit atomically; absolute receipts use user.gold.cur, user.card and user.item[{inst_id,qty}]. Affiliated equipment LEVEL fees additionally support valid explicit Guild level tables selected by aggregate INFO contribution and native per-thousand binary32 arithmetic; absent benefit in a valid table means base fee. Affiliated rank consumers remain unproved and refuse. Active targets, missing data and unsupported currency/source workflows refuse; persistence failure restores prior arrays/wallet. Prices and stats are supplied local/recovered data, not default original balances. Level requests have no recovered expected-level/intent field: identical successful calls can be separate upgrades. Native fields: inst_id decimal uint64, part1..3, price_type2, rank source_inst_ids null for the normal empty vector or JSON uint64 vector for the broader unreconstructed source workflow.",
         "tags": [
           "Equipment"
         ],
@@ -16655,10 +16655,10 @@
     },
     "/reference/GetGuildContributionPoints": {
       "post": {
-        "summary": "Recovered /reference/GetGuildContributionPoints route",
-        "description": "The route literal **/reference/GetGuildContributionPoints** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Read configured Guild progression: GetGuildContributionPoints",
+        "description": "Object with all decimal-string keys1/2/3/4 and exact signed32 values. Original action coefficients remain absent; configured reads do not authorize contribution event production or donation settlement. Authenticated immutable constructor/env snapshots, detached responses and no state mutation. Explicit guildLevelBenefits/guildBenefitStrings/guildContributionPoints/guildContributionRewards or corresponding BLUSTONE_GUILD_*_JSON options. Unconfigured unaffiliated bootstrap returns canonical empty array/object; nonzero affiliation or pending Guild ID refuses unavailable tables before unsafe native empty-level sentinel or zero-mileage lookup. Empty nonempty-required configured numeric tables reject startup. Native Guild progression UI requires valid supplied references and remains unverified; original numeric rows not recovered.",
         "tags": [
-          "Reference data"
+          "Guild"
         ],
         "parameters": [
           {
@@ -16730,16 +16730,16 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-level-benefits-native-2026-10-13.md; docs/guild-contribution-native-2026-10-13.md; docs/guild-progression-configured-2026-10-13.md; tests/guild-progression-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/reference/GetGuildContributionReward": {
       "post": {
-        "summary": "Recovered /reference/GetGuildContributionReward route",
-        "description": "The route literal **/reference/GetGuildContributionReward** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Read configured Guild progression: GetGuildContributionReward",
+        "description": "Bare {contribution,reward:{ap?,gold?,item_list?:[{id,qty}]}} rows with unique thresholds, positive maximum and known item IDs. Reward JSON is an object, not a serialized string. Native mileage displays aggregate contribution modulo maximum; this does not establish a claim ledger, reset or eligibility. Donate/ReceiveContributionReward remain refused. Authenticated immutable constructor/env snapshots, detached responses and no state mutation. Explicit guildLevelBenefits/guildBenefitStrings/guildContributionPoints/guildContributionRewards or corresponding BLUSTONE_GUILD_*_JSON options. Unconfigured unaffiliated bootstrap returns canonical empty array/object; nonzero affiliation or pending Guild ID refuses unavailable tables before unsafe native empty-level sentinel or zero-mileage lookup. Empty nonempty-required configured numeric tables reject startup. Native Guild progression UI requires valid supplied references and remains unverified; original numeric rows not recovered.",
         "tags": [
-          "Reference data"
+          "Guild"
         ],
         "parameters": [
           {
@@ -16811,16 +16811,16 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-level-benefits-native-2026-10-13.md; docs/guild-contribution-native-2026-10-13.md; docs/guild-progression-configured-2026-10-13.md; tests/guild-progression-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/reference/GetGuildLevelBenefits": {
       "post": {
-        "summary": "Recovered /reference/GetGuildLevelBenefits route",
-        "description": "The route literal **/reference/GetGuildLevelBenefits** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Read configured Guild progression: GetGuildLevelBenefits",
+        "description": "Bare level rows {level,contribution,equipment_level_up?,gem_level_up?,traning?,intrust?,ap?}. Explicit base0/threshold0 and strictly increasing wire order required; no sorting or invented default rows. Native fee types1..4 use per-thousand multiplier mode1, APtype5 additive mode0. Guild INFO aggregate contribution selects levels; personal points/status/newbie do not exclude the native nonzero-ID lookup. Only configured equipment-level fee settlement is integrated; other benefit effects remain incomplete. Authenticated immutable constructor/env snapshots, detached responses and no state mutation. Explicit guildLevelBenefits/guildBenefitStrings/guildContributionPoints/guildContributionRewards or corresponding BLUSTONE_GUILD_*_JSON options. Unconfigured unaffiliated bootstrap returns canonical empty array/object; nonzero affiliation or pending Guild ID refuses unavailable tables before unsafe native empty-level sentinel or zero-mileage lookup. Empty nonempty-required configured numeric tables reject startup. Native Guild progression UI requires valid supplied references and remains unverified; original numeric rows not recovered.",
         "tags": [
-          "Reference data"
+          "Guild"
         ],
         "parameters": [
           {
@@ -16892,16 +16892,16 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-level-benefits-native-2026-10-13.md; docs/guild-contribution-native-2026-10-13.md; docs/guild-progression-configured-2026-10-13.md; tests/guild-progression-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/reference/GetGuildLevelBenefitsStr": {
       "post": {
-        "summary": "Recovered /reference/GetGuildLevelBenefitsStr route",
-        "description": "The route literal **/reference/GetGuildLevelBenefitsStr** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Read configured Guild progression: GetGuildLevelBenefitsStr",
+        "description": "Object of optional equipment_level_up/gem_level_up/exact traning/intrust/ap string descriptions, not level rows or locale arrays. Strings do not establish numeric fees or entitlements. Authenticated immutable constructor/env snapshots, detached responses and no state mutation. Explicit guildLevelBenefits/guildBenefitStrings/guildContributionPoints/guildContributionRewards or corresponding BLUSTONE_GUILD_*_JSON options. Unconfigured unaffiliated bootstrap returns canonical empty array/object; nonzero affiliation or pending Guild ID refuses unavailable tables before unsafe native empty-level sentinel or zero-mileage lookup. Empty nonempty-required configured numeric tables reject startup. Native Guild progression UI requires valid supplied references and remains unverified; original numeric rows not recovered.",
         "tags": [
-          "Reference data"
+          "Guild"
         ],
         "parameters": [
           {
@@ -16973,7 +16973,7 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-level-benefits-native-2026-10-13.md; docs/guild-contribution-native-2026-10-13.md; docs/guild-progression-configured-2026-10-13.md; tests/guild-progression-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },

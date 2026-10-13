@@ -13,7 +13,8 @@ import {preflight} from './resources/verify.mjs';
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const exerciseBulk=process.argv.includes('--exercise-bulk');
 const exerciseSale=process.argv.includes('--exercise-sale');
-const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgrade');
+const exerciseGuildEquipment=process.argv.includes('--exercise-guild-equipment');
+const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgrade')||exerciseGuildEquipment;
 const exerciseGemReplacement=process.argv.includes('--exercise-gem-replacement');
 const exerciseGemSale=process.argv.includes('--exercise-gem-sale');
 const exerciseGuildRecords=process.argv.includes('--exercise-guild-records');
@@ -63,6 +64,7 @@ if(exerciseGemInventory && profileName!=='current-e6-gems') throw new Error('Gem
 if(exerciseGuildRecords && profileName!=='current-e6-guild') throw new Error('Guild lobby fixture requires prepared original Guild owner profile');
 if(exerciseGuildFound && profileName!=='current-e6-guild') throw new Error('Local Guild creation fixture requires original Guild profile');
 if(exerciseGuildMembership && profileName!=='current-e6-guild') throw new Error('Guild membership fixture requires original Guild profile');
+if(exerciseGuildEquipment && profileName!=='current-e6-guild') throw new Error('Guild equipment fixture requires original Guild profile');
 preflight(root,profile);
 const stamp=profile.env.BLUSTONE_RESLIST_STAMP;
 const expectedNames=profile.env.BLUSTONE_PACKAGE_NAMES.split(',').map(name=>name.slice(0,-4));
@@ -130,6 +132,8 @@ else {
     }
     const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
     seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===account.pvid?game:saved]);
+    if(exerciseGuildEquipment) seeded.guilds=[{id:7001,name:'Authored Guild',type:1,fc_point_limit:0,contribution:100,region:'EN',emblem_id:'GD_IMG_1',desc:'',rank:7,gvg_win_cnt:8,gvg_inf_win_cnt:9,
+      member_cnt:2,members:[{pvid:seeded.accounts[0].pvid,role:1,newbie:0,contribution:0,fc_point:0},{pvid:account.pvid,role:3,newbie:0,contribution:0,fc_point:0}]}];
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
   }
   if(exerciseGemInventory) {
@@ -178,6 +182,12 @@ const launch = async () => {
   env.BLUSTONE_GUILD_MANAGEMENT_MODE=exerciseGuildManagement?'local-management':'disabled';
   env.BLUSTONE_GUILD_INVITATION_MODE=exerciseGuildInvitations?'local-invitations':'disabled';
   if(exerciseGuildManagement) env.BLUSTONE_GUILD_ROLE_POLICY_JSON=JSON.stringify({formerLeaderRole:3,maxSupervisors:1});
+  if(exerciseGuildEquipment) {
+    env.BLUSTONE_GUILD_LEVEL_BENEFITS_JSON=JSON.stringify([{level:0,contribution:0},{level:1,contribution:100,equipment_level_up:900}]);
+    env.BLUSTONE_GUILD_BENEFIT_STRINGS_JSON=JSON.stringify({equipment_level_up:'Authored equipment description'});
+    env.BLUSTONE_GUILD_CONTRIBUTION_POINTS_JSON=JSON.stringify({'1':1,'2':2,'3':3,'4':4});
+    env.BLUSTONE_GUILD_CONTRIBUTION_REWARDS_JSON=JSON.stringify([{contribution:100,reward:{gold:1}}]);
+  }
   if(exerciseGuildFound) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17}]);
   if(exerciseGuildUpdate) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
   if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
@@ -426,9 +436,22 @@ try {
   const friendFloors=await secure('/mirage/GetFriendInfo',auth);
   assert.equal(friendFloors.result_code,1);assert.deepEqual(friendFloors.ret_data,[]);
   assert.deepEqual((await secure('/lobby/GetGuildInfo',auth)).ret_data,
+    exerciseGuildEquipment?{my_guild:{guild_id:7001,status:3,newbie:0,role:3,contribution:0}}:
     exerciseGuildRecords?{my_guild:{guild_id:7001,status:3,newbie:0,role:1,contribution:3}}:
       {my_guild:{guild_id:0,status:0,newbie:0,role:0,contribution:0}},'Guild boot membership is flat PLAY_DATA');
   assert.deepEqual((await secure('/guild/GetNotifications',auth)).ret_data,{guild_notifications:[]},'Named notification child reaches native cache replacement');
+  if(exerciseGuildEquipment) {
+    assert.deepEqual((await secure('/reference/GetGuildLevelBenefits',auth)).ret_data,[{level:0,contribution:0},{level:1,contribution:100,equipment_level_up:900}]);
+    assert.deepEqual((await secure('/reference/GetGuildLevelBenefitsStr',auth)).ret_data,{equipment_level_up:'Authored equipment description'});
+    assert.deepEqual((await secure('/reference/GetGuildContributionPoints',auth)).ret_data,{'1':1,'2':2,'3':3,'4':4});
+    assert.deepEqual((await secure('/reference/GetGuildContributionReward',auth)).ret_data,[{contribution:100,reward:{gold:1}}]);
+    const saved=JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===equipmentPvid)[1],target=saved.starter_cards.find(card=>card.ref_id==='001');
+    const request={...auth,inst_id:String(target.inst_id),part:'1',price_type:'2',source_inst_ids:'null'};
+    assert.equal((await secure('/card_handler/LevelUpEquipment',request)).ret_data.user.gold.cur,85,'Guild aggregate100 selects900/1000 multiplier, native binary32 fee17→15');
+    const settled=readFileSync(stateFile);
+    assert.equal((await secure('/card_handler/RankUpEquipment',request,{allowPlainRefusal:true})).result_code,2001,'Affiliated equipment rank consumer is still unproved');
+    assert.equal((await secure('/guild/ReceiveContributionReward',auth,{allowPlainRefusal:true})).result_code,2001);assert.deepEqual(readFileSync(stateFile),settled);
+  }
   if(exerciseGuildMembership&&!exerciseGuildInvitations) {
     const apply=id=>secure('/guild/Apply',{...auth,guild_id:String(id),desc:''});
     assert.equal((await apply(7001)).ret_data.my_guild.status,3);
@@ -572,7 +595,7 @@ try {
     const parsed=parseHunterEquipment([authoredEquipment]);
     assert.equal(calculateHunterEquipment(parsed,0,1,1).stats.atk,100);
     assert.equal(calculateHunterEquipment(parsed,0,1,10).stats.atk,280);
-    if(exerciseEquipmentUpgrade) {
+  if(exerciseEquipmentUpgrade&&!exerciseGuildEquipment) {
       assert.equal(Number(auth.pvid),equipmentPvid);
       const current=()=>JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===equipmentPvid)[1];
       const target=current().starter_cards.find(card=>card.ref_id==='001');
@@ -717,6 +740,7 @@ try {
   }
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
+  if(exerciseGuildEquipment) assert.deepEqual(after.guilds,before.guilds,'Guild metadata, contribution and members are not changed by configured Gym fee');
   if(exerciseGuildMembership) {
     assert.deepEqual(after.guilds[0],before.guilds[0],'Public join/departure preserves the Guild and counters');
     const expected=structuredClone(before.guilds[1]);expected.member_cnt=exerciseGuildManagement?1:2;
@@ -760,9 +784,9 @@ try {
     }
     if(exerciseEquipmentUpgrade&&entry[0]===equipmentPvid) {
       const expected=structuredClone(entry[1]),actual=structuredClone(found[1]);
-      expected.gold=31;const target=expected.starter_cards.find(card=>card.ref_id==='001');
-      target.weapon_rank=2;target.weapon_level=11;
-      expected.items[0].qty=0;
+      expected.gold=exerciseGuildEquipment?85:31;const target=expected.starter_cards.find(card=>card.ref_id==='001');
+      target.weapon_rank=exerciseGuildEquipment?1:2;target.weapon_level=exerciseGuildEquipment?10:11;
+      expected.items[0].qty=exerciseGuildEquipment?2:0;
       for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
       assert.deepEqual(actual,expected,'Equipment transaction must persist only exact selected fields and authored gold fees');
       continue;
@@ -810,6 +834,7 @@ try {
     encrypted_hunter_sale_fixture:exerciseSale,
     configured_equipment_reference_fixture:exerciseEquipment,
     configured_equipment_upgrade_fixture:exerciseEquipmentUpgrade,
+    configured_guild_equipment_fixture:exerciseGuildEquipment,
     configured_gem_inventory_fixture:exerciseGemInventory,
     configured_gem_mount_fixture:exerciseGemMount,
     configured_gem_replacement_fixture:exerciseGemReplacement,
