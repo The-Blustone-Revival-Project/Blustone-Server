@@ -21,6 +21,13 @@ npm start -- --host 127.0.0.1 --port 18081 --base-url http://127.0.0.1:18081 --s
 
 ## Resource bundle
 
+Guild text Chat is available in explicit local memory mode:
+`BLUSTONE_GUILD_CHAT_MODE=local-memory`. It requires existing joined Guild
+records and authenticated exchange sessions; ordinary encrypted text is
+supported, while fuel requests and persistent history remain incomplete.
+The default stays disabled. See the [Guild Chat workflow](docs/guild-chat-local-workflow-2026-10-13.md)
+for setup and the remaining native validation requirements.
+
 Resources are repo-local and pinned by `resources/manifests/imported-files.json`. Proprietary binary trees are ignored; a fresh checkout requires the locally retained bundle or an authorized distributed copy. Download the pinned resource bundle from the [server releases](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases). The migration also retained `local/bundles/resources-e6.zip`. Import it with:
 
 ```powershell

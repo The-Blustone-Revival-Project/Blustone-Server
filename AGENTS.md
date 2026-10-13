@@ -1,3 +1,33 @@
+## Latest continuation: opt-in encrypted Guild text WebSocket service (2026-10-13)
+
+Same two agents reused. Full133 test programs/build and both reviews passed.
+OrdinaryGuildsource UI TYPE1inner11000 +outer11000;
+receivedwho64/nickname/message/type11000, nooptimisticAddChatLog soownecho
+compatible. EmptyresponseaccessToken LOCALparser-compatible/no keyrotation.
+src/guild-chat.ts actualWS service onexistingHTTPport/chat/guild whenmode
+BLUSTONE_GUILD_CHAT_MODE=local-memory; defaultdisabled. Launcher/account URI
+guild_chat onlyadvertisedwhenenabled. No realenv/profile/input changed.
+
+UpgradeexistingboundXexchangeheader +currentjoined3/nonzeroGuild, validstored
+nickUTF8. Every sender/recipient account/server/Guild recheckedbeforeper-peer
+encryption; oldsubscriptions closeafterLeave/Banish/revocation. Authsenderwho/
+nickname only; spoofedfields/fuel/control/publicrequests refuse. Source-owned
+emptyarchiveGetChattingLog bare[] onlylocalmode, separatearchivedcacheclear.
+Incoming/queuedcap65536 LOCAL; no archive/rewards/dedup/replay law invented.
+SIGshutdown terminatesWSbeforeHTTPdrain. ws8.22.0 runtime locked;
+@types/ws8.18.2 is development-only.
+
+Realephemeralloopback fixture tests own/member echo, differentGuild isolation,
+pendingrefusal/newcomeradmission, UTF8/exact64request→low32reply policy,
+spoof/fuel/plaintext/corrupt refusals, leave/revocation, optinURIs/archive and
+bytepreserved complete saves/restart. Backendproof, NOTnativepixels. Source
+native-guild-chat-ordinary-text-2026-10-13.md +guild-chat-history-empty-native-
+2026-10-13.md; operator docs/guild-chat-local-workflow-2026-10-13.md.
+
+LiveUIpending/Escapehold; DataDumpreadonly/ServerInstrumentedwritable/private
+originalpreserved/collectorDockerInferenceoff. No APKpatch/release owed.
+GoalACTIVE; fuelAPsettlement/publicChat/persistence stillincomplete.
+
 ## Latest continuation: Chat bound account/key bridge and native JSON bodies (2026-10-13)
 
 Same two agents reused. Full132 test programs/build passed. Afterreviewarray

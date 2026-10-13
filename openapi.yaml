@@ -4156,29 +4156,19 @@ paths:
         ARM-device capture
   /guild/GetChattingLog:
     post:
-      summary: Recovered /guild/GetChattingLog route
-      description: >-
-        The route literal **/guild/GetChattingLog** was recovered from the ARM
-        native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Read local Guild archive
+      description: Authenticated bare ret_data array in explicit local-memory Guild
+        Chat mode; currently [] because this mode creates no persisted history.
+        Native ParseChatLog clears only the Guild archive cache, distinct from
+        its live socket log. Disabled mode refuses2001. Native archived row
+        order/time and durable history producers remain incomplete.
       tags:
         - Guild
       parameters: *a1
       requestBody: *a2
       responses:
         "200":
-          description: Mock-compatible response.
+          description: Empty explicit local archive or unavailable mode.
           content:
             application/json:
               schema:

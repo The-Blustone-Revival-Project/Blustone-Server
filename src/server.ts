@@ -15,6 +15,7 @@ import { readConfig, type ServerConfig } from "./config.js";
 import { applyBodyParsers, errorHandler, notFound, requestLogging } from "./middleware.js";
 import { registerRoutes, routeSummary, type RouteDefinition } from "./routes.js";
 import { webviewRouteDefinitions } from "./webview-routes.js";
+import {attachGuildChat} from "./guild-chat.js";
 
 export interface AppContext {
   app: express.Express;
@@ -43,9 +44,9 @@ const coreRoutes = new Set([
   "/pv_account/register_push_token",
 ]);
 
-export function createApp(options: { baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean } = {}): AppContext {
+export function createApp(options: { baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean;guildChatMode?:"disabled"|"local-memory" } = {}): AppContext {
   const baseUrl = options.baseUrl ?? "http://127.0.0.1:8080";
-  const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds });
+  const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds,guildChatMode:options.guildChatMode });
   const endpoints = discoverEndpoints(options.catalogPath ?? defaultCatalogPath());
   const openapi = buildOpenApi(endpoints, baseUrl);
   let runtimeReslistHeader: string | undefined;
@@ -608,6 +609,7 @@ export function startServer(port = Number(process.env.BLUSTONE_PORT ?? 8080), ho
     console.info(`Swagger UI: http://${config.host}:${config.port}/docs`);
     console.info(`Recovered route catalog: ${context.endpoints.length} routes`);
   });
+  const guildChat=context.state.guildChatEnabled()?attachGuildChat(server,context.state):undefined;
 
   // Connection-level diagnostics.
   //
@@ -672,6 +674,7 @@ export function startServer(port = Number(process.env.BLUSTONE_PORT ?? 8080), ho
   const shutdown = (signal: string) => {
     if (shuttingDown) return;
     shuttingDown = true;
+    guildChat?.close();
     console.info(`Received ${signal}; draining HTTP server`);
     server.close((error) => {
       if (error) {
