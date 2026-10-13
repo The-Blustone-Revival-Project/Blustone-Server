@@ -1,3 +1,36 @@
+## Latest continuation: donation-driven Hunter training and rank fees (2026-10-13)
+
+Same two agents reused. Full139 test programs/build and both reviews passed;
+each reviewer also ran Guildtraining, existing training and existing rank-up.
+
+Native source closes TYPE3 traning in BOTH Hunter Raise and Hunter rank-up:
+source.rank raw quote -> CalcBonusSaleValue -> accumulate EACH source fee.
+Do not discount an aggregated raw total; per-source float32/truncation differs.
+Source rank0 selects first price row; larger ranks clamp last. Shared fee now
+integrated in state.ts with current personal GuildID/current INFO aggregate and
+configured level table. Pending nonzero ID has no invented exclusion. Missing
+affiliated tables/INFO refuse; selected missing benefit/null or unaffiliated
+uses raw quote. No EXP benefit, equipment-rank discount or synthetic rank source
+admission added. Original quote/curve/benefit magnitudes remain fixtures.
+
+Actual disposable donor->Guildaggregate100->peerMEMBER0 Raise/rank verified:
+authored101/1001 at333/1000 charge66/666 (not aggregate67/667). Productionowned
+IDs, original-source grammar, correct removals/target changes/restart tested.
+Both Hunter consumption methods now rollback failed persistence across target
+EXP/rank/counter, gold, original roster/decks and rank book. Book validation is
+precomputed before mutation; malformedhistory refusal and real temp-write errors
+preserve in-memory/durable state. Guild/donor/other starter records unchanged.
+See docs/guild-hunter-training-workflow-2026-10-13.md and original source note.
+
+Explore audit found no new original numerical provider: /explore is already the
+Missing Hunter Aircraft Search implementation, not a new independent area. UI
+identity017 does not prove its currently local target/stage/cost/period tuple.
+docs/hunter-explore-original-provider-boundary-2026-10-13.md records scope.
+
+No live inputs/flags/profile/save/APK changes. Escape hold, DataDump read-only,
+private/original preservation and collector/Docker/inference hold persist.
+Native Hunter fee UI/original numeric refs remain pending. Goal ACTIVE.
+
 ## Latest continuation: opt-in atomic Guild gold donations (2026-10-13)
 
 Same two agents reused for source/transaction audits and independent reviews.

@@ -10,6 +10,7 @@ import {guildActionPrices,type GuildActionPrice} from "./guild-prices.js";
 import {planLocalGuildFound} from "./guild-local-found.js";
 import {planLocalGuildUpdate} from "./guild-local-update.js";
 import {planLocalGuildDonate} from "./guild-local-donate.js";
+import {nativeGuildSaleValue} from "./equipment-fee.js";
 import {guildWalletReceipt} from "./guild-wallet-receipt.js";
 import {guildMembershipPolicy,type GuildMembershipPolicy} from "./guild-membership-policy.js";
 import {guildApplications,guildPendingLobby,guildApplicantRows,type GuildApplication} from "./guild-applications.js";
@@ -56,7 +57,7 @@ import { LOCAL_MAIL_PORTRAIT_PATH, mailboxRequest, recordVictoryNotice } from ".
 import { LOGIN_BONUS_GOLD, LOGIN_BONUS_VIP_EXP, loginBonusInstance, observeLoginBonus } from "./login-bonus.js";
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { rankUpPrice, rankUpRows, rankUpTransition, trainingCurve, trainingPrices } from "./training.js";
+import { raisePrice, rankUpPrice, rankUpRows, rankUpTransition, trainingCurve } from "./training.js";
 import { completionOrders, earnedStageOrders } from "./progression.js";
 import { mergeTutorialRows } from "./tutorial.js";
 import { arenaRequest } from "./arena-service.js";
@@ -1998,11 +1999,26 @@ export class ServerState {
     return this.envelope({ inst_id: id, lock: card.lock });
   }
 
-  /** Training Raise: consumed source cards -> target exp + gold, atomically.
-   * ReqLevelUpCB nesting and object-valued removals are recovered in
-   * analysis/research/revival-systems-next.md. Prices/curves are fixtures.
-   * Non-success native callbacks skip mutation parsing; 2001 is a local
-   * refusal code, not a recovered original training-error mapping. */
+  /** Shared source-backed TYPE3 per-source fee; numeric quotes/benefits are
+   * independently supplied fixtures. Missing affiliated references refuse. */
+  private hunterTrainingGold(account:Account,prices:readonly number[]):number {
+    const id=this.guildPersonal(account.pvid).my_guild.guild_id;
+    let selected:null|{mode:number;value:number}=null;
+    if(id!==0) {
+      const guild=this.guilds?.find(record=>record.id===id);
+      if(!guild||!this.guildLevels)throw new TypeError("Guild Hunter training requires complete configured level references and current INFO");
+      selected=selectedGuildBenefit(this.guildLevels,guild.contribution,"traning");
+    }
+    // Both native Hunter popups transform EACH source price before addition.
+    // Applying the multiplier to an aggregate would change truncation results.
+    const cost=prices.reduce((sum,price)=>sum+nativeGuildSaleValue(price,selected),0);
+    if(!Number.isInteger(cost)||cost<0||cost>0xffff_ffff)throw new TypeError("Hunter training total exceeds wallet range");
+    return cost;
+  }
+
+  /** Training Raise consumes sources for target EXP and gold atomically.
+   * ReqLevelUpCB nesting/object removals are recovered; prices/curves remain
+   * fixtures. Non-success callbacks skip mutation parsing; 2001 is local. */
   trainCard(payload: Record<string, unknown>, headers: Record<string, string>) {
     const account=this.accountFor(payload,headers);
     const game=this.gameByPvid.get(account.pvid)??this.gameFor(account);
@@ -2036,13 +2052,16 @@ export class ServerState {
     if (Number(target.exp) >= targetCurve.maxExp) return refuse("training target is at its published level cap");
     // Native UpdateTraningInfo charges GetCardRaisePrice(SOURCE.rank) per card;
     // the one-row price fixture covers every supported positive rank.
-    const cost = sources.length * trainingPrices.level[0];
-    if (game.gold < cost) return refuse("not enough training gold");
+    let cost:number;
+    try{cost=this.hunterTrainingGold(account,sourceCards.map(card=>raisePrice(Number(card!.rank))));}
+    catch(error){return refuse(error instanceof Error?error.message:"Guild training fee unavailable");}
+    if (!Number.isInteger(game.gold)||game.gold<cost||game.gold>0xffff_ffff) return refuse("not enough or invalid training gold");
     const prevGold = game.gold;
     const prevExp = Number(target.exp);
     const gained = sourceCurves.reduce((sum, curve) => sum + curve!.sourceExp, 0);
     const curExp = Math.min(targetCurve.maxExp, prevExp + gained);
     const removed = new Set(sources);
+    const before={exp:target.exp,starters:game.starter_cards,recruits:game.recruited_cards,decks:game.decks};
     target.exp = curExp;
     game.gold -= cost;
     game.starter_cards = game.starter_cards.filter((card) => !removed.has(card.inst_id));
@@ -2050,7 +2069,8 @@ export class ServerState {
     // Case3 is not in native source protection. Remove any consumed source
     // from that unprotected preset rather than leaving dangling saved IDs.
     game.decks = game.decks.map((deck) => ({ ...deck, list: deck.list.map((id) => removed.has(id) ? 0 : id) }));
-    this.persist();
+    try{this.persist();}catch(error){target.exp=before.exp;game.gold=prevGold;game.starter_cards=before.starters;
+      game.recruited_cards=before.recruits;game.decks=before.decks;throw error;}
     return this.envelope({
       user: { gold: { prev: prevGold, cur: game.gold }, deck: partyDeck(game) },
       card: { target_inst: { inst_id: targetId, exp: { prev: prevExp, cur: curExp } },
@@ -2099,18 +2119,26 @@ export class ServerState {
     if (!reference?.stat.some((row) => row.rank === transition.rank && row.awk_step === 0) ||
         !starterLevels.card.some((row) => row.rank === transition.rank && row.level === 1))
       return refuse("next-rank reference is not reconstructed");
-    const cost = materials.reduce((sum, card) => sum + rankUpPrice(Number(card!.rank)), 0);
-    if (!Number.isSafeInteger(cost) || game.gold < cost) return refuse("not enough advancement gold");
+    let cost:number;
+    try{cost=this.hunterTrainingGold(account,materials.map(card=>rankUpPrice(Number(card!.rank))));}
+    catch(error){return refuse(error instanceof Error?error.message:"Guild advancement fee unavailable");}
+    if (!Number.isInteger(game.gold)||game.gold<cost||game.gold>0xffff_ffff) return refuse("not enough or invalid advancement gold");
+    let nextBook:LocalGameState["card_book"];
+    try{nextBook=mergeCardBook(game.card_book,[{...target,...transition}]);}
+    catch(error){return refuse(error instanceof Error?error.message:"Invalid Hunter book history");}
     const previous = { rank: Number(target.rank), rank_up_cnt: Number(target.rank_up_cnt), exp: Number(target.exp) };
     const previousGold = game.gold;
+    const before={target:{rank:target.rank,rank_up_cnt:target.rank_up_cnt,exp:target.exp},
+      starters:game.starter_cards,recruits:game.recruited_cards,decks:game.decks,book:game.card_book};
     Object.assign(target, transition);
     game.gold -= cost;
     const removed = new Set(sources);
     game.starter_cards = game.starter_cards.filter((card) => !removed.has(card.inst_id));
     game.recruited_cards = game.recruited_cards.filter((card) => !removed.has(card.inst_id));
     game.decks = game.decks.map((deck) => ({ ...deck, list: deck.list.map((id) => removed.has(id) ? 0 : id) }));
-    game.card_book = mergeCardBook(game.card_book, [target]);
-    this.persist();
+    game.card_book = nextBook;
+    try{this.persist();}catch(error){Object.assign(target,before.target);game.gold=previousGold;game.starter_cards=before.starters;
+      game.recruited_cards=before.recruits;game.decks=before.decks;game.card_book=before.book;throw error;}
     return this.envelope({ user: { gold: { prev: previousGold, cur: game.gold }, deck: partyDeck(game) },
       card: { target_inst: { inst_id: targetId,
         rank: { prev: previous.rank, cur: transition.rank },

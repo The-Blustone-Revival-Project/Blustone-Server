@@ -59,3 +59,7 @@ scene-safety assertion follows from this transaction.
 
 Source: guild-contribution-native-2026-10-13.md and
 guild-contribution-counter-semantics-2026-10-13.md.
+
+Donation-driven Guild aggregate thresholds now also feed source-backed per-card
+Hunter Raise/rank fees. See guild-hunter-training-workflow-2026-10-13.md. Benefit
+magnitudes are still supplied data; this does not enable contribution claims.

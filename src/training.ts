@@ -10,8 +10,12 @@ export const rankUpRows = Array.from({ length: 5 }, (_, index) => ({
   rank: index + 1, src_cnt: index < 4 ? index + 1 : 0, stat_bonus: 5,
 }));
 
+/** Native rank0 selects the first quote; larger ranks clamp to the last row. */
+export function raisePrice(rank:number) {
+  return trainingPrices.level[Math.max(0,Math.min(rank-1,trainingPrices.level.length-1))];
+}
 export function rankUpPrice(rank: number) {
-  return trainingPrices.rank[Math.min(rank - 1, trainingPrices.rank.length - 1)];
+  return trainingPrices.rank[Math.max(0,Math.min(rank - 1, trainingPrices.rank.length - 1))];
 }
 
 /** Inferred server policy consistent with native credited placeholders.

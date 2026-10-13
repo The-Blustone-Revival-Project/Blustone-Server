@@ -1,0 +1,61 @@
+import assert from "node:assert/strict";
+import {readFileSync,writeFileSync,mkdtempSync,mkdirSync,rmdirSync,rmSync} from "node:fs";
+import {tmpdir} from "node:os";
+import path from "node:path";
+import {repositoryPath} from "../src/paths.js";
+Object.assign(process.env,JSON.parse(readFileSync(repositoryPath("config/profiles/current-e6-guild.json"),"utf8")).env);
+const {ServerState}=await import("../src/state.js"),{gameResponse}=await import("../src/game-routes.js");
+const {cardInstance}=await import("../src/bootstrap.js"),{trainingPrices,trainingCurve}=await import("../src/training.js");
+// Authored price/benefit probes; original numerical tables remain unknown.
+trainingPrices.level[0]=101;trainingPrices.rank[0]=1001;
+const dir=mkdtempSync(path.join(tmpdir(),"blustone-guild-training-"));
+try{
+  const file=path.join(dir,"state.json"),initial=new ServerState("http://localhost",file);
+  const donor=initial.registerGuest({device_id:"benefit-donor"},{}).ret_data as any;
+  const peer=initial.registerGuest({device_id:"benefit-peer"},{}).ret_data as any;
+  const saved=JSON.parse(readFileSync(file,"utf8"));
+  saved.gameStates[0][1].gold=5000;saved.gameStates[1][1].gold=5000;
+  const cards=Array.from({length:6},(_,i)=>cardInstance(1000101+i,"003",i>=3?2:1));
+  cards.forEach(card=>card.lock=0);
+  cards[3].exp=trainingCurve(cards[3])!.maxExp;
+  saved.gameStates[1][1].recruited_cards=cards;saved.gameStates[1][1].next_card_inst_id=1000107;
+  saved.guilds=[{id:1,name:"Guild",desc:"",type:1,fc_point_limit:0,region:"EN",emblem_id:"GD_IMG_1",contribution:0,rank:0,gvg_win_cnt:0,gvg_inf_win_cnt:0,
+    members:[{pvid:donor.pvid,role:1,newbie:0,contribution:0,fc_point:0},{pvid:peer.pvid,role:3,newbie:0,contribution:0,fc_point:0}]}];
+  writeFileSync(file,JSON.stringify(saved));
+  const options={guildDonationMode:"local-gold" as const,guildLevelBenefits:[{level:0,contribution:0},{level:1,contribution:100,traning:333}]};
+  const state=new ServerState("http://localhost",file,options),game=(state as any).gameByPvid.get(peer.pvid);
+  const raiseBody={...peer,target_inst_id:cards[0].inst_id,source_inst_list:JSON.stringify([cards[1].inst_id,cards[2].inst_id])};
+  const rankBody={...peer,target_inst_id:cards[3].inst_id,source_inst_list:JSON.stringify([cards[4].inst_id,cards[5].inst_id])};
+  const initialBytes=readFileSync(file),unconfigured=new ServerState("http://localhost",file);
+  assert.equal(unconfigured.trainCard(raiseBody,{}).result_code,2001);assert.equal(unconfigured.rankUpCard(rankBody,{}).result_code,2001);
+  assert.deepEqual(readFileSync(file),initialBytes,"Affiliated missing tables cannot silently charge a raw quote");
+  const baseReceipt=state.trainCard(raiseBody,{}) as any;assert.equal(baseReceipt.result_code,1);assert.equal(baseReceipt.ret_data.user.gold.prev-baseReceipt.ret_data.user.gold.cur,202,"Selected row without traning uses raw prices");
+  // Restore only this authored fixture before testing the donation transition.
+  writeFileSync(file,initialBytes);const active=new ServerState("http://localhost",file,options),activeGame=(active as any).gameByPvid.get(peer.pvid);
+  assert.equal((gameResponse(active,"/guild/Donate",{...donor,amount:"1000"}) as any).result_code,1);
+  const personal=(gameResponse(active,"/lobby/GetGuildInfo",peer) as any).ret_data;
+  assert.equal(personal.my_guild.contribution,0);assert.equal(personal.guilds[0].contribution,100,"Another member's donation qualifies the aggregate benefit");
+  const donateBytes=readFileSync(file),beforeRaise=structuredClone(activeGame),oldRoster=activeGame.recruited_cards,oldDecks=activeGame.decks;
+  mkdirSync(file+".tmp");assert.throws(()=>active.trainCard(raiseBody,{}));rmdirSync(file+".tmp");
+  assert.deepEqual(activeGame,beforeRaise);assert.equal(activeGame.recruited_cards,oldRoster);assert.equal(activeGame.decks,oldDecks);assert.deepEqual(readFileSync(file),donateBytes);
+  const raised=active.trainCard(raiseBody,{}) as any;assert.equal(raised.result_code,1);
+  assert.deepEqual(raised.ret_data.user.gold,{prev:5000,cur:4934},"Two per-source101×333 fees truncate to33+33, not aggregate67");
+  assert.deepEqual(raised.ret_data.card.removed_inst_list,[{inst_id:cards[1].inst_id},{inst_id:cards[2].inst_id}]);
+  assert.ok(raised.ret_data.card.target_inst.exp.cur>0);assert.equal(activeGame.recruited_cards.length,4);
+  const rankBytes=readFileSync(file),beforeRank=structuredClone(activeGame),rankRoster=activeGame.recruited_cards,oldBook=activeGame.card_book;
+  activeGame.card_book=[{ref_id:"",rank:1}];const corruptSnapshot=structuredClone(activeGame);
+  assert.equal(active.rankUpCard(rankBody,{}).result_code,2001);assert.deepEqual(activeGame,corruptSnapshot);assert.deepEqual(readFileSync(file),rankBytes);
+  activeGame.card_book=oldBook;
+  mkdirSync(file+".tmp");assert.throws(()=>active.rankUpCard(rankBody,{}));rmdirSync(file+".tmp");
+  assert.deepEqual(activeGame,beforeRank);assert.equal(activeGame.recruited_cards,rankRoster);assert.equal(activeGame.card_book,oldBook);assert.deepEqual(readFileSync(file),rankBytes);
+  const ranked=active.rankUpCard(rankBody,{}) as any;assert.equal(ranked.result_code,1);
+  assert.deepEqual(ranked.ret_data.user.gold,{prev:4934,cur:4268},"Two1001×333 fees truncate separately to333+333, not667");
+  assert.deepEqual(ranked.ret_data.card.removed_inst_list,[cards[4].inst_id,cards[5].inst_id]);
+  assert.deepEqual(ranked.ret_data.card.target_inst.rank,{prev:2,cur:3});assert.equal(activeGame.recruited_cards.length,2);
+  const final=readFileSync(file),reloaded=new ServerState("http://localhost",file,options),restored=(reloaded as any).gameByPvid.get(peer.pvid);
+  assert.equal(restored.gold,4268);assert.equal(restored.recruited_cards[1].rank,3);assert.deepEqual(restored.starter_cards,saved.gameStates[1][1].starter_cards);
+  const persisted=JSON.parse(final.toString());assert.deepEqual(persisted.gameStates[0][1],{...saved.gameStates[0][1],gold:4000});
+  assert.deepEqual(persisted.guilds,JSON.parse(donateBytes.toString()).guilds,"Training does not add another contribution or claim");
+  assert.deepEqual(readFileSync(file),final);
+}finally{rmSync(dir,{recursive:true,force:true});}
+console.log("Guild Hunter fees: donation→aggregate threshold→other-member Raise/rank, per-source truncation, absent-benefit raw prices, missing-table refusal, consumed-roster/deck/book/wallet rollback and restart passed; original price/benefit numbers remain authored.");
