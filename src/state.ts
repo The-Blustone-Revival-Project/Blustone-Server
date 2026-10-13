@@ -1345,6 +1345,10 @@ export class ServerState {
     // RequestMsgList's exact callback selects this child before ParseNoties;
     // a bare empty array skips the cache replacement rather than clearing it.
     if (route === "/guild/GetNotifications") return this.envelope({guild_notifications:this.guildVisibleNotifications(account.pvid)});
+    // RequestFuelList Ga7bcdc/innerGa90d90 selects this named row array,
+    // upserts each entry and returns its cached map. Empty is NOT a cache clear.
+    // No local fuel request producer, support amount or ownership exists yet.
+    if(route==="/guild/GetFuelRequests") return this.envelope({fuel_requests:[]});
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");
   }
 

@@ -730,6 +730,8 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-evidence":"docs/guild-notifications-native-2026-10-13.md; tests/guild-lobby.ts"
   }};
   explicitlyDocumented.add("/guild/GetNotifications");
+  paths["/guild/GetFuelRequests"]={post:operation("Read Guild fuel requests", "Authenticated auth-only request. Returns ret_data.fuel_requests as an empty array because no fuel request producer or imported records exist. Native callback numerically parses rows and upserts its existing full64-owner cache; [] does not clear that cache. No support count, AP amount, request ownership, expiry schedule or contribution reward is inferred. SupportFuel remains unavailable.","Guild",response("No local fuel request rows."))};
+  explicitlyDocumented.add("/guild/GetFuelRequests");
   for(const route of ["/guild/ReadNotifications","/guild/DeleteNotifications"]) {
     paths[route]={post:{...operation("Update owned Guild notification state","notification_id is a JSON-array form STRING of exact supported uint32 IDs. Entire batch must belong to authenticated recipient, including retained deletion tombstones. Atomic read/deleted flag mutation with rollback; exact retries no-write and never resurrect messages. Reply contains complete current visible guild_notifications rows. Native callbacks consume that named child, optional Guild data and achievements, not generic wallet SyncUser. These operations do not accept/revoke invitations; ConfirmInvitation is separate. Original producer expiry/other MSG kinds remain incomplete.","Guild"),
       "x-evidence":"docs/guild-notification-transitions-native-2026-10-13.md; tests/guild-invitation-state.ts"}};

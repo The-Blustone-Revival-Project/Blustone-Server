@@ -4231,29 +4231,20 @@ paths:
         ARM-device capture
   /guild/GetFuelRequests:
     post:
-      summary: Recovered /guild/GetFuelRequests route
-      description: >-
-        The route literal **/guild/GetFuelRequests** was recovered from the ARM
-        native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Read Guild fuel requests
+      description: Authenticated auth-only request. Returns ret_data.fuel_requests as
+        an empty array because no fuel request producer or imported records
+        exist. Native callback numerically parses rows and upserts its existing
+        full64-owner cache; [] does not clear that cache. No support count, AP
+        amount, request ownership, expiry schedule or contribution reward is
+        inferred. SupportFuel remains unavailable.
       tags:
         - Guild
       parameters: *a1
       requestBody: *a2
       responses:
         "200":
-          description: Mock-compatible response.
+          description: No local fuel request rows.
           content:
             application/json:
               schema:

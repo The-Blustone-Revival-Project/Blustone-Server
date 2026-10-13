@@ -1,3 +1,31 @@
+## Latest continuation: Guild fuel request read and GvG entry recovery (2026-10-13)
+
+Same two agents reused. Source Ga7bcdc auth5 /guild/GetFuelRequests→actual
+Full127 test programs/build passed; fuel and wire-string reviews clean.
+innerGa90d90 namedret_data.fuel_requests numericrowarray; UpdateFuel upserts
+FULL64ownerkey, noclear. Servernowauthenticates andreturns{fuel_requests:[]}
+because localrequestproducer/records absent. Empty isNOTcacheclear; no AP,
+request/expiry/supportlimit/reward values invented. SupportFuel remains2001.
+Focusedauth/detachment/no-grant/fullsave/restart checks pass; workflow/native
+docs/guild-fuel-request-list-native-2026-10-13.md. No requestmodel fabricated.
+
+ImportedGuildINFO name/desc/region/emblem nowrequirelosslessUTF8, preventing
+malformed surrogate JSON fromreachingnative. ValidKO/JP/emoji retained exactly;
+no ASCIIfilter/normalization applied to importedmetadata. Malformedsave startup
+refuses withoutoverwrite, knownhistory/identity admission unchanged.
+
+GvG /gvg/GetInst actualcallback freshzeroPLAY_DATA parse/replacespersonalcache;
+ordinaryGuildID != GvGuserGuildID, no enrollmentinference. Noresult1gate before
+innercache replacement found. GetRef requiresstrictgvg.id +fullschedule/camp/
+reward rows, success{} unsafe. Newdocs/gvg-entry-instance-cache-native-
+2026-10-13.md recordsexactbindings andmissingdata. No GvGroute/gameplay activated.
+Nextread requirescompleteadmittedpersonal snapshot plusreference/state-selector
+proof; don't substituteemptyreference or inventepochs/camps/enrollment.
+
+No liveinputs/APK/profileactivation; Escapehold persists. DataDumpreadonly,
+Server/Instrumentedonly writable, collector/Docker/inferenceoffline, originals/
+private preserved. GoalACTIVE.
+
 ## Latest continuation: original fish classification type17 (2026-10-13)
 
 Same two agents reused; stronger originalpositivechain supersedes unknownfish
