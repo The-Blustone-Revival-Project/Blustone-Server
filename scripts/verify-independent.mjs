@@ -15,13 +15,16 @@ const exerciseBulk=process.argv.includes('--exercise-bulk');
 const exerciseSale=process.argv.includes('--exercise-sale');
 const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgrade');
 const exerciseGemReplacement=process.argv.includes('--exercise-gem-replacement');
+const exerciseGemSale=process.argv.includes('--exercise-gem-sale');
 const exerciseGemMount=process.argv.includes('--exercise-gem-mount')||exerciseGemReplacement;
-const exerciseGemInventory=process.argv.includes('--exercise-gem-inventory')||exerciseGemMount;
+const exerciseGemInventory=process.argv.includes('--exercise-gem-inventory')||exerciseGemMount||exerciseGemSale;
+if(exerciseGemSale&&exerciseGemMount) throw new Error('Gem sale and mount fixtures are distinct verification runs');
 const authoredGemReference={id:'AUTHORED_GEM',name:'Authored HP Gem',desc:'Local parser fixture',res_id:'G_1_001_R1',set_effect_id:1,rank:1,target:1};
 const authoredGemStat={rank:1,awk_step:0,hp:'10000',atk:'0',def:'0',spd:'0',crt_chance:'0',crt_dmg:'0',penetration:'0',
   block_chance:'0',block_dec_dmg:'0',attr_enhance:'0',attr_resist:'0',hp_regen:'0',hp_up:'0',atk_up:'0',def_up:'0'};
 const authoredGem={ref_id:'AUTHORED_GEM',inst_id:'9007199254740993',rank:1,level:1,position:0,target_inst_id:'0',ability:'opaque',
   abilities:{level_up_failed:0,main:authoredGemStat,sub:[{...authoredGemStat,hp:'0',atk:'1000'}]}};
+const authoredGemInventory=exerciseGemSale?[authoredGem,{...authoredGem,inst_id:'18446744073709551615'},{...authoredGem,inst_id:'3'}]:[authoredGem];
 const exerciseEquipment=process.argv.includes('--exercise-equipment')||exerciseEquipmentUpgrade;
 const fixtureEquipmentMaterial=exerciseEquipmentUpgrade?
   (await import(pathToFileURL(path.join(root,'dist/src/search-capsules.js')).href)).SEARCH_CAPSULE_ID:'';
@@ -97,7 +100,7 @@ else {
   if(exerciseGemInventory) {
     const auth=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
     const account=fixture.accountFor(auth,{}),game=fixture.gameFor(account);gemPvid=account.pvid;
-    game.gem=12;game.owned_gems=[authoredGem];
+    game.gem=12;game.owned_gems=authoredGemInventory;
     const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
     seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===account.pvid?game:saved]);
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
@@ -108,6 +111,7 @@ let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
   if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
+  if(exerciseGemSale) env.BLUSTONE_GEM_SELL_PRICES_JSON=JSON.stringify([{rank:1,level:1,price_type:2,price:13}]);
   if(exerciseGemReplacement) {
     env.BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON=JSON.stringify([{level:authoredGem.level,price_type:2,price:13}]);
     env.BLUSTONE_GEM_COMBINATIONS_JSON=JSON.stringify([{id:1,count:2,rank:0,awk_step:0,
@@ -179,7 +183,8 @@ async function secure(route,values,{allowPlainRefusal=false}={}) {
   const decipher=crypto.createDecipheriv('aes-256-cbc',secret.subarray(0,32),secret.subarray(32,48));const decoded=Buffer.concat([decipher.update(bytes),decipher.final()]);
   assert.equal(response.headers.get('pv-signature'),crypto.createHmac('sha384',secret).update(decoded).digest('base64'));
   const text=decoded.toString('utf8');
-  if(exerciseGemInventory && ['/lobby/GetGemInven','/card_handler/EquipGem'].includes(route) && !allowPlainRefusal)
+  if(exerciseGemInventory && ['/lobby/GetGemInven','/card_handler/EquipGem'].includes(route) && !allowPlainRefusal &&
+    !(exerciseGemSale && route==='/lobby/GetGemInven' && JSON.parse(text).ret_data?.length===0))
     assert.ok(text.includes('"inst_id":9007199254740993'),'Large Gem identity must be an exact integer JSON token, never a strtod string');
   const {parseStateWithGemIds}=await import(pathToFileURL(path.join(root,'dist/src/gem-wire.js')).href);
   return parseStateWithGemIds(text);
@@ -192,11 +197,23 @@ try {
   if(exerciseGemInventory) {
     assert.equal(Number(auth.pvid),gemPvid);
     assert.deepEqual((await secure('/reference/GetGem',auth)).ret_data,[authoredGemReference]);
-    assert.deepEqual((await secure('/lobby/GetGemInven',auth)).ret_data,[authoredGem]);
+    assert.deepEqual((await secure('/lobby/GetGemInven',auth)).ret_data,authoredGemInventory);
     const beforeMount=readFileSync(stateFile);
     assert.equal((await secure('/card_handler/EquipGem',{...auth,target_inst_id:'1000001',price_type:'2',combination:'{}'},
       {allowPlainRefusal:true})).result_code,2001,'Inventory read support must not fake an unproved mount');
     assert.deepEqual(readFileSync(stateFile),beforeMount);
+    if(exerciseGemSale) {
+      const current=JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===gemPvid)[1];
+      assert.deepEqual((await secure('/reference/GetGemSellPrice',auth)).ret_data,[{rank:1,level:1,price_type:2,price:13}]);
+      const singleton={...auth,inst_id:authoredGem.inst_id};
+      assert.deepEqual((await secure('/gem/Sell',singleton)).ret_data,{user:{gold:{cur:current.gold+13},item:[]}});
+      const batch={...auth,inst_id_list:'[18446744073709551615,3]'};
+      assert.deepEqual((await secure('/gem/Sell',batch)).ret_data,{user:{gold:{cur:current.gold+39},item:[]}});
+      const soldBytes=readFileSync(stateFile);
+      assert.equal((await secure('/gem/Sell',batch,{allowPlainRefusal:true})).result_code,2001,'Already sold request never duplicates credit');
+      assert.deepEqual(readFileSync(stateFile),soldBytes);
+      assert.deepEqual((await secure('/lobby/GetGemInven',auth)).ret_data,[]);
+    }
     if(exerciseGemMount) {
       const current=JSON.parse(readFileSync(stateFile,'utf8')).gameStates.find(([pvid])=>pvid===gemPvid)[1];
       const target=current.starter_cards.find(card=>card.ref_id==='001');
@@ -474,7 +491,7 @@ try {
   if(exerciseGemInventory) {
     assert.deepEqual((await secure('/reference/GetGem',auth)).ret_data,[authoredGemReference]);
     const expectedGem=exerciseGemMount?{...authoredGem,target_inst_id:String(before.gameStates.find(([pvid])=>pvid===gemPvid)[1].starter_cards.find(card=>card.ref_id==='001').inst_id),position:1}:authoredGem;
-    assert.deepEqual((await secure('/lobby/GetGemInven',auth)).ret_data,[expectedGem]);
+    assert.deepEqual((await secure('/lobby/GetGemInven',auth)).ret_data,exerciseGemSale?[]:[expectedGem]);
   }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
@@ -506,6 +523,7 @@ try {
       const actual=structuredClone(found[1]),expected=structuredClone(entry[1]);
       if(exerciseGemMount){expected.owned_gems[0].target_inst_id=String(expected.starter_cards.find(card=>card.ref_id==='001').inst_id);expected.owned_gems[0].position=1;}
       if(exerciseGemReplacement) expected.gold-=13;
+      if(exerciseGemSale){expected.gold+=39;expected.owned_gems=[];}
       for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
       assert.deepEqual(actual,expected,'Gem read/restart must preserve full raw inventory and legacy scalar separately');
       continue;
@@ -548,6 +566,7 @@ try {
     configured_gem_inventory_fixture:exerciseGemInventory,
     configured_gem_mount_fixture:exerciseGemMount,
     configured_gem_replacement_fixture:exerciseGemReplacement,
+    configured_gem_sale_fixture:exerciseGemSale,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,

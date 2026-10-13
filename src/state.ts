@@ -16,6 +16,7 @@ import {configuredGemReferences} from "./gem-reference-profile.js";
 import {parseGemInstances,type GemReference} from "./gem-instances.js";
 import {planPaidGemMount} from "./gem-paid-mount.js";
 import {gemRemovalPrices,type GemRemovalPrice} from "./gem-removal-prices.js";
+import {gemSalePrices,planGemSale,type GemSalePrice} from "./gem-sale.js";
 import {configuredGemCombinations} from "./gem-combination-reference.js";
 import {gemWireRows,parseStateWithGemIds} from "./gem-wire.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
@@ -505,11 +506,12 @@ export class ServerState {
   private readonly gemReferences: readonly GemReference[];
   private readonly gemCombinations: readonly Readonly<Record<string,string|number>>[];
   private readonly gemDisassemblePrices: readonly GemRemovalPrice[];
+  private readonly gemSellPrices: readonly GemSalePrice[];
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
-      gemDisassemblePrices?:unknown } = {}) {
+      gemDisassemblePrices?:unknown; gemSellPrices?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -534,6 +536,9 @@ export class ServerState {
     const removalPrices=Object.hasOwn(options,"gemDisassemblePrices")?options.gemDisassemblePrices:
       process.env.BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_DISASSEMBLE_PRICES_JSON);
     this.gemDisassemblePrices=Object.freeze(gemRemovalPrices({result_code:1,ret_data:removalPrices}).map(row=>Object.freeze(row)));
+    const sellPrices=Object.hasOwn(options,"gemSellPrices")?options.gemSellPrices:
+      process.env.BLUSTONE_GEM_SELL_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_SELL_PRICES_JSON);
+    this.gemSellPrices=Object.freeze(gemSalePrices({result_code:1,ret_data:sellPrices}).map(row=>Object.freeze(row)));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -1967,6 +1972,28 @@ export class ServerState {
   gemDisassembleReference(payload:Record<string,unknown>,headers:Record<string,string>) {
     this.accountFor(payload,headers);
     return this.envelope(this.gemDisassemblePrices.map(row=>({...row})));
+  }
+
+  gemSellReference(payload:Record<string,unknown>,headers:Record<string,string>) {
+    this.accountFor(payload,headers);
+    return this.envelope(this.gemSellPrices.map(row=>({...row})));
+  }
+
+  sellGems(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid)??this.gameFor(account);
+    assertOwnedCardCompatibility(game);
+    this.validateOwnedGems(game);
+    const guild=(this.guildAction("/lobby/GetGuildInfo",payload,headers).ret_data as {my_guild:{guild_id:number}}).my_guild.guild_id;
+    if(guild!==0) return this.failure(2001,"Gem selling with Guild affiliation is not reconstructed");
+    const hunters=new Set([...game.starter_cards,...game.recruited_cards].map(card=>String(card.inst_id)));
+    const plan=planGemSale(payload,game.owned_gems??[],this.gemReferences,hunters,this.gemSellPrices,game.gold);
+    if("error" in plan) return this.failure(2001,plan.error!);
+    const before=game.owned_gems,beforeGold=game.gold;
+    game.owned_gems=plan.next!;game.gold=plan.gold!;
+    try{this.persist();}catch(error){game.owned_gems=before;game.gold=beforeGold;throw error;}
+    // Native callback deletes its captured original request IDs. It consumes
+    // absolute gold/item quantities, not a guessed returned Gem deletion list.
+    return this.envelope({user:{gold:{cur:game.gold},item:[]}});
   }
 
   equipGems(payload:Record<string,unknown>,headers:Record<string,string>) {

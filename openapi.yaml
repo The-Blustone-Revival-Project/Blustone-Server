@@ -3655,24 +3655,18 @@ paths:
         ARM-device capture
   /gem/Sell:
     post:
-      summary: Recovered /gem/Sell route
-      description: >-
-        The route literal **/gem/Sell** was recovered from the ARM native
-        library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Sell owned unmounted Gems
+      description: Authenticated singleton inst_id or inst_id_list JSON form string of
+        exact uint64 IDs. Requires every ID currently owned and explicit
+        rank/level gold2 quotes; mounted refusal is conservative local policy.
+        Whole-batch atomic deletion and gold credit with rollback; signed32
+        wallet bounds, duplicate/unknown/sold replay and mixed-batch refusals.
+        Native callback deletes captured request IDs; response user.gold.cur and
+        user.item[] carry absolute quantities, no invented deletion list.
+        Lost-first-response reconciliation needs inventory refresh; no universal
+        successful retry promise. Original economy/native UI unverified.
       tags:
-        - gem
+        - Missions and combat
       parameters: *a1
       requestBody: *a2
       responses:
@@ -3690,10 +3684,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
-      x-runtime-confidence: route literal confirmed; payload/response shape pending
-        ARM-device capture
+      x-reverse-engineering-status: native-parser-reconstructed
+      x-evidence: analysis/research/search-entry-reference-contract.md;
+        server-ts/src/hunter-search.ts; server-ts/tests/hunter-search.ts
+      x-runtime-confidence: Server contract/no-mutation checks pass. Native Search
+        map, guide focus, partner selection, two-wave combat, successful End,
+        Search Complete2/2, trace1/10 and village return verified. Original
+        content/economics remain fixtures; normal capsule spending, dispatch and
+        recruitment remain unverified.
   /guild/Apply:
     post:
       summary: Recovered /guild/Apply route
@@ -8267,8 +8265,10 @@ paths:
   /reference/GetGemSellPrice:
     post:
       summary: Read jewel selling prices
-      description: Native direct ret_data collection, currently empty; original
-        rank/level/price_type/price table unknown.
+      description: Authenticated immutable explicit BLUSTONE_GEM_SELL_PRICES_JSON
+        rank/level/price_type/price uint32 rows, bare ret_data array; default
+        empty. Exact rank/level/gold2 quotes settle supported no-Guild sales.
+        Original numeric prices remain missing.
       tags:
         - Missions and combat
       parameters: *a1

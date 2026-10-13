@@ -251,10 +251,11 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if(route==="/reference/GetGem") return state.gemReferenceInventory(payload,headers);
   if (route === "/reference/GetGemCombinationEffect") return state.gemCombinationReference(payload,headers);
   if (route === "/reference/GetGemDisassemblePrice") return state.gemDisassembleReference(payload,headers);
-  if (["/reference/GetGemSellPrice",
-      "/reference/GetGemLevelUpPrice"].includes(route))
+  if (route === "/reference/GetGemSellPrice") return state.gemSellReference(payload,headers);
+  if (route === "/reference/GetGemLevelUpPrice")
     return state.envelope([]); // Native parsers consume ret_data arrays; tables remain unrecovered.
   if(route==="/card_handler/EquipGem") return state.equipGems(payload,headers);
+  if(route==="/gem/Sell") return state.sellGems(payload,headers);
   if (route.startsWith("/gem/")) return state.unavailableGemAction(payload, headers);
   if (["/reference/GetCardEquipmentLevelUpPrice","/reference/GetCardEquipmentRankUpPrice",
     "/card_handler/LevelUpEquipment","/card_handler/RankUpEquipment"].includes(route))
