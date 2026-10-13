@@ -1,3 +1,29 @@
+## Latest continuation: configured single/batch Gem sales (2026-10-13)
+
+Previous goal turn was progress: configured removal/set tables changed source
+and passed88 checks. Reused same2 agents for sale native evidence/review.
+Full90 checks/build and compiled encrypted --fixture --profile current-e6-gems
+--exercise-gem-sale pass. Explicit immutable gemSellPrices or
+BLUSTONE_GEM_SELL_PRICES_JSON now publishes authenticated exact rank/level/
+price_type/price rows; default empty. /gem/Sell supports native singleton
+inst_id or JSONform inst_id_list, exact numeric uint64 tokens, gold2 quotes.
+Native receipt ONLY user.gold.cur/item[]; callback deletes captured request
+IDs, so do not fabricate a returned deletion list. Atomic whole-batch Gem
+deletion/gold credit and rollback preserve original arrays/unrelated gameplay.
+All owned/unmounted IDs and exact quotes required; missing/unknown/sold/mixed/
+duplicate batches refuse. Replay never credits again, lost-first-response
+reconciliation needs inventory refresh (no universal retry success claim).
+Signed32 wallet cap follows native gold consumer. Mounted refusal remains
+conservative local policy; rank-selection UI confirmed, no native lock flag.
+Authored13-gold scalar+batch proof credited39, empty inventory/restart exact;
+native sale UI/original prices still missing. Independent review no defects.
+
+No live profile/source/save/client/input changes, no APK patch/build/release.
+Inputs still held after Escape; DataDump read-only; original/private preserved,
+collector/Docker/inference offline. Next substantive work remains original
+economy recovery, Gem level/roll/acquisition and native validation when inputs
+resume; do not turn missing tables into guessed grants or zero-price fallback.
+
 ## Latest continuation: configured Gem replacements and set tables (2026-10-13)
 
 User requested continued revival with two reusable agents. Full88 checks/build
