@@ -4022,22 +4022,20 @@ paths:
         ARM-device capture
   /guild/Found:
     post:
-      summary: Recovered /guild/Found route
-      description: >-
-        The route literal **/guild/Found** was recovered from the ARM native
-        library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: Create an explicitly configured local Guild
+      description: Default disabled. Opt-in guildCreationMode or
+        BLUSTONE_GUILD_CREATION_MODE=local-gold requires selected/hash-pinned
+        Guild resources and explicit action1 gold2 quote. Native request
+        name/desc/type/fc_point_limit/region/emblem_id; no client fee/ID
+        authority. Local printable ASCII subset, native text limits, stock
+        picker6, nonempty region, FC slider0..4000/500, existing no-joined
+        account and no active combat required. Atomic gold debit/sole-leader
+        record/monotonic uint32 allocator; malformed/duplicate names, missing
+        fee/funds, replay and exhaustion refuse with complete rollback. Receipt
+        flat my_guild, full guilds and user.gold BOTHprevcur. New counters/rank0
+        and leader role1 are explicit local initialization; original
+        badword/font/region/min-level/pending/debit policies unknown. Native
+        callback INFO defaults despite cache update, so no playable UI claim.
       tags:
         - Guild
       parameters: *a1
@@ -4058,7 +4056,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
+      x-evidence: docs/guild-found-native-2026-10-13.md;
+        docs/guild-creation-admission-native-2026-10-13.md;
+        tests/guild-local-found-state.ts
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /guild/GetApplicants:

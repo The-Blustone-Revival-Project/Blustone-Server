@@ -1,0 +1,60 @@
+import assert from "node:assert/strict";
+import {readFileSync,writeFileSync,mkdtempSync,rmSync} from "node:fs";
+import {tmpdir} from "node:os";
+import path from "node:path";
+import {repositoryPath} from "../src/paths.js";
+Object.assign(process.env,JSON.parse(readFileSync(repositoryPath("config/profiles/current-e6-guild.json"),"utf8")).env);
+const {ServerState}=await import("../src/state.js");const {gameResponse}=await import("../src/game-routes.js");
+const dir=mkdtempSync(path.join(tmpdir(),"blustone-guild-found-"));
+try {
+  const file=path.join(dir,"state.json"),options={guildCreationMode:"local-gold" as const,guildPrices:[{action:1,price_type:2,price:17}]};
+  const state=new ServerState("http://localhost",file,options),auth=state.registerGuest({device_id:"local-founder"},{}).ret_data as any;
+  const game=state.gameFor(state.accountFor(auth,{}));game.gold=100;
+  const peer=state.registerGuest({device_id:"founder-peer"},{}).ret_data as any;const peerGame=state.gameFor(state.accountFor(peer,{}));
+  (state as any).persist();const bytes=readFileSync(file),peerBefore=JSON.stringify(peerGame),others=JSON.stringify({...game,gold:undefined});
+  const body={...auth,name:"New Guild",desc:"Local fixture",type:"1",fc_point_limit:"500",region:"EN",emblem_id:"GD_IMG_1"};
+  const found=(extra={})=>gameResponse(state,"/guild/Found",{...body,...extra}) as any;
+  assert.throws(()=>gameResponse(state,"/guild/Found",{}),/authenticated/);
+  assert.throws(()=>found({pvid:peer.pvid}),/pvid does not match/);
+  assert.equal(found({fc_point_limit:"501"}).result_code,2001);assert.deepEqual(readFileSync(file),bytes);
+  const battle=game.active_battle;game.active_battle={state:"active"} as any;
+  assert.equal(found().result_code,2001,"creation cannot change membership during active combat");game.active_battle=battle;
+  assert.deepEqual(readFileSync(file),bytes);
+  const disabled=new ServerState("http://localhost",file,{guildPrices:options.guildPrices});
+  assert.equal((gameResponse(disabled,"/guild/Found",body) as any).result_code,2001);assert.deepEqual(readFileSync(file),bytes);
+  const beforeGuilds=(state as any).guilds,persist=(state as any).persist;
+  (state as any).persist=()=>{throw new Error("fixture disk error");};assert.throws(()=>found(),/disk error/);
+  assert.equal((state as any).guilds,beforeGuilds);assert.equal((state as any).nextGuildId,undefined);assert.equal(game.gold,100);assert.deepEqual(readFileSync(file),bytes);
+  (state as any).persist=persist;
+  const result=found({price:"0",guild_id:"99"});assert.equal(result.result_code,1);
+  assert.deepEqual(result.ret_data.user,{gold:{prev:100,cur:83}},"generic SyncUser requires prev AND cur");
+  assert.deepEqual(result.ret_data.my_guild,{guild_id:1,status:3,newbie:0,role:1,contribution:0});
+  assert.equal(result.ret_data.guilds[0].member_cnt,1);assert.equal(result.ret_data.guilds[0].rank,0);
+  assert.equal(result.ret_data.guilds[0].members[0].pvid,auth.pvid);
+  const settled=readFileSync(file);assert.equal(found().result_code,2001);assert.deepEqual(readFileSync(file),settled);
+  assert.equal(JSON.stringify({...game,gold:undefined}),others);assert.equal(JSON.stringify((state as any).gameByPvid.get(peer.pvid)),peerBefore);
+  const restart=new ServerState("http://localhost",file,options);
+  assert.equal(restart.gameFor(restart.accountFor(auth,{})).gold,83);
+  assert.equal((gameResponse(restart,"/lobby/GetGuildInfo",auth) as any).ret_data.my_guild.guild_id,1);
+  assert.deepEqual((gameResponse(restart,"/guild/GetRanking",{...auth,page:"0",size:"10"}) as any).ret_data,[],"creation invents no rank");
+  assert.deepEqual(readFileSync(file),settled);
+  assert.equal((gameResponse(restart,"/guild/Found",{...body,...peer,name:"New Guild"}) as any).result_code,2001);
+  const second=gameResponse(restart,"/guild/Found",{...body,...peer,name:"Other Guild"}) as any;
+  assert.equal(second.ret_data.my_guild.guild_id,2);assert.equal(JSON.parse(readFileSync(file,"utf8")).nextGuildId,3);
+  const current=readFileSync(file),corrupt=JSON.parse(current.toString());corrupt.nextGuildId=1;writeFileSync(file,JSON.stringify(corrupt));
+  const corruptBytes=readFileSync(file);assert.throws(()=>new ServerState("http://localhost",file,options),/allocator/);assert.deepEqual(readFileSync(file),corruptBytes);
+  writeFileSync(file,current);
+  const selected=process.env.BLUSTONE_PACKAGE_NAMES;
+  try{process.env.BLUSTONE_PACKAGE_NAMES=selected!.split(",").filter(name=>name!=="GUILD.jet").join(",");
+    assert.throws(()=>new ServerState("http://localhost",file,options),/selected original/);assert.deepEqual(readFileSync(file),current);
+  }finally{process.env.BLUSTONE_PACKAGE_NAMES=selected;}
+  for(const mode of ["unknown",null,undefined]) {
+    assert.throws(()=>new ServerState("http://localhost",file,{...options,guildCreationMode:mode as any}),/mode/);assert.deepEqual(readFileSync(file),current);
+  }
+  const exhausted=JSON.parse(current.toString());exhausted.nextGuildId=0x1_0000_0000;writeFileSync(file,JSON.stringify(exhausted));
+  const exhaustedState=new ServerState("http://localhost",file,options),last=exhaustedState.registerGuest({device_id:"exhausted-founder"},{}).ret_data as any;
+  const exhaustedBytes=readFileSync(file);
+  assert.equal((gameResponse(exhaustedState,"/guild/Found",{...body,...last,name:"Last Guild"}) as any).result_code,2001);
+  assert.deepEqual(readFileSync(file),exhaustedBytes,"uint32 exhaustion never wraps or debits");
+} finally {rmSync(dir,{recursive:true,force:true});}
+console.log("Local Guild creation state: opt-in only, exact my_guild/guilds/gold prev-cur receipt, atomic allocator/membership/wallet rollback, replay/name/auth protection and durable restart passed; native UI/original rules pending.");

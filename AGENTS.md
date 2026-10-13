@@ -1,3 +1,33 @@
+## Latest continuation: explicit LOCAL Guild creation backend (2026-10-13)
+
+Previous goal turn was progress: discovery/ranking105 checks. Reused same2
+agents. Full109 checks/build plus extra expanded Found state checks and compiled
+encrypted --fixture --profile current-e6-guild --exercise-guild-local-found pass.
+Two independent reviews no defects. Default remains DISABLED; explicit mode
+guildCreationMode/BLUSTONE_GUILD_CREATION_MODE=local-gold requires selected/
+hash-pinned original GUILD art and supplied action1gold2 quote. Found exact6
+fields; no client fee/ID control. Native nameASCII14/Unicode8, desc80/40,
+losslessUTF8 and FCslider0..4000/500 recovered; original badword/font/region/
+minimum founderlevel/FC/pending/cooldown/server policy unknown. Supported LOCAL
+ASCII subset/nonempty region/stockpicker6, no joined Guild/activecombat.
+Atomic gold/sole leader role1-newbie0 record/monotonic uint32 allocator with
+exhaustion2^32 sentinel; defaults rank/contribution/GvG0 and localArena snapshot
+declared local policies. Missingfees/funds, names/replay/invalid/import-counter
+collisions/exhaustion refuse; failure restores original arrays/allocator/wallet.
+Receipt flatmy_guild + fullguilds + user.gold BOTHprevcur: genericSyncUser ignores
+cur-only! Callback cache updates proven but returned callbackINFO staysdefault
+in bounded body; native creation UI remains UNVERIFIED, no playable claim.
+
+Follow-up source audit preserves earlier cur-only receipts: equipment level
+Gf5bc1c/f5bc6a, rank Gf5c6ae/f5c6fc and GemEquip Ga5cac2/a5cb12 direct setters;
+no bounded direct genericSyncUser call. Do not generalize Found wallet grammar.
+Compiled authored17gold100->83 createsID1/leader/cache, replay nocharge/write,
+search/lobby/newrank0/restart,nextID2 and unrelated gameplay preserved(except
+normal lobby clocks). State tests alsosecondfounderID2, rollback, malformed mode,
+unselected art, active combat and exhausted allocator. No live mode/source/
+profile/save/client/input or APK changes. Escape hold, DataDump read-only,
+original/private preservation, collector/Docker/inference offline remain.
+
 ## Latest continuation: Guild discovery and preserved ranking reads (2026-10-13)
 
 Previous goal turn was progress: association/action refs/Boutique audit and100

@@ -7,7 +7,9 @@ import {parseGuildUserQuery,guildUserRows} from "./guild-user-query.js";
 import {parseGuildDiscoveryRequest,guildDiscoveryRows} from "./guild-discovery.js";
 import {guildRankingRows} from "./guild-ranking.js";
 import {guildActionPrices,type GuildActionPrice} from "./guild-prices.js";
-import { GUILD_SPRITE_EMBLEMS } from "./guild-emblems.js";
+import {planLocalGuildFound} from "./guild-local-found.js";
+import { GUILD_SPRITE_EMBLEMS,GUILD_EMBLEM_SOURCE,verifyGuildEmblemSource } from "./guild-emblems.js";
+import {repositoryPath} from "./paths.js";
 import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js";
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors } from "./mirage.js";
@@ -510,6 +512,7 @@ export class ServerState {
   private socialFriends?: SocialFriends;
   private socialLikes?: SocialLikes;
   private guilds?: GuildRecord[];
+  private nextGuildId?:number;
   private readonly hunterSaleProfits: readonly CardSellProfit[];
   private readonly equipmentLevelPrices: readonly EquipmentLevelPrice[];
   private readonly equipmentRankPrices: readonly EquipmentRankPrice[];
@@ -519,11 +522,13 @@ export class ServerState {
   private readonly gemSellPrices: readonly GemSalePrice[];
   private readonly gemLevelPrices: readonly GemLevelPrice[];
   private readonly guildPrices: readonly GuildActionPrice[];
+  private readonly guildCreationMode:"disabled"|"local-gold";
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
-      gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown } = {}) {
+      gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown;
+      guildCreationMode?:"disabled"|"local-gold" } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -557,6 +562,13 @@ export class ServerState {
     const guildPrices=Object.hasOwn(options,"guildPrices")?options.guildPrices:
       process.env.BLUSTONE_GUILD_ACTION_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GUILD_ACTION_PRICES_JSON);
     this.guildPrices=Object.freeze(guildActionPrices({result_code:1,ret_data:guildPrices}).map(row=>Object.freeze(row)));
+    const creationMode=Object.hasOwn(options,"guildCreationMode")?options.guildCreationMode:process.env.BLUSTONE_GUILD_CREATION_MODE??"disabled";
+    if(creationMode!=="disabled"&&creationMode!=="local-gold") throw new TypeError("Unknown Guild creation mode");
+    this.guildCreationMode=creationMode;
+    if(creationMode==="local-gold"&&(!["pkgi1","pkgi1-tree"].includes(process.env.BLUSTONE_PACKAGE_MODE??"")||
+      !(process.env.BLUSTONE_PACKAGE_NAMES??"").split(",").includes("GUILD.jet")))
+      throw new TypeError("Local Guild creation requires selected original Guild resource profile");
+    if(creationMode==="local-gold") verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -589,6 +601,12 @@ export class ServerState {
     if (saved.socialLikes !== undefined)
       this.socialLikes = normalizeSocialLikes(saved.socialLikes, (pvid) => this.socialAccountProfile(pvid));
     if(saved.guilds!==undefined) this.guilds=establishedGuildRecords(saved.guilds,this.accountsByPvid);
+    if(saved.nextGuildId!==undefined) {
+      const maximum=Math.max(0,...(this.guilds??[]).map(record=>record.id));
+      if(typeof saved.nextGuildId!=="number"||!Number.isInteger(saved.nextGuildId)||saved.nextGuildId<=maximum||saved.nextGuildId>0x1_0000_0000)
+        throw new TypeError("Malformed/colliding local Guild allocator; refusing to overwrite state");
+      this.nextGuildId=saved.nextGuildId;
+    }
     if (saved.socialFriends !== undefined) {
       this.socialFriends = normalizeSocialFriends(saved.socialFriends);
       for (const relation of this.socialFriends.relations) {
@@ -646,6 +664,7 @@ export class ServerState {
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
+      ...(this.nextGuildId === undefined ? {} : { nextGuildId: this.nextGuildId }),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -1172,6 +1191,7 @@ export class ServerState {
 
   guildAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     const account = this.accountFor(payload, headers);
+    if(route==="/guild/Found") return this.foundLocalGuild(account,payload);
     if(route==="/reference/GetGuildPrices") return this.envelope(this.guildPrices.map(row=>({...row})));
     // Imported joined records are explicit local state, never inferred from
     // requests. my_guild is flat PLAY_DATA, distinct from full Guild INFO.
@@ -1198,6 +1218,25 @@ export class ServerState {
     }
     if (route === "/guild/GetNotifications") return this.envelope([]);
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");
+  }
+
+  private foundLocalGuild(account:Account,payload:Record<string,unknown>) {
+    if(this.guildCreationMode!=="local-gold") return this.failure(2001,"Local Guild creation mode is disabled");
+    const game=this.gameByPvid.get(account.pvid);
+    if(!game) return this.failure(2001,"Founder has no established game state");
+    if(game.active_battle?.state==="active"||game.arena.active||game.search.active)
+      return this.failure(2001,"Local Guild creation refuses active combat commitments");
+    const id=this.nextGuildId??(Math.max(0,...(this.guilds??[]).map(record=>record.id))+1);
+    const plan=planLocalGuildFound(payload,this.guilds??[],this.accountsByPvid,account,game.gold,game.arena.rating_point,id,this.guildPrices);
+    if("error" in plan) return this.failure(2001,plan.error!);
+    const next=establishedGuildRecords([...(this.guilds??[]),plan.created!],this.accountsByPvid);
+    const beforeGuilds=this.guilds,beforeId=this.nextGuildId,beforeGold=game.gold;
+    this.guilds=next;this.nextGuildId=plan.nextId!;game.gold=plan.gold!;
+    try{this.persist();}catch(error){this.guilds=beforeGuilds;this.nextGuildId=beforeId;game.gold=beforeGold;throw error;}
+    const created=this.guilds.find(record=>record.id===id)!;
+    return this.envelope({...guildLobby(account.pvid,this.guilds,new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS)),
+      guilds:guildDetailRows([String(created.id)],this.guilds,account.serverId,this.accountsByPvid),
+      user:{gold:{prev:beforeGold,cur:game.gold}}});
   }
 
   questAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {

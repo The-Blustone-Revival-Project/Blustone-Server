@@ -17,6 +17,7 @@ const exerciseEquipmentUpgrade=process.argv.includes('--exercise-equipment-upgra
 const exerciseGemReplacement=process.argv.includes('--exercise-gem-replacement');
 const exerciseGemSale=process.argv.includes('--exercise-gem-sale');
 const exerciseGuildRecords=process.argv.includes('--exercise-guild-records');
+const exerciseGuildFound=process.argv.includes('--exercise-guild-local-found');
 const exerciseGemLevelReference=process.argv.includes('--exercise-gem-level-reference');
 const exerciseGemMount=process.argv.includes('--exercise-gem-mount')||exerciseGemReplacement;
 const exerciseGemInventory=process.argv.includes('--exercise-gem-inventory')||exerciseGemMount||exerciseGemSale;
@@ -44,13 +45,15 @@ const monsterIndex=process.argv.indexOf('--exercise-monster');
 const exerciseMonster=monsterIndex===-1?undefined:process.argv[monsterIndex+1];
 if(monsterIndex!==-1 && (!process.argv.includes('--fixture') || typeof exerciseMonster!=='string' || !/^M[0-9]{3}$/.test(exerciseMonster)))
   throw new Error('Monster resource exercises require --fixture and one exact original namespace');
-if((exerciseBulk || exerciseSocial || exerciseSale || exerciseEquipment || exerciseGemInventory || exerciseGuildRecords || exerciseGemLevelReference) && !process.argv.includes('--fixture')) throw new Error('Configured exercises require --fixture; private preserved saves are never mutation targets');
+if((exerciseBulk || exerciseSocial || exerciseSale || exerciseEquipment || exerciseGemInventory || exerciseGuildRecords || exerciseGuildFound || exerciseGemLevelReference) && !process.argv.includes('--fixture')) throw new Error('Configured exercises require --fixture; private preserved saves are never mutation targets');
+if(exerciseGuildFound&&(exerciseGuildRecords||exerciseBulk||exerciseSocial||exerciseSale||exerciseEquipment||exerciseGemInventory)) throw new Error('Local Guild creation requires a separate disposable verification run');
 const profileIndex=process.argv.indexOf('--profile');
 const profileName=profileIndex===-1?'current-e6':process.argv[profileIndex+1];
 if(typeof profileName!=='string' || !/^[\w-]+$/.test(profileName)) throw new Error('Invalid verification profile');
 const profile=JSON.parse(readFileSync(path.join(root,'config/profiles',profileName+'.json'),'utf8'));
 if(exerciseGemInventory && profileName!=='current-e6-gems') throw new Error('Gem reference fixture requires the prepared original Gem owner profile');
 if(exerciseGuildRecords && profileName!=='current-e6-guild') throw new Error('Guild lobby fixture requires prepared original Guild owner profile');
+if(exerciseGuildFound && profileName!=='current-e6-guild') throw new Error('Local Guild creation fixture requires original Guild profile');
 preflight(root,profile);
 const stamp=profile.env.BLUSTONE_RESLIST_STAMP;
 const expectedNames=profile.env.BLUSTONE_PACKAGE_NAMES.split(',').map(name=>name.slice(0,-4));
@@ -68,14 +71,14 @@ await requireFreePort();
 // races the port probe. Never overwrite a concurrent writer's state copy.
 const folder = mkdtempSync(path.join(outputFolder,'run-'));
 const stateFile = path.join(folder, 'state.json');
-let bulkPvid, salePvid, equipmentPvid, gemPvid;
+let bulkPvid, salePvid, equipmentPvid, gemPvid,founderPvid;
 const preserved = process.argv.includes('--fixture') ? '' : path.join(root, 'local/private/preserved-state.json');
 if (existsSync(preserved)) copyFileSync(preserved, stateFile);
 else {
   // Public/CI checkouts use one disposable generated fixture, never a private account dump.
   rmSync(stateFile, {force:true});
   const { ServerState } = await import(pathToFileURL(path.join(root, 'dist/src/state.js')).href);
-  const fixture = new ServerState(base, stateFile);
+  const fixture = new ServerState(base, stateFile,{guildCreationMode:'disabled'});
   fixture.registerGuest({device_id:'standalone-generated-fixture'}, {});
   if(exerciseBulk || exerciseSale || exerciseEquipmentUpgrade) {
     const auth=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
@@ -118,11 +121,20 @@ else {
         {pvid:member.pvid,contribution:7,newbie:1,role:4,fc_point:10}]}];
     writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
   }
+  if(exerciseGuildFound) {
+    const founder=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
+    const game=fixture.gameFor(fixture.accountFor(founder,{}));founderPvid=founder.pvid;game.gold=100;
+    const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
+    seeded.gameStates=seeded.gameStates.map(([pvid,saved])=>[pvid,pvid===founderPvid?game:saved]);
+    writeFileSync(stateFile,JSON.stringify(seeded),{mode:0o600});
+  }
 }
 const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
+  env.BLUSTONE_GUILD_CREATION_MODE=exerciseGuildFound?'local-gold':'disabled';
+  if(exerciseGuildFound) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17}]);
   if(exerciseGemInventory) env.BLUSTONE_GEM_REFERENCE_JSON=JSON.stringify([authoredGemReference]);
   if(exerciseGemSale) env.BLUSTONE_GEM_SELL_PRICES_JSON=JSON.stringify([{rank:1,level:1,price_type:2,price:13}]);
   if(exerciseGemLevelReference) env.BLUSTONE_GEM_LEVEL_PRICES_JSON=JSON.stringify([{level:2,price_type:2,price:17,possibility:12.5,failed_compensation:.375,add_sub_ability:1}]);
@@ -395,6 +407,19 @@ try {
     assert.deepEqual(readFileSync(stateFile),bytes,'Price publication must not authorize unproved random upgrades');
   }
   assert.equal((await secure('/guild/Found',auth,{allowPlainRefusal:true})).result_code,2001,'Missing fees must not create a free Guild');
+  if(exerciseGuildFound) {
+    const request={...auth,name:'New Guild',desc:'Local fixture',type:'1',fc_point_limit:'500',region:'EN',emblem_id:'GD_IMG_1'};
+    const created=await secure('/guild/Found',request);assert.equal(created.result_code,1);
+    assert.deepEqual(created.ret_data.user,{gold:{prev:100,cur:83}},'Generic SyncUser requires both wallet fields');
+    assert.deepEqual(created.ret_data.my_guild,{guild_id:1,status:3,newbie:0,role:1,contribution:0});
+    assert.equal(created.ret_data.guilds[0].member_cnt,1);assert.equal(created.ret_data.guilds[0].rank,0);
+    const createdBytes=readFileSync(stateFile);
+    assert.equal((await secure('/guild/Found',request,{allowPlainRefusal:true})).result_code,2001,'Creation replay must not spend again');
+    assert.deepEqual(readFileSync(stateFile),createdBytes);
+    assert.deepEqual((await secure('/lobby/GetGuildInfo',auth)).ret_data,{my_guild:created.ret_data.my_guild});
+    assert.equal((await secure('/guild/Search',{...auth,keyword:'new'})).ret_data.guilds[0].id,1);
+    assert.deepEqual((await secure('/guild/GetRanking',{...auth,page:'0',size:'10'})).ret_data,[],'New local Guild gets no fabricated ranking');
+  }
   assert.deepEqual((await secure('/reference/GetSkinRef',auth)).ret_data,{skin:[],bonus:[]});
   assert.deepEqual((await secure('/lobby/GetSkinInst',auth)).ret_data,{skin:[]});
   assert.equal((await secure('/skin/Buy',auth,{allowPlainRefusal:true})).result_code,2001,'Missing paid skin data must not grant mock ownership');
@@ -565,6 +590,11 @@ try {
   }
   assert.equal(await (await fetch(base+'/reslist_'+stamp+'.list')).text(),manifest,'Manifest must remain byte-identical after compiled restart');
   const after=JSON.parse(readFileSync(stateFile,'utf8'));
+  if(exerciseGuildFound) {
+    assert.equal(after.nextGuildId,2);assert.equal(after.guilds.length,1);
+    assert.equal(after.guilds[0].members[0].pvid,founderPvid);
+    assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.guild_id,1,'Creation survives compiled restart');
+  }
   if(exerciseGuildRecords) {
     assert.deepEqual(after.guilds,before.guilds,'Established joined Guild records must survive compiled restart and unrelated writes');
     assert.deepEqual((await secure('/guild/GetDetailInfo',{...auth,guild_id:'[7001]'})).ret_data,{guilds:before.guilds},'Full details remain available across compiled restart');
@@ -613,6 +643,11 @@ try {
       assert.deepEqual(actual,expected,'Joined Guild reads must preserve all gameplay except normal lobby fuel clocks');
       continue;
     }
+    if(exerciseGuildFound&&entry[0]===founderPvid) {
+      const actual=structuredClone(found[1]),expected=structuredClone(entry[1]);expected.gold=83;
+      for(const key of ['ap_updated_at','bp_updated_at']) {delete actual[key];delete expected[key];}
+      assert.deepEqual(actual,expected,'Creation changes only configured gold fee in founder gameplay');continue;
+    }
     assert.deepEqual(found,entry,'Existing account gameplay state changed');
   }
   const report={compiled_process:true,unrelated_working_directory:true,encrypted_ecdh_hmac_aes:true,
@@ -627,6 +662,7 @@ try {
     configured_gem_sale_fixture:exerciseGemSale,
     configured_gem_level_reference_fixture:exerciseGemLevelReference,
     configured_guild_lobby_fixture:exerciseGuildRecords,
+    configured_local_guild_creation_fixture:exerciseGuildFound,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
