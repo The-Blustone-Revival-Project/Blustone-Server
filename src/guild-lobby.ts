@@ -8,6 +8,7 @@ export interface GuildRecord {
   region: string; emblem_id: string; desc: string; rank: number;
   gvg_win_cnt: number; gvg_inf_win_cnt: number; members: GuildMember[];
   banished?:number[];
+  invited_guests?:{pvid:number}[];
 }
 export const GUILD_JOIN_TYPES = { public: 1, permission: 2, private: 3 } as const;
 export const GUILD_MEMBER_ROLES = { leader: 1, supervisor: 2, member: 3, newcomer: 4 } as const;
@@ -43,12 +44,19 @@ export function guildInfo(record: GuildRecord, knownAccounts: ReadonlySet<number
       new Set(record.banished).size!==record.banished.length) throw new TypeError("Unsupported or conflicting Guild ban identity");
     banished=[...record.banished];
   }
+  let invited_guests:{pvid:number}[]|undefined;
+  if(record.invited_guests!==undefined) {
+    if(!Array.isArray(record.invited_guests)||record.invited_guests.some(row=>!row||typeof row!=="object"||Array.isArray(row)||
+      Object.keys(row).some(key=>key!=="pvid")||!safeId(row.pvid)||row.pvid>0xffff_ffff||!knownAccounts.has(row.pvid)||seen.has(row.pvid)||banished?.includes(row.pvid))||
+      new Set(record.invited_guests.map(row=>row.pvid)).size!==record.invited_guests.length) throw new TypeError("Unsupported or conflicting Guild invitation identity");
+    invited_guests=record.invited_guests.map(row=>({pvid:row.pvid}));
+  }
   // Only explicit scalar banished IDs are represented. Other histories stay
   // omitted rather than publishing invented empty invitation/exit collections.
   return { id: record.id, name: record.name, type: record.type, fc_point_limit: record.fc_point_limit,
     contribution: record.contribution, region: record.region, emblem_id: record.emblem_id, desc: record.desc,
     rank: record.rank, gvg_win_cnt: record.gvg_win_cnt, gvg_inf_win_cnt: record.gvg_inf_win_cnt,
-    member_cnt: members.length, members,...(banished===undefined?{}:{banished}) };
+    member_cnt: members.length, members,...(banished===undefined?{}:{banished}),...(invited_guests===undefined?{}:{invited_guests}) };
 }
 
 /** ReqGuildInstCB Gae61dc reads ret_data.my_guild and passes JUST that subtree

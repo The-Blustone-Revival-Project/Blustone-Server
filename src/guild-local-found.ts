@@ -25,7 +25,7 @@ export function planLocalGuildFound(raw:unknown,records:readonly GuildRecord[],a
     const fee=guildActionPrices({result_code:1,ret_data:prices}).find(row=>row.action===1);
     if(!fee||fee.price_type!==2) throw new TypeError("Local creation requires explicit action1 gold2 quote");
     if(gold<fee.price) throw new TypeError("Insufficient gold for configured Guild creation");
-    const created:GuildRecord={id,...request,contribution:0,rank:0,gvg_win_cnt:0,gvg_inf_win_cnt:0,banished:[],
+    const created:GuildRecord={id,...request,contribution:0,rank:0,gvg_win_cnt:0,gvg_inf_win_cnt:0,banished:[],invited_guests:[],
       members:[{pvid:owner.pvid,contribution:0,newbie:0,role:1,fc_point:fcPoint}]};
     return {created,gold:gold-fee.price,fee:fee.price,nextId:id+1};
   }catch(error){return {error:error instanceof Error?error.message:"Invalid local Guild creation"};}

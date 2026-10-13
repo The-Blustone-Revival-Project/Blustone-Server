@@ -18,7 +18,9 @@ const exerciseGemReplacement=process.argv.includes('--exercise-gem-replacement')
 const exerciseGemSale=process.argv.includes('--exercise-gem-sale');
 const exerciseGuildRecords=process.argv.includes('--exercise-guild-records');
 const exerciseGuildManagement=process.argv.includes('--exercise-guild-management');
-const exerciseGuildMembership=process.argv.includes('--exercise-guild-membership')||exerciseGuildManagement;
+const exerciseGuildInvitations=process.argv.includes('--exercise-guild-invitations');
+const exerciseGuildMembership=process.argv.includes('--exercise-guild-membership')||exerciseGuildManagement||exerciseGuildInvitations;
+if(exerciseGuildInvitations&&exerciseGuildManagement) throw new Error('Invitation and management fixtures are separate runs');
 const exerciseGuildUpdate=process.argv.includes('--exercise-guild-local-update');
 const exerciseGuildFound=process.argv.includes('--exercise-guild-local-found')||exerciseGuildUpdate;
 const exerciseGemLevelReference=process.argv.includes('--exercise-gem-level-reference');
@@ -93,7 +95,12 @@ else {
     const seeded=JSON.parse(readFileSync(stateFile,'utf8'));
     const makeGuild=(id,type,pvid)=>({id,name:'Authored Guild '+id,type,fc_point_limit:0,contribution:17,region:'EN',emblem_id:'GD_IMG_1',desc:'',rank:9,gvg_win_cnt:7,gvg_inf_win_cnt:8,
       member_cnt:1,members:[{pvid,contribution:3,newbie:0,role:1,fc_point:0}]});
-    seeded.guilds=[makeGuild(7001,1,seeded.accounts[0].pvid),makeGuild(7002,2,manager.pvid)];
+    seeded.guilds=[makeGuild(7001,exerciseGuildInvitations?2:1,seeded.accounts[0].pvid),makeGuild(7002,exerciseGuildInvitations?3:2,manager.pvid)];
+    if(exerciseGuildInvitations) {
+      fixture.registerGuest({device_id:'standalone-guild-profile-0'},{});fixture.registerGuest({device_id:'standalone-guild-profile-1'},{});
+      const latest=JSON.parse(readFileSync(stateFile,'utf8'));seeded.accounts=latest.accounts;seeded.gameStates=latest.gameStates;
+      seeded.guilds.forEach(row=>{row.banished=[];row.invited_guests=[];});
+    }
     if(exerciseGuildManagement) {
       const subordinate=fixture.registerGuest({device_id:'standalone-guild-subordinate'},{}).ret_data;
       const latest=JSON.parse(readFileSync(stateFile,'utf8'));seeded.accounts=latest.accounts;seeded.gameStates=latest.gameStates;
@@ -169,6 +176,7 @@ const launch = async () => {
   env.BLUSTONE_GUILD_MEMBERSHIP_MODE=exerciseGuildMembership?'local-public-approval':'disabled';
   if(exerciseGuildMembership) env.BLUSTONE_GUILD_MEMBERSHIP_POLICY_JSON=JSON.stringify({maxMembers:40,memberRole:exerciseGuildManagement?3:4,newbie:exerciseGuildManagement?0:1});
   env.BLUSTONE_GUILD_MANAGEMENT_MODE=exerciseGuildManagement?'local-management':'disabled';
+  env.BLUSTONE_GUILD_INVITATION_MODE=exerciseGuildInvitations?'local-invitations':'disabled';
   if(exerciseGuildManagement) env.BLUSTONE_GUILD_ROLE_POLICY_JSON=JSON.stringify({formerLeaderRole:3,maxSupervisors:1});
   if(exerciseGuildFound) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17}]);
   if(exerciseGuildUpdate) env.BLUSTONE_GUILD_ACTION_PRICES_JSON=JSON.stringify([{action:1,price_type:2,price:17},{action:2,price_type:1,price:23},{action:3,price_type:1,price:31}]);
@@ -421,7 +429,7 @@ try {
     exerciseGuildRecords?{my_guild:{guild_id:7001,status:3,newbie:0,role:1,contribution:3}}:
       {my_guild:{guild_id:0,status:0,newbie:0,role:0,contribution:0}},'Guild boot membership is flat PLAY_DATA');
   assert.deepEqual((await secure('/guild/GetNotifications',auth)).ret_data,{guild_notifications:[]},'Named notification child reaches native cache replacement');
-  if(exerciseGuildMembership) {
+  if(exerciseGuildMembership&&!exerciseGuildInvitations) {
     const apply=id=>secure('/guild/Apply',{...auth,guild_id:String(id),desc:''});
     assert.equal((await apply(7001)).ret_data.my_guild.status,3);
     let settled=readFileSync(stateFile);assert.equal((await apply(7001)).result_code,1);assert.deepEqual(readFileSync(stateFile),settled);
@@ -457,6 +465,31 @@ try {
       assert.equal((await secure('/guild/Leave',managerAuth)).result_code,1);
       ({secret,token}=applicantConnection);assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.role,1);
     }
+  }
+  if(exerciseGuildInvitations) {
+    const recipientConnection={secret,token};await exchange();
+    const manager=await secure('/v2/account/RegisterGuest',{device_id:'standalone-guild-manager'});
+    const managerAuth={pvid:String(manager.pvid),otp:String(manager.ret_data.otp)},managerConnection={secret,token};
+    const offer=()=>secure('/guild/Invite',{...managerAuth,target_pvid:auth.pvid});
+    assert.deepEqual((await offer()).ret_data.guilds[0].invited_guests,[{pvid:Number(auth.pvid)}]);
+    let settled=readFileSync(stateFile);await offer();assert.deepEqual(readFileSync(stateFile),settled);
+    ({secret,token}=recipientConnection);
+    const message=(await secure('/guild/GetNotifications',auth)).ret_data.guild_notifications[0];assert.equal(message.message,2);assert.equal(message.sender,Number(managerAuth.pvid));
+    assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.status,0);
+    assert.equal((await secure('/guild/ReadNotifications',{...auth,notification_id:JSON.stringify([message.id])})).ret_data.guild_notifications[0].read,1);
+    assert.equal((await secure('/guild/ConfirmInvitation',{...auth,guild_id:'7002',agreed:'0'})).result_code,1);
+    ({secret,token}=managerConnection);await offer();({secret,token}=recipientConnection);
+    assert.equal((await secure('/guild/Apply',{...auth,guild_id:'7001',desc:''})).ret_data.my_guild.status,1);
+    settled=readFileSync(stateFile);assert.equal((await secure('/guild/ConfirmInvitation',{...auth,guild_id:'7002',agreed:'1'},{allowPlainRefusal:true})).result_code,2001);assert.deepEqual(readFileSync(stateFile),settled);
+    await secure('/guild/CancelApplication',auth);
+    const accept={...auth,guild_id:'7002',agreed:'1'};
+    assert.equal((await secure('/guild/ConfirmInvitation',accept)).ret_data.my_guild.status,3);
+    settled=readFileSync(stateFile);await secure('/guild/ConfirmInvitation',accept);assert.deepEqual(readFileSync(stateFile),settled);
+    const ids=(await secure('/guild/GetNotifications',auth)).ret_data.guild_notifications.map(row=>row.id);
+    const remove={...auth,notification_id:JSON.stringify(ids)};assert.deepEqual((await secure('/guild/DeleteNotifications',remove)).ret_data.guild_notifications,[]);
+    settled=readFileSync(stateFile);await secure('/guild/DeleteNotifications',remove);assert.deepEqual(readFileSync(stateFile),settled);
+    const profiles=(await secure('/relation/GetTargetUserInfo',{...auth,list:JSON.stringify(before.accounts.slice(0,5).map(account=>account.pvid))})).ret_data.list;
+    assert.equal(profiles.length,5,'Native UserPool five-user batch must not hit Arena-specific three-profile guard');
   }
   if(exerciseGuildRecords) {
     const member=before.accounts.find(account=>account.deviceId==='standalone-established-guild-member');
@@ -691,6 +724,11 @@ try {
     if(exerciseGuildManagement){expected.members=[joined];expected.banished=[before.accounts.find(account=>account.deviceId==='standalone-guild-subordinate').pvid];}
     else expected.members.push(joined);
     assert.deepEqual(after.guilds[1],expected);assert.deepEqual(after.guildPending,[]);
+    if(exerciseGuildInvitations) {
+      assert.deepEqual(after.guildInvitations.map(row=>row.state),['declined','accepted']);
+      assert.ok(after.guildNotifications.every(row=>row.deleted===1));assert.equal(after.nextGuildNotificationId,3);
+      assert.deepEqual((await secure('/guild/GetNotifications',auth)).ret_data,{guild_notifications:[]},'Deleted ownership tombstones survive restart without reviving letters');
+    }
     assert.equal((await secure('/lobby/GetGuildInfo',auth)).ret_data.my_guild.status,3,'Approved ownership survives compiled restart');
   }
   if(exerciseGuildFound) {
@@ -782,6 +820,7 @@ try {
     configured_local_guild_update_fixture:exerciseGuildUpdate,
     configured_local_guild_membership_fixture:exerciseGuildMembership,
     configured_local_guild_management_fixture:exerciseGuildManagement,
+    configured_local_guild_invitation_fixture:exerciseGuildInvitations,
     episode_native_wallet_preservation_fixture:exerciseEpisodeWallet,
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,

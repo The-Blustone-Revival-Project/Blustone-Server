@@ -580,7 +580,10 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     catch { requestedProfiles = null; }
     if (Array.isArray(requestedProfiles)) {
       const account = state.accountFor(payload, headers);
-      if (!requestedProfiles.length || requestedProfiles.length > 3 ||
+      // CSRUserPool.FlushQueueUser sends batches of5; the general relation
+      // requester serializes its complete vector. Keep per-identity scope,
+      // not the old Arena fixture's unrelated three-profile restriction.
+      if (!requestedProfiles.length ||
           requestedProfiles.some((id) => id !== LOCAL_MAIL_SENDER.pvid && id !== account.pvid && id !== ARENA_RIVAL_PVID &&
             (typeof id !== "number" || !state.localSocialProfile(account.pvid, id))))
         return state.failure(2001, "Brief target profiles require self, a local presentation identity or an eligible same-server local account");

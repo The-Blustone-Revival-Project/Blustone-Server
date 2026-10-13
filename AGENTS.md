@@ -1,3 +1,61 @@
+## Latest continuation: invitations, native Guild Mail and profile batches (2026-10-13)
+
+Previous turn progressed roles/successor/bans (b7c0bb7). Same two agents reused
+for invitation/notification rendering, native batch recovery and independent
+implementation review. Full118 checks/build, compiled encrypted --fixture
+--profile current-e6-guild --exercise-guild-invitations decline/reinvite/pending
+cancel/privateaccept/read/delete/replay/restart proof passed. Both reviews clean.
+Old records test treating invited_guests[] as unknown was corrected: object
+history now source-backed, scalar history stillrefuses; byte preservation proved.
+
+Invite target_pvid scalaruint64; Confirm guild_id scalar/agreed0or1. Actual
+callbacks my_guild/guilds/user/achievement, no automaticjoin or personalclear.
+INFO.invited_guests WIRE[{pvid}] objects, unlike scalarbanished; nonnull replaces
+wholelist, missing/null preservescache. Classifier2 is TARGETuser invitation
+relationship, NOT personalstatus2. No personalstatus2 invented by invitations.
+Knowncomplete invitation/ban histories required; omittedlegacy remainsunknown;
+FreshFound genesis establishes both[], neverretrofits legacy unknown histories.
+
+MSG.message2 positivelyinvitation. MSG→Mail DATA ctor tags71/G and copiesfields;
+Mailbox marker builds target_pvid(sender)/guild_id/Noti_type/RecvMsg/ReadIndex/
+RecvTime internally, no invented supplementJSON. Bothsummary AND fullbody
+format originallocalizedtemplate+real sendernickname+Guildname. Fullbody
+Gd188c8→CMFormatGd18920→SetTextGd18a24 doesNOTuse RecvMsg. Emptyopaque
+supplement remains localproducerchoice, not original capture or blankbodycause.
+YES/NO controls iffkind2; joined3 blocksboth; pending1 YES cancelsfirst. Result1
+shows success/removesmail via separateRequestRemove: refuse staleacceptances.
+
+New defaultdisabled invitationMode local-invitations requires enabledcomplete
+membershipmode/policy andpinnedGuildprofile. Manager1/2 ownunjoined sameServer
+unblockedrecipient gets activeoffer+MSG2+guesthistory+monotonicuint32allocator
+atomically. ExplicitLOCAL epochseconds/blankopaque/indefiniteoffer/initialrole/
+FC-capacity/baneligibility, original producerdefaults/expiry unproved. Owned
+Invite exactretry no allocation/write. Accept requiresownedoffer,noGuild,
+pendingcancelled,currentFC/idle/capacity/ban gates; decline onlyownedoffer.
+Acceptedretry requiresactualsametargetmembership; contradictions/absentrevoked
+acceptance refuse false native success. OtherGuild offers remainowned; only
+sameGuild offers fulfilled bypublicApply/approval reconcileatomically.
+
+Read/Delete notification_id JSON-arrayformSTRING. Exact callbacks Ga92944/
+Ga931c8 selectnamedguild_notifications→ParseNoties, no genericwalletSyncUser.
+Recipient-only completevisible MSG2 rows, blocked/unavailable senders omitted;
+private recipient/deleted flags notpublished. Batchownership checkedbeforeflags;
+read/delete persistedrollback, tombstones preserveownership+IDnonreuse and
+safe no-write retries. Inboxdeletion doesNOTaccept/revoke offer. Invite/accept
+rollbackallGuild/offer/message/allocator arrays; unknown imports refusewithout
+saveoverwrite. EveryHunter/wallet/progress/Arena/clocks/otherGuild preserved.
+
+NativeUserPool batches FIVE (G10a2eb4/ed0/f0a), generalrelation codec serializes
+wholevector and parsesallrows, no source3cap. RemovedhistoricalArena-specific
+briefprofilecount3 guard; everyknown/sameServer/privacy/presentationID check
+retained. Five-user roundtrip proved; no artificial inboxcap hidingprofilebug.
+
+Proof preservesfiveauthoredgames exceptnormalregistration/lobby APBPanchors.
+NativeUI/pixels/fullscene validation remainsUNVERIFIED; broadernotifications/
+expiry/invitation exceptions/GvG stillincomplete. No livegameinput/profile
+activation or APK changes. Escape hold persists, DataDumpread-only, originals/
+privatepreserved; collector/Docker/inferenceoff. Server/Instrumented writable.
+
 ## Latest continuation: local Guild roles, successor transfer and lasting bans (2026-10-13)
 
 Previous turn progressed complete opt-in membership lifecycle (aa4bed9).

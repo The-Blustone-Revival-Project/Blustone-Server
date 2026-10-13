@@ -31,8 +31,12 @@ try {
   const restart=new ServerState("http://localhost",file);
   assert.equal((gameResponse(restart,"/lobby/GetGuildInfo",member) as any).ret_data.my_guild.contribution,7);
   const valid=readFileSync(file);
+  const invitationRecord={...persisted,guilds:[{...record,invited_guests:[{pvid:outsider.pvid}]}]};
+  writeFileSync(file,JSON.stringify(invitationRecord));const guestBytes=readFileSync(file),guestState=new ServerState("http://localhost",file);
+  assert.deepEqual((gameResponse(guestState,"/guild/GetDetailInfo",{...leader,guild_id:"[7001]"}) as any).ret_data.guilds[0].invited_guests,[{pvid:outsider.pvid}]);
+  assert.deepEqual(readFileSync(file),guestBytes,"explicit object invitation history remains byte-preserving, without inventing producer ownership");
   const invalidCases=[null,[{...record,id:0x1_0000_0000}],[{...record,member_cnt:3}],[{...record,emblem_id:"GUESS"}],
-    [{...record,invited_guests:[]}],[{...record,members:record.members.map(member=>({...member,donation_history:[]}))}],[record,{...record,id:7002}],
+    [{...record,invited_guests:[outsider.pvid]}],[{...record,members:record.members.map(member=>({...member,donation_history:[]}))}],[record,{...record,id:7002}],
     [{...record,members:[{...record.members[0],pvid:999}]}]];
   for(const guilds of invalidCases){const invalid={...persisted,guilds};writeFileSync(file,JSON.stringify(invalid));const invalidBytes=readFileSync(file);
     assert.throws(()=>new ServerState("http://localhost",file));assert.deepEqual(readFileSync(file),invalidBytes);}

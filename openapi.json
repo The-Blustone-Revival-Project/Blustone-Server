@@ -7822,8 +7822,8 @@
     },
     "/guild/ConfirmInvitation": {
       "post": {
-        "summary": "Recovered /guild/ConfirmInvitation route",
-        "description": "The route literal **/guild/ConfirmInvitation** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Configured local Guild invitations: ConfirmInvitation",
+        "description": "Scalar guild_id plus agreed0/1. Recipient must own the latest offer. Accept requires no current Guild, pending application cancelled first, current local FC/capacity/idle/ban eligibility; it adds configured member and consumes only this Guild's offer. Other Guild offers remain owned. Decline removes only this offer, preserving a pending application. Accepted replay succeeds only when currently joined the actual target; contradictory/stale/absent acceptance refuses before native false-success UI. Both callbacks need actor my_guild/full target INFO/user:null. Native Mail separately calls notification removal after successful decision. Default disabled. guildInvitationMode/BLUSTONE_GUILD_INVITATION_MODE=local-invitations requires complete enabled local-public-approval membership mode/policy and pinned Guild profile. INFO.invited_guests is [{pvid}], distinct from banished scalar IDs. Fresh local Found genesis establishes empty history; omitted legacy history stays omitted. Local MSG allocator, clocks, initialization/eligibility/indefinite offers/blank opaque supplement are declared policy; original expiry, broader notifications and native UI remain unverified. Public Apply/approval reconciles its same-Guild known offer without expiring unrelated offers.",
         "tags": [
           "Guild"
         ],
@@ -7897,14 +7897,14 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-invitation-native-2026-10-13.md; docs/guild-invitation-notification-native-2026-10-13.md; docs/guild-local-invitations-2026-10-13.md; tests/guild-invitation-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
     "/guild/DeleteNotifications": {
       "post": {
-        "summary": "Recovered /guild/DeleteNotifications route",
-        "description": "The route literal **/guild/DeleteNotifications** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Update owned Guild notification state",
+        "description": "notification_id is a JSON-array form STRING of exact supported uint32 IDs. Entire batch must belong to authenticated recipient, including retained deletion tombstones. Atomic read/deleted flag mutation with rollback; exact retries no-write and never resurrect messages. Reply contains complete current visible guild_notifications rows. Native callbacks consume that named child, optional Guild data and achievements, not generic wallet SyncUser. These operations do not accept/revoke invitations; ConfirmInvitation is separate. Original producer expiry/other MSG kinds remain incomplete.",
         "tags": [
           "Guild"
         ],
@@ -7978,7 +7978,7 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-notification-transitions-native-2026-10-13.md; tests/guild-invitation-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -8471,7 +8471,7 @@
     "/guild/GetNotifications": {
       "post": {
         "summary": "Read Guild notifications",
-        "description": "Authenticated response contains ret_data.guild_notifications:[], the exact RequestMsgList child consumed by ParseNoties. This replaces the native notification cache; a bare ret_data array would skip it. No original notification instances or producer event policy have been reconstructed. Read/delete transitions remain unavailable.",
+        "description": "Authenticated recipient-owned invitation MSG2 rows under ret_data.guild_notifications, the exact RequestMsgList child consumed by ParseNoties. Native Mail converts these to Guild letters and builds invitation text/controls from Guild INFO, sender profile and message2; supplement is opaque. Deleted rows and unavailable/blocked sender profiles are not published. Default empty, no original notification instances imported. Generated IDs/epoch-second dates/blank supplements/no expiry are explicit local invitation policy. Full-list reads replace native cache; bare arrays would skip it.",
         "tags": [
           "Guild"
         ],
@@ -8540,7 +8540,6 @@
                           "properties": {
                             "guild_notifications": {
                               "type": "array",
-                              "maxItems": 0,
                               "items": {
                                 "$ref": "#/components/schemas/OpaqueObject"
                               }
@@ -8818,8 +8817,8 @@
     },
     "/guild/Invite": {
       "post": {
-        "summary": "Recovered /guild/Invite route",
-        "description": "The route literal **/guild/Invite** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Configured local Guild invitations: Invite",
+        "description": "Auth plus scalar target_pvid. Joined manager1/2 requires known-complete invited_guests object history and banished scalar history. Known unjoined same-server unblocked recipient receives one owned MSG2 and active offer atomically; exact active-offer retry does not allocate/write. Invitation alone does not invent personal status2. Missing prior history/producer ownership, bans, self/foreign/joined targets refuse. Default disabled. guildInvitationMode/BLUSTONE_GUILD_INVITATION_MODE=local-invitations requires complete enabled local-public-approval membership mode/policy and pinned Guild profile. INFO.invited_guests is [{pvid}], distinct from banished scalar IDs. Fresh local Found genesis establishes empty history; omitted legacy history stays omitted. Local MSG allocator, clocks, initialization/eligibility/indefinite offers/blank opaque supplement are declared policy; original expiry, broader notifications and native UI remain unverified. Public Apply/approval reconciles its same-Guild known offer without expiring unrelated offers.",
         "tags": [
           "Guild"
         ],
@@ -8893,7 +8892,7 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-invitation-native-2026-10-13.md; docs/guild-invitation-notification-native-2026-10-13.md; docs/guild-local-invitations-2026-10-13.md; tests/guild-invitation-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
@@ -8980,8 +8979,8 @@
     },
     "/guild/ReadNotifications": {
       "post": {
-        "summary": "Recovered /guild/ReadNotifications route",
-        "description": "The route literal **/guild/ReadNotifications** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Update owned Guild notification state",
+        "description": "notification_id is a JSON-array form STRING of exact supported uint32 IDs. Entire batch must belong to authenticated recipient, including retained deletion tombstones. Atomic read/deleted flag mutation with rollback; exact retries no-write and never resurrect messages. Reply contains complete current visible guild_notifications rows. Native callbacks consume that named child, optional Guild data and achievements, not generic wallet SyncUser. These operations do not accept/revoke invitations; ConfirmInvitation is separate. Original producer expiry/other MSG kinds remain incomplete.",
         "tags": [
           "Guild"
         ],
@@ -9055,7 +9054,7 @@
           }
         },
         "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
+        "x-evidence": "docs/guild-notification-transitions-native-2026-10-13.md; tests/guild-invitation-state.ts",
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },

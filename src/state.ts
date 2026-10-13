@@ -15,6 +15,8 @@ import {guildApplications,guildPendingLobby,guildApplicantRows,type GuildApplica
 import {planLocalGuildMembership} from "./guild-local-membership.js";
 import {guildRolePolicy,type GuildRolePolicy,planLocalGuildAppoint} from "./guild-local-roles.js";
 import {planLocalGuildBanish} from "./guild-local-banish.js";
+import {guildNotificationState,guildNotificationRows,planGuildNotificationChange,type GuildNotification} from "./guild-notification-state.js";
+import {guildInvitationState,planLocalGuildInvitation,reconcileGuildInvitationJoins,type GuildInvitation} from "./guild-invitations.js";
 import {BADWORD_SOURCE,originalBadwordMatcher} from "./badword-source.js";
 import { GUILD_SPRITE_EMBLEMS,GUILD_EMBLEM_SOURCE,verifyGuildEmblemSource } from "./guild-emblems.js";
 import {repositoryPath} from "./paths.js";
@@ -522,6 +524,9 @@ export class ServerState {
   private guilds?: GuildRecord[];
   private nextGuildId?:number;
   private guildPending?:GuildApplication[];
+  private guildNotifications?:GuildNotification[];
+  private guildInvitations?:GuildInvitation[];
+  private nextGuildNotificationId?:number;
   private readonly hunterSaleProfits: readonly CardSellProfit[];
   private readonly equipmentLevelPrices: readonly EquipmentLevelPrice[];
   private readonly equipmentRankPrices: readonly EquipmentRankPrice[];
@@ -538,6 +543,7 @@ export class ServerState {
   private readonly guildMembershipPolicy?:Readonly<GuildMembershipPolicy>;
   private readonly guildManagementMode:"disabled"|"local-management";
   private readonly guildRolePolicy?:Readonly<GuildRolePolicy>;
+  private readonly guildInvitationMode:"disabled"|"local-invitations";
 
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
@@ -545,7 +551,8 @@ export class ServerState {
       gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown;
       guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first";
       guildMembershipMode?:"disabled"|"local-public-approval";guildMembershipPolicy?:unknown;
-      guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown } = {}) {
+      guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
+      guildInvitationMode?:"disabled"|"local-invitations" } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     // Explicit local economy opt-in; no original profit rows are recovered.
     // Snapshot once so GetExtra and settlement cannot disagree after env edits.
@@ -618,6 +625,10 @@ export class ServerState {
         throw new TypeError("Local Guild management requires selected original Guild resource profile");
       verifyGuildEmblemSource(readFileSync(repositoryPath(GUILD_EMBLEM_SOURCE.path)));
     }
+    const invitationMode=Object.hasOwn(options,"guildInvitationMode")?options.guildInvitationMode:process.env.BLUSTONE_GUILD_INVITATION_MODE??"disabled";
+    if(invitationMode!=="disabled"&&invitationMode!=="local-invitations") throw new TypeError("Unknown Guild invitation mode");
+    if(invitationMode!=="disabled"&&membershipMode!=="local-public-approval") throw new TypeError("Local Guild invitations require the complete membership mode/policy");
+    this.guildInvitationMode=invitationMode;
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
@@ -651,6 +662,14 @@ export class ServerState {
       this.socialLikes = normalizeSocialLikes(saved.socialLikes, (pvid) => this.socialAccountProfile(pvid));
     if(saved.guilds!==undefined) this.guilds=establishedGuildRecords(saved.guilds,this.accountsByPvid);
     if(saved.guildPending!==undefined) this.guildPending=guildApplications(saved.guildPending,this.guilds??[],this.accountsByPvid);
+    if(saved.guildNotifications!==undefined) this.guildNotifications=guildNotificationState(saved.guildNotifications,this.accountsByPvid,this.guildServerScopes());
+    if(saved.guildInvitations!==undefined) this.guildInvitations=guildInvitationState(saved.guildInvitations,this.guilds??[],this.accountsByPvid,this.guildNotifications??[]);
+    if(saved.nextGuildNotificationId!==undefined) {
+      const maximum=Math.max(0,...(this.guildNotifications??[]).map(row=>row.id));
+      if(typeof saved.nextGuildNotificationId!=="number"||!Number.isInteger(saved.nextGuildNotificationId)||saved.nextGuildNotificationId<=maximum||saved.nextGuildNotificationId>0x1_0000_0000)
+        throw new TypeError("Malformed/colliding Guild notification allocator");
+      this.nextGuildNotificationId=saved.nextGuildNotificationId;
+    }
     if(saved.nextGuildId!==undefined) {
       const maximum=Math.max(0,...(this.guilds??[]).map(record=>record.id));
       if(typeof saved.nextGuildId!=="number"||!Number.isInteger(saved.nextGuildId)||saved.nextGuildId<=maximum||saved.nextGuildId>0x1_0000_0000)
@@ -716,6 +735,9 @@ export class ServerState {
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
       ...(this.nextGuildId === undefined ? {} : { nextGuildId: this.nextGuildId }),
       ...(this.guildPending === undefined ? {} : { guildPending: this.guildPending }),
+      ...(this.guildNotifications===undefined?{}:{guildNotifications:this.guildNotifications}),
+      ...(this.guildInvitations===undefined?{}:{guildInvitations:this.guildInvitations}),
+      ...(this.nextGuildNotificationId===undefined?{}:{nextGuildNotificationId:this.nextGuildNotificationId}),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -1245,6 +1267,8 @@ export class ServerState {
     if(route==="/guild/Found") return this.foundLocalGuild(account,payload);
     if(route==="/guild/Update") return this.updateLocalGuild(account,payload);
     if(route==="/guild/Appoint"||route==="/guild/Banish") return this.localGuildManagement(account,route,payload);
+    if(route==="/guild/Invite"||route==="/guild/ConfirmInvitation") return this.localGuildInvitation(account,route,payload);
+    if(route==="/guild/ReadNotifications"||route==="/guild/DeleteNotifications") return this.changeGuildNotifications(account,route,payload);
     if(["/guild/Apply","/guild/CancelApplication","/guild/Leave","/guild/ConfirmApplication"].includes(route))
       return this.localGuildMembership(account,route,payload);
     if(route==="/reference/GetGuildPrices") return this.envelope(this.guildPrices.map(row=>({...row})));
@@ -1278,13 +1302,55 @@ export class ServerState {
     }
     // RequestMsgList's exact callback selects this child before ParseNoties;
     // a bare empty array skips the cache replacement rather than clearing it.
-    if (route === "/guild/GetNotifications") return this.envelope({guild_notifications:[]});
+    if (route === "/guild/GetNotifications") return this.envelope({guild_notifications:this.guildVisibleNotifications(account.pvid)});
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");
   }
 
   private guildPersonal(pvid:number) {
     return guildPendingLobby(pvid,this.guildPending??[])??guildLobby(pvid,this.guilds??[],
       new Set(this.accountsByPvid.keys()),new Set<string>(GUILD_SPRITE_EMBLEMS));
+  }
+  private guildServerScopes(records:readonly GuildRecord[]=this.guilds??[]) {
+    return new Map(records.map(record=>[record.id,{serverId:this.accountsByPvid.get(record.members[0].pvid)!.serverId}]));
+  }
+  private guildVisibleNotifications(pvid:number) {
+    return guildNotificationRows(pvid,this.guildNotifications??[]).filter(row=>!!this.localSocialProfile(pvid,row.sender));
+  }
+  private changeGuildNotifications(account:Account,route:string,payload:Record<string,unknown>) {
+    let plan;
+    try{plan=planGuildNotificationChange(route,account.pvid,payload,this.guildNotifications??[]);}
+    catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Guild notification request");}
+    if(plan.changed) {
+      const before=this.guildNotifications;this.guildNotifications=plan.next;
+      try{this.persist();}catch(error){this.guildNotifications=before;throw error;}
+    }
+    return this.envelope({guild_notifications:this.guildVisibleNotifications(account.pvid)});
+  }
+  private localGuildInvitation(account:Account,route:string,payload:Record<string,unknown>) {
+    if(this.guildInvitationMode!=="local-invitations") return this.failure(2001,"Local Guild invitation mode is disabled");
+    const game=this.gameByPvid.get(account.pvid);
+    if(!game||game.active_battle?.state==="active"||game.arena.active||game.search.active) return this.failure(2001,"Guild invitations require established idle actor gameplay");
+    let plan;
+    try {
+      if(route==="/guild/Invite"&&!this.localSocialProfile(account.pvid,Number(payload.target_pvid))) throw new TypeError("Invitation recipient profile is unavailable or blocked");
+      if(route==="/guild/ConfirmInvitation"&&["1",1].includes(payload.agreed as string|number)) {
+        const invitation=[...(this.guildInvitations??[])].reverse().find(row=>row.pvid===account.pvid&&String(row.guild_id)===payload.guild_id);
+        if(invitation&&!this.localSocialProfile(account.pvid,invitation.sender)) throw new TypeError("Invitation sender profile is unavailable or blocked");
+      }
+      const games=new Map([...this.gameByPvid].map(([pvid,game])=>[pvid,{fc_point:game.arena.rating_point,active:game.active_battle?.state==="active"||!!game.arena.active||!!game.search.active}]));
+      plan=planLocalGuildInvitation(route,payload,this.guilds??[],this.guildPending??[],this.guildInvitations??[],this.guildNotifications??[],
+        account,this.accountsByPvid,games,this.guildMembershipPolicy!,this.nextGuildNotificationId??Math.max(0,...(this.guildNotifications??[]).map(row=>row.id))+1,Math.floor(Date.now()/1000));
+      plan.guilds=establishedGuildRecords(plan.guilds,this.accountsByPvid);
+      plan.notifications=guildNotificationState(plan.notifications,this.accountsByPvid,this.guildServerScopes(plan.guilds));
+      plan.invitations=guildInvitationState(plan.invitations,plan.guilds,this.accountsByPvid,plan.notifications);
+    } catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid local Guild invitation");}
+    if(plan.changed) {
+      const before={guilds:this.guilds,invites:this.guildInvitations,messages:this.guildNotifications,nextId:this.nextGuildNotificationId};
+      this.guilds=plan.guilds;this.guildInvitations=plan.invitations;this.guildNotifications=plan.notifications;this.nextGuildNotificationId=plan.nextId;
+      try{this.persist();}catch(error){this.guilds=before.guilds;this.guildInvitations=before.invites;this.guildNotifications=before.messages;this.nextGuildNotificationId=before.nextId;throw error;}
+    }
+    return this.envelope({...this.guildPersonal(account.pvid),user:null,
+      guilds:guildDetailRows([String(plan.affectedId)],this.guilds??[],account.serverId,this.accountsByPvid)});
   }
 
   private localGuildManagement(account:Account,route:string,payload:Record<string,unknown>) {
@@ -1313,19 +1379,22 @@ export class ServerState {
     const game=this.gameByPvid.get(account.pvid);
     if(!game||game.active_battle?.state==="active"||game.arena.active||game.search.active)
       return this.failure(2001,"Guild membership requires established idle actor gameplay");
-    let plan;
+    let plan,nextInvitations:GuildInvitation[]|undefined;
     try {
       const games=new Map([...this.gameByPvid].map(([pvid,game])=>[pvid,{fc_point:game.arena.rating_point,
         active:game.active_battle?.state==="active"||!!game.arena.active||!!game.search.active}]));
       plan=planLocalGuildMembership(route,payload,this.guilds??[],this.guildPending??[],this.accountsByPvid,account,games,
         this.guildMembershipPolicy!,Math.floor(Date.now()/1000));
-      const next=establishedGuildRecords(plan.guilds,this.accountsByPvid);
+      const reconciled=reconcileGuildInvitationJoins(plan.guilds,this.guildInvitations??[]);
+      const next=establishedGuildRecords(reconciled.guilds,this.accountsByPvid);
       plan.guilds=next;
+      nextInvitations=guildInvitationState(reconciled.invitations,next,this.accountsByPvid,this.guildNotifications??[]);
     } catch(error) {return this.failure(2001,error instanceof Error?error.message:"Invalid local Guild membership");}
     if(plan.changed) {
-      const beforeGuilds=this.guilds,beforePending=this.guildPending;
+      const beforeGuilds=this.guilds,beforePending=this.guildPending,beforeInvites=this.guildInvitations;
       this.guilds=plan.guilds;this.guildPending=plan.applications;
-      try{this.persist();}catch(error){this.guilds=beforeGuilds;this.guildPending=beforePending;throw error;}
+      if(this.guildInvitations!==undefined) this.guildInvitations=nextInvitations;
+      try{this.persist();}catch(error){this.guilds=beforeGuilds;this.guildPending=beforePending;this.guildInvitations=beforeInvites;throw error;}
     }
     // These native callbacks clear personal state themselves; publishing a
     // fabricated Guild object cannot replace a persisted ownership transition.
