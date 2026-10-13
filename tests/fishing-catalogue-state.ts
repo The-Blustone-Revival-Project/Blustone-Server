@@ -52,6 +52,8 @@ try {
     {effect:"005"},{collect_qty:1},{rank:-1},{thumbnail_id:4}])
     assert.throws(()=>new ServerState("http://localhost",file,{fishingItems:[{...item,...patch}],fishingCatalogue:catalogue}));
   assert.throws(()=>new ServerState("http://localhost",file,{fishingItems:[item,item]}),/Duplicate/);
+  for(const key of ["id","name","desc","thumbnail_id","effect"])
+    assert.throws(()=>new ServerState("http://localhost",file,{fishingItems:[{...item,[key]:"bad\ud800"}]}),/Invalid fishing item/);
   assert.throws(()=>new ServerState("http://localhost",file,{fishingCatalogue:catalogue}),/item reference/);
   assert.throws(()=>new ServerState("http://localhost",file,{fishingItems:[item],fishingCatalogue:{pools:[],prices:[{...catalogue.prices[0],fish_id:"RP1"}]}}),/item reference/);
   assert.deepEqual(readFileSync(file),bytes);

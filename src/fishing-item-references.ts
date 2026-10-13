@@ -12,7 +12,8 @@ export function configuredFishingItems(raw: unknown, reservedIds: ReadonlySet<st
     if (!value || typeof value !== "object" || Array.isArray(value)) throw new TypeError("Expected fishing item object");
     const row = value as Record<string, unknown>, item = {} as FishingItemReference;
     for (const key of ["id", "name", "desc", "thumbnail_id", "effect"] as const) {
-      if (typeof row[key] !== "string" || (key === "id" && !row[key])) throw new TypeError(`Invalid fishing item ${key}`);
+      if (typeof row[key] !== "string" || (key === "id" && !row[key]) ||
+        Buffer.from(row[key],"utf8").toString("utf8")!==row[key]) throw new TypeError(`Invalid fishing item ${key}`);
       item[key] = row[key];
     }
     if (reservedIds.has(item.id) || seen.has(item.id)) throw new TypeError("Duplicate or unrelated reserved fishing item identity");
