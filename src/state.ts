@@ -1,3 +1,5 @@
+import {configuredHunterOvercome,hunterOvercomeWire,hunterOvercomeItems,hunterOvercomeFingerprint,type HunterOvercomePolicy} from "./hunter-overcome-reference.js";
+import {planHunterOvercome} from "./hunter-overcome.js";
 import {DORM_SHOP_ID,configuredDormExpansion,hunterCapacity,dormExpansionReferences,dormPurchaseInventory,planDormExpansion,type DormExpansionPolicy} from "./dorm-expansion.js";
 import {HUNTER_MIN_RANK_PROFILE} from "./hunter-minimum-rank.js";
 import {hunterRegistrationTime} from "./hunter-registration.js";
@@ -583,6 +585,9 @@ export class ServerState {
   private readonly dormExpansionPolicy?:DormExpansionPolicy;
   private readonly quickAdvancement:"disabled"|"local-owned-tickets";
   private readonly friendlyBattleMode:"disabled"|"local-owned-defense";
+  private readonly hunterOvercomeMode:"disabled"|"local-configured";
+  private configuredOvercomePolicy?:HunterOvercomePolicy;
+  private capturedOvercomePolicy?:HunterOvercomePolicy;
   private readonly veteranGiftPolicy?:VeteranGiftPolicy;
   private readonly profileMode:"disabled"|"archive-profile-projection";
   private readonly fishingSaleMode:"disabled"|"local-bound";
@@ -623,6 +628,7 @@ export class ServerState {
       dormExpansionMode?:"disabled"|"local-priced";dormExpansionPrices?:unknown;
       quickAdvancementMode?:"disabled"|"local-owned-tickets";
       friendlyBattleMode?:"disabled"|"local-owned-defense";
+      hunterOvercomeMode?:"disabled"|"local-configured";hunterOvercomePolicy?:unknown;
       resourceShopMode?:"disabled"|"archive-2018-base-only";resourceApDailyLimit?:unknown;resourceBpDailyLimit?:unknown;
       rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
       veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
@@ -631,6 +637,9 @@ export class ServerState {
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    const overcomeMode=Object.hasOwn(options,"hunterOvercomeMode")?options.hunterOvercomeMode:process.env.BLUSTONE_HUNTER_OVERCOME_MODE??"disabled";
+    if(overcomeMode!=="disabled"&&overcomeMode!=="local-configured")throw new TypeError("Unknown Hunter transcendence mode");
+    this.hunterOvercomeMode=overcomeMode;
     const friendlyMode=Object.hasOwn(options,"friendlyBattleMode")?options.friendlyBattleMode:process.env.BLUSTONE_FRIENDLY_BATTLE_MODE??"disabled";
     if(friendlyMode!=="disabled"&&friendlyMode!=="local-owned-defense")throw new TypeError("Unknown friendly battle mode");
     this.friendlyBattleMode=friendlyMode;
@@ -777,25 +786,37 @@ export class ServerState {
     if(text!==undefined) this.guildBenefitText=Object.freeze(guildBenefitStrings(text));
     if(points!==undefined) this.guildPoints=Object.freeze(guildContributionPoints(points));
     if(rewards!==undefined) this.guildRewards=Object.freeze(guildContributionRewards(rewards,knownItems));
+    const rawOvercome=Object.hasOwn(options,"hunterOvercomePolicy")?options.hunterOvercomePolicy:
+      process.env.BLUSTONE_HUNTER_OVERCOME_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_HUNTER_OVERCOME_POLICY_JSON);
+    if(this.hunterOvercomeMode!=="disabled")this.configuredOvercomePolicy=configuredHunterOvercome(rawOvercome,new Set(itemReference().item.map(row=>row.id)));
+    else if(rawOvercome!==undefined)throw new TypeError("Hunter transcendence policy requires local-configured mode");
     if (stateFile && existsSync(stateFile)) {
       const migrated = this.restore(readFileSync(stateFile, "utf8"));
       // Validate every account/session first; atomically save identities before
       // any request can receive them. Constructor failure exposes no live state.
+      this.validateOvercomeHistory();
       if (migrated) this.persist();
-    }
+    } else this.validateOvercomeHistory();
   }
 
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
-    if(saved.version!==10&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
+    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11)throw new TypeError("Captured Hunter transcendence policy requires schema11");
+    if(saved.version===11&&saved.hunterOvercomePolicy===undefined)throw new TypeError("Schema11 requires a captured Hunter transcendence policy");
+    if(saved.hunterOvercomePolicy!==undefined) {
+      this.capturedOvercomePolicy=configuredHunterOvercome(saved.hunterOvercomePolicy,new Set(itemReference().item.map(row=>row.id)));
+      if(this.configuredOvercomePolicy&&hunterOvercomeFingerprint(this.configuredOvercomePolicy)!==hunterOvercomeFingerprint(this.capturedOvercomePolicy))
+        throw new TypeError("Configured transcendence policy differs from captured earned policy; refusing silent stat/cost changes");
+    }
+    if(saved.version!==10&&saved.version!==11&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
       throw new TypeError("Paid dorm expansion requires state schema10");
-    if(saved.version!==9&&saved.version!==10&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
       [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
       throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
@@ -805,10 +826,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -889,7 +910,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -924,9 +945,9 @@ export class ServerState {
     const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const snapshot = { version: this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -935,6 +956,7 @@ export class ServerState {
       ...(this.guildNotifications===undefined?{}:{guildNotifications:this.guildNotifications}),
       ...(this.guildInvitations===undefined?{}:{guildInvitations:this.guildInvitations}),
       ...(this.nextGuildNotificationId===undefined?{}:{nextGuildNotificationId:this.nextGuildNotificationId}),
+      ...(this.capturedOvercomePolicy?{hunterOvercomePolicy:this.capturedOvercomePolicy}:{}),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -1805,7 +1827,9 @@ export class ServerState {
     const dorm=this.dormExpansionPolicy?dormExpansionReferences(this.dormExpansionPolicy):{item:[],global_item:[]};
     const retainedTickets=[...this.gameByPvid.values()].some(game=>game.items.some(row=>row.ref_id==="SU1"||row.ref_id==="SU2"));
     const quick=this.quickAdvancement!=="disabled"||retainedTickets?quickAdvancementReferences():{item:[]};
-    return {...base,item:[...base.item,...bait.item,...rupee.item,...dorm.item,...quick.item,...(this.veteranGiftPolicy?[veteranGiftItem(this.veteranGiftPolicy)]:[]),...this.fishingItems.map(row=>({...row}))],
+    const overcome=this.configuredOvercomePolicy??this.capturedOvercomePolicy;
+    if(overcome?.items.some(row=>this.fishingItems.some(fish=>fish.id===row.id)))throw new TypeError("Transcendence item reference collides with imported fishing data");
+    return {...base,item:[...base.item,...bait.item,...rupee.item,...dorm.item,...quick.item,...(overcome?hunterOvercomeItems(overcome):[]),...(this.veteranGiftPolicy?[veteranGiftItem(this.veteranGiftPolicy)]:[]),...this.fishingItems.map(row=>({...row}))],
       global_item:[...base.global_item,...bait.global_item,...rupee.global_item,...dorm.global_item]};
   }
 
@@ -2068,6 +2092,37 @@ export class ServerState {
     item.qty=plan.remaining;Object.assign(plan.target,plan.next);game.card_book=plan.book;
     try{this.persist();}catch(error){item.qty=quantity;Object.assign(plan.target,before);game.card_book=book;throw error;}
     return this.envelope(plan.receipt);
+  }
+
+  hunterOvercomeReference() {
+    const policy=this.configuredOvercomePolicy??this.capturedOvercomePolicy;
+    return policy?hunterOvercomeWire(policy):undefined;
+  }
+
+  private validateOvercomeHistory() {
+    const policy=this.configuredOvercomePolicy??this.capturedOvercomePolicy;if(!policy)return;
+    if(policy.items.some(row=>this.fishingItems.some(fish=>fish.id===row.id)))throw new TypeError("Transcendence item reference collides with imported fishing data");
+    const counts=[...this.gameByPvid.values()].flatMap(game=>[...game.starter_cards,...game.recruited_cards]).map(card=>card.overcome_cnt??0);
+    if(counts.some(value=>typeof value!=="number"||!Number.isInteger(value)||value<0||value>3))throw new TypeError("Unsupported captured ordinary transcendence count");
+    if(counts.some(value=>typeof value==="number"&&value>0)&&!this.capturedOvercomePolicy)throw new TypeError("Existing transcendence history has no bound effect policy; refusing silent retuning");
+  }
+
+  overcomeHunter(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid),policy=this.configuredOvercomePolicy;
+    if(this.hunterOvercomeMode==="disabled"||!policy||!game)return this.failure(2001,"Ordinary Hunter transcendence requires an explicit local policy");
+    if(game.active_battle?.state==="active"||game.arena.active||game.search.active)return this.failure(2001,"Finish active combat before transcendence");
+    let plan;
+    try {
+      this.validateOvercomeHistory();assertOwnedCardCompatibility(game);
+      const committed=this.dispatches.get(account.pvid)?.active?.deck??[];
+      const protectedIds=new Set([game.leader_inst_id,...this.gemProtectedCardIds(game),...committed,...game.decks.flatMap(deck=>deck.list)]);
+      plan=planHunterOvercome(payload,game,policy,starterReference,protectedIds);
+      if(committed.includes(plan.targetId))return this.failure(2001,"Target is committed to dispatch");
+    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Hunter transcendence");}
+    const before={gold:game.gold,items:game.items,starter_cards:game.starter_cards,recruited_cards:game.recruited_cards,decks:game.decks},captured=this.capturedOvercomePolicy;
+    Object.assign(game,{gold:plan.gold,items:plan.items,starter_cards:plan.starter_cards,recruited_cards:plan.recruited_cards,decks:plan.decks});this.capturedOvercomePolicy=policy;
+    try{this.persist();}catch(error){Object.assign(game,before);this.capturedOvercomePolicy=captured;throw error;}
+    return this.envelope({...plan.receipt,user:{...plan.receipt.user,deck:partyDeck(game)}});
   }
 
   friendlyBattlePreparation(payload:Record<string,unknown>,headers:Record<string,string>) {

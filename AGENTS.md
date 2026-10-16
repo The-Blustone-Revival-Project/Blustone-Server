@@ -1,3 +1,54 @@
+## Latest continuation: ordinary Hunter transcendence (2026-10-16)
+
+Previous checkpoint bc500b9 restored real-friend defense preparation. This
+checkpoint adds optional ordinary /gym/Overcome with combined duplicate,
+material and gold settlement. Goal ACTIVE; native UI validation PENDING.
+No live profile, device, original assets, APK, Docker, Collector or inference
+changes. Input hold persists. Server/Instrumented writes only; DataDump read
+only. No rebuild or release owed.
+
+BLUSTONE_HUNTER_OVERCOME_MODE=local-configured requires explicit
+BLUSTONE_HUNTER_OVERCOME_POLICY_JSON: three raw effect rows cnt1..3 and ALL
+12 unique base-rank1..4/count1..3 recipes. Native missing-recipe lookup returns
+an unsafe sentinel used by popup consumers; never publish a sparse table.
+Native effect percentage10 means+10%, applied by native stat validation;
+server never pre-multiplies GetCard stats. Original magnitudes/costs/material
+IDs remain UNKNOWN. Thirteen historical quotes from ten DataDump sources are
+preserved with hashes/locators; conflicting quotes remain unbound evidence.
+No historical recipe, material stock or original item ID is auto-adopted.
+
+Ordinary target rank3..5, count below rank-2, awake0; recipe selects FIRST
+reference stat rank and next count. LOCAL strict sources: exact same ref,
+unlocked, untranscended, awake0, grade at least required and absent from all
+leader/deck/Gem/dispatch commitments. Native char_id/resource-source domain
+and existing-source credit transfer remain unreconstructed. All configured
+card/item/gold costs apply together; locked items cannot fund payment.
+Full64 material IDs stay exact; removed_item reports deltas, removed_card
+bare IDs, target.overcome_cnt scalar, user gold/deck. Rank/EXP/skills/book/
+allocator and clocks remain unchanged. Active combat and dispatched target
+refuse. New local_overcome_* metadata is inert and grants no stock or offer.
+
+First successful operation captures the FULL canonical policy atomically
+in schema11, with mandatory dispatch/quest arrays. File-write and rename
+failure restore exact arrays/scalars/captured-policy reference or absence.
+Mode off plus unset policy retains earned effect reference and item metadata;
+any changed effect/cost/metadata refuses startup. Existing positive counts
+without a bound policy refuse activation. Mere config/reference reads do not
+capture policy. Default mutation2001; default reference keeps legacy fallback.
+
+All204 npm test programs, five resource-profile suites, TypeScript build,
+source/compiled reference/planner/state and independent review PASS. Compiled
+ephemeral P384/HMAC/AES HTTP checks pass: actual busy refusal, combined payment,
+wide-ID deltas, source removal, scalar-only upgrade, schema11 restart, mode-off
+retained tables/absolute sync, changed-policy byte-preserving startup refusal.
+Tests cover first/later real write and rename rollback, rank cap, immutable
+policy, older schemas, prior counters/profile/dorm retention and ledger survival
+after the last upgraded Hunter is removed. No native battle/buff/UI claim.
+
+Setup/limits: docs/hunter-overcome-local-policy-2026-10-16.md.
+Native addresses: docs/hunter-overcome-native-2026-10-16.md.
+Image evidence: docs/hunter-overcome-image-quotes-2026-10-16.md.
+
 ## Latest continuation: real-friend defense preparation (2026-10-16)
 
 Previous checkpoint9b6d219 restored optional owned SU ticket consumption.

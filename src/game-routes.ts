@@ -334,6 +334,10 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/card_handler/SetLeader") return state.setLeader(payload,headers);
   if (route === "/gym/LevelUp") return state.trainCard(payload, headers);
   if (route === "/gym/RankUp") return state.rankUpCard(payload, headers);
+  if (route === "/gym/Overcome") return state.overcomeHunter(payload,headers);
+  if (route === "/reference/GetCardOvercome") {
+    const reference=state.hunterOvercomeReference();if(reference)return state.envelope(reference);
+  }
   if (route === "/shop/SellCard") return state.sellCards(payload, headers);
   if (route === "/gym/RankUpBundle") return state.groupRankUpCards(payload, headers);
   if (route === "/gym/SkillUp") return state.trainSkill(payload, headers);

@@ -81,6 +81,14 @@ hunter-release economy is made.
 
 ## Equipment and Overcome: exact missing dependencies
 
+Continuation2026-10-16: ordinary Overcome now has an optional explicit local
+policy workflow, documented in
+[Hunter Overcome local policy](hunter-overcome-local-policy-2026-10-16.md).
+The native reference/receipt closure is in
+[Hunter Overcome native contract](hunter-overcome-native-2026-10-16.md).
+The historical numerical-data gaps below remain; configured local rows are
+not recovered original recipes, effects or material identities.
+
 RequestEquipLevelUp Gf59380 sends inst_id/part/price_type and exact unslashed
 card_handler/LevelUpEquipment (ADD Gf5970e). RequestEquipRankUp Gf5a0bc sends
 inst_id/part/price_type/source_inst_ids and card_handler/RankUpEquipment

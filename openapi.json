@@ -11506,10 +11506,10 @@
     },
     "/gym/Overcome": {
       "post": {
-        "summary": "Recovered /gym/Overcome route",
-        "description": "The route literal **/gym/Overcome** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Overcome",
+        "description": "Optional BLUSTONE_HUNTER_OVERCOME_MODE=local-configured requires an explicit validated policy: three raw percentage effect rows and all twelve base-rank1..4/count1..3 recipes. Ordinary transcendence consumes the combined exact duplicate count, item quantities and gold atomically; current target rank caps count at rank minus2. Local strict subset requires exact same reference, unlocked unprotected untranscended source Hunters; awakening and source-credit transfer are unsupported. Receipt uses scalar target.overcome_cnt, bare removed_card IDs, exact numeric U64 removed_item delta quantities and user gold/deck. No server-side stat multiplication, rank/EXP/skill change, material issuance or original cost claim. First paid operation captures immutable full policy in schema11; effects and inert item metadata remain published when mutations are disabled, and changed policy refuses startup. Unbound preexisting positive counts refuse policy activation. Default mutation refuses2001; reference retains legacy fallback until configured or captured. Native UI validation pending.",
         "tags": [
-          "gym"
+          "Hunters"
         ],
         "parameters": [
           {
@@ -11580,9 +11580,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/hunter-overcome-native-2026-10-16.md; docs/hunter-overcome-local-policy-2026-10-16.md",
+        "x-runtime-confidence": "Disposable atomic state and compiled encrypted HTTP restart checked; native UI pending"
       }
     },
     "/gym/RankUpBundle": {
@@ -16202,10 +16202,10 @@
     },
     "/reference/GetCardOvercome": {
       "post": {
-        "summary": "Recovered /reference/GetCardOvercome route",
-        "description": "The route literal **/reference/GetCardOvercome** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "GetCardOvercome",
+        "description": "Optional BLUSTONE_HUNTER_OVERCOME_MODE=local-configured requires an explicit validated policy: three raw percentage effect rows and all twelve base-rank1..4/count1..3 recipes. Ordinary transcendence consumes the combined exact duplicate count, item quantities and gold atomically; current target rank caps count at rank minus2. Local strict subset requires exact same reference, unlocked unprotected untranscended source Hunters; awakening and source-credit transfer are unsupported. Receipt uses scalar target.overcome_cnt, bare removed_card IDs, exact numeric U64 removed_item delta quantities and user gold/deck. No server-side stat multiplication, rank/EXP/skill change, material issuance or original cost claim. First paid operation captures immutable full policy in schema11; effects and inert item metadata remain published when mutations are disabled, and changed policy refuses startup. Unbound preexisting positive counts refuse policy activation. Default mutation refuses2001; reference retains legacy fallback until configured or captured. Native UI validation pending.",
         "tags": [
-          "Reference data"
+          "Hunters"
         ],
         "parameters": [
           {
@@ -16276,9 +16276,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/hunter-overcome-native-2026-10-16.md; docs/hunter-overcome-local-policy-2026-10-16.md",
+        "x-runtime-confidence": "Disposable atomic state and compiled encrypted HTTP restart checked; native UI pending"
       }
     },
     "/reference/GetCardRankUp": {
