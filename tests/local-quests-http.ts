@@ -36,6 +36,7 @@ try {
   };
   const lobby=await secure("/lobby/Enter",{});assert.equal(lobby.result_code,1);assert.equal(lobby.ret_data.dailyquest_min_stage,"n_01_05");
   assert.equal((await secure("/dailyquest/GetRefList",{})).ret_data[0].id,reference.id);
+  const wireReference=(await secure("/dailyquest/GetRefList",{})).ret_data[0];assert.equal(typeof wireReference.reward,"string");assert.equal(JSON.parse(wireReference.reward).gold,7);
   const claim={daily_quest_id:reference.id,target_val:"2"};assert.equal((await secure("/dailyquest/RequestReward",claim)).result_code,2001);
   for(let count=1;count<=2;count++) {
     const start=await secure("/mission/Start",{stage_id:"n_01_01"});assert.equal(start.result_code,1);

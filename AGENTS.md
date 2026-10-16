@@ -1,4 +1,40 @@
-## Latest continuation: atomic configured skill materials (2026-10-16)
+## Latest continuation: local linear quest sequences and preview wire correction (2026-10-16)
+
+Existing local-fixed quest policy optionally includes linear:{references,rules}.
+Explicit type3 local_ rows/gold-only, positivestrictlyascending configuredserials,
+one rule perrow, disjointdailyIDs, combineddaily+lineartargetsum≤10000. Fresh
+explicitowners enrollcapturedladder index0/cur0; refs/rules/ordering/rewards
+freeze inownerjournal. Existingdaily-onlyjournals NOT silently backfilled.
+OnlyCURRENTlinear row progresses onmatchingstrictordinarynativewin; daily
+canprogressinparallel. Fulltargetdoesnotadvancebeforeclaim. Exactid/serial/
+target+earnedcount/minstage required; gold/index/cur0 advanceatomically.
+Oldcompletedprefix claimrebasesCURRENTtask/terminal/currentgold, noaward/write/
+rewind. Indexdefinesclaimedprefix; restorevalidatesseenminimum/cur/serialdomain.
+
+CRITICAL nativewirecorrection: GetRefList previews AND linear rows require
+reward JSON STRING (strictstringthenJSON::parse), NOT internalobject. Earlier
+dailyobjectwirewaswrong, nowprojectedonce; internalconfig/journalobjects remain.
+Successfulclaim ret_data.reward remains OBJECT specializedgold.cur. Source
+docs/quest-reward-string-wire-correction-2026-10-16.md; no APK patch needed.
+Nativeone-slotlinearcache receivesonecurrentfullrow. Finalclearing MUSTsend
+fullEMPTY-ID tombstone withstringfields/zeroUINTcounters/rewardzeroJSONstring;
+[]/null/{}cannotclear safely. AllComplete/lobby/claim overlays staycurrent.
+
+Linearjournalsrequireschema4; older1/2/3writers refuse. Newreader rejects
+linearfieldinschema3 andemptylinearlessschema4; dailysnapshotsremain3. Offmode
+preservesreadhydration/sequences andrefusesclaims. Policyeditscan'tresetor
+repricecapturedhistory. Mission/claim/enrollmentwrite+renamefailures preserve
+exactgame/journalrefs/bytes, legitimate retrythenworks. No nonce/anti-cheat claim.
+
+Full160 testprograms/build pass; pure/state/realP384-AESHTTPcovercurrentonly,
+wrong/future/duplicateclaims,finaltombstone,replaylaterwallet/progress,overflow,
+actualIOfailure,schema/corruption,legacy/offrestart/peerpreservation. Same TWO
+agents reused. docs/local-linear-quests-2026-10-16.md. Allrecords/events/rewards
+LOCALconfigured, originalcatalogue/calendar/otherrewards stillmissing. NativeUI
+pending. No liveprofile/flags/privateprogress/APK/input/DataDump changes.
+Goal ACTIVE; Escapeinputhold/offlinecollector/original-privatepreservation stay.
+
+## Historical continuation: atomic configured skill materials (2026-10-16)
 
 BLUSTONE_SKILL_MATERIAL_PRICES_JSON optional sparse(role,destinationlevel) native
 four-slot recipes now sharedGetLevel+single/batch settlement. Defaultemptyrows

@@ -1,5 +1,10 @@
 # Persistent local daily quest progression and gold claims
 
+2026-10-16 follow-up: daily reference previews must encode reward as JSON string;
+claim reward remains an object. Optional captured linear sequences are now
+implemented separately in local-linear-quests-2026-10-16.md. Daily-only journals
+retain schema3/linear[] preservation; only linear-bearing snapshots require4.
+
 `BLUSTONE_QUEST_MODE=local-fixed` is opt-in, default disabled. It requires an
 explicit `BLUSTONE_QUEST_POLICY_JSON` (also ServerState/createApp questPolicy).
 No production quest catalogue, event predicate, calendar or numerical reward

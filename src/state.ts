@@ -33,7 +33,7 @@ import { mirageLobby, mirageFriendFloors,mirageEndRefusal } from "./mirage.js";
 import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
 import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type FishingCatalogue} from "./fishing-catalogue.js";
 import {ownedFishingInventory} from "./fishing-inventory.js";
-import {localQuestPolicy,localQuestJournal,beginLocalQuests,localQuestProgress,recordLocalQuestWin,planLocalQuestClaim,type LocalQuestPolicy,type LocalQuestJournal} from "./local-quests.js";
+import {localQuestPolicy,localQuestJournal,beginLocalQuests,localQuestProgress,localQuestReferenceWire,recordLocalQuestWin,planLocalQuestClaim,planLocalLinearClaim,type LocalQuestPolicy,type LocalQuestJournal} from "./local-quests.js";
 import {fishingSaleBindings,planFishingSale,type FishingSaleBindings} from "./fishing-sale.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
@@ -723,9 +723,9 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      saved.version===3&&!Array.isArray(saved.quests)||saved.version!==3&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
     const ids = new Set<number>();
@@ -802,9 +802,11 @@ export class ServerState {
     if(saved.quests!==undefined) {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
-        this.quests.set(row[0],localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id))));
+        const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
+        if(journal.linear&&saved.version!==4)throw new TypeError("Linear quests require state schema4");this.quests.set(row[0],journal);
       }
     }
+    if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
     for (const row of saved.transportKeys) {
       if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== "string" || typeof row[1] !== "string") throw new Error("Malformed transport state");
       const key = Buffer.from(row[1], "base64");
@@ -830,7 +832,7 @@ export class ServerState {
     if (!this.stateFile) return;
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
     // Older version1 writers must refuse a journal they cannot preserve.
-    const snapshot = { version: this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+    const snapshot = { version: [...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
       ...(this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
       ...(this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
@@ -1606,12 +1608,13 @@ export class ServerState {
     const account=this.accountFor(payload, headers),journal=this.ensureLocalQuests(account.pvid);
     // CSRAchieve consumes ret_data itself, not generic mock metadata or a
     // list child. No original production quest IDs/conditions are imported.
-    if (route === "/dailyquest/GetRefList")return this.envelope(journal?structuredClone(journal.references):[]);
+    if (route === "/dailyquest/GetRefList")return this.envelope(journal?journal.references.map(localQuestReferenceWire):[]);
     if (route === "/dailyquest/GetInstList")return this.envelope(journal?structuredClone(journal.instances):[]);
-    if(route==="/dailyquest/RequestReward"&&journal&&this.questMode==="local-fixed") {
+    if((route==="/dailyquest/RequestReward"||route==="/linearquest/Reward")&&journal&&this.questMode==="local-fixed") {
       const game=this.gameByPvid.get(account.pvid);
       if(!game||(game.stage_achievements[journal.minimum_stage]?.length??game.stage_stars[journal.minimum_stage]??0)===0)return this.failure(2001,"Local quest minimum stage is not cleared");
-      let plan;try{plan=planLocalQuestClaim(journal,game.gold,payload.daily_quest_id,payload.target_val);}catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+      let plan;try{plan=route==="/linearquest/Reward"?planLocalLinearClaim(journal,game.gold,payload.id,payload.serial,payload.target_val):
+        planLocalQuestClaim(journal,game.gold,payload.daily_quest_id,payload.target_val);}catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
       if(!plan.replay) {
         const before=game.gold;game.gold=plan.gold;this.quests.set(account.pvid,plan.journal);
         try{this.persist();}catch(error){game.gold=before;this.quests.set(account.pvid,journal);throw error;}

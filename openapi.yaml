@@ -2642,8 +2642,14 @@ paths:
         claimed. Specialized receipt has min-stage/daily/linear progress plus
         reward.gold.cur, no generic user. Replay rebases current wallet/progress
         without another grant. Journals use schema3, survive disabled
-        mode/restart/config changes. Linear claims remain refused. Native quest
-        UI validation pending.
+        mode/restart/config changes. Optional captured linear ladder has full
+        type3 rows/rules, one current task, exact id/serial/target claims and
+        atomic gold/advance. Earlier claims replay CURRENT cache/wallet;
+        terminal sequence emits complete empty-ID row, not[]. New linear
+        journals require schema4; existing captured daily-only journals are not
+        silently enrolled. Daily reference and linear preview reward fields are
+        JSON STRINGS; claim reward remains OBJECT. Native quest UI validation
+        pending.
       tags:
         - Quests
       parameters: *a1
@@ -2685,8 +2691,14 @@ paths:
         claimed. Specialized receipt has min-stage/daily/linear progress plus
         reward.gold.cur, no generic user. Replay rebases current wallet/progress
         without another grant. Journals use schema3, survive disabled
-        mode/restart/config changes. Linear claims remain refused. Native quest
-        UI validation pending.
+        mode/restart/config changes. Optional captured linear ladder has full
+        type3 rows/rules, one current task, exact id/serial/target claims and
+        atomic gold/advance. Earlier claims replay CURRENT cache/wallet;
+        terminal sequence emits complete empty-ID row, not[]. New linear
+        journals require schema4; existing captured daily-only journals are not
+        silently enrolled. Daily reference and linear preview reward fields are
+        JSON STRINGS; claim reward remains OBJECT. Native quest UI validation
+        pending.
       tags:
         - Quests
       parameters: *a1
@@ -2728,8 +2740,14 @@ paths:
         claimed. Specialized receipt has min-stage/daily/linear progress plus
         reward.gold.cur, no generic user. Replay rebases current wallet/progress
         without another grant. Journals use schema3, survive disabled
-        mode/restart/config changes. Linear claims remain refused. Native quest
-        UI validation pending.
+        mode/restart/config changes. Optional captured linear ladder has full
+        type3 rows/rules, one current task, exact id/serial/target claims and
+        atomic gold/advance. Earlier claims replay CURRENT cache/wallet;
+        terminal sequence emits complete empty-ID row, not[]. New linear
+        journals require schema4; existing captured daily-only journals are not
+        silently enrolled. Daily reference and linear preview reward fields are
+        JSON STRINGS; claim reward remains OBJECT. Native quest UI validation
+        pending.
       tags:
         - Quests
       parameters: *a1
@@ -5699,8 +5717,14 @@ paths:
         claimed. Specialized receipt has min-stage/daily/linear progress plus
         reward.gold.cur, no generic user. Replay rebases current wallet/progress
         without another grant. Journals use schema3, survive disabled
-        mode/restart/config changes. Linear claims remain refused. Native quest
-        UI validation pending.
+        mode/restart/config changes. Optional captured linear ladder has full
+        type3 rows/rules, one current task, exact id/serial/target claims and
+        atomic gold/advance. Earlier claims replay CURRENT cache/wallet;
+        terminal sequence emits complete empty-ID row, not[]. New linear
+        journals require schema4; existing captured daily-only journals are not
+        silently enrolled. Daily reference and linear preview reward fields are
+        JSON STRINGS; claim reward remains OBJECT. Native quest UI validation
+        pending.
       tags:
         - Quests
       parameters: *a1
@@ -13191,8 +13215,9 @@ components:
           type: array
           items:
             type: object
-          description: Empty preserves existing native linear slot; no local linear
-            producer.
+          description: Without a configured ladder, empty preserves existing native slot.
+            Configured sequence publishes one current full row with JSON-string
+            reward, or complete empty-ID terminal row to remove it.
         achieve:
           type: array
           description: "[RECOVERED] Newly granted flags0..2. Empty for defeat or a replay

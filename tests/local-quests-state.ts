@@ -30,7 +30,7 @@ try {
   const count=()=>progress().cur_val;
   const claim=(id="local_any_win",target="3")=>route("RequestReward",{daily_quest_id:id,target_val:target});
   assert.throws(()=>gameResponse(state,"/dailyquest/GetRefList",{}),/authenticated/);
-  assert.deepEqual(route("GetRefList").ret_data,references);
+  assert.deepEqual(route("GetRefList").ret_data,references.map(row=>({...row,reward:JSON.stringify(row.reward)})));
   assert.deepEqual(route("GetInstList").ret_data,instances);
   assert.deepEqual(route("GetRefList",{},peer).ret_data,[],"Unlisted owner is not assigned tasks");
   const lobby=gameResponse(state,"/lobby/Enter",actor) as any;

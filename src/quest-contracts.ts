@@ -27,6 +27,9 @@ export interface QuestReference {
   npc_id: string; go_to: string; serial: number; target_val: number; option_val: number;
   reward: QuestReward;
 }
+// QuestReference.reward is the normalized INTERNAL preview object. Original
+// GetRefList/linear wire rows encode it as JSON STRING; claim reward is an
+// independent OBJECT. See quest-reward-string-wire-correction-2026-10-16.md.
 export interface DailyQuestInstance { daily_quest_id: string; is_rewarded: number; cur_val: number }
 
 function object(raw: unknown, field: string): Record<string, unknown> {
@@ -62,7 +65,9 @@ export function questRewardIdentity(raw: unknown): QuestReward {
   return { ...currency, item_list: list("item_list"), card_list: list("card_list") };
 }
 
-/** Array collection is strict local ingestion policy: native iterators also
+/** Input is normalized reference data with an already-decoded reward object,
+ * not a direct copy of the native string-encoded preview field.
+ * Array collection is strict local ingestion policy: native iterators also
  * handle object collections, but do not index a list child in this consumer.
  * No IDs are manufactured from source filenames, stage IDs or a client's
  * request. approvedOriginalIds must come from an independently recovered
