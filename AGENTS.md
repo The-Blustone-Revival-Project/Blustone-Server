@@ -1,3 +1,75 @@
+## Latest continuation: persisted configured fishing catches (2026-10-17)
+
+Previous checkpoint3a8a2b6 prepared the inactive169-group restoration profile.
+Goal ACTIVE. Only Server code/docs/tests changed. No live profile/private save/
+device/APK/original asset/Docker/Collector/inference change. Device input hold
+persists; no new battle. DataDump read only. No APK rebuild/release owed.
+
+Optional BLUSTONE_FISHING_CAST_MODE=local-configured plus complete
+BLUSTONE_FISHING_CAST_POLICY_JSON now implements the missing full persisted
+Begin → End win/loss → keep/automatic sale → records/standalone sale producer.
+Default disabled; fixture tests are not startup profiles. Original fish IDs,
+RNG/grade/length distribution, minigame tuning, bait costs/debit timing and
+original grade-to-general-stack mapping remain UNKNOWN. All supplied tuning,
+context/outcome cycles and economics are explicitly LOCAL authored laws.
+
+Fresh immutable ELF closure proves exact no-catch sentinel empty STRING,
+not0/-1/omitted. ParseEnd compares initialized BSS NULL_STR and skips BOTH
+AddInven/UpdateRecord for empty. GetRecord bare rows fish_id/grade/length use
+signed32; actual catch changes both record fields only when strictly longer.
+Both GetRecord and GetInven INSERT MISSING keys; existing cached rows never
+replace. docs/fishing-no-catch-record-native-2026-10-17.md pins GOT/initializer/
+array/sentinel/achievement:null proof; prior lifecycle doc supplies requests.
+
+New src/fishing-casts.ts validates exact plain JSON, finite float32 tuning,
+explicit place/distance/lure contexts, type17 fish metadata/lure membership,
+positive signed32 lengths/grades1..3, and optional supplied sale prices. Bait
+requires separately published metadata: currently historical LU003 offer can
+supply it; LU001 identity alone is insufficient. No automatic bait/stock grant.
+Begin binds unlocked actual bait by exact ID/qty, captures deterministic outcome
+and positive owner-scoped log; no debit yet. Same pending context returns same
+log/tuning without writes. Different/unknown contexts and unavailable bait refuse.
+
+LOCAL stock law is new-stack-per-catch: each win earns exactly one allocated
+general instance plus separate grade count and a captured dynamic grade binding.
+Keep permits later existing local-bound sale using that earned bridge (explicit
+empty external bindings map allows fresh owners). Auto-sale follows native
+ParseEnd addition BEFORE optional ParseSell removal/absolute count replacement.
+End-all bait debit applies to both win and loss as explicit LOCAL policy.
+First loss preserves absent owned_fish, allocator and gold; only bait/journal
+change. Generated stack qty must0..1 even when corrupt grade totals agree;
+independent review caught this inflation gap and it is fixed/tested. Imported
+base-bound stacks may hold more. No unbound positive fish ownership accepted.
+
+Schema15 captures policy/reference hash/imported bindings/full bounded history
+(10000 casts, no pruning). Silent retuning, malformed ownership/logs, stale
+references and inconsistent grade/stack totals refuse before overwrite.
+Current/archived Mirage first aid/re-entry and older cohorts coexist. Disabled
+mode retains reads/earned data, requires fish reference dependencies, and
+refuses cast mutations. Begin/End persistence failures restore original field
+and journal references plus optional-key absence, including rename failure.
+
+End sends only log_id/is_win; a pending owned log can settle exactly once.
+LOCAL terminal10203 maps to source-backed native consume cleanup without
+replaying additive success. Original server meaning is not claimed. With a
+newer pending cast, old terminal result returns2001 so native does not clear
+that newer consume marker. Unknown/invalid logs refuse2001. Lost-response
+in-session fish-count/record cache repair remains UNSOLVED: insert-only reads
+cannot replace stale entries. Cold native model reload is necessary; no native
+end-to-end recovery or minigame/rendering validation claimed.
+
+Validation: build PASS; npm test216-program dispatch PASS; newly added217th
+cohort test PASS in source and compiled runs. Final npm run test:fishing-casts
+(build + state + compiled encrypted HTTP + cohort) PASS. HTTP buys its bait via
+real shop, captures pending cast, restores app/transport keys, catches/keeps/
+sells, loses, checks records, repeat/stale results, peer isolation and modeoff.
+Cohort test creates REAL Mirage re-entry and paid aid in current+archived runs,
+then schema15 cast/restart/unrelated saves and both modes disabled, preserving
+Mirage journals and older settings. OpenAPI/README/.env guide updated.
+See docs/fishing-configured-casts-2026-10-17.md for exact policy/setup/limits.
+Next meaningful work: recover original fish item/tuning tables or another
+missing original system; native validation remains pending input reauthorization.
+
 ## Latest continuation: combined restoration profile and fishing producer (2026-10-17)
 
 Previous checkpoint badc0f0 restored configured Mirage re-entry. Goal ACTIVE.

@@ -35,6 +35,14 @@ for10 LU003 bait. It defaults disabled; the cap and UTC reset are local policy.
 See the [bait shop workflow](docs/fishing-bait-shop-workflow-2026-10-16.md)
 for save-version compatibility and the remaining catch-data gaps.
 
+Optional `BLUSTONE_FISHING_CAST_MODE=local-configured` adds persisted casts,
+owned bait consumption, catches, longest-catch records and keep/sale settlement.
+It requires a complete supplied policy, fish metadata and lure catalogue;
+outcomes, tuning, bait economics and grade/stack bindings remain explicitly local.
+No original fish identities or RNG are guessed. Captured journals use schema15.
+See the [configured fishing workflow](docs/fishing-configured-casts-2026-10-17.md)
+for setup, rollback/replay behavior and unresolved native cache repair.
+
 The reconstructed profile editor is available with
 `BLUSTONE_PROFILE_MODE=archive-profile-projection`. It restores the native
 `my_info` WebView entry and saves nickname/status changes. Its undated historical

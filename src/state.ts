@@ -55,6 +55,7 @@ import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type Fishing
 import {ownedFishingInventory} from "./fishing-inventory.js";
 import {localQuestPolicy,localQuestJournal,beginLocalQuests,localQuestProgress,localQuestReferenceWire,recordLocalQuestWin,planLocalQuestClaim,planLocalLinearClaim,type LocalQuestPolicy,type LocalQuestJournal} from "./local-quests.js";
 import {fishingSaleBindings,planFishingSale,type FishingSaleBindings} from "./fishing-sale.js";
+import {configuredFishingCasts,normalizeFishingCasts,fishingReferenceHash,fishingCastBindings,validateFishingCastStock,planFishingBegin,planFishingEnd,fishingEndLog,fishingCastRecordRows,type FishingCastPolicy,type FishingCastJournal} from "./fishing-casts.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { socialDiscovery } from "./social-discovery.js";
@@ -602,6 +603,9 @@ export class ServerState {
   private readonly miragePolicy?:MiragePolicy;
   private readonly veteranGiftPolicy?:VeteranGiftPolicy;
   private readonly profileMode:"disabled"|"archive-profile-projection";
+  private readonly fishingCasts=new Map<number,FishingCastJournal>();
+  private readonly fishingCastMode:"disabled"|"local-configured";
+  private readonly fishingCastPolicy?:FishingCastPolicy;
   private readonly fishingSaleMode:"disabled"|"local-bound";
   private readonly fishingBindings?:FishingSaleBindings;
   private readonly guildChatMode:"disabled"|"local-memory";
@@ -647,6 +651,7 @@ export class ServerState {
       veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
       profileMode?:"disabled"|"archive-profile-projection";
       baitShopMode?:"disabled"|"archive-2018-projection";baitShopDailyLimit?:unknown;
+      fishingCastMode?:"disabled"|"local-configured";fishingCastPolicy?:unknown;
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
@@ -735,6 +740,17 @@ export class ServerState {
       process.env.BLUSTONE_FISHING_SALE_BINDINGS_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_FISHING_SALE_BINDINGS_JSON);
     if(fishBindings!==undefined)this.fishingBindings=fishingSaleBindings(fishBindings,new Set(this.fishingItems.filter(row=>row.use_type===17).map(row=>row.id)));
     if(fishSaleMode!=="disabled"&&(!this.fishingBindings||!this.fishingCatalogue))throw new TypeError("Local fishing sale requires explicit stack bindings and prices");
+    const castMode=options.fishingCastMode??process.env.BLUSTONE_FISHING_CAST_MODE??"disabled";
+    if(castMode!=="disabled"&&castMode!=="local-configured")throw new TypeError("Unknown fishing cast mode");
+    this.fishingCastMode=castMode;
+    const castPolicy=Object.hasOwn(options,"fishingCastPolicy")?options.fishingCastPolicy:
+      process.env.BLUSTONE_FISHING_CAST_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_FISHING_CAST_POLICY_JSON);
+    if(castMode==="local-configured")this.fishingCastPolicy=configuredFishingCasts(castPolicy,this.fishingItems,this.fishingCatalogue);
+    else if(castPolicy!==undefined)throw new TypeError("Fishing cast policy requires local-configured mode");
+    if(this.fishingCastPolicy) {
+      const baitIds=new Set([...itemReference().item,...(this.baitShopPolicy?baitShopReferences(this.baitShopPolicy).item:[])].map(item=>item.id));
+      if(this.fishingCastPolicy.contexts.some(context=>!baitIds.has(context.lure_id)))throw new TypeError("Configured casting bait requires separately published item metadata");
+    }
     const levelPrices = readPrices("equipmentLevelPrices","BLUSTONE_EQUIPMENT_LEVEL_PRICES_JSON");
     const rankPrices = readPrices("equipmentRankPrices","BLUSTONE_EQUIPMENT_RANK_PRICES_JSON");
     this.equipmentLevelPrices = Object.freeze((Array.isArray(levelPrices) && levelPrices.length===0 ? [] :
@@ -826,28 +842,30 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14||saved.version===15)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
-    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Mirage run journals require schema12");
+    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Mirage run journals require schema12");
     if((saved.version===12||saved.version===13||saved.version===14)&&(!Array.isArray(saved.mirageRuns)||!saved.mirageRuns.length))throw new TypeError("Schema12 requires captured Mirage run journals");
-    if(saved.mirageSeries!==undefined&&saved.version!==14)throw new TypeError("Mirage re-entry journals require schema14");
+    if(saved.mirageSeries!==undefined&&saved.version!==14&&saved.version!==15)throw new TypeError("Mirage re-entry journals require schema14");
     if(saved.version===14&&(!Array.isArray(saved.mirageSeries)||!saved.mirageSeries.length))throw new TypeError("Schema14 requires captured Mirage re-entry journals");
+    if(saved.fishingCasts!==undefined&&saved.version!==15)throw new TypeError("Fishing cast journals require schema15");
+    if(saved.version===15&&(!Array.isArray(saved.fishingCasts)||!saved.fishingCasts.length))throw new TypeError("Schema15 requires captured fishing casts");
     const hasMirageRevive=Array.isArray(saved.mirageRuns)&&saved.mirageRuns.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].policy)&&row[1].policy.revive_prices!==undefined);
-    if(hasMirageRevive&&saved.version!==13&&saved.version!==14)throw new TypeError("Mirage first-aid policies require schema13");
+    if(hasMirageRevive&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Mirage first-aid policies require schema13");
     if(saved.version===13&&!hasMirageRevive)throw new TypeError("Schema13 requires captured Mirage first-aid policy");
-    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Captured Hunter transcendence policy requires schema11");
+    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Captured Hunter transcendence policy requires schema11");
     if(saved.version===11&&saved.hunterOvercomePolicy===undefined)throw new TypeError("Schema11 requires a captured Hunter transcendence policy");
     if(saved.hunterOvercomePolicy!==undefined) {
       this.capturedOvercomePolicy=configuredHunterOvercome(saved.hunterOvercomePolicy,new Set(itemReference().item.map(row=>row.id)));
       if(this.configuredOvercomePolicy&&hunterOvercomeFingerprint(this.configuredOvercomePolicy)!==hunterOvercomeFingerprint(this.capturedOvercomePolicy))
         throw new TypeError("Configured transcendence policy differs from captured earned policy; refusing silent stat/cost changes");
     }
-    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
+    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
       throw new TypeError("Paid dorm expansion requires state schema10");
-    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
       [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
       throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
@@ -857,10 +875,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -941,7 +959,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -952,6 +970,16 @@ export class ServerState {
     if(saved.mirageSeries!==undefined)for(const row of saved.mirageSeries as unknown[]) {
       if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.mirageRuns.has(row[0])||this.mirageSeries.has(row[0]))throw new TypeError("Invalid Mirage re-entry journal owner");
       this.mirageSeries.set(row[0],normalizeMirageSeries(row[1],this.mirageRuns.get(row[0])!));
+    }
+    if(saved.fishingCasts!==undefined)for(const row of saved.fishingCasts as unknown[]) {
+      if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.fishingCasts.has(row[0]))
+        throw new TypeError("Invalid fishing cast journal owner");
+      const journal=normalizeFishingCasts(row[1],this.fishingItems,this.fishingCatalogue);
+      if(this.fishingCastPolicy&&JSON.stringify(journal.policy)!==JSON.stringify(this.fishingCastPolicy))throw new TypeError("Configured fishing policy differs from captured casts");
+      if(this.fishingBindings&&JSON.stringify(this.fishingBindings[String(row[0])]??[])!==JSON.stringify(journal.base_bindings))
+        throw new TypeError("Configured fishing ownership bindings differ from captured casts");
+      validateFishingCastStock(this.gameByPvid.get(row[0])!,journal,new Set(this.fishingItems.filter(item=>item.use_type===17).map(item=>item.id)));
+      this.fishingCasts.set(row[0],journal);
     }
     for (const row of saved.transportKeys) {
       if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== "string" || typeof row[1] !== "string") throw new Error("Malformed transport state");
@@ -984,9 +1012,9 @@ export class ServerState {
     const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const snapshot = { version: this.fishingCasts.size?15:this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -998,6 +1026,7 @@ export class ServerState {
       ...(this.capturedOvercomePolicy?{hunterOvercomePolicy:this.capturedOvercomePolicy}:{}),
       ...(this.mirageRuns.size?{mirageRuns:[...this.mirageRuns]}:{}),
       ...(this.mirageSeries.size?{mirageSeries:[...this.mirageSeries]}:{}),
+      ...(this.fishingCasts.size?{fishingCasts:[...this.fishingCasts]}:{}),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -1825,10 +1854,47 @@ export class ServerState {
 
   fishingAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     const account=this.accountFor(payload, headers);
+    if(route==="/fishing/Begin"||route==="/fishing/EndWithSell") {
+      const game=this.gameByPvid.get(account.pvid),prior=this.fishingCasts.get(account.pvid);
+      if(this.fishingCastMode!=="local-configured"||!this.fishingCastPolicy||!this.fishingCatalogue||!game)
+        return this.failure(2001,"Configured fishing catches are unavailable");
+      const fishIds=new Set(this.fishingItems.filter(item=>item.use_type===17).map(item=>item.id));
+      if(route==="/fishing/Begin") {
+        let plan;
+        try{plan=planFishingBegin(game,account.pvid,this.fishingCastPolicy,
+          fishingReferenceHash(this.fishingCastPolicy,this.fishingItems,this.fishingCatalogue),this.fishingBindings,prior,payload,fishIds);}
+        catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+        if(plan.changed) {
+          this.fishingCasts.set(account.pvid,plan.journal);
+          try{this.persist();}catch(error){if(prior)this.fishingCasts.set(account.pvid,prior);else this.fishingCasts.delete(account.pvid);throw error;}
+        }
+        return this.envelope({...plan.receipt,achievement:null});
+      }
+      let logId;
+      try{logId=fishingEndLog(payload);}catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid cast log");}
+      const cast=prior?.casts.find(c=>c.log_id===logId);
+      // LOCAL terminal mapping to native consume cleanup. Replaying additive
+      // success would duplicate cached items/counts. Absolute cache repair after
+      // a lost reply is not proved by insert-only GetInven/GetRecord.
+      if(cast&&cast.state!=="pending") {
+        if(prior!.casts.at(-1)?.state==="pending")return this.failure(2001,"A later fishing cast is pending; stale result must not clear its consume marker");
+        return this.failure(10203,"Local cast already settled; cold reload required to repair any missed cached counts or records");
+      }
+      if(!prior||!cast)return this.failure(2001,"No matching owned pending fishing log");
+      let plan;
+      try{plan=planFishingEnd(game,account.pvid,prior,this.fishingCatalogue,fishIds,payload,"");}
+      catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+      const before={items:game.items,owned_fish:game.owned_fish,gold:game.gold,next_item_inst_id:game.next_item_inst_id};
+      Object.assign(game,{items:plan.items,owned_fish:plan.owned_fish,gold:plan.gold,next_item_inst_id:plan.next_item_inst_id});
+      if(plan.owned_fish===undefined)delete game.owned_fish;
+      this.fishingCasts.set(account.pvid,plan.journal);
+      try{this.persist();}catch(error){Object.assign(game,before);if(before.owned_fish===undefined)delete game.owned_fish;this.fishingCasts.set(account.pvid,prior);throw error;}
+      return this.envelope({...plan.receipt,achievement:null});
+    }
     if(route==="/fishing/SellFish") {
       const game=this.gameByPvid.get(account.pvid);
       if(this.fishingSaleMode!=="local-bound"||!this.fishingBindings||!this.fishingCatalogue||!game)return this.failure(2001,"Bound fishing sale is unavailable");
-      let plan;try{plan=planFishingSale(game,account.pvid,this.fishingBindings,this.fishingCatalogue,
+      let plan;try{plan=planFishingSale(game,account.pvid,this.fishingCasts.has(account.pvid)?{[String(account.pvid)]:fishingCastBindings(this.fishingCasts.get(account.pvid)!)}:this.fishingBindings,this.fishingCatalogue,
         new Set(this.fishingItems.filter(row=>row.use_type===17).map(row=>row.id)),payload);}
       catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
       const before={items:game.items,owned_fish:game.owned_fish,gold:game.gold};
@@ -1845,12 +1911,12 @@ export class ServerState {
     }
     // CSRMFishing ParseInven/ParseRecod index ret_data numerically. Inventory
     // reads publish only explicit stored ownership; catalogue rows never grant
-    // counts. No catch producer or personal record history is reconstructed.
+    // counts. Configured casts maintain their own captured personal record history.
     if(route==="/fishing/GetInven") {
       try {return this.envelope(ownedFishingInventory(this.gameByPvid.get(account.pvid)?.owned_fish??[],new Set(this.fishingItems.map(row=>row.id))));}
       catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid owned fishing inventory");}
     }
-    if(route==="/fishing/GetRecord") return this.envelope([]);
+    if(route==="/fishing/GetRecord") return this.envelope(fishingCastRecordRows(this.fishingCasts.get(account.pvid)));
     return this.failure(2001, "Fishing catches, pools, prices and settlement are not reconstructed");
   }
 
