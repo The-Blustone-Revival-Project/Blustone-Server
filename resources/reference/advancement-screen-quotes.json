@@ -1,0 +1,204 @@
+{
+  "kind": "Historical advancement screen fee/count observations; not original rank-up price vectors",
+  "date_method": "Dates/years derive from image filenames only, not independently verified capture metadata. Null dates remain unknown.",
+  "scope": "Screen-effective rank3=4000 andrank4=15000 may be explicitly projected as LOCAL raw inputs. Guild status and original undiscounted base fees are UNKNOWN. Unknown rank1/rank2 remain existing fixture1000 in that projection; they are not image-derived. No Guild-discount deduction from later1440/3840/43650 observations.",
+  "quotes": [
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-40.tsv",
+      "source_sha256": "fbd8fc13294e58fbe331b06672ce1c8db11b4678350d0a522fed1c40f325f923",
+      "line": 46,
+      "idx": 1995,
+      "image_filename": "Screenshot_2017-08-12-04-21-33-526_com.vsh-8993dbc0b75ca86e.png",
+      "filename_year": 2017,
+      "filename_date": "2017-08-12",
+      "observation_kind": "rank3-three-real-12000",
+      "raw_tsv_row": "1995\tScreenshot_2017-08-12-04-21-33-526_com.vsh-8993dbc0b75ca86e.png\t1080\t1920\trankup-transcend\t\t\t\t\t\tAdvancement Match 3-star -> 4-star; Power Upgraded 6685 -> 10469 (zoom-verified z1995_mat); wallet 381665; materials 5175 / 5175 / 7029 (zoom-verified) + bottom row cut; fee Level-Up Advancement 12000; 'The Hunter that participated in the Advancement Match will be spent and will no longer be in the dormitory.'\t\tno\thigh\tBefore->after Power pair (stars shown but hero identity/level unshown, hit=no); twin-chibi material art",
+      "raw_row_sha256": "77fd0beee5aef13023a6dfee2f85de1a8cdada0de3d712514e37b6b42f193841",
+      "source_rank": 3,
+      "observed_total_fee": 12000,
+      "real_source_count": 3,
+      "pass_source_count": 0,
+      "guild_status": "UNKNOWN",
+      "original_undiscounted_base_fee": "UNKNOWN",
+      "count_evidence": {
+        "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/z1995_mat.png",
+        "sha256": "8df246700b1fd098119ceecdccf102941f4ab5139536b4ab07a92f6795a1ba18",
+        "method": "Direct pixel inspection of mirrored crop: selected top row exactly3 real portraits5175/5175/7029 and no PASS; separate candidate grid below. Crop does not show fee. Fee12000 is from the same-index TSV transcription."
+      },
+      "effective_unit_fee": 4000
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-29.tsv",
+      "source_sha256": "1f23e641553ab33f9e5370ff93514a0db0b291ce7000be3e41758e9ffd28c5a6",
+      "line": 27,
+      "idx": 1426,
+      "image_filename": "image-c308431949a4c0f5.png",
+      "filename_year": null,
+      "filename_date": null,
+      "observation_kind": "rank4-one-real-three-pass-15000",
+      "raw_tsv_row": "1426\timage-c308431949a4c0f5.png\t750\t1334\trankup-transcend\t\t\t\t\t\tAdvancement Match; 4-star yellow ring -> 5-star blue ring; Power 32740->23552; fodder 3x PASS + Yuri-girl 9199; fee Level-Up Advancement 15000; wallet 171398; Lantern chibi; Select All Gods (chibi icon); spent-warning; Start Advancement / Cancel\t\tno\thigh\tAdvancement staging; NOTE resulting 5-star Lv.1 power (23552) below 4-star base (32740); no identity shown so catalog blank",
+      "raw_row_sha256": "8478ae7cc4af9e859ae277639f709e22fc67989f292741d6147f4eca69469c36",
+      "source_rank": 4,
+      "observed_total_fee": 15000,
+      "real_source_count": 1,
+      "pass_source_count": 3,
+      "guild_status": "UNKNOWN",
+      "original_undiscounted_base_fee": "UNKNOWN",
+      "count_evidence": {
+        "method": "Published manual transcription; no fresh original-image visual check. Explicit3PASS plus1real source."
+      },
+      "effective_unit_fee": 15000
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-31.tsv",
+      "source_sha256": "569c0c5a48997685db36fec4dfa0aa86303cbee09ff4560295e6c69a007dba1b",
+      "line": 36,
+      "idx": 1535,
+      "image_filename": "image-f05d56e60fb50c12.png",
+      "filename_year": null,
+      "filename_date": null,
+      "observation_kind": "rank4-one-real-three-pass-15000",
+      "raw_tsv_row": "1535\timage-f05d56e60fb50c12.png\t1242\t2208\trankup-transcend\t\t\t\t\t\tAdvancement Match staging; 4-star green ring -> 5-star blue ring; Power Upgraded 21399->27583; 3x PASS + red-cap girl 11455; fodder MAX 15207 / 15475 / 17351; spent-warning (Advancement Match hunter spent, leaves dormitory); Level-Up Advancement fee 15000; wallet 16462; Start Advancement / Cancel\t\tno\thigh\tAdvancement staging; pairs batch-29 idx 1426 (same 15000 fee, 3x PASS pattern); no identity shown so catalog blank",
+      "raw_row_sha256": "054e0722ef5c6a7e992a7118c74c4190b3713cd82cfae5ec5e2bec4f5c9c4423",
+      "source_rank": 4,
+      "observed_total_fee": 15000,
+      "real_source_count": 1,
+      "pass_source_count": 3,
+      "guild_status": "UNKNOWN",
+      "original_undiscounted_base_fee": "UNKNOWN",
+      "count_evidence": {
+        "method": "Published manual transcription; no fresh original-image visual check. Explicit3PASS plus1real source."
+      },
+      "effective_unit_fee": 15000
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-28.tsv",
+      "source_sha256": "9c7e8edc0f66847cf09ddc4e2496184b422be45ba3f6f67312aeabdb9bd07b83",
+      "line": 16,
+      "idx": 1365,
+      "image_filename": "image-a7e7fa5a73db90a0.png",
+      "filename_year": null,
+      "filename_date": null,
+      "observation_kind": "rank4-one-real-three-pass-15000-medium",
+      "raw_tsv_row": "1365\timage-a7e7fa5a73db90a0.png\t640\t1136\trankup-transcend\t\t\t\t\t\tAdvancement Match; 4-star green Lv.MAX -> 5-star blue Lv.1 (unnamed red-haired heroine); Power 26041 -> 34092 (OCR misread 340926, zoom/visual-corrected); 3x PASS!; fodder Lv.1 13021; grid Lv.15 14230 + Lv.MAX 15808 Exploring + Lv.MAX 16683 Defending + Lv.MAX 18805 Exploring; The Hunter that participated in the Advancement Match will be spent and will no longer be in the dormitory.; Level-Up Advancement 15000; manda 8674; banner Jamesonfaw : Where's our queen...\t\tno\tmedium\tStar-up result; no identity; 15000-fee tier",
+      "raw_row_sha256": "54610d9d57a080578dacf49c1861fced2f5ca2bf5e54b0387540029294536f4b",
+      "source_rank": 4,
+      "observed_total_fee": 15000,
+      "real_source_count": 1,
+      "pass_source_count": 3,
+      "guild_status": "UNKNOWN",
+      "original_undiscounted_base_fee": "UNKNOWN",
+      "count_evidence": {
+        "method": "Published manual transcription; no fresh original-image visual check. Explicit3PASS plus1real source."
+      },
+      "effective_unit_fee": 15000
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-37.tsv",
+      "source_sha256": "504eae5dfc29d7e5a9e84973e969684c4daa0b4c2001913fa51470706aa8670b",
+      "line": 19,
+      "idx": 1818,
+      "image_filename": "Screenshot_20170619-142734-175c957578e8bdaa.png",
+      "filename_year": 2017,
+      "filename_date": "2017-06-19",
+      "observation_kind": "rank4-four-real-60000",
+      "raw_tsv_row": "1818\tScreenshot_20170619-142734-175c957578e8bdaa.png\t1080\t1920\trankup-transcend\t\t\t\t\t\tAdvancement Match; 4-star -> 5-star; Power Upgraded 16151 -> 25178 (+9027, +55.9%); coins 63246; materials row 11455 / 11455 / 11118 / 11688 (chibi team); fodder row 15143 MAX / 16220 MAX / 16609 MAX / 15097 MAX; dormant-loss warning: The teammates that were sacrificed to advance your hunter will be lost, and your hunter will be sealed in the Dormitory.; Level-Up Advancement cost 60000 (wallet 63246 covers); no name line\t\tno\thigh\tFodder rules verbatim; fee-with-wallet affordability context; no name on variant so catalog blank",
+      "raw_row_sha256": "0a79cab751804249caf117417a93626615d92b2d17a0ac20b86896a3292489fa",
+      "source_rank": 4,
+      "observed_total_fee": 60000,
+      "real_source_count": 4,
+      "pass_source_count": 0,
+      "guild_status": "UNKNOWN",
+      "original_undiscounted_base_fee": "UNKNOWN",
+      "count_evidence": {
+        "method": "Published manual transcription; no fresh original-image visual check. Four listed materials are distinguished from a separate candidate fodder row."
+      },
+      "effective_unit_fee": 15000
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-68.tsv",
+      "source_sha256": "b2e7006ce6b8fb706b6b2997c8a5932926c91dfe460a04ae46c67bc9c55aca69",
+      "line": 25,
+      "idx": 3374,
+      "image_filename": "Screenshot_20210618-194748_Blustone-21e08bdedf917a46.jpg",
+      "filename_year": 2021,
+      "filename_date": "2021-06-18",
+      "observation_kind": "rank2-1440-count-unresolved",
+      "raw_tsv_row": "3374\tScreenshot_20210618-194748_Blustone-21e08bdedf917a46.jpg\t1080\t2400\trankup-transcend\t\t\t\t\t\tAdvancement Match 2-star Lv.MAX -> 3-star Lv.1; Power 1305 -> 1881; coins 36362; Selected Advancement Partner Lv.1; candidates Lv.1 898 / Lv.1 921 / Lv.17 839 Dispatch / Lv.24 1253 Exploring; Level-Up Advancement cost 1440; OCR spot-check (z68_3374_adv.png) returned garbage on HUD font - eye wins\t\tno\thigh\tstars-shown advancement before->after with Power; advancement cost 1440",
+      "raw_row_sha256": "80f7cbabdf192a1defc7eb493f47a8c4a64b8cfa732152460b5ed1b446ffc7d8",
+      "source_rank": 2,
+      "observed_total_fee": 1440,
+      "real_source_count": null,
+      "pass_source_count": null,
+      "guild_status": "UNKNOWN",
+      "original_undiscounted_base_fee": "UNKNOWN",
+      "count_evidence": {
+        "method": "Published transcription only; selected/PASS context incomplete for a unit quote."
+      }
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-68.tsv",
+      "source_sha256": "b2e7006ce6b8fb706b6b2997c8a5932926c91dfe460a04ae46c67bc9c55aca69",
+      "line": 32,
+      "idx": 3381,
+      "image_filename": "Screenshot_20210619-202956_Blustone-37f6a2cdb1220e72.jpg",
+      "filename_year": 2021,
+      "filename_date": "2021-06-19",
+      "observation_kind": "rank3-two-pass-one-empty",
+      "raw_tsv_row": "3381\tScreenshot_20210619-202956_Blustone-37f6a2cdb1220e72.jpg\t1080\t2400\trankup-transcend\t\t\t\t\t\tAdvancement Match 3-star Lv.MAX -> 4-star Lv.1; Power 2852 -> 2852; coins 63318; partners 2 PASS! + 1 empty; candidates Lv.1 1524 Defending / Lv.19 2161 Defending / Lv.28 3086 Leader / Lv.24 2865 Exploring; warning no hunters of the same grade\t\tno\thigh\tsame-account trail with 3380/3382",
+      "raw_row_sha256": "26832abfc40b8c5ec419010a436ae804f5fec2df20db738586b7434a46666060",
+      "source_rank": 3,
+      "observed_total_fee": null,
+      "real_source_count": 0,
+      "pass_source_count": 2,
+      "guild_status": "UNKNOWN",
+      "original_undiscounted_base_fee": "UNKNOWN",
+      "count_evidence": {
+        "method": "Published baseline:2PASS+1empty, before third-source selection."
+      }
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-68.tsv",
+      "source_sha256": "b2e7006ce6b8fb706b6b2997c8a5932926c91dfe460a04ae46c67bc9c55aca69",
+      "line": 33,
+      "idx": 3382,
+      "image_filename": "Screenshot_20210619-203638_Blustone-52ee6c9e4cbf80ae.jpg",
+      "filename_year": 2021,
+      "filename_date": "2021-06-19",
+      "observation_kind": "rank3-third-partner-3840",
+      "raw_tsv_row": "3382\tScreenshot_20210619-203638_Blustone-52ee6c9e4cbf80ae.jpg\t1080\t2400\trankup-transcend\t\t\t\t\t\tAdvancement Match 3-star Lv.MAX -> 4-star Lv.1; Power 2852 -> 2852; coins 59478; third partner Lv.1 selected; Level-Up Advancement 3840; candidates Lv.1 1547 Defending / Lv.19 2161 Defending / Lv.28 3086 Leader / Lv.24 2865 Exploring\t\tno\thigh\tsame-account trail with 3380/3381; advancement cost 3840",
+      "raw_row_sha256": "fa4eff68cc3a56a7fc48ec969eacaa9560a4c471bfc32276c346f9804bb2ab78",
+      "source_rank": 3,
+      "observed_total_fee": 3840,
+      "real_source_count": 1,
+      "pass_source_count": 2,
+      "guild_status": "UNKNOWN",
+      "original_undiscounted_base_fee": "UNKNOWN",
+      "count_evidence": {
+        "method": "Correlated published rows3381/3382: twoPASS and oneempty, then third real partner; wallet63318->59478. No Guild or undiscounted fee is inferred."
+      },
+      "effective_unit_fee": 3840
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-66.tsv",
+      "source_sha256": "a060a7cc82b271ad1390f4a29a114d47158115a8ebdc7472171116f0d6360b32",
+      "line": 44,
+      "idx": 3293,
+      "image_filename": "Screenshot_20200818-071527_Blustone-79afb52f78055d0f.jpg",
+      "filename_year": 2020,
+      "filename_date": "2020-08-18",
+      "observation_kind": "rank4-43650-count-unresolved",
+      "raw_tsv_row": "3293\tScreenshot_20200818-071527_Blustone-79afb52f78055d0f.jpg\t1080\t2280\trankup-transcend\t\t\t\t\t\tAdvancement Match: bear avatar 4-star Lv.MAX -> 5-star Lv.1; Power 10856 -> 10856 (unchanged); materials 3x Lv.1; bottom 5067 Lv.1 / 6328 Lv.MAX Locked / 8125 Lv.MAX Locked / 8149 Lv.MAX Locked; wallet 31013; Level-Up Advancement 43650; warning: The Hunter that participated in the Advancement Match will be spent (sic spent); 07:15\t\tno\thigh\tstar-up keeps Power flat 10856; advancement fee 43650; sic will be spent",
+      "raw_row_sha256": "e64802921923525d471e2afc2a0c7fe314ee8dea3740c9b9d50c3d87e1dd76ce",
+      "source_rank": 4,
+      "observed_total_fee": 43650,
+      "real_source_count": null,
+      "pass_source_count": null,
+      "guild_status": "UNKNOWN",
+      "original_undiscounted_base_fee": "UNKNOWN",
+      "count_evidence": {
+        "method": "Published transcription only; selected/PASS context incomplete for a unit quote."
+      }
+    }
+  ]
+}

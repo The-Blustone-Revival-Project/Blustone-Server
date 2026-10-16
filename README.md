@@ -71,6 +71,12 @@ at the current100-slot fixture. Capacity persists, survives disabling purchases,
 and governs both premium and trace recruitment. See the [dorm setup and native
 contract](docs/dorm-expansion-native-2026-10-16.md).
 
+Optional `BLUSTONE_ADVANCEMENT_GOLD_PROFILE=screenshot-effective-quote-projection`
+uses historical screen-effective advancement fees for three- and four-star
+materials, shared by native price previews and server settlement. Historical
+Guild discounts and undiscounted base prices remain unknown. See the
+[advancement price projection](docs/advancement-gold-projection-2026-10-16.md).
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

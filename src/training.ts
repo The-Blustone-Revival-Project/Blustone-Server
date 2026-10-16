@@ -1,8 +1,10 @@
 import { starterLevels } from "./bootstrap.js";
 import type { LocalCardInstance } from "./game.js";
+import {ADVANCEMENT_GOLD_PROFILE,createTrainingPrices} from "./advancement-gold.js";
 
-/** Native price vectors recovered; numeric prices are local fixtures. */
-export const trainingPrices = { level: [100], rank: [1000] };
+/** Native vector grammar; numeric prices are local fixtures or explicitly
+ * selected historical screen-effective fee projections, not original bases. */
+export const trainingPrices = createTrainingPrices(ADVANCEMENT_GOLD_PROFILE);
 
 /** Native rank/src_cnt/stat_bonus fields. Counts follow historical community
  * same-grade material rules;5percent per credited material is a local fixture. */

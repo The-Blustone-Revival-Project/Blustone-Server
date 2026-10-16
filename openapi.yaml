@@ -1025,18 +1025,26 @@ paths:
         level, ranks1..4, same-grade unlocked unused materials and
         capacity=current rank: partial p+n retains rank/EXP; reaching capacity
         promotes one grade, resets counter and EXP. Overflow refuses. Counts
-        follow historical community guidance;1000 gold/source and5percent bonus
-        per credited material are fixtures. Native skips real source IDs below
-        capacity as synthetic credits, so the server refuses that legacy
-        compatibility edge without renumbering ownership.
+        follow historical community guidance; default1000 gold/source
+        and5percent bonus per credited material are fixtures. Optional
+        BLUSTONE_ADVANCEMENT_GOLD_PROFILE=screenshot-effective-quote-projection
+        publishes per-source rank vector[1000,1000,4000,15000], shared by
+        GetCardEnhancePrice and settlement. Rank3/4 use pinned historical
+        screen-effective fees projected as LOCAL raw inputs; Guild
+        state/undiscounted original fees remain unknown. Rank1/2 and level
+        training remain local fixtures. Credited placeholders are not billed.
+        Existing configured Guild TYPE3 adjustment applies to each real source
+        before summing; historical discount attribution is not inferred. Native
+        skips real source IDs below capacity as synthetic credits, so the server
+        refuses that legacy compatibility edge without renumbering ownership.
         Target-in-active-battle, protected leader/deck/battle materials and
         malformed requests refuse atomically. Source consumption prevents retry
         duplication. Target skills are preserved because this callback does not
         read automatic unlock fields; new eligible zero-level slots need further
         investigation. Gold, target, sources, deck cleanup and book maximum
-        persist together. Awakening, guild discounts and original partial/EXP
-        behavior remain unreconstructed. Native preview/partial/full/relaunch
-        validation is pending."
+        persist together. Awakening and original partial/EXP behavior remain
+        unreconstructed; original Guild discount parameters also remain unknown.
+        Native preview/partial/full/relaunch validation is pending."
       tags:
         - Cards and training
       parameters: *a1
@@ -1904,8 +1912,15 @@ paths:
       description: SetCardEnhancePrice consumes direct numeric ret_data.level and
         ret_data.rank arrays. GetCardRaisePrice/GetCardRankUpPrice select
         requested rank minus1, capped to the last row. Nonempty arrays are
-        mandatory to avoid invalid native reads. Current vectors [100] and
-        [1000] are replica fixtures, not recovered economy values.
+        mandatory to avoid invalid native reads. Default vectors [100] and
+        [1000] are replica fixtures. Optional
+        BLUSTONE_ADVANCEMENT_GOLD_PROFILE=screenshot-effective-quote-projection
+        keeps level[100] and publishes rank[1000,1000,4000,15000]. Rank3/4
+        derive effective fees from pinned historical counts/totals, not original
+        undiscounted base prices; lower ranks stay fixtures. Settlement shares
+        these vectors and applies configured Guild adjustments per source. No
+        owned data, EXP, currency or acquisition grant is created by a reference
+        read.
       tags:
         - Reference data
       parameters: *a1

@@ -1,4 +1,64 @@
-## Latest continuation: persistent dorm expansion and recruitment capacity (2026-10-16)
+## Latest continuation: advancement fee projection and ticket caller evidence (2026-10-16)
+
+Previous checkpoint b7e71e2 restored persistent dorm expansion/capacity gates.
+This checkpoint adds optional historical effective advancement fee projection
+and closes more of the genuine quick-advancement caller. Goal ACTIVE. No live
+profile/save/device/client/APK/original asset/Docker/Collector/inference changes.
+Device input hold persists. Edit only Server/Instrumented; DataDump read-only.
+
+BLUSTONE_ADVANCEMENT_GOLD_PROFILE=screenshot-effective-quote-projection selects
+level[100],rank[1000,1000,4000,15000], shared by native GetCardEnhancePrice and
+server rankUpPrice settlement. Default legacy remains level[100]/rank[1000].
+Unknown rank1/2 and level training remain existing fixtures. Runtime pins and
+derives rank3/4 units from resources/reference/advancement-screen-quotes.json,
+SHA25605778a93c35d63b2bfd02200e79c445c3c56850ed1e4f9c744f946fcfd40c424.
+Nine exact rows/seven source files plus a source-count crop are preserved.
+
+idx1995 (2017-08-12) selected3 real/noPASS plus total12000 → effective4000;
+count is directly inspected mirrored z1995_mat.png, fee comes from same-index
+manual TSV, not that fee-less crop. Undated idx1426/1535 show3PASS+1real and
+total15000; medium1365 corroborates. Dated1818 four-material total60000 agrees.
+These are SCREEN-EFFECTIVE fees projected into LOCAL raw inputs, not recovered
+undiscounted original vectors. Historical Guild state is UNKNOWN. Later1440/
+3840/43650 observations remain unresolved; no discount percentage inferred.
+Source/count/total/crop provenance and unknowns are separated in
+docs/advancement-image-quotes-2026-10-16.md and
+docs/advancement-gold-projection-2026-10-16.md.
+
+Existing native per-REAL-source rank/GuildTYPE3 adjustment stays intact; prior
+credited placeholders are not billed again. Current configured Guild adjustment
+on top of these projected inputs is explicit LOCAL composition. Rank3 total3
+sources costs12000 in neutral local Guild state; rank4 one-real/three-credited
+costs15000 and four-real costs60000. Native rank−1/clamp getters remain. Bulk
+currently admits source1/2, so its prices and ordinary level training stay as
+before. Partial transition/EXP/5percent bonus remain inferred/local; no new
+ownership, stat, skill, currency, material or schema fields/grants introduced.
+Profile selection is process-import-time, not an environment hot reload.
+
+UseItem audit found genuine hardcoded SU1/SU2 in IAPQuickRankUp. Current target
+rank3 selectsSU1; the other branch selectsSU2. Do NOT interpret the else as
+permission for rank1/2/5. Direct button sends full64 selected owned ticket and
+target IDs, qty1 to /world/UseItem. Success applies consumed_item_list quantity
+DELTA and card.target_inst rank/rank_up_cnt/exp pairs. It has no AP/BP/gold/VIP
+resource sync helper; global shop virtual resource refs are not consumables.
+docs/quick-advancement-use-item-native-2026-10-16.md records exact addresses.
+Target rank domain/max-level/award EXP and cached immediatly_rankup entitlement
+lifecycle remain unresolved. UseItem remains guarded2001; no ticket references,
+stock, purchase rights or awards are invented by this checkpoint.
+
+All196 npm test programs, five resource-profile suites, build and independent
+review PASS. Source/compiled projection state checks verify pinned anchors,
+shared table, rank3 partial4000+8000/full12000, rank4 four*15000, real.tmp and
+blocked-rename rollback before/after credit, shortage, protected ownership/book,
+unchanged peer/skills/wallets and restart/schema1. Actual compiled child HTTP
+proof uses ephemeral loopback/disposable actor and P384/HMAC/AES transport:
+rank3 one-source4000→credit1 then two8000→rank4/credit0/EXP0, native pairs and
+bare removed IDs, consumed retry refusal, same persisted key/OTP plus actual
+inventory/book restart. No Android training pixels or original-base-fee claim.
+npm run test:advancement-gold repeats built state+HTTP checks. Further ticket
+gates, native validation and more original areas/rewards remain pending.
+
+## Historical continuation: persistent dorm expansion and recruitment capacity (2026-10-16)
 
 Previous checkpoint da24b85 reconstructed historical fuel/Fight Club refills.
 This checkpoint restores optional paid dorm expansion and central capacity

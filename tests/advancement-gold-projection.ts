@@ -1,0 +1,63 @@
+import assert from "node:assert/strict";
+import {mkdtempSync,readFileSync,mkdirSync,rmdirSync,rmSync} from "node:fs";
+import {tmpdir} from "node:os";
+import path from "node:path";
+import {createHash} from "node:crypto";
+process.env.BLUSTONE_ADVANCEMENT_GOLD_PROFILE="screenshot-effective-quote-projection";
+const {ServerState}=await import("../src/state.js");
+const {gameResponse}=await import("../src/game-routes.js");
+const {trainingPrices,trainingCurve,rankUpPrice,raisePrice}=await import("../src/training.js");
+const {createTrainingPrices,advancementGoldEvidence}=await import("../src/advancement-gold.js");
+const {cardInstance}=await import("../src/bootstrap.js");
+const directory=mkdtempSync(path.join(tmpdir(),"blustone-advancement-gold-")),clock=Date.now;Date.now=()=>1_800_000_000_000;
+try {
+  const evidence=advancementGoldEvidence();
+  for(const row of evidence.quotes)assert.equal(createHash("sha256").update(row.raw_tsv_row).digest("hex"),row.raw_row_sha256);
+  for(const idx of [1995,1426,1535,1818])assert.ok(evidence.quotes.some((row:any)=>row.idx===idx));
+  assert.deepEqual(createTrainingPrices("legacy"),{level:[100],rank:[1000]});
+  assert.throws(()=>createTrainingPrices("unknown"));
+  assert.deepEqual(trainingPrices,{level:[100],rank:[1000,1000,4000,15000]});
+  for(const idx of [1995,1426,1535,1818]) {
+    const row=evidence.quotes.find((quote:any)=>quote.idx===idx);
+    assert.equal(rankUpPrice(row.source_rank)*row.real_source_count,row.observed_total_fee);
+  }
+  for(const rank of [0,1,2,3,4,5])assert.equal(raisePrice(rank),100,"Level training keeps existing fixture");
+  assert.deepEqual([0,1,2,3,4,5].map(rankUpPrice),[1000,1000,1000,4000,15000,15000]);
+  const file=path.join(directory,"state.json"),state=new ServerState("http://localhost",file);
+  const actor=state.registerGuest({device_id:"advancement-price-owner"},{}).ret_data as any;
+  const peer=state.registerGuest({device_id:"advancement-price-peer"},{}).ret_data as any;
+  const game=(state as any).gameByPvid.get(actor.pvid),peerBefore=structuredClone((state as any).gameByPvid.get(peer.pvid));
+  const target=cardInstance(1000100,"003",3),materials=Array.from({length:7},(_,i)=>cardInstance(1000101+i,"003",i<3?3:4));
+  for(const row of materials)row.lock=0;
+  target.lock=1;target.exp=trainingCurve(target)!.maxExp;
+  game.recruited_cards=[target,...materials];game.next_card_inst_id=1000108;game.gold=100000;game.ap_updated_at=Date.now();game.bp_updated_at=Date.now();(state as any).persist();
+  const reference=(gameResponse(state,"/reference/GetCardEnhancePrice",{}).ret_data as any);
+  assert.deepEqual(reference,trainingPrices,"Native preview and server settlement use the same vectors");
+  const run=(ids:number[])=>gameResponse(state,"/gym/RankUp",{...actor,target_inst_id:target.inst_id,source_inst_list:JSON.stringify(ids),is_tuto:0}) as any;
+  const snapshot=()=>({game:structuredClone(game),disk:readFileSync(file),recruits:game.recruited_cards,book:game.card_book,decks:game.decks});
+  const exact=(before:ReturnType<typeof snapshot>)=>{assert.deepEqual(game,before.game);assert.deepEqual(readFileSync(file),before.disk);assert.equal(game.recruited_cards,before.recruits);assert.equal(game.card_book,before.book);assert.equal(game.decks,before.decks);};
+  const failures=(action:()=>unknown)=>{
+    const before=snapshot();mkdirSync(file+".tmp");try{assert.throws(action);}finally{rmdirSync(file+".tmp");}exact(before);
+    const blocked=file+"-blocked";mkdirSync(blocked);(state as any).stateFile=blocked;
+    try{assert.throws(action);}finally{(state as any).stateFile=file;rmdirSync(blocked);}exact(before);
+  };
+  failures(()=>run([materials[0].inst_id]));
+  const first=run([materials[0].inst_id]);assert.equal(first.result_code,1);assert.deepEqual(first.ret_data.user.gold,{prev:100000,cur:96000});
+  assert.equal(target.rank,3);assert.equal(target.rank_up_cnt,1,"Only one actual source is billed; partial advancement remains max-level");
+  failures(()=>run([materials[1].inst_id,materials[2].inst_id]));
+  assert.equal(run([materials[1].inst_id,materials[2].inst_id]).result_code,1);assert.equal(game.gold,88000);assert.equal(target.rank,4);assert.equal(target.rank_up_cnt,0);assert.equal(target.exp,0);
+  target.exp=trainingCurve(target)!.maxExp;(state as any).persist();
+  const next=materials.slice(3).map(row=>row.inst_id),beforeRank4=snapshot();
+  game.gold=59999;(state as any).persist();const poor=snapshot();assert.notEqual(run(next).result_code,1);exact(poor);
+  game.gold=beforeRank4.game.gold;(state as any).persist();failures(()=>run(next));
+  assert.equal(run([next[0]]).result_code,1);assert.equal(game.gold,73000);assert.equal(target.rank_up_cnt,1);
+  assert.equal(run([next[1]]).result_code,1);assert.equal(game.gold,58000);assert.equal(target.rank_up_cnt,2);
+  assert.equal(run([next[2]]).result_code,1);assert.equal(game.gold,43000);assert.equal(target.rank_up_cnt,3);
+  const final=run([next[3]]);assert.equal(final.result_code,1);assert.deepEqual(final.ret_data.user.gold,{prev:43000,cur:28000});
+  assert.equal(target.rank,5);assert.equal(target.rank_up_cnt,0);assert.equal(target.exp,0);
+  assert.equal(game.recruited_cards.length,1);assert.deepEqual((state as any).gameByPvid.get(peer.pvid),peerBefore);
+  const restarted=new ServerState("http://localhost",file),savedGame=(restarted as any).gameByPvid.get(actor.pvid);
+  assert.deepEqual(savedGame,game);assert.equal(savedGame.recruited_cards[0].rank,5);assert.equal(savedGame.gold,28000);
+  assert.equal(JSON.parse(readFileSync(file,"utf8")).version,1,"Price selection adds no journal/schema or grants");
+  console.log("Advancement gold projection: pinned effective historical3/4-star fees, shared native/server vectors, partial/full source billing, real write/rename rollback, shortage, ownership and restart passed; original undiscounted/Guild state unknown");
+}finally{Date.now=clock;rmSync(directory,{recursive:true,force:true});}
