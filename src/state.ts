@@ -69,7 +69,8 @@ import { arenaRequest } from "./arena-service.js";
 import { searchBattleRequest, usedSearchHelpers } from "./search-battle.js";
 import { teamLevel } from "./team-level.js";
 import { earnSearchCapsule, explicitSearchCapsuleVictory } from "./search-capsules.js";
-import { skillLevelLimit, skillUpPrice,goldOnlySkillPrice } from "./skill-training.js";
+import { skillLevelLimit, skillUpPrice,skillLevelRows } from "./skill-training.js";
+import {planSkillMaterials,skillMaterialRequirements} from "./skill-materials.js";
 import { FIXTURE_FUEL_AP, FIXTURE_FUEL_ID, fuelCycle, fuelStatus, supplyActivities, supplyInstances } from "./supply.js";
 import { BP_SHOP_AMOUNT, BP_SHOP_ID, FUEL_SHOP_AP, FUEL_SHOP_ID, FUEL_SHOP_LIMIT, FUEL_SHOP_PRICES, fuelPurchaseInventory, settleFuelShop } from "./shop-fuel.js";
 import { completeTutorialList, createLocalGameState, GACHA_COST, GACHA_SINGLE_COST, mergeCardBook, normalizeLocalGameState, regenerateResources, resourceChargeTime, type LocalGameState, type LocalTutorialState } from "./game.js";
@@ -548,6 +549,7 @@ export class ServerState {
   private readonly gemSellPrices: readonly GemSalePrice[];
   private readonly gemLevelPrices: readonly GemLevelPrice[];
   private readonly fishingItems: readonly Readonly<FishingItemReference>[];
+  private readonly skillMaterialIds:ReadonlySet<string>;
   private readonly fishingCatalogue?: FishingCatalogue;
   private readonly fishingSaleMode:"disabled"|"local-bound";
   private readonly fishingBindings?:FishingSaleBindings;
@@ -621,6 +623,8 @@ export class ServerState {
     const readPrices = (key: "equipmentLevelPrices" | "equipmentRankPrices", envName: string): unknown =>
       Object.hasOwn(options,key) ? options[key] : process.env[envName]===undefined ? [] : JSON.parse(process.env[envName]!);
     const knownItems = new Set(itemReference().item.map(item=>item.id));
+    this.skillMaterialIds=new Set([SEARCH_CAPSULE_ID,...HUNTER_TRACE_ITEMS.map(row=>row.id)].filter(id=>knownItems.has(id)));
+    for(const price of skillLevelRows)skillMaterialRequirements([price],this.skillMaterialIds); // Before restore/private save writes.
     const fishItems=Object.hasOwn(options,"fishingItems")?options.fishingItems:
       process.env.BLUSTONE_FISHING_ITEMS_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_FISHING_ITEMS_JSON);
     this.fishingItems=configuredFishingItems(fishItems,new Set([...knownItems,"LU001","LU003",...starterReference.map(row=>row.base.id)]));
@@ -1962,19 +1966,22 @@ export class ServerState {
     const role = Number(reference.base.role);
     if (previousLevel >= skillLevelLimit(role, rank)) return this.failure(2001, "skill level cap reached");
     const price = skillUpPrice(role, previousLevel + 1);
-    if (!price || !goldOnlySkillPrice(price) || !Number.isSafeInteger(price.gold) || price.gold < 0 || game.gold < price.gold) {
+    if (!price || !Number.isSafeInteger(price.gold) || price.gold < 0 || game.gold < price.gold) {
       return this.failure(2001, "skill training price unavailable or insufficient gold");
     }
+    let materials;try{materials=planSkillMaterials(game.items,[price],this.skillMaterialIds);}catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
     const previousGold = game.gold;
+    const previousItems=game.items;
     const previousSkillValue=target[field],previousSkillPresent=Object.hasOwn(target,field);
     target[field] = previousLevel + 1;
     game.gold -= price.gold;
-    try{this.persist();}catch(error){if(previousSkillPresent)target[field]=previousSkillValue;else delete target[field];game.gold=previousGold;throw error;}
+    game.items=materials.items;
+    try{this.persist();}catch(error){if(previousSkillPresent)target[field]=previousSkillValue;else delete target[field];game.gold=previousGold;game.items=previousItems;throw error;}
     return this.envelope({
       skill_idx: index,
       target_inst: { inst_id: targetId, [field]: { prev: previousLevel, cur: previousLevel + 1 } },
       user: { gold: { prev: previousGold, cur: game.gold } },
-      consumed_inst_list: [],
+      consumed_inst_list: materials.single,
     });
   }
 
@@ -2001,6 +2008,7 @@ export class ServerState {
     const role = Number(reference.base.role);
     const cap = skillLevelLimit(role, rank);
     const changes: Array<{ field: string; current: number }> = [];
+    const materialPrices:typeof skillLevelRows=[];
     let total = 0;
     for (let slot = 0; slot < 5; slot++) {
       const count = counts[slot] as number;
@@ -2014,23 +2022,27 @@ export class ServerState {
       }
       for (let level = previous + 1; level <= previous + count; level++) {
         const price = skillUpPrice(role, level);
-        if (!price || !goldOnlySkillPrice(price) || !Number.isSafeInteger(price.gold) || price.gold < 0) return this.failure(2001, "skill price unavailable");
+        if (!price || !Number.isSafeInteger(price.gold) || price.gold < 0) return this.failure(2001, "skill price unavailable");
         total += price.gold;
+        materialPrices.push(price);
       }
       changes.push({ field, current: previous + count });
     }
     if (!Number.isSafeInteger(total) || game.gold < total) return this.failure(2001, "insufficient gold for batch skill training");
+    let materials;try{materials=planSkillMaterials(game.items,materialPrices,this.skillMaterialIds);}catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
     const previousGold = game.gold;
+    const previousItems=game.items;
     const previousSkills=changes.map(change=>({field:change.field,value:target[change.field],present:Object.hasOwn(target,change.field)}));
     for (const change of changes) target[change.field] = change.current;
     game.gold -= total;
+    game.items=materials.items;
     try{this.persist();}catch(error){
       for(const previous of previousSkills){if(previous.present)target[previous.field]=previous.value;else delete target[previous.field];}
-      game.gold=previousGold;throw error;
+      game.gold=previousGold;game.items=previousItems;throw error;
     }
     return this.envelope({
       target_inst: { inst_id: targetId, ...Object.fromEntries(changes.map((change) => [change.field, { cur: change.current }])) },
-      user: { gold: { prev: previousGold, cur: game.gold } }, consumed_inst_list: [],
+      user: { gold: { prev: previousGold, cur: game.gold } }, consumed_inst_list: materials.multi,
     });
   }
 

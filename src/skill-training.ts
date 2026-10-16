@@ -1,12 +1,14 @@
 /** CSRUserLV::SetLevel skill rows are role-keyed dense vectors. The schema
  * and getters are native-recovered. Caps10/20/30/40/50 are inferred from the
  * community10-per-grade rule; original network price rows remain missing.
- * Gold100*destinationLevel and zero materials are explicit local economy fixtures.
+ * Default gold100*destinationLevel/zero materials remain local fixtures;
+ * optional gold projection and explicit material overlays are separate policies.
  * Empty material slots are guarded by CSRPopUpSkillUp before item lookup.
  * Evidence: analysis/research/skill-level-reference.md. */
 import {readFileSync} from "node:fs";
 import {createHash} from "node:crypto";
 import {repositoryPath} from "./paths.js";
+import {applySkillMaterialPrices} from "./skill-materials.js";
 export type SkillGoldProfile="legacy"|"screenshot-2018-gold-projection";
 export const SKILL_GOLD_PROFILE=process.env.BLUSTONE_SKILL_GOLD_PROFILE??"legacy";
 export const SKILL_GOLD_EVIDENCE={path:"resources/reference/skill-training-screen-quotes-2018.json",
@@ -43,12 +45,8 @@ export function createSkillLevelRows(profile:string):SkillLevelRow[] {
     source_3_ref_id: "", source_3_qty: 0, source_4_ref_id: "", source_4_qty: 0,
   })));
 }
-export const skillLevelRows=createSkillLevelRows(SKILL_GOLD_PROFILE);
-/** Material identities/consumption are not reconstructed. Refuse future
- * nonzero/unknown slots rather than silently charging only their gold. */
-export function goldOnlySkillPrice(row:SkillLevelRow):boolean {
-  return ([1,2,3,4] as const).every(index=>row[`source_${index}_ref_id`]===""&&row[`source_${index}_qty`]===0);
-}
+export const skillLevelRows=applySkillMaterialPrices(createSkillLevelRows(SKILL_GOLD_PROFILE),
+  process.env.BLUSTONE_SKILL_MATERIAL_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_SKILL_MATERIAL_PRICES_JSON));
 
 export function skillLevelLimit(role: number, rank: number): number {
   return skillLevelRows.reduce((maximum, row) => row.role === role && row.rank <= rank

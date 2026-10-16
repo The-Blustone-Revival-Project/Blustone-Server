@@ -42,10 +42,10 @@ independent of a sibling DataDump checkout at runtime.
 
 Screens show material requirements, including quantities such as5030/4. Those
 are owned/required counts, NOT reference IDs. No material identity is guessed,
-no nonzero material requirement is published, and neither profile claims an
-original material-free upgrade. Single and batch handlers now refuse any future
-nonempty/nonzero material row instead of silently ignoring it. Real material
-settlement requires its own reference mapping and atomic consumption work.
+neither gold profile invents an original material-free upgrade. Explicit
+configured rows now use the separate atomic consumption path documented in
+configured-skill-materials-2026-10-16.md; unsupported identities still refuse.
+The original material reference mapping remains missing.
 
 Single and batch persist failures now restore exact original gold and selected
 skill values, including absent fields and imported numeric strings. The same

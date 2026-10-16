@@ -786,14 +786,19 @@ paths:
         BLUSTONE_SKILL_GOLD_PROFILE=screenshot-2018-gold-projection
         uses100*ceil(destinationLevel/5), matching five pinned historical
         screenshot anchors. Other levels/role-wide interpolation and zero
-        materials remain local policy. Nonzero material rows refuse until atomic
-        consumption is implemented. Persistence failure restores exact skill
-        field presence/value and gold. Original final prices/material IDs and
-        increment implementation are missing. Each accepted call is a separate
-        upgrade: the native request has no nonce or expected level, so transport
-        exactly-once is not promised. Local refusal code2001 skips native
-        mutation parsing. The separately documented MultiSkillUp route has a
-        different batch response contract."
+        materials remain local policy. Optional
+        BLUSTONE_SKILL_MATERIAL_PRICES_JSON overlays explicit four-slot
+        role/level recipes, validated against published capsule/actual trace IDs
+        only; defaults remain empty and original recipes unknown. Single receipt
+        consumed_inst_list uses full64 inst_id/qty DELTAS; batch uses full64
+        inst_id/remain ABSOLUTE. Unlocked stacks allocate in ID order after all
+        aggregate checks; wallet/skills/items roll back together. Persistence
+        failure restores exact skill field presence/value and gold. Original
+        final prices/material IDs and increment implementation are missing. Each
+        accepted call is a separate upgrade: the native request has no nonce or
+        expected level, so transport exactly-once is not promised. Local refusal
+        code2001 skips native mutation parsing. The separately documented
+        MultiSkillUp route has a different batch response contract."
       tags:
         - Cards and training
       parameters: *a1
@@ -834,13 +839,17 @@ paths:
         are100*destinationLevel; optional screenshot-2018-gold-projection shares
         the GetLevel bracket curve100*ceil(destinationLevel/5). Five historical
         anchors support it; interpolation/role-wide use and zero materials
-        remain local. Both setters restore exact fields/wallet on failed save
-        and refuse nonzero materials. Caps remain community-derived. Native
-        batch callback UI parameters differ from single training. A genuine
-        singleton batch upgrade of Tyltyl5 slot1 from1 to2, gold200,
-        nextprice300 and preserved roster is verified; arbitrary
-        multi-slot/multi-count training remains unverified. Requests have no
-        recovered nonce/expected level; accepted calls are distinct upgrades."
+        remain local. Explicit material overlays share GetLevel and settlement.
+        Duplicate refs and all intermediate levels aggregate; supported owned
+        unlocked stacks are consumed atomically. Multi consumed_inst_list uses
+        full64 inst_id/remain ABSOLUTE, distinct from single qty deltas. Both
+        setters restore exact fields/wallet/items on failed save; original
+        material IDs remain unknown. Caps remain community-derived. Native batch
+        callback UI parameters differ from single training. A genuine singleton
+        batch upgrade of Tyltyl5 slot1 from1 to2, gold200, nextprice300 and
+        preserved roster is verified; arbitrary multi-slot/multi-count training
+        remains unverified. Requests have no recovered nonce/expected level;
+        accepted calls are distinct upgrades."
       tags:
         - Cards and training
       parameters: *a1
@@ -8630,10 +8639,14 @@ paths:
         BLUSTONE_SKILL_GOLD_PROFILE=screenshot-2018-gold-projection
         uses100*ceil(destinationLevel/5), matching five pinned historical
         screenshot quotes; interpolation and role-wide application are declared
-        local, not original final economy. Both setters share these rows and
-        refuse nonzero materials. Single/batch SkillUp persistence is
-        implemented; awakening, original balance and VIP commerce remain
-        incomplete.
+        local, not original final economy. Both setters share these rows.
+        Optional BLUSTONE_SKILL_MATERIAL_PRICES_JSON adds complete four-slot
+        material recipes to selected role/level rows; only supported published
+        ordinary consumables are admitted, with atomic owned-stack consumption
+        and exact per-route delta/remainder receipts. Defaults remain empty; no
+        original material identities or grants are inferred. Single/batch
+        SkillUp persistence is implemented; awakening, original balance and VIP
+        commerce remain incomplete.
       tags:
         - Reference data
       parameters: *a1

@@ -1,4 +1,35 @@
-## Latest continuation: DataDump image lane and skill gold (2026-10-16)
+## Latest continuation: atomic configured skill materials (2026-10-16)
+
+BLUSTONE_SKILL_MATERIAL_PRICES_JSON optional sparse(role,destinationlevel) native
+four-slot recipes now sharedGetLevel+single/batch settlement. Defaultemptyrows
+unchanged; originalrecipes/IDs remainunknown. Fullslotpairs/refUTF8/uint32/dense
+plainarrays/duplicatekeyguards. Statectorvalidates EACHquote against capsule+
+actuallypublished HUNTER_TRACE_ITEMS before private restore/write; NOT blanket
+GetItem. Display/fuel/fish/navigation IDs excluded. No metadata/recipegrants.
+
+Source positiveUseItem closure: JSON inst_id FULL64 +qty U32 callsUseItem,
+subtracts unchecked, no lock/ref check and NOerase atzero. MULTI is DIFFERENT:
+SetItemQuantity consumes inst_idFULL64 +remainABSOLUTEU32, no missinginsert.
+See docs/skill-material-useitem-contract-2026-10-16.md. Neverinterchangereceipts.
+
+Planner aggregates duplicate refs/slots/everyintermediatebatchlevel, checksuint
+demands/stocksum, globalpositiveSAFEuniqueIDs andselectedqty/locks. LOCAL lowest-ID
+unlockedallocation splitstacks, preserveslocked/unrelatedfields/zerorows and
+allocator. Entiregold/skills/items planbeforemutations; onrealwrite/renamefail
+restoreexactitemsarray/rowrefs,skillpresence/value,gold anddurablebytes. Default
+goldonly retainsitemarray. No nonce: fundedrepeats arenewupgrades; reconcile
+skills/wallet/absoluteiteminventoryafterlostreply, no automaticrecoveryclaim.
+
+Full157 testprograms/build pass; pure/state/actualP384-AES-HMACHTTPcoverwideIDs,
+aggregateshortage,allroutes,wrongshapes,lock/split/zerostock,sharedrefs,realIOfail,
+restart/peer/otherhistory. SameTWO agents reused forsource/review/tests.
+No liveflags/privateprogress/APK/UIinput changes. Originalmaterialmapping and
+nativepopupvalidation pending. docs/configured-skill-materials-2026-10-16.md.
+GoalACTIVE; existing Escapeinputhold/offlinecollector/DataDumpread-only and
+original/privatepreservation stay. Recipeprofilechangesrequireclientcurrent
+referencefetch; no transparentquote-version/cachemigration claimed.
+
+## Historical continuation: DataDump image lane and skill gold (2026-10-16)
 
 Verified GitHub latest DataDump release2026-10-14, checkout0aff320. New3626-image/
 73batch transcription lane has119 stat hits/22full triples plus useful economy
