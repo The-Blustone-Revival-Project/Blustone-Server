@@ -1,3 +1,56 @@
+## Latest continuation: real paid material-Hunter progression proof (2026-10-17)
+
+Previous checkpoint79e420c restored actual-owned local global ranking pages.
+Goal ACTIVE. No live/default profile/private save/device/APK/original assets/
+Docker/Collector/inference changed. Input hold persists. Server/Instrumented
+writes only; DataDump read only. No client rebuild/release owed.
+
+No new gacha pool was needed: existing gachaPremium accepts a published non-main
+BLUSTONE_RECRUIT_CARD selection with actual fee/capacity/allocator/book ownership.
+The launcher used env={processenv,...profile.env}, so its saved004 overrode an
+inherited target. New explicit --recruit-card overrides that profile default.
+It validates canonical three-digit/non-main syntax; absent well-formed IDs still
+refuse at the server reference gate without grants. Merely launching/selecting
+a target grants nothing. Coupon/rate/featured-pool laws remain unrecovered.
+
+New INACTIVE current-e6-materials-progression profile combines existing indexed
+Episode skill projection,2019 material-stat projection and COMMUNITY birth-grade
+projection. Same139 original package order/bytes/stamp1634683 as skills baseline;
+only material-stat/min-rank flags added. Existing selected-target/default004 and
+pricing stay unchanged. No new original balance/distribution claim. Do not
+apply blindly to old live rank1 Mowgli saves: existing constructor rejects
+incompatible ownership BEFORE overwriting; no automatic promotion/erase/migration.
+Use separate compatible disposable state for experiments. Isolated host recipe
+is in docs/material-hunter-acquisition-workflow-2026-10-17.md.
+
+New compiled encrypted tests/material-hunter-progression-http.ts creates fresh
+production ServerState accounts with existing LOCAL300k startup wallets, NOT
+seeded material owners, trace stock, Manda top-ups or forged clear history.
+Actual paid single handler recruits ALL8: Captain009rank1/Vincent010rank4/
+Karl012rank3/Denali013rank2/Lapis017rank1/Bear036rank3/Bibi040rank3/Bright049rank3.
+Exact30 free-first Manda each/240 total, eight unique allocations, native single
+card object/reward metadata, locks/five skill keys/book entries verified.
+
+Each actual owned Hunter trains skill1→2 using existing fees, becomes leader
+and CASE1 party, and gains local mission EXP only when snapshotted participant.
+The test submits a protocol-reported win; it does NOT measure native combat.
+Prior nonparticipants, original starters/peer/Episode progress preserved.
+Constructor restoration plus closing/replacing HTTP app on a new ephemeral port
+reuses original secure client/token and verifies absolute inventory/save-byte
+identity. This is app/transport restoration in SAMEOSprocess, not OS restart.
+Unknown999 gives no card/charge/save. Malformed/main CLI invocations exit before
+state-file creation; positive launcherPROCESS execution still unverified (option
+precedence reviewed, actualpaidapp paths tested). No native battle/HP/Rage/cutin/
+portrait/training-pixel proof. Old live save never loaded or edited for this test.
+
+Build/compiled progression HTTP PASS; full224-program runtime regression PASS.
+Global focused pure/state/compiledHTTP + independent compiled-process verifier
+and process restart PASS. Independent acquisition/global reviews clear. README,
+profile, launcher and durable docs updated. DataDump GitHub releases API verified
+latest2026-10-14 published2026-10-14T17:21:51Z, matching local released evidence;
+no newer release fetched or inferred. Full revival remains incomplete. Next:
+more original system/provider recovery and separately authorized native validation.
+
 ## Latest continuation: actual-owned global Fight Club pages (2026-10-17)
 
 Previous checkpoint6980524 added eight indexed material skill graphs; f35813e

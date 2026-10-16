@@ -21,6 +21,15 @@ env.BLUSTONE_PORT = option('--port', process.env.BLUSTONE_PORT ?? '8080');
 env.BLUSTONE_BIND_HOST = option('--host', process.env.BLUSTONE_BIND_HOST ?? env.BLUSTONE_BIND_HOST);
 env.BLUSTONE_BASE_URL = option('--base-url', process.env.BLUSTONE_BASE_URL ?? env.BLUSTONE_BASE_URL);
 env.BLUSTONE_STATE_FILE = path.resolve(root, option('--state-file', env.BLUSTONE_STATE_FILE));
+// Profile defaults normally override inherited environment. This explicit
+// operator choice selects the existing LOCAL paid-recruitment target; the
+// server still requires a published ordinary reference and actual payment.
+if (args.includes('--recruit-card')) {
+  const recruitCard = option('--recruit-card');
+  if (!/^\d{3}$/.test(recruitCard ?? '') || ['000', '001'].includes(recruitCard))
+    throw new Error('--recruit-card requires a three-digit non-main ordinary Hunter ID');
+  env.BLUSTONE_RECRUIT_CARD = recruitCard;
+}
 preflight(root, profile);
 mkdirSync(path.dirname(env.BLUSTONE_STATE_FILE), { recursive: true });
 console.log(`Profile ${profileName}: ${profile.expectedPackages} packages, version ${env.BLUSTONE_RESOURCE_VERSION}, port ${env.BLUSTONE_PORT}`);

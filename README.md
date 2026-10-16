@@ -36,6 +36,21 @@ original ordinary growth and native execution remain unverified. The prepared
 `current-e6-materials-skills` profile keeps all139 resources/stamps unchanged.
 See the [indexed skill profile](docs/material-skill-indexed-projection-2026-10-17.md).
 
+The inactive `current-e6-materials-progression` profile combines those skills
+with the existing2019 material-stat and community birth-grade projections.
+`--recruit-card 013` overrides the profile's selected LOCAL paid-draw target;
+it selects Denali without adding a pool or issuing a free Hunter. All eight
+material Hunters now have paid recruitment/progression HTTP proof. Use a fresh
+compatible test state: the birth-grade option refuses incompatible old owned
+ranks before saving. See the [acquisition workflow](docs/material-hunter-acquisition-workflow-2026-10-17.md).
+
+Fight Club global-ranking pages now publish actual same-realm local standings,
+complete owned defense parties and mounted Gems. Missing or unsupported
+selected defenses refuse without initializing decks; blocked profiles are
+filtered while established ranks retain gaps. This restores the data contract
+for the leaderboard/profile path; real-peer ranked battles and native rendered
+screens remain unverified. See the [global ranking contract](docs/arena-global-rankings-2026-10-17.md).
+
 A historical High-quality Bait offer is available with
 `BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection` and an explicit local cap,
 for example `BLUSTONE_BAIT_SHOP_DAILY_LIMIT=2`. Each purchase spends6 Manda
