@@ -1,3 +1,37 @@
+## Latest continuation: original Mirage resource bindings (2026-10-16)
+
+Goal ACTIVE. Work only Server/Instrumented; DataDump and retained workspace
+read-only. BlueStacks input hold persists; no live input, profile activation,
+private state change, APK rebuild/install or release in this milestone.
+
+Original JET names now closed through CRMResMap.ExtractJETInfo/GetResListinJET
+and RM10to38: uint64 header+12, base38 alphabet0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ._.
+Do not use CRC guesses or Number for full64 name keys. Bounded Python indexer
+scripts/resources/jet-index.py reproduces MIRAGE71chunks/60resources (30I2,
+30S2) and ST00224chunks/24resources. All30 Mirage66-byte one-image S2 sprites
+resolve exact full64 I2 references, transform40bytes and signed point offsets.
+MRG002 nine-sprite owner matches original KO/MIRAGE/MIRAGE_STAIR BG_STAGE.
+Node mirage-resources.ts pins BOTH original pack and generated index before
+returning detached maps; tests regenerate full reports independently. Generic
+native compression semantics remain unclosed: nextowner LoadJETBlockG110aff8.
+Equal-size/raw-versus-zlib is validated strict pack profile, not universal JET.
+
+Mirage battle selection is separate: stage.res_prefix override else selected
+postfix -> first exact digit text in ENV.PreFix -> ALL matching ENVmapkeys ->
+random selection. CSVcolumn0 is exact stringkey. Original selector002 matches
+STI002 ENVkeys2 AND15. requireMirageCombatCache now requires complete supplied
+environment coverage; it no longer demands literal002 sprite. base.bg_res
+presence remains additional LOCALUIpolicy, not battle environment provenance.
+BG_M_INGAME is hidden shade decoration, not parallax selection. MIRAGE package
+presence on disk does not establish active current-e6 client deployment.
+
+All161 gameplay test programs, six Python indexer cases and TypeScript build
+PASS. See docs/mirage-native-jet-name-index-2026-10-16.md and
+ docs/mirage-original-ui-resource-names-2026-10-16.md. Original floor/grade/
+balance/enemy/rotation/reward and registration producer remain unknown; no
+nonempty GetInfo run publication or playable-Mirage claim. Next close layer
+construction and remaining original run data without guessed assignments.
+
 ## Latest continuation: local linear quest sequences and preview wire correction (2026-10-16)
 
 Existing local-fixed quest policy optionally includes linear:{references,rules}.

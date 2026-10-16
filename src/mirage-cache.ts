@@ -69,6 +69,11 @@ export interface MirageReadiness {
   // from ordinary deck or from1000 defaults. Schema checking is not provenance.
   commitments:ReadonlyMap<number,number>;
   heroIds:ReadonlySet<string>;resources:ReadonlySet<string>;dialogueIds:ReadonlySet<string>;
+  /** Native ENV map key -> PreFix. First digit substring is compared as exact
+   * text with the selected postfix/stage override; every random candidate
+   * needs independently established layered-background readiness. */
+  environments:ReadonlyMap<string,string>;readyEnvironments:ReadonlySet<string>;
+  stageBackgroundPrefixes?:ReadonlyMap<string,string>;
   enemySupported:(enemy:Readonly<MirageEnemy>)=>boolean;now:number;
 }
 export function requireMirageCombatCache(raw:unknown,context:MirageReadiness):MirageCache {
@@ -85,9 +90,16 @@ export function requireMirageCombatCache(raw:unknown,context:MirageReadiness):Mi
   if(!cache.inst_enemy.length||cache.inst_enemy.some(enemy=>enemy.hp_percent<0||enemy.hp_percent>10000||!context.enemySupported(Object.freeze({...enemy})))||
     !cache.inst_enemy.some(enemy=>enemy.hp_percent>0))throw new TypeError("Mirage enemy references/projection or living camp is unavailable");
   if(cache.ref_stair.list.some(row=>row.grade<0||row.grade>3)||cache.ref_stair.list[base.stair-1].balance<=0||
+    // base.bg_res presence remains an additional LOCAL UI admission check;
+    // native battle environment selection does not read this field here.
     !cache.ref_stair.res_postfix_list.length||!context.resources.has(base.bg_res)||cache.ref_stair.res_postfix_list.some(postfix=>
-      !postfix||!context.resources.has(cache.ref_stair.res_prefix+postfix)||!context.resources.has(postfix))||
+      !postfix||!context.resources.has(cache.ref_stair.res_prefix+postfix))||
     [base.dlg_begin,base.dlg_end].some(id=>id&&!context.dialogueIds.has(id)))throw new TypeError("Mirage selected stair/resource bindings are unavailable");
+  for(const postfix of cache.ref_stair.res_postfix_list) {
+    const override=context.stageBackgroundPrefixes?.get(postfix),selector=override===undefined||text(override)===""?postfix:override;
+    const candidates=[...context.environments].filter(([_key,prefix])=>text(prefix).match(/[0-9]+/)?.[0]===selector);
+    if(!candidates.length||candidates.some(([key])=>!text(key)||!context.readyEnvironments.has(key)))throw new TypeError("Mirage environment candidates are unavailable or incompletely covered");
+  }
   if([...cache.ref_hero.cur,...cache.ref_hero.next].some(id=>!context.heroIds.has(id)))throw new TypeError("Mirage rotating Hunter reference unavailable");
   return cache;
 }

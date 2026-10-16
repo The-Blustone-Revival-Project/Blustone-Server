@@ -7,11 +7,12 @@ const enemy={ref_id:"AUTHORED_ENEMY",hp_percent:10000,rank:1,rank_up_cnt:0,overc
 const source={entry:[{id:101,mirage_remain_hp:10000},{id:102,mirage_remain_hp:5000}],
   inst_base:{bg_res:"AUTHORED_BASE",dlg_begin:"AUTHORED_DIALOG",dlg_end:"",new_record:1,floor:1,stair:1,state:1,
     deck:[101,102,0],tier_percent:0,highest:1,revive_price:0,begin_ltime:100},inst_enemy:[enemy],
-  ref_stair:{res_prefix:"AUTHORED_PREFIX_",res_postfix_list:["AUTHORED_BG"],list:[{grade:1,balance:10000}]},
+  ref_stair:{res_prefix:"AUTHORED_PREFIX_",res_postfix_list:["002"],list:[{grade:1,balance:10000}]},
   ref_hero:{bonus:0,end_ltime:200,cur:["AUTHORED_HERO_A"],next:["AUTHORED_HERO_B"]}};
 const context:MirageReadiness={owned:new Map([[101,{ref_id:"AUTHORED_HERO_A",name:"Authored A"}],[102,{ref_id:"AUTHORED_HERO_B",name:"Authored B"}]]),
   commitments:new Map([[101,10000],[102,5000]]),heroIds:new Set(["AUTHORED_HERO_A","AUTHORED_HERO_B"]),
-  resources:new Set(["AUTHORED_BASE","AUTHORED_BG","AUTHORED_PREFIX_AUTHORED_BG"]),dialogueIds:new Set(["AUTHORED_DIALOG"]),
+  resources:new Set(["AUTHORED_BASE","AUTHORED_PREFIX_002"]),dialogueIds:new Set(["AUTHORED_DIALOG"]),
+  environments:new Map([["env-key","STI002"]]),readyEnvironments:new Set(["env-key"]),
   enemySupported:row=>row.ref_id==="AUTHORED_ENEMY"&&row.rank===1,now:200};
 const bytes=JSON.stringify(source),decoded=parseMirageCache(source);
 assert.deepEqual(decoded.inst_base.deck,["101","102","0"]);
@@ -46,7 +47,7 @@ assert.throws(()=>parseMirageCache({...source,inst_enemy:custom}));assert.equal(
 assert.throws(()=>parseMirageCache(Object.create(source)));assert.throws(()=>parseMirageCache({...source,entry:Array(1)}));
 assert.throws(()=>parseMirageCache({...source,inst_base:{...source.inst_base,bg_res:"bad\ud800"}}),/lossless/);
 for(const patch of [{commitments:new Map([[101,1000],[102,5000]])},{commitments:new Map([[101,10000]])},
-  {heroIds:new Set<string>()},{resources:new Set(["AUTHORED_BASE","AUTHORED_PREFIX_AUTHORED_BG"])},
+  {heroIds:new Set<string>()},{resources:new Set(["AUTHORED_BASE"])},
   {dialogueIds:new Set<string>()},{enemySupported:()=>false},{now:201}])assert.throws(()=>requireMirageCombatCache(source,{...context,...patch}));
 for(const patch of [{floor:0},{stair:0},{stair:2},{state:2},{revive_price:-1},{deck:[101,101]},
   {deck:[101,999]},{deck:[0,0]}])assert.throws(()=>requireMirageCombatCache({...source,inst_base:{...source.inst_base,...patch}},context));
@@ -55,6 +56,22 @@ assert.throws(()=>requireMirageCombatCache({...source,inst_enemy:[{...enemy,hp_p
 assert.throws(()=>requireMirageCombatCache({...source,ref_stair:{...source.ref_stair,list:[{grade:4,balance:10000}]}},context));
 assert.throws(()=>requireMirageCombatCache({...source,ref_stair:{...source.ref_stair,list:[{grade:1,balance:0}]}},context));
 assert.throws(()=>requireMirageCombatCache({...source,ref_stair:{...source.ref_stair,res_postfix_list:[]}},context));
+assert.equal(context.resources.has("002"),false,"Native postfix selects an environment; it is not itself a sprite");
+assert.throws(()=>requireMirageCombatCache(source,{...context,environments:new Map()}),/environment/);
+assert.throws(()=>requireMirageCombatCache(source,{...context,environments:new Map([["env-key","STI2"]])}),/environment/,
+  "Exact first digit text distinguishes 002 from2");
+assert.throws(()=>requireMirageCombatCache(source,{...context,environments:new Map([["env-key","STI002"],["second","OTHER002_PART9"]])}),/environment/,
+  "All matching random candidates require complete coverage");
+assert.deepEqual(requireMirageCombatCache(source,{...context,
+  environments:new Map([["env-key","STI002"],["second","OTHER002_PART9"]]),readyEnvironments:new Set(["env-key","second"])}),decoded);
+assert.throws(()=>requireMirageCombatCache(source,{...context,environments:new Map([["env-key","STI9_PART002"]])}),/environment/,
+  "Native compares first digit substring, not a later substring");
+assert.deepEqual(requireMirageCombatCache(source,{...context,stageBackgroundPrefixes:new Map([["002",""]])}),decoded,
+  "An empty stage prefix falls back to postfix");
+assert.throws(()=>requireMirageCombatCache(source,{...context,stageBackgroundPrefixes:new Map([["002","2"]])}),/environment/);
+assert.deepEqual(requireMirageCombatCache(source,{...context,stageBackgroundPrefixes:new Map([["002","2"]]),
+  environments:new Map([["override-env","STI2"]]),readyEnvironments:new Set(["override-env"])}),decoded,
+  "Nonempty matching stage res_prefix overrides battle selector but not stair sprite binding");
 const detached=requireMirageCombatCache(source,context);detached.entry[0].mirage_remain_hp=0;detached.ref_stair.list[0].balance=1;
 assert.equal(JSON.stringify(source),bytes);
 // An external projection predicate must not rewrite the retained source DTO.
