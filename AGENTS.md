@@ -1,3 +1,26 @@
+## Latest continuation: atomic Missing Hunter Search saves (2026-10-17)
+
+Previous checkpoint098622c added configured fishing casts. Goal ACTIVE. No live
+profile/private save/device/APK/original asset/Docker/Collector/inference change;
+device input hold persists. Server/Instrumented writes only; DataDump read only.
+
+Search previously mutated live capsule/helper/log/trace/Manda state before its
+persist callback; failed write/rename left memory diverging from the save.
+searchAction now plans on a detached game, marks whether persistence is needed,
+stages that complete candidate for the synchronous writer, restores the account
+map in finally and publishes only AFTER durable success. Existing capsule/trace/
+array identities are preserved on success. Failed persistence leaves all live
+nested values/references, prior file and other account data untouched. Idle
+reads/refusals/acknowledged replays do not write. No economy or native DTO change.
+
+New tests/search-atomic-state.ts proves write AND rename failure for Begin/End
+(new and existing trace)/Retry/Reset and guided-waiver Begin/End; genuine local
+campaign-earned capsules, log/waiver/helper/allocator/Manda/refusal/replay and
+successful restart. Source and compiled focused test plus existing Search
+battle/repeat/guided-recruitment tests PASS; build PASS. Documentation:
+docs/search-atomic-persistence-2026-10-17.md. Parallel indexed material skill
+reference work is the next checkpoint; no live activation or native combat claim.
+
 ## Latest continuation: persisted configured fishing catches (2026-10-17)
 
 Previous checkpoint3a8a2b6 prepared the inactive169-group restoration profile.

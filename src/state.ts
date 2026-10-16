@@ -3492,8 +3492,40 @@ export class ServerState {
     // do not refresh AP/BP clocks or emit energy updates.
     const game = this.gameByPvid.get(account.pvid) ?? this.gameFor(account);
     if (route === "/abyss/GetHelperList") return this.envelope(usedSearchHelpers(game));
-    const result = searchBattleRequest(route, payload, game, () => this.persist());
-    return "error" in result ? this.failure(2001, result.error) : this.envelope(result.data);
+    // Plan against detached state: validation and save errors must not consume
+    // capsules/helpers, spend Manda, advance logs or publish an earned reward.
+    const planned = structuredClone(game);
+    let changed = false;
+    const result = searchBattleRequest(route, payload, planned, () => { changed = true; });
+    if ("error" in result) return this.failure(2001, result.error);
+    if (changed) {
+      // The synchronous writer sees the complete planned transaction, while
+      // every live object stays untouched until durable replacement succeeds.
+      this.gameByPvid.set(account.pvid, planned);
+      try { this.persist(); } finally { this.gameByPvid.set(account.pvid, game); }
+      // Preserve existing item/array identities on successful publication too:
+      // callers may retain a capsule row while the Search action debits it.
+      const publish = (before: any, after: any): any => {
+        if (Array.isArray(before) && Array.isArray(after)) {
+          for (let index = 0; index < after.length; index++) before[index] = publish(before[index], after[index]);
+          before.length = after.length;
+          return before;
+        }
+        if (before && after && typeof before === "object" && typeof after === "object" &&
+            !Array.isArray(before) && !Array.isArray(after)) {
+          for (const key of Object.keys(before)) if (!Object.hasOwn(after, key)) delete before[key];
+          for (const [key, value] of Object.entries(after)) before[key] = publish(before[key], value);
+          return before;
+        }
+        return after;
+      };
+      publish(game.search, planned.search);
+      publish(game.items, planned.items);
+      game.next_item_inst_id = planned.next_item_inst_id;
+      game.gacha_free_qty = planned.gacha_free_qty;
+      game.gacha_iap_qty = planned.gacha_iap_qty;
+    }
+    return this.envelope(result.data);
   }
 
   startMission(payload: Record<string, unknown>, headers: Record<string, string>) {
