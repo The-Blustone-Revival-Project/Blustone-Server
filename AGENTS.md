@@ -1,3 +1,45 @@
+## Latest continuation: original Mirage background dependency closure (2026-10-16)
+
+Previous goal turn was progress:0b1bf58/ca453ca committed original JET names
+and corrected environment selection. This continuation closes three more
+resource gaps. Goal ACTIVE; no live input/state/profile/APK change. Preserve
+BlueStacks input hold, DataDump read-only and Server/Instrumented edit scope.
+
+Original LEVELING.jet COMMON, not COMMON_DESC, supplies layer suffixes:
+longlongD/longC/shortB/shortshortA/windowE. Exact pack/header/bounded zlib/RW
+length/BOM/JSON pins now guarded in src/mirage-backgrounds.ts. ENVkeys2/15
+both require STI002_D1x2,C1x2,B1x2,A1x3,E1x2. Decimal111 repeats variant1.
+Separate originalMirageLayerDependencies pins ST002+index then proves all5
+AT→S2→I2 asset chains. D/E share I2 M7UX9J; do not invent distinct textures.
+No automatic environment-ready publication, original floor assignment or
+live rendering claim follows from these dependency proofs.
+
+Native CRMAnim2.Load ATconsumer closed: type2+transform40+opaqueByte1+
+countU32, eachframe full64SpriteKey+durationF32+tagLenU16+opaqueTagBytes.
+Opaque byte is NOTboolean (original values include255/224/112/34). Native
+RM10to38→LoadSprite2 is explicit. Tool now supports bounded exactEOF AT,
+keeps invalid shapes unsupported and refuses invalid supported references.
+S2 now supports bounded1..1024 image lists/zeroaux, full64 keys/signedpoints,
+order/repetition preserved. ST_SHA82byte two-image form closed; all8 ST002
+ATs now have supported S2→I2 chains. Singularfields retained onlycount1.
+Generated MIRAGE/ST002 indexes and Nodepins updated reproducibly.
+
+Native LoadJETBlockG110aff8 compression branch nowclosed: compares header
+word1 decoded and word2 stored; equal rawread, otherwise RMDecompress via
+inflateInit_/inflateZ_FINISH/inflateEnd. Word0 universal assembled-length
+meaning and general multipart constructor behavior remain unclosed. Strict
+offline exactEOF/bounds/unique names/part order are additional LOCAL policy.
+
+162 gameplay test programs passed; finalmultiimage/indexchanges rechecked
+with both focused resource/background programs, nine Pythoncases and build.
+Docs: jet-at-animation-consumer-2026-10-16.md,
+jet-native-compression-consumer-2026-10-16.md and
+mirage-original-common-background-prefixes-2026-10-16.md under docs/.
+Original Mirage floor/grade/balance/enemy/rotation/reward/registration data
+remain missing. No nonempty GetInfo run or playable-Mirage claim. Next use
+these decoded resources with original run evidence, or apply decoder to
+other unreconstructed game area dependencies; no guessed stat/loot grants.
+
 ## Latest continuation: original Mirage resource bindings (2026-10-16)
 
 Goal ACTIVE. Work only Server/Instrumented; DataDump and retained workspace

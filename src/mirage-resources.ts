@@ -7,11 +7,11 @@ export const MIRAGE_RESOURCE_SOURCES=Object.freeze({
   mirage:Object.freeze({pack:"resources/runtime/assets/MIRAGE.jet",bytes:3861142,
     sha256:"d2cf0adca895de1174f35f507cf5e38a21b8e74572a5c895c50ad6c062f4374e",
     index:"resources/reference/mirage-original-jet-index.json",
-    indexSha256:"ba702450ec3cad2afdf9a10eb03cf51758cbb025d49894ab4a68d523b6b5b118",resources:60,chunks:71}),
+    indexSha256:"0aad1601eef30b3a32ced4aac1090999c89f987b33899983c1b355b72ff673fc",resources:60,chunks:71}),
   st002:Object.freeze({pack:"resources/runtime/assets/ST002.jet",bytes:2985916,
     sha256:"e75a9e7be84632e960a3084e4262726604c013d96633c3015d125f9ada9129ba",
     index:"resources/reference/st002-original-jet-index.json",
-    indexSha256:"122a00a5b16decf63bf10ea65c92f004d4a67b8762f85626680fc6062a63a6de",resources:24,chunks:24}),
+    indexSha256:"a59c0698b2024829c44b9769969907722bfc3f294bbf8428a62c4ada2fb328f5",resources:24,chunks:24}),
 });
 export const MIRAGE_ENVIRONMENT_SOURCE=Object.freeze({path:"resources/reference/recovered-data/environments.csv",
   sha256:"0c9e214daae929e264083329dc8fdd7f0b02b4f438ec159080a82d6264da1b4c"});
@@ -19,7 +19,12 @@ export interface OriginalJetResource {
   name:string;encoded_name:string;offset:number;total_bytes:number;decoded_bytes:number;sha256:string;payload_prefix_hex:string;
   chunks:{offset:number;payload_offset:number;raw_bytes:number;stored_bytes:number;part:number;type_bytes_hex:string;header_hex:string}[];
   s2projection?:{supported:boolean;image_name?:string;image_encoded_name?:string;image_sha256?:string;
-    image_decoded_bytes?:number;point?:{x:number;y:number};[key:string]:unknown};
+    image_decoded_bytes?:number;point?:{x:number;y:number};
+    images?:{image_name:string;image_encoded_name:string;image_sha256:string;image_decoded_bytes:number;point:{x:number;y:number}}[];
+    [key:string]:unknown};
+  atprojection?:{supported:boolean;opaque_byte?:number;frame_count?:number;
+    frames?:{sprite_encoded_name:string;sprite_name:string;duration_float32:number;duration_hex:string;
+      tag_hex:string;sprite_projection_supported:boolean;[key:string]:unknown}[];[key:string]:unknown};
 }
 function hash(bytes:Buffer):string{return createHash("sha256").update(bytes).digest("hex");}
 /** Both inputs are pinned before parsing. This deliberately admits only these

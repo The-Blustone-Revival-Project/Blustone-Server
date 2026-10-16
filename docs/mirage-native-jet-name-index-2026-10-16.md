@@ -141,3 +141,12 @@ G10e9704. Existing published decompilation only includes the wrapper
 CRMResourceMgr4.LoadRawData G10eac8c, which resolves cache/clone or delegates
 file loading. It does not establish compression semantics. There is no
 CRMResMap.LoadRawData symbol in the checked source vocabulary.
+
+## Compression follow-up
+
+The raw-versus-zlib consumer is now closed in the companion
+jet-native-compression-consumer-2026-10-16.md: LoadJETBlock compares header
+word1 decoded length and word2 stored length, reads equal lengths directly,
+otherwise calls RMDecompress/inflate. The earlier unclosed statements above
+record the previous audit boundary. Exact EOF, resource uniqueness and
+word0 assembled-length policy remain strict offline admission limitations.

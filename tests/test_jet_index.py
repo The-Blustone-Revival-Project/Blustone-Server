@@ -78,6 +78,8 @@ class JetIndexTests(unittest.TestCase):
         self.assertEqual(projection["image_decoded_bytes"], 102)
         self.assertEqual(projection["image_sha256"], report["resources"][1]["sha256"])
         self.assertEqual(projection["transform_hex"], sprite[2:42].hex())
+        self.assertEqual(projection["images"], [{key: projection[key] for key in
+                         ["image_encoded_name", "image_name", "image_sha256", "image_decoded_bytes", "point"]}])
         with self.assertRaises(ValueError): jet.index_jet(chunk("MRG001", sprite))
         with self.assertRaises(ValueError): jet.index_jet(chunk("MRG001", sprite)+chunk(image_name,b"RWwrong"))
         nonfinite = bytearray(sprite);struct.pack_into("<f", nonfinite, 2, float("nan"))
@@ -89,6 +91,90 @@ class JetIndexTests(unittest.TestCase):
         for count, auxiliary in [(0,0),(2,0),(1,1)]:
             payload=b"S2"+struct.pack("<10fIQiiI", *([0.0]*10),count,1,0,0,auxiliary)
             report=jet.index_jet(chunk("ODD",payload))
+            self.assertFalse(report["resources"][0]["s2projection"]["supported"])
+
+    def test_at_full64_sprite_frames_and_opaque_tags(self):
+        sprite_name = "SPRITE_12345"
+        sprite_key = jet.encode_name(sprite_name)
+        self.assertGreater(sprite_key, 2**32)
+        image_name = "IMAGE_123456"
+        sprite = b"S2" + struct.pack("<10fIQiiI", *([0.0]*10), 1, jet.encode_name(image_name), 0, 0, 0)
+        def frame(duration, tag):
+            return struct.pack("<QfH", sprite_key, duration, len(tag)) + tag
+        animation = b"AT" + struct.pack("<10fBI", *([0.0]*10), 255, 2) + frame(0.5, b"intro\0tail") + frame(0.0, b"")
+        # Prefix split across physical chunks exercises bounded type discovery.
+        data = chunk("ANIM", animation[:1], whole=len(animation))
+        data += chunk("ANIM", animation[1:], whole=len(animation), part=1, compress=True)
+        data += chunk(sprite_name, sprite) + chunk(image_name, b"I2payload")
+        report = jet.index_jet(data)
+        projection = report["resources"][0]["atprojection"]
+        self.assertEqual(report["exact_eof"], len(data), "AT cursor must not replace the archive EOF cursor")
+        self.assertTrue(projection["supported"])
+        self.assertEqual(projection["opaque_byte"], 255)
+        self.assertEqual(projection["frame_count"], 2)
+        self.assertTrue(projection["all_sprite_projections_supported"])
+        first, second = projection["frames"]
+        self.assertEqual(first["sprite_encoded_name"], str(sprite_key))
+        self.assertEqual(first["sprite_name"], sprite_name)
+        self.assertEqual(first["duration_float32"], 0.5)
+        self.assertEqual(first["tag_hex"], b"intro\0tail".hex(), "Tag bytes are preserved; native strlen semantics are not emulated")
+        self.assertEqual(second["duration_float32"], 0.0)
+        self.assertEqual(second["tag_hex"], "")
+        self.assertEqual(first["sprite_sha256"], report["resources"][1]["sha256"])
+        # Resolving the S2 record is distinct from decoding that sprite's internals.
+        partial = jet.index_jet(chunk("ANIM", b"AT" + struct.pack("<10fBIQfH", *([0.0]*10), 112, 1, sprite_key, 0.5, 0)) + chunk(sprite_name, b"S2unknown"))
+        self.assertTrue(partial["resources"][0]["atprojection"]["supported"])
+        self.assertFalse(partial["resources"][0]["atprojection"]["all_sprite_projections_supported"])
+
+    def test_at_refusal_and_unsupported_shapes(self):
+        key = jet.encode_name("SPRITE")
+        animation = b"AT" + struct.pack("<10fBIQfH", *([0.0]*10), 34, 1, key, 0.5, 0)
+        self.assertEqual(len(animation), 61)
+        for payload in [b"ATshort", animation[:-1], animation + b"trailing",
+                        b"AT" + struct.pack("<10fBI", *([0.0]*10), 0, jet.MAX_AT_FRAMES + 1),
+                        animation[:59] + struct.pack("<H", jet.MAX_AT_TAG_BYTES + 1)]:
+            report = jet.index_jet(chunk("ANIM", payload))
+            self.assertFalse(report["resources"][0]["atprojection"]["supported"])
+        for duration in [float("inf"), float("nan"), -0.5]:
+            invalid = bytearray(animation);struct.pack_into("<f", invalid, 55, duration)
+            with self.assertRaises(ValueError): jet.index_jet(chunk("ANIM", bytes(invalid)) + chunk("SPRITE", b"S2unknown"))
+        for referenced in [b"", chunk("SPRITE", b"I2wrong")]:
+            with self.assertRaises(ValueError): jet.index_jet(chunk("ANIM", animation) + referenced)
+        invalid_key = bytearray(animation);struct.pack_into("<Q", invalid_key, 47, 38**12)
+        with self.assertRaises(ValueError): jet.index_jet(chunk("ANIM", bytes(invalid_key)))
+        invalid_transform = bytearray(animation);struct.pack_into("<f", invalid_transform, 2, float("inf"))
+        with self.assertRaises(ValueError): jet.index_jet(chunk("ANIM", bytes(invalid_transform)))
+
+    def test_multi_image_s2_preserves_order_keys_and_coordinates(self):
+        names = ["IMAGE_123456", "OTHER_123456"]
+        keys = [jet.encode_name(name) for name in names]
+        for key in keys: self.assertGreater(key, 2**32)
+        sprite = b"S2" + struct.pack("<10fI", *([0.0]*10), 2)
+        sprite += struct.pack("<Qii", keys[0], -272, -1320)
+        sprite += struct.pack("<QiiI", keys[1], -488, -568, 0)
+        self.assertEqual(len(sprite), 82)
+        data = chunk("ST_SHA", sprite[:1], whole=82) + chunk("ST_SHA", sprite[1:], whole=82, part=1, compress=True)
+        # Referenced image prefix can also span physical chunks.
+        data += chunk(names[0], b"I", whole=5) + chunk(names[0], b"2one", whole=5, part=1)
+        data += chunk(names[1], b"I2two")
+        report = jet.index_jet(data)
+        self.assertEqual(report["exact_eof"], len(data))
+        projection = report["resources"][0]["s2projection"]
+        self.assertTrue(projection["supported"])
+        self.assertEqual(projection["image_count"], 2)
+        self.assertEqual([entry["image_name"] for entry in projection["images"]], names)
+        self.assertEqual([entry["image_encoded_name"] for entry in projection["images"]], list(map(str, keys)))
+        self.assertEqual([entry["point"] for entry in projection["images"]], [{"x": -272,"y": -1320},{"x": -488,"y": -568}])
+        self.assertNotIn("image_name", projection, "Multi-image projection must not invent a single primary image")
+        self.assertEqual(projection["images"][0]["image_sha256"], report["resources"][1]["sha256"])
+        for suffix in [b"", chunk(names[1], b"S2wrong")]:
+            with self.assertRaises(ValueError): jet.index_jet(chunk("ST_SHA", sprite) + chunk(names[0], b"I2one") + suffix)
+        duplicate = bytearray(sprite);struct.pack_into("<Q", duplicate, 62, keys[0])
+        repeated = jet.index_jet(chunk("ST_SHA", bytes(duplicate)) + chunk(names[0], b"I2one"))
+        self.assertEqual(len(repeated["resources"][0]["s2projection"]["images"]), 2,"Native image list retains repeated references")
+        for payload in [sprite[:-1], sprite+b"x", sprite[:-4]+struct.pack("<I",1),
+                        b"S2"+struct.pack("<10fI", *([0.0]*10), jet.MAX_S2_IMAGES+1)]:
+            report=jet.index_jet(chunk("ST_SHA",payload))
             self.assertFalse(report["resources"][0]["s2projection"]["supported"])
 
 if __name__ == "__main__":

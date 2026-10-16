@@ -14,10 +14,24 @@ for(const kind of ["mirage","st002"] as const) {
   const resources=originalMirageResourceIndex(kind,pack,index);
   assert.equal(resources.size,pin.resources);
   for(const row of resources.values())if(row.s2projection?.supported) {
-    const image=resources.get(row.s2projection.image_name!);
-    assert.ok(image);assert.equal(image.payload_prefix_hex,"4932");
-    assert.equal(row.s2projection.image_encoded_name,image.encoded_name);
-    assert.equal(row.s2projection.image_sha256,image.sha256);
+    const entries=row.s2projection.images!;
+    assert.ok(entries.length);
+    for(const entry of entries) {
+      const image=resources.get(entry.image_name);
+      assert.ok(image);assert.equal(image.payload_prefix_hex,"4932");
+      assert.equal(entry.image_encoded_name,image.encoded_name);
+      assert.equal(entry.image_sha256,image.sha256);
+    }
+  }
+  if(kind==="st002") {
+    const animations=[...resources.values()].filter(row=>row.atprojection?.supported);
+    assert.equal(animations.length,8);
+    assert.equal(animations.filter(row=>row.atprojection?.all_sprite_projections_supported).length,8);
+    assert.equal(resources.get("ST_SHADOW")!.atprojection!.frames![0].sprite_name,"ST_SHA");
+    assert.equal(resources.get("ST_SHADOW")!.atprojection!.all_sprite_projections_supported,true);
+    assert.equal(resources.get("ST_SHA")!.s2projection!.images!.length,2,
+      "Original shadow is a two-image sprite; keep both dependencies");
+    assert.equal(resources.get("STI002_C1")!.atprojection!.opaque_byte,255,"Opaque byte must not be coerced to a boolean");
   }
   const badPack=Buffer.from(pack);badPack[24]^=1;
   assert.throws(()=>originalMirageResourceIndex(kind,badPack,index),/pin mismatch/);
