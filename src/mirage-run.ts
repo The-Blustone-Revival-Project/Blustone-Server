@@ -6,11 +6,12 @@ export interface MiragePolicy {
   readonly res_prefix:string;readonly res_postfix_list:readonly string[];
   readonly stairs:readonly {readonly grade:number;readonly balance:number;readonly enemies:readonly MirageEnemy[];readonly gold:number}[];
   readonly hero:{readonly bonus:number;readonly end_ltime:number;readonly cur:readonly string[];readonly next:readonly string[]};
+  readonly revive_prices?:readonly number[];
 }
 export interface MirageRun {
   policy:MiragePolicy;cache:MirageCache;
   lastEnd?:{fingerprint:string;receipt:Record<string,unknown>};
-  claimed:number[];abandoned?:true;
+  claimed:number[];abandoned?:true;revive_ids?:number[];
 }
 const I32=0x7fff_ffff,U32=0xffff_ffff;
 function object(raw:unknown,required:readonly string[],optional:readonly string[]=[]):Record<string,unknown> {
@@ -53,7 +54,7 @@ function enemyRows(raw:unknown):MirageEnemy[] {
  * defaults are filled. Runtime readiness independently joins original assets,
  * supported Hunter references and actually owned enrollment/party records. */
 export function validatedMiragePolicy(raw:unknown):MiragePolicy {
-  const root=object(raw,["enrollment","floor","bg_res","dlg_begin","dlg_end","res_prefix","res_postfix_list","stairs","hero"]);
+  const root=object(raw,["enrollment","floor","bg_res","dlg_begin","dlg_end","res_prefix","res_postfix_list","stairs","hero"],["revive_prices"]);
   if(root.enrollment!=="rank-exp-id-projection")throw new TypeError("Explicit LOCAL Mirage enrollment projection required");
   const floor=integer(root.floor,1),bg_res=text(root.bg_res,true),dlg_begin=text(root.dlg_begin),dlg_end=text(root.dlg_end);
   if(dlg_begin||dlg_end)throw new TypeError("Configured Mirage dialogue production is not supported");
@@ -66,7 +67,10 @@ export function validatedMiragePolicy(raw:unknown):MiragePolicy {
   if(stairs.length!==required)throw new TypeError("Configured Mirage floor requires explicit3/6/9 stairs for its floor band");
   const heroRaw=object(root.hero,["bonus","end_ltime","cur","next"]),hero={bonus:integer(heroRaw.bonus),end_ltime:integer(heroRaw.end_ltime),
     cur:names(heroRaw.cur,100),next:names(heroRaw.next,100)};
-  return freeze({enrollment:root.enrollment,floor,bg_res,dlg_begin,dlg_end,res_prefix,res_postfix_list,stairs,hero}) as MiragePolicy;
+  const revive_prices=Object.hasOwn(root,"revive_prices")?array(root.revive_prices,100).map(value=>integer(value,1)):undefined;
+  if(revive_prices&&!revive_prices.length)throw new TypeError("Enabled Mirage first aid requires explicit positive prices");
+  return freeze({enrollment:root.enrollment,floor,bg_res,dlg_begin,dlg_end,res_prefix,res_postfix_list,stairs,hero,
+    ...(revive_prices?{revive_prices}:{})}) as MiragePolicy;
 }
 function membership(cache:MirageCache,completed=false) {
   const entries=new Map<number,number>();
@@ -82,10 +86,10 @@ function membership(cache:MirageCache,completed=false) {
 export function createMirageRun(policy:MiragePolicy,entries:readonly MirageEntry[],deck:readonly string[],now:number):MirageRun {
   const valid=validatedMiragePolicy(policy),time=integer(now);
   if(valid.hero.end_ltime<time)throw new TypeError("Configured Mirage rotation has already expired");
-  const cache=parseMirageCache({entry:entries,inst_base:initialBase(valid.floor,valid.bg_res,valid.dlg_begin,valid.dlg_end,time,deck),
+  const cache=parseMirageCache({entry:entries,inst_base:{...initialBase(valid.floor,valid.bg_res,valid.dlg_begin,valid.dlg_end,time,deck),revive_price:valid.revive_prices?.[0]??0},
     inst_enemy:valid.stairs[0].enemies,ref_stair:{res_prefix:valid.res_prefix,res_postfix_list:valid.res_postfix_list,
       list:valid.stairs.map(({grade,balance})=>({grade,balance}))},ref_hero:valid.hero});
-  membership(cache);return normalizeMirageRun({policy:valid,cache,claimed:[]});
+  membership(cache);return normalizeMirageRun({policy:valid,cache,claimed:[],...(valid.revive_prices?{revive_ids:[]}:{})});
 }
 function normalizeEnd(raw:unknown,cache:MirageCache,entries:ReadonlyMap<number,number>) {
   const end=object(raw,["fingerprint","receipt"]),fingerprint=text(end.fingerprint,true);
@@ -119,11 +123,15 @@ function normalizeEnd(raw:unknown,cache:MirageCache,entries:ReadonlyMap<number,n
  * the state owner must also bind every enrolled ID and carry to actual owned
  * Hunters, current reference support and persistent commitment provenance. */
 export function normalizeMirageRun(raw:unknown):MirageRun {
-  const root=object(raw,["policy","cache","claimed"],["lastEnd","abandoned"]),policy=validatedMiragePolicy(root.policy),cache=parseMirageCache(root.cache),base=cache.inst_base;
+  const root=object(raw,["policy","cache","claimed"],["lastEnd","abandoned","revive_ids"]),policy=validatedMiragePolicy(root.policy),cache=parseMirageCache(root.cache),base=cache.inst_base;
   const abandoned=Object.hasOwn(root,"abandoned");
   if(abandoned&&root.abandoned!==true)throw new TypeError("Mirage abandoned marker must be explicit true or absent");
+  const reviveEnabled=policy.revive_prices!==undefined;
+  if(Object.hasOwn(root,"revive_ids")!==reviveEnabled)throw new TypeError("Mirage first-aid history must exactly match its captured policy");
+  const revive_ids=reviveEnabled?array(root.revive_ids,policy.revive_prices!.length).map(value=>integer(value,1,U32)):undefined;
+  const revive_price=reviveEnabled?policy.revive_prices![revive_ids!.length]??-1:0;
   if(base.floor!==policy.floor||base.bg_res!==policy.bg_res||base.dlg_begin!==policy.dlg_begin||base.dlg_end!==policy.dlg_end||
-    base.new_record!==0||base.tier_percent!==0||base.highest!==(base.state===0&&!abandoned?policy.floor:0)||base.revive_price!==0||base.begin_ltime<0||base.begin_ltime>policy.hero.end_ltime||
+    base.new_record!==0||base.tier_percent!==0||base.highest!==(base.state===0&&!abandoned?policy.floor:0)||base.revive_price!==revive_price||base.begin_ltime<0||base.begin_ltime>policy.hero.end_ltime||
     !same(cache.ref_stair,{res_prefix:policy.res_prefix,res_postfix_list:policy.res_postfix_list,list:policy.stairs.map(({grade,balance})=>({grade,balance}))})||!same(cache.ref_hero,policy.hero))
     throw new TypeError("Captured Mirage cache differs from bound static policy");
   const claimed=array(root.claimed,policy.stairs.length).map((value,index)=>{
@@ -137,12 +145,13 @@ export function normalizeMirageRun(raw:unknown):MirageRun {
     integer(row.hp_percent,0,10000);return !same({...row,hp_percent:10000},original[index]);
   }))throw new TypeError("Mirage enemy instance differs from configured current stair");
   const entries=membership(cache,base.state===0);
+  if(base.state!==0&&revive_ids?.some(id=>!entries.has(id)))throw new TypeError("Active Mirage first-aid history must refer to enrolled Hunters");
   if(!abandoned&&(base.state===1&&!cache.inst_enemy.some(row=>row.hp_percent>0)||base.state!==1&&cache.inst_enemy.some(row=>row.hp_percent!==0)))
     throw new TypeError("Mirage enemy carry contradicts current state");
   let lastEnd:MirageRun["lastEnd"];
   if(Object.hasOwn(root,"lastEnd")){if(base.state===0)throw new TypeError("Completed Mirage run cannot retain a pending End receipt");lastEnd=normalizeEnd(root.lastEnd,cache,entries);}
   if(base.state===2&&!lastEnd)throw new TypeError("Reward-ready Mirage stair requires a bound winning End receipt");
-  return {policy,cache,claimed,...(lastEnd?{lastEnd}:{}),...(abandoned?{abandoned:true as const}:{})};
+  return {policy,cache,claimed,...(lastEnd?{lastEnd}:{}),...(abandoned?{abandoned:true as const}:{}),...(revive_ids?{revive_ids}:{})};
 }
 /** Explicit LOCAL interpretation of an existing native reset request: abandon
  * the captured run without replay, re-entry, healing or reward production.

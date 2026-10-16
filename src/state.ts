@@ -1,3 +1,4 @@
+import {planMirageRevive} from "./mirage-revive.js";
 import {validatedMiragePolicy,createMirageRun,normalizeMirageRun,advanceMirageReward,abandonMirageRun,type MiragePolicy,type MirageRun} from "./mirage-run.js";
 import {mirageRuntimeContext} from "./mirage-runtime-context.js";
 import {mirageCacheWire} from "./mirage-cache.js";
@@ -817,23 +818,26 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
-    if(saved.mirageRuns!==undefined&&saved.version!==12)throw new TypeError("Mirage run journals require schema12");
-    if(saved.version===12&&(!Array.isArray(saved.mirageRuns)||!saved.mirageRuns.length))throw new TypeError("Schema12 requires captured Mirage run journals");
-    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12)throw new TypeError("Captured Hunter transcendence policy requires schema11");
+    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13)throw new TypeError("Mirage run journals require schema12");
+    if((saved.version===12||saved.version===13)&&(!Array.isArray(saved.mirageRuns)||!saved.mirageRuns.length))throw new TypeError("Schema12 requires captured Mirage run journals");
+    const hasMirageRevive=Array.isArray(saved.mirageRuns)&&saved.mirageRuns.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].policy)&&row[1].policy.revive_prices!==undefined);
+    if(hasMirageRevive&&saved.version!==13)throw new TypeError("Mirage first-aid policies require schema13");
+    if(saved.version===13&&!hasMirageRevive)throw new TypeError("Schema13 requires captured Mirage first-aid policy");
+    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Captured Hunter transcendence policy requires schema11");
     if(saved.version===11&&saved.hunterOvercomePolicy===undefined)throw new TypeError("Schema11 requires a captured Hunter transcendence policy");
     if(saved.hunterOvercomePolicy!==undefined) {
       this.capturedOvercomePolicy=configuredHunterOvercome(saved.hunterOvercomePolicy,new Set(itemReference().item.map(row=>row.id)));
       if(this.configuredOvercomePolicy&&hunterOvercomeFingerprint(this.configuredOvercomePolicy)!==hunterOvercomeFingerprint(this.capturedOvercomePolicy))
         throw new TypeError("Configured transcendence policy differs from captured earned policy; refusing silent stat/cost changes");
     }
-    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
+    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
       throw new TypeError("Paid dorm expansion requires state schema10");
-    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
       [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
       throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
@@ -843,10 +847,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -927,7 +931,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -966,7 +970,7 @@ export class ServerState {
     const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+    const snapshot = { version: [...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
       ...(this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
       ...(this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
@@ -1867,8 +1871,8 @@ export class ServerState {
   }
 
   private commitMirage(pvid:number,game:LocalGameState,next:LocalGameState,run:MirageRun) {
-    const old=this.mirageRuns.get(pvid),before={gold:game.gold,starter_cards:game.starter_cards,recruited_cards:game.recruited_cards};
-    Object.assign(game,{gold:next.gold,starter_cards:next.starter_cards,recruited_cards:next.recruited_cards});this.mirageRuns.set(pvid,run);
+    const old=this.mirageRuns.get(pvid),before={gold:game.gold,gacha_free_qty:game.gacha_free_qty,gacha_iap_qty:game.gacha_iap_qty,starter_cards:game.starter_cards,recruited_cards:game.recruited_cards};
+    Object.assign(game,{gold:next.gold,gacha_free_qty:next.gacha_free_qty,gacha_iap_qty:next.gacha_iap_qty,starter_cards:next.starter_cards,recruited_cards:next.recruited_cards});this.mirageRuns.set(pvid,run);
     try{this.persist();}catch(error){Object.assign(game,before);if(old)this.mirageRuns.set(pvid,old);else this.mirageRuns.delete(pvid);throw error;}
   }
 
@@ -1935,6 +1939,12 @@ export class ServerState {
         run.cache=planned.cache;run.lastEnd={fingerprint:planned.fingerprint,receipt:planned.receipt};
         const hp=new Map(run.cache.entry.map(row=>[row.id,row.mirage_remain_hp]));
         for(const card of [...next.starter_cards,...next.recruited_cards])if(hp.has(card.inst_id))card.mirage_remain_hp=hp.get(card.inst_id)!;
+        this.commitMirage(pvid,game,next,run);return this.envelope(planned.receipt);
+      }
+      if(route==="/mirage/Revive") {
+        const planned=planMirageRevive(run,payload,next);
+        if(planned.replay)return this.envelope(planned.receipt);
+        run=planned.run;Object.assign(next,{gacha_free_qty:planned.gacha_free_qty,gacha_iap_qty:planned.gacha_iap_qty,starter_cards:planned.starter_cards,recruited_cards:planned.recruited_cards});
         this.commitMirage(pvid,game,next,run);return this.envelope(planned.receipt);
       }
       if(route==="/mirage/Reward") {

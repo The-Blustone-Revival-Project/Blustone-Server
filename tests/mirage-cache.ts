@@ -17,6 +17,10 @@ const context:MirageReadiness={owned:new Map([[101,{ref_id:"AUTHORED_HERO_A",cha
 const bytes=JSON.stringify(source),decoded=parseMirageCache(source);
 assert.deepEqual(decoded.inst_base.deck,["101","102","0"]);
 assert.deepEqual(requireMirageCombatCache(source,context),decoded,"Complete supplied commitments at exact hero deadline admitted by local subset");
+const exhausted={...source,inst_base:{...source.inst_base,revive_price:-1}};
+assert.throws(()=>requireMirageCombatCache(exhausted,context),/clock/);
+assert.equal(requireMirageCombatCache(exhausted,{...context,exhaustedRevivePrice:-1}).inst_base.revive_price,-1,"Explicit LOCAL first-aid cap does not strand continuing combat");
+assert.throws(()=>requireMirageCombatCache({...exhausted,inst_base:{...exhausted.inst_base,revive_price:-2}},{...context,exhaustedRevivePrice:-1}),/clock/);
 assert.equal(mirageHpRatio(10000),1);assert.equal(mirageHpRatio(1000),Math.fround(0.1),"Legacy1000 is not native full carry");
 assert.equal(mirageHpRatio(5000),0.5);assert.equal(mirageHpRatio(-1),Math.fround(-0.0001));
 assert.equal(mirageBalanceScale(10000),1);assert.equal(mirageBalanceScale(0),0);

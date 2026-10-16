@@ -75,6 +75,8 @@ export interface MirageReadiness {
   environments:ReadonlyMap<string,string>;readyEnvironments:ReadonlySet<string>;
   stageBackgroundPrefixes?:ReadonlyMap<string,string>;
   enemySupported:(enemy:Readonly<MirageEnemy>)=>boolean;now:number;
+  /** Explicit LOCAL cap marker, never inferred as an original sentinel. */
+  exhaustedRevivePrice?:-1;
 }
 export function requireMirageCombatCache(raw:unknown,context:MirageReadiness):MirageCache {
   const cache=parseMirageCache(raw),base=cache.inst_base,entries=new Map(cache.entry.map(row=>[row.id,row]));
@@ -85,7 +87,7 @@ export function requireMirageCombatCache(raw:unknown,context:MirageReadiness):Mi
     new Set(deck.map(id=>context.owned.get(Number(id))!.ref_id)).size!==deck.length)throw new TypeError("Mirage sortie requires distinct living entered Hunters");
   const families=deck.map(id=>text(context.owned.get(Number(id))!.char_id));
   if(families.some(id=>!id)||new Set(families).size!==families.length)throw new TypeError("Mirage sortie requires distinct explicit native Hunter character families");
-  if(base.floor<1||base.stair<1||base.stair>cache.ref_stair.list.length||base.state!==1||base.revive_price<0||base.begin_ltime<0||base.highest<0||
+  if(base.floor<1||base.stair<1||base.stair>cache.ref_stair.list.length||base.state!==1||(base.revive_price<0&&!(base.revive_price===-1&&context.exhaustedRevivePrice===-1))||base.begin_ltime<0||base.highest<0||
     !Number.isInteger(context.now)||context.now<0||context.now>0x7fff_ffff||cache.ref_hero.end_ltime<context.now)throw new TypeError("Mirage combat floor/state/clock is unavailable");
   if(!cache.inst_enemy.length||cache.inst_enemy.some(enemy=>enemy.hp_percent<0||enemy.hp_percent>10000||!context.enemySupported(Object.freeze({...enemy})))||
     !cache.inst_enemy.some(enemy=>enemy.hp_percent>0))throw new TypeError("Mirage enemy references/projection or living camp is unavailable");

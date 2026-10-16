@@ -76,5 +76,5 @@ export function mirageRuntimeContext(game:LocalGameState,cache:MirageCache,now:n
   return {owned,commitments,heroIds:new Set(refs.keys()),resources,dialogueIds:new Set(),environments,readyEnvironments,
     // No original stage-row res_prefix map is currently recovered. The
     // analytics campaign-stages export cannot supply native stage overrides.
-    stageBackgroundPrefixes:new Map(),enemySupported,now};
+    stageBackgroundPrefixes:new Map(),enemySupported,now,exhaustedRevivePrice:-1};
 }

@@ -1,3 +1,73 @@
+## Latest continuation: configured Mirage first aid (2026-10-17)
+
+Previous checkpoint89856df restored configured one-floor lifecycle. This adds
+optional priced first aid for real enrolled unconscious Hunters. Goal ACTIVE.
+No live profile/private save/device/APK/original asset/Docker/Collector/inference
+changes; input hold persists. Server/Instrumented writes only, DataDump read
+only. No rebuild/release owed. Native Mirage/first-aid UI still PENDING.
+
+Native /mirage/Revive RequestHealHunter sends auth5+target_inst_id only.
+Parse_HealHunter consumes FLAT inst_id(full64), mirage_remain_hp(SIGNED32),
+revive_price(SIGNED32), user.iap.free_iap_qty and user.iap.iap_qty(SIGNED32).
+These are ABSOLUTE setters, no prev/cur wrapper. Matched callback requires
+result1 and ret_data presence before HP/price/wallet mutation. UI confirmation
+uses captured price and unsigned comparison against summed paid/free Manda.
+Therefore0 is affordable/free, not proof of exhausted first aid. Original
+price/cap/negative-sentinel law and exact HP0 visibility remain unrecovered.
+Addresses: docs/mirage-revive-native-2026-10-17.md. Image/localization audit
+adds original first-aid label, but NO numeric pricing/cap or owned kit ID.
+
+Optional revive_prices:[3,5] in a NEW complete Mirage policy is an authored
+example only. Dense1..100 positive signed32 prices explicitly define LOCAL
+use tiers/cap. Absent field preserves disabled first aid and schema12. Existing
+captured policy cannot silently acquire/reorder/retune first-aid prices.
+Enabled policy requires revive_ids numeric paid-use history, initially[], and
+writes schema13 on capture. Every earlier schema1..12 refuses this first-aid
+policy; schema13 requires it. Missing/invalid history and inconsistent derived
+price refuse before overwrite. Older features, schema12 runs, prior profiles/
+Rupee/resource-coupon/dorm counters and transport keys remain preserved.
+
+Revive admits an actually owned/enrolled target with HP0 in active state1 only.
+Foreign/unentered/alive-never-revived/pendingwin/finished targets refuse. LOCAL
+payment uses existing free Manda first, then paid; each balance and sum must fit
+nonnegative signed32. Restores full native carry10000 in owned and entry HP,
+clears old End receipt, appends paid target ID and advances next price. Repeated
+IDs allowed only as new paid uses after an admitted subsequent death. No item,
+Hunter, currency or entitlement grant. Rank/EXP/skills/book/decks/enemy/reserve
+carry stay unchanged. Wallet+cards+cache+history persist atomically and real
+write/rename failure restores exact scalars/nested refs/journal reference.
+
+Previously paid target still alive returns CURRENT HP, wallet and price without
+charge, heal or save. It never returns an old receipt that overwrites later
+wallet changes, nor reheals partly injured carry. Native request has no nonce;
+no original anti-cheat/fresh-terminal-report authority is claimed.
+
+LOCAL exhaustion marker is-1 (NOT a proved original sentinel). Native unsigned
+affordability rejects it for supported wallets. Runtime context explicitly
+opts into that exact marker so the cap cannot strand normal combat; other
+negative prices remain refused. Old readiness callers require explicit optin.
+Native marker display/visibility remains unverified. Abandon remains available.
+Completion/abandon keeps payment history without retaining enrollment; future
+card deletion therefore need not orphan active ownership. No Manda refund.
+Modeoff preserves wallet/HP/history/cache; mutations refuse until identical
+policy reenabled. Captured run continuation and existing replays unchanged.
+
+All212 regression programs, six resource suites, build, focused source/compiled
+pure/state and separate compiled P384/HMAC/AES HTTP proofs PASS. Tests cover
+free2/paid10 -> price3 ->free0/paid9 ->price5 ->paid4, fullHP, actual new losses,
+same/different target history, current-wallet/HP response-loss repair, signed
+cap, normal3-stair completion aftercap, exact rollback, auth/forged/funds/phase/
+ownership/default-no-policy refusal, key+OTP/modeoff restart, immutable prices,
+schema1..12 injection/missing history, prior cohort retention through another
+save, and completed/abandoned history. Independent final review clean. No
+native combat/first-aid interaction or original economy claim.
+
+Setup: docs/mirage-local-first-aid-2026-10-17.md; mode remains optin and live
+profile unchanged. NEXT broader revival: native scene verification only once
+human input hold is lifted; reconstruct repeat-entry/floor assignment and
+original reward/material identities. Preserve full goal; optional local first
+aid is another capability, not completion or original-game parity.
+
 ## Latest continuation: configured Mirage floor lifecycle (2026-10-17)
 
 Previous checkpointc7057c9 prepared assets/family/End codecs. This checkpoint

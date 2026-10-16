@@ -1,5 +1,10 @@
 # Optional configured Mirage run
 
+Continuation: [optional local first aid](mirage-local-first-aid-2026-10-17.md)
+now supplies an explicitly priced Revive workflow for new policies. Statements
+below about Revive being unavailable are historical for that opt-in extension;
+original prices/caps and native UI remain unknown or unverified.
+
 The server can now run one explicitly configured Mirage floor with real
 owned Hunters: enroll, register a party, settle carried HP from End, claim
 each stair's configured gold, advance to the next stair, and release the
@@ -32,7 +37,7 @@ before enrollment; a later unsupported stair cannot be deferred until its
 Reward response reaches the client. Asset/environment dependencies are
 also validated before the initial capture.
 
-The exact policy fields are `enrollment`, `floor`, `bg_res`, `dlg_begin`,
+The baseline policy fields are `enrollment`, `floor`, `bg_res`, `dlg_begin`,
 `dlg_end`, `res_prefix`, `res_postfix_list`, `stairs`, and `hero`.
 `enrollment` must be `rank-exp-id-projection`. Floor is positive signed32;
 floors1..20 require exactly3 stairs,21..40 require6, and41+ require9.
