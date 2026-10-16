@@ -12063,33 +12063,51 @@ paths:
         ARM-device capture
   /world/GetFriendMissionRecord:
     post:
-      summary: Recovered /world/GetFriendMissionRecord route
-      description: >-
-        The route literal **/world/GetFriendMissionRecord** was recovered from
-        the ARM native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
+      summary: GetFriendMissionRecord
+      description: Authenticated auth-only read returning a bare ret_data array of
+        pvid/profile_url/stage records. Local placement policy selects each
+        accepted, same-server, mutually nonblocked friend's furthest actually
+        earned ordinary stage in published area/link order. No earned stage
+        means no row. Pending/removed relationships, unknown stages, diagnostic
+        seed stars and client-supplied selectors never manufacture progress.
+        Uses the original100x100 system portrait as a local fallback. Reads
+        never create a peer game, regenerate energy or persist. Native full64
+        IDs are limited to existing positive safe local account IDs; native
+        map-marker rendering and original backend placement law remain
+        unverified.
       tags:
-        - World state
+        - Social
       parameters: *a1
       requestBody: *a2
       responses:
         "200":
-          description: Mock-compatible response.
+          description: Source-shaped friend campaign records; empty array replaces the
+            native cache.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResultEnvelope"
+                allOf:
+                  - $ref: "#/components/schemas/ResultEnvelope"
+                  - type: object
+                    properties:
+                      ret_data:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - pvid
+                            - profile_url
+                            - stage
+                          additionalProperties: false
+                          properties:
+                            pvid:
+                              type: integer
+                              minimum: 1
+                              maximum: 9007199254740991
+                            profile_url:
+                              type: string
+                            stage:
+                              type: string
         "404":
           description: Route not present in the recovered catalog.
         "500":
@@ -12098,10 +12116,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
-      x-runtime-confidence: route literal confirmed; payload/response shape pending
-        ARM-device capture
+      x-reverse-engineering-status: native-parser-reconstructed
+      x-evidence: docs/friend-mission-record-native-2026-10-16.md;
+        tests/friend-mission-records-state.ts
+      x-runtime-confidence: Local read-only projection tested; native map markers pending
   /world/GetFriendlyBattleInfo:
     post:
       summary: Recovered /world/GetFriendlyBattleInfo route

@@ -493,6 +493,19 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     } };
     explicitlyDocumented.add(route);
   }
+  paths["/world/GetFriendMissionRecord"]={post:{
+    ...operation("GetFriendMissionRecord",
+      "Authenticated auth-only read returning a bare ret_data array of pvid/profile_url/stage records. Local placement policy selects each accepted, same-server, mutually nonblocked friend's furthest actually earned ordinary stage in published area/link order. No earned stage means no row. Pending/removed relationships, unknown stages, diagnostic seed stars and client-supplied selectors never manufacture progress. Uses the original100x100 system portrait as a local fallback. Reads never create a peer game, regenerate energy or persist. Native full64 IDs are limited to existing positive safe local account IDs; native map-marker rendering and original backend placement law remain unverified.",
+      "Social",response("Source-shaped friend campaign records; empty array replaces the native cache.",{
+        allOf:[{$ref:"#/components/schemas/ResultEnvelope"},{type:"object",properties:{ret_data:{type:"array",items:{
+          type:"object",required:["pvid","profile_url","stage"],additionalProperties:false,properties:{
+            pvid:{type:"integer",minimum:1,maximum:Number.MAX_SAFE_INTEGER},profile_url:{type:"string"},stage:{type:"string"}}}}}}],
+      })),
+    "x-evidence":"docs/friend-mission-record-native-2026-10-16.md; tests/friend-mission-records-state.ts",
+    "x-reverse-engineering-status":"native-parser-reconstructed",
+    "x-runtime-confidence":"Local read-only projection tested; native map markers pending",
+  }};
+  explicitlyDocumented.add("/world/GetFriendMissionRecord");
   for (const action of ["FriendReqCancel", "FriendReqReject", "Unfriend"]) {
     const route = `/relation/${action}`;
     paths[route] = { post: {

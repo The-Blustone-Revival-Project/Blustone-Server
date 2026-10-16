@@ -38,6 +38,7 @@ import {fishingSaleBindings,planFishingSale,type FishingSaleBindings} from "./fi
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { socialDiscovery } from "./social-discovery.js";
+import {friendMissionRecords} from "./friend-mission-records.js";
 import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
 import { planGroupRankUp } from "./group-rank-up.js";
 import { cardSellProfitRows, planHunterSale, type CardSellProfit } from "./hunter-sale.js";
@@ -2282,6 +2283,21 @@ export class ServerState {
       // restored the complete graph covering both relationship participants.
       return this.failure(2001, error instanceof Error ? error.message : "Invalid local friend operation");
     }
+  }
+
+  friendMissionRecords(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers);
+    const peers=(this.socialFriends?.relations??[]).flatMap(relation=>{
+      if(relation.state!=="accepted")return [];
+      const peerId=relation.from_pvid===account.pvid?relation.to_pvid:relation.to_pvid===account.pvid?relation.from_pvid:undefined;
+      if(peerId===undefined)return [];
+      const profile=this.localSocialProfile(account.pvid,peerId);
+      return profile?[{pvid:peerId,profile_url:profile.profile_url,game:this.gameByPvid.get(peerId)}]:[];
+    });
+    const published=new Set(starterStages.stage.map(stage=>stage.id));
+    const order=[...new Set(starterAreas.area.flatMap(area=>area.stage.map(link=>link.stage_id)))]
+      .filter(id=>id.startsWith("n_")&&published.has(id));
+    return this.envelope(friendMissionRecords(peers,order));
   }
 
   socialDiscoveryAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {

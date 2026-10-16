@@ -1,3 +1,44 @@
+## Latest continuation: real friend campaign records (2026-10-16)
+
+Previous turn was progress:52dce74 original Gem anvil and historicalMirage
+observations. This continuation replaces /world/GetFriendMissionRecord's
+malformedgenericmock with a real authenticated read-only social/campaign
+projection. Goal ACTIVE; native map-marker pixels stillunverified.
+
+Native CSRSyncMStage.GetFriendMissionRecordGb46468 sendsAUTH5ONLY. Exact
+second-chaincallbackGb4b300 requiresresult1, selectsret_dataGb4b328..32,
+thenSetFriendMissionRecordListGb7172c clearsentiremap+270 beforeparse.
+Successret_data is BAREARRAY of{pvid:U64,profile_url:STRICTSTRING,stage:STRICTSTRING}.
+No stars/count/nickname/stage_id field belongs here. Duplicatepvidfirstwins
+natively; localproducer emitsoneunique row. GetStage...Gb71580 matchesstage
+exactlength/bytes. Original backendplacementlaw not recovered.
+
+LOCALplacement policy now chooses lastactuallyearned ordinarypublishedstage
+in currentarea/link order. Uses earnedStageOrders: explicit[] overridesold
+counts, noncontiguous flags preserved; historicalstage_stars/clearIDs fallback
+onlywhennoflags. No unlocked/selected/active/loss/unknownstage/diagnosticseed
+stars canmanufactureprogress. Onlyacceptedactualsame-serverfriends with
+bothdirectionblockvisibility via localSocialProfile. Fresh/no-loaded/zeroearned
+peer omitted; original100x100 portrait remainsLOCALfallback. No arbitrary
+requesttarget/stage/list/profile_url selector is honored. PVIDs useexisting
+positive safe local IDs within nativeU64. Direct gameByPvid.get only;
+NEVER gameFor/regen/alloc/persist for this read. No state-schema migration.
+
+165 gameplay programs and buildPASS. Productionnamespace test coversactual
+request→accept andmissionStart→Complete[0,2], pending/active/loss/unfriend/
+blocks/cross-server/auth/forgedselectors/missinggame and exactsavedbytes,
+gamereferences/energyanchors acrossread/restart. Pureprojection fallback/
+ordering/unknownstage/detachment testsPASS. Compiled independent verifier
+--fixture --exercise-social passedECDH/HMAC/AES bareemptyarray+bytepreserving
+read andprocessrestart; earnedrowproducer coveredby state test, not that
+cryptedfixture. OpenAPI source/JSON/YAML regenerated with exactschema and
+local/nativeverification limits. Docs/friend-mission-record-native-2026-10-16.md.
+
+No private live save/profile/client/APK or UI touched. BlueStacksinputhold
+persists; Collector/Docker/inference offline. Work only Server/Instrumented;
+DataDump/retainedworkspace read-only. Next continue actual supportedgame
+systems/content; don'tinfer Mirage or Gem settlement fromdisplay metadata.
+
 ## Latest continuation: original Gem anvil display and Mirage observations (2026-10-16)
 
 Previous turn was progress: f0b03e9 closed original Mirage layer resources.

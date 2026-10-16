@@ -377,6 +377,10 @@ try {
     const sent=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
     assert.equal(sent.list.length,1);assert.equal(sent.list[0].friend_id,friendId);
     assert.equal(sent.list[0].target_pvid,Number(friendPeer.pvid));
+    const missionReadBefore=readFileSync(stateFile);
+    assert.deepEqual((await secure('/world/GetFriendMissionRecord',auth)).ret_data,[],
+      'Fresh accepted peer has no earned campaign marker; compiled encrypted read must be a bare array');
+    assert.deepEqual(readFileSync(stateFile),missionReadBefore,'Friend mission read cannot write the disposable save');
     assert.deepEqual((await secure('/relation/GetLikeCnt',{...auth,target_pvid:friendPeer.pvid})).ret_data,
       {target_pvid:Number(friendPeer.pvid),cnt:0});
     for(const state of [1,0,1])
@@ -744,6 +748,8 @@ try {
     const owned=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
     assert.equal(owned.list.length,1);assert.equal(owned.list[0].friend_id,friendId);
     assert.equal(owned.list[0].like_cnt,1);assert.equal(owned.list[0].is_like,1,'Owned like must survive compiled restart');
+    assert.deepEqual((await secure('/world/GetFriendMissionRecord',auth)).ret_data,[],
+      'Fresh friend mission cache remains empty across compiled restart');
     ({secret,token}=peerConnection);
     const peer=(await secure('/relation/GetList',{...friendPeer,type:'1'})).ret_data;
     assert.equal(peer.list.length,1);assert.equal(peer.list[0].friend_id,friendId);
