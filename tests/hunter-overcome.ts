@@ -6,7 +6,7 @@ import {planHunterOvercome,type HunterOvercomePolicy} from "../src/hunter-overco
 const policy:HunterOvercomePolicy={effect:[1,2,3].map(cnt=>({cnt,hp_percent:cnt*7,atk_percent:cnt*8,def_percent:cnt*9})),
   src:[1,2,3].map(overcome_cnt=>({target_base_rank:3,overcome_cnt,card_required_rank:3,card_cnt:2,
     item_list:[{ref_id:"local_authored_overcome_stone",qty:3},{ref_id:"local_authored_overcome_stone",qty:2}],gold:123})),items:[]};
-const refs=[{base:{id:"003",is_source:0},stat:[3,4,5].map(rank=>({rank,awk_step:0}))}];
+const refs=[{base:{id:"003",char_id:"nene-family",is_source:0,source_field:0},stat:[3,4,5].map(rank=>({rank,awk_step:0}))}];
 function fixture() {
   const game=createLocalGameState();game.starter_cards=[{...cardInstance(1000001,"003",5),exp:234,overcome_cnt:0,regdate:123456,skill_1_level:7}];
   game.recruited_cards=[{...cardInstance(1000010,"003",3),lock:0},{...cardInstance(1000011,"003",4),lock:0},
@@ -64,4 +64,51 @@ refuse(()=>{},{...payload,src_inst_id_list:[]},{...policy,src:[{...policy.src[0]
 // multiplier. All retained target fields remain exact, with no stat preapply.
 const later=fixture();later.starter_cards[0].overcome_cnt=2;
 assert.equal(planHunterOvercome(payload,later,policy,refs,new Set()).overcome_cnt,3);
-console.log("Hunter Overcome planner: explicit combined BOM/effect gate, first reference rank/next count, ordinary cap and same-ref protected sources, exact full64 deterministic material deltas, zero rows, detached transition and unchanged input passed; numeric policies authored LOCAL");
+// Native family identity is char_id, not ref_id, name or resource prefix.
+// Alternate references below are authored fixtures, never published aliases.
+const alternate={base:{...refs[0].base,id:"authored-alternate"},stat:refs[0].stat};
+const familyRefs=[...refs,alternate],familyGame=fixture();familyGame.recruited_cards[0].ref_id=alternate.base.id;
+const familyBefore=structuredClone(familyGame),familyPlan=planHunterOvercome(payload,familyGame,policy,familyRefs,new Set());
+assert.deepEqual(familyPlan.receipt.removed_card,[1000010,1000011]);assert.deepEqual(familyGame,familyBefore);
+const changedFamily=[...refs,{...alternate,base:{...alternate.base,char_id:"different-family"}}];
+assert.throws(()=>planHunterOvercome(payload,familyGame,policy,changedFamily,new Set()),/family/);
+assert.throws(()=>planHunterOvercome(payload,familyGame,policy,refs,new Set()),/Published source/);
+assert.throws(()=>planHunterOvercome(payload,familyGame,policy,[...familyRefs,alternate],new Set()),/Published source/);
+const missingCurrent=[...refs,{...alternate,stat:[{rank:4,awk_step:0}]}];
+assert.throws(()=>planHunterOvercome(payload,familyGame,policy,missingCurrent,new Set()),/current stat/);
+const awakeFamily=structuredClone(familyGame);awakeFamily.recruited_cards[0].awk_step=1;
+assert.throws(()=>planHunterOvercome(payload,awakeFamily,policy,[...refs,{...alternate,stat:[...alternate.stat,{rank:3,awk_step:1}]}],new Set()),/family/);
+for(const [key,value] of [["rank",2],["awk_step",1],["overcome_cnt",1],["lock",1]] as const){
+  const invalid=structuredClone(familyGame);invalid.recruited_cards[0][key]=value;
+  assert.throws(()=>planHunterOvercome(payload,invalid,policy,familyRefs,new Set()));
+}
+// All reference/owned records in this branch are authored, not recovered
+// resource-card stats or an issuance mechanism. Native derived bit2 ignores
+// raw source_field; matching first stat rank bypasses normal grade/awake gates.
+const resource=(id:string,min=3,char_id="resource-family",source_field=0,is_source=1)=>({
+  base:{id,char_id,is_source,source_field},stat:[{rank:min,awk_step:0},{rank:4,awk_step:0},{rank:3,awk_step:1}]});
+const resourceGame=fixture();resourceGame.recruited_cards[0].ref_id="912";resourceGame.recruited_cards[0].awk_step=1;
+resourceGame.recruited_cards[1].ref_id="913";
+const resourceRefs=[...refs,resource("912"),resource("913",3,"different-resource",999)];
+const highGradePolicy={...policy,src:policy.src.map(row=>({...row,card_required_rank:5}))};
+const resourceBefore=structuredClone(resourceGame);
+assert.equal(planHunterOvercome(payload,resourceGame,highGradePolicy,resourceRefs,new Set()).overcome_cnt,1);
+assert.deepEqual(resourceGame,resourceBefore);
+assert.throws(()=>planHunterOvercome(payload,resourceGame,highGradePolicy,resourceRefs,new Set([1000010])),/uncommitted/);
+for(const key of ["overcome_cnt","awk_overcome","lock"]){const invalid=structuredClone(resourceGame);invalid.recruited_cards[0][key]=1;
+  assert.throws(()=>planHunterOvercome(payload,invalid,highGradePolicy,resourceRefs,new Set()));}
+for(const id of ["901","902","903","904"]){
+  const candidate=fixture();candidate.recruited_cards[0].ref_id=id;
+  assert.throws(()=>planHunterOvercome(payload,candidate,policy,[...refs,resource(id,3,"unrelated",1)],new Set()),/family/);
+  // Missing bit2 falls through, rather than excluding a compatible family.
+  assert.equal(planHunterOvercome(payload,candidate,policy,[...refs,resource(id,3,"nene-family",0)],new Set()).overcome_cnt,1);
+}
+for(const id of ["912","913","914","authored-unlisted","0901"]){
+  const candidate=fixture();candidate.recruited_cards[0].ref_id=id;
+  assert.equal(planHunterOvercome(payload,candidate,policy,[...refs,resource(id)],new Set()).overcome_cnt,1);
+  assert.throws(()=>planHunterOvercome(payload,candidate,policy,[...refs,resource(id,3,"unrelated",1,0)],new Set()),/family/);
+}
+const mismatched=fixture();mismatched.recruited_cards[0].ref_id="914";mismatched.recruited_cards[0].rank=4;
+assert.throws(()=>planHunterOvercome(payload,mismatched,policy,[...refs,resource("914",4)],new Set()),/family/);
+assert.equal(planHunterOvercome(payload,mismatched,policy,[...refs,resource("914",4,"nene-family")],new Set()).overcome_cnt,1);
+console.log("Hunter Overcome planner: combined BOM, native family and ID-derived resource admission/fallback, published stat ownership, local credit/commitment bounds, exact full64 deltas and detached one-step transition passed; numerical policies and alternate/source records authored LOCAL");

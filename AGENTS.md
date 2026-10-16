@@ -1,3 +1,52 @@
+## Latest continuation: native transcendence source admission (2026-10-16)
+
+Previous checkpoint86bded4 restored optional ordinary transcendence. This
+checkpoint replaces its exact-ref source restriction with proven native
+character-family and resource-card selection. Goal ACTIVE. No device/live
+profile/save/APK/original asset/Docker/Collector/inference changes; input hold
+persists. Server/Instrumented writes only, DataDump read only. No release owed.
+
+Normal sources match base.char_id, including DISTINCT published reference IDs;
+current source rank must meet recipe required grade and awake_step must be0.
+Special sources require published is_source1, native derived mask bit2 and
+SOURCE FIRST stat rank equal TARGET FIRST stat rank. This bypasses normal
+family/current-grade/awake-zero gates. Failure falls through to normal checks.
+Both branches still require unique published source reference/current stat row,
+real owned distinct IDs, unlocked/unprotected sources and zero ordinary/awake
+counters. These last economic guards remain explicit LOCAL policy; no credit
+transfer, excess-copy refunds or extra original source records are invented.
+
+IMPORTANT correction: native reference+3e is NOT raw base.source_field.
+SetCard indexes source_field but replaces its parsed result with an ID mask:
+exact901/902/903/904→3, exact912/913/914→4, every other ID/length→7.
+Bit0→reference+3d, bit1→+3f, bit2→+3e. Raw source_field changes do not control
+Overcome admission. Current runtime catalogue contains no newly installed
+resource/family source records; tests use explicitly authored records. Do not
+convert item inventory records into Hunter references or grant ticket cards.
+
+Native ordinary preview reads target GetDefaultOvercome only and increments
+one in SetOvercomeNext. A bounded source scan found no selected-source counter
+sum; this does NOT prove backend credit transfer absent. Keep nonzero source
+counter refusal. Detailed addresses/derived mapping and bounded negative
+results are in docs/hunter-overcome-native-2026-10-16.md.
+
+All204 regression programs, TypeScript build, source/compiled planner and full
+focused compiled+encrypted HTTP suite PASS; independent native-branch review
+clean. New cases cover distinct-ref family acceptance, missing/duplicate ref/
+current-row refusals, valid-row normal awake rejection, 901..904 fallback,
+912..914/unlisted/exact-length masks, raw-field nonauthority, matching FIRST
+rank, special current-grade/awake bypass, mismatched-rank fallback, protected
+and upgraded-source refusal and exact detached one-step settlement. Schema11,
+policy capture, effects/costs, default disabled state and ownership unchanged.
+Native UI validation remains pending. Resource-profile code/data unchanged;
+five profile suites passed at the preceding checkpoint.
+
+OV1 follow-up: original Episode E06 grants10/E14 grants30. Native IAP
+ArrangeMD uses a display-order entry14; Fishing announcement whitelist includes
+OV1 with GC2/7/8/9. Neither recovers item name/type/effect/icon or a Metron join.
+Do not adopt14 as use_type or turn this evidence into guessed material stock.
+See docs/ov1-native-item-owner-2026-10-16.md for exact owners and next dependency.
+
 ## Latest continuation: ordinary Hunter transcendence (2026-10-16)
 
 Previous checkpoint bc500b9 restored real-friend defense preparation. This

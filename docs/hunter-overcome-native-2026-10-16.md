@@ -103,10 +103,12 @@ The bounded source picker establishes:
 - Source current grade must be at least `card_required_rank`
   (Gfe05b8, Gfe05fa/5fc); source `GetAwakeStep` must be zero
   (Gfe0600..060a).
-- An additional resource-card branch accepts `is_source==1` and
-  `source_field==1` with a matching reference base rank
-  (Gfe04ae..04bc and Gfe0580..0588). Its acquisition and exact
-  original identities are not reconstructed here.
+- An additional resource-card branch accepts `is_source==1` and a native
+  **derived Overcome-admission flag** at reference `+0x3e`, with a matching
+  reference base rank (Gfe04ae..04bc and Gfe0580..0588). This flag is
+  **not** the raw JSON `source_field` value. The exact derivation and the
+  branch's bypass behavior are closed in the follow-up below; no resource
+  stock or original acquisition law is implied.
 
 Complete credit transfer from already-transcended sources and every UI
 lock/commitment path remain unclosed. A safe configured initial subset can
@@ -185,3 +187,94 @@ sources, and increment the target ordinary count under a clearly stated
 LOCAL one-step rule. It must not admit awakened targets that this callback
 would clear, invent an original ticket, derive a price from Gym100/1000,
 or adopt the historical Bear recipe merely because a UI label sounds alike.
+
+## Follow-up: full ordinary-family and special-resource picker branches
+
+`CSRTableCardOvercome::SetSourceCardList` Gfe0370 resolves the TARGET
+reference at Gfe03e6, reads its cached first-stat rank at Gfe03f2,
+and selects the next recipe at Gfe0400. It copies that target
+`CSRCardInfo` into stack storage at Gfe0450. Candidate source cards are
+then resolved independently through `GetCardData` at Gfe04aa.
+
+The normal branch compares **`base.char_id`** (source reference `+0x30`
+against copied target `+0x30`, stack `+0x58`) by exact string length and
+bytes at Gfe04c0..0516. It does not compare `base.id`/owned `ref_id`.
+Therefore **different published reference IDs with the same nonempty
+char_id can be normal-family materials**. There is no requirement to
+invent or merge reference identities to represent this relationship.
+Gfe0518..0528 then excludes the target's exact full64 instance ID;
+Gfe05b8..05fc checks source current rank at least recipe
+`card_required_rank`; Gfe0600..060a requires source awake step 0.
+
+The special branch precedes that normal-family path:
+
+1. Gfe04ae..04bc checks candidate source reference `+0x3c == 1`
+   (`is_source`) and derived flag `+0x3e == 1`.
+2. Gfe0580 loads **copied TARGET reference first-stat rank** from
+   stack `+0x6c`; Gfe0582 loads **SOURCE reference first-stat rank**
+   at source `+0x44`. It compares those two base ranks at Gfe0584.
+3. On equality Gfe0588 marks the candidate eligible and jumps directly
+   to Gfe054e/push. This bypasses normal char_id equality, self-ID,
+   current material-rank requirement, and source awake-step checks.
+4. If either special flag is false, or the two first-stat ranks differ,
+   control falls back to Gfe04be's **normal-family branch**. It does
+   not immediately reject the candidate solely for a failed special test.
+
+An implementation may still impose explicit LOCAL ownership, distinct-ID,
+lock/commitment, published current-stat-row, and zero ordinary/awake-source
+counter guards for safe economic settlement. Those must not be described as
+all having been checked by this special native picker branch.
+
+### The derived flag is an ID mask, not raw source_field
+
+The original `SetCard` routine indexes JSON `source_field` at G87bf40.
+Only its string-type branch calls `strtod` at G87bf5a. Its returned
+number is then discarded: G87bf5e onward reads the reference ID and
+derives an independent bit mask. Exact equality applies only when the
+ID length is three bytes (G87bf6c/6e):
+
+- `901`, `902`, `903`, `904` → mask **3**. Literal construction
+  addresses G87bf80/G87bf92/G87bfa2/G87bfb2; equality branches
+  retain r5=3 before G87bff6.
+- `912`, `913`, `914` → mask **4**. Literal construction
+  G87bfc0/G87bfd2/G87bfe4. The first two select G87c802's
+  `mov r5,#4`; the final equality selects G87bff0's `mov r5,#4`.
+- Every other ID/length → mask **7**, through G87bfea/G87bff4.
+
+G87c004/008 writes mask bit0 to allocation `+0x49`, returned
+reference `+0x3d`; G87bff8/G87c000 writes bit1 to reference
+`+0x3f`; G87c00c/00e writes bit2 to reference **`+0x3e`**.
+`is_source` is independent: its JSON conversion writes allocation
+`+0x48` at G87bf3a, reference `+0x3c`.
+
+Consequently the special Overcome selector is `is_source==1` and
+**derived mask bit2**, not `base.source_field==1`. Within the native
+hardcoded map, 901..904 lack that special bit; 912..914 have it;
+unlisted published source IDs receive it from the native mask7 fallback.
+This mapping proves a selector, not the missing art/stats/availability or
+issuance of any absent original source-card identity. Resolve candidates
+against the actually published reference registry before admission.
+
+## Follow-up: source-counter credit transfer remains unclosed
+
+The ordinary preview demonstrably uses only target progress:
+Gfe136a/Gfe2844 reads the selected target's `GetDefaultOvercome`,
+then Gfe1374/Gfe284e calls `CSRCardAnalyzer::SetOvercomeNext`.
+That function compares its ordinary-count input with 2 at G86eb80;
+G86eb86..8e increments it **exactly one** and selects awake count 0.
+Its other branch G86eb94..eba2 increments the awake input only when
+ordinary progress is already 3. Selected-source counters are not arguments.
+
+A bounded direct-call/field scan of ordinary UI Gfdf9bc..Gfe2d50 found
+`GetTotalOvercome` only in target adjustment/recipe/display paths
+(Gfdfb22/42/5a, Gfdffe0, Gfe03f6, Gfe07d8), and the target preview
+calls above. No source `+0x68c/+0x698` counter read or source-counter
+sum was established. This is bounded negative evidence, not a proof that
+the original backend never transferred any source progress.
+
+The backend's final count is still the scalar response described above.
+Transfer from already-transcended sources, excess-copy charging/refunds,
+and leftover-credit behavior remain **UNKNOWN**. Keep zero ordinary/awake
+source-counter restrictions in the local restoration until a separate
+authoritative rule is established. Do not infer a source-credit algorithm
+from the target-only one-step preview.

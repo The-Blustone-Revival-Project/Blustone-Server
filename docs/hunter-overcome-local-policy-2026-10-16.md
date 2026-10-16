@@ -105,10 +105,24 @@ with a published current rank row, grade3..5 and current count below
 `current overcome count+1`, not its current star rank as the base key.
 
 The supplied real source count must equal the configured count. Sources must
-be other owned, unlocked, uncommitted, ordinary, untranscended Hunters of
-the **exact same ref_id**, at least the recipe's required grade. This is a
-conservative LOCAL subset: the native source UI supports a wider char_id
-family/resource-card domain which is not automatically admitted here.
+be other owned, unlocked, uncommitted, untranscended cards with unique published
+references and a matching published current rank/awakening stat row. Normal
+sources match the target's **char_id** family, which can span distinct ref_id
+values; their grade must meet the recipe requirement and awakening step be0.
+
+The native resource branch instead requires is_source1, its ID-derived bit2
+and matching source/target FIRST stat rank. It bypasses normal family, current
+grade and awakening-step restrictions. IDs901..904 lack bit2; IDs912..914 and
+other IDs receive bit2 from SetCard's native fallback. Raw source_field does
+not select this branch. A failed resource test falls through to normal family
+checks. The server mirrors those rules only for already published references
+and real owned stock; it publishes or grants no resource cards. Alternate
+family and resource branches are verified with authored pure-planner records;
+the current runtime reference catalogue supplies no such new source records.
+Zero ordinary/awake source counters, exact copy count, published current stat,
+locks and active commitments remain explicit LOCAL safeguards; source-credit
+transfer and excess-copy behavior remain unknown. See the native contract for
+field offsets, ID-derived flags and bounded preview evidence.
 Active mission/Arena/Search blocks the operation; dispatch targets and
 protected leader/deck/Gem/dispatch source cards refuse.
 
