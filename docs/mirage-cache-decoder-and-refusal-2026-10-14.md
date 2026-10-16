@@ -44,16 +44,32 @@ reference; highword entry aliases refuse. The current supported local subset
 requires positive floor/one-based selected stair, state1, positive selected
 balance, grade0..3, nonempty resolvable postfixes and a living supported enemy
 camp. HP0..10000 is supported local normal-health admission, not a proved native
-clamp. Hero deadlines must satisfy end>=current local seconds. Resource checks
-include base background, postfix game resource and prefix+postfix stair resource.
+clamp. Hero deadlines must satisfy end>=current local seconds. At the initial
+2026-10-14 checkpoint, readiness required a direct postfix resource; that
+assumption is superseded by the2026-10-16 native environment-owner audit.
+Current checks bind prefix+postfix to a stair sprite, then use the selected
+postfix or stage-row res_prefix override as a selector against the first digit
+substring of each native ENV_INFO.PreFix. Every matching random environment
+candidate needs independently established layered-background readiness.
+The extra base.bg_res resource check remains explicitly LOCAL UI admission:
+CSRExploreMirage.InitBackground does not read that field in this path.
 The enemy predicate receives a frozen detached row and cannot mutate the retained
 validated cache. Schema/lookup/predicate success does not authenticate provenance.
 
 This check covers the supported current combat subset. It does not prove all
 future stair/reward art, rotations, empty-hero UI safety or native scene rendering.
-Original MIRAGE.jet is present and has30 decoded image entries; the bounded
-listing exposed opaque names, not enough to certify specific postfix strings.
-No pack-presence-to-resource-name or artwork-to-encounter inference is made.
+The original header-name index is now recovered: MIRAGE.jet has71 physical
+chunks,60 assembled resources and30 named S2 sprites, including MRG001..006,
+MIRAGE_BG_G/R and BG_M_INGAME. Exact full64 sprite→image references are
+resolved; names are decoded from original headers, not inferred from artwork.
+Original UI XML independently binds MRG002 to the stair BG_STAGE nine-sprite.
+ST002 also supplies the actual AT→S2→I2 dependencies of the STI002 environment
+layers. A postfix such as002 is an environment selector, not a sprite named002;
+BG_M_INGAME is a separate hidden shade-node resource. These material bindings
+do not establish original floor/enemy/reward policy or native rendering.
+See mirage-native-jet-name-index-2026-10-16.md,
+mirage-original-ui-resource-names-2026-10-16.md and
+jet-at-animation-consumer-2026-10-16.md for exact source ownership and limits.
 
 Unsupported `/mirage/End` now returns a non-success body with neither ret_data
 nor data, including account failure and the global NativeAuthError wrapper.

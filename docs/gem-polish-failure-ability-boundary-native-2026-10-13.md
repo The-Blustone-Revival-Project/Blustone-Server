@@ -80,3 +80,15 @@ current-level/attempt binding, full before/after abilities, exact attempted
 cost, and atomic replay handling before its settlement is supported. Until
 then mutation refusal remains appropriate even while read/price publication
 and affiliation-aware quote selection can be completed.
+
+## 2026-10-16 original anvil display-table follow-up
+
+The bounded LEVELING.jet inventory now locates original ANVILHEATED RWdata
+for destination levels2..15, consumed by CSRPopUpGemLevelUp.Anvilheated.
+See gem-anvil-native-2026-10-16.md. This closes a numeric UI-table gap above:
+base float32 plus wrapped failure-counter times byte-truncated increment
+feeds an unclamped percentage badge and separately capped heat animation.
+It does not establish the backend roll law, GetGemLevelUpPrice possibility
+scale, failed_compensation semantics, prices, ability growth or RNG. Those
+original server transition dependencies remain unproved. The raw decimal
+third CSV column must not be copied into server compensation by analogy.

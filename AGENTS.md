@@ -1,3 +1,42 @@
+## Latest continuation: original Gem anvil display and Mirage observations (2026-10-16)
+
+Previous turn was progress: f0b03e9 closed original Mirage layer resources.
+This continuation decoded LEVELING21RWresources/exactEOF18524: no Mirage
+floor/enemy/reward/rotation catalogue there. See original inventory doc;
+LEVELING_M name alone is NOT a proved Mirage selector. Goal stays ACTIVE.
+
+New original ANVILHEATED in LEVELING.jet:14destinationlevels2..15, exact
+pack/header/bounded-inflate/RW pins. Native LoadAnvilStatus storesbaseF32
+and converts thirdCSVfloat32→U32→BYTE. E.g6.4→6 and0.6→0; rawdecimals are
+not backend compensation. Actualconsumer CSRPopUpGemLevelUp.Anvilheated:
+CreateView copiesGem.level+1c→popup+6b0 andGem.level_up_failed+28→popup+6b8;
+then destinationcurrent+1 uses signedlookup. Missingrow is0/0/255 sentinel,
+not safezeroodds. MULwrap32→S32→F32product thenF32baseaddition. U32failure
+words preserved (highbit/negativewrappedproduct tested). Result feeds an
+UNCLAMPED percentbadge; a separate formatting/parsing path precedes heat.
+Heatstage isF32 min(F32(F32(percent*255)/100),255)/255; upperclampONLY.
+Pure src/gem-anvil.ts exposes source rows/preformatpercentage/separateheat,
+not exacttextformat or RNG. No GetGemLevelUpPrice possibility/compensation,
+fees, wallet, growth or successful/failed settlement law changed or inferred.
+Source: docs/gem-anvil-native-2026-10-16.md. Independentnative review passed.
+
+New DataDump manual lane observations documented with6TSVhashpins in
+ docs/mirage-historical-image-observations-2026-10-16.md. HistoricalFloor13
+shows3completedstairs;83/121showStage9;122showsLastStageabove8/7/6.
+2018currentboostcohort001/003/002/004 andnext008/005/021/006 observed with
+2Daysremaining, NOT a currentcalendar/epoch/multiplier. Current/highest/
+percentile separate. No originalRuinsenemies/perstairpayouts/registrationrule
+recovered. ForestofMirageevent rewards and playerchat anecdote stayseparate.
+Older Mirage cache doc corrected for current namedresources/ENVselection.
+
+163 gameplay test programs and build PASS; finalfocused Gem anvil test also
+covers separateintermediateF32rounding case3355445failures→33554548, not
+singlefinalround33554552. No client/APK/profile/private-save/UI changes;
+BlueStacksinputhold persists. Work only Server/Instrumented; DataDump and
+retainedworkspace read-only. Collector/Docker/inference untouched.
+Next continue original area/settlement/data recovery; none of these proofs
+makes Mirage playable or establishes full Gem upgrade production parity.
+
 ## Latest continuation: original Mirage background dependency closure (2026-10-16)
 
 Previous goal turn was progress:0b1bf58/ca453ca committed original JET names
