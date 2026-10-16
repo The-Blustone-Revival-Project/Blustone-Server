@@ -508,14 +508,17 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
   explicitlyDocumented.add("/world/GetFriendMissionRecord");
   paths["/world/RefreshInven"]={post:{
     ...operation("RefreshInven",
-      "Authenticated targeted card-only sync. card_inst_list is a JSON numeric uint64 array; exact native tokens are preserved before ownership lookup. Existing owned card DTOs return in ret_data.card as absolute per-card replacements, not EXP deltas or a whole-roster clear. Local quota1024 input IDs; duplicates coalesce in request order. Unknown IDs refuse the whole batch. Empty card list returns card:[]. Item-only and combined item_ref_list requests remain explicitly unsupported because their distinct callback consumers are not reconstructed. Reads never create a game, regenerate energy or persist. Native replacement UI remains pending.",
-      "Inventory",response("Native card-only replacement snapshot; unsupported sync modes fail.",{
+      "Authenticated targeted card, item or combined sync. card_inst_list is a JSON numeric uint64 array; item_ref_list is a JSON string reference-ID array. Local quota1024 per selector; duplicates coalesce in request order. ret_data.card contains detached full absolute owned-card replacements. ret_data.item contains every matching owned stack, including quantity0, with exact numeric uint64 inst_id, ref_id, absolute uint32 qty and optional uint32 buy_cnt_gold/buy_cnt_manda (native default0). Combined responses supply items then cards. Unknown card identities, malformed counts and returned items lacking published metadata refuse the complete batch. Unowned item references return no rows; omissions never delete cached instances or synthesize zero stock. Empty selectors produce empty requested child arrays. No Gem selector, whole-inventory clear or additive grant is inferred. Reads never create a game, regenerate energy or persist. Native replacement UI remains pending.",
+      "Inventory",response("Native per-instance replacement snapshots; only selected child collections are returned.",{
         allOf:[{$ref:"#/components/schemas/ResultEnvelope"},{type:"object",properties:{ret_data:{type:"object",properties:{
-          card:{type:"array",items:{type:"object",properties:{inst_id:{type:"integer",minimum:1,maximum:Number.MAX_SAFE_INTEGER},ref_id:{type:"string"}}}}}}}}],
+          card:{type:"array",items:{type:"object",properties:{inst_id:{type:"integer",minimum:1,maximum:Number.MAX_SAFE_INTEGER},ref_id:{type:"string"}}}},
+          item:{type:"array",items:{type:"object",required:["inst_id","ref_id","qty"],properties:{
+            inst_id:{type:"integer",format:"uint64",minimum:1},ref_id:{type:"string"},qty:{type:"integer",minimum:0,maximum:4294967295},
+            buy_cnt_gold:{type:"integer",minimum:0,maximum:4294967295},buy_cnt_manda:{type:"integer",minimum:0,maximum:4294967295}}}}}}}}],
       })),
-    "x-evidence":"docs/world-use-item-and-inventory-sync-native-2026-10-16.md; tests/inventory-card-sync-state.ts",
+    "x-evidence":"docs/world-item-combined-sync-native-2026-10-16.md; tests/inventory-item-sync-state.ts",
     "x-reverse-engineering-status":"native-parser-reconstructed",
-    "x-runtime-confidence":"Targeted absolute-card sync tested on disposable state; native UI pending",
+    "x-runtime-confidence":"All three targeted sync modes tested on disposable state; native UI pending",
   }};
   explicitlyDocumented.add("/world/RefreshInven");
   for(const [route,description,evidence] of [

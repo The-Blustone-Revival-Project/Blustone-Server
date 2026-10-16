@@ -40,6 +40,7 @@ import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocia
 import { socialDiscovery } from "./social-discovery.js";
 import {friendMissionRecords} from "./friend-mission-records.js";
 import {syncOwnedCards} from "./inventory-card-sync.js";
+import {syncOwnedItems} from "./inventory-item-sync.js";
 import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
 import { planGroupRankUp } from "./group-rank-up.js";
 import { cardSellProfitRows, planHunterSale, type CardSellProfit } from "./hunter-sale.js";
@@ -1897,15 +1898,18 @@ export class ServerState {
       user: { ap: { cur: game.ap, ap_charge_time: resourceChargeTime(game, "ap") } } });
   }
 
-  refreshCardInventory(payload:Record<string,unknown>,headers:Record<string,string>) {
+  refreshInventory(payload:Record<string,unknown>,headers:Record<string,string>) {
     const account=this.accountFor(payload,headers);
-    if(payload.item_ref_list!==undefined)return this.failure(2001,"Item and combined inventory sync receivers are not reconstructed");
+    const cards=payload.card_inst_list!==undefined,items=payload.item_ref_list!==undefined;
+    if(!cards&&!items)return this.failure(2001,"Inventory sync requires a card or item selector");
     const game=this.gameByPvid.get(account.pvid);
-    if(!game)return this.failure(2001,"Owned card snapshot is unavailable");
+    if(!game)return this.failure(2001,"Owned inventory snapshot is unavailable");
     try {
-      assertOwnedCardCompatibility(game);
-      return this.envelope(syncOwnedCards(payload.card_inst_list,[...game.starter_cards,...game.recruited_cards]));
-    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid card inventory sync");}
+      const item=items?syncOwnedItems(payload.item_ref_list,game.items,new Set(this.itemReferenceRows().item.map(row=>row.id))):undefined;
+      if(cards)assertOwnedCardCompatibility(game);
+      const card=cards?syncOwnedCards(payload.card_inst_list,[...game.starter_cards,...game.recruited_cards]):undefined;
+      return this.envelope({...item,...card});
+    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid inventory sync");}
   }
 
   unavailableWorldAction(route:string,payload:Record<string,unknown>,headers:Record<string,string>) {

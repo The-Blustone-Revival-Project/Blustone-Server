@@ -1,3 +1,54 @@
+## Latest continuation: all three inventory sync modes (2026-10-16)
+
+Previous turn was progress:51280c6 targetedcard-onlysync+guardedworldrefusals.
+This turn closes distinct ITEM/COMBINEDnativeconsumers and implements both.
+Goal ACTIVE. No live/private/client/profile/UI/APK change or release owed.
+
+ReqSyncItemInstance::$_2 E0: RTTI/vtableG218cea4→invokeGf716e8, result1guard
+Gf7170a, ret_data.itemGf71714/71e→SetItemGf71964. Combined::$_3E0: builder
+Gf6d9b8..9be explicitlyinstallsvtableVA217cf24 (file217bf24), invokeGf721b4;
+result1guardGf721d6..dc, itemFIRSTGf721e0..→SetItemGf72432; cardTHEN
+Gf72524..→ParseCardInst/RemoveCard/AddCard. Exactitemfieldsinst_idU64,
+ref_idSTRICTSTRING,qtyU32, OPTIONALbuy_cnt_gold/manda U32default0.
+SetItemGaec33c erases/replacesSAMEFULL64INSTANCE evenqty0; notAddItemdelta,
+notref-widedelete/aggregate orwholeinventoryclear. Multipleownedstacks/ref
+arevalid. Unlistedstacks remain; no Gemselector or lock parse is recovered.
+
+ServerState.refreshInventory nowadmits card_inst_list, item_ref_list, orboth.
+Atleastone selector required; absentchild notreturned; combineditemthencard.
+Bothprojectionsvalidatedbeforeresponse→invalidmixedrequestNOPARTIALsuccess.
+src/inventory-item-sync.ts exactlosslessstringrefs, LOCAL1024cap/requestorder
+dedup; allmatchingownedstacksinclzero, absolutecounters/extra data detached.
+RETURNEDrefsmusthavepublishedGetItemmetadata; unrequestedunknownmetadata
+retained. Never-ownedrefs→noitems(upsertNOPATCH), no inventedzeroID orclaim
+ofcacheddeletion. Optionalcounterskeptomitted→native0default; no manufactured
+originalcounterhistory. ExactpositiveU64 IDs inclcanonicalstringstorage;
+number/stringaliasesduplicate-refused, unsafealreadyroundedNumbersrefuse.
+Wire unsafeIDs areNUMERICJSON.rawJSON, not strtod-roundedstrings. StoredIDs/
+qty/countersareunchanged. This read's full64 support doesNOTdeclareallother
+itemmutators readyforwide-importedIDs. CardIDs remainexistingSAFEsubset.
+
+DirectgameByPvid only; no gameFor/energyregen/persist/alloc. UseItem and
+FriendlyBattleInfo remainauth2001, not restored successfulmutations/combat.
+Previouscard-only refusal statements below/docs areHISTORICAL/superseded.
+Docs/world-item-combined-sync-native-2026-10-16.md exactowners+currentlimits.
+OpenAPI source/JSON/YAML updatedforall3modes/nativeUIPENDING.
+
+169 gameplay programs/build/independentreviewPASS. State test executesreal
+SkillUpwithdeclaredLOCALmaterialrecipe→zero tombstone, actualcardlockchange,
+thenitem/combined/fullDTOsync. Multiple/zero/lockedstacks, purchasecounters,
+U64numericwire+storedstring/restart, auth/foreign/invalidmixed/publishedmeta/
+noGameAllocation/elapsedAPBP andexactnestedrefs+savedbytes covered. Compiled
+--fixture --exercise-inventory-sync seedsTWOexplicitAIRSHIP_TICKET teststacks
+above32bits (onezero,counters3/4), verifiesECDH/HMAC/AES all3modes+restart/
+bytepreservation without stockchange. Flag refusesprivate/preservedtargets
+andotherexercisecombinations; no acquisition/balance inferredfromfixture.
+
+BlueStacksinputhold persists; workonlyServer/Instrumented; DataDump/retained
+workspace read-only; Collector/Docker/inference untouched. Nextpursuereal
+progression/itemeffectlaws orfriendlyidentity/preparation+nativevalidation;
+don'tequatecorrectinventoryhydrationwithfullgameparity.
+
 ## Latest continuation: targeted card inventory sync (2026-10-16)
 
 Previous turn was progress:9240d50 real friend campaign records. This turn

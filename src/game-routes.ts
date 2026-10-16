@@ -337,7 +337,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/gym/MultiSkillUp") return state.trainSkills(payload, headers);
   if (route === "/world/SetDeck") return state.setDeck(payload, headers);
   if (route === "/world/GetFriendMissionRecord") return state.friendMissionRecords(payload,headers);
-  if (route === "/world/RefreshInven") return state.refreshCardInventory(payload,headers);
+  if (route === "/world/RefreshInven") return state.refreshInventory(payload,headers);
   if (route === "/world/UseItem" || route === "/world/GetFriendlyBattleInfo") return state.unavailableWorldAction(route,payload,headers);
   if (route === "/tuto/Clear") return state.clearTutorial(payload, headers);
   if (route === "/reference/V2_GetSupply") return state.envelope(supplyReference());

@@ -53,10 +53,12 @@ try {
   for(const extra of [{card_inst_list:JSON.stringify([id,foreignId])},{card_inst_list:JSON.stringify([id,9_999_999])},
     {card_inst_list:"[18446744073709551615]"},{card_inst_list:"[0]"},{card_inst_list:"[true]"},
     {card_inst_list:'["'+id+'"]'},{card_inst_list:undefined},
-    {item_ref_list:'["AIRSHIP_TICKET"]',card_inst_list:undefined},{item_ref_list:"[]"},
-    {item_ref_list:[]},{item_ref_list:null}]) {
+    {item_ref_list:'[1]'},{item_ref_list:{}},{item_ref_list:null}]) {
     const reply=immutable(()=>read(extra));assert.notEqual(reply.result_code,1);assert.equal(reply.ret_data.card,undefined,"No partial grant for mixed or unsupported selectors");
   }
+  assert.deepEqual(immutable(()=>read({item_ref_list:"[]"})).ret_data,{item:[],card:[expected]},"Combined empty item selector retains targeted card sync");
+  assert.deepEqual(immutable(()=>read({item_ref_list:'["never-owned-reference"]',card_inst_list:undefined})).ret_data,{item:[]},
+    "Item reference misses return no upserts and never fabricate zero-stock instances");
   const forged=immutable(()=>read({target_pvid:peer.pvid,card:[{inst_id:foreignId}],items:[{ref_id:"AIRSHIP_TICKET",qty:999}],gem:[{inst_id:999}],profile_url:"forged"}));
   assert.deepEqual(forged.ret_data,{card:[expected]},"Unrecognized caller objects cannot enlarge the requested owned card set");
   now+=3_600_000;immutable(()=>read());
@@ -72,4 +74,4 @@ try {
   assert.deepEqual(readFileSync(file),bytes);
   assert.deepEqual((restart as any).gameByPvid.get(peer.pvid).recruited_cards,peerGame.recruited_cards,"Peer ownership persists without becoming actor inventory");
 }finally{Date.now=originalNow;rmSync(directory,{recursive:true,force:true});}
-console.log("Card-only inventory sync: production ownership, actual lock/skill changes, absolute detached DTOs, mixed/foreign/item-selector refusal, auth, unsupported world actions, elapsed-clock read-only preservation, missing-game refusal and restart passed.");
+console.log("Card inventory sync: production ownership, actual lock/skill changes, absolute detached DTOs, mixed/foreign/malformed-selector refusal, auth, unsupported world actions, elapsed-clock read-only preservation, missing-game refusal and restart passed.");

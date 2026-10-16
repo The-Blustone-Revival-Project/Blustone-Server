@@ -50,6 +50,11 @@ const authoredEquipmentRankPrice={rank:exerciseEquipmentUpgrade?2:1,attr:1,price
 const authoredEquipmentPrices=exerciseEquipmentUpgrade?[authoredEquipmentLevelPrice,{...authoredEquipmentLevelPrice,level:11,price:29}]:[authoredEquipmentLevelPrice];
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
+const exerciseInventorySync=process.argv.includes('--exercise-inventory-sync');
+if(exerciseInventorySync&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-inventory-sync')))
+  throw new Error('Inventory sync stock uses a separate disposable --fixture exercise');
+const inventorySyncStock=[{inst_id:4294967301,ref_id:'AIRSHIP_TICKET',qty:0,lock:0,buy_cnt_gold:3,buy_cnt_manda:4},
+  {inst_id:4294967302,ref_id:'AIRSHIP_TICKET',qty:7,lock:1}];
 const monsterIndex=process.argv.indexOf('--exercise-monster');
 const exerciseMonster=monsterIndex===-1?undefined:process.argv[monsterIndex+1];
 if(monsterIndex!==-1 && (!process.argv.includes('--fixture') || typeof exerciseMonster!=='string' || !/^M[0-9]{3}$/.test(exerciseMonster)))
@@ -93,6 +98,14 @@ else {
   const { ServerState } = await import(pathToFileURL(path.join(root, 'dist/src/state.js')).href);
   const fixture = new ServerState(base, stateFile,{guildCreationMode:'disabled'});
   fixture.registerGuest({device_id:'standalone-generated-fixture'}, {});
+  if(exerciseInventorySync) {
+    const owner=fixture.registerGuest({device_id:'standalone-migration-verification'},{}).ret_data;
+    const game=fixture.gameFor(fixture.accountFor(owner,{}));
+    game.items=structuredClone(inventorySyncStock);game.next_item_inst_id=4294967303;
+    const snapshot=JSON.parse(readFileSync(stateFile,'utf8'));
+    snapshot.gameStates=snapshot.gameStates.map(([pvid,saved])=>[pvid,pvid===owner.pvid?game:saved]);
+    writeFileSync(stateFile,JSON.stringify(snapshot),{mode:0o600});
+  }
   if(exerciseGuildMembership) {
     const manager=fixture.registerGuest({device_id:'standalone-guild-manager'},{}).ret_data;
     fixture.registerGuest({device_id:'standalone-migration-verification'},{});
@@ -452,6 +465,15 @@ try {
   assert.deepEqual((await secure('/world/RefreshInven',{...auth,card_inst_list:JSON.stringify([cardSyncId])})).ret_data,
     {card:[syncInventory[0]]},'Compiled encrypted sync must return the exact absolute owned DTO');
   assert.deepEqual((await secure('/world/RefreshInven',{...auth,card_inst_list:'[]'})).ret_data,{card:[]});
+  assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'[]'})).ret_data,{item:[]});
+  assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'[]',card_inst_list:JSON.stringify([cardSyncId])})).ret_data,
+    {item:[],card:[syncInventory[0]]},'Combined callback receives both absolute child collections');
+  if(exerciseInventorySync) {
+    assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'["AIRSHIP_TICKET","unowned-reference","AIRSHIP_TICKET"]'})).ret_data,
+      {item:inventorySyncStock},'All owned stacks and zero-quantity tombstones survive encrypted item sync');
+    assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'["AIRSHIP_TICKET"]',card_inst_list:JSON.stringify([cardSyncId])})).ret_data,
+      {item:inventorySyncStock,card:[syncInventory[0]]});
+  }
   for(const route of ['/world/UseItem','/world/GetFriendlyBattleInfo'])
     assert.equal((await secure(route,auth,{allowPlainRefusal:true})).result_code,2001,'Unsupported world receivers cannot acknowledge a mock success');
   assert.deepEqual(readFileSync(stateFile),syncBefore,'Targeted sync and unsupported world actions cannot write the disposable save');
@@ -755,6 +777,8 @@ try {
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
   const restartedCardSync=await secure('/world/RefreshInven',{...auth,card_inst_list:JSON.stringify([cardSyncId])});
   assert.equal(restartedCardSync.ret_data.card[0].inst_id,cardSyncId,'Owned card selector survives compiled restart');
+  if(exerciseInventorySync)assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'["AIRSHIP_TICKET"]'})).ret_data,
+    {item:inventorySyncStock},'Absolute item stacks, counters and zero stock survive compiled restart');
   if(exerciseSocial) {
     const owned=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
     assert.equal(owned.list.length,1);assert.equal(owned.list[0].friend_id,friendId);
@@ -892,7 +916,7 @@ try {
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
-    encrypted_social_likes_fixture:exerciseSocial,
+    encrypted_social_likes_fixture:exerciseSocial,encrypted_inventory_sync_fixture:exerciseInventorySync,
     encrypted_monster_resource_fixture:exerciseMonster??null,
     historical_material_projection:profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection',
     quest_empty_collections_and_claim_refusal:true,

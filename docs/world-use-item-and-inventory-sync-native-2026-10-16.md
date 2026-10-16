@@ -113,7 +113,7 @@ their schemas and automatic invocation cannot be assumed here. This note
 does not claim a native UI refresh, retry-safe item repair, new owned data,
 or a complete server RefreshInven implementation.
 
-## Implemented card-only sync and guarded unsupported actions
+## Initial card-only sync checkpoint and guarded unsupported actions
 
 /world/RefreshInven now accepts card_inst_list only. Exact numeric uint64
 JSON tokens are decoded before ownership lookup; unsafe already-rounded
@@ -141,3 +141,11 @@ game, unchanged object references/file bytes and restart. The independent
 compiled verifier additionally exercises encrypted exact owned-card sync,
 empty sync, unsupported-action failures and selector continuity after
 restart against a disposable state. No private/live account or client changed.
+
+## Subsequent item/combined closure
+
+The item-only and combined callback boundaries above are now closed in
+world-item-combined-sync-native-2026-10-16.md. Current RefreshInven supports
+all three selector modes with exact absolute per-instance updates. The old
+item_ref_list refusals describe the initial checkpoint only. UseItem and
+friendly-battle success paths remain unsupported; their refusals remain.
