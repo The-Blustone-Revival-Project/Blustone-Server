@@ -1,6 +1,7 @@
 import {DORM_SHOP_ID,configuredDormExpansion,hunterCapacity,dormExpansionReferences,dormPurchaseInventory,planDormExpansion,type DormExpansionPolicy} from "./dorm-expansion.js";
 import {HUNTER_MIN_RANK_PROFILE} from "./hunter-minimum-rank.js";
 import {hunterRegistrationTime} from "./hunter-registration.js";
+import {quickAdvancementMode,quickAdvancementReferences,planQuickAdvancement} from "./quick-advancement.js";
 import crypto from "node:crypto";
 import { guildLobby,type GuildRecord } from "./guild-lobby.js";
 import { establishedGuildRecords } from "./guild-records.js";
@@ -579,6 +580,7 @@ export class ServerState {
   private readonly rupeeShopPolicy?:RupeeShopPolicy;
   private readonly resourceShopPolicy?:ResourceShopPolicy;
   private readonly dormExpansionPolicy?:DormExpansionPolicy;
+  private readonly quickAdvancement:"disabled"|"local-owned-tickets";
   private readonly veteranGiftPolicy?:VeteranGiftPolicy;
   private readonly profileMode:"disabled"|"archive-profile-projection";
   private readonly fishingSaleMode:"disabled"|"local-bound";
@@ -617,6 +619,7 @@ export class ServerState {
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
       dormExpansionMode?:"disabled"|"local-priced";dormExpansionPrices?:unknown;
+      quickAdvancementMode?:"disabled"|"local-owned-tickets";
       resourceShopMode?:"disabled"|"archive-2018-base-only";resourceApDailyLimit?:unknown;resourceBpDailyLimit?:unknown;
       rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
       veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
@@ -625,6 +628,8 @@ export class ServerState {
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    this.quickAdvancement=quickAdvancementMode(Object.hasOwn(options,"quickAdvancementMode")?options.quickAdvancementMode:process.env.BLUSTONE_QUICK_ADVANCEMENT_MODE??"disabled");
+    if(this.quickAdvancement!=="disabled"&&HUNTER_MIN_RANK_PROFILE!=="catalogue-birth-rank-projection")throw new TypeError("Local quick advancement requires the catalogue minimum-rank profile");
     this.dormExpansionPolicy=configuredDormExpansion(Object.hasOwn(options,"dormExpansionMode")?options.dormExpansionMode:process.env.BLUSTONE_DORM_EXPANSION_MODE??"disabled",
       Object.hasOwn(options,"dormExpansionPrices")?options.dormExpansionPrices:process.env.BLUSTONE_DORM_EXPANSION_PRICES_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_DORM_EXPANSION_PRICES_JSON));
     this.resourceShopPolicy=configuredResourceShop(Object.hasOwn(options,"resourceShopMode")?options.resourceShopMode:process.env.BLUSTONE_RESOURCE_SHOP_MODE??"disabled",
@@ -681,7 +686,7 @@ export class ServerState {
     for(const price of skillLevelRows)skillMaterialRequirements([price],this.skillMaterialIds); // Before restore/private save writes.
     const fishItems=Object.hasOwn(options,"fishingItems")?options.fishingItems:
       process.env.BLUSTONE_FISHING_ITEMS_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_FISHING_ITEMS_JSON);
-    this.fishingItems=configuredFishingItems(fishItems,new Set([...knownItems,"LU001","LU003","GC6",DORM_SHOP_ID,RUPEE_SHOP_ID,RUPEE_COUPON_ID,...starterReference.map(row=>row.base.id)]));
+    this.fishingItems=configuredFishingItems(fishItems,new Set([...knownItems,"LU001","LU003","GC6","SU1","SU2",DORM_SHOP_ID,RUPEE_SHOP_ID,RUPEE_COUPON_ID,...starterReference.map(row=>row.base.id)]));
     const fishCatalogue=Object.hasOwn(options,"fishingCatalogue")?options.fishingCatalogue:
       process.env.BLUSTONE_FISHING_CATALOGUE_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_FISHING_CATALOGUE_JSON);
     if(fishCatalogue!==undefined) this.fishingCatalogue=configuredFishingCatalogue(fishCatalogue,new Set(this.fishingItems.map(row=>row.id)));
@@ -1792,7 +1797,9 @@ export class ServerState {
     const bait=this.baitShopPolicy?baitShopReferences(this.baitShopPolicy):{item:[],global_item:[]};
     const rupee=this.rupeeShopPolicy?rupeeShopReferences(this.rupeeShopPolicy):{item:[],global_item:[]};
     const dorm=this.dormExpansionPolicy?dormExpansionReferences(this.dormExpansionPolicy):{item:[],global_item:[]};
-    return {...base,item:[...base.item,...bait.item,...rupee.item,...dorm.item,...(this.veteranGiftPolicy?[veteranGiftItem(this.veteranGiftPolicy)]:[]),...this.fishingItems.map(row=>({...row}))],
+    const retainedTickets=[...this.gameByPvid.values()].some(game=>game.items.some(row=>row.ref_id==="SU1"||row.ref_id==="SU2"));
+    const quick=this.quickAdvancement!=="disabled"||retainedTickets?quickAdvancementReferences():{item:[]};
+    return {...base,item:[...base.item,...bait.item,...rupee.item,...dorm.item,...quick.item,...(this.veteranGiftPolicy?[veteranGiftItem(this.veteranGiftPolicy)]:[]),...this.fishingItems.map(row=>({...row}))],
       global_item:[...base.global_item,...bait.global_item,...rupee.global_item,...dorm.global_item]};
   }
 
@@ -2042,6 +2049,19 @@ export class ServerState {
     this.accountFor(payload,headers);
     return this.failure(2001,route==="/world/UseItem"?"Item effects and consumption settlement are not reconstructed":
       "Friendly battle opponent projection and battle flow are not reconstructed");
+  }
+
+  useAdvancementTicket(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid);
+    if(this.quickAdvancement==="disabled"||!game)return this.failure(2001,"Item effects and consumption settlement are not reconstructed");
+    if(game.active_battle?.state==="active"||game.arena.active||game.search.active)return this.failure(2001,"Finish active combat before quick advancement");
+    let plan;try{assertOwnedCardCompatibility(game);plan=planQuickAdvancement(payload,game,starterReference,starterLevels.card);
+      if(this.dispatches.get(account.pvid)?.active?.deck.includes(plan.target.inst_id))return this.failure(2001,"Target is committed to dispatch");
+    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid advancement ticket");}
+    const item=game.items[plan.index],quantity=item.qty,before={rank:plan.target.rank,rank_up_cnt:plan.target.rank_up_cnt,exp:plan.target.exp},book=game.card_book;
+    item.qty=plan.remaining;Object.assign(plan.target,plan.next);game.card_book=plan.book;
+    try{this.persist();}catch(error){item.qty=quantity;Object.assign(plan.target,before);game.card_book=book;throw error;}
+    return this.envelope(plan.receipt);
   }
 
   cardInventory(payload: Record<string, unknown>, headers: Record<string, string>) {

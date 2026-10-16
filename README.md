@@ -86,6 +86,11 @@ New gacha and trace recruits record their [native registration time](docs/hunter
 in epoch seconds. Existing acquisition history and transient templates retain
 their dates; this does not enable quick-advancement ticket consumption.
 
+Optional `BLUSTONE_QUICK_ADVANCEMENT_MODE=local-owned-tickets` consumes already
+owned SU1/SU2 to advance eligible natural three/four-star Hunters. It requires
+the compatible minimum-rank profile, uses an explicit local counter-reset rule,
+and grants no tickets or purchase rights. See the [owned-ticket policy](docs/quick-advancement-local-ticket-2026-10-16.md).
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

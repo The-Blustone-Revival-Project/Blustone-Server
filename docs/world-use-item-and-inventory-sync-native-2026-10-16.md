@@ -1,5 +1,11 @@
 # World UseItem and RefreshInven: distinct native contracts
 
+Later checkpoint: [optional owned-ticket quick advancement](quick-advancement-local-ticket-2026-10-16.md)
+now reconstructs a narrow SU1/SU2 UseItem operation with explicit local award
+policy. Default refusal remains. Statements below about the initial all-item
+guard are historical; generic consumable effects and original IAP issuance
+are not enabled by the subsequent ticket implementation.
+
 Bounded read-only native research2026-10-16. Immutable DataDump library
 `local/inputs/extracted/lib/armeabi-v7a/libnative_core.so`, SHA256
 `c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec`.

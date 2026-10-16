@@ -1,5 +1,12 @@
 # Quick advancement tickets and UseItem: bounded native evidence
 
+Current implementation follow-up: optional `local-owned-tickets` settlement
+is documented in [the owned-ticket policy](quick-advancement-local-ticket-2026-10-16.md).
+Recovered protocol and preview rules are separated from its explicit LOCAL
+counter-reset policy. Default remains guarded; original IAP verification and
+ticket issuance are still absent. Historical blocker statements below record
+the order of investigation, not a requirement for a server extra_data marker.
+
 Read-only native investigation, 2026-10-16. Original DataDump input:
 `local/inputs/extracted/lib/armeabi-v7a/libnative_core.so`, SHA256
 `c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec`.
@@ -77,10 +84,10 @@ for the distinction from absolute RefreshInven receipts.
 
 ## Pending-state gate and unresolved transition
 
-`IsAvailableCondition` Gcb43e0 reads the cached extra-data key with the
+`IsAvailableCondition` Gcb43e0 reads the local marker key with the
 original spelling **`immediatly_rankup`** (literal references Gcb4400
-and Gcb448c), through `GetValue` Gb72798. It parses a pending instance
-ID, calls Gb726c0 with that key at Gcb449e, and searches the owned-card
+and Gcb448c), through `GetMarker` Gb72798. It parses a pending instance
+ID, calls `RemoveMarker` Gb726c0 with that key at Gcb449e, and searches the owned-card
 map for the pending ID. Thus availability includes a pending cached
 state, not merely a rank comparison against every owned hunter.
 
@@ -264,3 +271,87 @@ date for migrated records, or turn transient Arena/Search templates
 into newly earned ownership. The complete UI predicate binding and
 original package/entitlement settlement remain separate unresolved
 boundaries; a nonzero timer is not proof of backend purchase admission.
+
+## Follow-up: local gacha marker and persistent purchase recovery are distinct
+
+The pending marker's producer is now closed. It is not a required
+`account.extra_data.immediatly_rankup` response field:
+
+- `CSRLotteryX10Card::SetCharData(uint64)` Gb03f18 constructs the
+  result-card display. Its displayed-rank check is `>=3` at
+  Gb03f7e/80. It then calls `CSRPlayData::SetMarker64` Gb72280
+  at Gb03fae with marker **`immediatly_rankup`**, subkey **`inst_id`**,
+  and the full64 card ID loaded at Gb03fa0.
+- `CSRPopUpGachaResult::SetCardData` Gcdfaa8 reads the same marker
+  through `GetMarker` at Gce02ac. If present, it resolves the stored
+  candidate through `FindCard` at Gce0336. When both cards resolve,
+  Gce0370/378 reads their ranks and Gce039e/3a0 skips replacement
+  when the existing candidate is greater. Otherwise it stores the
+  displayed card's full64 ID through `SetMarker64` at Gce03ce.
+  This comparison must not be promoted to a new backend award rule.
+- `SetMarker64` builds a JSON object with the requested subkey and
+  a uint64 value, then delegates to `SetMarker` Gb67bbc at
+  Gb722e4. The latter indexes/updates **PlayData `+0x330`**
+  (Gb67bca and Gb67be0), without a network request in this setter.
+  `GetMarker`, `RemoveMarker`, and `ClearMarkerAll` use that same
+  JSON owner. The published constructor export
+  `sources/native/campaign/ghidra-campaign-marker-play-owner.txt`
+  lines 222/223 initializes its `+0x338` payload and `+0x330` type
+  to zero/null.
+- `IsAvailableCondition` reads and **removes** this local marker at
+  Gcb4412/Gcb449e, before testing the pending owned card. Its
+  rank/reference/roster tests still decide whether it returns the ID.
+
+Thus the normal native gacha result UI can generate the candidate from
+the actual acquired card DTO. Injecting a server marker or extra-data
+field is unnecessary for these positively identified producers. This
+does not claim that no other generic native marker API can ever be
+fed by server content; the claim is about this exact key's closed path.
+
+There is a **second, persistent local record** for an already purchased
+quick advancement that still needs consuming:
+
+- `CSRUserDB::PutImmediatlyAdvencedCard(uint64)` G109c464 creates
+  a per-user local DB key ending **`/IMMEDIATLY_ADVENCED_CARD`**
+  (literal G109c484). It converts the supplied uint64 to a decimal
+  string at G109c496 and writes via the local DB at G109c4a2.
+  The corresponding getter G109c50c and remover G109c790 use
+  the same key (literal loads G109c528 and G109c7b2).
+- The success continuation queued by `PurchasePackageCB` Gcb3a58
+  begins at Gcb6c24. Its result comparison Gcb6c42/44 accepts 1;
+  it loads the selected card's full64 ID at Gcb6c4e/52 and writes
+  this persistent recovery record at Gcb6c56.
+- The continuation reads purchase-result **`item`** at Gcb6c62,
+  iterates rows with **`inst_id`**, **`ref_id`**, **`added`**
+  (literal loads Gcb6ce4/f0/f6), and calls `CSRInventory::AddItem`
+  at Gcb6df2. These are purchase stock additions, not the later
+  UseItem consumed deltas.
+- It checks the popup-selected SU reference's owned quantity through
+  `GetInstItemCnt` at Gcb7034, refuses the automatic continuation
+  when zero at Gcb7058/5a, obtains the owned instance at Gcb7084,
+  and invokes `ReqUseItem` at Gcb7296. Quantity is explicitly 1
+  at Gcb7286; source and target IDs are supplied separately.
+- Recovery methods `IsIncompletionImmediatlyAdvanced` Gcb4e24
+  and `InCompletionImmediatlyAdvancedPopup` Gcb4978 start from
+  the persistent UserDB getter at Gcb4e40/Gcb4998. The former
+  checks the selected SU reference's current quantity at Gcb4f82
+  and resolves the saved target card again at Gcb5136. This is
+  evidence of recovery of an owned purchased ticket, not issuance
+  of a ticket when no stock exists.
+- Successful UseItem continuations remove the persistent record only
+  after result 1: Gcb64f4..650c, Gcb7554..7566,
+  Gcb7d78..7d94, and Gdc53bc..53d4. Non-success branches do
+  not take these demonstrated removals.
+
+The persistent getter's callers in the recovery methods pass its
+returned low word as the target ID and explicitly zero the high word
+(Gcb4e6e/70 and Gcb5132/34). The purchase-record setter accepts
+uint64, but full-width recovery must not be assumed from that signature
+alone. Current revival owned-card IDs fit the safe lower subset; this
+note does not authorize changing or renumbering storage identities.
+
+The two local owners explain normal-popup selection versus interrupted
+purchase recovery without inventing a server entitlement journal.
+Original purchase verification, ticket issuance/product economics,
+complete alternative activation gates, and authoritative UseItem
+`rank_up_cnt.cur` settlement remain outside the closed contract.

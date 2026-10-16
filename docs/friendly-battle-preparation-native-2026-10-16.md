@@ -1,5 +1,33 @@
 # Friendly battle preparation: exact contract and unresolved admission
 
+## Follow-up: real friendly scene and local result branch
+
+Further bounded original inspection closes the downstream scene selection:
+the user-info continuation Gd980c0 checks result1 atGd980e2, writes the local
+`rival_pvid` marker with SetMarker64 atGd98148, then pushes scene0x54 through
+PushSceneFadeOutIn atGd98178. The special failure10177 (0x27c1) selects the
+ONLY_FRIENDS literal atGd98182→G1d877de. This proves a friend-only error
+presentation, not a complete original backend admission law.
+
+The continuation belongs to OnButtonClick::$_1: original RTTI is recorded in
+native-all-strings.tsv line460639 and the vtable atG217a7ec resolves its
+operator toGd980c0. Data PT_LOAD mapping uses ELF file offset=VA−0x1000 before
+applying the Ghidra image base; an adjacent callback is not substituted.
+
+The scene0x54 RequestBattleWith branch bypasses the normal CalcTotalBP gate.
+CSRFC.OnFinishG947b6a tests the previous scene and takes a local friendly-result
+branch for0x54: G947f0a constructs FCFriendlyResult andG947f20 calls SetData.
+The normal network-complete call atG947e06 is on the other branch. This closes
+more of the free/local-result flow without authorizing Arena fees or rewards.
+
+Runtime GetFriendlyBattleInfo remains guarded. Account-local owned card IDs
+still collide across users in the native full-serial actor lookup. A subsequent
+implementation must prove a coherent collision-free transient rival projection,
+deck policy and gem/bonus handling before enabling the callback's automatic
+scene transition. No live friendly battle, fee, honor award or state mutation
+was performed by this audit. Earlier downstream uncertainty statements below
+are historical where superseded by this section; the identity boundary remains.
+
 Original ARM SHA256
 c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec.
 Bounded read-only original Thumb inspection and existing published DataDump

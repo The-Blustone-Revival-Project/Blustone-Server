@@ -1,4 +1,73 @@
-## Latest continuation: actual Hunter registration timestamps (2026-10-16)
+## Latest continuation: optional owned SU ticket advancement (2026-10-16)
+
+Previous checkpoint5cc833d corrected actual new Hunter registration times.
+This checkpoint implements a narrow optional /world/UseItem policy for already
+owned SU1/SU2. Goal ACTIVE/native purchase/recovery UI PENDING. No live profile,
+private save, device input, client/APK, original asset, Docker, Collector or
+inference changes. Input hold persists. DataDump remains read-only.
+
+New native closure separates two LOCAL records. Gacha result UI produces the
+temporary immediatly_rankup marker in PlayData JSON+330 (bundleGb03fae and
+singleGce03ce); IsAvailableCondition consumes it. It is NOT server extra_data.
+Successful IAP callbacks write UserDB /IMMEDIATLY_ADVENCED_CARD atGcb6c56,
+then AddItemGcb6df2 and owned SU countGcb7034 precede automatic UseItemGcb7296.
+Successful callbacks remove recovery atGcb650c/7566/7d94/Gdc53d4. Recovery
+rechecks target/owned stock without the initial offer timer/competitor gate.
+Persistent recovery target high words narrow in some callers; wide native target
+recovery is unverified. Current tested ownership namespace is low-word.
+
+BLUSTONE_QUICK_ADVANCEMENT_MODE=local-owned-tickets requires import-time
+BLUSTONE_HUNTER_MIN_RANK_PROFILE=catalogue-birth-rank-projection plus compatible
+owned state. Default remains2001. Actual owned unlocked SU1 consumes1 for ordinary
+current3/firststat3; SU2 for current4/firststat4. Next ordinary stat and level1
+reference are required. Next rank/level1 follows native preview; resetting
+rank_up_cnt0 is EXPLICIT LOCAL completed-promotion policy, not original backend
+counter recovery. EXP comes from next-grade level1 min_exp, not hardcoded0.
+Target locks permit improvement; skills/equipment/date/other fields stay intact.
+Book maximum updates with existing local policy. No original IAP verification,
+ticket issuance, product offers, startup grants or purchase rights introduced.
+
+Direct owned-stock button sends only auth5 +inst_id/full64,target_id/full64,qty1.
+No entitlement flag/type/effect/price. Pure plan validates exact unique owned
+source/target, stock/lock/natural grade/ordinary state, references and credits.
+Unsafe already-rounded IDs refuse; ticket receipt uses RawJSON exact numericU64.
+Native consumed_item_list qty1 is a DELTA, not remaining or consumed_inst_list.
+card.target_inst has inst_id/rank/rank_up_cnt/exp pairs; neutral dailyquest_min_
+stage string, daily/linear/achievement arrays are present. No user/resource DTO.
+No initial one-hour or competing-copy offer gate is imposed on owned recovery
+stock. No max-level gate is invented. Busy combat/arena/search or dispatched
+targets refuse. No game creation, energy regeneration or ID allocation occurs.
+
+Ticket qty, target fields and book persist together; real.tmp and blocked rename
+failures restore exact original fields/row refs/book ref/bytes. Promoted same-
+ticket replay refuses, with no general nonce/exactly-once claim. Combined
+RefreshInven restores absolute item/card snapshots after a lost response. Zero
+stock remains a server row. Inert use_type0 SU1/SU2 metadata has local labels/
+blank original art/effects and no offers; it remains when any loaded stock row
+exists, including0, even if consumption is disabled. Reserved against fish-ID
+collisions. No new owned fields or schema. docs/quick-advancement-local-ticket-
+2026-10-16.md records setup, native-vs-local boundary and original gaps.
+
+All199 npm test programs, five profile suites, build and independent review
+PASS. Focused source/compiled state tests cover both tickets, U64 source IDs,
+non-max-level/credited/expired-offer targets, explicit level1 curve, foreign/
+locked/wrong/empty/duplicate/awake/busy/dispatch/forged refusal, last ticket0,
+real write+rename rollback, no wallet/clock/skill/date/allocator changes and
+replay/restart/disabled metadata. Compiled child HTTP proof owns ephemeral
+loopback/disposable authored Nene3+SU1 stock: actual P384/HMAC/AES consumption
+delta and3→4/credit0/EXP0/book, unchanged peer/wallet/skills/count, same key/OTP
+restart, absolute combined sync, prerequisite startup refusal and disabled mode.
+npm run test:quick-advancement repeats built state+HTTP checks. No live UI claim.
+
+Friendly battle research also closes user-info success→rival_pvid marker→scene
+0x54 atGd980c0/Gd98148/Gd98178; friend-only error10177 mapsONLY_FRIENDS.
+Scene54 bypasses normal BP gate; OnFinishG947b6a uses local FCFriendlyResult
+G947f0a/G947f20 instead of normal network CompleteG947e06. Recorded in
+docs/friendly-battle-preparation-native-2026-10-16.md. Route remains guarded
+because account-local serial collisions still need a coherent transient rival
+projection and deck/gem/bonus policy. Next meaningful area; goal ACTIVE.
+
+## Historical continuation: actual Hunter registration timestamps (2026-10-16)
 
 Previous checkpoint ee4cd10 added optional native minimum-rank references.
 This checkpoint fixes zero registration dates on actual new gacha and trace

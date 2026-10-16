@@ -602,12 +602,12 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
   }};
   explicitlyDocumented.add("/world/RefreshInven");
   for(const [route,description,evidence] of [
-    ["/world/UseItem","Authenticated explicit failure2001. Native success would subtract consumed_item_list quantities and set target-card rank/rank_up_cnt/EXP, with achievement overlays. Original item effects/eligibility and settlement are not reconstructed, so the former generic success mock is no longer emitted. No consumption, progression or grants occur.","docs/world-use-item-and-inventory-sync-native-2026-10-16.md"],
+    ["/world/UseItem","Default authenticated refusal2001. Optional BLUSTONE_QUICK_ADVANCEMENT_MODE=local-owned-tickets requires catalogue-birth-rank-projection and existing compatible ownership. Accepts exact owned inst_id, owned target_id, qty1: SU1 for ordinary natural rank3/firststat3, SU2 for rank4/firststat4. Success consumes one unlocked matching ticket and advances target to next-grade level1 min_exp, resetting credits to0 as explicit LOCAL policy; original backend counter/IAP issuance remain unrecovered. No popup one-hour/competing-copy gate is reimposed on already owned recovery stock. Native consumed_item_list uses exact numeric uint64 inst_id and qty DELTA1; card.target_inst has inst_id and rank/rank_up_cnt/exp prev-cur pairs, with neutral daily/linear/achievement overlays. No wallet or resource mutation. Busy combat or dispatched targets refuse. Target fields, stock and book persist atomically with exact rollback. Same promoted-target replay refuses; absolute combined RefreshInven repairs lost responses. No stock grants, shop offers, IAP verification or entitlement flags. Inert SU metadata remains while stock exists even when disabled. Native UI remains pending.","docs/quick-advancement-local-ticket-2026-10-16.md"],
     ["/world/GetFriendlyBattleInfo","Authenticated explicit failure2001. Native success expects ret_data.rival as a complete ParseDefender DTO and would replace the opponent cache. Target deck policy, cross-account card-ID collision handling and native friendly flow remain unverified. No synthetic rival, battle admission, fee or reward is returned.","docs/friendly-battle-preparation-native-2026-10-16.md"],
   ]) {
     paths[route]={post:{...operation(route.split("/").at(-1)!,description,"World state"),
       "x-evidence":evidence,"x-reverse-engineering-status":"native-parser-reconstructed",
-      "x-runtime-confidence":"Authenticated state-preserving refusal tested; successful gameplay remains unsupported"}};
+      "x-runtime-confidence":route==="/world/UseItem"?"Optional owned-ticket source/compiled HTTP settlement and refusal tested; original IAP/native UI pending":"Authenticated state-preserving refusal tested; successful gameplay remains unsupported"}};
     explicitlyDocumented.add(route);
   }
   for (const action of ["FriendReqCancel", "FriendReqReject", "Unfriend"]) {
