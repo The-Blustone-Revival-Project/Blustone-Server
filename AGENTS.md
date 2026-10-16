@@ -1,3 +1,85 @@
+## Latest continuation: configured Mirage floor lifecycle (2026-10-17)
+
+Previous checkpointc7057c9 prepared assets/family/End codecs. This checkpoint
+wires an optional REAL-owned one-floor Mirage run through encrypted server
+routes. Goal ACTIVE. No live profile/private save/device/APK/original asset/
+Docker/Collector/inference changes; input hold persists. Server/Instrumented
+writes only, DataDump read only. No rebuild/release owed. Native Mirage scene
+validation still PENDING; host/API proof is not native battle evidence.
+
+BLUSTONE_MIRAGE_MODE=local-configured plus COMPLETE explicit policy JSON and
+selected prepared current-e6-mirage resources enables GetInfo/RegisterDeck/
+End/Reward. Default guarded behavior remains. createApp requires original
+MIRAGE/ST002/LEVELING selected, pinned and coherently wrapped/stamped, including
+when modeoff restores captured cache. Enabled asset failure precedes state read.
+No default enemy/floor/balance/gold/reward data; all configured values LOCAL.
+Original-help floor bands require3/6/9 stairs at1..20/21..40/41+. Every enemy in
+ALL stairs must match supported canonical ordinary reference/stat/EXP/skills;
+implicit gear neutral, overcome0. Exact original assets/ENV2+15/layers verified.
+No art/enemy identity from screenshots alone and no item/fragment/Gem producer.
+
+First valid nonempty GetInfo captures real owned ordinary families. REQUIRED
+local enrollment policy rank-exp-id-projection selects highest rank, then EXP,
+then lowest owned ID per char_id; original combat-power/tie law UNKNOWN. Entry
+HP10000 and unenrolled-1 are explicit LOCAL new-attempt initialization, admitted
+only when prior owned carry is absent/1000. Unknown historical carry refuses.
+All-zero section requests do not enroll or write. Sections use exact0/1 flags;
+response ref_stair corresponds to request ref_stair_list. No invented Begin.
+
+Schema12 root mirageRuns captures immutable full policy/cache/membership/claim
+prefix and lastEnd report/absolute receipt per owner. Older schemas refuse this
+field; schema12 requires journal(s), quest/dispatch arrays and all earlier
+feature cohorts survive. Restart binds entry HP to actual owned cards and pins
+all enemies/assets before migration writes. Changed policy refuses startup.
+Modeoff/unsetJSON retains native cache reads and active commitment holds while
+all Mirage mutations refuse. Reenable exact captured policy to finish/abandon.
+
+RegisterDeck preserves source-shaped bare numeric ID list, only living entered
+unique character families, and keeps enemy/reserve damage. End binds exact
+floor/stair/selected IDs/enemy count; normal HP0..10000 and one surviving camp
+are LOCAL admission, ties/nonterminal reports refuse. Cache+owned carry+receipt
+persist atomically; matching End retries return saved absolute receipt without
+writes. Failure omits ret_data entirely for native's unsafe non1 parser.
+
+Reward pays explicit gold once, advances inline cur_stair/state/enemies (native
+close need not GetInfo). Claimed-stair retry returns CURRENT cache and gold
+prev=cur, no replay grant or rewind. Completion records actual highest=floor,
+clears membership/End and restores ordinary LOCAL unentered HP1000. Other cards,
+book/allocator/wallets/energy clocks/progress unchanged. Real write/rename failure
+restores exact game scalars/array/nested refs and journal reference/absence.
+
+LOCAL escape: GetInfo reset1 is ABANDON ONLY, not original retry/new-floor law.
+All flags validate BEFORE mutation. It releases all known commitments/HP1000,
+sets inactive state0/highest0, preserves partial paid claim prefix/currentstair/
+enemy carry/policy, marks abandoned:true, drops pendingEnd and grants nothing.
+Repeat completion/abandon is read-only. This prevents all-dead roster traps.
+Captured cohort remains valid until completion/abandon, evaluated at entrytime;
+hero deadline limits NEW enrollment and stays frozen on wire. It does NOT
+silently retune/expire/wipe an ongoing run. Native countdown behavior unverified.
+
+GetFriendInfo now projects real captured highest floors from accepted same-server
+friends only, checking both blocks; pending/unrelated/fixture rivals excluded.
+Active attempts hold Hunter/gem/deck/combat mutations as additional LOCAL safety;
+completion/abandon releases ordinary routes. No fresh attempt, new floor,
+revival, fragment shop, original prices/payouts/rotation or anti-cheat claimed.
+
+All210 regression programs, six resource profiles, build, focused compiled
+policy/context/state/social/gate checks and separate compiled P384/HMAC/AES
+three-stair lifecycle PASS. HTTP proof preserves key/OTP across modeoff restart;
+actor entire game returns to baseline except configured gold; peer exact.
+Tests cover loss/reserve retry, duplicate End, Reward response-loss repair,
+startup original-resource gates, immutable policy, expired ongoing completion,
+all-dead abandon/invalidflag/no-reward release, schema1..11 injection, missing
+carry, unsupported later enemy, write/rename rollback, friend privacy/clock
+preservation and modeoff guards. Independent native/code review closed readiness,
+retry and commitment traps before shipment. No native combat/UI claim.
+
+Setup and complete explicit three-stair example:
+docs/mirage-local-run-2026-10-17.md. NEXT: validate native scene once user input
+hold is lifted; recover/configure repeat-entry/floor assignment/Revive and source
+fragment item data without sacrificing captured run integrity. Keep revival
+objective broad; one configured floor is a new capability, not completion.
+
 ## Latest continuation: Mirage resources, family correction and End planner (2026-10-17)
 
 Previous checkpoint2e4bc86 corrected ordinary transcendence source admission.

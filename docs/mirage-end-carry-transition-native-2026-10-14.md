@@ -1,5 +1,11 @@
 # Mirage End: exact wire, ten-thousand HP units and callback boundaries
 
+Continuation2026-10-17: these codecs now support the optional configured local
+run described in [Mirage local run](mirage-local-run-2026-10-17.md). Historical
+statements below about absent runtime integration are superseded for that
+explicit mode; original assignment/economy and native scene validation remain
+incomplete.
+
 Original immutable ARM SHA256
 `c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec`;
 Ghidra code addresses ELF+0x10000. Preserved mirage-strings-08/entry-model/

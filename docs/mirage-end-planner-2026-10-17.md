@@ -1,5 +1,11 @@
 # Mirage End: report decoder and bound carry transition
 
+Continuation2026-10-17: these codecs now support the optional configured local
+run described in [Mirage local run](mirage-local-run-2026-10-17.md). Historical
+statements below about absent runtime integration are superseded for that
+explicit mode; original assignment/economy and native scene validation remain
+incomplete.
+
 `src/mirage-end.ts` implements a pure transition toward a persistent Mirage
 run. It does not enable `/mirage/End`, enroll Hunters, import a run, grant a
 reward or publish a new cache. The existing runtime preserving refusal stays

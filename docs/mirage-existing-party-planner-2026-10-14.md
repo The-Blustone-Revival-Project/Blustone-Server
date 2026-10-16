@@ -1,5 +1,11 @@
 # Mirage existing-party registration codec and character-family admission
 
+Continuation2026-10-17: these codecs now support the optional configured local
+run described in [Mirage local run](mirage-local-run-2026-10-17.md). Historical
+statements below about absent runtime integration are superseded for that
+explicit mode; original assignment/economy and native scene validation remain
+incomplete.
+
 The exact registration codec now decodes inst_list JSON STRING with full64
 unsigned decimal numeric tokens, and emits the successful bare numeric ID
 array. Quoted IDs, floats/exponents, negative zero, unsafe already-rounded

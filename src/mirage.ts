@@ -19,7 +19,7 @@ export function mirageEndRefusal(code=2001,message="Mirage End settlement is not
 /** RequestFriend callback G938298 passes ret_data directly to ParseFriendInfo
  * G934c00. Each row groups nicknames by a floor; it does not carry account IDs.
  * Callers must supply ONLY established friend relationships, never all local
- * accounts or invented rivals. The replica currently has no such relationships.
+ * accounts or invented rivals. Only actual captured highest-floor records may supply these rows.
  */
 export function mirageFriendFloors(friends: readonly { nickname: string; highestFloor: number }[] = []) {
   const floors = new Map<number, string[]>();

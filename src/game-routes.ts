@@ -242,6 +242,7 @@ function applyWaveRefIdMode<T>(record: T): T {
  * evidence note before it replaces the generic fallback.
  */
 export function gameResponse(state: ServerState, route: string, payload: Record<string, unknown>, headers: Record<string, string> = {}) {
+  if(state.mirageBlocks(route,payload,headers))return state.failure(2001,"Finish the captured Mirage attempt before changing Hunter/combat commitments");
   if(state.dispatchBlocks(route,payload,headers))return state.failure(2001,"Local dispatch preserves Hunter/combat commitments until collection");
   // Persistent local-game routes.
   if (route === "/lobby/Enter") return state.lobbyEnter(payload, headers);

@@ -1,3 +1,5 @@
+import {MIRAGE_RESOURCE_SOURCES} from "./mirage-resources.js";
+import {MIRAGE_BACKGROUND_SOURCE} from "./mirage-backgrounds.js";
 import { repositoryPath } from "./paths.js";
 import express, { type Request, type Response } from "express";
 import { createHash } from "node:crypto";
@@ -49,11 +51,14 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
   rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
   veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
   profileMode?:"disabled"|"archive-profile-projection";
+  mirageMode?:"disabled"|"local-configured";miragePolicy?:unknown;
   fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}): AppContext {
   const baseUrl = options.baseUrl ?? "http://127.0.0.1:8080";
+  if((options.mirageMode??process.env.BLUSTONE_MIRAGE_MODE)==="local-configured")verifyMirageRuntimePackages();
   const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds,guildChatMode:options.guildChatMode,publicChatMode:options.publicChatMode,
     ...(Object.hasOwn(options,"dispatchMode")?{dispatchMode:options.dispatchMode}:{}),...(Object.hasOwn(options,"dispatchPolicy")?{dispatchPolicy:options.dispatchPolicy}:{}),
-    ...Object.fromEntries(["rupeeShopMode","rupeeShopDailyLimit","veteranGiftMode","veteranPointsPerTicket","profileMode","fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
+    ...Object.fromEntries(["mirageMode","miragePolicy","rupeeShopMode","rupeeShopDailyLimit","veteranGiftMode","veteranPointsPerTicket","profileMode","fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
+  if(state.mirageResourcesRequired())verifyMirageRuntimePackages();
   const endpoints = discoverEndpoints(options.catalogPath ?? defaultCatalogPath());
   const openapi = buildOpenApi(endpoints, baseUrl);
   let runtimeReslistHeader: string | undefined;
@@ -222,6 +227,20 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
   app.use(notFound());
   app.use(errorHandler());
   return { app, state, endpoints, openapi, routes: routeDefinitions };
+}
+
+function verifyMirageRuntimePackages() {
+  const names=(process.env.BLUSTONE_PACKAGE_NAMES??"").split(",");
+  const stamps=["BLUSTONE_RESOURCE_VERSION","BLUSTONE_RESLIST_STAMP","BLUSTONE_RESLIST_HEADER_STAMP"].map(key=>process.env[key]);
+  if(!["pkgi1","pkgi1-tree"].includes(process.env.BLUSTONE_PACKAGE_MODE??"")||new Set(names).size!==names.length||!stamps[0]||!/^[1-9]\d*$/.test(stamps[0])||Number(stamps[0])>0x7fffffff||stamps.some(value=>value!==stamps[0]))throw new TypeError("Mirage requires coherent original CDN package settings");
+  const pins=[MIRAGE_RESOURCE_SOURCES.mirage,MIRAGE_RESOURCE_SOURCES.st002,MIRAGE_BACKGROUND_SOURCE];
+  for(const pin of pins) {
+    const name=path.basename(pin.pack);if(!names.includes(name))throw new TypeError("Mirage runtime requires selected original "+name);
+    const candidates=[process.env.BLUSTONE_PACKAGE_DIR??repositoryPath("resources/runtime/packages"),process.env.BLUSTONE_RESOURCE_ASSET_DIR].filter((value):value is string=>!!value).map(dir=>path.resolve(dir,name));
+    const file=candidates.find(value=>existsSync(value));
+    if(!file||!statSync(file).isFile())throw new TypeError("Missing Mirage runtime package "+name);
+    const bytes=readFileSync(file);if(bytes.length!==pin.bytes||createHash("sha256").update(bytes).digest("hex")!==pin.sha256)throw new TypeError("Conflicting Mirage runtime package "+name);
+  }
 }
 
 function resourcePackages(): ResourcePackage[] {

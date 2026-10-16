@@ -13693,118 +13693,8 @@
     },
     "/mirage/End": {
       "post": {
-        "summary": "Refuse unsupported Mirage settlement without cache writes",
-        "description": "Native End sends signed floor/stair and JSON-string remain_deck_hp full64 inst_id/hp_percent plus remain_enemy_hp uint32 values. Native carried full health is10000; the historical server1000 placeholder is local and is never auto-healed. Settlement remains unavailable. Non-success End replies omit ret_data/data ENTIRELY, including account/transport auth errors: the native callback tests key existence after failure/retry and otherwise still applies captured enemy HP, Parse_End and quest caches. Null or a generic error subtree is not preserving. Caller independently checks actual result code before success UI. No original outcome from rounded HP, state/party/floor transition or successful run/reward is inferred. Pure supplied-cache decoding/readiness support does not activate GetInfo or prove native Mirage combat.",
-        "tags": [
-          "Mirage"
-        ],
-        "parameters": [
-          {
-            "name": "PV-AccessToken",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Transport-session token returned by shared_secret/Exchange. Required for native encrypted requests; distinct from the account OTP sent inside the encrypted form body. Keys survive restart when BLUSTONE_STATE_FILE is configured; otherwise they are in memory only. The local state file contains secrets and must never be published."
-          },
-          {
-            "name": "PV-Signature",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Observed native request-signature header. Exact canonicalization remains unverified."
-          }
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GenericRequest"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                }
-              }
-            },
-            "application/octet-stream": {
-              "schema": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Non-success body with no native-parsed data subtree.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "result_code",
-                    "protocol_code",
-                    "code",
-                    "error"
-                  ],
-                  "additionalProperties": false,
-                  "properties": {
-                    "result_code": {
-                      "type": "integer",
-                      "not": {
-                        "enum": [
-                          1
-                        ]
-                      }
-                    },
-                    "protocol_code": {
-                      "type": "integer",
-                      "enum": [
-                        0
-                      ]
-                    },
-                    "code": {
-                      "type": "integer"
-                    },
-                    "error": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Route not present in the recovered catalog."
-          },
-          "500": {
-            "description": "Local scaffold failure.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
-      }
-    },
-    "/mirage/GetFriendInfo": {
-      "post": {
-        "summary": "Read Mirage friend floors",
-        "description": "Authenticated request with no floor selector. Native ParseFriendInfo consumes bare ret_data rows {floor,nick_list:string[]}. Local friendships now exist, but no friend highest-floor records have been reconstructed; the replica returns an empty array rather than inventing floor0 or ranks. This read does not enter or modify a Mirage run.",
+        "summary": "End",
+        "description": "Configured active run only; normal-health reports bind exact floor/stair, selected player IDs and enemy count. remain_deck_hp and remain_enemy_hp are JSON strings; player HP key hp_percent, receipt key remain_hp_percent. LOCAL supported normal HP0..10000 and exactly one surviving camp; ambiguous ties refuse. Selected carry/enemy HP and state1loss/state2win persist atomically with exact replay fingerprint/absolute receipt. Reserve HP and progression remain unchanged. Refusals OMIT ret_data/data entirely, including auth/transport errors, because native callback may parse present data after non-success. No invented Begin request, original combat authority or reward from End.",
         "tags": [
           "Mirage"
         ],
@@ -13878,14 +13768,14 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/mirage-friend-floors-2026-10-11.md; tests/mirage-contract.ts",
-        "x-runtime-confidence": "Compiled encrypted response verified; native friend panel pending"
+        "x-evidence": "docs/mirage-local-run-2026-10-17.md; docs/mirage-getinfo-enrollment-boundary-2026-10-17.md; docs/mirage-end-carry-transition-native-2026-10-14.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three-stair HTTP lifecycle checked; native scene pending"
       }
     },
-    "/mirage/GetInfo": {
+    "/mirage/GetFriendInfo": {
       "post": {
-        "summary": "Read supported empty Mirage lobby",
-        "description": "Authenticated starter lobby only; no reconstructed run, enemy or reward data. Explicit resets refuse2001. Preserved nondefault carried Hunter HP also refuses before publishing entry or inst_base: native entry[] resets every owned Hunter's Mirage HP to -1. The replica's absent/1000 no-carried convention is local policy, not proof of original entry membership. Refusal and reads preserve saved gameplay.",
+        "summary": "Read Mirage friend floors",
+        "description": "Authenticated request with no floor selector. Native ParseFriendInfo consumes bare ret_data rows {floor,nick_list:string[]}. Returns actual captured Mirage highest-floor records for accepted same-server friends, checking both block directions. No journal means no invented floor. A fresh captured attempt has earned highest0; a fully completed configured floor records its floor; abandonment records0. Ignores forged floor/user selectors. Detached read only, with no account creation, energy regeneration or save write.",
         "tags": [
           "Mirage"
         ],
@@ -13935,7 +13825,7 @@
         },
         "responses": {
           "200": {
-            "description": "Empty starter lobby or unavailable preserved run.",
+            "description": "Mock-compatible response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13958,9 +13848,90 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/mirage-local-run-2026-10-17.md; tests/mirage-run-social.ts",
+        "x-runtime-confidence": "Actual accepted-friend records and privacy/clock preservation checked; native panel pending"
+      }
+    },
+    "/mirage/GetInfo": {
+      "post": {
+        "summary": "GetInfo",
+        "description": "Default guarded empty lobby preserves unrepresented carry. Optional BLUSTONE_MIRAGE_MODE=local-configured plus explicit BLUSTONE_MIRAGE_POLICY_JSON and selected pinned MIRAGE/LEVELING/ST002 CDN resources captures a one-floor schema12 run. Native section selectors entry/inst_base/inst_enemy/ref_stair_list/ref_hero use0/1 and ret_data.ref_stair differs from request ref_stair_list. LOCAL enrollment selects one ordinary owned Hunter per char_id by rank, EXP, lowest ID; initial admitted HP10000, unenrolled -1, no card or item grants. Unknown historical carry refuses. Empty selector reads do not enroll. Captured policy is immutable, retained when disabled. reset1 is explicit LOCAL reward-free ABANDON ONLY, releasing commitments with highest0 and partial claims preserved; it does not create another attempt or claim original reset/assignment law. Captured runs continue their frozen entry cohort beyond the new-enrollment deadline. Completion/abandon releases owned HP to historical local1000. Native scene validation remains pending.",
+        "tags": [
+          "Mirage"
+        ],
+        "parameters": [
+          {
+            "name": "PV-AccessToken",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Transport-session token returned by shared_secret/Exchange. Required for native encrypted requests; distinct from the account OTP sent inside the encrypted form body. Keys survive restart when BLUSTONE_STATE_FILE is configured; otherwise they are in memory only. The local state file contains secrets and must never be published."
+          },
+          {
+            "name": "PV-Signature",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Observed native request-signature header. Exact canonicalization remains unverified."
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenericRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mock-compatible response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Route not present in the recovered catalog."
+          },
+          "500": {
+            "description": "Local scaffold failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/mirage-local-run-2026-10-17.md; docs/mirage-getinfo-enrollment-boundary-2026-10-17.md; docs/mirage-end-carry-transition-native-2026-10-14.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three-stair HTTP lifecycle checked; native scene pending"
       }
     },
     "/mirage/GetNextFloor": {
@@ -14046,10 +14017,10 @@
     },
     "/mirage/RegisterDeck": {
       "post": {
-        "summary": "Recovered /mirage/RegisterDeck route",
-        "description": "The route literal **/mirage/RegisterDeck** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "RegisterDeck",
+        "description": "Configured run only. Native inst_list is a JSON numeric uint64 array; reply is a bare numeric ID array. Real owned enrolled living participants only, at mostfive, exact char_id family exclusion. Changes only selected party and clears prior losing End receipt while preserving enemy and reserve carry. Active captured attempts hold other Hunter/combat mutations as LOCAL protection. Atomic persistence; no fee, HP heal or enrollment through registration.",
         "tags": [
-          "mirage"
+          "Mirage"
         ],
         "parameters": [
           {
@@ -14120,9 +14091,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/mirage-local-run-2026-10-17.md; docs/mirage-getinfo-enrollment-boundary-2026-10-17.md; docs/mirage-end-carry-transition-native-2026-10-14.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three-stair HTTP lifecycle checked; native scene pending"
       }
     },
     "/mirage/Revive": {
@@ -14208,10 +14179,10 @@
     },
     "/mirage/Reward": {
       "post": {
-        "summary": "Recovered /mirage/Reward route",
-        "description": "The route literal **/mirage/Reward** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "Reward",
+        "description": "Configured pending winning stair only. Authenticated floor/stair authorizes captured explicit LOCAL gold amount, once per stair, with inline cur_stair/state/inst_enemy hydration because the native close path need not request GetInfo. Claims progress through original-help3/6/9 count bands; exact enemy/scaling/payout values are explicit local inputs. Claimed-stair retries return CURRENT cache plus current gold prev=cur without paying or rewinding. Last claim sets state0/highestcompletedfloor and releases enrollment. Real write/rename failures roll back game and journal together. No original fragment, item, Gem, EXP, revival price, repeat-entry or next-floor law is invented.",
         "tags": [
-          "mirage"
+          "Mirage"
         ],
         "parameters": [
           {
@@ -14282,9 +14253,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/mirage-local-run-2026-10-17.md; docs/mirage-getinfo-enrollment-boundary-2026-10-17.md; docs/mirage-end-carry-transition-native-2026-10-14.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three-stair HTTP lifecycle checked; native scene pending"
       }
     },
     "/mission/Complete": {
