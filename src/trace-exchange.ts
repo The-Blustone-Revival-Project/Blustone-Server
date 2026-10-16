@@ -1,10 +1,11 @@
+import {hunterCapacity} from "./dorm-expansion.js";
 import { cardInstance, recruitBirthRanks, starterReference } from "./bootstrap.js";
 import { mergeCardBook, type LocalGameState } from "./game.js";
 import { HUNTER_TRACE_ITEMS } from "./hunter-traces.js";
 import { SEARCH_HELPER_SERIAL } from "./search-helpers.js";
 import { CARD_INSTANCE_LIMIT } from "./card-instance-namespace.js";
 
-// Matches the currently advertised lobby capacity; original extensions unknown.
+// Compatibility export for the unchanged LOCAL initial capacity.
 export const LOCAL_CARD_CAPACITY = 100;
 const integer = (raw: unknown) => typeof raw === "number" ? raw :
   typeof raw === "string" && /^\d+$/.test(raw) ? Number(raw) : NaN;
@@ -32,7 +33,7 @@ export function exchangeHunterTraces(payload: Record<string, unknown>, game: Loc
   if (!Number.isSafeInteger(debit) || !Number.isSafeInteger(item.qty) || item.qty < debit)
     return { error: "Insufficient traces for the requested hunters" };
   const owned = [...game.starter_cards, ...game.recruited_cards];
-  if (owned.length + count > LOCAL_CARD_CAPACITY) return { error: "Hunter inventory is full", code: 10027 };
+  if (owned.length + count > hunterCapacity(game)) return { error: "Hunter inventory is full", code: 10027 };
   const next = Math.max(game.next_card_inst_id, ...owned.map((row) => row.inst_id + 1));
   const end = next + count;
   if (!Number.isSafeInteger(next) || next < 1 || !Number.isSafeInteger(end) ||

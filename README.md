@@ -64,6 +64,13 @@ must explicitly define local caps. Existing paid counts survive mode changes;
 coupon purchases capture schema9 history. No coupons or jackpots are issued.
 See the [resource shop contract and setup](docs/resource-shop-native-2026-10-16.md).
 
+Optional `BLUSTONE_DORM_EXPANSION_MODE=local-priced` restores paid dorm expansion
+through the native shop API. It requires an explicit local price ladder in
+`BLUSTONE_DORM_EXPANSION_PRICES_JSON`; historical images do not establish prices
+at the current100-slot fixture. Capacity persists, survives disabling purchases,
+and governs both premium and trace recruitment. See the [dorm setup and native
+contract](docs/dorm-expansion-native-2026-10-16.md).
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

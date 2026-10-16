@@ -1,0 +1,103 @@
+{
+  "kind": "Historical dorm expansion offers, version notice and capacity observations; not an original price schedule or final capacity table",
+  "date_method": "Date/year derive only from filename, not independently verified capture metadata. Both explicit offers are undated.",
+  "scope": "Exact51->54 and60->63 offers have3Manda alternatives anddifferentRupee prices. No quote at100 or original request/reference ID is recovered. Roster counts prove observed denominators only, not initial capacity, a shared account timeline or purchased upgrade history. Versionnotice57->72 is historical, not final2.8 policy.",
+  "quotes": [
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-19.tsv",
+      "source_sha256": "9f1697974b118bf95e5370fa19df8f4e4bdfb3c58cd209f83a599680b4501b3d",
+      "line": 22,
+      "idx": 921,
+      "image_filename": "image0-e8eaa27517b930b4.png",
+      "filename_year": null,
+      "observation_kind": "explicit-dorm-51-to-54",
+      "raw_tsv_row": "921\timage0-e8eaa27517b930b4.png\t640\t1136\tvillage\t\t\t\t\t\tDorm is full; expand 51->54; cost=12800 rupees OR 3 Manda; wallet: rupees=70916 / manda=26 / gems=0\t\tno\thigh\tDorm expansion pricing; dual-currency option",
+      "raw_row_sha256": "1c129baaa67d2ded85e91c391e0ad90be97a7c540a7772cdd7054b2415603e69",
+      "filename_date": null
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-21.tsv",
+      "source_sha256": "d2d5d2baa974d11f69a37f1b6645d90f2e616bbdafc07e66a17299c2e5dfe50d",
+      "line": 43,
+      "idx": 1042,
+      "image_filename": "image-2b00b753c3810938.png",
+      "filename_year": null,
+      "observation_kind": "explicit-dorm-60-to-63",
+      "raw_tsv_row": "1042\timage-2b00b753c3810938.png\t640\t1136\tother\t\t\t\t\t\tDorm-full dialog; [You cannot recruit new hunters because your dorm is full.]; Expand dorm? 60->63; Purchase with Rupees 50000 / with Manda 3; wallets 76884 + 272\t\tno\thigh\tDorm economy: +3 slots = 50000 rupees or 3 Manda",
+      "raw_row_sha256": "69ec6839a3bef864adafa6bce34b5a883ee4d6f17e5cd48e24c1457cfa95e0ee",
+      "filename_date": null
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-38.tsv",
+      "source_sha256": "4425221f2e99304ebf0c11f1aa40f72cf16032932605b1c68654311f0a6466b9",
+      "line": 47,
+      "idx": 1896,
+      "image_filename": "Screenshot_20170712-115628-e66b6a3949ea8223.png",
+      "filename_year": 2017,
+      "observation_kind": "version-1.0.7.0-dorm-max-57-to-72",
+      "raw_tsv_row": "1896\tScreenshot_20170712-115628-e66b6a3949ea8223.png\t1080\t1920\tother\t\t\t\t\t\tv1.0.7.0 Patch Notes: 14 New Features (daily fuel 30->45; dorm max 57->72; expedition/fight-club progress in town; building names; story skip; mail from player info page; ad rewards; forum Events tab; last-area shortcut from assignments; combat points on results page; inventory; manage hunter; chat rooms; daily assignments replace Living the Hunter Life) + Bug Fixes (black screen on calls; auto-combat fuel glitch) + 3rd fix line cut by footer (abnormal amount of experience...); (c) VisualShower; status 93% 11:56 AM\t\tno\thigh\tVersion anchor v1.0.7.0; richest mechanic read of the batch",
+      "raw_row_sha256": "35c418c502c58ddf0a892f159fee4b4586a6e376f06255cce8604e49235c4529",
+      "filename_date": "2017-07-12"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-04.tsv",
+      "source_sha256": "668d0cde87ff9dce5e550124c67945d1cd840125eebd06a81ed588d9d9d82e5b",
+      "line": 2,
+      "idx": 151,
+      "image_filename": "Blustone_2017-06-06-19-17-28-edd8f988a00284c3.png",
+      "filename_year": 2017,
+      "observation_kind": "hunter-list-observed-41-of-45",
+      "raw_tsv_row": "151\tBlustone_2017-06-06-19-17-28-edd8f988a00284c3.png\t1080\t1920\thunter-list\t\t\t\t\t\troster=41/45; powers=32361|30205|33518|34588|37106|32991|12374(MAX)|14857(MAX)|14381|10248|9106|10505\t\tno\thigh\tEnglish client; Hunter List grid, 12 powers legible",
+      "raw_row_sha256": "6e4c4a6a835a582386d2fccdccbe3d38905571b50d97ebec932f6c9d1ebc515e",
+      "filename_date": "2017-06-06"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-04.tsv",
+      "source_sha256": "668d0cde87ff9dce5e550124c67945d1cd840125eebd06a81ed588d9d9d82e5b",
+      "line": 33,
+      "idx": 182,
+      "image_filename": "Blustone_2017-06-19-12-29-33-f4526a1643691b90.png",
+      "filename_year": 2017,
+      "observation_kind": "hunter-list-observed-45-of-51",
+      "raw_tsv_row": "182\tBlustone_2017-06-19-12-29-33-f4526a1643691b90.png\t1080\t1920\thunter-list\t\t\t\t\t\troster=45/51 lower rows; powers=14333|10635|10505|9273|9605|6742(MAX)|5491|4860|5593|5263|7857(MAX)|6708(MAX)\t\tno\tmedium\tHunter List lower grid",
+      "raw_row_sha256": "7d7dfbd4676d21f0ebdceb857f2e026522910bf1b867177b880862ffb923a7f4",
+      "filename_date": "2017-06-19"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-05.tsv",
+      "source_sha256": "b1aa93f1c8ff112e3d7165505c2caea09f05d85b91f0ea91e5397b295f56981d",
+      "line": 15,
+      "idx": 214,
+      "image_filename": "Blustone_2017-07-10-21-05-28-cd20859fbad71865.png",
+      "filename_year": 2017,
+      "observation_kind": "hunter-list-observed-57-of-57",
+      "raw_tsv_row": "214\tBlustone_2017-07-10-21-05-28-cd20859fbad71865.png\t1080\t1920\thunter-list\t\t\t\t\t\troster=57/57; chat=today my 6 5star created; powers=33218;30774;34118;35265;37937;33135;43032(MAX);32414(new Athena, no MAX);42539(MAX);14878;11455;11455\tno\tno\thigh\tHunter List; non-MAX Athena 32414 vs MAX Athena 43032 elsewhere",
+      "raw_row_sha256": "5e174298a558f6cfc81442fb0e67be102413307443d23f544378141bcce29856",
+      "filename_date": "2017-07-10"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-05.tsv",
+      "source_sha256": "b1aa93f1c8ff112e3d7165505c2caea09f05d85b91f0ea91e5397b295f56981d",
+      "line": 20,
+      "idx": 219,
+      "image_filename": "Blustone_2017-07-17-07-46-39-dae0c49c2600010d.png",
+      "filename_year": 2017,
+      "observation_kind": "hunter-list-observed-58-of-69",
+      "raw_tsv_row": "219\tBlustone_2017-07-17-07-46-39-dae0c49c2600010d.png\t1080\t1920\thunter-list\t\t\t\t\t\troster=58/69; powers=33430;30774;37587;34118;35358;28842;37937;35290;43032(MAX);42539(MAX);14362;14878\tno\tno\thigh\tHunter List top of 58/69 roster",
+      "raw_row_sha256": "2ae8d114b425c5c060e512278c0a39da9c5b8e48d5a36a327ffe95fa636a6266",
+      "filename_date": "2017-07-17"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-11.tsv",
+      "source_sha256": "aaef87c3375684e25b7e78c6a5ca416f03ed59c1c15ee4cfc91e56c4f4fdae75",
+      "line": 25,
+      "idx": 524,
+      "image_filename": "CD572BA4-FB33-43DD-88D8-BD6B3B8E78B7-4bd1bc25798284dc.png",
+      "filename_year": null,
+      "observation_kind": "hunter-list-observed-18-of-39",
+      "raw_tsv_row": "524\tCD572BA4-FB33-43DD-88D8-BD6B3B8E78B7-4bd1bc25798284dc.png\t1536\t2048\thunter-list\t\t\t\t\t\tHunter List 18/39 sorted by Strength: 16252 Lv.13 Leader; 9630 Lv.MAX Defending; 9534 Lv.29; 9005 Lv.28; 8739 Lv.MAX; 7626 Lv.23 Dispatch; 6375 Lv.17 Mirage Expedition; 5976 Lv.1; 5369 Lv.1; 5320 Lv.1; 5150 Lv.1; 5118 Lv.1; 4940 Lv.1; 4882 Lv.1; 2612 Lv.1; 2311 Lv.1\t\tno\tmedium-high\tHunter grid with status tags (Leader/Defending/Dispatch/Mirage Expedition)",
+      "raw_row_sha256": "75f0cb8195a293147f2b09dea9fd46ff10c55ec88c0bcf97e0b1755727f6412f",
+      "filename_date": null
+    }
+  ]
+}

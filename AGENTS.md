@@ -1,4 +1,71 @@
-## Latest continuation: fuel and Fight Club refill reconstruction (2026-10-16)
+## Latest continuation: persistent dorm expansion and recruitment capacity (2026-10-16)
+
+Previous checkpoint da24b85 reconstructed historical fuel/Fight Club refills.
+This checkpoint restores optional paid dorm expansion and central capacity
+admission for BOTH implemented Hunter producers. Goal ACTIVE; native dorm UI
+PENDING. No live/private save, device input, client/APK, original asset, Docker,
+Collector or inference changes. Input hold persists. DataDump remains read-only.
+
+Eight exact rows/six sources are preserved in
+resources/reference/dorm-expansion-screen-quotes.json, SHA256
+5b463282280450b47dca1edc375a23fe8b68773b1cde99f89b37a1b9c2306104.
+Undated offers show51→54 for12800gold/3Manda and60→63 for50000gold/3Manda.
+Publisher v1.0.7.0 screenshot reports maximum57→72. NO price at100, universal
+Manda price, initial/final cap, original item ID or fee formula is inferred.
+docs/dorm-expansion-image-quotes-2026-10-16.md retains raw provenance;
+docs/dorm-expansion-native-2026-10-16.md owns native evidence/setup/limitations.
+
+CreateCardInvenExtendGb8dd04 selects use_type9 atGb8dd22/24; preview reads
+PlayData.card_inven_max+158 and adds atoi(item.effect) atGb8dfca..dfe4.
+Native Manda1 and gold2 purchases use selected reference/instance0/qty1 through
+/shop/BuyGlobalItem. Shared callbackGf8b940..9d6 applies user.card_inven_max.cur.
+No separate endpoint or coupon path invented. LOCAL local_dorm_expansion use9/
+effect3/globaltype2 publishes explicit combined lifetime tiers. Normal1/1 receipt,
+iap scalars or gold pair, per-payment target_inst counter and no consumed stock.
+GetCardInvenCntGaebbe2 loads FULL owned map size+7c; training/resource cards
+also reach full map insertionGae9470→Gaedc1c. All owned Hunters consume slots.
+
+BLUSTONE_DORM_EXPANSION_MODE=local-priced requires explicit
+BLUSTONE_DORM_EXPANSION_PRICES_JSON array,1..100 contiguous tiers beginning100
+and stepping3, positive signed gold/Manda prices. No default price. Examples
+100:{gold50000,manda3},103:{gold60000,manda4} are LOCAL authored test prices,
+NOT historical100-slot quotes. Existing default100 slots remain; no startup
+stock, Hunter or capacity grant. Original final economy/maximum remain unknown.
+
+First paid expansion stores game.dorm_expansion={capacity,manda,gold} with
+capacity100+3*(manda+gold), lifetime/no-reset LOCAL policy. Lobby, expansion
+and both recruitment paths share this capacity. Paid slots survive disabled
+mode or shortened policy. Overfull old rosters remain owned without hidden cap
+increase; new recruits require room for the whole batch. Guided trace exchange
+uses the same admission; Search itself drops traces. Future direct Hunter
+rewards must use the same capacity gate. No card deletion/stat/party retuning.
+
+Captured history promotes state to10 and requires quest/dispatch arrays.
+Schemas1..9 carrying dorm_expansion refuse before normalization;10 requires
+actual history. Resource9/Rupee8/profile7/bait6/comments5/linear4 remain accepted;
+actual resource+Rupee+profile9→10 restart is tested. No-history accounts retain
+their prior schema. Capacity/wallet commit in one write, exact scalar/counter
+reference/field-absence rollback on real.tmp and blocked-rename failures.
+
+Premium recruitment lacked trace's prior100-slot gate. It now checks whole
+single/bundle capacity before payment/ID allocation and uses captured paid slots.
+Failed persist also restores both Manda pools/allocator/card tail/exact book
+reference. Existing lazy energy recovery is a separate preceding boundary.
+Gacha full-dorm reply retains LOCAL cnt0/cardnull/no-charge grammar; specific
+native10027 popup behavior is unproved. Trace keeps its existing10027 refusal.
+
+All195 npm test programs, five resource-profile suites, build and independent
+review PASS. Focused source/compiled checks cover type9/type2, explicit prices,
+combined vs per-payment counters, both currencies, schema10/old-reader guards,
+first/subsequent actual write+rename rollback, mode-off retained slots, full
+bundle refusal, trace+gacha recruitment beyond100, preserved overflow and peer.
+Compiled HTTP proof uses its OWN ephemeral-loopback child/disposable prices/
+state, signed P384/HMAC/AES purchases100→103→106, lobby/counter/wallet schema10
+and same persisted key/OTP restart. No Android/live deployment claim.
+npm run test:dorm-expansion repeats built state+HTTP checks. Next native dorm
+UI validation and further original areas/rewards remain pending; goal ACTIVE.
+
+## Historical continuation: fuel and Fight Club refill reconstruction (2026-10-16)
 
 Previous checkpoint c0d5302 restored optional historical Rupee exchange.
 This checkpoint adds optional archive-2018-base-only resource shops: AP60/BP2

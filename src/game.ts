@@ -1,3 +1,4 @@
+import {normalizeDormExpansion,type DormExpansion} from "./dorm-expansion.js";
 /**
  * Small persistent local-game model used by the compatibility handlers.
  *
@@ -130,6 +131,8 @@ export interface LocalGameState {
   items: LocalItemInstance[];
   /** Cards awarded after the bootstrap inventory. Never gacha popup metadata. */
   recruited_cards: LocalCardInstance[];
+  /** Captured paid dorm expansion only; absent means the existing LOCAL100 slots. */
+  dorm_expansion?: DormExpansion;
   /** Account-owned bootstrap instances, snapshotted once so training changes
    * and consumption survive reload instead of recreating the starter roster. */
   starter_cards: LocalCardInstance[];
@@ -373,6 +376,7 @@ export function normalizeLocalGameState(raw: unknown): LocalGameState {
       return structuredClone(value.owned_gems) as Record<string,unknown>[];
     })()}),
     ...(value.owned_fish===undefined?{}:{owned_fish:ownedFishingInventory(value.owned_fish)}),
+    ...(value.dorm_expansion===undefined?{}:{dorm_expansion:normalizeDormExpansion(value.dorm_expansion)}),
     leader_inst_id: integer("leader_inst_id", fallback.leader_inst_id),
     items: Array.isArray(value.items) ? value.items as LocalItemInstance[] : [],
     recruited_cards: Array.isArray(value.recruited_cards)

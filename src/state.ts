@@ -1,3 +1,4 @@
+import {DORM_SHOP_ID,configuredDormExpansion,hunterCapacity,dormExpansionReferences,dormPurchaseInventory,planDormExpansion,type DormExpansionPolicy} from "./dorm-expansion.js";
 import crypto from "node:crypto";
 import { guildLobby,type GuildRecord } from "./guild-lobby.js";
 import { establishedGuildRecords } from "./guild-records.js";
@@ -573,6 +574,7 @@ export class ServerState {
   private readonly baitShopPolicy?:BaitShopPolicy;
   private readonly rupeeShopPolicy?:RupeeShopPolicy;
   private readonly resourceShopPolicy?:ResourceShopPolicy;
+  private readonly dormExpansionPolicy?:DormExpansionPolicy;
   private readonly veteranGiftPolicy?:VeteranGiftPolicy;
   private readonly profileMode:"disabled"|"archive-profile-projection";
   private readonly fishingSaleMode:"disabled"|"local-bound";
@@ -610,6 +612,7 @@ export class ServerState {
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
+      dormExpansionMode?:"disabled"|"local-priced";dormExpansionPrices?:unknown;
       resourceShopMode?:"disabled"|"archive-2018-base-only";resourceApDailyLimit?:unknown;resourceBpDailyLimit?:unknown;
       rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
       veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
@@ -618,6 +621,8 @@ export class ServerState {
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    this.dormExpansionPolicy=configuredDormExpansion(Object.hasOwn(options,"dormExpansionMode")?options.dormExpansionMode:process.env.BLUSTONE_DORM_EXPANSION_MODE??"disabled",
+      Object.hasOwn(options,"dormExpansionPrices")?options.dormExpansionPrices:process.env.BLUSTONE_DORM_EXPANSION_PRICES_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_DORM_EXPANSION_PRICES_JSON));
     this.resourceShopPolicy=configuredResourceShop(Object.hasOwn(options,"resourceShopMode")?options.resourceShopMode:process.env.BLUSTONE_RESOURCE_SHOP_MODE??"disabled",
       Object.hasOwn(options,"resourceApDailyLimit")?options.resourceApDailyLimit:process.env.BLUSTONE_RESOURCE_AP_DAILY_LIMIT,
       Object.hasOwn(options,"resourceBpDailyLimit")?options.resourceBpDailyLimit:process.env.BLUSTONE_RESOURCE_BP_DAILY_LIMIT);
@@ -672,7 +677,7 @@ export class ServerState {
     for(const price of skillLevelRows)skillMaterialRequirements([price],this.skillMaterialIds); // Before restore/private save writes.
     const fishItems=Object.hasOwn(options,"fishingItems")?options.fishingItems:
       process.env.BLUSTONE_FISHING_ITEMS_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_FISHING_ITEMS_JSON);
-    this.fishingItems=configuredFishingItems(fishItems,new Set([...knownItems,"LU001","LU003","GC6",RUPEE_SHOP_ID,RUPEE_COUPON_ID,...starterReference.map(row=>row.base.id)]));
+    this.fishingItems=configuredFishingItems(fishItems,new Set([...knownItems,"LU001","LU003","GC6",DORM_SHOP_ID,RUPEE_SHOP_ID,RUPEE_COUPON_ID,...starterReference.map(row=>row.base.id)]));
     const fishCatalogue=Object.hasOwn(options,"fishingCatalogue")?options.fishingCatalogue:
       process.env.BLUSTONE_FISHING_CATALOGUE_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_FISHING_CATALOGUE_JSON);
     if(fishCatalogue!==undefined) this.fishingCatalogue=configuredFishingCatalogue(fishCatalogue,new Set(this.fishingItems.map(row=>row.id)));
@@ -768,12 +773,14 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
-    if(saved.version!==9&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+    if(saved.version!==10&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
+      throw new TypeError("Paid dorm expansion requires state schema10");
+    if(saved.version!==9&&saved.version!==10&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
       [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
       throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
@@ -783,10 +790,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -852,6 +859,8 @@ export class ServerState {
     }
     if(saved.version===9&&![...this.gameByPvid.values()].some(game=>game.fuel_shop.coupon!==undefined||game.bp_shop.coupon!==undefined))
       throw new TypeError("Schema9 requires captured resource coupon history");
+    if(saved.version===10&&![...this.gameByPvid.values()].some(game=>game.dorm_expansion!==undefined))
+      throw new TypeError("Schema10 requires captured paid dorm expansion");
     if(saved.dispatches!==undefined) {
       if(!Array.isArray(saved.dispatches))throw new TypeError("Malformed dispatch journal collection");
       for(const row of saved.dispatches) {
@@ -865,7 +874,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -894,14 +903,15 @@ export class ServerState {
     if (!this.stateFile) return;
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
     // Older writers must refuse journals/settings they cannot preserve.
+    const dorms=[...this.gameByPvid.values()].some(game=>game.dorm_expansion!==undefined);
     const resourceCoupons=[...this.gameByPvid.values()].some(game=>game.fuel_shop.coupon!==undefined||game.bp_shop.coupon!==undefined);
     const rupees=[...this.accountsByPvid.values()].some(account=>account.rupeeShopCounter!==undefined);
     const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const snapshot = { version: dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -1164,7 +1174,7 @@ export class ServerState {
       stage: stageAchieve,
       user: {
         ap: game.ap, bp: game.bp, gdp: 0, max_ap: game.max_ap, max_bp: game.max_bp, max_gdp: 100,
-        gold: game.gold, honor: game.honor, group_exp: game.exp, vip_exp: game.vip_exp, card_inven_max: 100,
+        gold: game.gold, honor: game.honor, group_exp: game.exp, vip_exp: game.vip_exp, card_inven_max: hunterCapacity(game),
         ap_charge_time: resourceChargeTime(game, "ap"), bp_charge_time: resourceChargeTime(game, "bp"), leader_inst_id: game.leader_inst_id,
         is_newbiew: 0, is_dailyquest_newbie: 0, is_shared: 0, pm_key: "", tuto: tutorial,
         area_achieve: areaAchieve,
@@ -1374,10 +1384,12 @@ export class ServerState {
     }
     return this.envelope({ item: game.items, global_item: [...fuelPurchaseInventory(game.fuel_shop), ...fuelPurchaseInventory(game.bp_shop, BP_SHOP_ID),
       ...(this.baitShopPolicy?baitPurchaseInventory(account.baitShopCounter,Date.now()):[]),
-      ...(this.rupeeShopPolicy?rupeePurchaseInventory(account.rupeeShopCounter,Date.now()):[])] });
+      ...(this.rupeeShopPolicy?rupeePurchaseInventory(account.rupeeShopCounter,Date.now()):[]),
+      ...(this.dormExpansionPolicy||game.dorm_expansion?dormPurchaseInventory(game.dorm_expansion):[])] });
   }
 
   buyFuel(payload: Record<string, unknown>, headers: Record<string, string>) {
+    if(payload.target_ref_id===DORM_SHOP_ID)return this.expandDorm(payload,headers);
     if(payload.target_ref_id===RUPEE_SHOP_ID)return this.buyRupees(payload,headers);
     if(payload.target_ref_id==="LU003")return this.buyBait(payload,headers);
     const account=this.accountFor(payload,headers),loaded=this.gameByPvid.get(account.pvid);
@@ -1393,6 +1405,17 @@ export class ServerState {
     try{this.persist();}catch(error){
       Object.assign(game,before);game[plan.resource]=resourceBefore;game[plan.shopKey]=counter;if(coupon)coupon.qty=quantity!;throw error;
     }
+    return this.envelope(plan.receipt);
+  }
+
+  private expandDorm(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid);
+    if(!this.dormExpansionPolicy||!game)return this.failure(2001,"Local dorm expansion is unavailable");
+    let plan;try{plan=planDormExpansion(payload,game,this.dormExpansionPolicy);}
+    catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid dorm purchase");}
+    const before={gold:game.gold,gacha_free_qty:game.gacha_free_qty,gacha_iap_qty:game.gacha_iap_qty},counter=game.dorm_expansion;
+    Object.assign(game,{gold:plan.gold,gacha_free_qty:plan.gacha_free_qty,gacha_iap_qty:plan.gacha_iap_qty,dorm_expansion:plan.counter});
+    try{this.persist();}catch(error){Object.assign(game,before);if(counter===undefined)delete game.dorm_expansion;else game.dorm_expansion=counter;throw error;}
     return this.envelope(plan.receipt);
   }
 
@@ -1764,8 +1787,9 @@ export class ServerState {
     }
     const bait=this.baitShopPolicy?baitShopReferences(this.baitShopPolicy):{item:[],global_item:[]};
     const rupee=this.rupeeShopPolicy?rupeeShopReferences(this.rupeeShopPolicy):{item:[],global_item:[]};
-    return {...base,item:[...base.item,...bait.item,...rupee.item,...(this.veteranGiftPolicy?[veteranGiftItem(this.veteranGiftPolicy)]:[]),...this.fishingItems.map(row=>({...row}))],
-      global_item:[...base.global_item,...bait.global_item,...rupee.global_item]};
+    const dorm=this.dormExpansionPolicy?dormExpansionReferences(this.dormExpansionPolicy):{item:[],global_item:[]};
+    return {...base,item:[...base.item,...bait.item,...rupee.item,...dorm.item,...(this.veteranGiftPolicy?[veteranGiftItem(this.veteranGiftPolicy)]:[]),...this.fishingItems.map(row=>({...row}))],
+      global_item:[...base.global_item,...bait.global_item,...rupee.global_item,...dorm.global_item]};
   }
 
   mirageAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
@@ -2949,6 +2973,10 @@ export class ServerState {
         user: { iap_qty: game.gacha_iap_qty, free_iap_qty: game.gacha_free_qty, gold: { cur: game.gold } },
         error_code: "GACHA_INSTANCE_CAPACITY", cost: 0, granted: 0,
       });
+    if(granted>0&&game.starter_cards.length+game.recruited_cards.length+granted>hunterCapacity(game))return this.envelope({
+      cnt:0,card:null,user:{iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty,gold:{cur:game.gold}},error_code:"GACHA_DORM_FULL",cost:0,granted:0});
+    const before={gacha_free_qty:game.gacha_free_qty,gacha_iap_qty:game.gacha_iap_qty,next_card_inst_id:game.next_card_inst_id,
+      book:game.card_book,count:game.recruited_cards.length};
     if (affordable && cost > 0) {
       // Native confirmation says green Manda is used first (screenshot94).
       // Free/paid displayed values match these pools; charge TOTAL once.
@@ -2985,7 +3013,10 @@ export class ServerState {
       game.recruited_cards.push(...instances);
       game.card_book = mergeCardBook(game.card_book, instances);
       game.next_card_inst_id += granted;
-      this.persist();
+      try{this.persist();}catch(error){
+        game.gacha_free_qty=before.gacha_free_qty;game.gacha_iap_qty=before.gacha_iap_qty;game.next_card_inst_id=before.next_card_inst_id;
+        game.recruited_cards.splice(before.count);game.card_book=before.book;throw error;
+      }
     }
 
     return this.envelope({

@@ -1143,7 +1143,18 @@ paths:
         deterministically is explicitly LOCAL and no original RNG or GC6 bonus
         is inferred. First captured Rupee counter uses schema8; prior
         schemas1..7 remain unchanged without it. Native Rupee UI validation
-        remains pending."
+        remains pending. Optional BLUSTONE_DORM_EXPANSION_MODE=local-priced adds
+        LOCAL local_dorm_expansion/use_type9/effect3.
+        BLUSTONE_DORM_EXPANSION_PRICES_JSON must explicitly price contiguous
+        capacity100,103,... tiers; no historical price at100 is established.
+        Global.type2 indexes combined lifetime Manda/Rupee purchases. Native
+        qty1/instance0/price_type1or2 buys three slots, with
+        user.card_inven_max.prev/cur, iap scalars or gold pair, and separate
+        paid currency target_inst counter. No coupon path or startup grant.
+        Captured capacity persists under schema10 with rollback, survives
+        disabled mode, and governs whole premium/trace recruitment batches.
+        Default remains100; oversized existing rosters stay owned and cannot add
+        more. Native dorm popup validation is pending."
       tags:
         - Shop and economy
       parameters: *a1
@@ -1177,7 +1188,7 @@ paths:
         earning/display remains unverified; capsule purchases are unsupported.
   /shop/BuyGlobalItem:
     post:
-      summary: Purchase a local AP or BP refill
+      summary: Purchase a configured resource refill or dorm expansion
       description: "Native item reference is ret_data{item,trace,global_item};
         item.effect is a STRING. Hunter trace use_type3/effect005 or006 binds
         explicit local item IDs to Gerard/Sylvester. Flat trace rows use
@@ -1256,7 +1267,18 @@ paths:
         deterministically is explicitly LOCAL and no original RNG or GC6 bonus
         is inferred. First captured Rupee counter uses schema8; prior
         schemas1..7 remain unchanged without it. Native Rupee UI validation
-        remains pending."
+        remains pending. Optional BLUSTONE_DORM_EXPANSION_MODE=local-priced adds
+        LOCAL local_dorm_expansion/use_type9/effect3.
+        BLUSTONE_DORM_EXPANSION_PRICES_JSON must explicitly price contiguous
+        capacity100,103,... tiers; no historical price at100 is established.
+        Global.type2 indexes combined lifetime Manda/Rupee purchases. Native
+        qty1/instance0/price_type1or2 buys three slots, with
+        user.card_inven_max.prev/cur, iap scalars or gold pair, and separate
+        paid currency target_inst counter. No coupon path or startup grant.
+        Captured capacity persists under schema10 with rollback, survives
+        disabled mode, and governs whole premium/trace recruitment batches.
+        Default remains100; oversized existing rosters stay owned and cannot add
+        more. Native dorm popup validation is pending."
       tags:
         - Shop and economy
       parameters: *a1
@@ -11105,8 +11127,14 @@ paths:
   /shop/GachaPremium:
     post:
       summary: Recruit hunters (gacha pull)
-      description: "[RECOVERED] The premium recruitment pull, reachable in game for
-        free from the defeat screen's \"Recruit New Hunter\" button
+      description: "Whole draw admission uses shared persisted dorm capacity (default
+        LOCAL100); insufficient space returns local cnt0/cardnull with no
+        currency, allocator or ownership change. Captured expansion survives
+        disabled purchase mode. Failed durable recruitment writes restore both
+        Manda pools, allocator, recruited tail and exact book reference.
+        Specific native server-full-popup behavior remains unverified.
+        [RECOVERED] The premium recruitment pull, reachable in game for free
+        from the defeat screen's \"Recruit New Hunter\" button
         (analysis/research/in-game-stats.md §5.3). The client really issues
         `POST /shop/GachaPremium` with the 9-key set `app_code, app_ver,
         bonus_level, cnt, gacha_type, item_inst_id, market, otp, pvid` and `cnt:
@@ -11458,22 +11486,23 @@ paths:
       summary: Recruit hunters from owned traces
       description: "Recovered RequestShardExchange sends item_inst_id and cnt (number
         of hunters). Validates owned unlocked local trace instance, published
-        hunter birth rank/stat support, trace quantity, lobby capacity100 and
-        safe fresh actor IDs. Consumes cnt times the published threshold:
-        default local10 Sylvester/20 Gerard, or opt-in archive-images-2017-2018
-        historical screenshot20/40; returns card ARRAY of complete owned
-        instances and consumed_inst_list inst_id/qty decrement delta. CSRAchieve
-        ParseLobbyEnter requires dailyquest_min_stage empty string plus neutral
-        daily_quest/linear_quest arrays. Persists debit, ownership, allocator
-        and cardbook together, preserving wallets/party/stars/tutorials. Failed
-        write/rename restores original quantities, recruited-array tail,
-        allocator and exact cardbook reference for retry. Guided tutorial37/1
-        uses the same transaction with its acknowledgement in one write and
-        restores its original tutorial reference on failure. No nonce: funded
-        repeats are additional exchanges; reconcile ownership after a lost
-        response. Original final-version thresholds/stats remain incomplete; the
-        historical projection uses local item IDs and does not change grants or
-        prior receipts. Native success presentation remains unverified."
+        hunter birth rank/stat support, trace quantity, shared persisted dorm
+        capacity (default LOCAL100) and safe fresh actor IDs. Consumes cnt times
+        the published threshold: default local10 Sylvester/20 Gerard, or opt-in
+        archive-images-2017-2018 historical screenshot20/40; returns card ARRAY
+        of complete owned instances and consumed_inst_list inst_id/qty decrement
+        delta. CSRAchieve ParseLobbyEnter requires dailyquest_min_stage empty
+        string plus neutral daily_quest/linear_quest arrays. Persists debit,
+        ownership, allocator and cardbook together, preserving
+        wallets/party/stars/tutorials. Failed write/rename restores original
+        quantities, recruited-array tail, allocator and exact cardbook reference
+        for retry. Guided tutorial37/1 uses the same transaction with its
+        acknowledgement in one write and restores its original tutorial
+        reference on failure. No nonce: funded repeats are additional exchanges;
+        reconcile ownership after a lost response. Original final-version
+        thresholds/stats remain incomplete; the historical projection uses local
+        item IDs and does not change grants or prior receipts. Native success
+        presentation remains unverified."
       tags:
         - Missions and combat
       parameters: *a1
