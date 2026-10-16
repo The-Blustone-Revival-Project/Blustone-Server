@@ -1,3 +1,50 @@
+## Latest continuation: corroborated library traces and atomic recruitment (2026-10-16)
+
+Previous checkpoint834cd5a added optional historical005/006 requirements.
+This checkpoint extends that profile to11 exact named base identities AND
+repairs ordinary/guided recruitment persistence failures. Goal ACTIVE;
+BlueStacks input hold persists. No live profile/client/private-save change,
+APK rebuild/install, original-asset modification or Docker/Collector operation.
+
+Historical quantities are002Mowgli40,003Nene80,004Tyltyl20,005Gerard40,
+006Sylvester20,009Captain20,012KarlSteiner80,013Denali40,017Lapis20,
+036Bear80,040Bibi80. Exact current bootstrap IDs/names were inspected; never
+join from recalled numeric order. Nine additional quantities affect ONLY
+existing material-profile library navigation collect_qty. No new exchange
+whitelist members, acquisition links, ownership, stats, birth ranks or grants.
+Default fixture/navigation unchanged; Guide payout stillLOCAL10.
+
+resources/reference/hunter-trace-image-thresholds-2017-2018.json pins17 raw
+TSV rows/nine source hashes, eleven joins, three exclusions. Runtime integrity
+SHA2565c1b38f5dcddc4997f2f002a910ba70004efb472e736a620b25591c0e6afe402
+is checked by src/trace-threshold-evidence.ts; exposed audit data is detached.
+Lantern001 conflicting80vs20 and Vincent010 conflicting80vs160 are HELD;
+Bright049 onlyone medium19/80 observation is HELD. Their navigation1 remains
+LOCALfallback, never a recoveredprice. Raw conflicting pixels were not found
+inside DataDump; Desktop originals NOTaccessed. Tyltyl004 usesWorld'sBestCook
+observations, notInWonderland. Captain renamedplayernames stilltitle009.
+Evidence describes historical image transcriptions, not finalversionauthority.
+
+Reproduced real persist-throw bugs in PieceExchange AND guided37/1: traces
+10->0, newcard/allocator+1 and guidedACK remained after failed save. Shared
+exchange now prepares book before mutation; catch restores exact prior qty,
+recruited tail/array, book ref and allocator. Guided caller supplies one real
+persist callback for both recruitment+ACK; outer catch restores exact prior
+tutorial ref. Native ordinaryconsumed_inst_list versus guidedconsume_result.item
+unchanged. Funded ordinary repeats remain new paid exchanges; guided cleared
+repeat is no-write/no-grant. No invented transaction nonce or backfill.
+
+Focused tests/build/independent source and code reviews PASS. New tests use
+isolated local/history imports, actual ID/name checks, all11values/3holds,
+unchanged other profiles/ownership/acquisition/shop, and real .tmp/rename
+failures after actually earned guide traces with exact all-account/game/nested
+refs/bytes, one-write retries and restart. All182 gameplay programs PASS.
+Compiled --fixture --profile current-e6-materials with historical flag PASS:
+P384/HMAC/AES GetItem exact11+fallback,14references,139packages and process
+restart; report compiled_historical_trace_requirements TRUE. No native UI
+claim. See docs/trace-exchange-atomic-2026-10-16.md and updated historical
+trace projection evidence. Native library/recruitment validation still pending.
+
 ## Latest continuation: image-backed historical trace requirements (2026-10-16)
 
 Previous checkpoint b3b3c1c repaired Arena save-failure recovery. This

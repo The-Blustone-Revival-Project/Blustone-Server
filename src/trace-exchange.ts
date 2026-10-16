@@ -39,11 +39,24 @@ export function exchangeHunterTraces(payload: Record<string, unknown>, game: Loc
       end > Math.min(CARD_INSTANCE_LIMIT, SEARCH_HELPER_SERIAL))
     return { error: "Hunter instance capacity reached" };
   const cards = Array.from({ length: count }, (_, index) => cardInstance(next + index, trace.cardId, rank));
-  item.qty -= debit;
-  game.recruited_cards.push(...cards);
-  game.card_book = mergeCardBook(game.card_book, cards);
-  game.next_card_inst_id = end;
-  persist();
+  // Prepare the replacement book before touching earned inventory. Preserve
+  // existing row/array identities when the durable write or rename fails.
+  const book = mergeCardBook(game.card_book, cards), previousBook = game.card_book;
+  const previousQuantity = item.qty, previousCount = game.recruited_cards.length;
+  const previousAllocator = game.next_card_inst_id;
+  try {
+    item.qty -= debit;
+    game.recruited_cards.push(...cards);
+    game.card_book = book;
+    game.next_card_inst_id = end;
+    persist();
+  } catch (error) {
+    item.qty = previousQuantity;
+    game.recruited_cards.splice(previousCount);
+    game.card_book = previousBook;
+    game.next_card_inst_id = previousAllocator;
+    throw error;
+  }
   // CSRAchieve::ParseLobbyEnter G844918 always reads the first as a string;
   // an empty string leaves its prior gate unchanged, empty lists iterate no rows.
   return { data: { card: cards, consumed_inst_list: [{ inst_id: item.inst_id, qty: debit }],

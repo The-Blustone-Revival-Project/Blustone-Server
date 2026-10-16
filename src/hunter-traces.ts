@@ -2,6 +2,7 @@ import { CARD_REFERENCE_PROFILE, starterReference, starterStages } from "./boots
 import { fuelItemReference } from "./shop-fuel.js";
 import { SEARCH_CAPSULE_ID, searchCapsuleReference } from "./search-capsules.js";
 import { ARENA_HONOR_DISPLAY_REFERENCE } from "./arena-honor-reference.js";
+import {historicalTraceQuantity} from "./trace-threshold-evidence.js";
 
 /** Import-time opt-in only. Historical threshold evidence does not recover
  * original trace item IDs, drops or final-version economic authority. */
@@ -15,16 +16,17 @@ if(!["local-fixture","archive-images-2017-2018"].includes(TRACE_THRESHOLD_PROFIL
  * Evidence: docs/trace-threshold-image-projection-2026-10-16.md. */
 export const HUNTER_TRACE_ITEMS = Object.freeze([
   Object.freeze({ id: "local_gerard_trace", cardId: "005", rank: 2, name: "Gerard Traces",
-    collect_qty: TRACE_THRESHOLD_PROFILE==="archive-images-2017-2018"?40:20 } as const),
+    collect_qty: TRACE_THRESHOLD_PROFILE==="archive-images-2017-2018"?historicalTraceQuantity("005")!:20 } as const),
   Object.freeze({ id: "local_sylvester_trace", cardId: "006", rank: 1, name: "Sylvester Traces",
-    collect_qty: TRACE_THRESHOLD_PROFILE==="archive-images-2017-2018"?20:10 } as const),
+    collect_qty: TRACE_THRESHOLD_PROFILE==="archive-images-2017-2018"?historicalTraceQuantity("006")!:10 } as const),
 ] as const);
 export const HUNTER_TRACE_STAGE = "n_01_07";
 
 /** Library SetRole filters CardInfo.collect_qty before building its row vector.
  * An empty role vector is dereferenced at original ELF8630b4. Item PostProcess
  * supplies collect_qty through use_type3/effect=exact Hunter reference ID.
- * Original trace item IDs and thresholds are unknown; positive1 is exclusively
+ * Original trace item IDs remain unknown. Historical named denominators are
+ * projected only with the opt-in; unresolved positive1 is exclusively
  * local navigation policy, not an earned item or a recovered exchange price.
  * Keep these out of HUNTER_TRACE_ITEMS: that list owns Search/claim semantics.
  * No acquisition link, inventory stack, drop or exchange handler is added. */
@@ -34,7 +36,7 @@ export function libraryNavigationTraceItems() {
   return starterReference.filter((card) => !priorBindings.has(card.base.id)).map((card) => ({
     id: `local_library_trace_${card.base.id}`, name: `${card.base.name} Traces`,
     rank: Math.min(...card.stat.map((row) => row.rank)),
-    use_type: 3, effect: card.base.id, collect_qty: 1,
+    use_type: 3, effect: card.base.id, collect_qty: TRACE_THRESHOLD_PROFILE==="archive-images-2017-2018"?historicalTraceQuantity(card.base.id)??1:1,
     thumbnail_id: "", sell_price: 0,
     desc: "Original trace acquisition and exchange remain unreconstructed.",
   }));

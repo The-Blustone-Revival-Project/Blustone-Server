@@ -25,3 +25,40 @@ The thresholds affect future exchange quotes and debits only. Default behavior i
 ## Verification
 
 `tests/trace-threshold-projection.ts` starts isolated processes for unset, explicit local, historical and invalid profiles, setting the environment before any game imports. It checks reference/exchange agreement, exact20/40 historical consumption, shortage and lock refusals, deep immutability, and immunity to later environment edits. Disposable production ServerState accounts earn the guide capsule through an actual mission, begin/finish guided Search, receive exactly10, restart and replay without another grant or durable write. A default-profile10 receipt is also reopened under the historical profile without rewriting bytes. The historical tutorial exchange refuses at10; default exchanges still consume10.
+
+## Extended library projection
+
+The same opt-in now projects eleven corroborated named base identities:002
+Mowgli40,003 Nene80,004 Tyltyl20,005 Gerard40,006 Sylvester20,009 Captain20,
+012 Karl Steiner80,013 Denali40,017 Lapis20,036 Bear80 and040 Bibi80. The
+nine additional entries change only collect_qty on already-published library
+navigation items in the materials profile. The exchange whitelist remains
+005/006; no new acquisition sources, trace grants, birth ranks or ownership.
+Default local navigation thresholds remain1.
+
+The curated resources/reference/hunter-trace-image-thresholds-2017-2018.json
+retains17 exact raw TSV observations, nine source file hashes, per-hunter
+observation joins and three explicit exclusions. The runtime verifies its
+SHA256 before projecting it; audit access returns detached data. These are
+published transcription observations, not a new visual reread or proof of
+final-version requirements. Source files need not exist beside the server.
+
+Lantern001 is excluded because named rows conflict80 vs20; Vincent010
+conflicts80 vs160. Bright049 has only a single medium-confidence19/80 row.
+Their existing navigation1 stays an explicit local fallback, not a recovered
+price. Contradictory screenshot pixels were not found inside DataDump; Desktop
+originals were not accessed. Tyltyl004 uses World's Best Cook observations
+only, distinct from In Wonderland Tyltyl. Captain009 is identified by the
+Captain title despite player-renamed names. No rarity-wide rule is inferred.
+
+Tests compare isolated local/historical materials-profile processes: exact
+ID/name joins, all11 quantities, three holds, detached evidence, unchanged
+reference stats/inventory/birth ranks, item identities, acquisition links and
+shop offers. Library-only identities remain outside supported recruitment.
+
+Compiled encrypted verification also passes with the historical environment
+flag and node scripts/verify-independent.mjs --fixture --profile
+current-e6-materials. Report compiled_historical_trace_requirements is true;
+the server is started from an unrelated working directory and validates all
+11 values plus unresolved fallback through authenticated GetItem. This remains
+backend verification, without native library pixels or live profile activation.

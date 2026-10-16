@@ -807,6 +807,11 @@ try {
       const bindings=items.item.filter(item=>item.use_type===3 && item.effect===card.base.id);
       assert.equal(bindings.length,1,'One compiled item post-processing binding per ordinary Hunter');
       assert.ok(bindings[0].collect_qty>0,'Compiled Library navigation threshold');
+      if(process.env.BLUSTONE_TRACE_THRESHOLD_PROFILE==='archive-images-2017-2018') {
+        const requirements={'002':40,'003':80,'004':20,'005':40,'006':20,'009':20,'012':80,'013':40,'017':20,'036':80,'040':80};
+        assert.equal(bindings[0].collect_qty,requirements[card.base.id]??1,
+          'Compiled historical requirement must preserve exact named quantities and unresolved fallback');
+      }
     }
     for(const role of [1,2,3,4])
       assert.ok(ordinaryReferences.some(card=>card.base.role===role && card.base.is_source===0),'Compiled nonempty ordinary Library role');
@@ -1058,6 +1063,7 @@ try {
     added_original_jet_groups:verifiedOriginals,live_profile_activation:false,
     ordinary_reference_count:ordinaryReferences.length,authenticated_mirage_friend_floors:true,
     compiled_library_navigation_bindings:profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials',native_library_rendering_verified:false,
+    compiled_historical_trace_requirements:profile.env.BLUSTONE_CARD_REFERENCE_PROFILE==='materials'&&process.env.BLUSTONE_TRACE_THRESHOLD_PROFILE==='archive-images-2017-2018',
     authenticated_lobby_and_references:true,unique_campaign_area_ownership:true,hidden_origin_rewards_absent:true,
     episode_log:true,resource_packages:rows.length,resource_range_206:true,
     compiled_portrait:true,persisted_transport_and_credentials:true,

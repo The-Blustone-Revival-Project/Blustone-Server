@@ -1,0 +1,294 @@
+{
+  "label": "HISTORICAL IMAGE TRANSCRIPTION",
+  "release": "manual-scrapes-2026-10-14",
+  "scope": "Per-hunter historical library thresholds, not original final-version prices or grants. Costume variants excluded.",
+  "sources": {
+    "batch-09.tsv": {
+      "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-09.tsv",
+      "sha256": "2e65a698e709e6607d38d4643e8a46af77931baf492e5b3ec8bfd3445e6738da"
+    },
+    "batch-10.tsv": {
+      "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-10.tsv",
+      "sha256": "b0f6c3c11a60df18901b3751bfa3d01127cae7c1d484e4e4469c115b7d5c30e1"
+    },
+    "batch-13.tsv": {
+      "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-13.tsv",
+      "sha256": "6200aec8418e90c23645014fba5c67b6d349516ab4d11eb824fed02de8ca2e8a"
+    },
+    "batch-25.tsv": {
+      "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-25.tsv",
+      "sha256": "7fa7fb9f2ebe056f67031f41b15d8ab2c3e00405160e065276a2440403d1e112"
+    },
+    "batch-26.tsv": {
+      "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-26.tsv",
+      "sha256": "7a62440e707263947887b7bee0bd9c8bedd3df04982b141dde12e371d0c695b9"
+    },
+    "batch-28.tsv": {
+      "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-28.tsv",
+      "sha256": "9c7e8edc0f66847cf09ddc4e2496184b422be45ba3f6f67312aeabdb9bd07b83"
+    },
+    "batch-30.tsv": {
+      "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-30.tsv",
+      "sha256": "2d6e84b6b3a8b39f55a39b9464c25752c531caa94397d5b40dba29a9905a4376"
+    },
+    "batch-46.tsv": {
+      "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-46.tsv",
+      "sha256": "ef0adb864a6b2f896db3c6fed30c55ea3fb9d9d52a9ce3fa58b0fa253272633e"
+    },
+    "batch-54.tsv": {
+      "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-54.tsv",
+      "sha256": "8feb8dcdf48d62877b3bd7dd02add0c401364bdb56ddb71b4b758859dd5ae840"
+    }
+  },
+  "observations": [
+    {
+      "id": "b09-l18",
+      "source": "batch-09.tsv",
+      "line": 18,
+      "idx": 417,
+      "raw_tsv": "417\tCapture_2017-05-28-18-11-19-7cacf5630e07ceaa.png\t720\t1196\trecruit\tKarl Steiner; Mowgli; Rebecca; Sylvester; Lapis; Balian\tImmortal One; Forgotten Forest; Twilight Bat Clan; Undying Soldier; Speedy Swordsman; Wandering Fighter\t\t\t012; 002; 021; 006; 017; 019\tscreen=Find a hunter; Offense=5/6; Critical Damage Bonus=5.0% -> 6.0%; Karl Steiner=46/80 Items Collected; Mowgli=29/40 Items Collected; Rebecca=21/40 Items Collected; Sylvester=336/20 Recruit; Lapis=124/20 Recruit; Balian=176/20 Recruit\tno\tno\thigh\tClient spells Mowgli (catalog 002 Mowgli: title discrepancy); bonus bar zoom-verified"
+    },
+    {
+      "id": "b09-l30",
+      "source": "batch-09.tsv",
+      "line": 30,
+      "idx": 429,
+      "raw_tsv": "429\tCapture_2017-05-28-23-23-10-dfd15312fecd5fe3.png\t720\t1196\trecruit\tLantern; Levi; Teddy Bommer; Metis; Locke; Sienna\tFirst Ever Hunter; Lieutenant; Teddy Bear Terrorist; Fiery Soul; Locke and Cash CEO; Firepower Maniac\t\t\t001; 015; 025; 007; 014; 020\tscreen=Find a hunter; Bomber=6/6; Attack Bonus=6.0% -> 7.0%; Lantern=54/80 Items Collected; Levi=86/40 Recruit; Teddy Bommer=40/40 Recruit; Metis=114/20 Recruit; Locke=105/20 Recruit; Sienna=165/20 Recruit\tno\tno\thigh\tClient spells Teddy Bommer (catalog 025 Teddy Bomber: discrepancy); bonus bar zoom-verified"
+    },
+    {
+      "id": "b09-l38",
+      "source": "batch-09.tsv",
+      "line": 38,
+      "idx": 437,
+      "raw_tsv": "437\tCapture_2017-05-29-19-41-12-1867a3e173a83bd5.png\t720\t1196\trecruit\tNene; Gerard; HoZhihui; Hecate; Robin\tWalking Disaster; Invincible One; Captain; Protector; King of Survival\t\t\t003; 005; 009; 011; 018\tscreen=Find a hunter; Defense=5/5; Defense Bonus=5.0% -> 6.0%; Nene=58/80 Items Collected; Gerard=13/40 Items Collected; Captain HoZhihui=0/20 Items Collected; Hecate=169/20 Recruit; Robin=79/20 Recruit\tno\tno\thigh\tKEY: avatar Captain bears player name HoZhihui (catalog 009 name Captain); anchors idx423 identity"
+    },
+    {
+      "id": "b09-l42",
+      "source": "batch-09.tsv",
+      "line": 42,
+      "idx": 441,
+      "raw_tsv": "441\tCapture_2017-05-30-17-55-25-ea2c8e075e35687c.png\t720\t1196\trecruit\tAkasha; Denali; Sunny; Tyltyl; Bruce Bang; Tyltyl\tMaiden of Tree (truncated); Clean Fairy; Experiments 2; World's Best Cook; Death Metal Preacher; In Wonderland\t\t\t008; 013; 022; 004; 016; 026\tscreen=Find a hunter; Support=5/6; Health Bonus=5.0% -> 6.0%; Akasha=67/80; Denali=38/40; Sunny=0/40; Tyltyl=1/20; Bruce Bang=167/20 Recruit; Tyltyl In Wonderland=0/20; all Items Collected; Saved to Gallery toast\tno\tno\thigh\tDiscrepancies: client Maiden of Tree (catalog 008 Maiden of Gods, truncated display); client Experiments 2 (catalog 022 Experiment 2)"
+    },
+    {
+      "id": "b10-l28",
+      "source": "batch-10.tsv",
+      "line": 28,
+      "idx": 477,
+      "raw_tsv": "477\tCapture_2017-06-02-23-20-01-4489d81b08fc587d.png\t720\t1196\trecruit\t\t\t\t\t\tscreen=Find a hunter; tab=Offense 6/7; bonus=Critical Damage Bonus 6.0% > 7.0%; Elite Messenger Hermes 4/80; Immortal One Karl Steiner 51/80; Forgotten Forest Mowgli 11/40; Twilight Bat Clan Rebecca 40/40 Recruit; Undying Soldier Sylvester 148/20 Recruit; Wandering Fighter Balian 135/20 Recruit; Speedy Swordsman Lapis 121/20 Recruit\tno\tno\thigh\tRecruit trace board; Karl Steiner title matches catalog 012"
+    },
+    {
+      "id": "b10-l29",
+      "source": "batch-10.tsv",
+      "line": 29,
+      "idx": 478,
+      "raw_tsv": "478\tCapture_2017-06-02-23-20-05-c936000ff63002b9.png\t720\t1196\trecruit\t\t\t\t\t\tscreen=Find a hunter; tab=Defense 5/6; bonus=Defense Bonus 5.0% > 6.0%; Walking Disaster Nene 58/80; Invincible One Gerard 40/40 Recruit; Hard-Knock Life Rico 11/40; HoZhihui 3/20; Protector Hecate 165/20 Recruit; King of Survival Robin 91/20 Recruit\tno\tno\thigh\tRecruit trace board; Gerard title matches catalog 005; HoZhihui uses romanized Korean name on screen"
+    },
+    {
+      "id": "b10-l30",
+      "source": "batch-10.tsv",
+      "line": 30,
+      "idx": 479,
+      "raw_tsv": "479\tCapture_2017-06-02-23-20-09-f8c1f552b68e8a60.png\t720\t1196\trecruit\t\t\t\t\t\tscreen=Find a hunter; tab=Bomber Attack Bonus 6/6; bonus=6.0% > 7.0%; Teddy Bear Terrorist Teddy Bommer 13/40 (screen spelling Bommer); First Ever Hunter Lantern 80/20 Recruit; Lieutenant Levi (count cut); Fiery Soul Metis 77/20 Recruit; Locke and Cash CEO Locke 24/20 Recruit; Firepower Maniac Sienna 27/20 Recruit; Maiden of Tree Akasha (count cut)\tno\tno\thigh\tTitle discrepancies vs catalog: screen Teddy Bommer vs catalog 025 Teddy Bomber; screen Maiden of Tree vs catalog 008 Maiden of Gods"
+    },
+    {
+      "id": "b10-l31",
+      "source": "batch-10.tsv",
+      "line": 31,
+      "idx": 480,
+      "raw_tsv": "480\tCapture_2017-06-02-23-20-13-cfc9afaca2e876c0.png\t720\t1196\trecruit\t\t\t\t\t\tscreen=Find a hunter; tab=Support Health Bonus 5/6; bonus=5.0% > 6.0%; Maiden of Tree Akasha 67/80; World's Best Cook Tyltyl 1/20; Death Metal Preacher Bruce Bang 160/20 Recruit; In Wonderland Tyltyl 0/20; Clean Fairy Denali 129/40 Recruit; Experiments 2 Sunny 0/40\tno\tno\thigh\tTitle discrepancies vs catalog: screen Maiden of Tree vs catalog 008 Maiden of Gods; screen Experiments 2 vs catalog 022 Experiment 2"
+    },
+    {
+      "id": "b13-l27",
+      "source": "batch-13.tsv",
+      "line": 27,
+      "idx": 626,
+      "raw_tsv": "626\timage0-3afd49ff3825f3ab.png\t750\t1334\trecruit\t\t\t\t\t\tSupport=11/12; Health Bonus=11.0%->12.0%; top row=88/80 + 83/80 + 47/40 Recruit (names illegible); Bruce Bang=157/20 Recruit; 185/20 Recruit (name-uncertain); 10/160 Items Collected; Therapy=2/80; Bright=19/80; Pansy=4/80 Items Collected\t\tno\tmedium\tTop-row and 185/20 hero names not legible; counts OCR-verified"
+    },
+    {
+      "id": "b25-l28",
+      "source": "batch-25.tsv",
+      "line": 28,
+      "idx": 1227,
+      "raw_tsv": "1227\timage-7047d6c44dff6be6.png\t640\t1136\trecruit\t\t\t\t\t\tFind a hunter; Find hunters by collecting hunter traces; Defense 8/9; Defense Bonus 8.0%->9.0%; Walking Disaster Nene 46/80; Steely Bodyguard Kain 7/80; Flame of the Battlefield Athena 9/80 (client wording; catalog=Flame of Battlefield); Nature's Gift Bear 0/80; Invincible One Gerard 31/40; Halloween Witch Riko 0/40; Hard-Knock Life Riko 11/40; King of Survival Robin 27/20 Recruit; Protector Hecate 18/20\t\tno\thigh\tDefense trace board; TITLE note: client Flame of the Battlefield vs catalog Flame of Battlefield (extra the)"
+    },
+    {
+      "id": "b26-l16",
+      "source": "batch-26.tsv",
+      "line": 16,
+      "idx": 1265,
+      "raw_tsv": "1265\timage-7ff9c942e8b0cfaf.png\t640\t1136\trecruit\t\t\t\t\t\tFind a hunter; Find hunters by collecting hunter traces; Offense 5/6; Critical Damage Bonus 5.0%->6.0%; Strange Twins Lily & Lyla 0/160; Renegade Vincent 0/80; Ice Skating Fairy Yuri 1/80; Noble Spear Natalia 5/80; Wolf Child Bibi 18/80; Immortal One Karl Steiner 0/80; The Frost Witch Octavia 3/80; Naughty Child Hunter Santa Clauster 5/80; Santa Girl Rebecca 0/80\t\tno\thigh\tTrace board; TITLE DISCREPANCY: client The Frost Witch vs catalog Frost Witch (028)"
+    },
+    {
+      "id": "b26-l31",
+      "source": "batch-26.tsv",
+      "line": 31,
+      "idx": 1280,
+      "raw_tsv": "1280\timage-861a03d6b24aca90.png\t1125\t2436\trecruit\t\t\t\t\t\tEntered Channel 0007; Offense 11/12; Critical Damage Bonus 11.0%->12.0%; Renegade Vincent 0/160; Strange Twins Lily & Lyla 4/160; Noble Spear Natalia 9/80; Wolf Child Bibi 14/80; Immortal One Karl Steiner 37/80; Girl with Two Faces Heidi 11/80; bottom row 3x Lv.1 (counts cut)\t\tno\thigh\tTrace board; near-max Offense team track (11/12, 11.0%->12.0%)"
+    },
+    {
+      "id": "b28-l12",
+      "source": "batch-28.tsv",
+      "line": 12,
+      "idx": 1361,
+      "raw_tsv": "1361\timage-a52bba870dba5326.png\t1242\t2208\trecruit\t\t\t\t\t\tFind a hunter; Offense 8/9; Critical Damage Bonus 8.0%->9.0%; Elite Messenger Hermes 3/80 Items Collected; Immortal One Karl Steiner 8/80; Forgotten Forest Mowgli 28/40; Twilight Bat Clan Rebecca 15/40 Items Collected; Undying Soldier Sylvester 39/20 Recruit; Wandering Fighter Balian 61/20 Recruit; Speedy Swordsman Lapis 55/20 Recruit\t\tno\thigh\tTrace board; TITLE DISCREPANCY: client Wandering Fighter Balian vs catalog 019 Wandering Swordsman (032 Scar holds Wandering Fighter)"
+    },
+    {
+      "id": "b28-l22",
+      "source": "batch-28.tsv",
+      "line": 22,
+      "idx": 1371,
+      "raw_tsv": "1371\timage-a9edc7bdb6411b3f.png\t1242\t2208\trecruit\t\t\t\t\t\tFind a hunter; Defense 6/6; Defense Bonus 6.0%->7.0%; Walking Disaster Nene 21/80; Invincible One Gerard 21/40; Hard-Knock Life Rico 0/40; Captain xSephirothx 3/20 (player-renamed Captain); Protector Hecate 44/20 Recruit; King of Survival Robin 189/20 Recruit\t\tno\thigh\tTrace board; NAME note: client Rico vs catalog 024 Riko; renamed-Captain row (catalog 009)"
+    },
+    {
+      "id": "b30-l50",
+      "source": "batch-30.tsv",
+      "line": 50,
+      "idx": 1499,
+      "raw_tsv": "1499\timage-e227ef15d21783b4.png\t640\t1136\tother\t\t\t\t\t\tFind a hunter (Defense tab); Walking Disaster Nene 64/80 / Steely Bodyguard Kain 7/80 / Flame of the Battlefield Athena 15/80 / Nature's Gift Bear 4/80 / Invincible One Gerard 38/40 / Halloween Witch Riko 0/40 / Hard-Knock Life Riko 29/40 / King of Survival Robin 7/20 / Protector Hecate 19/20; all Lv.1; all Items Collected\t\tno\thigh\tTITLE NOTE: client Flame of the Battlefield vs catalog 027 Flame of Battlefield (client ADDS the); other titles match catalog (003/029/036/005/024/018/011); top rows zoom-verified (z1499_traces)"
+    },
+    {
+      "id": "b46-l39",
+      "source": "batch-46.tsv",
+      "line": 39,
+      "idx": 2288,
+      "raw_tsv": "2288\tScreenshot_20170929-081339-e648331bd8dd8114.png\t1080\t1920\tother\t\t\t\t\t\tHunter Library Find a hunter, Support tab 4/5; Health Bonus 4.0% -> 5.0%; Maiden of Gods Akasha Lv.1 170/80 Recruit / Biologist Acerola 5/40 / Clean Fairy Denali 38/40 / Experiment #2 Sunny 0/40 / World's Best Cook Tyltyl 12/20 (zoom-verified spelling, z2288_tyltyl2) / In Wonderland Tyltyl 81/20 Recruit / Death Metal Preacher Bruce Bang 9/20\t\tno\thigh\tTwo Tyltyl variants side by side; catalog has only World's Best Cook (004)"
+    },
+    {
+      "id": "b54-l42",
+      "source": "batch-54.tsv",
+      "line": 42,
+      "idx": 2691,
+      "raw_tsv": "2691\tScreenshot_20180515-160742-66d0c1e71b59db62.png\t720\t1280\trecruit\t\t\t\t\t\tRecruit a Hunter trace-collection: Offense 11/12; Critical Damage Bonus 11.0% -> 12.0%; Renegade Vincent 0/160 / Strange Twins Lily & Lyla 0/160 / Noble Spear Natalia 3/80 / Wolf Child Bibi 29/80 / Girl with Two Faces Heidi 0/80 / Ice Skating Fairy Yuri 34/80; all Lv.1; Items Collected; chat letters : Lo-lo-loooovvvveee... (full-view)\t\tno\thigh\tTrace costs 160/80 by hunter; Bibi 29/80 + Yuri 34/80 nearest completion; hit=no (no stars/stats)"
+    }
+  ],
+  "requirements": [
+    {
+      "ref_id": "002",
+      "hunter": "Mowgli",
+      "collect_qty": 40,
+      "observations": [
+        "b09-l18",
+        "b10-l28"
+      ]
+    },
+    {
+      "ref_id": "003",
+      "hunter": "Nene",
+      "collect_qty": 80,
+      "observations": [
+        "b09-l38",
+        "b10-l29"
+      ]
+    },
+    {
+      "ref_id": "004",
+      "hunter": "Tyltyl",
+      "collect_qty": 20,
+      "observations": [
+        "b10-l31",
+        "b46-l39"
+      ]
+    },
+    {
+      "ref_id": "005",
+      "hunter": "Gerard",
+      "collect_qty": 40,
+      "observations": [
+        "b09-l38",
+        "b10-l29"
+      ]
+    },
+    {
+      "ref_id": "006",
+      "hunter": "Sylvester",
+      "collect_qty": 20,
+      "observations": [
+        "b09-l18",
+        "b10-l28"
+      ]
+    },
+    {
+      "ref_id": "009",
+      "hunter": "Captain",
+      "collect_qty": 20,
+      "observations": [
+        "b09-l38",
+        "b28-l22"
+      ]
+    },
+    {
+      "ref_id": "012",
+      "hunter": "Karl Steiner",
+      "collect_qty": 80,
+      "observations": [
+        "b09-l18",
+        "b10-l28"
+      ]
+    },
+    {
+      "ref_id": "013",
+      "hunter": "Denali",
+      "collect_qty": 40,
+      "observations": [
+        "b09-l42",
+        "b10-l31"
+      ]
+    },
+    {
+      "ref_id": "017",
+      "hunter": "Lapis",
+      "collect_qty": 20,
+      "observations": [
+        "b09-l18",
+        "b28-l12"
+      ]
+    },
+    {
+      "ref_id": "036",
+      "hunter": "Bear",
+      "collect_qty": 80,
+      "observations": [
+        "b25-l28",
+        "b30-l50"
+      ]
+    },
+    {
+      "ref_id": "040",
+      "hunter": "Bibi",
+      "collect_qty": 80,
+      "observations": [
+        "b26-l16",
+        "b26-l31"
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "ref_id": "001",
+      "hunter": "Lantern",
+      "reason": "Conflicting named80 and20 denominators; no era transition or transcription resolution.",
+      "observations": [
+        "b09-l30",
+        "b10-l30"
+      ]
+    },
+    {
+      "ref_id": "010",
+      "hunter": "Vincent",
+      "reason": "Conflicting named80 and160 denominators; original era transition unknown.",
+      "observations": [
+        "b26-l16",
+        "b26-l31",
+        "b54-l42"
+      ]
+    },
+    {
+      "ref_id": "049",
+      "hunter": "Bright",
+      "reason": "Only one medium-confidence numeric observation; insufficient unambiguous corroboration.",
+      "observations": [
+        "b13-l27"
+      ]
+    }
+  ]
+}

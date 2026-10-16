@@ -21,7 +21,9 @@ npm start -- --host 127.0.0.1 --port 18081 --base-url http://127.0.0.1:18081 --s
 
 Historical Hunter trace requirements are available with
 `BLUSTONE_TRACE_THRESHOLD_PROFILE=archive-images-2017-2018`: Sylvester20 and
-Gerard40, corroborated by extracted screenshots. The default retains the local
+Gerard40, corroborated by extracted screenshots, plus nine library-only
+requirements in the materials profile. Lantern/Vincent conflicts and Bright
+uncertainty retain the existing local fallback; recruitment eligibility stays unchanged. The default retains the local
 10/20 fixture. Item IDs, drops and the fixed10 guided reward remain local;
 selecting historical requirements does not backfill traces or alter receipts.
 See the [image projection evidence](docs/trace-threshold-image-projection-2026-10-16.md).

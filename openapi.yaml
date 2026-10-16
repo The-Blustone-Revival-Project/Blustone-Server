@@ -932,11 +932,14 @@ paths:
         requires actual stars on that source. Trace IDs and source association
         remain local. Default thresholds are Sylvester10/Gerard20 fixtures;
         optional BLUSTONE_TRACE_THRESHOLD_PROFILE=archive-images-2017-2018
-        publishes screenshot-supported historical20/40, shared by PieceExchange.
-        Historical applicability to the final client is unproven; drops and
-        guide rewards remain local. This reference read grants nothing. Local
-        local_ap/use_type1 provides10 AP and local_bp/use_type2 provides5 BP;
-        thumbnails IT_ST/IT_LT are reconstructed candidates. Global prices
+        publishes screenshot-supported historical20/40, shared by PieceExchange,
+        plus nine corroborated library-only denominators in the materials
+        profile. Conflicting Lantern/Vincent and weak Bright observations stay
+        unresolved with the existing local navigation1; no exchange eligibility
+        expands. Historical applicability to the final client is unproven; drops
+        and guide rewards remain local. This reference read grants nothing.
+        Local local_ap/use_type1 provides10 AP and local_bp/use_type2 provides5
+        BP; thumbnails IT_ST/IT_LT are reconstructed candidates. Global prices
         publish exact buy counts1..3 for Manda5/type1 and gold100/type2; missing
         native tiers return0, never cap-to-last. Buy request requires
         target_ref_id, price_type, item_inst_id0, qty1. Unsupported
@@ -994,11 +997,14 @@ paths:
         requires actual stars on that source. Trace IDs and source association
         remain local. Default thresholds are Sylvester10/Gerard20 fixtures;
         optional BLUSTONE_TRACE_THRESHOLD_PROFILE=archive-images-2017-2018
-        publishes screenshot-supported historical20/40, shared by PieceExchange.
-        Historical applicability to the final client is unproven; drops and
-        guide rewards remain local. This reference read grants nothing. Local
-        local_ap/use_type1 provides10 AP and local_bp/use_type2 provides5 BP;
-        thumbnails IT_ST/IT_LT are reconstructed candidates. Global prices
+        publishes screenshot-supported historical20/40, shared by PieceExchange,
+        plus nine corroborated library-only denominators in the materials
+        profile. Conflicting Lantern/Vincent and weak Bright observations stay
+        unresolved with the existing local navigation1; no exchange eligibility
+        expands. Historical applicability to the final client is unproven; drops
+        and guide rewards remain local. This reference read grants nothing.
+        Local local_ap/use_type1 provides10 AP and local_bp/use_type2 provides5
+        BP; thumbnails IT_ST/IT_LT are reconstructed candidates. Global prices
         publish exact buy counts1..3 for Manda5/type1 and gold100/type2; missing
         native tiers return0, never cap-to-last. Buy request requires
         target_ref_id, price_type, item_inst_id0, qty1. Unsupported
@@ -11151,12 +11157,15 @@ paths:
         instances and consumed_inst_list inst_id/qty decrement delta. CSRAchieve
         ParseLobbyEnter requires dailyquest_min_stage empty string plus neutral
         daily_quest/linear_quest arrays. Persists debit, ownership, allocator
-        and cardbook together, preserving wallets/party/stars/tutorials. No
-        nonce: funded repeats are additional exchanges; reconcile ownership
-        after a lost response. Original final-version thresholds/stats remain
-        incomplete; the historical projection uses local item IDs and does not
-        change grants or prior receipts. Native success presentation remains
-        unverified."
+        and cardbook together, preserving wallets/party/stars/tutorials. Failed
+        write/rename restores original quantities, recruited-array tail,
+        allocator and exact cardbook reference for retry. Guided tutorial37/1
+        uses the same transaction with its acknowledgement in one write and
+        restores its original tutorial reference on failure. No nonce: funded
+        repeats are additional exchanges; reconcile ownership after a lost
+        response. Original final-version thresholds/stats remain incomplete; the
+        historical projection uses local item IDs and does not change grants or
+        prior receipts. Native success presentation remains unverified."
       tags:
         - Missions and combat
       parameters: *a1

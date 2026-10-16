@@ -1962,10 +1962,20 @@ export class ServerState {
       assertOwnedCardCompatibility(game);
       // One persist includes ownership, trace debit and the tutorial ACK.
       // No direct live grant or automatic flag clear; actual native UI requests it.
-      const exchanged = exchangeHunterTraces({ item_inst_id: ownedTrace.inst_id, cnt: 1 }, game, () => {});
+      const previousTutorial = game.tutorial;
+      let exchanged: ReturnType<typeof exchangeHunterTraces>;
+      try {
+        exchanged = exchangeHunterTraces({ item_inst_id: ownedTrace.inst_id, cnt: 1 }, game, () => {
+          game.tutorial = mergeTutorialRows(previousTutorial, [{ type, step, is_cleared: 1 }]);
+          this.persist();
+        });
+      } catch (error) {
+        // The shared handler restores its debit, cards, allocator and book;
+        // this caller owns the additional tutorial replacement in that write.
+        game.tutorial = previousTutorial;
+        throw error;
+      }
       if ("error" in exchanged) return this.failure(exchanged.code ?? 2001, exchanged.error);
-      game.tutorial = mergeTutorialRows(game.tutorial, [{ type, step, is_cleared: 1 }]);
-      this.persist();
       return this.envelope({ type, step, card: exchanged.data.card,
         consume_result: { item: exchanged.data.consumed_inst_list } });
     }
