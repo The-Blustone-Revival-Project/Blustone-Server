@@ -43,7 +43,8 @@ import {syncOwnedCards} from "./inventory-card-sync.js";
 import {syncOwnedItems} from "./inventory-item-sync.js";
 import {parseUserDetailTargets,ownedUserDetail} from "./user-details.js";
 import {planLeaderSelection} from "./leader-selection.js";
-import {ARENA_RIVAL_PVID,arenaRival} from "./arena.js";
+import {normalizeArenaComments,planArenaComments,type ArenaComments} from "./arena-comments.js";
+import {ARENA_RIVAL_PVID,arenaRival,arenaProfile} from "./arena.js";
 import {LOCAL_MAIL_SENDER} from "./mail.js";
 import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
 import { planGroupRankUp } from "./group-rank-up.js";
@@ -197,6 +198,7 @@ export interface Account {
   lastLoginAt: number;
   passwordHash: string;
   socialBlocks?: SocialBlocks;
+  arenaComments?:ArenaComments;
 }
 
 export class NativeAuthError extends Error {
@@ -730,9 +732,9 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
     const ids = new Set<number>();
@@ -742,6 +744,7 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
+      if(raw.arenaComments!==undefined&&saved.version!==5)throw new TypeError("Arena comments require state schema5");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -750,6 +753,8 @@ export class ServerState {
       this.indexAccount(account);
       this.nextPvid = Math.max(this.nextPvid, account.pvid + 1);
     }
+    if(saved.version===5&&![...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined))
+      throw new TypeError("Schema5 requires captured Arena comments");
     if (saved.socialLikes !== undefined)
       this.socialLikes = normalizeSocialLikes(saved.socialLikes, (pvid) => this.socialAccountProfile(pvid));
     if(saved.guilds!==undefined) this.guilds=establishedGuildRecords(saved.guilds,this.accountsByPvid);
@@ -810,7 +815,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4)throw new TypeError("Linear quests require state schema4");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5)throw new TypeError("Linear quests require state schema4 or5");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -838,10 +843,11 @@ export class ServerState {
   private persist() {
     if (!this.stateFile) return;
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
-    // Older version1 writers must refuse a journal they cannot preserve.
-    const snapshot = { version: [...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(this.quests.size?{quests:[...this.quests]}:{}),
+    // Older writers must refuse journals/settings they cannot preserve.
+    const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
+    const snapshot = { version: comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -2094,7 +2100,8 @@ export class ServerState {
           if(id!==actor.pvid&&!this.localSocialProfile(actor.pvid,id))throw new TypeError("Detailed profile target is not visible on this server");
           const game=this.gameByPvid.get(id);if(!game)throw new TypeError("Detailed profile owned snapshot is unavailable");
           assertOwnedCardCompatibility(game);
-          return ownedUserDetail(id,game,order,refs);
+          const detail=ownedUserDetail(id,game,order,refs),comments=this.accountsByPvid.get(id)!.arenaComments;
+          return comments?{...detail,win_message:comments.win_message,lose_message:comments.lose_message}:detail;
         }
         if(id===LOCAL_MAIL_SENDER.pvid)return partyProfile(id);
         if(id===ARENA_RIVAL_PVID)return partyProfile(id,arenaRival().thumbnail);
@@ -2910,8 +2917,25 @@ export class ServerState {
 
   arenaAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     const account = this.accountFor(payload, headers), game = this.gameFor(account);
-    const result = arenaRequest(route, payload, account.pvid, game, () => this.persist());
+    const result = arenaRequest(route, payload, account.pvid, game, () => this.persist(),account.arenaComments);
     return "error" in result ? this.failure(2001, result.error) : this.envelope(result.data);
+  }
+
+  arenaCommentAction(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid);
+    if(!game)return this.failure(2001,"Arena profile snapshot is unavailable");
+    let plan,battle;
+    try {
+      plan=planArenaComments(account.arenaComments,payload.comment_info);
+      battle=arenaProfile(account.pvid,game.arena,plan.next);
+      for(const key of ["rank","season_no","weekly_no","league_level","rating_point","league_win","win","lose"] as const)
+        if(!Number.isInteger(battle[key])||battle[key]<0||battle[key]>0xffff_ffff)throw new TypeError("Arena profile counter exceeds native uint32");
+    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Arena comment");}
+    if(plan.changed) {
+      const before=account.arenaComments;account.arenaComments=plan.next;
+      try{this.persist();}catch(error){if(before===undefined)delete account.arenaComments;else account.arenaComments=before;throw error;}
+    }
+    return this.envelope({user:{battle}});
   }
 
   searchAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
@@ -3680,6 +3704,7 @@ function normalizeStoredAccount(raw: Record<string, unknown>): Account {
     lastLoginAt: Number.isSafeInteger(raw.lastLoginAt) ? Number(raw.lastLoginAt) : 0,
     passwordHash: String(raw.passwordHash ?? ""),
     ...(raw.socialBlocks === undefined ? {} : { socialBlocks: { ...raw.socialBlocks as SocialBlocks } }),
+    ...(raw.arenaComments===undefined?{}:{arenaComments:normalizeArenaComments(raw.arenaComments)}),
   };
 }
 

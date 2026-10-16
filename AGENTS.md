@@ -1,3 +1,57 @@
+## Latest continuation: persistent Fight Club messages (2026-10-16)
+
+Previous turn was progress:fc8e234 ownedleader+atomicparty saves. This turn
+restores /arena/SaveComment, persistssettings andreturnsEXACTfullnativeown
+battleprofile. Goal ACTIVE/nativeUIeditingPENDING. No directlive/private/
+profile/client operations performed; allstate verification disposable.
+
+NativeCSRSyncFC.RequestUpdateMeGf6193c takes3nullableCstrings: start_message,
+win_message,lose_message (nullptrOMITSkey), JSONdumpGf61c2c→comment_info
+FORMSTRINGGf61c36, auth5, /arena/SaveCommentGf61d5a. No numericmessage-type
+wirefield. UIpopup0start/1win/2lose isLOCALswitch, passesALL3cachedstrings.
+ReqUpdateMeCBGf62154 guardstransport0+signedbodyresult1 thenParseMeGf62212..26;
+ParseMeG946994 readsret_data.user.battle→ParseUserG9430f8→REPLACESowncache+118.
+Thusret_data:{user:{battle:COMPLETEprofile}} mandatory; 3stringsalone/{}unsafe.
+No GenericSyncUser/wallet/itemparse inthiscallback.
+
+src/arena-comments.ts partialknown3keys, completevalidatedstorage, current
+localdefaults unchanged. LOCAL128Unicodecodepoints/losslessUTF8/nonempty/
+noC0controls; originalserverlength/clearinglawunknown, UIemptyinputreject
+observed. No trim/casefold/profanityrulederivedfromGuild. {}noopnotcreate
+prefs; firstexplicitpatch capturesfull3defaultsEVENsameasdefault; equal
+existingupdatesackwithoutwrite. Server-owned Account.arenaComments, NOT
+clientextra_data. ArenaEnter.user.battle all3actualmessages andrealuserdetail
+win/losepropagate; notice/NPCfixturedefaultsunchanged.
+
+Settings-bearingstate nowVERSION5: Accountpreferencesstrictlyvalidated;
+mandatorydispatches/questsarraysevenempty; existinglinearjournalsallowed4OR5.
+Older1..4withprefsreject;5withoutprefs/malformedfields/missingarraysreject.
+Oldwriters' explicitversionguards refuse5 ratherthansilentlydropmetadata.
+Comments-freeaccounts retainversions1..4. Registrationextra_data remains
+opaque/unchanged andcannotseedserver-ownedsettings. No directprivate-schema
+promotion. Futureoldrelease rollback must respectversion5onceprefsareused.
+
+arenaCommentAction auth+directloadedgameMap (no gameFor/regen/alloc), plans
+text/fullArenaProfile andvalidatesnativeU32counters beforeanymutation. Full
+receiptpreservesactualpvid/league/rating/win/lose plus existinglocalrank/
+season/refreshdefaults. Persistfailuredelete-vs-restoreexactoldprefsreference;
+no partialsuccess/ownership/wallet/ranking/attempt/clock changes. Empty/equal
+requestcachebodyfullcorrectwithoutwrite.
+
+176 gameplayprograms/build/independentreviewPASS. Unicode/patch/noop,
+actualArenaEnter+realprofilepropagation/auth/peerisolation/metadata injection,
+.tmp+renameexactrollback, old1..4stability/v5restart/downgrade/corruption and
+nonemptyquest/dispatchhistory preservation covered. Compiled--fixture
+--exercise-arena-comments ECDH/HMAC/AES fullprofile/preference-onlychange/
+no-write repeat/details/schema5processrestartPASS; flagTRUE. Baselineflushes
+priorlazyresource reads beforeexactSaveCommentgamecomparison. OpenAPI
+regenerated; docs/arena-comments-native-2026-10-16.md ownsprovenance/limits.
+
+No APK rebuild/install/release owed. BlueStacksinputhold persists; workonly
+Server/Instrumented; DataDump/retainedworkspace read-only; Collector/Docker/
+inference untouched. BroaderFightClubranking/refresh/originaleconomy and
+othergameareas remainincomplete; nofullgameparityclaim.
+
 ## Latest continuation: owned leader selection and atomic formations (2026-10-16)
 
 Previous turn was progress:c6266e5 real5-slotdetailedprofiles. This turn adds

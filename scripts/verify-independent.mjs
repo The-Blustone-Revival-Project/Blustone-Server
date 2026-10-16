@@ -50,6 +50,9 @@ const authoredEquipmentRankPrice={rank:exerciseEquipmentUpgrade?2:1,attr:1,price
 const authoredEquipmentPrices=exerciseEquipmentUpgrade?[authoredEquipmentLevelPrice,{...authoredEquipmentLevelPrice,level:11,price:29}]:[authoredEquipmentLevelPrice];
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
+const exerciseArenaComments=process.argv.includes('--exercise-arena-comments');
+if(exerciseArenaComments&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-arena-comments')))
+  throw new Error('Arena comments require a separate disposable --fixture exercise');
 const exerciseLeader=process.argv.includes('--exercise-leader');
 if(exerciseLeader&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-leader')))
   throw new Error('Leader selection requires a separate disposable --fixture exercise');
@@ -263,7 +266,7 @@ const stop = async () => {
   throw new Error('Verifier listener did not close; no replacement process was started');
 };
 let secret,token;
-let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId;
+let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
   const response=await fetch(base+'/shared_secret/Exchange',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},
@@ -512,6 +515,23 @@ try {
   for(const route of ['/world/UseItem','/world/GetFriendlyBattleInfo'])
     assert.equal((await secure(route,auth,{allowPlainRefusal:true})).result_code,2001,'Unsupported world receivers cannot acknowledge a mock success');
   assert.deepEqual(readFileSync(stateFile),syncBefore,'Targeted sync and unsupported world actions cannot write the disposable save');
+  if(exerciseArenaComments) {
+    const originalBattle=(await secure('/arena/Enter',auth)).ret_data.user.battle;
+    // Persist any prior lazy clock refresh before measuring the settings-only operation.
+    for(let repeat=0;repeat<2;repeat++)assert.equal((await secure('/card_handler/ToggleLock',{...auth,target_inst_id:String(cardSyncId)})).result_code,1);
+    const ownerPvid=Number(auth.pvid),beforeComments=JSON.parse(readFileSync(stateFile));
+    const ownerGame=beforeComments.gameStates.find(([pvid])=>pvid===ownerPvid)[1];
+    const comment='Well played, friends 🌟',request={...auth,comment_info:JSON.stringify({win_message:comment})};
+    const reply=await secure('/arena/SaveComment',request);savedArenaBattle=reply.ret_data.user.battle;
+    assert.deepEqual(savedArenaBattle,{...originalBattle,win_message:comment},'Comment receipt replaces the complete current battle profile');
+    const afterComments=JSON.parse(readFileSync(stateFile));assert.equal(afterComments.version,5);
+    assert.deepEqual(afterComments.gameStates.find(([pvid])=>pvid===ownerPvid)[1],ownerGame,'Saving messages cannot change gameplay or resource clocks');
+    assert.equal(afterComments.accounts.find(account=>account.pvid===ownerPvid).arenaComments.win_message,comment);
+    const saved=readFileSync(stateFile);assert.deepEqual((await secure('/arena/SaveComment',request)).ret_data.user.battle,savedArenaBattle);
+    assert.deepEqual(readFileSync(stateFile),saved,'Repeated message settings acknowledge without another write');
+    const detail=(await secure('/world/GetUserDetail',{...auth,list:JSON.stringify([ownerPvid])})).ret_data[0];
+    assert.equal(detail.win_message,comment);assert.equal(detail.lose_message,savedArenaBattle.lose_message);
+  }
   const friendFloors=await secure('/mirage/GetFriendInfo',auth);
   assert.equal(friendFloors.result_code,1);assert.deepEqual(friendFloors.ret_data,[]);
   const guildBoot=(await secure('/lobby/GetGuildInfo',auth)).ret_data;
@@ -810,6 +830,8 @@ try {
   }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
+  if(exerciseArenaComments)assert.deepEqual((await secure('/arena/Enter',auth)).ret_data.user.battle,savedArenaBattle,
+    'Complete own Fight Club messages/profile survive compiled schema5 restart');
   if(exerciseLeader) {
     assert.equal(afterLobby.ret_data.inst_id_leader,selectedLeaderId);
     assert.equal((await secure('/world/GetUserDetail',{...auth,list:JSON.stringify([Number(auth.pvid)])})).ret_data[0].inst_id_leader,selectedLeaderId,
@@ -958,7 +980,7 @@ try {
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
-    encrypted_social_likes_fixture:exerciseSocial,encrypted_inventory_sync_fixture:exerciseInventorySync,encrypted_leader_selection_fixture:exerciseLeader,
+    encrypted_social_likes_fixture:exerciseSocial,encrypted_inventory_sync_fixture:exerciseInventorySync,encrypted_leader_selection_fixture:exerciseLeader,encrypted_arena_comments_fixture:exerciseArenaComments,
     encrypted_monster_resource_fixture:exerciseMonster??null,
     historical_material_projection:profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection',
     quest_empty_collections_and_claim_refusal:true,

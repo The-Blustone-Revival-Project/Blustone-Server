@@ -2343,6 +2343,109 @@
         "x-runtime-confidence": "Atomic local owned selection tested; native UI pending"
       }
     },
+    "/arena/SaveComment": {
+      "post": {
+        "summary": "Save Fight Club messages",
+        "description": "Authenticated comment_info is JSON text containing a partial start_message/win_message/lose_message object. Success ret_data.user.battle is the complete current native battle profile; the client replaces its own cache. Saved messages persist per account and appear on Arena Enter and real detailed profiles. LOCAL text policy requires nonempty lossless UTF8, at most128 Unicode code points and no C0 controls; original backend lengths/clearing rules remain unknown. Empty object acknowledges without materializing settings; existing equal updates do not write. Atomic write/rename rollback preserves prior settings, ownership, game state and energy clocks. First explicit settings use save schema5 so older readers reject rather than silently drop preferences; accounts without settings retain prior schema versions. Defaults remain local presentation text. No currency, ranking, roster or reward change occurs. Native UI editing remains unverified.",
+        "tags": [
+          "Fight Club"
+        ],
+        "parameters": [
+          {
+            "name": "PV-AccessToken",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Transport-session token returned by shared_secret/Exchange. Required for native encrypted requests; distinct from the account OTP sent inside the encrypted form body. Keys survive restart when BLUSTONE_STATE_FILE is configured; otherwise they are in memory only. The local state file contains secrets and must never be published."
+          },
+          {
+            "name": "PV-Signature",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Observed native request-signature header. Exact canonicalization remains unverified."
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenericRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Complete native own battle-profile replacement.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ResultEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "ret_data": {
+                          "type": "object",
+                          "properties": {
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "battle": {
+                                  "type": "object"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Route not present in the recovered catalog."
+          },
+          "500": {
+            "description": "Local scaffold failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/arena-comments-native-2026-10-16.md; tests/arena-comments-state.ts",
+        "x-runtime-confidence": "Account settings, full receipt and restart tested; native UI editing pending"
+      }
+    },
     "/gym/LevelUp": {
       "post": {
         "summary": "Train an owned hunter using source hunters",
@@ -4555,87 +4658,6 @@
       "post": {
         "summary": "Recovered /arena/RefreshRival route",
         "description": "The route literal **/arena/RefreshRival** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
-        "tags": [
-          "Arena"
-        ],
-        "parameters": [
-          {
-            "name": "PV-AccessToken",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Transport-session token returned by shared_secret/Exchange. Required for native encrypted requests; distinct from the account OTP sent inside the encrypted form body. Keys survive restart when BLUSTONE_STATE_FILE is configured; otherwise they are in memory only. The local state file contains secrets and must never be published."
-          },
-          {
-            "name": "PV-Signature",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Observed native request-signature header. Exact canonicalization remains unverified."
-          }
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GenericRequest"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                }
-              }
-            },
-            "application/octet-stream": {
-              "schema": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Mock-compatible response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResultEnvelope"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Route not present in the recovered catalog."
-          },
-          "500": {
-            "description": "Local scaffold failure.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
-      }
-    },
-    "/arena/SaveComment": {
-      "post": {
-        "summary": "Recovered /arena/SaveComment route",
-        "description": "The route literal **/arena/SaveComment** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
         "tags": [
           "Arena"
         ],

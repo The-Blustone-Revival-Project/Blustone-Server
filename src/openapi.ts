@@ -373,6 +373,17 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-runtime-confidence":"Atomic local owned selection tested; native UI pending",
   }};
   explicitlyDocumented.add("/card_handler/SetLeader");
+  paths["/arena/SaveComment"]={post:{
+    ...operation("Save Fight Club messages",
+      "Authenticated comment_info is JSON text containing a partial start_message/win_message/lose_message object. Success ret_data.user.battle is the complete current native battle profile; the client replaces its own cache. Saved messages persist per account and appear on Arena Enter and real detailed profiles. LOCAL text policy requires nonempty lossless UTF8, at most128 Unicode code points and no C0 controls; original backend lengths/clearing rules remain unknown. Empty object acknowledges without materializing settings; existing equal updates do not write. Atomic write/rename rollback preserves prior settings, ownership, game state and energy clocks. First explicit settings use save schema5 so older readers reject rather than silently drop preferences; accounts without settings retain prior schema versions. Defaults remain local presentation text. No currency, ranking, roster or reward change occurs. Native UI editing remains unverified.",
+      "Fight Club",response("Complete native own battle-profile replacement.",{
+        allOf:[{$ref:"#/components/schemas/ResultEnvelope"},{type:"object",properties:{ret_data:{type:"object",properties:{user:{type:"object",properties:{battle:{type:"object"}}}}}}}],
+      })),
+    "x-evidence":"docs/arena-comments-native-2026-10-16.md; tests/arena-comments-state.ts",
+    "x-reverse-engineering-status":"native-parser-reconstructed",
+    "x-runtime-confidence":"Account settings, full receipt and restart tested; native UI editing pending",
+  }};
+  explicitlyDocumented.add("/arena/SaveComment");
   paths["/gym/LevelUp"] = { post: {
     ...operation("Train an owned hunter using source hunters",
       "Recovered CSRSyncCard::RequestLevelUp / ReqLevelUpCB contract. target_inst_id identifies the owned target; source_inst_list is JSON array text of source IDs. Ownership, source uniqueness/locks, leader/deck protection, level cap and gold are checked before consumption/XP persistence. ret_data.user carries gold prev/cur and deck; ret_data.card carries target_inst {inst_id,exp:{prev,cur}} and removed_inst_list OBJECTS {inst_id}. Ordinary ranks1..5 have30 dense levels, supported by historical community cap evidence. Cumulative XP100*(level-1), source XP100*level and100gold/source are local fixtures; old thresholds0/100 and yields100/200 are unchanged. Original XP/stats/prices and awakened caps remain missing. Local refusal2001 skips native mutation parsing.",

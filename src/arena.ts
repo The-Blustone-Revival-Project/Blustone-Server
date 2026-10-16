@@ -1,4 +1,5 @@
 import { cardInstance, starterReference } from "./bootstrap.js";
+import {ARENA_COMMENT_DEFAULTS,type ArenaComments} from "./arena-comments.js";
 
 /** Fight Club schemas are native-derived. Opponent, seasons and economy below
  * are local revival fixtures, not recovered matchmaking or original rewards. */
@@ -77,11 +78,11 @@ export function normalizeArena(raw: unknown): ArenaState {
   return { league_level: value.league_level, win: value.win, lose: value.lose,
     league_win: value.league_win, rating_point: value.rating_point, active, last_result: last };
 }
-export function arenaProfile(pvid: number, arena: ArenaState) {
+export function arenaProfile(pvid: number, arena: ArenaState,comments?:ArenaComments) {
   return { pvid, rank: 1, season_no: 1, weekly_no: 1, league_level: arena.league_level,
     rating_point: arena.rating_point, league_win: arena.league_win,
     win: arena.win, lose: arena.lose, refresh_datetime: 0,
-    start_message: "Local revival sparring", win_message: "Well fought!", lose_message: "Train and try again." };
+    ...(comments??ARENA_COMMENT_DEFAULTS) };
 }
 /** Native end_datetime subtracts GetCurServerTime seconds and divides by86400.
  * Units are recovered; weekly alignment and season schedule remain fixtures.

@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { ARENA_BP_COST, ARENA_DECK_TYPE, ARENA_DEFENSE_DECK_TYPE, ARENA_RIVAL_PVID, arenaProfile, arenaRival, arenaSeason, type ArenaReceipt } from "./arena.js";
 import { resourceChargeTime, type LocalGameState } from "./game.js";
+import type {ArenaComments} from "./arena-comments.js";
 
 type Result = { data: Record<string, unknown> } | { error: string };
 const numeric = (value: unknown) => typeof value === "number" ? value :
@@ -18,7 +19,7 @@ function arenaDeck(game: LocalGameState) {
  * mutation belongs here. BP1, honor10, rating±10 and six wins per league are
  * explicitly local policies; original economics are still unknown. */
 export function arenaRequest(route: string, payload: Record<string, unknown>, pvid: number,
-    game: LocalGameState, persist: () => void): Result {
+    game: LocalGameState, persist: () => void,comments?:ArenaComments): Result {
   if (route === "/arena/Enter") {
     let initialized = false;
     if (!game.decks.some((row) => row.type === ARENA_DECK_TYPE)) {
@@ -31,7 +32,7 @@ export function arenaRequest(route: string, payload: Record<string, unknown>, pv
     }
     if (initialized) persist();
     return { data: { arena: { status: 1, season: arenaSeason() },
-      user: { battle: arenaProfile(pvid, game.arena), is_weekly_reward: 0 }, deck: deckRows(game) } };
+      user: { battle: arenaProfile(pvid, game.arena,comments), is_weekly_reward: 0 }, deck: deckRows(game) } };
   }
   if (route === "/arena/FindRival") return { data: { arena: { rival_list: [arenaRival()] }, refresh_price: refreshPrice() } };
   // ReqMyRankCB (Gf600d8) reads ret_data.rank directly into PlayData+0x128.
