@@ -50,6 +50,9 @@ const authoredEquipmentRankPrice={rank:exerciseEquipmentUpgrade?2:1,attr:1,price
 const authoredEquipmentPrices=exerciseEquipmentUpgrade?[authoredEquipmentLevelPrice,{...authoredEquipmentLevelPrice,level:11,price:29}]:[authoredEquipmentLevelPrice];
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
+const exerciseLeader=process.argv.includes('--exercise-leader');
+if(exerciseLeader&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-leader')))
+  throw new Error('Leader selection requires a separate disposable --fixture exercise');
 const exerciseInventorySync=process.argv.includes('--exercise-inventory-sync');
 if(exerciseInventorySync&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-inventory-sync')))
   throw new Error('Inventory sync stock uses a separate disposable --fixture exercise');
@@ -260,7 +263,7 @@ const stop = async () => {
   throw new Error('Verifier listener did not close; no replacement process was started');
 };
 let secret,token;
-let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot;
+let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
   const response=await fetch(base+'/shared_secret/Exchange',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},
@@ -474,6 +477,25 @@ try {
   }
   const syncInventory=(await secure('/lobby/GetCardInven',auth)).ret_data;
   assert.ok(syncInventory.length>0);
+  if(exerciseLeader) {
+    const ownerPvid=Number(auth.pvid),initial=JSON.parse(readFileSync(stateFile)).gameStates.find(([pvid])=>pvid===ownerPvid)[1];
+    const target=syncInventory.find(card=>card.inst_id!==initial.leader_inst_id);assert.ok(target);
+    // Inventory reads can already have lazily refreshed in-memory clocks.
+    // Two real lock toggles restore the original card and persist that prior
+    // state before measuring the leader operation's exact isolated change.
+    for(let repeat=0;repeat<2;repeat++)assert.equal((await secure('/card_handler/ToggleLock',{...auth,target_inst_id:String(target.inst_id)})).result_code,1);
+    const prior=JSON.parse(readFileSync(stateFile)).gameStates.find(([pvid])=>pvid===ownerPvid)[1];
+    selectedLeaderId=target.inst_id;
+    const request={app_code:'_SR',app_ver:'28010',...auth,target_inst_id:String(selectedLeaderId)};
+    assert.equal(Object.hasOwn(request,'market'),false);
+    assert.equal((await secure('/card_handler/SetLeader',request)).ret_data,selectedLeaderId,'Native leader receipt is a scalar ID');
+    const updated=JSON.parse(readFileSync(stateFile)).gameStates.find(([pvid])=>pvid===ownerPvid)[1];
+    assert.deepEqual(updated,{...prior,leader_inst_id:selectedLeaderId},'Only the selected owned leader word changes');
+    const saved=readFileSync(stateFile);
+    assert.equal((await secure('/card_handler/SetLeader',request)).ret_data,selectedLeaderId);
+    assert.deepEqual(readFileSync(stateFile),saved,'Current-leader retry is a no-write acknowledgement');
+    assert.equal((await secure('/world/GetUserDetail',{...auth,list:JSON.stringify([ownerPvid])})).ret_data[0].inst_id_leader,selectedLeaderId);
+  }
   const cardSyncId=syncInventory[0].inst_id,syncBefore=readFileSync(stateFile);
   assert.deepEqual((await secure('/world/RefreshInven',{...auth,card_inst_list:JSON.stringify([cardSyncId])})).ret_data,
     {card:[syncInventory[0]]},'Compiled encrypted sync must return the exact absolute owned DTO');
@@ -788,6 +810,11 @@ try {
   }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
+  if(exerciseLeader) {
+    assert.equal(afterLobby.ret_data.inst_id_leader,selectedLeaderId);
+    assert.equal((await secure('/world/GetUserDetail',{...auth,list:JSON.stringify([Number(auth.pvid)])})).ret_data[0].inst_id_leader,selectedLeaderId,
+      'Native scalar leader selection survives compiled process restart');
+  }
   const restartedCardSync=await secure('/world/RefreshInven',{...auth,card_inst_list:JSON.stringify([cardSyncId])});
   assert.equal(restartedCardSync.ret_data.card[0].inst_id,cardSyncId,'Owned card selector survives compiled restart');
   if(exerciseInventorySync)assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'["AIRSHIP_TICKET"]'})).ret_data,
@@ -931,7 +958,7 @@ try {
     encrypted_social_lifecycle_fixture:exerciseSocial,
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
-    encrypted_social_likes_fixture:exerciseSocial,encrypted_inventory_sync_fixture:exerciseInventorySync,
+    encrypted_social_likes_fixture:exerciseSocial,encrypted_inventory_sync_fixture:exerciseInventorySync,encrypted_leader_selection_fixture:exerciseLeader,
     encrypted_monster_resource_fixture:exerciseMonster??null,
     historical_material_projection:profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection',
     quest_empty_collections_and_claim_refusal:true,

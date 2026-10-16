@@ -329,6 +329,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/reference/GetAbyss") return state.envelope(searchHelperReference());
   if (route.startsWith("/explore/")) return state.failure(2001, "Hunter search transaction is not reconstructed");
   if (route === "/card_handler/ToggleLock") return state.toggleCardLock(payload, headers);
+  if (route === "/card_handler/SetLeader") return state.setLeader(payload,headers);
   if (route === "/gym/LevelUp") return state.trainCard(payload, headers);
   if (route === "/gym/RankUp") return state.rankUpCard(payload, headers);
   if (route === "/shop/SellCard") return state.sellCards(payload, headers);

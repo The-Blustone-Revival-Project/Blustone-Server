@@ -1,3 +1,52 @@
+## Latest continuation: owned leader selection and atomic formations (2026-10-16)
+
+Previous turn was progress:c6266e5 real5-slotdetailedprofiles. This turn adds
+REAL /card_handler/SetLeader and repairsreproducedSetDeckwriterollbackbug.
+Goal ACTIVE; no directliveclient/profile/private-save operations performed.
+
+NativepopupSetLeaderGdd0bf8 onlydrawsUIbool; actualrequestsiteGdd53dc..3e6
+passesselectedcardIDFULL64→CSRSyncGlobal.RequestCardLeaderGf65fa8.
+Builderauth4 app_code/app_ver/pvid/otp (NOmarket), target_inst_id Gf660e0,
+literalcard_handler/SetLeader withoutleadingslashGf661dc. Routercanonical
+/world path isNOTused; /card_handler/SetLeader nowrealhandler. Callback
+Gf66560 guardstransport0/result1 beforebodyret_dataSCALARFULL64Gf66658,
+theninventoryleaderwritesGf66798/7c4. Noobject/prevcur/cardgrant reply.
+
+planLeaderSelection exactcanonicalpositiveU64 str/safeNumber→actualowned
+SAFE-IDsubset, selectedpublishedref, ambiguousIDsrefuse. No guessedrole/
+rank/lockrule; LOCKEDownedtargeteligible. Changedselectionduringordinary/
+Search/ArenaactiveLOCALrefusal; sameleadernoopallowed. LOCALfree,no stats/
+items/deckreordering. LoadedgameMaponly/no gameFor/energy/ownershipcreation.
+Persistnewleaderwordatomically; write/renamefailure restorespreviousword.
+Identicalrequestackwithoutwrite. Lobby/details reflectactualsavedleader.
+
+RealSetDeckfailure reproducedBEFOREfix: .tmpdirectory→persistthrows,disk
+unchanged,BUTmemoryformationchanged/originalarraylost. RegressiontestRED
+thenGREENaftermethodrollback. Validwholebatchplannedbeforemutation; exact
+originalarrayrestoredonwriteORrenamefault. Same-normalized type+5ordered
+slots noopack (requesttypeorder/trailingzerosirrelevant) withoutpreset
+reordering/writer/regen. Invalid/missinggame/elapsedclock operationspreserve
+snapshots. ExistingSearch/Arenaformationguardsretained. OrdinaryEXP false
+hypothesisDISPROVED: Startsnapshot2Hunters→changefutureformation→Complete
+stillawardsBOTHoriginalIDs10EXP; no EXPmodel/newordinarypartyguardchanged.
+
+174 gameplayprograms/build/independentreviewPASS. Productiontests native
+no-market/scalar/lockedtarget, invalidU64/unknownref/auth/activeguards,
+fullgame/account/nestedrefs/file exactfaultrollback/retry/noop/elapsedAPBP,
+restart andprofileleaderreflection. Compiled--fixture--exercise-leader
+ECDH/HMAC/AES actualownedselection/scalar/soleleaderworddiff/no-write retry/
+lobby+detailafterrestartPASS, encrypted_leader_selection_fixture:true.
+BaselineflushespriorGetCardInvenlazyclockupdateswith2reversiblelocktoggles;
+exactleader-onlyassertionretained. Fixtureguardrefusesprivate/preservedand
+otherexercisecombinations. NativeUIleaderbutton/label/pixelsUNVERIFIED.
+OpenAPI regenerated. Docs/leader-selection-native-2026-10-16.md and
+ docs/owned-leader-and-formation-transactions-2026-10-16.md.
+
+No APK rebuild/install/release owed. BlueStacksinputhold persists; workonly
+Server/Instrumented; DataDump/retainedworkspace read-only; Collector/Docker/
+inference untouched. Broadercontent/economy/combat revivalstillincomplete;
+FriendlyBattleInfo remainsguardedpendingidentity/nativeflow validation.
+
 ## Latest continuation: real detailed player profiles (2026-10-16)
 
 Previous turn was progress:01843d4 completedall3inventorysyncmodes. This turn

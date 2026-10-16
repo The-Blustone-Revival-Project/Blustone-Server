@@ -357,11 +357,22 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
   }
   paths["/world/SetDeck"] = { post: {
     ...operation("Save an owned hunter formation",
-      "CSRSyncMStage::RegisterDeck posts deck_info as JSON array text: [{type:1,list:[ordered numeric instance IDs]}]. Native Build Team sends four slots; ParseDeckSetting reads five lobby fields. The replica accepts one-to-five input slots and pads the stored/listed formation to five. Lobby returns deck rows with inst_id_1..5. ReqDeckCB only checks result_code; ret_data is not parsed on save. Ownership, duplicate instances/types, nonempty formation and whole-batch validity are checked before atomic persistence. Duplicate rejection and integrity cleanup of consumed IDs from unprotected presets are local policies; role restrictions beyond the native minimum-one-hunter rule remain unpinned. Native save/reload and mixed Mowgli-frontline/Lantern-airship combat verified in analysis/testing/revival-003.md. Original stats/skills/economy remain fixtures or incomplete.", "Cards and training"),
+      "CSRSyncMStage::RegisterDeck posts deck_info as JSON array text: [{type:1,list:[ordered numeric instance IDs]}]. Native Build Team sends four slots; ParseDeckSetting reads five lobby fields. The replica accepts one-to-five input slots and pads the stored/listed formation to five. Lobby returns deck rows with inst_id_1..5. ReqDeckCB only checks result_code; ret_data is not parsed on save. Ownership, duplicate instances/types, nonempty formation and whole-batch validity are checked before atomic persistence. Write/rename failures restore the original formation array; equivalent normalized repeats acknowledge without writing or regenerating energy. Missing loaded ownership refuses without creating a game. Duplicate rejection and integrity cleanup of consumed IDs from unprotected presets are local policies; role restrictions beyond the native minimum-one-hunter rule remain unpinned. Native save/reload and mixed Mowgli-frontline/Lantern-airship combat verified in analysis/testing/revival-003.md. Original stats/skills/economy remain fixtures or incomplete.", "Cards and training"),
     "x-evidence": "analysis/research/mission-deck-contract.md; server-ts/tests/decks.ts; analysis/testing/revival-003.md",
     "x-reverse-engineering-status": "native-parser-reconstructed",
   } };
   explicitlyDocumented.add("/world/SetDeck");
+  paths["/card_handler/SetLeader"]={post:{
+    ...operation("Select an owned leader",
+      "Native RequestCardLeader sends target_inst_id as a full64 scalar plus app_code/app_ver/pvid/otp; market is not required by this requester. Authenticated local selection requires an actual owned, published Hunter. Locked cards remain eligible; no role/rank restriction is invented. Success ret_data is the scalar selected ID, not an object or inventory grant. Selection is free local policy and changes the saved leader independently of ordered party presets. Changed selections refuse active ordinary/Search/Fight Club attempts as explicit local policy; choosing the current leader is a no-write acknowledgement. Uses the existing loaded snapshot without energy regeneration or game creation. Write/rename failures restore the previous leader. Native UI selection remains unverified.",
+      "Cards and training",response("Scalar native leader identity.",{
+        allOf:[{$ref:"#/components/schemas/ResultEnvelope"},{type:"object",properties:{ret_data:{type:"integer",format:"uint64",minimum:1,maximum:Number.MAX_SAFE_INTEGER}}}],
+      })),
+    "x-evidence":"docs/leader-selection-native-2026-10-16.md; tests/leader-selection-state.ts",
+    "x-reverse-engineering-status":"native-parser-reconstructed",
+    "x-runtime-confidence":"Atomic local owned selection tested; native UI pending",
+  }};
+  explicitlyDocumented.add("/card_handler/SetLeader");
   paths["/gym/LevelUp"] = { post: {
     ...operation("Train an owned hunter using source hunters",
       "Recovered CSRSyncCard::RequestLevelUp / ReqLevelUpCB contract. target_inst_id identifies the owned target; source_inst_list is JSON array text of source IDs. Ownership, source uniqueness/locks, leader/deck protection, level cap and gold are checked before consumption/XP persistence. ret_data.user carries gold prev/cur and deck; ret_data.card carries target_inst {inst_id,exp:{prev,cur}} and removed_inst_list OBJECTS {inst_id}. Ordinary ranks1..5 have30 dense levels, supported by historical community cap evidence. Cumulative XP100*(level-1), source XP100*level and100gold/source are local fixtures; old thresholds0/100 and yields100/200 are unchanged. Original XP/stats/prices and awakened caps remain missing. Local refusal2001 skips native mutation parsing.",

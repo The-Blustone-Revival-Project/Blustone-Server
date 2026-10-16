@@ -42,6 +42,7 @@ import {friendMissionRecords} from "./friend-mission-records.js";
 import {syncOwnedCards} from "./inventory-card-sync.js";
 import {syncOwnedItems} from "./inventory-item-sync.js";
 import {parseUserDetailTargets,ownedUserDetail} from "./user-details.js";
+import {planLeaderSelection} from "./leader-selection.js";
 import {ARENA_RIVAL_PVID,arenaRival} from "./arena.js";
 import {LOCAL_MAIL_SENDER} from "./mail.js";
 import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
@@ -2106,7 +2107,8 @@ export class ServerState {
   /** Native RegisterDeck posts deck_info=[{type,list:[five ordered IDs]}].
    * ReqDeckCB checks only result_code. See mission-deck-contract.md. */
   setDeck(payload: Record<string, unknown>, headers: Record<string, string>) {
-    const game = this.gameFor(this.accountFor(payload, headers));
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid);
+    if(!game)return this.failure(2001,"Owned formation snapshot is unavailable");
     let value: unknown = payload.deck_info;
     if (typeof value === "string") {
       try { value = JSON.parse(value); } catch { return this.failure(2001, "invalid deck_info"); }
@@ -2135,10 +2137,25 @@ export class ServerState {
       }
       updates.push({ type: Number(row.type), list: Array.from({ length: 5 }, (_, index) => Number(incomingList[index] ?? 0)) });
     }
+    if(updates.every(update=>game.decks.some(deck=>deck.type===update.type&&deck.list.length===update.list.length&&
+      deck.list.every((id,index)=>id===update.list[index]))))return this.envelope({deck:partyDeck(game)});
     const updatedTypes = new Set(updates.map((deck) => deck.type));
+    const before=game.decks;
     game.decks = [...game.decks.filter((deck) => !updatedTypes.has(deck.type)), ...updates];
-    this.persist();
+    try{this.persist();}catch(error){game.decks=before;throw error;}
     return this.envelope({ deck: partyDeck(game) });
+  }
+
+  setLeader(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid);
+    if(!game)return this.failure(2001,"Owned leader snapshot is unavailable");
+    let plan;
+    try{plan=planLeaderSelection(payload.target_inst_id,game,new Set(starterReference.map(row=>row.base.id)));}
+    catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid leader selection");}
+    if(!plan.changed)return this.envelope(plan.leader_inst_id);
+    const before=game.leader_inst_id;game.leader_inst_id=plan.leader_inst_id;
+    try{this.persist();}catch(error){game.leader_inst_id=before;throw error;}
+    return this.envelope(plan.leader_inst_id);
   }
 
   /** Recovered ReqCardLockCB (0xf65c8c): flat numeric inst_id/lock fields.

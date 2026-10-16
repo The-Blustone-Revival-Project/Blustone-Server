@@ -1212,12 +1212,15 @@ paths:
         five. Lobby returns deck rows with inst_id_1..5. ReqDeckCB only checks
         result_code; ret_data is not parsed on save. Ownership, duplicate
         instances/types, nonempty formation and whole-batch validity are checked
-        before atomic persistence. Duplicate rejection and integrity cleanup of
-        consumed IDs from unprotected presets are local policies; role
-        restrictions beyond the native minimum-one-hunter rule remain unpinned.
-        Native save/reload and mixed Mowgli-frontline/Lantern-airship combat
-        verified in analysis/testing/revival-003.md. Original
-        stats/skills/economy remain fixtures or incomplete."
+        before atomic persistence. Write/rename failures restore the original
+        formation array; equivalent normalized repeats acknowledge without
+        writing or regenerating energy. Missing loaded ownership refuses without
+        creating a game. Duplicate rejection and integrity cleanup of consumed
+        IDs from unprotected presets are local policies; role restrictions
+        beyond the native minimum-one-hunter rule remain unpinned. Native
+        save/reload and mixed Mowgli-frontline/Lantern-airship combat verified
+        in analysis/testing/revival-003.md. Original stats/skills/economy remain
+        fixtures or incomplete."
       tags:
         - Cards and training
       parameters: *a1
@@ -1242,6 +1245,52 @@ paths:
         server-ts/tests/decks.ts; analysis/testing/revival-003.md
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
+  /card_handler/SetLeader:
+    post:
+      summary: Select an owned leader
+      description: Native RequestCardLeader sends target_inst_id as a full64 scalar
+        plus app_code/app_ver/pvid/otp; market is not required by this
+        requester. Authenticated local selection requires an actual owned,
+        published Hunter. Locked cards remain eligible; no role/rank restriction
+        is invented. Success ret_data is the scalar selected ID, not an object
+        or inventory grant. Selection is free local policy and changes the saved
+        leader independently of ordered party presets. Changed selections refuse
+        active ordinary/Search/Fight Club attempts as explicit local policy;
+        choosing the current leader is a no-write acknowledgement. Uses the
+        existing loaded snapshot without energy regeneration or game creation.
+        Write/rename failures restore the previous leader. Native UI selection
+        remains unverified.
+      tags:
+        - Cards and training
+      parameters: *a1
+      requestBody: *a2
+      responses:
+        "200":
+          description: Scalar native leader identity.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ResultEnvelope"
+                  - type: object
+                    properties:
+                      ret_data:
+                        type: integer
+                        format: uint64
+                        minimum: 1
+                        maximum: 9007199254740991
+        "404":
+          description: Route not present in the recovered catalog.
+        "500":
+          description: Local scaffold failure.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      x-reverse-engineering-status: native-parser-reconstructed
+      x-evidence: docs/leader-selection-native-2026-10-16.md;
+        tests/leader-selection-state.ts
+      x-runtime-confidence: Atomic local owned selection tested; native UI pending
   /gym/LevelUp:
     post:
       summary: Train an owned hunter using source hunters
@@ -2583,47 +2632,6 @@ paths:
       x-reverse-engineering-status: native-parser-reconstructed
       x-evidence: docs/equipment-upgrade-local-workflow-2026-10-11.md;
         tests/equipment-upgrade-state.ts
-      x-runtime-confidence: route literal confirmed; payload/response shape pending
-        ARM-device capture
-  /card_handler/SetLeader:
-    post:
-      summary: Recovered /card_handler/SetLeader route
-      description: >-
-        The route literal **/card_handler/SetLeader** was recovered from the ARM
-        native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
-      tags:
-        - card_handler
-      parameters: *a1
-      requestBody: *a2
-      responses:
-        "200":
-          description: Mock-compatible response.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ResultEnvelope"
-        "404":
-          description: Route not present in the recovered catalog.
-        "500":
-          description: Local scaffold failure.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
   /dailyquest/GetInstList:
