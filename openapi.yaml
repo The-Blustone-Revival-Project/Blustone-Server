@@ -781,12 +781,19 @@ paths:
         ownership, unlocked slot, reference rank eligibility, role/rank cap and
         gold before persisting one level and gold together. Inventory lock
         prevents destruction, not skill improvement. Local policy is +1 per
-        accepted request, gold100*destinationLevel, zero materials; original
-        prices and increment implementation are missing. Each accepted call is a
-        separate upgrade: the native request has no nonce or expected level, so
-        transport exactly-once is not promised. Local refusal code2001 skips
-        native mutation parsing. The separately documented MultiSkillUp route
-        has a different batch response contract."
+        accepted request, default legacy gold100*destinationLevel, zero
+        materials; optional
+        BLUSTONE_SKILL_GOLD_PROFILE=screenshot-2018-gold-projection
+        uses100*ceil(destinationLevel/5), matching five pinned historical
+        screenshot anchors. Other levels/role-wide interpolation and zero
+        materials remain local policy. Nonzero material rows refuse until atomic
+        consumption is implemented. Persistence failure restores exact skill
+        field presence/value and gold. Original final prices/material IDs and
+        increment implementation are missing. Each accepted call is a separate
+        upgrade: the native request has no nonce or expected level, so transport
+        exactly-once is not promised. Local refusal code2001 skips native
+        mutation parsing. The separately documented MultiSkillUp route has a
+        different batch response contract."
       tags:
         - Cards and training
       parameters: *a1
@@ -823,14 +830,17 @@ paths:
         ReqMultiSkillUpCB null-guards unselected fields and reads only cur.
         Optional user supplies gold prev/cur; consumed_inst_list is empty for
         the local gold-only fixture. Original item rows use absolute
-        {inst_id,remain}, distinct from incremental charges. Prices
-        are100*destinationLevel and caps are community-derived
-        fixtures/inference. Native batch callback UI parameters differ from
-        single training. A genuine singleton batch upgrade of Tyltyl5 slot1
-        from1 to2, gold200, nextprice300 and preserved roster is verified;
-        arbitrary multi-slot/multi-count training remains unverified. Requests
-        have no recovered nonce/expected level; accepted calls are distinct
-        upgrades."
+        {inst_id,remain}, distinct from incremental charges. Default prices
+        are100*destinationLevel; optional screenshot-2018-gold-projection shares
+        the GetLevel bracket curve100*ceil(destinationLevel/5). Five historical
+        anchors support it; interpolation/role-wide use and zero materials
+        remain local. Both setters restore exact fields/wallet on failed save
+        and refuse nonzero materials. Caps remain community-derived. Native
+        batch callback UI parameters differ from single training. A genuine
+        singleton batch upgrade of Tyltyl5 slot1 from1 to2, gold200,
+        nextprice300 and preserved roster is verified; arbitrary
+        multi-slot/multi-count training remains unverified. Requests have no
+        recovered nonce/expected level; accepted calls are distinct upgrades."
       tags:
         - Cards and training
       parameters: *a1
@@ -8615,9 +8625,15 @@ paths:
         is max level whose rank<=hunter rank; price is
         roleVector[destinationLevel-1], with destinationLevel=ownedLevel+1.
         Skill caps10/20/30/40/50 are community-derived inference, not character
-        caps or captured server rows. Gold100*destinationLevel and zero
-        materials are fixtures. Single/batch SkillUp persistence is implemented;
-        awakening, original balance and VIP commerce remain incomplete.
+        caps or captured server rows. Default gold100*destinationLevel and zero
+        materials are fixtures. Optional
+        BLUSTONE_SKILL_GOLD_PROFILE=screenshot-2018-gold-projection
+        uses100*ceil(destinationLevel/5), matching five pinned historical
+        screenshot quotes; interpolation and role-wide application are declared
+        local, not original final economy. Both setters share these rows and
+        refuse nonzero materials. Single/batch SkillUp persistence is
+        implemented; awakening, original balance and VIP commerce remain
+        incomplete.
       tags:
         - Reference data
       parameters: *a1

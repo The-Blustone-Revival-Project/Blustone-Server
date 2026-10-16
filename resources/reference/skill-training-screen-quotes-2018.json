@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "release": "2026-10-14",
+  "classification": "HISTORICAL-SCREEN-TRANSCRIPTION",
+  "warning": "Observed displayed fees at stated levels; role-wide interpolation and zero materials are local policy, not recovered final economy.",
+  "quotes": [
+    {
+      "idx": 2277,
+      "previous_level": 1,
+      "destination_level": 2,
+      "displayed_fee": 100,
+      "source": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-46.tsv",
+      "source_sha256": "ef0adb864a6b2f896db3c6fed30c55ea3fb9d9d52a9ce3fa58b0fa253272633e",
+      "line": 28,
+      "raw_tsv": "2277\tScreenshot_20170920-223617-fa4e91363a948254.png\t1080\t1920\tskill-training\t\t\t\t\t\tSkill Training: Precious Chocolate Bar Lv.1/20, Forward / Healing; Sunny flavor text; Healing 163 -> 166; mat 14/1; wallet 4186; Begin Training 100 gold\t\tno\thigh\tSame-account Sunny skill sweep w/ idx 2278-2281 (shared wallet 4186)"
+    },
+    {
+      "idx": 444,
+      "previous_level": 5,
+      "destination_level": 6,
+      "displayed_fee": 200,
+      "source": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-09.tsv",
+      "source_sha256": "2e65a698e709e6607d38d4643e8a46af77931baf492e5b3ec8bfd3445e6738da",
+      "line": 45,
+      "raw_tsv": "444\tCapture_2017-05-30-18-26-37-0013ddcc6a5e1340.png\t720\t1196\tskill-training\t\t\t\t\t\tscreen=Skill Training; skill=Bomb Party (Force your enemy to dance through a field of bombs.); Lv.=5/40; Damage=2662 -> 2690 (delta +28); Items Required=3959/1 + 42/1; Collect items by clearing the Expedition Area; Begin Training=200; rupees=231554\tno\tno\thigh\tSkill-level economy: Lv5->6 costs 200 gold + 1+1 mats for +28 damage"
+    },
+    {
+      "idx": 2591,
+      "previous_level": 20,
+      "destination_level": 21,
+      "displayed_fee": 500,
+      "source": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-52.tsv",
+      "source_sha256": "e70c241598f64e277541004726eba93f1bbe7683ff91428769a57e93141e2787",
+      "line": 42,
+      "raw_tsv": "2591\tScreenshot_20180413-024854-cf0a611ba5dad3e1.png\t1080\t1920\tskill-training\t\t\t20\t\t\tSkill Training toast Biqker : Big news from the Lot... (cut); coins 1318; Lv.20/40 Attack Speed Increase; Temporarily increase attack speed.; Enemy / Weaker tags; Special Training Effects Attack Speed 18.00% -> 18.40%; Items Required to Train 174/3, 3/4 (red shortfall), 27/1; Collect items by clearing the Expedition Area; Begin Training 500 (full-view)\t\tno\thigh\tShortfall row 3/4 red; delta +0.40pp"
+    },
+    {
+      "idx": 605,
+      "previous_level": 33,
+      "destination_level": 34,
+      "displayed_fee": 700,
+      "source": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-13.tsv",
+      "source_sha256": "6200aec8418e90c23645014fba5c67b6d349516ab4d11eb824fed02de8ca2e8a",
+      "line": 6,
+      "raw_tsv": "605\timage0-29bb4900929bb79e.png\t640\t1136\tskill-training\tBeckhen\tGuardian of Fight Club\t33\t\t051\ttab=Enemy; Lv.=33/50; Everlasting Effect; Block Chance=19.79%->20.40%; materials=5030/4 + 2/3 + 56/1; Begin Training=700 coins; balance=22358\t\tno\thigh\tName+level but no star rank or HP/ATK/DEF -> hit=no (near-hit)"
+    },
+    {
+      "idx": 1387,
+      "previous_level": 40,
+      "destination_level": 41,
+      "displayed_fee": 900,
+      "source": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-28.tsv",
+      "source_sha256": "9c7e8edc0f66847cf09ddc4e2496184b422be45ba3f6f67312aeabdb9bd07b83",
+      "line": 38,
+      "raw_tsv": "1387\timage-b25845a309914daa.png\t750\t1334\tskill-training\t\t\t\t\t\tSkill Training; Reflection Prayer (...praying...); Lv.40/50; Healing 188->190; Items Required to Train 2197/5 + 7/5 + 51/3; Collect items by clearing the Expedition Area; Begin Training 900; wallet 624; hero name unshown\t\tno\thigh\tHigh-level heal-skill cost block; 900-fee tier; catalog blank (name unshown)"
+    }
+  ]
+}

@@ -1,4 +1,40 @@
-## Latest continuation: Mirage registration and reward transition contracts (2026-10-14)
+## Latest continuation: DataDump image lane and skill gold (2026-10-16)
+
+Verified GitHub latest DataDump release2026-10-14, checkout0aff320. New3626-image/
+73batch transcription lane has119 stat hits/22full triples plus useful economy
+screens classifiedNO only because notstatpanels. Normalized stats/estimate
+tables unchangedfrom10-11.2; no tierpromotions/bulkbase rescale justified.
+DataDump read-only; existing untracked otherchatwork untouched.
+
+Optional BLUSTONE_SKILL_GOLD_PROFILE=screenshot-2018-gold-projection implemented.
+DefaultLEGACY unchanged. Five pinned rawTSV observations previous→destination/
+displayedfee:1→2/100,5→6/200,20→21/500,33→34/700,40→41/900. Fifthanchoridx1387
+Lv40/50 replacesambiguouscap40/40idx2505. Portable copiedsourceJSON carries
+fullsourcehash/line/rawrecord; runtimepin957aed737408514c3c7ded38c97580a8a19c2516ca3fbb39f040b5221ee3ee78.
+100*ceil(destination/5) matchesanchors; otherlevels androle-wideapplication
+are explicitly LOCALinterpolation, not originalfinaleconomy. No oldstat estimates
+or113hero/565skillrows blindly imported; rawskilltableincludesfixtureclasses.
+
+GetLevel andsingle/batch setters shareselected200rows. Batchsumseveryintermediate
+levelacrossbrackets. Existingcaps/rank/unlock andmaterial-free fixturepreserved;
+materialcounts5030/4 etc ARENOT itemIDs. Nonempty/nonzero materialprice slots now
+REFUSE bothsetters untilpropermappedatomicconsumption, notsilentlyignorecosts.
+Single/batch savefailures restoreexacttargetfieldvalues/presence,gold,objectrefs
+anddurablebytes; importednumericstrings/missingfields covered. No nonceclaim.
+
+Full154 testprograms/build pass, independentboundedreview clear. Newprofiletest
+isolatedenvbeforedynamicimports coversfiveanchors,sharedreference,bracketcosts,
+realwrite/renamefailure,rankcap/materialrefusal,restart/peer/items preservation.
+No liveprofile/ownedstate/flags/APK changed. Nativepopupvalidationpending.
+See docs/screenshot-skill-gold-projection-2026-10-16.md and
+docs/datadump-manual-lane-actionable-evidence-2026-10-16.md. Fishingimage2706
+hasnamedtierprices butoriginalIDsunknown; Ruinsfloor122idx2896 isNOTMirageForest
+event; Shop2595Joy/Gullveig conflict unresolved. Don't fabricate thosejoins.
+Goal ACTIVE. Escapeinputhold/offlinecollector/private-originalpreservation/
+DataDumpread-only remain. Continue evidence-backedgameareas, no stats hunts or
+source fixturepromotions without context/evidence; no APK release owed here.
+
+## Historical continuation: Mirage registration and reward transition contracts (2026-10-14)
 
 Source RegisterDeck exact auth5 +inst_list JSONSTRING numericUINT64; zero IDs
 skipped bybuilder. Success callback admits1 OR10189, then ParseDeckInfo DIRECT

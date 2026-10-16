@@ -69,7 +69,7 @@ import { arenaRequest } from "./arena-service.js";
 import { searchBattleRequest, usedSearchHelpers } from "./search-battle.js";
 import { teamLevel } from "./team-level.js";
 import { earnSearchCapsule, explicitSearchCapsuleVictory } from "./search-capsules.js";
-import { skillLevelLimit, skillUpPrice } from "./skill-training.js";
+import { skillLevelLimit, skillUpPrice,goldOnlySkillPrice } from "./skill-training.js";
 import { FIXTURE_FUEL_AP, FIXTURE_FUEL_ID, fuelCycle, fuelStatus, supplyActivities, supplyInstances } from "./supply.js";
 import { BP_SHOP_AMOUNT, BP_SHOP_ID, FUEL_SHOP_AP, FUEL_SHOP_ID, FUEL_SHOP_LIMIT, FUEL_SHOP_PRICES, fuelPurchaseInventory, settleFuelShop } from "./shop-fuel.js";
 import { completeTutorialList, createLocalGameState, GACHA_COST, GACHA_SINGLE_COST, mergeCardBook, normalizeLocalGameState, regenerateResources, resourceChargeTime, type LocalGameState, type LocalTutorialState } from "./game.js";
@@ -1962,13 +1962,14 @@ export class ServerState {
     const role = Number(reference.base.role);
     if (previousLevel >= skillLevelLimit(role, rank)) return this.failure(2001, "skill level cap reached");
     const price = skillUpPrice(role, previousLevel + 1);
-    if (!price || !Number.isSafeInteger(price.gold) || price.gold < 0 || game.gold < price.gold) {
+    if (!price || !goldOnlySkillPrice(price) || !Number.isSafeInteger(price.gold) || price.gold < 0 || game.gold < price.gold) {
       return this.failure(2001, "skill training price unavailable or insufficient gold");
     }
     const previousGold = game.gold;
+    const previousSkillValue=target[field],previousSkillPresent=Object.hasOwn(target,field);
     target[field] = previousLevel + 1;
     game.gold -= price.gold;
-    this.persist();
+    try{this.persist();}catch(error){if(previousSkillPresent)target[field]=previousSkillValue;else delete target[field];game.gold=previousGold;throw error;}
     return this.envelope({
       skill_idx: index,
       target_inst: { inst_id: targetId, [field]: { prev: previousLevel, cur: previousLevel + 1 } },
@@ -2013,16 +2014,20 @@ export class ServerState {
       }
       for (let level = previous + 1; level <= previous + count; level++) {
         const price = skillUpPrice(role, level);
-        if (!price || !Number.isSafeInteger(price.gold) || price.gold < 0) return this.failure(2001, "skill price unavailable");
+        if (!price || !goldOnlySkillPrice(price) || !Number.isSafeInteger(price.gold) || price.gold < 0) return this.failure(2001, "skill price unavailable");
         total += price.gold;
       }
       changes.push({ field, current: previous + count });
     }
     if (!Number.isSafeInteger(total) || game.gold < total) return this.failure(2001, "insufficient gold for batch skill training");
     const previousGold = game.gold;
+    const previousSkills=changes.map(change=>({field:change.field,value:target[change.field],present:Object.hasOwn(target,change.field)}));
     for (const change of changes) target[change.field] = change.current;
     game.gold -= total;
-    this.persist();
+    try{this.persist();}catch(error){
+      for(const previous of previousSkills){if(previous.present)target[previous.field]=previous.value;else delete target[previous.field];}
+      game.gold=previousGold;throw error;
+    }
     return this.envelope({
       target_inst: { inst_id: targetId, ...Object.fromEntries(changes.map((change) => [change.field, { cur: change.current }])) },
       user: { gold: { prev: previousGold, cur: game.gold } }, consumed_inst_list: [],
