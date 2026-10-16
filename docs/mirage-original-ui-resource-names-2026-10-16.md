@@ -144,6 +144,42 @@ Mirage-only asset registry cannot prove the required STI002 layer coverage.
 Native random ENV selection requires coverage of every matching candidate,
 not merely one selected convenient texture.
 
+### Bounded layer composition follow-up
+
+Original `sources/client-tables/recovered-data/environments.csv:4,17` gives
+both keys2/15 PreFixSTI002 and five composition integers11/11/11/111/11.
+`sources/native/episodes/ghidra-episode-background-producer.txt:94-169`
+constructs five layer prefixes with `%s_%s`, using ENV.PreFix plus static
+strings at+6c/+78/+84/+90/+9c. Its calls at lines170/218/266/314/362 supply
+the five ENV composition fields at node+44/+50/+5c/+68/+74. The format
+literal is independently resolved by
+`sources/native/episodes/ghidra-episode-leveling-background-keys.txt:4-8`.
+
+The static-string loader identities are closed by
+`sources/native/revival/ghidra-leveldata-decomp-04.txt`: line1427 selects
+bg_prefix_longlong and line1440 writes+6c;1452/1465 select/write
+bg_prefix_long/+78;1477/1490 bg_prefix_short/+84;1502/1515
+bg_prefix_shortshort/+90;1527/1540 bg_prefix_window/+9c. Exact literals are
+also retained in `sources/native/strings/native-all-strings.tsv:448215-448219`.
+Their original actual values were not recovered by this bounded audit.
+
+Fresh direct immutable Thumb inspection of CSRGameScrollBGDraw.Load
+G9c0444 closes the composition mechanism: G9c0548..55c divides the integer
+by10 and extracts its last decimal digit; G9c0560 converts that digit to
+text; G9c0566..576 prefixes the supplied layer string; the loop continues
+with the quotient. Thus11 means two occurrences of variant1, and111 three
+occurrences of variant1. It does not imply variants1/2/3. This consumer
+was inspected directly in the original ELF (entryELF9b0444), not copied
+from an existing decompilation file containing this function.
+
+The verified ST002 index includes named AT entriesSTI002_A1/B1/C1/D1/E1
+and S2 entriesSTI002_A01/B01/C01/D01/E01. IF the five static prefix values
+are explicitly supplied as A/B/C/D/E, the named AT entries cover all
+decimal variants for these two ENV rows. This is conditional source/name
+coverage: the static values and AT-to-sprite dependency consumer remain
+unclosed. Neither those names nor the already verified S2-to-I2 joins prove
+full layered-background rendering readiness.
+
 Readiness correction implied by this source:
 
 - Keep prefix+postfix stair-sprite binding checks.
