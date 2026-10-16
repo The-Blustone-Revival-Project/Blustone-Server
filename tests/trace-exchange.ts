@@ -70,7 +70,7 @@ try {
   assert.equal(game.recruited_cards.length, previous + 2);
   for (const card of success.ret_data.card) {
     assert.equal(card.ref_id, "006"); assert.equal(card.rank, 1);
-    assert.deepEqual(card, cardInstance(card.inst_id, "006", 1));
+    assert.deepEqual(card, {...cardInstance(card.inst_id, "006", 1),regdate:Math.floor(Date.now()/1000)});
     assert.equal("index_id" in card, false, "native builds the result marker itself");
   }
   assert.notEqual(success.ret_data.card[0].inst_id, success.ret_data.card[1].inst_id);

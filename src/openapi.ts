@@ -1345,6 +1345,7 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
             inst_id: { type: "integer", description: "Owned instance identifier; used by decks and leader selection." },
             ref_id: { type: "string", description: "Exact base.id of a loaded CardReference; never empty." },
             rank: { type: "integer", description: "Must have a corresponding reference stat row." },
+            regdate: { type: "integer", minimum: 0, maximum: 4294967295, description: "Native uint32 epoch seconds. Actual new gacha/trace grants sample registration time once per batch; old owned dates and transient/bootstrap templates retain prior values. Used by the native one-hour getter, but not proof of quick-advancement entitlement." },
             exp: { type: "integer", description: "Accumulated experience; level tables still need reconstruction." },
           },
         },

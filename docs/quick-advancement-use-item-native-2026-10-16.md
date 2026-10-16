@@ -216,3 +216,51 @@ cards and other native consumers. This note does not propose trimming
 rank1/rank2 references or changing earned hunters to activate the popup.
 Reference compatibility must be solved explicitly before claiming this
 native quick-advancement flow is usable with the current ordinary refs.
+
+## Follow-up: the one-hour field is parsed regdate in seconds
+
+The field identity and unit in the timer above are now positively closed.
+`CSRCard::parse` G8680a4 loads literal **`regdate`** at G8681ac,
+forms the key address at G8681b4, and indexes the card JSON at G8681b6.
+Its numeric branch loads the value's low word at G8681ce. Its
+floating/string-number conversion uses `VCVT.U32.F64` at G8681f6;
+the default path supplies 0. At G868200 it stores the resulting low
+uint32 together with the zero register r6 as a doubleword at **card
+`+0x18`**. This field is not a full-width uint64 timestamp just because
+its native storage occupies eight bytes. Canonical server wire values
+should be integral numeric uint32 timestamps.
+
+`GetJustRankUpRemainedT` G867a3c then reads exactly that field's low word
+at G867a5e. G867a60 adds `0xe10` (**3600**), G867a64 subtracts the
+supplied server time, and G867a66/68 returns the difference only under
+the signed **GT** condition; otherwise the prior result 0 is returned.
+Arithmetic is native low32 arithmetic, followed by a signed-positive
+test. The earlier numeric-reference guard at G867a58/5c still applies.
+Do not describe this as unbounded JavaScript timestamp arithmetic.
+
+Seconds are established independently by the clock owner:
+
+- `CGMTime::GetCurServerTime` G797628 calls `RMGetTickCount`
+  G10ff8e8 at G79762e, divides the returned 64-bit quantity by **1000**
+  at G797632..638, and applies its stored server-time offset at
+  G79763c..642.
+- `RMGetTickCount` calls imported `clock_gettime` G62225c with
+  clock ID **0** at G10ff8fa..8fc. G10ff914..926 converts the
+  realtime seconds/nanoseconds pair into milliseconds. Thus the
+  divided clock represents realtime epoch seconds before server offset.
+- `CGMTime::SetTime` G79794c also samples this clock divided by 1000
+  at G79795c..966, stores that baseline at `+8`, and stores supplied
+  server seconds at `+0x14` via G797974..976. The current-server getter
+  returns supplied server time plus elapsed seconds.
+- The bounded popup-region predicate passes `GetCurServerTime`'s
+  result directly to `GetJustRankUpRemainedT` at Gdc7194..719c.
+
+Consequently a revival factory that always emits `regdate:0` for a
+newly earned ordinary hunter cannot expose a positive present-day
+hour remainder through this getter. Timestamping an actually new
+earned hunter with current server seconds would repair that missing
+input. It must not rewrite old owned hunters, imply an original grant
+date for migrated records, or turn transient Arena/Search templates
+into newly earned ownership. The complete UI predicate binding and
+original package/entitlement settlement remain separate unresolved
+boundaries; a nonzero timer is not proof of backend purchase admission.

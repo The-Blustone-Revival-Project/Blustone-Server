@@ -76,7 +76,9 @@ try {
     const cards=(await secure("/lobby/GetCardInven")).ret_data;
     assert.ok(cards.some((row:any)=>row.ref_id==='002'));assert.ok(cards.filter((row:any)=>row.ref_id==='002').every((row:any)=>row.rank===2));
     const registered=JSON.parse(readFileSync(file,"utf8"));assert.equal(registered.gameStates[0][1].starter_cards.find((row:any)=>row.ref_id==='002').rank,2);
+    const beforeDraw=Math.floor(Date.now()/1000);
     const draw=await secure("/shop/GachaPremium",{cnt:"1"});assert.equal(draw.result_code,1);assert.equal(draw.ret_data.cnt,1);
+    assert.ok(Number.isInteger(draw.ret_data.card.regdate)&&draw.ret_data.card.regdate>=beforeDraw&&draw.ret_data.card.regdate<=Math.floor(Date.now()/1000),"New owned acquisition uses native epoch seconds on encrypted wire");
     assert.equal(Array.isArray(draw.ret_data.card),false,"Native one-draw receipt is a single complete card DTO");
     assert.equal(draw.ret_data.card.ref_id,recruit);assert.equal(draw.ret_data.card.rank,rank);assert.deepEqual(draw.ret_data.card.reward,{ref_id:recruit,qty:1});
     const acquired=JSON.parse(readFileSync(file,"utf8")),owned=acquired.gameStates[0][1];
@@ -85,6 +87,7 @@ try {
     assert.deepEqual(JSON.parse(readFileSync(file,"utf8")).gameStates[0][1],owned);
     const restored=(await secure("/lobby/GetCardInven")).ret_data;
     assert.equal(restored.find((row:any)=>row.inst_id===draw.ret_data.card.inst_id).rank,rank);
+    assert.equal(restored.find((row:any)=>row.inst_id===draw.ret_data.card.inst_id).regdate,draw.ret_data.card.regdate,"Restart retains the original acquisition date");
     assert.ok(restored.filter((row:any)=>row.ref_id==='002').every((row:any)=>row.rank===2));
     assert.equal((await secure("/reference/GetCard")).ret_data.find((row:any)=>row.base.id===recruit).stat[0].rank,rank);
     await stop();

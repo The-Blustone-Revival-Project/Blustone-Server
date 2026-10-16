@@ -1,4 +1,41 @@
-## Latest continuation: native minimum-rank reference prerequisite (2026-10-16)
+## Latest continuation: actual Hunter registration timestamps (2026-10-16)
+
+Previous checkpoint ee4cd10 added optional native minimum-rank references.
+This checkpoint fixes zero registration dates on actual new gacha and trace
+grants, backed by newly closed native field/unit evidence. Goal ACTIVE; no live
+profile/save/device/client/APK/original asset/Docker/Collector/inference changes.
+Input hold persists. Server/Instrumented edit boundary and read-only DataDump
+remain. No original ticket entitlement or successful UseItem is introduced.
+
+CSRCard.parseG8680a4 loads regdateG8681ac/1b4→operator[]G8681b6. Numeric
+conversion is effectivelyU32 (including VCVT.U32.F64G8681f6), stored with zero
+high word into card+18 atG868200. GetJustRankUpRemainedTG867a3c reads that
+exact low wordG867a5e and returns positive signed32 regdate+3600−serverTime,
+or0, for numeric refs below900. Clock GetCurServerTimeG797628 uses realtime
+milliseconds/1000 plus server-time seconds adjustment. Full proof appended
+docs/quick-advancement-use-item-native-2026-10-16.md; original ARM unchanged.
+
+cardInstance previously supplied regdate0 to every new owned recruitment.
+New actual gacha/trace batches now sample bounded floor(Date.now()/1000) ONCE,
+before debit/ID/ownership mutation. Invalid negative/fractional/unsafe/overU32
+host clocks refuse without purchase mutation. Trace reuse covers guided awards.
+Existing dated or zero-dated owned records remain untouched, including reload;
+generic starter/transient Arena/Search templates retain0. No backfill, simulated
+entitlement, timer extension, currency/card grant or new schema. Existing lazy
+resource recovery remains its separate preceding boundary.
+
+All198 npm test programs, five profile suites, build and independent review
+PASS. New focused source/compiled check covers actual gacha11 and trace2 batches,
+second truncation/U32 edges, different grant dates, untouched old/template dates,
+real write failure rollback, invalid-clock no-debit and restart. Existing trace
+DTO test now expects its actual grant timestamp instead of template0. Compiled
+encrypted minimum-rank HTTP proof additionally bounds real gacha wire regdate
+between host epoch seconds and verifies exact date after persisted key/OTP
+restart. docs/hunter-registration-time-2026-10-16.md and OpenAPI own semantics.
+No native popup/live deployment claim. Actual pending purchase lifecycle,
+result counter/entitlement and further areas/rewards remain pending; goal ACTIVE.
+
+## Historical continuation: native minimum-rank reference prerequisite (2026-10-16)
 
 Previous checkpoint113f122 added historical effective advancement fees.
 This checkpoint closes more quick-advancement gates and adds an optional

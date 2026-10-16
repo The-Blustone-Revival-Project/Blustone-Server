@@ -82,6 +82,10 @@ aligns non-main references and new-card factories with accepted community birth
 grades. It preserves retained stat values and refuses incompatible old saves
 without changing ownership. See the [minimum-rank profile](docs/hunter-minimum-rank-projection-2026-10-16.md).
 
+New gacha and trace recruits record their [native registration time](docs/hunter-registration-time-2026-10-16.md)
+in epoch seconds. Existing acquisition history and transient templates retain
+their dates; this does not enable quick-advancement ticket consumption.
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

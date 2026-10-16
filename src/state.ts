@@ -1,5 +1,6 @@
 import {DORM_SHOP_ID,configuredDormExpansion,hunterCapacity,dormExpansionReferences,dormPurchaseInventory,planDormExpansion,type DormExpansionPolicy} from "./dorm-expansion.js";
 import {HUNTER_MIN_RANK_PROFILE} from "./hunter-minimum-rank.js";
+import {hunterRegistrationTime} from "./hunter-registration.js";
 import crypto from "node:crypto";
 import { guildLobby,type GuildRecord } from "./guild-lobby.js";
 import { establishedGuildRecords } from "./guild-records.js";
@@ -2978,6 +2979,8 @@ export class ServerState {
       });
     if(granted>0&&game.starter_cards.length+game.recruited_cards.length+granted>hunterCapacity(game))return this.envelope({
       cnt:0,card:null,user:{iap_qty:game.gacha_iap_qty,free_iap_qty:game.gacha_free_qty,gold:{cur:game.gold}},error_code:"GACHA_DORM_FULL",cost:0,granted:0});
+    let regdate=0;
+    if(granted>0)try{regdate=hunterRegistrationTime(Date.now());}catch{return this.failure(2001,"Hunter registration clock unavailable");}
     const before={gacha_free_qty:game.gacha_free_qty,gacha_iap_qty:game.gacha_iap_qty,next_card_inst_id:game.next_card_inst_id,
       book:game.card_book,count:game.recruited_cards.length};
     if (affordable && cost > 0) {
@@ -2993,7 +2996,7 @@ export class ServerState {
     game.next_card_inst_id = nextCardId;
     const instances = Array.from({ length: granted }, (_, index) => {
       const id = needsGuarantee && index === 10 ? guaranteedReference!.base.id : recruitId;
-      return cardInstance(game.next_card_inst_id + index, id, referenceRecruitRank(id));
+      return {...cardInstance(game.next_card_inst_id + index, id, referenceRecruitRank(id)),regdate};
     });
     const previousRefs = new Set(game.card_book.map((card) => card.ref_id));
     const card = instances.map((instance, index) => {

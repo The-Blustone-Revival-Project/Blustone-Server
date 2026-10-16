@@ -1,4 +1,5 @@
 import {hunterCapacity} from "./dorm-expansion.js";
+import {hunterRegistrationTime} from "./hunter-registration.js";
 import { cardInstance, recruitBirthRanks, starterReference } from "./bootstrap.js";
 import { mergeCardBook, type LocalGameState } from "./game.js";
 import { HUNTER_TRACE_ITEMS } from "./hunter-traces.js";
@@ -39,7 +40,9 @@ export function exchangeHunterTraces(payload: Record<string, unknown>, game: Loc
   if (!Number.isSafeInteger(next) || next < 1 || !Number.isSafeInteger(end) ||
       end > Math.min(CARD_INSTANCE_LIMIT, SEARCH_HELPER_SERIAL))
     return { error: "Hunter instance capacity reached" };
-  const cards = Array.from({ length: count }, (_, index) => cardInstance(next + index, trace.cardId, rank));
+  let regdate:number;
+  try{regdate=hunterRegistrationTime(Date.now());}catch{return {error:"Hunter registration clock unavailable"};}
+  const cards = Array.from({ length: count }, (_, index) => ({...cardInstance(next + index, trace.cardId, rank),regdate}));
   // Prepare the replacement book before touching earned inventory. Preserve
   // existing row/array identities when the durable write or rename fails.
   const book = mergeCardBook(game.card_book, cards), previousBook = game.card_book;
