@@ -31,6 +31,8 @@ import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors,mirageEndRefusal } from "./mirage.js";
 import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
+import {configuredResourceShop,resourceShopReferences,type ResourceShopPolicy} from "./resource-shop.js";
+import {planResourcePurchase} from "./resource-purchase.js";
 import {configuredRupeeShop,normalizeRupeeShopCounter,rupeeShopReferences,rupeePurchaseInventory,planRupeePurchase,RUPEE_SHOP_ID,RUPEE_COUPON_ID,type RupeeShopCounter,type RupeeShopPolicy} from "./rupee-shop.js";
 import {configuredVeteranGift,veteranGiftItem,planVeteranGift,type VeteranGiftPolicy} from "./veteran-gift.js";
 import {normalizeProfileSettings,planProfileSettings,profileEditView,validateProfileNickname,type ProfileSettings} from "./profile-settings.js";
@@ -85,7 +87,7 @@ import { earnSearchCapsule, explicitSearchCapsuleVictory } from "./search-capsul
 import { skillLevelLimit, skillUpPrice,skillLevelRows } from "./skill-training.js";
 import {planSkillMaterials,skillMaterialRequirements} from "./skill-materials.js";
 import { FIXTURE_FUEL_AP, FIXTURE_FUEL_ID, fuelCycle, fuelStatus, supplyActivities, supplyInstances } from "./supply.js";
-import { BP_SHOP_AMOUNT, BP_SHOP_ID, FUEL_SHOP_AP, FUEL_SHOP_ID, FUEL_SHOP_LIMIT, FUEL_SHOP_PRICES, fuelPurchaseInventory, settleFuelShop } from "./shop-fuel.js";
+import { BP_SHOP_ID, fuelPurchaseInventory, settleFuelShop } from "./shop-fuel.js";
 import { completeTutorialList, createLocalGameState, GACHA_COST, GACHA_SINGLE_COST, mergeCardBook, normalizeLocalGameState, regenerateResources, resourceChargeTime, type LocalGameState, type LocalTutorialState } from "./game.js";
 import { CARD_INSTANCE_BASE, CARD_INSTANCE_LIMIT, migrateCardInstanceNamespace, validateRawCardInstanceRoster } from "./card-instance-namespace.js";
 import {
@@ -570,6 +572,7 @@ export class ServerState {
   private readonly fishingCatalogue?: FishingCatalogue;
   private readonly baitShopPolicy?:BaitShopPolicy;
   private readonly rupeeShopPolicy?:RupeeShopPolicy;
+  private readonly resourceShopPolicy?:ResourceShopPolicy;
   private readonly veteranGiftPolicy?:VeteranGiftPolicy;
   private readonly profileMode:"disabled"|"archive-profile-projection";
   private readonly fishingSaleMode:"disabled"|"local-bound";
@@ -607,6 +610,7 @@ export class ServerState {
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
+      resourceShopMode?:"disabled"|"archive-2018-base-only";resourceApDailyLimit?:unknown;resourceBpDailyLimit?:unknown;
       rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
       veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
       profileMode?:"disabled"|"archive-profile-projection";
@@ -614,6 +618,11 @@ export class ServerState {
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    this.resourceShopPolicy=configuredResourceShop(Object.hasOwn(options,"resourceShopMode")?options.resourceShopMode:process.env.BLUSTONE_RESOURCE_SHOP_MODE??"disabled",
+      Object.hasOwn(options,"resourceApDailyLimit")?options.resourceApDailyLimit:process.env.BLUSTONE_RESOURCE_AP_DAILY_LIMIT,
+      Object.hasOwn(options,"resourceBpDailyLimit")?options.resourceBpDailyLimit:process.env.BLUSTONE_RESOURCE_BP_DAILY_LIMIT);
+    if(this.resourceShopPolicy&&(starterLevels.vip_group.length||starterLevels.vip.some(row=>row.benefit.length)))
+      throw new TypeError("Historical resource shop currently requires neutral VIP benefits");
     this.rupeeShopPolicy=configuredRupeeShop(Object.hasOwn(options,"rupeeShopMode")?options.rupeeShopMode:process.env.BLUSTONE_RUPEE_SHOP_MODE??"disabled",
       Object.hasOwn(options,"rupeeShopDailyLimit")?options.rupeeShopDailyLimit:process.env.BLUSTONE_RUPEE_SHOP_DAILY_LIMIT);
     if(this.rupeeShopPolicy&&(starterLevels.vip_group.length||starterLevels.vip.some(row=>row.benefit.length)))
@@ -759,11 +768,14 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
+    if(saved.version!==9&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+      [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
+      throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
     for (const raw of saved.accounts) {
       if (!isRecord(raw) || !Number.isSafeInteger(raw.pvid) || Number(raw.pvid) < 1 ||
@@ -771,10 +783,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -838,6 +850,8 @@ export class ServerState {
         }
       }
     }
+    if(saved.version===9&&![...this.gameByPvid.values()].some(game=>game.fuel_shop.coupon!==undefined||game.bp_shop.coupon!==undefined))
+      throw new TypeError("Schema9 requires captured resource coupon history");
     if(saved.dispatches!==undefined) {
       if(!Array.isArray(saved.dispatches))throw new TypeError("Malformed dispatch journal collection");
       for(const row of saved.dispatches) {
@@ -851,7 +865,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -880,13 +894,14 @@ export class ServerState {
     if (!this.stateFile) return;
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
     // Older writers must refuse journals/settings they cannot preserve.
+    const resourceCoupons=[...this.gameByPvid.values()].some(game=>game.fuel_shop.coupon!==undefined||game.bp_shop.coupon!==undefined);
     const rupees=[...this.accountsByPvid.values()].some(account=>account.rupeeShopCounter!==undefined);
     const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const snapshot = { version: resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -1352,8 +1367,11 @@ export class ServerState {
     // Ordinary item rows remain unchanged; purchase counts are separate
     // scalar rows, not prev/cur receipts or a bare inventory array.
     const account=this.accountFor(payload,headers),game=this.gameFor(account);
+    const counters=[{...game.fuel_shop},{...game.bp_shop}];
     const apChanged = settleFuelShop(game.fuel_shop, Date.now()), bpChanged = settleFuelShop(game.bp_shop, Date.now());
-    if (apChanged || bpChanged) this.persist();
+    if (apChanged || bpChanged) {
+      try{this.persist();}catch(error){Object.assign(game.fuel_shop,counters[0]);Object.assign(game.bp_shop,counters[1]);throw error;}
+    }
     return this.envelope({ item: game.items, global_item: [...fuelPurchaseInventory(game.fuel_shop), ...fuelPurchaseInventory(game.bp_shop, BP_SHOP_ID),
       ...(this.baitShopPolicy?baitPurchaseInventory(account.baitShopCounter,Date.now()):[]),
       ...(this.rupeeShopPolicy?rupeePurchaseInventory(account.rupeeShopCounter,Date.now()):[])] });
@@ -1362,37 +1380,20 @@ export class ServerState {
   buyFuel(payload: Record<string, unknown>, headers: Record<string, string>) {
     if(payload.target_ref_id===RUPEE_SHOP_ID)return this.buyRupees(payload,headers);
     if(payload.target_ref_id==="LU003")return this.buyBait(payload,headers);
-    const game = this.gameFor(this.accountFor(payload, headers));
-    const parse = (value: unknown) => typeof value === "number" ? value :
-      typeof value === "string" && /^\d+$/.test(value.trim()) ? Number(value) : NaN;
-    const priceType = parse(payload.price_type);
-    const resource = payload.target_ref_id === FUEL_SHOP_ID ? "ap" : payload.target_ref_id === BP_SHOP_ID ? "bp" : null;
-    if (!resource || ![1, 2].includes(priceType) ||
-        parse(payload.qty) !== 1 || parse(payload.item_inst_id) !== 0)
-      return this.failure(2001, "unsupported fuel item/payment/quantity");
-    const shop = resource === "ap" ? game.fuel_shop : game.bp_shop;
-    const amount = resource === "ap" ? FUEL_SHOP_AP : BP_SHOP_AMOUNT;
-    if (settleFuelShop(shop, Date.now())) this.persist();
-    const key = priceType === 1 ? "manda" : "gold";
-    const previousCount = shop[key], price = FUEL_SHOP_PRICES[priceType as 1 | 2];
-    if (shop.manda + shop.gold >= FUEL_SHOP_LIMIT || !Number.isSafeInteger(game[resource] + amount))
-      return this.failure(2001, "fuel purchase limit/balance invalid");
-    if (priceType === 1 ? game.gacha_iap_qty + game.gacha_free_qty < price : game.gold < price)
-      return this.failure(2001, "not enough fuel purchase currency");
-    const previousResource = game[resource], previousGold = game.gold;
-    if (priceType === 1) {
-      const free = Math.min(game.gacha_free_qty, price); // local free-first policy
-      game.gacha_free_qty -= free; game.gacha_iap_qty -= price - free;
-    } else game.gold -= price;
-    game[resource] += amount; // preserve reward overflow
-    shop[key] = previousCount + 1;
-    this.persist();
-    return this.envelope({ jackpot_level: 1, jackpot_multiply: 1,
-      user: { [resource]: { prev: previousResource, cur: game[resource], [`${resource}_charge_time`]: resourceChargeTime(game, resource) },
-        ...(priceType === 1 ? { iap: { iap_qty: game.gacha_iap_qty, free_iap_qty: game.gacha_free_qty } }
-          : { gold: { prev: previousGold, cur: game.gold } }) },
-      target_inst: { item_id: payload.target_ref_id, price_type: priceType, buy_cnt: { prev: previousCount, cur: previousCount + 1 } },
-      consumed_inst_list: [] });
+    const account=this.accountFor(payload,headers),loaded=this.gameByPvid.get(account.pvid);
+    if(!loaded)return this.failure(2001,"Resource shop requires a loaded game");
+    // Existing lazy regeneration remains its own boundary, before purchasing.
+    const game=this.gameFor(account);let plan;
+    try{plan=planResourcePurchase(payload,game,this.resourceShopPolicy,Date.now());}
+    catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid resource purchase");}
+    const counter=game[plan.shopKey],before={gold:game.gold,gacha_free_qty:game.gacha_free_qty,gacha_iap_qty:game.gacha_iap_qty},resourceBefore=game[plan.resource];
+    const coupon=plan.coupon===undefined?undefined:game.items[plan.coupon.index],quantity=coupon?.qty;
+    Object.assign(game,{gold:plan.gold,gacha_free_qty:plan.gacha_free_qty,gacha_iap_qty:plan.gacha_iap_qty});
+    game[plan.resource]=plan.amount;game[plan.shopKey]=plan.counter;if(coupon)coupon.qty=plan.coupon!.remaining;
+    try{this.persist();}catch(error){
+      Object.assign(game,before);game[plan.resource]=resourceBefore;game[plan.shopKey]=counter;if(coupon)coupon.qty=quantity!;throw error;
+    }
+    return this.envelope(plan.receipt);
   }
 
   private buyRupees(payload:Record<string,unknown>,headers:Record<string,string>) {
@@ -1753,7 +1754,14 @@ export class ServerState {
   }
 
   itemReferenceRows() {
-    const base=itemReference();
+    const source=itemReference(),base={...source,global_item:source.global_item.map(row=>({...row,
+      price_list:row.price_list.map(price=>({...price,price:Number(price.price)}))}))};
+    if(this.resourceShopPolicy) {
+      const replacement=resourceShopReferences(this.resourceShopPolicy);
+      base.item=base.item.map(row=>replacement.item.find(item=>item.id===row.id)??row);
+      base.item.push(...replacement.item.filter(row=>!base.item.some(item=>item.id===row.id)));
+      base.global_item=base.global_item.map(row=>replacement.global_item.find(item=>item.item_id===row.item_id)??row);
+    }
     const bait=this.baitShopPolicy?baitShopReferences(this.baitShopPolicy):{item:[],global_item:[]};
     const rupee=this.rupeeShopPolicy?rupeeShopReferences(this.rupeeShopPolicy):{item:[],global_item:[]};
     return {...base,item:[...base.item,...bait.item,...rupee.item,...(this.veteranGiftPolicy?[veteranGiftItem(this.veteranGiftPolicy)]:[]),...this.fishingItems.map(row=>({...row}))],

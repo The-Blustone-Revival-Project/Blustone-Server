@@ -57,6 +57,13 @@ owned local coupons as another payment. IDs, daily policy and base-only payouts
 are local; original jackpots and item identities remain missing. First purchase
 captures schema8 counters. See the [Rupee workflow](docs/rupee-shop-workflow-2026-10-16.md).
 
+Optional `BLUSTONE_RESOURCE_SHOP_MODE=archive-2018-base-only` supplies60 fuel
+or2 Challenge Invitations for5 Manda,5,000 Rupees or one owned local coupon.
+Both `BLUSTONE_RESOURCE_AP_DAILY_LIMIT` and `BLUSTONE_RESOURCE_BP_DAILY_LIMIT`
+must explicitly define local caps. Existing paid counts survive mode changes;
+coupon purchases capture schema9 history. No coupons or jackpots are issued.
+See the [resource shop contract and setup](docs/resource-shop-native-2026-10-16.md).
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

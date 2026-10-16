@@ -1,4 +1,64 @@
-## Latest continuation: historical base-only Rupee shop (2026-10-16)
+## Latest continuation: fuel and Fight Club refill reconstruction (2026-10-16)
+
+Previous checkpoint c0d5302 restored optional historical Rupee exchange.
+This checkpoint adds optional archive-2018-base-only resource shops: AP60/BP2
+for5 Manda,5000 Rupees or one owned LOCAL coupon. Goal ACTIVE. No live/private
+save, Android, APK, Docker, Collector or inference changes. Device input hold
+persists; no battle started. Work only Server/Instrumented; DataDump read-only.
+
+14 exact extracted image rows/14 source files preserved in
+resources/reference/resource-shop-screen-quotes.json SHA256
+5c82b482ace33c9333e3aa4b970bf1e09836f33a48812c5c9b28ab2b7ae1a94b.
+Complete2018 fuel idx2840 and invitations idx2478 support these base quotes;
+conflicting2017/undated prices and jackpot outcomes remain separate evidence.
+Original IDs/coupon producers, VIP law/caps/reset timezone and RNG unrecovered.
+docs/resource-shop-image-quotes-2026-10-16.md and
+docs/resource-shop-native-2026-10-16.md retain provenance/native addresses/setup.
+
+BLUSTONE_RESOURCE_SHOP_MODE=archive-2018-base-only requires BOTH explicit
+BLUSTONE_RESOURCE_AP_DAILY_LIMIT and BLUSTONE_RESOURCE_BP_DAILY_LIMIT1..1000.
+Caps, UTC reset, free-first and deterministic base-only payout are LOCAL policy;
+neutral VIP benefits enforced. Stable local_ap/local_bp replace matching rows,
+never duplicate native use_type1/2 selectors; historical effect60/2*provide1.
+Default AP10/BP5 and5Manda/100gold remain. No coupon issuance/startup grants.
+
+Native BOTH shops add purchase counts1/2/4 against a resource's allowance.
+Existing fuel_shop/bp_shop manda/gold histories remain canonical when enabling,
+disabling or changing prices/caps. Real coupon purchase adds optional coupon
+history, retained at0 after day reset; disabled mode still counts it. Inventory
+publishes all1/2/4 rows. First actual coupon payment writes schema9 with required
+quest/dispatch arrays; schemas1..8 with resource coupon history refuse before
+normalization. Rupee8/profile7/bait6/comments5/linear4 remain accepted under9;
+no-coupon accounts retain prior versions. Actual Rupee/profile8→9 restart tested.
+
+Native empty-ID/zero coupon requirement can pass affordability then dereference
+missing stock: APGetItemInstGd4b160→VLDRGd4b168; BPGd484c6→VLDRGd484ce.
+Default fixtures now also supply neutral local_ap_coupon/local_bp_coupon IDs
+with positive need1. Their default coupon API still refuses; historical mode
+supports one actual unlocked unambiguous full64 owned coupon. Local IDs have
+no claimed original mapping; blank coupon thumbnails/unknown producer retained.
+
+Pure resource purchase plan commits wallet/resource/counter/coupon together.
+Real.tmp and blocked-rename failures restore exact fields/counter reference/
+selected row/absence/file bytes in both modes, including FIRSTcoupon schema1→9
+failure. Inventory reset persistence also rolls counters back. Existing lazy
+resource regeneration remains a separate preceding boundary; no exactly-once
+transport guarantee. Native changed-resource-only nested ap/bp_charge_time,
+scalar iap/gold pairs, absolute numeric full64 target_item_inst.qty, empty
+consumed_inst_list and target_inst per-payment counter pairs are preserved.
+Normal jackpot1/1; no original probabilities or GC6 bonus invented.
+
+All193 npm test programs, five profile suites, build and independent review
+PASS. Focused source/compiled state tests cover mode carry/shared caps/all three
+payments, exact IDs, lock/dup/short/overflow, UTC rollback/reset, schema guards,
+peer isolation and real failure rollback. Compiled encrypted HTTP proof starts
+its OWN ephemeral-loopback child/disposable state, authors two coupon stacks
+IDs9007199254740993 and18446744073709551615, performs AP/BP Manda/gold/coupon
+purchases and verifies receipt/stock/caps/schema9/peer/restart/key+OTP persistence.
+No native UI or live deployment claim. npm run test:resource-shop repeats built
+state+HTTP proof. Android refill UI, original rewards/other areas remain pending.
+
+## Historical continuation: historical base-only Rupee shop (2026-10-16)
 
 Previous checkpoint24f3f0c restoredconfiguredGC6gifts/refusedunbackedWebViews.
 Thischeckpoint restores optionaltype11goldshop usingLOCALitem/couponIDs,

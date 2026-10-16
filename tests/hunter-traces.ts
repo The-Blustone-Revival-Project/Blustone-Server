@@ -12,7 +12,7 @@ const game = state.gameFor(state.accountFor(auth, {}));
 const before = JSON.stringify(game);
 const reference = gameResponse(state, "/reference/GetItem", {}).ret_data as ReturnType<typeof itemReference>;
 assert.deepEqual(reference.global_item, fuelItemReference().global_item, "trace definitions cannot add shop offers");
-assert.deepEqual(reference.item.slice(0, 2), fuelItemReference().item, "existing resource definitions stay unchanged");
+assert.deepEqual(reference.item.slice(0, fuelItemReference().item.length), fuelItemReference().item, "existing resource definitions stay unchanged");
 assert.equal(JSON.stringify(game), before, "reading trace references cannot grant items, stars or hunters");
 const goldDisplay = reference.item.filter((row) => row.id === "RP1");
 assert.equal(goldDisplay.length, 1, "native calendar gold preview must classify RP1 as an item, not a card");

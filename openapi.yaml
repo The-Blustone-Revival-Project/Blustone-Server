@@ -1086,17 +1086,32 @@ paths:
         tickets/items/quantities refuse with provisional code2001. Local policy
         allows3 purchases per resource shared across currencies per UTCday;
         rollback never reopens a capped cycle, overflow is preserved, and Manda
-        total is charged once free-first. Identity, prices, amount, reset and
-        limit policy are fixtures; original values remain unknown. Success
-        supplies neutral jackpot1/1, scalar user.iap balances or user.gold pair,
-        user.ap or user.bp prev/cur/deadline INSIDE its resource object, and
-        target_inst item_id/price_type/buy_cnt prev-cur. GetItemInven restores
-        scalar global_item count rows. Independent AP/BP counters, resource
-        balances and wallet persist together. No native nonce was recovered:
-        separate accepted requests are distinct purchases, transport
-        exactly-once is not promised. Optional
-        BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection adds original LU003
-        High-quality Bait as a historical10-for6Manda offer;
+        total is charged once free-first. Default identity, prices, amount,
+        reset and limit policy are fixtures. Optional
+        BLUSTONE_RESOURCE_SHOP_MODE=archive-2018-base-only replaces the existing
+        use_type1/2 rows with historical2018 base quotes: AP60/BP2
+        for5Manda/5000gold/one owned LOCAL coupon, with explicit independent
+        BLUSTONE_RESOURCE_AP_DAILY_LIMIT and
+        BLUSTONE_RESOURCE_BP_DAILY_LIMIT1..1000 shared across1/2/4. Original
+        item/coupon IDs, cap/VIP law and jackpots remain unknown. Current
+        neutral VIP benefits are enforced. Positive coupon metadata avoids the
+        native unchecked empty-ID branch in default fixtures too; default coupon
+        API stays unsupported. Historical coupon receipts use exact numeric
+        uint64 target_item_inst.inst_id and absolute remaining qty,
+        consumed_inst_list empty. Enabling/disabling preserves existing paid and
+        coupon counts; no stock grant. First real resource coupon payment
+        captures schema9; earlier accounts retain their prior schema. AP/BP
+        purchases and inventory counter resets roll back on persistence failure;
+        existing lazy regeneration is a preceding separate boundary. Native
+        resource popup validation remains pending. Success supplies neutral
+        jackpot1/1, scalar user.iap balances or user.gold pair, user.ap or
+        user.bp prev/cur/deadline INSIDE its resource object, and target_inst
+        item_id/price_type/buy_cnt prev-cur. GetItemInven restores scalar
+        global_item count rows. Independent AP/BP counters, resource balances
+        and wallet persist together. No native nonce was recovered: separate
+        accepted requests are distinct purchases, transport exactly-once is not
+        promised. Optional BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection adds
+        original LU003 High-quality Bait as a historical10-for6Manda offer;
         BLUSTONE_BAIT_SHOP_DAILY_LIMIT must explicitly supply a LOCAL
         cap1..1000. Bait buys require price_type1/item_inst_id0/qty1 with no
         price field. Native provide_qty10 is the pack size. Receipt
@@ -1184,17 +1199,32 @@ paths:
         tickets/items/quantities refuse with provisional code2001. Local policy
         allows3 purchases per resource shared across currencies per UTCday;
         rollback never reopens a capped cycle, overflow is preserved, and Manda
-        total is charged once free-first. Identity, prices, amount, reset and
-        limit policy are fixtures; original values remain unknown. Success
-        supplies neutral jackpot1/1, scalar user.iap balances or user.gold pair,
-        user.ap or user.bp prev/cur/deadline INSIDE its resource object, and
-        target_inst item_id/price_type/buy_cnt prev-cur. GetItemInven restores
-        scalar global_item count rows. Independent AP/BP counters, resource
-        balances and wallet persist together. No native nonce was recovered:
-        separate accepted requests are distinct purchases, transport
-        exactly-once is not promised. Optional
-        BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection adds original LU003
-        High-quality Bait as a historical10-for6Manda offer;
+        total is charged once free-first. Default identity, prices, amount,
+        reset and limit policy are fixtures. Optional
+        BLUSTONE_RESOURCE_SHOP_MODE=archive-2018-base-only replaces the existing
+        use_type1/2 rows with historical2018 base quotes: AP60/BP2
+        for5Manda/5000gold/one owned LOCAL coupon, with explicit independent
+        BLUSTONE_RESOURCE_AP_DAILY_LIMIT and
+        BLUSTONE_RESOURCE_BP_DAILY_LIMIT1..1000 shared across1/2/4. Original
+        item/coupon IDs, cap/VIP law and jackpots remain unknown. Current
+        neutral VIP benefits are enforced. Positive coupon metadata avoids the
+        native unchecked empty-ID branch in default fixtures too; default coupon
+        API stays unsupported. Historical coupon receipts use exact numeric
+        uint64 target_item_inst.inst_id and absolute remaining qty,
+        consumed_inst_list empty. Enabling/disabling preserves existing paid and
+        coupon counts; no stock grant. First real resource coupon payment
+        captures schema9; earlier accounts retain their prior schema. AP/BP
+        purchases and inventory counter resets roll back on persistence failure;
+        existing lazy regeneration is a preceding separate boundary. Native
+        resource popup validation remains pending. Success supplies neutral
+        jackpot1/1, scalar user.iap balances or user.gold pair, user.ap or
+        user.bp prev/cur/deadline INSIDE its resource object, and target_inst
+        item_id/price_type/buy_cnt prev-cur. GetItemInven restores scalar
+        global_item count rows. Independent AP/BP counters, resource balances
+        and wallet persist together. No native nonce was recovered: separate
+        accepted requests are distinct purchases, transport exactly-once is not
+        promised. Optional BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection adds
+        original LU003 High-quality Bait as a historical10-for6Manda offer;
         BLUSTONE_BAIT_SHOP_DAILY_LIMIT must explicitly supply a LOCAL
         cap1..1000. Bait buys require price_type1/item_inst_id0/qty1 with no
         price field. Native provide_qty10 is the pack size. Receipt
