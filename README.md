@@ -77,6 +77,11 @@ materials, shared by native price previews and server settlement. Historical
 Guild discounts and undiscounted base prices remain unknown. See the
 [advancement price projection](docs/advancement-gold-projection-2026-10-16.md).
 
+Optional `BLUSTONE_HUNTER_MIN_RANK_PROFILE=catalogue-birth-rank-projection`
+aligns non-main references and new-card factories with accepted community birth
+grades. It preserves retained stat values and refuses incompatible old saves
+without changing ownership. See the [minimum-rank profile](docs/hunter-minimum-rank-projection-2026-10-16.md).
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

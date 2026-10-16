@@ -23,6 +23,7 @@ import { additionalMaterialReferences } from "./character-materials.js";
 import { RECOVERED_MONSTER_NAMESPACES, requireSelectedMonsterArt } from "./monster-art.js";
 import { projectMaterialStats } from "./material-stat-projection.js";
 import { configuredEquipmentReferences } from "./equipment-reference-profile.js";
+import {HUNTER_MIN_RANK_PROFILE,projectHunterMinimumRanks} from "./hunter-minimum-rank.js";
 
 /**
  * `BLUSTONE_CAMPAIGN=full|minimal`, resolved once at import. **`full`** is the
@@ -222,7 +223,7 @@ const originalStarterReference = [...new Map([
 export const CARD_REFERENCE_PROFILE = process.env.BLUSTONE_CARD_REFERENCE_PROFILE ?? "starter";
 if (!["starter", "materials"].includes(CARD_REFERENCE_PROFILE))
   throw new Error("Unknown ordinary card reference profile");
-export const starterReference = configuredEquipmentReferences([...originalStarterReference,
+export const starterReference = configuredEquipmentReferences(projectHunterMinimumRanks([...originalStarterReference,
   ...(CARD_REFERENCE_PROFILE === "materials" ? additionalMaterialReferences({
     packageNames: (process.env.BLUSTONE_PACKAGE_NAMES ?? "").split(","),
     publishedIds: originalStarterReference.map((card) => card.base.id),
@@ -230,10 +231,16 @@ export const starterReference = configuredEquipmentReferences([...originalStarte
     neutralSkillSlots: fixtureSkillSlots,
     projectStats: projectMaterialStats,
   }) : []),
-]);
+],HUNTER_MIN_RANK_PROFILE));
 
 /** Community birth grades apply to NEW grants only; preserve old rank1 saves. */
 export const recruitBirthRanks: Record<string, number> = { "002": 2, "003": 3, "004": 1, "005": 2, "006": 1 };
+
+/** Existing legacy recruitment choices remain; projected references supply
+ * the birth grade for material-backed identities absent from that old map. */
+export function referenceRecruitRank(refId:string) {
+  return recruitBirthRanks[refId]??(HUNTER_MIN_RANK_PROFILE==="legacy"?1:starterReference.find(row=>row.base.id===refId)?.stat[0]?.rank??1);
+}
 
 /**
  * Card instances.
@@ -271,7 +278,7 @@ const PARTY_SIZE = Math.max(1, Math.min(5, Number(process.env.BLUSTONE_PARTY_SIZ
  * **[FIXTURE]** every value except `ref_id`/`inst_id`. Nothing recovered
  * publishes a starter instance's rank, exp or gear levels.
  */
-export function cardInstance(instId: number, refId: string, rank = 1) {
+export function cardInstance(instId: number, refId: string, rank = HUNTER_MIN_RANK_PROFILE==="legacy"?1:starterReference.find(row=>row.base.id===refId)?.stat[0]?.rank??1) {
   return {
     inst_id: instId, ref_id: refId, rank, rank_up_cnt: 0,
     overcome_cnt: 0, exp: 0, lock: 1, regdate: 0, mirage_remain_hp: 1000,

@@ -2156,8 +2156,20 @@ paths:
         ret_data must be an array, not an object containing list/items. Each
         entry groups base, stat, equipment, skill and dialog. The local starter
         definition is reconstructed: field names are recovered, balance numbers
-        and resource selection are provisional. It is not production reference
-        data, and successful combat has not been verified."
+        and resource selection are provisional. It is not a complete original
+        production reference table. Optional
+        BLUSTONE_HUNTER_MIN_RANK_PROFILE=catalogue-birth-rank-projection removes
+        ordinary rows below known COMMUNITY-SOURCED birth grades for non-main
+        ordinary identities. GetMinRank reads the FIRST stat row; retained
+        numerical/growth values and row order are unchanged. Main user-name001,
+        unknown and awakened identities remain untouched. Fresh default
+        instances and material-backed recruitment align to supported projected
+        grades. Incompatible saved owned rank/awakening rows refuse before
+        persistence instead of being upgraded or erased; returning to legacy
+        retains compatible ownership. Native quick-advancement also requires
+        first-row/current-rank equality, but ticket eligibility/entitlement
+        settlement remains incomplete and UseItem stays guarded. Projected
+        native UI validation is pending."
       tags:
         - Reference data
       parameters: *a1
@@ -2198,8 +2210,12 @@ paths:
         loaded card definition; inst_id identifies ownership, not the
         definition. Authenticated response combines the bootstrap roster with
         account-owned recruitment grants persisted across server restart. Card
-        stats, costs, skills and bootstrap ownership remain fixtures; training
-        progression is not implemented.
+        stats, costs, skills and bootstrap ownership include explicit fixtures
+        and selected historical projections. Earned training/recruitment changes
+        persist. Under optional catalogue-birth-rank-projection, only fresh
+        factories use projected birth grades; incompatible old saves refuse
+        without rewriting and existing compatible cards are not retuned.
+        Original progression economics remain incomplete.
       tags:
         - Lobby and session
       parameters: *a1

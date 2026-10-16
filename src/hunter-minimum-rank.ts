@@ -1,0 +1,34 @@
+import {characterIdentities} from "./character-materials.js";
+
+export const HUNTER_MIN_RANK_PROFILE=process.env.BLUSTONE_HUNTER_MIN_RANK_PROFILE??"legacy";
+const profiles=["legacy","catalogue-birth-rank-projection"];
+if(!profiles.includes(HUNTER_MIN_RANK_PROFILE))throw new TypeError("Unknown Hunter minimum-rank profile");
+/** COMMUNITY-SOURCED catalogue claims, never original server birth ranks. */
+export function catalogueBirthRanks() {
+  return new Map(characterIdentities.flatMap(row=>{
+    const claim=row.claims.rarity;
+    if(!/^\d{3}$/.test(row.id)||!claim||!/^\d$/.test(claim.value??"")||Number(claim.value)<1||Number(claim.value)>4)return [];
+    if(claim.provenance.label!=="COMMUNITY-SOURCED")throw new TypeError("Hunter birth-rank provenance changed");
+    return [[row.id,Number(claim.value)] as const];
+  }));
+}
+/** GetMinRank reads the FIRST stat entry. Keep row order and every retained
+ * numerical value; remove only ordinary rows below a known catalogue grade.
+ * Unknown identities/awakened references remain unchanged. The state owner
+ * must reject incompatible owned ranks before writing a loaded save. */
+export function projectHunterMinimumRanks<T extends {base:{id:string;is_main?:number};is_main?:number;stat:readonly {rank:number;awk_step:number}[]}>(references:readonly T[],profile:string) {
+  if(!profiles.includes(profile))throw new TypeError("Unknown Hunter minimum-rank profile");
+  if(profile==="legacy")return [...references];
+  const births=catalogueBirthRanks();
+  return references.map(reference=>{
+    // The current main001 is the user-name fixture, not an authoritative join
+    // to catalogue Lantern. Preserve it and the fixed001 Search helper.
+    if(reference.is_main===1||reference.base.is_main===1)return reference;
+    const birth=births.get(reference.base.id);if(birth===undefined)return reference;
+    const stat=reference.stat.filter(row=>row.awk_step!==0||row.rank>=birth).map(row=>({...row}));
+    if(!stat.length||stat[0].rank!==birth||stat[0].awk_step!==0||
+      Array.from({length:6-birth},(_,index)=>birth+index).some(rank=>!stat.some(row=>row.rank===rank&&row.awk_step===0)))
+      throw new TypeError("Projected Hunter minimum requires ordered ordinary birth-through5 stat coverage");
+    return {...reference,stat} as T;
+  });
+}

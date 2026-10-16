@@ -1,4 +1,5 @@
 import {DORM_SHOP_ID,configuredDormExpansion,hunterCapacity,dormExpansionReferences,dormPurchaseInventory,planDormExpansion,type DormExpansionPolicy} from "./dorm-expansion.js";
+import {HUNTER_MIN_RANK_PROFILE} from "./hunter-minimum-rank.js";
 import crypto from "node:crypto";
 import { guildLobby,type GuildRecord } from "./guild-lobby.js";
 import { establishedGuildRecords } from "./guild-records.js";
@@ -103,7 +104,7 @@ import {
   starterLevels,
   linkedStageIds,
   partyProfile,
-  recruitBirthRanks,
+  referenceRecruitRank,
   starterAreas,
   starterInventory,
   starterReference,
@@ -141,6 +142,8 @@ function assertOwnedCardCompatibility(game: LocalGameState): void {
     if (ownedIds.has(card.inst_id) || !refs.has(card.ref_id)) {
       throw new Error("Invalid persisted owned card IDs/references. Refusing to overwrite ownership.");
     }
+    if(HUNTER_MIN_RANK_PROFILE!=="legacy"&&!starterReference.find(row=>row.base.id===card.ref_id)?.stat.some(row=>row.rank===card.rank&&row.awk_step===card.awk_step))
+      throw new Error("Hunter minimum-rank projection lacks an owned rank/awakening row; restore legacy. Refusing to overwrite ownership.");
     ownedIds.add(card.inst_id);
   }
   const deckTypes = new Set<number>();
@@ -2957,8 +2960,8 @@ export class ServerState {
     // Original probabilities/featured pool remain unknown; never fabricate an
     // unpublished reference or debit a bundle unable to honor the guarantee.
     const guaranteedReference = requested === 11 ? starterReference.find((card) =>
-      card.base.is_main === 0 && (recruitBirthRanks[card.base.id] ?? 1) >= 3) : undefined;
-    const needsGuarantee = requested === 11 && (recruitBirthRanks[recruitId] ?? 1) < 3;
+      card.base.is_main === 0 && referenceRecruitRank(card.base.id) >= 3) : undefined;
+    const needsGuarantee = requested === 11 && referenceRecruitRank(recruitId) < 3;
     const draws = FIXTURE_GACHA_CARD_ENABLED && recruitReference && price !== null &&
       (!needsGuarantee || guaranteedReference) ? requested : 0;
 
@@ -2990,7 +2993,7 @@ export class ServerState {
     game.next_card_inst_id = nextCardId;
     const instances = Array.from({ length: granted }, (_, index) => {
       const id = needsGuarantee && index === 10 ? guaranteedReference!.base.id : recruitId;
-      return cardInstance(game.next_card_inst_id + index, id, recruitBirthRanks[id] ?? 1);
+      return cardInstance(game.next_card_inst_id + index, id, referenceRecruitRank(id));
     });
     const previousRefs = new Set(game.card_book.map((card) => card.ref_id));
     const card = instances.map((instance, index) => {

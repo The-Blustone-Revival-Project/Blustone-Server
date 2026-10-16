@@ -1,4 +1,71 @@
-## Latest continuation: advancement fee projection and ticket caller evidence (2026-10-16)
+## Latest continuation: native minimum-rank reference prerequisite (2026-10-16)
+
+Previous checkpoint113f122 added historical effective advancement fees.
+This checkpoint closes more quick-advancement gates and adds an optional
+minimum-rank reference projection addressing a proven native prerequisite.
+Goal ACTIVE/native projected UI PENDING. No live profile/save/device/client/
+APK/original asset/Docker/Collector/inference changes. Input hold persists.
+Work only Server/Instrumented; DataDump remains read-only.
+
+Native IsAvailableConditionGcb45d8..45e4 admits current ranks3/4, then
+GetCardData/GetMinRankGcb45f4..4600 must equal current rank. Same-reference
+greater-rank or equal-rank credited competitor exclusion is also closed.
+GetMinRankG87b302 loads CardInfo+a0/a4 and reads FIRST stat entry's rank,
+NOT a min-scan or separate rarity field. Existing ordinary1..5 fixture rows
+therefore block that popup for higher-born characters. PreviewGcb5a06..5a16
+copies rank+1 and level1; SetLV derives EXP from the existing level table.
+It preserves credited counter in the detached preview, which does NOT prove
+the actual receipt's rank_up_cnt. More timer/pending-state details and exact
+addresses are in docs/quick-advancement-use-item-native-2026-10-16.md.
+
+docs/quick-advancement-presentation-evidence-2026-10-16.md adds source-bound
+original text/XML and a preserved package crop: before AND after labelsLv1,
+2603→5093. Crop does not retain full star badges;4star stays a separate full
+transcription claim. Original strings include dynamic%s-star title and bought-
+but-unapplied recovery text; static4star fallback does not map both SU IDs.
+SU1/SU2 metadata/entitlement/pending lifecycle and actual award counter remain
+incomplete. /world/UseItem stays guarded2001; no tickets or payment rights granted.
+
+BLUSTONE_HUNTER_MIN_RANK_PROFILE=catalogue-birth-rank-projection uses accepted
+characterIdentities COMMUNITY-SOURCED rarity1..4 for non-main ordinary IDs.
+Only ordinary stat rows below that grade are removed; row order and ALL kept
+numeric/growth fields stay unchanged. First ordinary row must match birth and
+coverage through5 must remain. Unknown/awakened identities stay untouched.
+The main001 user-name fixture is EXEMPT: catalogue Lantern rarity3 is not an
+authoritative identity join for it. This preserves main001 and fixed Search
+helper001/rank1. Current first ranks:0011/0022/0033/0041/0052/0061.
+This is a community projection, not a recovered original server rarity table.
+
+Default legacy references/factories remain unchanged. Fresh opt-in Mowgli
+starter and transient Arena default factories use the first supported rank.
+Gacha keeps old known birth choices; previously unmapped material-backed refs
+use their projected first row, including guarantee admission. Trace005/006
+remain2/1. Prices, acquisition pools and dorm capacity remain independent.
+Factory skill initialization remains its existing grade-based behavior;
+existing earned skills/EXP/equipment/ranks are not rewritten.
+
+Projected mode checks EVERY stored owned rank/awakening against published
+stat coverage during restore BEFORE persistence. Legacy Mowgli1/Nene1 refuse
+with clear restore-legacy error; no automatic upgrade, deletion or renumber.
+Compatible saves load byte-identically, and returning to legacy preserves
+their higher grades. No new state schema or owned fields. Review separately
+configured sale-profit rank keys when selecting this profile. See
+docs/hunter-minimum-rank-projection-2026-10-16.md for setup/limits/native audit.
+
+All197 npm test programs, five resource-profile suites, build and independent
+review PASS. Source/compiled policy-state test proves retained stat equivalence,
+main/helper safety, ordered first rows, fresh factories, Mowgli2/Nene3 grants,
+material-backed unmapped grade support, real compatible/incompatible old saves
+in separate import-isolated processes, exact file-byte refusal and legacy return.
+Compiled HTTP proof owns ephemeral-loopback children/disposable states, verifies
+encrypted P384/HMAC/AES refs/new registration/owned starters, default0022 and
+override0033 native single-draw receipts plus persisted transport restart.
+An old0021 state refuses before listener startup with original bytes preserved.
+npm run test:hunter-min-rank repeats built state+HTTP proofs. No native UI or
+live activation claim. Further ticket lifecycle, native gameplay and more
+original areas/rewards remain pending; goal ACTIVE.
+
+## Historical continuation: advancement fee projection and ticket caller evidence (2026-10-16)
 
 Previous checkpoint b7e71e2 restored persistent dorm expansion/capacity gates.
 This checkpoint adds optional historical effective advancement fee projection
