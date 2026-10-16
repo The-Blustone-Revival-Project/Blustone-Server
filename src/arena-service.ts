@@ -19,7 +19,7 @@ function arenaDeck(game: LocalGameState) {
  * mutation belongs here. BP1, honor10, rating±10 and six wins per league are
  * explicitly local policies; original economics are still unknown. */
 export function arenaRequest(route: string, payload: Record<string, unknown>, pvid: number,
-    game: LocalGameState, persist: () => void,comments?:ArenaComments): Result {
+    game: LocalGameState, persist: () => void,comments?:ArenaComments,rank=1): Result {
   if (route === "/arena/Enter") {
     let initialized = false;
     if (!game.decks.some((row) => row.type === ARENA_DECK_TYPE)) {
@@ -32,12 +32,12 @@ export function arenaRequest(route: string, payload: Record<string, unknown>, pv
     }
     if (initialized) persist();
     return { data: { arena: { status: 1, season: arenaSeason() },
-      user: { battle: arenaProfile(pvid, game.arena,comments), is_weekly_reward: 0 }, deck: deckRows(game) } };
+      user: { battle: arenaProfile(pvid, game.arena,comments,rank), is_weekly_reward: 0 }, deck: deckRows(game) } };
   }
   if (route === "/arena/FindRival") return { data: { arena: { rival_list: [arenaRival()] }, refresh_price: refreshPrice() } };
   // ReqMyRankCB (Gf600d8) reads ret_data.rank directly into PlayData+0x128.
-  // This replica has one local player; rank1 is a fixture, not a global ladder.
-  if (route === "/arena/GetMyRank") return { data: { rank: arenaProfile(pvid, game.arena).rank } };
+  // ServerState supplies the same local standing used by full own profiles.
+  if (route === "/arena/GetMyRank") return { data: { rank } };
   if (route === "/arena/BattleStart") {
     if (numeric(payload.target_pvid) !== ARENA_RIVAL_PVID || numeric(payload.bid) !== 0 ||
         numeric(payload.is_revenge) !== 0 || numeric(payload.is_friendship) !== 0)

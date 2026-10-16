@@ -384,6 +384,28 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-runtime-confidence":"Account settings, full receipt and restart tested; native UI editing pending",
   }};
   explicitlyDocumented.add("/arena/SaveComment");
+  const standingUint = {type:"integer",minimum:0,maximum:0xffff_ffff};
+  const standingRow = {type:"object",required:["pvid","rating_point","rank","win","lose"],additionalProperties:false,
+    properties:{pvid:{...standingUint,minimum:1},rating_point:standingUint,rank:{...standingUint,minimum:1},win:standingUint,lose:standingUint}};
+  for(const [route,summary,description,data] of [
+    ["/arena/GetMyRank","Read own local Fight Club standing",
+      "Authenticated native ret_data.rank is uint32. Shares Enter and SaveComment rank. LOCAL population: self plus loaded same-server accounts with Arena deck4/5, results or a pending attempt. Rating descending, PVID ascending ties, sequential ranks; original seasons and tie rules unknown. Reads do not regenerate energy, allocate games or write saves.",
+      {type:"object",required:["rank"],properties:{rank:{...standingUint,minimum:1}}}],
+    ["/arena/GetFriendRankList","Read local Fight Club friend standings",
+      "Native auth-only request has no paging or target selector. ParseFriendRanking replaces its cache from ret_data.list; each row requires pvid/rating_point/rank/win/lose as effective uint32. Includes self because the UI does not append it. Accepted friends need an existing same-server participant snapshot and pass mutual blocks. Filters shared local standings without renumbering hidden participants. Visible wide PVIDs refuse instead of aliasing. No score, enrollment, energy or save mutation. Native rendered ranking remains unverified.",
+      {type:"object",required:["list"],properties:{list:{type:"array",items:standingRow}}}],
+  ] as const) {
+    paths[route]={post:{...operation(summary,description,"Fight Club",response("Native local ranking payload.",{
+      allOf:[{$ref:"#/components/schemas/ResultEnvelope"},{type:"object",properties:{ret_data:data}}],
+    })),"x-evidence":"docs/arena-rankings-native-2026-10-16.md; tests/arena-rankings-state.ts",
+    "x-reverse-engineering-status":"native-parser-reconstructed-with-local-ranking-policy",
+    "x-runtime-confidence":"Disposable state tests; native ranking UI pending"}};
+    explicitlyDocumented.add(route);
+  }
+  paths["/arena/GetGlobalRankList"]={post:{...operation("Global Fight Club rankings unavailable",
+    "Authenticated explicit failure2001. Native sends page/page_scale uint32 (UI starts page1, scale10); success requires season_no plus a list of complete ParseDefender combat descriptors. Compact friend rows cannot substitute. Original global season, full source-compatible opponent projection and placement rules remain incomplete.","Fight Club"),
+    "x-evidence":"docs/arena-rankings-native-2026-10-16.md","x-reverse-engineering-status":"request-and-parser-recovered-success-unreconstructed"}};
+  explicitlyDocumented.add("/arena/GetGlobalRankList");
   paths["/gym/LevelUp"] = { post: {
     ...operation("Train an owned hunter using source hunters",
       "Recovered CSRSyncCard::RequestLevelUp / ReqLevelUpCB contract. target_inst_id identifies the owned target; source_inst_list is JSON array text of source IDs. Ownership, source uniqueness/locks, leader/deck protection, level cap and gold are checked before consumption/XP persistence. ret_data.user carries gold prev/cur and deck; ret_data.card carries target_inst {inst_id,exp:{prev,cur}} and removed_inst_list OBJECTS {inst_id}. Ordinary ranks1..5 have30 dense levels, supported by historical community cap evidence. Cumulative XP100*(level-1), source XP100*level and100gold/source are local fixtures; old thresholds0/100 and yields100/200 are unchanged. Original XP/stats/prices and awakened caps remain missing. Local refusal2001 skips native mutation parsing.",
@@ -933,8 +955,7 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-runtime-confidence": "Request contract recovered from the client and the result contract recovered by disassembling all three native parsers; unit-tested in tests/smoke.ts. NOT yet observed on device: the first pull with a real `card[]` has never been made, so whether the result popup paints is unmeasured.",
   } };
   for (const [route, summary, description] of [
-    ["/arena/Enter", "Enter local Fight Club", "Native arena.status1 and arena.season, user.battle scalar profile, user.is_weekly_reward0 and root deck. First entry seeds a separate CASE4 deck from the existing expedition party without changing CASE1 or granting hunters. Native season deadline units are server-epoch seconds; calendar alignment, duration and rank are local fixtures. Rendered timing/display validation is pending."],
-    ["/arena/GetMyRank", "Read local Fight Club rank", "ReqMyRankCB reads ret_data.rank directly as a scalar. Returns local rank1 consistently with Enter; this is a single-player ladder fixture, not recovered global ranking. No battle, wallet or deck mutation."],
+    ["/arena/Enter", "Enter local Fight Club", "Native arena.status1 and arena.season, user.battle scalar profile, user.is_weekly_reward0 and root deck. First entry seeds a separate CASE4 deck from the existing expedition party without changing CASE1 or granting hunters. Native season deadline units are server-epoch seconds; calendar alignment and duration remain local fixtures. Own rank shares the local same-server standings with GetMyRank, friend rankings and SaveComment; rating descending and PVID ascending ties are explicit local policy. Rendered timing/display validation is pending."],
     ["/arena/FindRival", "Find a local sparring opponent", "Returns arena.rival_list array of full native defender records: strict profile strings, nested battle profile, chain_bonus/card_book, inst_1..inst_5 deck with full known-art card instances, gem[]. Synthetic pvid9000001 is a local opponent, not owned inventory or real matchmaking. Root refresh_price is a fixture; RefreshRival currently refuses rather than claiming a supported transaction."],
     ["/arena/BattleStart", "Start a dedicated Fight Club attempt", "Requires target_pvid9000001, is_revenge0, is_friendship0, bid0. Local BP cost1, AP unchanged. Native ParseApBp requires ALL FOUR flat scalar fields user.ap/ap_charge_time/bp/bp_charge_time; target is arena.combat_info, with root refresh_price. Persists separate arena attempt and CASE4 party; active-start replay spends no extra BP. Expedition/arena active attempts cannot overlap. Revenge/friendship/nonzero bids are unimplemented and refuse. This replaces the incorrect mission alias; native fight rendering remains unverified."],
     ["/arena/BattleComplete", "Settle a dedicated Fight Club attempt", "Requires target_pvid, is_revenge0 and play_info JSON containing is_win and native combat metrics. Native is_win determines the outcome; original combat/timeout rules and anti-cheat are not reconstructed. Returns user.battle prev/cur pairs for league_level/win/lose/league_win/rating_point, user.honor pair, and top-level card map keyed CASE4 snapshot IDs with direct unchanged EXP pairs. Complete does not resync AP/BP. Local honor10/rating+10 win, rating-10 loss and six wins per league are fixtures; original rewards/EXP allowance are unknown. Repeated matching completion without an active attempt replays the original persisted receipt without another reward. No completion nonce was recovered: a stale completion crossing a later same-target Start is indistinguishable; transport exactly-once is not promised. Native fight/result/reload validation pending."],

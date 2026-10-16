@@ -1342,6 +1342,147 @@ paths:
       x-evidence: docs/arena-comments-native-2026-10-16.md; tests/arena-comments-state.ts
       x-runtime-confidence: Account settings, full receipt and restart tested; native
         UI editing pending
+  /arena/GetMyRank:
+    post:
+      summary: Read own local Fight Club standing
+      description: "Authenticated native ret_data.rank is uint32. Shares Enter and
+        SaveComment rank. LOCAL population: self plus loaded same-server
+        accounts with Arena deck4/5, results or a pending attempt. Rating
+        descending, PVID ascending ties, sequential ranks; original seasons and
+        tie rules unknown. Reads do not regenerate energy, allocate games or
+        write saves."
+      tags:
+        - Fight Club
+      parameters: *a1
+      requestBody: *a2
+      responses:
+        "200":
+          description: Native local ranking payload.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ResultEnvelope"
+                  - type: object
+                    properties:
+                      ret_data:
+                        type: object
+                        required:
+                          - rank
+                        properties:
+                          rank:
+                            type: integer
+                            minimum: 1
+                            maximum: 4294967295
+        "404":
+          description: Route not present in the recovered catalog.
+        "500":
+          description: Local scaffold failure.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      x-reverse-engineering-status: native-parser-reconstructed-with-local-ranking-policy
+      x-evidence: docs/arena-rankings-native-2026-10-16.md; tests/arena-rankings-state.ts
+      x-runtime-confidence: Disposable state tests; native ranking UI pending
+  /arena/GetFriendRankList:
+    post:
+      summary: Read local Fight Club friend standings
+      description: Native auth-only request has no paging or target selector.
+        ParseFriendRanking replaces its cache from ret_data.list; each row
+        requires pvid/rating_point/rank/win/lose as effective uint32. Includes
+        self because the UI does not append it. Accepted friends need an
+        existing same-server participant snapshot and pass mutual blocks.
+        Filters shared local standings without renumbering hidden participants.
+        Visible wide PVIDs refuse instead of aliasing. No score, enrollment,
+        energy or save mutation. Native rendered ranking remains unverified.
+      tags:
+        - Fight Club
+      parameters: *a1
+      requestBody: *a2
+      responses:
+        "200":
+          description: Native local ranking payload.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ResultEnvelope"
+                  - type: object
+                    properties:
+                      ret_data:
+                        type: object
+                        required:
+                          - list
+                        properties:
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - pvid
+                                - rating_point
+                                - rank
+                                - win
+                                - lose
+                              additionalProperties: false
+                              properties:
+                                pvid:
+                                  type: integer
+                                  minimum: 1
+                                  maximum: 4294967295
+                                rating_point: &a3
+                                  type: integer
+                                  minimum: 0
+                                  maximum: 4294967295
+                                rank:
+                                  type: integer
+                                  minimum: 1
+                                  maximum: 4294967295
+                                win: *a3
+                                lose: *a3
+        "404":
+          description: Route not present in the recovered catalog.
+        "500":
+          description: Local scaffold failure.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      x-reverse-engineering-status: native-parser-reconstructed-with-local-ranking-policy
+      x-evidence: docs/arena-rankings-native-2026-10-16.md; tests/arena-rankings-state.ts
+      x-runtime-confidence: Disposable state tests; native ranking UI pending
+  /arena/GetGlobalRankList:
+    post:
+      summary: Global Fight Club rankings unavailable
+      description: Authenticated explicit failure2001. Native sends page/page_scale
+        uint32 (UI starts page1, scale10); success requires season_no plus a
+        list of complete ParseDefender combat descriptors. Compact friend rows
+        cannot substitute. Original global season, full source-compatible
+        opponent projection and placement rules remain incomplete.
+      tags:
+        - Fight Club
+      parameters: *a1
+      requestBody: *a2
+      responses:
+        "200":
+          description: Mock-compatible response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultEnvelope"
+        "404":
+          description: Route not present in the recovered catalog.
+        "500":
+          description: Local scaffold failure.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      x-reverse-engineering-status: request-and-parser-recovered-success-unreconstructed
+      x-evidence: docs/arena-rankings-native-2026-10-16.md
+      x-runtime-confidence: route literal confirmed; payload/response shape pending
+        ARM-device capture
   /gym/LevelUp:
     post:
       summary: Train an owned hunter using source hunters
@@ -2171,8 +2312,10 @@ paths:
         user.is_weekly_reward0 and root deck. First entry seeds a separate CASE4
         deck from the existing expedition party without changing CASE1 or
         granting hunters. Native season deadline units are server-epoch seconds;
-        calendar alignment, duration and rank are local fixtures. Rendered
-        timing/display validation is pending.
+        calendar alignment and duration remain local fixtures. Own rank shares
+        the local same-server standings with GetMyRank, friend rankings and
+        SaveComment; rating descending and PVID ascending ties are explicit
+        local policy. Rendered timing/display validation is pending.
       tags:
         - Missions and combat
       parameters: *a1
@@ -2273,119 +2416,6 @@ paths:
       x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
       x-runtime-confidence: route literal confirmed; payload/response shape pending
         ARM-device capture
-  /arena/GetFriendRankList:
-    post:
-      summary: Recovered /arena/GetFriendRankList route
-      description: >-
-        The route literal **/arena/GetFriendRankList** was recovered from the
-        ARM native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
-      tags:
-        - Arena
-      parameters: *a1
-      requestBody: *a2
-      responses:
-        "200":
-          description: Mock-compatible response.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ResultEnvelope"
-        "404":
-          description: Route not present in the recovered catalog.
-        "500":
-          description: Local scaffold failure.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
-      x-runtime-confidence: route literal confirmed; payload/response shape pending
-        ARM-device capture
-  /arena/GetGlobalRankList:
-    post:
-      summary: Recovered /arena/GetGlobalRankList route
-      description: >-
-        The route literal **/arena/GetGlobalRankList** was recovered from the
-        ARM native library.
-
-
-        The exact request fields and response model have not yet been confirmed
-        with a live ARM-device capture.
-
-
-        The local scaffold accepts JSON, URL-encoded form data, or opaque octet
-        bodies and returns a success envelope with mock data.
-
-
-        Replace this handler with a persistence-backed implementation once the
-        corresponding request/response pair is captured.
-      tags:
-        - Arena
-      parameters: *a1
-      requestBody: *a2
-      responses:
-        "200":
-          description: Mock-compatible response.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ResultEnvelope"
-        "404":
-          description: Route not present in the recovered catalog.
-        "500":
-          description: Local scaffold failure.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: recovered-native-route
-      x-evidence: analysis/native-all-strings.tsv and analysis/native-network-decomp.txt
-      x-runtime-confidence: route literal confirmed; payload/response shape pending
-        ARM-device capture
-  /arena/GetMyRank:
-    post:
-      summary: Read local Fight Club rank
-      description: ReqMyRankCB reads ret_data.rank directly as a scalar. Returns local
-        rank1 consistently with Enter; this is a single-player ladder fixture,
-        not recovered global ranking. No battle, wallet or deck mutation.
-      tags:
-        - Missions and combat
-      parameters: *a1
-      requestBody: *a2
-      responses:
-        "200":
-          description: Mock-compatible response.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ResultEnvelope"
-        "404":
-          description: Route not present in the recovered catalog.
-        "500":
-          description: Local scaffold failure.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      x-reverse-engineering-status: native-parser-reconstructed
-      x-evidence: analysis/research/arena-lobby-contract.md;
-        analysis/research/arena-battle-contract.md;
-        server-ts/src/arena-service.ts; server-ts/tests/arena.ts
-      x-runtime-confidence: Dedicated server contract/persistence tested; native Fight
-        Club UI/battle unverified
   /arena/PrevSeasonRanking:
     post:
       summary: Recovered /arena/PrevSeasonRanking route

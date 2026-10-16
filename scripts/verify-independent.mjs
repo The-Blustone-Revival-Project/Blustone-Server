@@ -50,6 +50,9 @@ const authoredEquipmentRankPrice={rank:exerciseEquipmentUpgrade?2:1,attr:1,price
 const authoredEquipmentPrices=exerciseEquipmentUpgrade?[authoredEquipmentLevelPrice,{...authoredEquipmentLevelPrice,level:11,price:29}]:[authoredEquipmentLevelPrice];
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
+const exerciseArenaRanks=process.argv.includes('--exercise-arena-ranks');
+if(exerciseArenaRanks&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-arena-ranks')))
+  throw new Error('Arena standings require a separate disposable --fixture exercise');
 const exerciseArenaComments=process.argv.includes('--exercise-arena-comments');
 if(exerciseArenaComments&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-arena-comments')))
   throw new Error('Arena comments require a separate disposable --fixture exercise');
@@ -266,7 +269,7 @@ const stop = async () => {
   throw new Error('Verifier listener did not close; no replacement process was started');
 };
 let secret,token;
-let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle;
+let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle,arenaRanksProof;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
   const response=await fetch(base+'/shared_secret/Exchange',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},
@@ -515,6 +518,55 @@ try {
   for(const route of ['/world/UseItem','/world/GetFriendlyBattleInfo'])
     assert.equal((await secure(route,auth,{allowPlainRefusal:true})).result_code,2001,'Unsupported world receivers cannot acknowledge a mock success');
   assert.deepEqual(readFileSync(stateFile),syncBefore,'Targeted sync and unsupported world actions cannot write the disposable save');
+  if(exerciseArenaRanks) {
+    const owner={secret,token};
+    const register=async device=>{
+      await exchange();
+      const registered=await secure('/v2/account/RegisterGuest',{device_id:device});
+      const account={otp:String(registered.ret_data.otp),pvid:String(registered.pvid)},connection={secret,token};
+      assert.equal((await secure('/lobby/Enter',account)).result_code,1);
+      return {account,connection};
+    };
+    const friend=await register('standalone-arena-rank-friend');
+    const other=await register('standalone-arena-rank-nonfriend');
+    ({secret,token}=owner);
+    const request=await secure('/relation/FriendRequest',{...auth,target_pvid:friend.account.pvid});assert.equal(request.result_code,1);
+    ({secret,token}=friend.connection);
+    assert.equal((await secure('/relation/FriendReqAccept',{...friend.account,target_friend_id:String(request.ret_data.friend_id)})).result_code,1);
+    const earn=async(account,connection,wins)=>{
+      ({secret,token}=connection);
+      assert.equal((await secure('/arena/Enter',account)).result_code,1);
+      for(let index=0;index<wins;index++) {
+        assert.equal((await secure('/arena/BattleStart',{...account,target_pvid:'9000001',bid:'0',is_revenge:'0',is_friendship:'0'})).result_code,1);
+        const play_info=JSON.stringify({is_win:1,clear_time:10,dead_cnt:0,player_total_hp:100,player_total_hp_max:100,
+          enemy_total_hp:0,enemy_total_hp_max:300,atk_max:181,atk_total:300,atk_cnt:2});
+        assert.equal((await secure('/arena/BattleComplete',{...account,target_pvid:'9000001',is_revenge:'0',play_info})).result_code,1);
+      }
+    };
+    // Points arise from accepted encrypted local BattleComplete operations;
+    // these authored metrics do not claim native device combat validation.
+    await earn(auth,owner,1);await earn(friend.account,friend.connection,3);await earn(other.account,other.connection,2);
+    ({secret,token}=owner);
+    const entered=(await secure('/arena/Enter',auth)).ret_data.user.battle;assert.equal(entered.rank,3);
+    const comment={...auth,comment_info:JSON.stringify({win_message:'Clear skies'})};
+    const battle=(await secure('/arena/SaveComment',comment)).ret_data.user.battle;assert.equal(battle.rank,3);
+    const expected={list:[{pvid:Number(friend.account.pvid),rating_point:30,win:3,lose:0,rank:1},
+      {pvid:Number(auth.pvid),rating_point:10,win:1,lose:0,rank:3}]};
+    const bytes=readFileSync(stateFile);
+    const ranked=(await secure('/arena/GetFriendRankList',{...auth,start:'99',length:'0',target_pvid:other.account.pvid})).ret_data;
+    assert.deepEqual(ranked,expected,'Friend list includes self and accepted friend, retaining rank2 gap occupied by a nonfriend');
+    for(const row of ranked.list)assert.deepEqual(Object.keys(row).sort(),['pvid','rating_point','rank','win','lose'].sort());
+    assert.deepEqual((await secure('/arena/GetMyRank',auth)).ret_data,{rank:3});
+    assert.equal((await secure('/arena/GetGlobalRankList',auth,{allowPlainRefusal:true})).result_code,2001);
+    assert.deepEqual((await secure('/arena/SaveComment',comment)).ret_data.user.battle,battle,'Settings replay uses the same current rank without another write');
+    assert.deepEqual(readFileSync(stateFile),bytes,'Encrypted ranking reads/refusal/replay preserve durable state exactly');
+    const persisted=JSON.parse(bytes);assert.equal(persisted.version,5);
+    for(const [account,points,wins] of [[auth,10,1],[friend.account,30,3],[other.account,20,2]]) {
+      const saved=persisted.gameStates.find(([pvid])=>pvid===Number(account.pvid))[1];
+      assert.equal(saved.arena.rating_point,points);assert.equal(saved.arena.win,wins);
+    }
+    arenaRanksProof={owner,friend,other,expected,battle,comment};
+  }
   if(exerciseArenaComments) {
     const originalBattle=(await secure('/arena/Enter',auth)).ret_data.user.battle;
     // Persist any prior lazy clock refresh before measuring the settings-only operation.
@@ -832,6 +884,22 @@ try {
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
   if(exerciseArenaComments)assert.deepEqual((await secure('/arena/Enter',auth)).ret_data.user.battle,savedArenaBattle,
     'Complete own Fight Club messages/profile survive compiled schema5 restart');
+  if(exerciseArenaRanks) {
+    ({secret,token}=arenaRanksProof.owner);
+    assert.deepEqual((await secure('/arena/Enter',auth)).ret_data.user.battle,arenaRanksProof.battle,
+      'Arena profile, messages and non-first rank survive compiled process restart');
+    const bytes=readFileSync(stateFile);
+    assert.deepEqual((await secure('/arena/GetFriendRankList',auth)).ret_data,arenaRanksProof.expected);
+    assert.deepEqual((await secure('/arena/GetMyRank',auth)).ret_data,{rank:3});
+    assert.deepEqual((await secure('/arena/SaveComment',arenaRanksProof.comment)).ret_data.user.battle,arenaRanksProof.battle);
+    assert.equal((await secure('/arena/GetGlobalRankList',auth,{allowPlainRefusal:true})).result_code,2001);
+    assert.deepEqual(readFileSync(stateFile),bytes,'Restarted ranking reads and no-op preferences never rewrite persisted standings');
+    ({secret,token}=arenaRanksProof.friend.connection);
+    const friendBytes=readFileSync(stateFile);
+    assert.deepEqual((await secure('/arena/GetMyRank',arenaRanksProof.friend.account)).ret_data,{rank:1});
+    assert.deepEqual(readFileSync(stateFile),friendBytes,'Independent friend transport/account retains its own standing after restart');
+    ({secret,token}=arenaRanksProof.owner);
+  }
   if(exerciseLeader) {
     assert.equal(afterLobby.ret_data.inst_id_leader,selectedLeaderId);
     assert.equal((await secure('/world/GetUserDetail',{...auth,list:JSON.stringify([Number(auth.pvid)])})).ret_data[0].inst_id_leader,selectedLeaderId,
@@ -981,6 +1049,7 @@ try {
     encrypted_social_cleanup_fixture:exerciseSocial,
     encrypted_social_discovery_fixture:exerciseSocial,
     encrypted_social_likes_fixture:exerciseSocial,encrypted_inventory_sync_fixture:exerciseInventorySync,encrypted_leader_selection_fixture:exerciseLeader,encrypted_arena_comments_fixture:exerciseArenaComments,
+    encrypted_arena_ranking_fixture:exerciseArenaRanks,arena_ranking_restart_readonly_fixture:exerciseArenaRanks,
     encrypted_monster_resource_fixture:exerciseMonster??null,
     historical_material_projection:profile.env.BLUSTONE_MATERIAL_STAT_PROFILE==='archive-2019-projection',
     quest_empty_collections_and_claim_refusal:true,

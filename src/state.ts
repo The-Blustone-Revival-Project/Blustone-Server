@@ -44,6 +44,7 @@ import {syncOwnedItems} from "./inventory-item-sync.js";
 import {parseUserDetailTargets,ownedUserDetail} from "./user-details.js";
 import {planLeaderSelection} from "./leader-selection.js";
 import {normalizeArenaComments,planArenaComments,type ArenaComments} from "./arena-comments.js";
+import {localArenaStandings,friendArenaRanking} from "./arena-rankings.js";
 import {ARENA_RIVAL_PVID,arenaRival,arenaProfile} from "./arena.js";
 import {LOCAL_MAIL_SENDER} from "./mail.js";
 import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
@@ -2916,9 +2917,48 @@ export class ServerState {
   }
 
   arenaAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
-    const account = this.accountFor(payload, headers), game = this.gameFor(account);
-    const result = arenaRequest(route, payload, account.pvid, game, () => this.persist(),account.arenaComments);
+    if(route==="/arena/GetMyRank")return this.arenaRankingAction(route,payload,headers);
+    const account = this.accountFor(payload, headers);
+    let rank=1;
+    if(route==="/arena/Enter")try{rank=this.localArenaRank(account);}catch(error){return this.failure(2001,error instanceof Error?error.message:"Local Arena rank is unavailable");}
+    const game = this.gameFor(account);
+    const result = arenaRequest(route, payload, account.pvid, game, () => this.persist(),account.arenaComments,rank);
     return "error" in result ? this.failure(2001, result.error) : this.envelope(result.data);
+  }
+
+  private localArenaStandingRows(actor:Account) {
+    if(!this.gameByPvid.has(actor.pvid))throw new TypeError("Local Arena owned snapshot is unavailable");
+    const rows=[...this.accountsByPvid.values()].flatMap(peer=>{
+      if(peer.serverId!==actor.serverId)return [];
+      const game=this.gameByPvid.get(peer.pvid);if(!game)return [];
+      // Existing Fight Club configuration/results are LOCAL participation
+      // evidence; the requester is always included. No new enrolment is stored.
+      if(peer.pvid!==actor.pvid&&!game.arena.win&&!game.arena.lose&&!game.arena.active&&
+        !game.decks.some(deck=>deck.type===4||deck.type===5))return [];
+      return [{pvid:peer.pvid,rating_point:game.arena.rating_point,win:game.arena.win,lose:game.arena.lose}];
+    });
+    return localArenaStandings(rows);
+  }
+
+  private localArenaRank(actor:Account) {
+    const rank=this.localArenaStandingRows(actor).find(row=>row.pvid===actor.pvid)?.rank;
+    if(rank===undefined)throw new TypeError("Local Arena requester has no standing");return rank;
+  }
+
+  arenaRankingAction(route:string,payload:Record<string,unknown>,headers:Record<string,string>) {
+    const actor=this.accountFor(payload,headers);
+    if(route==="/arena/GetGlobalRankList")return this.failure(2001,"Global ranking combat descriptors are not reconstructed");
+    try {
+      const rows=this.localArenaStandingRows(actor);
+      if(route==="/arena/GetMyRank")return this.envelope({rank:rows.find(row=>row.pvid===actor.pvid)!.rank});
+      if(route!=="/arena/GetFriendRankList")return this.failure(2001,"Unknown Arena ranking operation");
+      const friends=new Set((this.socialFriends?.relations??[]).flatMap(relation=>{
+        if(relation.state!=="accepted")return [];
+        const peer=relation.from_pvid===actor.pvid?relation.to_pvid:relation.to_pvid===actor.pvid?relation.from_pvid:undefined;
+        return peer!==undefined&&this.localSocialProfile(actor.pvid,peer)?[peer]:[];
+      }));
+      return this.envelope(friendArenaRanking(rows,actor.pvid,friends));
+    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Local Arena standings are unavailable");}
   }
 
   arenaCommentAction(payload:Record<string,unknown>,headers:Record<string,string>) {
@@ -2927,7 +2967,7 @@ export class ServerState {
     let plan,battle;
     try {
       plan=planArenaComments(account.arenaComments,payload.comment_info);
-      battle=arenaProfile(account.pvid,game.arena,plan.next);
+      battle=arenaProfile(account.pvid,game.arena,plan.next,this.localArenaRank(account));
       for(const key of ["rank","season_no","weekly_no","league_level","rating_point","league_win","win","lose"] as const)
         if(!Number.isInteger(battle[key])||battle[key]<0||battle[key]>0xffff_ffff)throw new TypeError("Arena profile counter exceeds native uint32");
     }catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid Arena comment");}

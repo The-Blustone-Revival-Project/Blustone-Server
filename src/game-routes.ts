@@ -304,6 +304,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   // Fight Club has dedicated profile, BP and result state. Its automatic
   // GetMyRank callback consumes a root rank scalar, separate from Enter.
   if(route==="/arena/SaveComment")return state.arenaCommentAction(payload,headers);
+  if(route==="/arena/GetFriendRankList"||route==="/arena/GetGlobalRankList")return state.arenaRankingAction(route,payload,headers);
   if (["/arena/Enter", "/arena/GetMyRank", "/arena/FindRival", "/arena/BattleStart", "/arena/BattleComplete", "/arena/RefreshRival"].includes(route))
     return state.arenaAction(route, payload, headers);
   // **[RECOVERED]** The recruitment pull. `CSRSyncLottery::ReqGachaPremiumCB`

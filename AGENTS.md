@@ -1,3 +1,54 @@
+## Latest continuation: real local Fight Club standings (2026-10-16)
+
+Previous checkpoint9783a56 restored persistent Fight Club messages. This
+checkpoint adds /arena/GetFriendRankList from actual saved local ratings and
+replaces the own rank1 fixture across GetMyRank, Enter and SaveComment with
+one shared local standing. Goal ACTIVE; native ranking UI remains PENDING.
+No live client/private save, APK, Collector, Docker or inference operations.
+BlueStacks input hold persists; all validation uses disposable server state.
+
+RequestFriendRank Gf60ae4 sends auth5 only; route Gf60d18, callback Gf6109c
+invokes ParseFriendRanking G94616c. ret_data.list replaces FC+22c; each row
+pvid/rating_point/rank/win/lose is effective U32. PVID lowword G9462f0
+stores with highword0 G946322. UI Gff4f76..8e chooses own row vs actual
+UserPool profile; it does NOT append omitted self. Full evidence and limits:
+docs/arena-rankings-native-2026-10-16.md.
+
+LOCAL population: self always plus loaded same-server real accounts with
+existing deck4/5, win/loss or active Arena attempt. No NPC, grant, backfill or
+new enrollment journal. Sort rating DESC, exact PVID ASC ties, sequential
+one-based ranks; original world/season/reset/tie law still unknown. Friend
+visibility requires accepted relation and mutual block checks. Filtering
+retains rank gaps; hidden participants keep positions. Visible wide PVIDs
+refuse instead of aliasing native U32, while scalar own ranks remain valid.
+Direct loaded maps: rank reads never gameFor, regenerate energy, create
+games, initialize decks or persist. SaveComment full own profile now retains
+actual shared rank instead of resetting the native cache to1. Enter keeps
+its existing independent deck/clock behavior. No battle receipt scalar rank
+added: BattleComplete still uses the original prev/cur counter grammar.
+
+Global ranking success remains UNRECONSTRUCTED: authenticated explicit2001.
+Native RequestWorldRank Gf60294 sends U32 page/page_scale; UI page1/scale10.
+ParseWorldRanking G945e9c requires season_no plus full ParseDefender perrow,
+not compact friend rows. Complete source-compatible opponent projection and
+original global placement remain missing; no invented empty-deck success.
+
+Pure/state tests use actual Enter/Start/Complete ratings, PVID ties, rank gaps,
+self without Enter, fresh friends, both blocks/unfriend/cross-server, U32
+corruption/refusal, elapsed-clock and missing-game immutability, shared rank
+through full profile updates and schema5 restart with quest/dispatch history.
+Independent review found no actionable issues. No APK rebuild/release owed.
+178 gameplay test programs, TypeScript build and independent review PASS.
+Compiled --fixture --exercise-arena-ranks PASS: separate P384/HMAC/AES
+owner/friend/nonfriend connections earn10/30/20 through accepted server
+battles; owner rank3 shared across own profiles, friend ranks1/self3 with
+nonfriend gap2, global2001. Actual process restart preserves ranks/messages;
+read/no-op receipts preserve exact save bytes and friend credentials retain
+its own rank1. Report flags encrypted_arena_ranking_fixture and
+arena_ranking_restart_readonly_fixture TRUE. Fixture-only/exclusive flag
+guards refuse unsafe combinations before runtime/state access.
+OpenAPI regenerated; only four Arena path contracts changed semantically.
+
 ## Latest continuation: persistent Fight Club messages (2026-10-16)
 
 Previous turn was progress:fc8e234 ownedleader+atomicparty saves. This turn

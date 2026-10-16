@@ -78,8 +78,8 @@ export function normalizeArena(raw: unknown): ArenaState {
   return { league_level: value.league_level, win: value.win, lose: value.lose,
     league_win: value.league_win, rating_point: value.rating_point, active, last_result: last };
 }
-export function arenaProfile(pvid: number, arena: ArenaState,comments?:ArenaComments) {
-  return { pvid, rank: 1, season_no: 1, weekly_no: 1, league_level: arena.league_level,
+export function arenaProfile(pvid: number, arena: ArenaState,comments?:ArenaComments,rank=1) {
+  return { pvid, rank, season_no: 1, weekly_no: 1, league_level: arena.league_level,
     rating_point: arena.rating_point, league_win: arena.league_win,
     win: arena.win, lose: arena.lose, refresh_datetime: 0,
     ...(comments??ARENA_COMMENT_DEFAULTS) };
