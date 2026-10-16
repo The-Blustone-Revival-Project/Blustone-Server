@@ -1,3 +1,55 @@
+## Latest continuation: targeted card inventory sync (2026-10-16)
+
+Previous turn was progress:9240d50 real friend campaign records. This turn
+replaces /world/RefreshInven's genericmock for CARD-ONLY requests with real
+absolute owned DTOs; /world/UseItem and /world/GetFriendlyBattleInfo now
+explicitly refuse unsupported success paths. Goal remains ACTIVE.
+
+Native ReqSyncCardInstanceGf6b8bc sendsauth5+card_inst_list numericU64JSON.
+RTTIvtable G218ce24→invokeGf70ccc provesmatchingcard-onlysecondcallback;
+result1guardGf70cee..cf4, ret_data.cardGf70cf8/d02, eachrow ParseCardInst
+Gf70dc0→RemoveCardGf70dee→AddCardGf70e60. This is absoluteper-cardreplace,
+notEXPdelta/fullrosterclear. ReqSyncItemInstanceGf6c604 sendsitem_ref_list;
+combinedGf6d354 sendsboth; their specificconsumers remainUNPROVED.
+
+src/inventory-card-sync.ts decodesnumericU64tokens EXACTLY beforerounding.
+ExistingownedcardIDs arepositivesafeNumber subset. LOCALinputquota1024,
+requestorderdedup, wholebatchrefusalunknownIDs. Emptycardlist→{card:[]}.
+No tombstones/ghostdeletion/grants invented. Anyitem_ref_list presence,
+including[]/null, refusesitem/combinedmode. Stateauth+gameByPviddirect+
+ownedcompatibilityguard; no gameFor/energyregen/alloc/persist. ClonedFULL
+ownedDTO preservesrank/EXP/skills/equipment/lock/carry. Othercallersupplied
+objects cannotenlargeownership orwrite inventory.
+
+UseItemGf6ab8c sendsauth5+inst_idU64,target_idU64,qtyU32; successcallback
+Gf6b2f4 wouldparseachievement/consumed_item_list DELTARemoveItem andtarget
+rank/rank_up_cnt/EXP.cur. Effects/eligibility missing; now2001beforecachewrite.
+FriendlyrequestGf67368 sendsauth5+target_pvidU64; matchedcallbackGf67a34
+requiresresult1 thenret_data.rival→ParseFreindlyBattleRivalG944790→exact
+ParseDefenderG943958. Dense deck.inst_NOBJECT, fullcardDTO, gemcollection,
+chain/book structs/profile/battle metadata required. refresh_datetime is
+numericFULL64 (earlierstrictstringhypothesis corrected, noArena fixturefix).
+Attackerusesdeck4; targetdeck5 isNOTrecoveredlaw. Same-local-account-ID
+reuse is unsafe toassumesafe: cardIDs feedactorserial+880/884 andglobal
+FindActorDataG9dd49c comparesONLYserial, no camp. Ambiguitysourceproved;
+noactualnativecrash/misrouteobserved andotherremapnotuniversallyexcluded.
+No savedIDrenumbering/aliases introduced; friendlynowauth2001, notmockrival.
+
+167 gameplay programs, build and independentreviewPASS. Actualproduction
+namespace locktoggle/SkillUp thenabsoluteDTOsync tested; malformed/full64/
+foreign/mixed/unsupportedmodes/auth/detachment/elapsedAPBP/missinggame/
+exactgamereferences+savedbytes/restart testsPASS. CompiledECDH/HMAC/AES
+exactownedcardDTO+emptybatch+unsupported2001+readbytepreservation+process
+restart passedagainstDISPOSABLEstate. OpenAPI source/JSON/YAML updated.
+Docs/world-use-item-and-inventory-sync-native-2026-10-16.md and
+ docs/friendly-battle-preparation-native-2026-10-16.md holdexactowners.
+
+No private/liveprofile/save/client/APK/UI changed; no releaserequired.
+BlueStacksinputhold persists. Work only Server/Instrumented; DataDump and
+retainedworkspace read-only; Collector/Docker/inference untouched. Nextclose
+specificitem/combinedsynccontinuations or friendlyidentity/preparationflow;
+nevercopyneighbor inventory schemas or presentparse-onlyfixtures ascombat.
+
 ## Latest continuation: real friend campaign records (2026-10-16)
 
 Previous turn was progress:52dce74 original Gem anvil and historicalMirage

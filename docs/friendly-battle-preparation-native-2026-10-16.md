@@ -1,0 +1,105 @@
+# Friendly battle preparation: exact contract and unresolved admission
+
+Original ARM SHA256
+c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec.
+Bounded read-only original Thumb inspection and existing published DataDump
+source; Ghidra code coordinates below equal ELF code offsets plus0x10000.
+No runtime, save, client, original binary or DataDump file was changed.
+
+## Request and matched callback
+
+CSRSyncGlobal.RequestFriendlyBattleDeckInfo Gf67368 takes a captured
+SRTARGET_USER and continuation. The request serializes standard auth5 plus
+target_pvid. Gf674ca loads both target identity words; Gf674d0 converts
+the full64 identity; target_pvid literal is Gf674d4..4dc. The route literal
+is /world/GetFriendlyBattleInfo at Gf675fa. There is no target deck selector,
+payment field, battle nonce, supplied enemy list or client-selected balance.
+The exact exported owners are named in
+sources/native/symbols/native-evidence.tsv:22629–22630.
+
+ReqFriendlyBattleDeckInfoCB Gf67a34 obtains GetResultCode at Gf67ac4 and
+requires1 at Gf67aca..acc. Success selects full response.ret_data at
+Gf67bd2..bda, then child rival at Gf67be4..bec, and explicitly invokes
+CSRFCPlayData.ParseFreindlyBattleRival G944790 at Gf67bf4. Failure skips that
+cache parse and still passes the result code to its continuation.
+
+ParseFreindlyBattleRival (original misspelling) explicitly calls ParseDefender
+G943958 at G9447ac, then moves the resulting BATTLE_ENEMY into its FC cache
+at G9447b4. Thus this route uses that parser because of an established call,
+not merely because its name resembles an Arena route. It prepares opponent
+data; this callback does not debit resources, issue an admission token,
+settle a fight or award a victory. Downstream native friendly scene/start/
+finish behavior is not fully established by this callback.
+
+## Complete rival shape
+
+Successful canonical envelope is ret_data:{rival:<full opponent object>}.
+Primary parser source is
+sources/native/systems/ghidra-arena-lobby-helpers.txt:762 onwards, with
+literal locators in sources/native/strings/ghidra-arena-corrected-strings.txt.
+
+- chain_bonus: collection of {ref_id:STRING,atk:UINT32,def:UINT32,hp:UINT32}.
+- card_book: object containing atk/def/hp/crt_chance/crt_dmg numeric words.
+  The parser scales atk/def/hp by10000 in its internal representation.
+  Those scale operations do not recover original aggregate production laws.
+- nickname, thumbnail, profile_status, country_code: strict strings.
+- status, user_exp, vip_exp: unsigned32 numeric conversions.
+- battle: object parsed by ParseUser G9430f8: pvid full64; rank/season_no/
+  weekly_no/league_level/rating_point/league_win/win/lose unsigned32;
+  refresh_datetime full64 numeric; start_message/win_message/lose_message
+  strict strings.
+- deck: dense OBJECT keyed inst_1,inst_2,..., not an inventory array. The
+  parser counts entries and constructs these one-based keys at G9440aa
+  onwards. Each entry's inst_id is full64 at G944154 onwards. Nonzero IDs
+  invoke CSRPlayData.ParseCardInst and require the full independent owned-card
+  grammar; zero creates an empty card which is still pushed to the vector.
+- gem: separate collection parsed through CSRGem.ParseGem, requiring its
+  independent complete Gem grammar for any nonempty publication.
+
+Numeric default-to-zero conversion does not make a missing parent object or
+strict string safe. No Guild field is read by this parser. Empty chain_bonus
+and gem collections are structurally meaningful, but original zero earned
+effects cannot be inferred merely because they would avoid extra work.
+
+Correction to an intermediate research message: battle.refresh_datetime is
+NOT a strict date string. Native integer conversion LDRD G94344c and its
+eight-byte storage preserve the numeric full64 value. Numeric0 in the
+existing local Arena profile is not contradicted by this parser. The three
+battle message fields are the strict strings in that tail.
+
+## Deck policy and cross-account identity boundary
+
+CSRFC.MakeStageInst obtains the LOCAL attacking party using GetDeckInfo4
+in sources/native/hunters/ghidra-arena-battle-stage-consumers.txt:378–380.
+This does not establish which deck the original server selects for the
+target. Neither the friendly request nor its rival parser specifies target
+case4/5 or an ordinary party. A future choice of an explicitly stored owned
+defense deck5 is LOCAL policy, never recovered original backend selection.
+It must not silently copy another deck or grant/alter owned Hunters.
+
+Overlapping per-account instance IDs need a separate proven strategy before
+publishing a native-combat-capable friendly rival:
+
+- The same MakeStageInst source:446–449 preserves own card instance words;
+  lines813–814 copy the rival CSRCard without an observed replacement-ID step.
+- sources/native/revival/ghidra-enemycamp-decomp-02.txt:1142–1157 obtains
+  the analyzed card instance words and passes them to BaseDraw.Load. Fresh
+  Thumb G9addb0 loads r2/r3 from card+10; G9addd8 calls that load function.
+- CSRGameActorBaseDraw.Load G99a438 stores the supplied full64 serial at
+  actor+880/+884, instruction G99a45e. GetSerial G99abb8 returns those words.
+- Global CSRGameBase.FindActorData G9dd49c iterates group actor vectors and
+  compares ONLY the full64 serial at G9dd4ee..512, returning the first match.
+  That lookup has no camp identity argument or comparison.
+
+Therefore duplicates that reach these actors create ambiguous global serial
+lookup; cross-camp safety is not established by separate actor groups. No
+actual native crash, damage misrouting or runtime collision was reproduced
+by this offline audit, and other possible downstream remapping is not
+universally excluded. Do not claim overlapping account-local IDs safe or
+change/renumber private saves to bypass this boundary.
+
+The current honest runtime behavior can remain an authenticated non-success
+refusal. Full native preparation requires compatible published references,
+complete real owned participants/equipment/skills/Gems, justified aggregate
+effects and identity handling, then direct native scene validation. It does
+not follow from a parser-shaped fixture alone.

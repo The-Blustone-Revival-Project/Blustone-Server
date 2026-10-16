@@ -39,6 +39,7 @@ import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { socialDiscovery } from "./social-discovery.js";
 import {friendMissionRecords} from "./friend-mission-records.js";
+import {syncOwnedCards} from "./inventory-card-sync.js";
 import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
 import { planGroupRankUp } from "./group-rank-up.js";
 import { cardSellProfitRows, planHunterSale, type CardSellProfit } from "./hunter-sale.js";
@@ -1894,6 +1895,23 @@ export class ServerState {
     this.persist();
     return this.envelope({ target_inst: { id: FIXTURE_FUEL_ID, status: 2 },
       user: { ap: { cur: game.ap, ap_charge_time: resourceChargeTime(game, "ap") } } });
+  }
+
+  refreshCardInventory(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers);
+    if(payload.item_ref_list!==undefined)return this.failure(2001,"Item and combined inventory sync receivers are not reconstructed");
+    const game=this.gameByPvid.get(account.pvid);
+    if(!game)return this.failure(2001,"Owned card snapshot is unavailable");
+    try {
+      assertOwnedCardCompatibility(game);
+      return this.envelope(syncOwnedCards(payload.card_inst_list,[...game.starter_cards,...game.recruited_cards]));
+    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid card inventory sync");}
+  }
+
+  unavailableWorldAction(route:string,payload:Record<string,unknown>,headers:Record<string,string>) {
+    this.accountFor(payload,headers);
+    return this.failure(2001,route==="/world/UseItem"?"Item effects and consumption settlement are not reconstructed":
+      "Friendly battle opponent projection and battle flow are not reconstructed");
   }
 
   cardInventory(payload: Record<string, unknown>, headers: Record<string, string>) {

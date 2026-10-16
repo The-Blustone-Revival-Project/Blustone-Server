@@ -446,6 +446,15 @@ try {
   for(const route of ['/reference/GetStage','/reference/GetCard','/lobby/GetCardInven','/episode/GetLog']) {
     const reply=await secure(route,auth);assert.ok(reply.ret_data!==undefined,route);
   }
+  const syncInventory=(await secure('/lobby/GetCardInven',auth)).ret_data;
+  assert.ok(syncInventory.length>0);
+  const cardSyncId=syncInventory[0].inst_id,syncBefore=readFileSync(stateFile);
+  assert.deepEqual((await secure('/world/RefreshInven',{...auth,card_inst_list:JSON.stringify([cardSyncId])})).ret_data,
+    {card:[syncInventory[0]]},'Compiled encrypted sync must return the exact absolute owned DTO');
+  assert.deepEqual((await secure('/world/RefreshInven',{...auth,card_inst_list:'[]'})).ret_data,{card:[]});
+  for(const route of ['/world/UseItem','/world/GetFriendlyBattleInfo'])
+    assert.equal((await secure(route,auth,{allowPlainRefusal:true})).result_code,2001,'Unsupported world receivers cannot acknowledge a mock success');
+  assert.deepEqual(readFileSync(stateFile),syncBefore,'Targeted sync and unsupported world actions cannot write the disposable save');
   const friendFloors=await secure('/mirage/GetFriendInfo',auth);
   assert.equal(friendFloors.result_code,1);assert.deepEqual(friendFloors.ret_data,[]);
   const guildBoot=(await secure('/lobby/GetGuildInfo',auth)).ret_data;
@@ -744,6 +753,8 @@ try {
   }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
+  const restartedCardSync=await secure('/world/RefreshInven',{...auth,card_inst_list:JSON.stringify([cardSyncId])});
+  assert.equal(restartedCardSync.ret_data.card[0].inst_id,cardSyncId,'Owned card selector survives compiled restart');
   if(exerciseSocial) {
     const owned=(await secure('/relation/GetList',{...auth,type:'1'})).ret_data;
     assert.equal(owned.list.length,1);assert.equal(owned.list[0].friend_id,friendId);

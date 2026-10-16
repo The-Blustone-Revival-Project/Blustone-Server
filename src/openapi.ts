@@ -506,6 +506,27 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-runtime-confidence":"Local read-only projection tested; native map markers pending",
   }};
   explicitlyDocumented.add("/world/GetFriendMissionRecord");
+  paths["/world/RefreshInven"]={post:{
+    ...operation("RefreshInven",
+      "Authenticated targeted card-only sync. card_inst_list is a JSON numeric uint64 array; exact native tokens are preserved before ownership lookup. Existing owned card DTOs return in ret_data.card as absolute per-card replacements, not EXP deltas or a whole-roster clear. Local quota1024 input IDs; duplicates coalesce in request order. Unknown IDs refuse the whole batch. Empty card list returns card:[]. Item-only and combined item_ref_list requests remain explicitly unsupported because their distinct callback consumers are not reconstructed. Reads never create a game, regenerate energy or persist. Native replacement UI remains pending.",
+      "Inventory",response("Native card-only replacement snapshot; unsupported sync modes fail.",{
+        allOf:[{$ref:"#/components/schemas/ResultEnvelope"},{type:"object",properties:{ret_data:{type:"object",properties:{
+          card:{type:"array",items:{type:"object",properties:{inst_id:{type:"integer",minimum:1,maximum:Number.MAX_SAFE_INTEGER},ref_id:{type:"string"}}}}}}}}],
+      })),
+    "x-evidence":"docs/world-use-item-and-inventory-sync-native-2026-10-16.md; tests/inventory-card-sync-state.ts",
+    "x-reverse-engineering-status":"native-parser-reconstructed",
+    "x-runtime-confidence":"Targeted absolute-card sync tested on disposable state; native UI pending",
+  }};
+  explicitlyDocumented.add("/world/RefreshInven");
+  for(const [route,description,evidence] of [
+    ["/world/UseItem","Authenticated explicit failure2001. Native success would subtract consumed_item_list quantities and set target-card rank/rank_up_cnt/EXP, with achievement overlays. Original item effects/eligibility and settlement are not reconstructed, so the former generic success mock is no longer emitted. No consumption, progression or grants occur.","docs/world-use-item-and-inventory-sync-native-2026-10-16.md"],
+    ["/world/GetFriendlyBattleInfo","Authenticated explicit failure2001. Native success expects ret_data.rival as a complete ParseDefender DTO and would replace the opponent cache. Target deck policy, cross-account card-ID collision handling and native friendly flow remain unverified. No synthetic rival, battle admission, fee or reward is returned.","docs/friendly-battle-preparation-native-2026-10-16.md"],
+  ]) {
+    paths[route]={post:{...operation(route.split("/").at(-1)!,description,"World state"),
+      "x-evidence":evidence,"x-reverse-engineering-status":"native-parser-reconstructed",
+      "x-runtime-confidence":"Authenticated state-preserving refusal tested; successful gameplay remains unsupported"}};
+    explicitlyDocumented.add(route);
+  }
   for (const action of ["FriendReqCancel", "FriendReqReject", "Unfriend"]) {
     const route = `/relation/${action}`;
     paths[route] = { post: {
