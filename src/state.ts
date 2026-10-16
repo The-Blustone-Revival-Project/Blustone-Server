@@ -31,6 +31,7 @@ import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors,mirageEndRefusal } from "./mirage.js";
 import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
+import {configuredBaitShop,normalizeBaitShopCounter,baitShopReferences,baitPurchaseInventory,planBaitPurchase,type BaitShopCounter,type BaitShopPolicy} from "./fishing-bait-shop.js";
 import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type FishingCatalogue} from "./fishing-catalogue.js";
 import {ownedFishingInventory} from "./fishing-inventory.js";
 import {localQuestPolicy,localQuestJournal,beginLocalQuests,localQuestProgress,localQuestReferenceWire,recordLocalQuestWin,planLocalQuestClaim,planLocalLinearClaim,type LocalQuestPolicy,type LocalQuestJournal} from "./local-quests.js";
@@ -200,6 +201,7 @@ export interface Account {
   passwordHash: string;
   socialBlocks?: SocialBlocks;
   arenaComments?:ArenaComments;
+  baitShopCounter?:BaitShopCounter;
 }
 
 export class NativeAuthError extends Error {
@@ -561,6 +563,7 @@ export class ServerState {
   private readonly fishingItems: readonly Readonly<FishingItemReference>[];
   private readonly skillMaterialIds:ReadonlySet<string>;
   private readonly fishingCatalogue?: FishingCatalogue;
+  private readonly baitShopPolicy?:BaitShopPolicy;
   private readonly fishingSaleMode:"disabled"|"local-bound";
   private readonly fishingBindings?:FishingSaleBindings;
   private readonly guildChatMode:"disabled"|"local-memory";
@@ -596,9 +599,12 @@ export class ServerState {
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
+      baitShopMode?:"disabled"|"archive-2018-projection";baitShopDailyLimit?:unknown;
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    this.baitShopPolicy=configuredBaitShop(Object.hasOwn(options,"baitShopMode")?options.baitShopMode:process.env.BLUSTONE_BAIT_SHOP_MODE??"disabled",
+      Object.hasOwn(options,"baitShopDailyLimit")?options.baitShopDailyLimit:process.env.BLUSTONE_BAIT_SHOP_DAILY_LIMIT);
     const questMode=Object.hasOwn(options,"questMode")?options.questMode:process.env.BLUSTONE_QUEST_MODE??"disabled";
     if(questMode!=="disabled"&&questMode!=="local-fixed")throw new TypeError("Unknown quest mode");this.questMode=questMode;
     const questPolicy=Object.hasOwn(options,"questPolicy")?options.questPolicy:process.env.BLUSTONE_QUEST_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_QUEST_POLICY_JSON);
@@ -733,9 +739,9 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
     const ids = new Set<number>();
@@ -745,7 +751,8 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.arenaComments!==undefined&&saved.version!==5)throw new TypeError("Arena comments require state schema5");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6)throw new TypeError("Bait purchase counters require state schema6");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6)throw new TypeError("Arena comments require state schema5 or6");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -754,6 +761,8 @@ export class ServerState {
       this.indexAccount(account);
       this.nextPvid = Math.max(this.nextPvid, account.pvid + 1);
     }
+    if(saved.version===6&&![...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined))
+      throw new TypeError("Schema6 requires captured bait purchases");
     if(saved.version===5&&![...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined))
       throw new TypeError("Schema5 requires captured Arena comments");
     if (saved.socialLikes !== undefined)
@@ -816,7 +825,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5)throw new TypeError("Linear quests require state schema4 or5");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6)throw new TypeError("Linear quests require state schema4,5 or6");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -845,10 +854,11 @@ export class ServerState {
     if (!this.stateFile) return;
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
     // Older writers must refuse journals/settings they cannot preserve.
+    const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const snapshot = { version: bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -1313,13 +1323,15 @@ export class ServerState {
     // ParseUserItemInven consumes envelope.ret_data.item and .global_item.
     // Ordinary item rows remain unchanged; purchase counts are separate
     // scalar rows, not prev/cur receipts or a bare inventory array.
-    const game = this.gameFor(this.accountFor(payload, headers));
+    const account=this.accountFor(payload,headers),game=this.gameFor(account);
     const apChanged = settleFuelShop(game.fuel_shop, Date.now()), bpChanged = settleFuelShop(game.bp_shop, Date.now());
     if (apChanged || bpChanged) this.persist();
-    return this.envelope({ item: game.items, global_item: [...fuelPurchaseInventory(game.fuel_shop), ...fuelPurchaseInventory(game.bp_shop, BP_SHOP_ID)] });
+    return this.envelope({ item: game.items, global_item: [...fuelPurchaseInventory(game.fuel_shop), ...fuelPurchaseInventory(game.bp_shop, BP_SHOP_ID),
+      ...(this.baitShopPolicy?baitPurchaseInventory(account.baitShopCounter,Date.now()):[])] });
   }
 
   buyFuel(payload: Record<string, unknown>, headers: Record<string, string>) {
+    if(payload.target_ref_id==="LU003")return this.buyBait(payload,headers);
     const game = this.gameFor(this.accountFor(payload, headers));
     const parse = (value: unknown) => typeof value === "number" ? value :
       typeof value === "string" && /^\d+$/.test(value.trim()) ? Number(value) : NaN;
@@ -1351,6 +1363,23 @@ export class ServerState {
           : { gold: { prev: previousGold, cur: game.gold } }) },
       target_inst: { item_id: payload.target_ref_id, price_type: priceType, buy_cnt: { prev: previousCount, cur: previousCount + 1 } },
       consumed_inst_list: [] });
+  }
+
+  private buyBait(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid);
+    if(!this.baitShopPolicy||!game)return this.failure(2001,"Historical bait shop is unavailable");
+    let plan;
+    try{plan=planBaitPurchase(payload,game,account.baitShopCounter,this.baitShopPolicy,Date.now());}
+    catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid bait purchase");}
+    const counter=account.baitShopCounter,before={items:game.items,next_item_inst_id:game.next_item_inst_id,
+      gacha_free_qty:game.gacha_free_qty,gacha_iap_qty:game.gacha_iap_qty};
+    Object.assign(game,{items:plan.items,next_item_inst_id:plan.next_item_inst_id,
+      gacha_free_qty:plan.gacha_free_qty,gacha_iap_qty:plan.gacha_iap_qty});account.baitShopCounter=plan.counter;
+    try{this.persist();}catch(error){
+      Object.assign(game,before);if(counter===undefined)delete account.baitShopCounter;else account.baitShopCounter=counter;
+      throw error;
+    }
+    return this.envelope(plan.receipt);
   }
 
   /** Bootstrap instances plus persistently awarded cards, in native array shape. */
@@ -1678,7 +1707,9 @@ export class ServerState {
 
   itemReferenceRows() {
     const base=itemReference();
-    return {...base,item:[...base.item,...this.fishingItems.map(row=>({...row}))]};
+    const bait=this.baitShopPolicy?baitShopReferences(this.baitShopPolicy):{item:[],global_item:[]};
+    return {...base,item:[...base.item,...bait.item,...this.fishingItems.map(row=>({...row}))],
+      global_item:[...base.global_item,...bait.global_item]};
   }
 
   mirageAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
@@ -3755,6 +3786,7 @@ function normalizeStoredAccount(raw: Record<string, unknown>): Account {
     passwordHash: String(raw.passwordHash ?? ""),
     ...(raw.socialBlocks === undefined ? {} : { socialBlocks: { ...raw.socialBlocks as SocialBlocks } }),
     ...(raw.arenaComments===undefined?{}:{arenaComments:normalizeArenaComments(raw.arenaComments)}),
+    ...(raw.baitShopCounter===undefined?{}:{baitShopCounter:normalizeBaitShopCounter(raw.baitShopCounter)}),
   };
 }
 

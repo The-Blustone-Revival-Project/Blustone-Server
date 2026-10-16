@@ -28,6 +28,13 @@ uncertainty retain the existing local fallback; recruitment eligibility stays un
 selecting historical requirements does not backfill traces or alter receipts.
 See the [image projection evidence](docs/trace-threshold-image-projection-2026-10-16.md).
 
+A historical High-quality Bait offer is available with
+`BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection` and an explicit local cap,
+for example `BLUSTONE_BAIT_SHOP_DAILY_LIMIT=2`. Each purchase spends6 Manda
+for10 LU003 bait. It defaults disabled; the cap and UTC reset are local policy.
+See the [bait shop workflow](docs/fishing-bait-shop-workflow-2026-10-16.md)
+for save-version compatibility and the remaining catch-data gaps.
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

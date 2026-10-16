@@ -954,8 +954,22 @@ paths:
         scalar global_item count rows. Independent AP/BP counters, resource
         balances and wallet persist together. No native nonce was recovered:
         separate accepted requests are distinct purchases, transport
-        exactly-once is not promised. Native shop receipt/relaunch validation
-        pending."
+        exactly-once is not promised. Optional
+        BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection adds original LU003
+        High-quality Bait as a historical10-for6Manda offer;
+        BLUSTONE_BAIT_SHOP_DAILY_LIMIT must explicitly supply a LOCAL
+        cap1..1000. Bait buys require price_type1/item_inst_id0/qty1 with no
+        price field. Native provide_qty10 is the pack size. Receipt
+        item[].added10 drives inventory; qty10 is LOCAL nominal display
+        quantity, not remaining stock. Scalar user.iap balances and target_inst
+        buy_cnt prev/cur update independently; no AP/BP mutation. Refuses
+        ambiguous or locked LU003 stacks, insufficient funds and invalid
+        packets. Stock, free-first Manda debit and monotone UTC counters persist
+        atomically; failed write/rename restores exact prior fields. First
+        captured bait counter uses schema6 so older writers refuse it;
+        schemas1..5 without bait history retain prior versions. Original daily
+        limits, metadata/icon and catch behavior are unrecovered. Native bait
+        purchase UI validation pending."
       tags:
         - Shop and economy
       parameters: *a1
@@ -1019,8 +1033,22 @@ paths:
         scalar global_item count rows. Independent AP/BP counters, resource
         balances and wallet persist together. No native nonce was recovered:
         separate accepted requests are distinct purchases, transport
-        exactly-once is not promised. Native shop receipt/relaunch validation
-        pending."
+        exactly-once is not promised. Optional
+        BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection adds original LU003
+        High-quality Bait as a historical10-for6Manda offer;
+        BLUSTONE_BAIT_SHOP_DAILY_LIMIT must explicitly supply a LOCAL
+        cap1..1000. Bait buys require price_type1/item_inst_id0/qty1 with no
+        price field. Native provide_qty10 is the pack size. Receipt
+        item[].added10 drives inventory; qty10 is LOCAL nominal display
+        quantity, not remaining stock. Scalar user.iap balances and target_inst
+        buy_cnt prev/cur update independently; no AP/BP mutation. Refuses
+        ambiguous or locked LU003 stacks, insufficient funds and invalid
+        packets. Stock, free-first Manda debit and monotone UTC counters persist
+        atomically; failed write/rename restores exact prior fields. First
+        captured bait counter uses schema6 so older writers refuse it;
+        schemas1..5 without bait history retain prior versions. Original daily
+        limits, metadata/icon and catch behavior are unrecovered. Native bait
+        purchase UI validation pending."
       tags:
         - Shop and economy
       parameters: *a1

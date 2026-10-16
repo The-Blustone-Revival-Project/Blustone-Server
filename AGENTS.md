@@ -1,3 +1,59 @@
+## Latest continuation: historical High-quality Bait purchases (2026-10-16)
+
+Previous checkpoint2455e38 restored11libraryrequirements+atomicrecruitment.
+This checkpoint restores actual optional LU003 stock purchases, independently
+of missing fishcatch data. Goal ACTIVE; BlueStacks input hold persists. No
+live profile/client/private-save changes, APK rebuild/install, originalasset
+modifications, Collector/Docker/inference operations. Allstateproof disposable.
+
+BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection requires explicit
+BLUSTONE_BAIT_SHOP_DAILY_LIMIT integer1..1000. Defaultdisabled. Historical
+batch56line46idx2795 showsHigh-qualityBait x10/Manda6, filename2018-07-02;
+medium-hightranscription, finalversionapplicabilityunproven. Daily12/12OCR is
+NOTusedasoriginalcap. CurrentAmount9 NOTinitialgrant. Price6acrosstiers,
+cap/UTCreset/rollbackclock/free-first/neutralmetadata are explicitLOCALpolicy.
+Source+rawrowhashes resources/reference/fishing-bait-offer-2018.json pin
+73e5c4a9b03d93edafbd8eb2e5fa794f042a4aef25508f50d8eef705f8a81682
+(runtime verifies this pin; no sibling dependency).
+
+Nativepopup GetBait(1)=LU003; actualMandaGcff020..06c andgoldGcfe1a4..1e6
+send qty1/item_inst_id0, payment1/2; NOpriceparam. provide_qtyGaf09ee/09f4
+storedglobalnode+24/GLOBAL_ITEM+8 thenpopupGcfd09a: x10pack, notrequestqty10.
+OnlyMandamodeimplemented. Nativecallbackitem[].added drivesAddItemGf8bc5c..64;
+target_inst separatelyupdatesbuy_cnt. Successitemqty10 is LOCALnominalgoods,
+NOTabsoluteinventory. BothbaitcontinuationsignoreGOODS_INFO thenSetLure
+refreshes actualstock andpack. Trueoriginalbackendqtysemanticsunknown.
+
+NativeGetInstItemCnt FIRSTmatchingLUref, notsum: Gaeced2..cf14/Gaecf42..44.
+Refuse ambiguousmultipleLU003rows (evenzero), lockedstock, overflow/invalid
+packet/insufficientfunds/cap. ReuseonecanonicalstackorallocatesafefreshlocalID.
+Neutraluse_type0/effectempty/thumbempty/rank1/sell0 metadata LOCAL; native
+popupreadsname/desc/thumb only andAddItemdoesn'tchecktype. Notoriginalrowclaim.
+Planbeforemutation; items/allocator/Manda/accountcounter persisttogether;
+write/renamefailure restores exact priorarrays/scalars/counterref/absence.
+Loadedgameonly, noAPBP/clockregeneration inpurchasepath. No newfishorcatch.
+
+Firstcaptured Account.baitShopCounter promotesstateSCHEMA6. Older1..5with
+counterreject,6withoutcounter/missingquestdispatcharraysreject. Comments5->6
+andlinear4/5/6 coexist; no-baitaccounts retainprior1..5. Disabledmodepreserves
+capturedstock+metadata, noforcedreset. Oldreadersreject6 insteadofdroppingcap.
+No native nonce: eachfundedrequest buysanotherpack; absolute RefreshInven
+LU003 repairsinventoryafterlostreceipt, notanexactly-onceclaim.
+
+Pure/state/build/independentreviewPASS. Newstate test authenticatesbuy/ref/inven,
+actual.tmp+renamefailures, exactwallet/stock/metadata rollback, dayroll/clockback,
+schema6restart/oldschemas/corruption, actuallinearquestenrollment+dispatchhistory
+and Arena messages surviving subsequentnonbaitwrite. All184programsPASS.
+Compiled --fixture --exercise-bait-shop P384/HMAC/AES+processrestartPASS:
+newstack10→sameinst20, free-firstcost6, cap2, pre-capforgeryrefusal, exactbytes
+oncap, absoluteRefresh20, peer/originalfixtureunchanged; bothreportflagsTRUE.
+Docs fishing-bait-purchase-native-2026-10-16.md and fishing-bait-shop-workflow-
+2026-10-16.md ownsource/operation/limitations. NativeUIstillPENDING.
+
+FishingBegin/EndWithSell actualfishIDs/art/pools/selection/grade/length and
+baitconsumption remainmissing. Newimagefishnames/salequotes doNOTestablish
+internalIDs orgradepricejoins; noFS001/FISH_01 artworkalias orcatchgrantadded.
+
 ## Latest continuation: corroborated library traces and atomic recruitment (2026-10-16)
 
 Previous checkpoint834cd5a added optional historical005/006 requirements.

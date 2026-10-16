@@ -50,6 +50,9 @@ const authoredEquipmentRankPrice={rank:exerciseEquipmentUpgrade?2:1,attr:1,price
 const authoredEquipmentPrices=exerciseEquipmentUpgrade?[authoredEquipmentLevelPrice,{...authoredEquipmentLevelPrice,level:11,price:29}]:[authoredEquipmentLevelPrice];
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
+const exerciseBaitShop=process.argv.includes('--exercise-bait-shop');
+if(exerciseBaitShop&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-bait-shop')))
+  throw new Error('Bait shop requires a separate disposable --fixture exercise');
 const exerciseArenaRanks=process.argv.includes('--exercise-arena-ranks');
 if(exerciseArenaRanks&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-arena-ranks')))
   throw new Error('Arena standings require a separate disposable --fixture exercise');
@@ -201,6 +204,7 @@ const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
+  if(exerciseBaitShop){env.BLUSTONE_BAIT_SHOP_MODE='archive-2018-projection';env.BLUSTONE_BAIT_SHOP_DAILY_LIMIT='2';}
   env.BLUSTONE_GUILD_CREATION_MODE=exerciseGuildFound?'local-gold':'disabled';
   env.BLUSTONE_GUILD_UPDATE_MODE=exerciseGuildUpdate?'local-manda-free-first':'disabled';
   env.BLUSTONE_GUILD_MEMBERSHIP_MODE=exerciseGuildMembership?'local-public-approval':'disabled';
@@ -269,7 +273,7 @@ const stop = async () => {
   throw new Error('Verifier listener did not close; no replacement process was started');
 };
 let secret,token;
-let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle,arenaRanksProof;
+let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle,arenaRanksProof,baitShopProof;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
   const response=await fetch(base+'/shared_secret/Exchange',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},
@@ -307,6 +311,52 @@ try {
   const guest=await secure('/v2/account/RegisterGuest',{device_id:'standalone-migration-verification'});
   const auth={otp:String(guest.ret_data.otp),pvid:String(guest.pvid)};
   const lobby=await secure('/lobby/Enter',auth);assert.ok(lobby.ret_data);
+  if(exerciseBaitShop) {
+    const refs=(await secure('/reference/GetItem',auth)).ret_data;
+    assert.equal(refs.item.find(row=>row.id==='LU003').name,'High-quality Bait');
+    const offer=refs.global_item.find(row=>row.item_id==='LU003');
+    assert.equal(offer.provide_qty,10);assert.equal(offer.buy_limit,2);
+    assert.deepEqual(offer.price_list,[{price_type:1,buy_cnt:1,price:6},{price_type:1,buy_cnt:2,price:6}]);
+    const inventory=(await secure('/lobby/GetItemInven',auth)).ret_data;
+    assert.equal(inventory.item.filter(row=>row.ref_id==='LU003').length,0);
+    assert.deepEqual(inventory.global_item.find(row=>row.item_id==='LU003'),{item_id:'LU003',price_type:1,buy_cnt:0});
+    const saved=JSON.parse(readFileSync(stateFile)),baseline=saved.gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    const packet={...auth,target_ref_id:'LU003',price_type:'1',item_inst_id:'0',qty:'1'};
+    for(const forged of [{qty:'10'},{price:'0'},{target_ref_id:'LU001'}]) {
+      const prior=JSON.parse(readFileSync(stateFile)).gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+      assert.equal((await secure('/shop/BuyGlobalItem',{...packet,...forged},{allowPlainRefusal:true})).result_code,2001);
+      const current=JSON.parse(readFileSync(stateFile)).gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+      assert.equal(current.gacha_free_qty,prior.gacha_free_qty);assert.equal(current.gacha_iap_qty,prior.gacha_iap_qty);
+      assert.deepEqual(current.items,prior.items,'Forged selectors cannot alter owned stock');
+    }
+    let id;
+    for(let index=0;index<2;index++) {
+      const purchase=await secure('/shop/BuyGlobalItem',packet);assert.equal(purchase.result_code,1);
+      const data=purchase.ret_data;assert.equal(data.jackpot_level,1);assert.equal(data.jackpot_multiply,1);
+      assert.equal(data.item.length,1);assert.equal(data.item[0].ref_id,'LU003');assert.equal(data.item[0].added,10);assert.equal(data.item[0].qty,10);
+      if(index===0)id=data.item[0].inst_id;else assert.equal(data.item[0].inst_id,id);
+      assert.ok(Number.isSafeInteger(id)&&id>0);
+      const spent=(index+1)*6,free=Math.min(baseline.gacha_free_qty,spent);
+      assert.deepEqual(data.user,{iap:{iap_qty:baseline.gacha_iap_qty-(spent-free),free_iap_qty:baseline.gacha_free_qty-free}});
+      assert.deepEqual(data.target_inst,{item_id:'LU003',price_type:1,buy_cnt:{prev:index,cur:index+1}});
+      assert.deepEqual(data.consumed_inst_list,[]);
+      const raw=JSON.parse(readFileSync(stateFile));assert.equal(raw.version,6);
+      const game=raw.gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+      assert.deepEqual(game.items.find(row=>row.ref_id==='LU003'),{inst_id:id,ref_id:'LU003',qty:(index+1)*10,lock:0});
+    }
+    const capped=readFileSync(stateFile);
+    assert.equal((await secure('/shop/BuyGlobalItem',packet,{allowPlainRefusal:true})).result_code,2001);
+    assert.deepEqual(readFileSync(stateFile),capped,'Capped purchase must not write');
+    const owned=(await secure('/lobby/GetItemInven',auth)).ret_data;
+    assert.deepEqual(owned.item.find(row=>row.ref_id==='LU003'),{inst_id:id,ref_id:'LU003',qty:20,lock:0});
+    assert.equal(owned.global_item.find(row=>row.item_id==='LU003').buy_cnt,2);
+    const syncBytes=readFileSync(stateFile);
+    assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'["LU003"]'})).ret_data,
+      {item:[{inst_id:id,ref_id:'LU003',qty:20,lock:0}]});
+    assert.deepEqual(readFileSync(stateFile),syncBytes,'Absolute bait repair cannot grant or write');
+    baitShopProof={id,packet,game:JSON.parse(syncBytes).gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1]};
+  }
+
   if(exerciseEpisodeWallet) {
     const free=await secure('/episode/Reward',{...auth,id:'E02'});assert.equal(free.result_code,1);
     assert.deepEqual(free.ret_data.user,{free_iap:{prev:20,cur:50},iap_qty:55,free_iap_qty:50});
@@ -887,6 +937,18 @@ try {
   }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
+  if(exerciseBaitShop) {
+    const inventory=(await secure('/lobby/GetItemInven',auth)).ret_data;
+    assert.deepEqual(inventory.item.find(row=>row.ref_id==='LU003'),{inst_id:baitShopProof.id,ref_id:'LU003',qty:20,lock:0});
+    assert.equal(inventory.global_item.find(row=>row.item_id==='LU003').buy_cnt,2);
+    const bytes=readFileSync(stateFile),game=JSON.parse(bytes).gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    assert.equal(game.gacha_free_qty,baitShopProof.game.gacha_free_qty);assert.equal(game.gacha_iap_qty,baitShopProof.game.gacha_iap_qty);
+    assert.equal((await secure('/shop/BuyGlobalItem',baitShopProof.packet,{allowPlainRefusal:true})).result_code,2001);
+    assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'["LU003"]'})).ret_data,
+      {item:[{inst_id:baitShopProof.id,ref_id:'LU003',qty:20,lock:0}]});
+    assert.deepEqual(readFileSync(stateFile),bytes,'Restart retains cap, stock, wallet and read-only repair');
+  }
+
   if(exerciseArenaComments)assert.deepEqual((await secure('/arena/Enter',auth)).ret_data.user.battle,savedArenaBattle,
     'Complete own Fight Club messages/profile survive compiled schema5 restart');
   if(exerciseArenaRanks) {
@@ -1032,6 +1094,7 @@ try {
   }
   const report={compiled_process:true,unrelated_working_directory:true,encrypted_ecdh_hmac_aes:true,
     direct_compiled_process:true,launcher_process_verified:false,
+    encrypted_bait_shop_fixture:exerciseBaitShop,bait_shop_restart_fixture:exerciseBaitShop,
     encrypted_bulk_rank_up_fixture:exerciseBulk,
     encrypted_hunter_sale_fixture:exerciseSale,
     configured_equipment_reference_fixture:exerciseEquipment,

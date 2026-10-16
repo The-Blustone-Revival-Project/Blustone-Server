@@ -1,0 +1,18 @@
+{
+  "profile": "archive-2018-projection",
+  "source": {
+    "path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-56.tsv",
+    "sha256": "6b8acb8ebfe1c1bd0d3f6ef82e233308b1c81dd67d827d92fd3269b7966bded6",
+    "line": 46,
+    "idx": 2795,
+    "raw": "2795\tScreenshot_20180702-221639-0c934c2cf44bad3d.png\t720\t1280\tfishing\t\t\t\t\t\tHigh-quality Bait popup; Current Amount 9; Daily Purchase 12/12 (OCR); [High-Quality Bait] A shrimp that fishes go crazy for. Bites quicker and the chances of catching a big fish increases.; x10; Purchase with Manda 6; gem balance 323 (full-view + partial OCR)\t\tno\tmedium-high\tFishing economy: 12/12 daily cap reached; Manda-6 bulk price; single full view",
+    "raw_sha256": "6857fedc3b35efe9b1522090829f9b903d31a2ba5aa902dd02e8a32bd4f5b46e"
+  },
+  "offer": {
+    "item_id": "LU003",
+    "name": "High-quality Bait",
+    "provide_qty": 10,
+    "manda": 6
+  },
+  "scope": "2018-07-02 filename; daily12/12 OCR is observation only, not a recovered limit/reset rule. ItemID join is independent native evidence. Neutral metadata, cap, UTC reset and free-first spending are LOCAL."
+}
