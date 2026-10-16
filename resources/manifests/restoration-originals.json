@@ -1,0 +1,258 @@
+[
+  {
+    "name": "C007.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C007.jet",
+    "destination": "resources/runtime/assets/C007.jet",
+    "bytes": 753975,
+    "sha256": "949be5dbd4d6451f4f50fc862a1a0f5071f591fda73e95da3a5d727690930e73"
+  },
+  {
+    "name": "C007_EFT.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C007_EFT.jet",
+    "destination": "resources/runtime/assets/C007_EFT.jet",
+    "bytes": 2137495,
+    "sha256": "8bb0c0971a56491cb3e41cd9b4279e077e295d9f1fd33919a6bbb537e9e0af3e"
+  },
+  {
+    "name": "C007_Q.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C007_Q.jet",
+    "destination": "resources/runtime/assets/C007_Q.jet",
+    "bytes": 57482,
+    "sha256": "8395cc442c9a41a4381766e5c8b959e6d89f8cc86ba6146efc024ceeb07192b8"
+  },
+  {
+    "name": "C011.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C011.jet",
+    "destination": "resources/runtime/assets/C011.jet",
+    "bytes": 1189575,
+    "sha256": "e2aea670ac617df79be05ad2c860074997efbd5201c1a8724e179d8bca1be944"
+  },
+  {
+    "name": "C011_EFT.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C011_EFT.jet",
+    "destination": "resources/runtime/assets/C011_EFT.jet",
+    "bytes": 1944752,
+    "sha256": "268de72b2d4e405009a7345f9c0a536d131b154194b03e9f029497e7880c88ed"
+  },
+  {
+    "name": "C011_Q.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C011_Q.jet",
+    "destination": "resources/runtime/assets/C011_Q.jet",
+    "bytes": 53700,
+    "sha256": "6abe741c5b180e20d6a96d171320294e978e4780d6d1cd69504ed94a978f3a41"
+  },
+  {
+    "name": "C011_SND.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C011_SND.jet",
+    "destination": "resources/runtime/assets/C011_SND.jet",
+    "bytes": 86588,
+    "sha256": "0cb28a36f329a90661c41bc0619258b1d03c0cfff3956187ea670dead89c5ac5"
+  },
+  {
+    "name": "C016.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C016.jet",
+    "destination": "resources/runtime/assets/C016.jet",
+    "bytes": 757670,
+    "sha256": "c35c525e4eb65a7ded346aa7baac2aacdafbc40d51c38a746debebf3d2c2436f"
+  },
+  {
+    "name": "C016_EFT.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C016_EFT.jet",
+    "destination": "resources/runtime/assets/C016_EFT.jet",
+    "bytes": 7335026,
+    "sha256": "f1347d403ac57aa855841b2307d0f596754a5c6b8dd198fc1a1abf601228c41f"
+  },
+  {
+    "name": "C016_Q.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C016_Q.jet",
+    "destination": "resources/runtime/assets/C016_Q.jet",
+    "bytes": 120442,
+    "sha256": "33b1e5a313ad84c990a0bbb5335304fe84bf64aaed8e12db72fb94060e073eb4"
+  },
+  {
+    "name": "C016_SND.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C016_SND.jet",
+    "destination": "resources/runtime/assets/C016_SND.jet",
+    "bytes": 135066,
+    "sha256": "f578b51dbf267d304a34963ec906b0eaa372486c1f2fad0c55dd68e5f4ff6f6a"
+  },
+  {
+    "name": "C018.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C018.jet",
+    "destination": "resources/runtime/assets/C018.jet",
+    "bytes": 900296,
+    "sha256": "7ab656845ab2e37448c48e073ec34301fe5d5e9dd505c384d200a4c25d95e82a"
+  },
+  {
+    "name": "C018_EFT.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C018_EFT.jet",
+    "destination": "resources/runtime/assets/C018_EFT.jet",
+    "bytes": 1147675,
+    "sha256": "a19f6f9e06468eb1c2f5ecf6b861d1e9e78c57bee6f2fef5831c7f8a1ac29181"
+  },
+  {
+    "name": "C018_Q.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C018_Q.jet",
+    "destination": "resources/runtime/assets/C018_Q.jet",
+    "bytes": 42481,
+    "sha256": "9eae7a673078dc1baf46c66ea935ad94f13fc48507e155197b39744a1ea57fba"
+  },
+  {
+    "name": "M020.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/M020.jet",
+    "destination": "resources/runtime/assets/M020.jet",
+    "bytes": 925674,
+    "sha256": "f0acad2194ab843a3fb722176c51c93a916fab8238be19aa42ac379097e62dbb"
+  },
+  {
+    "name": "N007.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/N007.jet",
+    "destination": "resources/runtime/assets/N007.jet",
+    "bytes": 3327702,
+    "sha256": "48633922e7091be83983fdff41416725f14c1631a09fac03986d17b31f9a45c7"
+  },
+  {
+    "name": "ST901.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/ST901.jet",
+    "destination": "resources/runtime/assets/ST901.jet",
+    "bytes": 663573,
+    "sha256": "5036d6f3490eb011a0b7fc3bcb30bd56e897dc776657e11d9543f995f9725128"
+  },
+  {
+    "name": "C014_Q.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C014_Q.jet",
+    "destination": "resources/runtime/assets/C014_Q.jet",
+    "bytes": 47425,
+    "sha256": "ff3760eeb625be7e9eda4c1d82d303d9c75a3afcbe50a5d6c9c2e9e60140a4ed"
+  },
+  {
+    "name": "C014_EFT.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C014_EFT.jet",
+    "destination": "resources/runtime/assets/C014_EFT.jet",
+    "bytes": 3220988,
+    "sha256": "716a21f6557ebda3dec2c0636f479164b9edb08bea8bb909fbeb20ac0d91d662"
+  },
+  {
+    "name": "C014_SND.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C014_SND.jet",
+    "destination": "resources/runtime/assets/C014_SND.jet",
+    "bytes": 115487,
+    "sha256": "442ebee474ebfe15369d63b41fa433cebdec6c94b079c50556107d360997a10f"
+  },
+  {
+    "name": "C030_Q.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C030_Q.jet",
+    "destination": "resources/runtime/assets/C030_Q.jet",
+    "bytes": 50479,
+    "sha256": "8e81e09ae78accd91d759373c808664978682fac52a190939e888e770050cb7c"
+  },
+  {
+    "name": "C030_EFT.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C030_EFT.jet",
+    "destination": "resources/runtime/assets/C030_EFT.jet",
+    "bytes": 1713201,
+    "sha256": "7fe62d125f88f42891631e6d53eebcb0ab6911c6e72053ef682831877abdfb86"
+  },
+  {
+    "name": "C030_SND.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C030_SND.jet",
+    "destination": "resources/runtime/assets/C030_SND.jet",
+    "bytes": 287301,
+    "sha256": "52a226f79c9a30589d68e0c07088761e5fe2d92505eb7c650b6077d79ed85a0d"
+  },
+  {
+    "name": "C048_Q.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C048_Q.jet",
+    "destination": "resources/runtime/assets/C048_Q.jet",
+    "bytes": 58721,
+    "sha256": "bdd5647d778e804b99cf01fe3707cdcf5909aba95ea49d7473e4458da393bfab"
+  },
+  {
+    "name": "C048_EFT.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C048_EFT.jet",
+    "destination": "resources/runtime/assets/C048_EFT.jet",
+    "bytes": 2848635,
+    "sha256": "e0441f76f60bdd970419a98ec379a529a367dac10e3c61e21aa7c48a9d6c803f"
+  },
+  {
+    "name": "C048_SND.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C048_SND.jet",
+    "destination": "resources/runtime/assets/C048_SND.jet",
+    "bytes": 181536,
+    "sha256": "e06d38a895d0e08ca89452e6b50f7b68632eb0340371bc8c0559e847388fcf0a"
+  },
+  {
+    "name": "C054_Q.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C054_Q.jet",
+    "destination": "resources/runtime/assets/C054_Q.jet",
+    "bytes": 142331,
+    "sha256": "b29bf3096a458a385a0210e7e47bb0ffcd18a6a8af9edd66b9906ea5b20a909f"
+  },
+  {
+    "name": "C054_EFT.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C054_EFT.jet",
+    "destination": "resources/runtime/assets/C054_EFT.jet",
+    "bytes": 2951152,
+    "sha256": "787c55dd5d235c8961c3cd052e678ed9ec578458dd276565cb05d20ee9096793"
+  },
+  {
+    "name": "GUILD.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/GUILD.jet",
+    "destination": "resources/runtime/assets/GUILD.jet",
+    "bytes": 2258272,
+    "sha256": "9a2964fa1137b4ed6d09570103397ab3a221f31c97ed462c03a94fbe01c5fe66"
+  },
+  {
+    "name": "MIRAGE.jet",
+    "role": "added",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/MIRAGE.jet",
+    "destination": "resources/runtime/assets/MIRAGE.jet",
+    "bytes": 3861142,
+    "sha256": "d2cf0adca895de1174f35f507cf5e38a21b8e74572a5c895c50ad6c062f4374e"
+  },
+  {
+    "name": "LEVELING.jet",
+    "role": "prerequisite",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/LEVELING.jet",
+    "destination": "resources/runtime/assets/LEVELING.jet",
+    "bytes": 18524,
+    "sha256": "ba73fff17002cc94f7f1a98bf657be1bef042283051a5b92c395347006d3c57e"
+  },
+  {
+    "name": "ST002.jet",
+    "role": "prerequisite",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/ST002.jet",
+    "destination": "resources/runtime/assets/ST002.jet",
+    "bytes": 2985916,
+    "sha256": "e75a9e7be84632e960a3084e4262726604c013d96633c3015d125f9ada9129ba"
+  }
+]

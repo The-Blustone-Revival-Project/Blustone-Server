@@ -1,3 +1,58 @@
+## Latest continuation: combined restoration profile and fishing producer (2026-10-17)
+
+Previous checkpoint badc0f0 restored configured Mirage re-entry. Goal ACTIVE.
+No live profile/private save/device/APK/original asset/Docker/Collector/inference
+changes. Device input hold persists. Server/Instrumented writes only; DataDump
+read only. No APK rebuild or release owed. This checkpoint is prepared locally.
+
+New INACTIVE config/profiles/current-restoration.json combines the exact ordered
+139-group current-e6-materials baseline with 17 E7, 11 materials18, GUILD and
+MIRAGE originals: 169 groups, stamp1634688. Thirty additions total39,315,842
+original bytes. resources/manifests/restoration-originals.json contains32 unique
+pins including existing LEVELING/ST002 prerequisites. Every imported original
+joins its hash/bytes/path provenance ledger; conflicting copies refuse.
+
+scripts/profiles/prepare-restoration.mjs preserves materials/reference and stat/
+skill flags. The older E7 profile lacks the materials reference flag, so do not
+activate it as a substitute for this union. Partial/reordered unions, malformed
+settings, missing/corrupt originals and overflow refuse. Already-combined inputs
+also advance beyond every source stamp, preventing different lists sharing a
+future E7/Guild/etc. stamp. Inspect-only does not write; repeat preparation is
+idempotent and conflicting existing outputs are never overwritten.
+
+Combined native GetCard wire catalogue has22 ordinary references: all14 prior
+rows exact plus007/011/014/016/018/030/048/054. Added stat/skill rows remain
+explicit neutral LOCAL fixtures (HP1000/ATK100/DEF50, empty effects); original
+balance is UNKNOWN. Publishing references grants no Hunter. Starter inventory,
+birth defaults, acquisition/drop/exchange definitions and owned cards unchanged.
+
+Verification: build PASS; all SEVEN profile programs PASS. Compiled ephemeral
+HTTP checks169 manifest rows and downloads all32 pinned PKGI containers, proving
+outer MD5/size and exact table/offset/EOF/inner original bytes/SHA/MD5. Restoring
+a disposable existing14-reference account under the union preserves all prior
+rows, ownership and complete save bytes using targeted RefreshInven reads.
+Ordinary inventory legitimately regenerates/repairs resource clocks; do not
+change production semantics merely to force byte preservation in a test.
+Runtime214-program suite was not rerun: production runtime source unchanged.
+Independent review clear. docs/restoration-resource-profile-2026-10-17.md has
+commands and limits. Native169 boot/RAM/cache/render/E7 combat UNVERIFIED;
+historical bad_alloc makes host package checks insufficient native proof.
+
+New docs/fishing-catch-lifecycle-native-2026-10-17.md closes Begin/catch/End:
+Begin sends auth5+place_id+cast_dist+lure_id; success returns log_id and float
+minigame tuning, not a fish. Wait persists that log via PutConsume. EndWithSell
+reads SIGNED consume ID, log0 short-circuits locally, and sends ONLY auth5+
+log_id+is_win (literal1 iff argument1). Client never chooses fish/grade/length.
+Success clears consume before ParseEnd; errors10203/10204 also clear it, while
+generic2001 retains it. ParseEnd produces fish_id/grade/length and updates
+separate grade counts/records. Generic item deltas are independent stock;
+consumed_inst_list removes general instances. Optional ret_data.sell follows
+ParseEnd and can replace grade counts. Endpoint name alone does not prove an
+automatic sale. Fish IDs/RNG/lengths/tuning/bait-debit phase and grade-to-general-
+instance join remain UNKNOWN. No new catch grant/runtime fishing behavior.
+Next useful server work: explicit optional configured fishing lifecycle grounded
+in this producer contract, keeping all unknown tables labeled LOCAL.
+
 ## Latest continuation: Mirage re-entry, floor choices and native clock (2026-10-17)
 
 Previous checkpointdee622b added optional first aid. This checkpoint supplies
