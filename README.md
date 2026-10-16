@@ -91,6 +91,11 @@ owned SU1/SU2 to advance eligible natural three/four-star Hunters. It requires
 the compatible minimum-rank profile, uses an explicit local counter-reset rule,
 and grants no tickets or purchase rights. See the [owned-ticket policy](docs/quick-advancement-local-ticket-2026-10-16.md).
 
+Optional `BLUSTONE_FRIENDLY_BATTLE_MODE=local-owned-defense` prepares an accepted
+local friend's explicit Fight Club defense team, with collision-free response
+IDs and mounted Gem links. It preserves both saves and charges no resources.
+Native battle validation is pending; see the [friendly preparation policy](docs/friendly-battle-local-defense-2026-10-16.md).
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

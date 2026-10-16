@@ -343,7 +343,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/world/RefreshInven") return state.refreshInventory(payload,headers);
   if(route==="/world/UseVIPTicket")return state.giftVeteranTicket(payload,headers);
   if (route === "/world/UseItem") return state.useAdvancementTicket(payload,headers);
-  if (route === "/world/GetFriendlyBattleInfo") return state.unavailableWorldAction(route,payload,headers);
+  if (route === "/world/GetFriendlyBattleInfo") return state.friendlyBattlePreparation(payload,headers);
   if (route === "/tuto/Clear") return state.clearTutorial(payload, headers);
   if (route === "/reference/V2_GetSupply") return state.envelope(supplyReference());
   if (route === "/lobby/V2_GetSupplyInst") return state.supplyInventory(payload, headers);

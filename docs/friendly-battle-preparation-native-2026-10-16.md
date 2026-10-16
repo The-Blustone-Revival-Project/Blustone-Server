@@ -1,5 +1,11 @@
 # Friendly battle preparation: exact contract and unresolved admission
 
+Implementation follow-up: [optional local-owned-defense preparation](friendly-battle-local-defense-2026-10-16.md)
+now projects real accepted friends with response-only card and Gem aliases,
+explicit deck policy and read-only state handling. Default remains guarded.
+Historical blocker statements below describe the original collision boundary;
+the new host-tested mapping does not yet claim native scene validation.
+
 ## Follow-up: real friendly scene and local result branch
 
 Further bounded original inspection closes the downstream scene selection:
@@ -131,3 +137,74 @@ refusal. Full native preparation requires compatible published references,
 complete real owned participants/equipment/skills/Gems, justified aggregate
 effects and identity handling, then direct native scene validation. It does
 not follow from a parser-shaped fixture alone.
+
+## Follow-up: transient rival serials and the separate Gem attachment join
+
+Bounded native review supports a response-only rival-card serial projection
+as a LOCAL collision strategy. The client copies rival card instances into
+actors; the actor serial lookup described above uses both ID words. Reserved
+mirror serials `9_100_000_001..9_100_000_005`, selected by dense defense slot,
+are exact JavaScript integers and exact native uint64 numeric JSON values.
+They are separate from this server's owned-card namespace
+`1 <= ID < CARD_INSTANCE_LIMIT` (`900_000_001`), fixed Search helper
+`900_000_001`, and existing Arena fixture serial `9_000_001_001`.
+These constants are LOCAL choices, not recovered original friendly IDs.
+No save identity may be renumbered to implement this projection. Empty slots
+remain `{inst_id:0}`; nonempty slots copy the actual full card DTO with only
+its response `inst_id` replaced. Actual friendly-scene runtime validation is
+still required before claiming the projected scene works.
+
+Equipment levels/ranks, skill levels, skin references, and progression are
+fields inside the parsed `CSRCard`; they are not independent owned-card-ID
+links in the established flat card grammar. This does **not** cover Gems:
+those are parsed separately and explicitly joined to cards by target ID.
+
+`ParseDefender` G943958 reads the separate `gem` collection, calls
+`CSRGem::ParseGem` for each row, and appends the returned shared row to
+`BATTLE_ENEMY +0xb8` (published
+`sources/native/systems/ghidra-arena-lobby-helpers.txt:1579` onward).
+`CSRGem::ParseGem` Ga5c2f4 delegates to `CSRGem::parse` Ga5d3dc at
+Ga5c342. This bounded wrapper returns the parsed shared row; it does not
+show an insertion into the local player's owned-Gem inventory.
+
+The complete Gem keys are recorded in
+`sources/native/economy/ghidra-gem-inventory-keys.txt`: `ref_id`, `inst_id`,
+`rank`, `level`, `position`, `target_inst_id`, `ability`, `abilities`, and
+`level_up_failed`. Ability is its established string-JSON grammar containing
+`main`/`sub`, not an invented empty object. Gem instance and target IDs are
+native full64 values; rank/level/position/failure counter use uint32
+conversions. The target integer-JSON branch loads both words at Ga5d5c6
+and stores both at Ga5d5ee. The store is allocation `+0x58`, which is
+returned `PLAY_DATA +0x48` after its `+0x10` control-block prefix.
+As with existing Gem wire publication, unsafe uint64 values require exact
+unquoted integer JSON tokens; native string parsing passes through double
+and must not be used to preserve arbitrary full64 identities.
+
+The rival-card attachment comparison is positively closed in
+`CSRFC::MakeStageInst` G9418b0:
+
+- `sources/native/hunters/ghidra-arena-battle-stage-consumers.txt:957`
+  onward loops the rival Gem list for each copied rival card.
+- G94227e loads card `+0x10/+0x14`; G942282 loads Gem
+  `PLAY_DATA +0x48/+0x4c`.
+- G942286..28c compares **both words**, and only an exact match appends
+  that Gem to the actor's list. The matching Gem shared object is retained
+  at G942298..29e; there is no compensating original-to-mirror target-ID
+  mapping in this join.
+
+Therefore changing only `card.inst_id` while publishing unchanged attached
+Gems silently loses their actor association. A coherent Gem-capable mirror
+must map each selected Gem's `target_inst_id` to the corresponding response
+card mirror ID, preserve its other validated fields, and ensure it publishes
+only the intended selected participants' attachments. The bounded work does
+not establish universal safety for arbitrary overlapping Gem instance IDs
+in every downstream consumer. That claim needs separate closure.
+
+A deliberately limited first implementation may publish `gem:[]` only when
+the selected real defense participants have no equipped Gems; it must refuse
+an unsupported attachment rather than drop an earned effect. Likewise the
+explicit stored defense-deck5 selection, same-server accepted-friend access,
+zero Card Book/chain effects where that is the server's currently published
+LOCAL policy, and all other reference/bonus validation remain necessary.
+This is a compatibility strategy for a real read-only rival projection,
+not a new ownership grant, Arena admission token, BP charge, or reward law.

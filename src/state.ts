@@ -2,6 +2,7 @@ import {DORM_SHOP_ID,configuredDormExpansion,hunterCapacity,dormExpansionReferen
 import {HUNTER_MIN_RANK_PROFILE} from "./hunter-minimum-rank.js";
 import {hunterRegistrationTime} from "./hunter-registration.js";
 import {quickAdvancementMode,quickAdvancementReferences,planQuickAdvancement} from "./quick-advancement.js";
+import {friendlyTargetPvid,friendlyBattleRival,friendlyBattleAttackReady} from "./friendly-battle.js";
 import crypto from "node:crypto";
 import { guildLobby,type GuildRecord } from "./guild-lobby.js";
 import { establishedGuildRecords } from "./guild-records.js";
@@ -581,6 +582,7 @@ export class ServerState {
   private readonly resourceShopPolicy?:ResourceShopPolicy;
   private readonly dormExpansionPolicy?:DormExpansionPolicy;
   private readonly quickAdvancement:"disabled"|"local-owned-tickets";
+  private readonly friendlyBattleMode:"disabled"|"local-owned-defense";
   private readonly veteranGiftPolicy?:VeteranGiftPolicy;
   private readonly profileMode:"disabled"|"archive-profile-projection";
   private readonly fishingSaleMode:"disabled"|"local-bound";
@@ -620,6 +622,7 @@ export class ServerState {
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
       dormExpansionMode?:"disabled"|"local-priced";dormExpansionPrices?:unknown;
       quickAdvancementMode?:"disabled"|"local-owned-tickets";
+      friendlyBattleMode?:"disabled"|"local-owned-defense";
       resourceShopMode?:"disabled"|"archive-2018-base-only";resourceApDailyLimit?:unknown;resourceBpDailyLimit?:unknown;
       rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
       veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
@@ -628,6 +631,9 @@ export class ServerState {
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    const friendlyMode=Object.hasOwn(options,"friendlyBattleMode")?options.friendlyBattleMode:process.env.BLUSTONE_FRIENDLY_BATTLE_MODE??"disabled";
+    if(friendlyMode!=="disabled"&&friendlyMode!=="local-owned-defense")throw new TypeError("Unknown friendly battle mode");
+    this.friendlyBattleMode=friendlyMode;
     this.quickAdvancement=quickAdvancementMode(Object.hasOwn(options,"quickAdvancementMode")?options.quickAdvancementMode:process.env.BLUSTONE_QUICK_ADVANCEMENT_MODE??"disabled");
     if(this.quickAdvancement!=="disabled"&&HUNTER_MIN_RANK_PROFILE!=="catalogue-birth-rank-projection")throw new TypeError("Local quick advancement requires the catalogue minimum-rank profile");
     this.dormExpansionPolicy=configuredDormExpansion(Object.hasOwn(options,"dormExpansionMode")?options.dormExpansionMode:process.env.BLUSTONE_DORM_EXPANSION_MODE??"disabled",
@@ -2062,6 +2068,31 @@ export class ServerState {
     item.qty=plan.remaining;Object.assign(plan.target,plan.next);game.card_book=plan.book;
     try{this.persist();}catch(error){item.qty=quantity;Object.assign(plan.target,before);game.card_book=book;throw error;}
     return this.envelope(plan.receipt);
+  }
+
+  friendlyBattlePreparation(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const actor=this.accountFor(payload,headers);
+    if(this.friendlyBattleMode==="disabled")return this.failure(2001,"Friendly battle opponent projection and battle flow are not reconstructed");
+    try {
+      if(["deck_type","deck","rival","fee","bp","gold","honor","rank"].some(key=>Object.hasOwn(payload,key)))throw new TypeError("Unsupported friendly battle selectors");
+      const target=friendlyTargetPvid(payload.target_pvid),peer=this.accountsByPvid.get(target);
+      if(!peer||peer.pvid===actor.pvid||peer.serverId!==actor.serverId)throw new TypeError("Unknown same-server friendly opponent");
+      const accepted=this.socialFriends?.relations.some(row=>row.state==="accepted"&&
+        (row.from_pvid===actor.pvid&&row.to_pvid===target||row.to_pvid===actor.pvid&&row.from_pvid===target));
+      if(!accepted||Object.hasOwn(actor.socialBlocks??{},String(target))||Object.hasOwn(peer.socialBlocks??{},String(actor.pvid)))
+        return this.failure(10177,"Friendly battles require an accepted unblocked friend");
+      const ownGame=this.gameByPvid.get(actor.pvid),peerGame=this.gameByPvid.get(target);
+      if(!ownGame||!peerGame)throw new TypeError("Owned friendly formations are unavailable");
+      if(ownGame.active_battle?.state==="active"||ownGame.arena.active||ownGame.search.active)throw new TypeError("Finish active combat before a friendly battle");
+      assertOwnedCardCompatibility(ownGame);assertOwnedCardCompatibility(peerGame);
+      this.validateOwnedGems(ownGame);this.validateOwnedGems(peerGame);
+      const refs=new Set(starterReference.map(row=>row.base.id));
+      friendlyBattleAttackReady(ownGame,refs,this.gemReferences);
+      const occupied=new Set<number|string>([...ownGame.starter_cards,...ownGame.recruited_cards,...peerGame.starter_cards,...peerGame.recruited_cards].map(row=>row.inst_id));
+      for(const game of [ownGame,peerGame])for(const gem of game.owned_gems??[])occupied.add(String(gem.inst_id));
+      const rival=friendlyBattleRival({pvid:target,nickname:peer.nickname,profile_status:this.profileStatus(target),arenaComments:peer.arenaComments},peerGame,refs,occupied,this.gemReferences);
+      return this.envelope({rival});
+    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Friendly opponent preparation failed");}
   }
 
   cardInventory(payload: Record<string, unknown>, headers: Record<string, string>) {

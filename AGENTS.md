@@ -1,4 +1,73 @@
-## Latest continuation: optional owned SU ticket advancement (2026-10-16)
+## Latest continuation: real-friend defense preparation (2026-10-16)
+
+Previous checkpoint9b6d219 restored optional owned SU ticket consumption.
+This checkpoint reconstructs optional friendly opponent preparation with actual
+owned rosters and collision-free response aliases. Goal ACTIVE; native friendly
+scene/battle validation PENDING. No live profile/private save/device/client/APK/
+original asset/Docker/Collector/inference changes. Input hold persists. Work
+only Server/Instrumented; DataDump read-only. No release/rebuild owed.
+
+BLUSTONE_FRIENDLY_BATTLE_MODE=local-owned-defense enables authenticated
+/world/GetFriendlyBattleInfo; default remains2001. Only accepted unblocked real
+same-server friends qualify, with both block directions checked. Native-only-
+friends error10177 is used for pending/unaccepted/blocked targets; self/unknown/
+different-server/forged selectors refuse. Actor ordinary/Arena/Search activity
+blocks preparation. Both loaded owned games are read directly; no game creation,
+energy regeneration, save write, friendship change or ID allocation occurs.
+
+Actor explicit attack4 is source-proven; target explicit defense5 is LOCAL
+policy because the request supplies no target formation selector. Dense five
+slots, unique owned nonzero IDs, at least one participant and valid ordinary
+stat/gear references required. No copying/default fallback. Native scene54 skips
+normal BP gate and finishes through local FCFriendlyResult, not ranked Complete;
+the server adds no fee, battle reservation, honor/rating/EXP/gold/item settlement.
+
+Per-account owned IDs overlap below900000001, while native global actor lookup
+uses full64 serial without camp. Response-only defender aliases9100000001..5
+preserve slot order and all current public native card fields. Empty slots stay
+inst_id0. Stored cards and own attack IDs are never renumbered. Unknown private
+card fields are whitelisted OUT; getter-based or malformed records refuse.
+Aliases are checked against BOTH users' cards and Gem identities.
+
+Native Gem join is now positively closed: MakeStageInstG94227e/G942282 compares
+card+10/+14 with Gem PLAY_DATA target+48/+4c, EORing both wordsG942286..28c.
+Changing only card IDs would silently lose mounted effects. New Gem projection
+validates full existing registry/stock/owners/native positions/equipment ranks,
+then aliases Gem instances from9200000001 and remaps target_inst_id to defender
+aliases. Original raw ability/stat units and known fields stay intact, rather
+than reserializing normalized fractions. Only mounted Gems for selected cards
+are public; unrelated/unmounted inventory stays private. Invalid/unknown Gems
+or occupied aliases refuse. Actor mounted Gems are validated too. No silent
+empty-Gem substitute, stock grants or own/source mutations.
+
+Public rival includes actual peer nickname/status/EXP/arena counters/comments
+and leader-or-first-selected thumbnail. Friendly rank0, unknown country and
+empty chain/current neutral book effects are LOCAL presentation choices. Current
+book reference is checked neutral; future positive bonuses require proper
+projection. Baseline gear1/1 retains neutral fixture behavior; nonbaseline gear
+requires matching configured slot/rank/awakening rows. Skills/skin/progression
+are copied as owned. Original balance/aggregate law and native visuals remain
+incomplete. No account extra_data/tokens or unrelated owned cards are exposed.
+
+All201 npm test programs, five profile suites, build and independent review
+PASS. Source/compiled model/state cases cover dense explicit teams, overlapping
+real account IDs, aliases numeric/string/U64 occupancy, raw Gem effect equality,
+privacy/detachment, malformed/future-nonneutral/readiness refusal, auth/pending/
+both block directions/cross-server/busy gates, exact expired-clock/save/account/
+graph preservation and successful reads with blocked.tmp writes. Compiled
+ephemeral-loopback P384/HMAC/AES proof uses actual Request/Accept-created friends,
+real peer profile, response-only mirrored cards, missing-team and disabled-mode
+refusal, exact save bytes/expired energy and persisted key/OTP process restart.
+HTTP proof has no Gems; source/compiled state independently covers Gem links and
+normalized effect equivalence. No native fight, damage or result was claimed.
+
+docs/friendly-battle-local-defense-2026-10-16.md owns setup/policies/limits;
+native evidence remains in docs/friendly-battle-preparation-native-2026-10-16.md.
+npm run test:friendly-battle repeats built model/state/HTTP checks. Remaining:
+native friendly validation when control resumes, further original areas/rewards
+and original progression/entitlement reconstruction. Goal ACTIVE.
+
+## Historical continuation: optional owned SU ticket advancement (2026-10-16)
 
 Previous checkpoint5cc833d corrected actual new Hunter registration times.
 This checkpoint implements a narrow optional /world/UseItem policy for already
