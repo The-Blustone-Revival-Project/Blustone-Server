@@ -50,6 +50,6 @@ export function socialDiscovery(current: SocialFriends, actor: number, mode: "su
     .sort((a, b) => a.pvid - b.pvid).slice(start, start + count);
   const list = peers.map((peer) => ({ friend_id: 0, target_pvid: peer.pvid, type: "candidate",
     reg_utc: peer.beginUtc, tick: 0, received_dtm: 0, nick_name: peer.nickname, country_code: "",
-    profile_url: peer.profile_url, profile_status: "", like_cnt: peer.like_cnt ?? 0, is_like: peer.is_like ?? 0 }));
+    profile_url: peer.profile_url, profile_status: peer.profile_status??"", like_cnt: peer.like_cnt ?? 0, is_like: peer.is_like ?? 0 }));
   return { start, length: list.length, list };
 }

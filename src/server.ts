@@ -46,11 +46,12 @@ const coreRoutes = new Set([
 ]);
 
 export function createApp(options: { baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;
+  profileMode?:"disabled"|"archive-profile-projection";
   fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}): AppContext {
   const baseUrl = options.baseUrl ?? "http://127.0.0.1:8080";
   const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds,guildChatMode:options.guildChatMode,publicChatMode:options.publicChatMode,
     ...(Object.hasOwn(options,"dispatchMode")?{dispatchMode:options.dispatchMode}:{}),...(Object.hasOwn(options,"dispatchPolicy")?{dispatchPolicy:options.dispatchPolicy}:{}),
-    ...Object.fromEntries(["fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
+    ...Object.fromEntries(["profileMode","fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
   const endpoints = discoverEndpoints(options.catalogPath ?? defaultCatalogPath());
   const openapi = buildOpenApi(endpoints, baseUrl);
   let runtimeReslistHeader: string | undefined;
@@ -184,10 +185,7 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
       { method, path: "/account/Unbind", name: `unbind-${method}`, handler: (req, res) => sendResponse(req, res, state, state.envelope({ accepted: true })) },
       { method, path: "/account/Unregister", name: `unregister-${method}`, handler: (req, res) => sendResponse(req, res, state, state.envelope({ accepted: true })) },
       { method, path: "/pv_account/get_token", name: `get-token-${method}`, handler: (req, res) => {
-        return stateCall(req, res, state, () => {
-          const account = state.accountFor(payloadOf(req, state), headersOf(req));
-          return state.envelope({}, { token: account.vsToken, vs_token: account.vsToken, pvid: account.pvid });
-        });
+        return stateCall(req,res,state,()=>state.webLoginToken(payloadOf(req,state),headersOf(req)));
       } },
       { method, path: "/pv_account/register_push_token", name: `register-push-${method}`, handler: (req, res) => stateCall(req, res, state, () => state.registerPushToken(payloadOf(req, state), headersOf(req))) },
     );
@@ -216,7 +214,7 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
 
   // WebView event/evaluation contracts are evidence-backed form fixtures and
   // intentionally remain separate from the recovered native route catalog.
-  routeDefinitions.push(...webviewRouteDefinitions());
+  routeDefinitions.push(...webviewRouteDefinitions(state));
 
   registerRoutes(app, routeDefinitions);
   app.use(notFound());

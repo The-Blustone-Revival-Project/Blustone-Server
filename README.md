@@ -35,6 +35,14 @@ for10 LU003 bait. It defaults disabled; the cap and UTC reset are local policy.
 See the [bait shop workflow](docs/fishing-bait-shop-workflow-2026-10-16.md)
 for save-version compatibility and the remaining catch-data gaps.
 
+The reconstructed profile editor is available with
+`BLUSTONE_PROFILE_MODE=archive-profile-projection`. It restores the native
+`my_info` WebView entry and saves nickname/status changes. Its undated historical
+policy gives one free rename, then100 Manda; status accepts50 characters.
+The first edit uses save schema7 to preserve rename history. See the
+[profile workflow](docs/profile-editor-workflow-2026-10-16.md) for setup,
+source limits and the remaining Android validation.
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

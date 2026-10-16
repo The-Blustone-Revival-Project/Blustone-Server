@@ -1,5 +1,7 @@
 import type { RequestHandler } from "express";
 import type { RouteDefinition } from "./routes.js";
+import {NativeAuthError,type ServerState} from "./state.js";
+import {renderProfilePage} from "./profile-page.js";
 
 /**
  * Form-observed WebView endpoints recovered from the offline cache.
@@ -48,11 +50,26 @@ function fixtureHandler(route: string): RequestHandler {
   };
 }
 
-export function webviewRouteDefinitions(): RouteDefinition[] {
-  return webviewEvidenceRoutes.map((path) => ({
+export function webviewRouteDefinitions(state:ServerState): RouteDefinition[] {
+  const fixtures=webviewEvidenceRoutes.map((path) => ({
     method: "post" as const,
     path,
     name: `webview-evidence-${path.slice("/webview/".length).replaceAll("/", "-")}`,
     handler: fixtureHandler(path),
   }));
+  const profile:RouteDefinition[]=[
+    {method:"get",path:"/webview/my-info",name:"local-profile-page",handler:(req,res,next)=>{
+      try{
+        const view=state.webProfile(req.query.web_token);
+        res.setHeader("Referrer-Policy","no-referrer");
+        res.setHeader("Content-Security-Policy","default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'");
+        return res.type("html").send(renderProfilePage(view,req.query.web_token as string));
+      }catch(error){if(error instanceof NativeAuthError)return res.status(403).json(state.failure(error.code,error.message));next(error);}
+    }},
+    {method:"post",path:"/webview/my-info/update",name:"local-profile-update",handler:(req,res,next)=>{
+      try{return res.json(state.updateWebProfile(req.body?.web_token,req.body?.patch));}
+      catch(error){if(error instanceof NativeAuthError)return res.status(403).json(state.failure(error.code,error.message));next(error);}
+    }},
+  ];
+  return [...fixtures,...profile];
 }

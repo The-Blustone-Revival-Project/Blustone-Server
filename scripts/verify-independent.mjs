@@ -50,6 +50,9 @@ const authoredEquipmentRankPrice={rank:exerciseEquipmentUpgrade?2:1,attr:1,price
 const authoredEquipmentPrices=exerciseEquipmentUpgrade?[authoredEquipmentLevelPrice,{...authoredEquipmentLevelPrice,level:11,price:29}]:[authoredEquipmentLevelPrice];
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
+const exerciseProfile=process.argv.includes('--exercise-profile');
+if(exerciseProfile&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-profile')))
+  throw new Error('Profile editing requires a separate disposable --fixture exercise');
 const exerciseBaitShop=process.argv.includes('--exercise-bait-shop');
 if(exerciseBaitShop&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-bait-shop')))
   throw new Error('Bait shop requires a separate disposable --fixture exercise');
@@ -204,6 +207,7 @@ const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
+  env.BLUSTONE_PROFILE_MODE=exerciseProfile?'archive-profile-projection':'disabled';
   if(exerciseBaitShop){env.BLUSTONE_BAIT_SHOP_MODE='archive-2018-projection';env.BLUSTONE_BAIT_SHOP_DAILY_LIMIT='2';}
   env.BLUSTONE_GUILD_CREATION_MODE=exerciseGuildFound?'local-gold':'disabled';
   env.BLUSTONE_GUILD_UPDATE_MODE=exerciseGuildUpdate?'local-manda-free-first':'disabled';
@@ -273,7 +277,7 @@ const stop = async () => {
   throw new Error('Verifier listener did not close; no replacement process was started');
 };
 let secret,token;
-let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle,arenaRanksProof,baitShopProof;
+let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle,arenaRanksProof,baitShopProof,profileProof;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
   const response=await fetch(base+'/shared_secret/Exchange',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},
@@ -311,6 +315,46 @@ try {
   const guest=await secure('/v2/account/RegisterGuest',{device_id:'standalone-migration-verification'});
   const auth={otp:String(guest.ret_data.otp),pvid:String(guest.pvid)};
   const lobby=await secure('/lobby/Enter',auth);assert.ok(lobby.ret_data);
+  const myInfo=(guest.ret_data.url_list??[]).find(row=>row.url_key==='my_info');
+  assert.equal(!!myInfo,exerciseProfile,'my_info is advertised only by the explicitly enabled profile fixture');
+  if(exerciseProfile) {
+    assert.equal(myInfo.address,base+'/webview/my-info');assert.equal(myInfo.param_format,'?web_token=%s&sns=%s&lang=%s');
+    const nativeToken=await secure('/pv_account/get_token',auth);
+    assert.deepEqual(Object.keys(nativeToken.ret_data),['token']);assert.ok(typeof nativeToken.ret_data.token==='string'&&nativeToken.ret_data.token.length>0);
+    const webToken=nativeToken.ret_data.token;
+    const args=[webToken,'','en'];let argument=0;
+    const pageUrl=myInfo.address+myInfo.param_format.replace(/%s/g,()=>encodeURIComponent(args[argument++]));
+    assert.equal(argument,3,'Native key3 format order is web token, available SNS list, language');
+    const page=await fetch(pageUrl);assert.equal(page.status,200);assert.match(page.headers.get('content-type'),/text\/html/);
+    assert.match(page.headers.get('content-security-policy'),/connect-src 'self'/);assert.equal(page.headers.get('referrer-policy'),'no-referrer');
+    assert.ok((await page.text()).includes('VSWebViewBridge'));
+    const post=async body=>{const response=await fetch(base+'/webview/my-info/update',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});return {status:response.status,body:await response.json()};};
+    const baseline=JSON.parse(readFileSync(stateFile)).gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    const oldOwner=before.accounts[0].pvid;
+    const first=await post({web_token:webToken,pvid:oldOwner,patch:{nick_name:'HTTP Captain One',info_message:'Welcome aboard 🌟'}});
+    assert.equal(first.status,200);assert.equal(first.body.result_code,1);
+    assert.deepEqual(first.body.ret_data,{nick_name:'HTTP Captain One',info_message:'Welcome aboard 🌟',rename_price:100,manda:baseline.gacha_free_qty+baseline.gacha_iap_qty});
+    const firstSaved=JSON.parse(readFileSync(stateFile)),firstGame=firstSaved.gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    assert.equal(firstSaved.version,7);assert.equal(firstGame.gacha_free_qty,baseline.gacha_free_qty);assert.equal(firstGame.gacha_iap_qty,baseline.gacha_iap_qty);
+    assert.deepEqual(firstSaved.accounts.find(account=>account.pvid===Number(auth.pvid)).profileSettings,{info_message:'Welcome aboard 🌟',rename_count:1});
+    assert.equal(firstSaved.accounts.find(account=>account.pvid===oldOwner).nickname,before.accounts[0].nickname,'Foreign pvid cannot redirect a token-owned edit');
+    const patch={nick_name:'HTTP Captain Two',info_message:'Ready to explore 🌟'};
+    const second=await post({web_token:webToken,patch});assert.equal(second.status,200);assert.equal(second.body.result_code,1);
+    const free=Math.min(baseline.gacha_free_qty,100),settled=JSON.parse(readFileSync(stateFile)),game=settled.gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    assert.equal(game.gacha_free_qty,baseline.gacha_free_qty-free);assert.equal(game.gacha_iap_qty,baseline.gacha_iap_qty-(100-free));
+    assert.deepEqual(settled.accounts.find(account=>account.pvid===Number(auth.pvid)).profileSettings,{info_message:patch.info_message,rename_count:2});
+    assert.deepEqual(second.body.ret_data,{...patch,rename_price:100,manda:game.gacha_free_qty+game.gacha_iap_qty});
+    const noopBytes=readFileSync(stateFile);assert.deepEqual((await post({web_token:webToken,patch})).body,second.body);assert.deepEqual(readFileSync(stateFile),noopBytes);
+    const badPage=await fetch(base+'/webview/my-info?web_token=invalid');assert.equal(badPage.status,403);
+    assert.equal((await post({web_token:'invalid',patch})).status,403);assert.deepEqual(readFileSync(stateFile),noopBytes);
+    const brief=(await secure('/relation/GetTargetUserInfo',{...auth,list:JSON.stringify([Number(auth.pvid)])})).ret_data.list[0];
+    assert.equal(brief.nick_name,patch.nick_name);assert.equal(brief.profile_status,patch.info_message);
+    const login=await secure('/v2/account/Login',auth);assert.equal(login.result_code,1);
+    assert.equal(login.ret_data.nick_name,patch.nick_name);assert.equal(login.ret_data.profile_status,patch.info_message);assert.equal(typeof login.ret_data.profile_status,'string');
+    auth.otp=String(login.ret_data.otp);
+    profileProof={webToken,pageUrl,patch,view:second.body.ret_data,game};
+  }
+
   if(exerciseBaitShop) {
     const refs=(await secure('/reference/GetItem',auth)).ret_data;
     assert.equal(refs.item.find(row=>row.id==='LU003').name,'High-quality Bait');
@@ -937,6 +981,23 @@ try {
   }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
+  if(exerciseProfile) {
+    const bytes=readFileSync(stateFile),saved=JSON.parse(bytes),account=saved.accounts.find(row=>row.pvid===Number(auth.pvid));
+    assert.equal(saved.version,7);assert.equal(account.nickname,profileProof.patch.nick_name);
+    assert.deepEqual(account.profileSettings,{info_message:profileProof.patch.info_message,rename_count:2});
+    assert.equal(account.webToken,profileProof.webToken);
+    const page=await fetch(profileProof.pageUrl);assert.equal(page.status,200);const html=await page.text();
+    assert.ok(html.includes(profileProof.patch.nick_name)&&html.includes(profileProof.patch.info_message));
+    const brief=(await secure('/relation/GetTargetUserInfo',{...auth,list:JSON.stringify([Number(auth.pvid)])})).ret_data.list[0];
+    assert.equal(brief.nick_name,profileProof.patch.nick_name);assert.equal(brief.profile_status,profileProof.patch.info_message);
+    assert.equal((await secure('/pv_account/get_token',auth)).ret_data.token,profileProof.webToken);
+    const repeat=await fetch(base+'/webview/my-info/update',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({web_token:profileProof.webToken,patch:profileProof.patch})});
+    assert.equal(repeat.status,200);assert.deepEqual((await repeat.json()).ret_data,profileProof.view);
+    const game=JSON.parse(readFileSync(stateFile)).gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    assert.equal(game.gacha_free_qty,profileProof.game.gacha_free_qty);assert.equal(game.gacha_iap_qty,profileProof.game.gacha_iap_qty);
+    assert.deepEqual(readFileSync(stateFile),bytes,'Restarted profile reads and equal edit preserve durable bytes');
+  }
+
   if(exerciseBaitShop) {
     const inventory=(await secure('/lobby/GetItemInven',auth)).ret_data;
     assert.deepEqual(inventory.item.find(row=>row.ref_id==='LU003'),{inst_id:baitShopProof.id,ref_id:'LU003',qty:20,lock:0});
@@ -1094,6 +1155,8 @@ try {
   }
   const report={compiled_process:true,unrelated_working_directory:true,encrypted_ecdh_hmac_aes:true,
     direct_compiled_process:true,launcher_process_verified:false,
+    encrypted_profile_edit_fixture:exerciseProfile,profile_edit_restart_fixture:exerciseProfile,
+    compiled_my_info_url_advertised:exerciseProfile,
     encrypted_bait_shop_fixture:exerciseBaitShop,bait_shop_restart_fixture:exerciseBaitShop,
     encrypted_bulk_rank_up_fixture:exerciseBulk,
     encrypted_hunter_sale_fixture:exerciseSale,

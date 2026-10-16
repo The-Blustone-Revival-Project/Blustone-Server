@@ -1,3 +1,69 @@
+## Latest continuation: reconstructed My Info profile editor (2026-10-16)
+
+Previous checkpointb445cc1 restoredoptionalhistoricalbait purchases. This
+checkpoint restoresoptionalnative my_info WebView wiring and persistent
+nickname/status editing. Goal ACTIVE; no live/private/client/APK changes.
+BlueStacks input hold persists; actualAndroidentry/close remainsPENDING.
+
+BLUSTONE_PROFILE_MODE=archive-profile-projection enableslocalHTMLpage and
+advertisesmy_info launcher+login URLs. OriginalOpenMyinfoViewGd2128c formats
+address+param_format with EXACT3 strings:webtoken,availableSNSlist,lowercase
+language ko/en/ja/zh/zh-hant. Rootlocaladdress/webview/my-info and querynames
+web_token/sns/lang are replacements, notclaimedoriginalserverendpoints.
+OriginalRequestWebLoginTokenG7c20a8→/pv_account/get_token readsret_data.token;
+oldserverputtokenonlytop-level. Nowactualaccount.webToken returnedinside;
+legacytopvs-tokenaliases remainseparate. No tokenrotation/resource/gamewrites.
+
+OriginalJavaRMWebView interfaceVSWebViewBridge.SetData(rawJSON),CloseView().
+PageexplicitClose sendsresult_code1/action_type0/ret_data{}, thencallsCloseView.
+ARMG7c525c action0→PVMyInfoViewCloseGd2221c→UserPool.Update(self)Gd2232a.
+ItsGd2348c callbackcopies briefnickname/profile_url/profile_status/country
+intoCPVDataMgr+60/+78/+84/+90 andredrawspopup, soeditclosecanrefreshnative
+nameANDstatus. NativeJava exportlocalDataDumparchiveSHA/documented; unmodified.
+No inventedprofileRPC/action10, accountbinding, country/avatar controls.
+
+Neworiginalhelpercorrection: G728b08 convertsnumbers→decimalstrings aswell
+ascopyingstrings; canonicalwirestrings remaincorrect. LoginParseG7e2e5a..7e
+storesprofile_statusSTRING toDataMgr+84; priornumeric0 became message'0',
+NOTstatusenum. Login/brief/friend/discovery nowpublishsavedactualstatusstring,
+emptydefault. DetailedpartyDTO andArena win/lose messages remainseparate.
+
+Undatedimagebatch12line44idx593 saysfirstnicknamechangeFREE then100Manda,
+statuslimit50; nofinalversion/uniqueness/nicknamelength claim. Optionalprofile
+modeprojects fee; LOCALfree-first, exactnamecomparison,50Unicodecodepoint
+status and128nonblanklosslessUTF8/noC0nickname admission. Case/outerspaces
+preserved; emptyinfo clears. No-op/equalname skipswrite/fee. Newstatusdoesn't
+consume firstfree rename. NativeConfirmNickname nowvalidates/rollsback,
+returns{nick_name} withoutgameFor; rejects changednameonceprofilehistory
+exists, avoidingfee bypass. Legacy nicknameinputalias retainedLOCAL.
+
+Account.profileSettings{info_message,rename_count} persists with nickname+
+Manda inONEatomicwrite; failure restores exact prior settingsref/absence and
+wallet/name. Firstactualedit SCHEMA7; mandatoryquest+dispatcharrays, comments5,
+bait6 andlinear4 coexist. Earlier1..6 withprofilemetadata reject;7withoutrecord
+reject. No-editorhistory retainspriorversions; disablingpreservesowneddata.
+Uniqueexistingwebtoken authorizesONLYitsowner; no pvidselector/gameallocation/
+APBP recovery. LocalPOST /webview/my-info/update is replacementbackendAPI.
+
+All186gameplayprograms/build/independentreviewPASS. Pure+state tests exercise
+Unicode/legacyrepair/HTMLescape/VMbridge, real.tmp+renamefailures, free/paid
+100renames, noops/funds/fee-bypass, self/peer/friend/discovery/loginpropagation,
+all1..7schemas, actualcaptured4linear→5comments→6bait→7profile anddispatchhistory.
+Compiled --fixture --exercise-profile P384/HMAC/AESnative token/URL→plainHTML/
+JSONedit/free+paid100+ownerisolation→nativebrief/Login→restartPASS; report
+ encrypted_profile_edit_fixture/profile_edit_restart_fixture/
+ compiled_my_info_url_advertised TRUE. DisabledbaselineflagFALSE andoldfixture
+unchanged. No AndroidnativeUIclaim ornewAPKreleaseowed.
+
+ActualIABbrowserdummyaccount savedAuroraCaptain/status, displayedChangesSaved,
+firstrenamefree andnextprice100; screenshotlocal/profile-ui-saved.jpg. Its
+helperprocess35240/session14500 STOPPEDverified. Automaticapprovalreview
+blockedcombinedtempfoldercleanup; test-onlyfolder retained underTemp (pathin
+ignoredlocal/profile-ui-qa-session.json). No unrelatedprocess touched.
+Docs profile-native-contract-2026-10-16.md, profile-webview-bridge-2026-10-16.md
+and profile-editor-workflow-2026-10-16.md ownlocators/setup/limits. Country,
+avatar/SNS/originalpage andnativeAndroidvalidation stillincomplete.
+
 ## Latest continuation: historical High-quality Bait purchases (2026-10-16)
 
 Previous checkpoint2455e38 restored11libraryrequirements+atomicrecruitment.

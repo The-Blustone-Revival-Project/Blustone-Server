@@ -607,7 +607,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
         reg_utc: id === account.pvid ? account.beginUtc : 0, utc: Math.floor(Date.now() / 1000),
         nick_name: id === account.pvid ? account.nickname : id === ARENA_RIVAL_PVID
           ? arenaRival().nickname : LOCAL_MAIL_SENDER.nickname,
-        country_code: "", profile_status: "", ...state.socialLikeMetadata(account.pvid, id),
+        country_code: "", profile_status: id===account.pvid?state.profileStatus(id):"", ...state.socialLikeMetadata(account.pvid, id),
         profile_url: state.baseUrl + LOCAL_MAIL_PORTRAIT_PATH })) });
     }
     // **[RECOVERED]** the profile field set is

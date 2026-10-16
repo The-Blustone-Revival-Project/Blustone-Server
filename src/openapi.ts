@@ -287,16 +287,28 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
       post: operation("Create or authenticate local email account", "Accepts email and password form fields, stores a local scrypt password verifier, issues stable vs_token plus a fresh otp, and returns the native login-shaped account payload.", "Account and authentication", response("Email account session.", { $ref: "#/components/schemas/AccountResponse" })),
     },
     "/account/ConfirmNickname": {
-      post: operation("Confirm local nickname", "Resolves the native account OTP in the request body and updates nick_name (nickname is also accepted). Saves the mutation when BLUSTONE_STATE_FILE is configured. Restart persistence is tested; full client nickname-validation/error semantics remain incomplete.", "Account and authentication", response("Updated account.", { $ref: "#/components/schemas/AccountResponse" })),
+      post: operation("Confirm an initial local nickname", "Native request uses nick_name and account authentication; nickname remains a legacy local input alias. Canonical success ret_data is {nick_name:string}, without account/wallet refresh. LOCAL validation requires nonblank lossless UTF8, no C0 controls and at most128 code points; original nickname length/uniqueness rules remain unknown. Equal confirmation is a no-write acknowledgement, and persistence failure restores the prior nickname. Once captured profile-edit history exists, changed names require the profile editor rather than bypassing its fee. This action does not allocate games or regenerate AP/BP.", "Account and authentication", response("Confirmed native nickname.", {allOf:[{$ref:"#/components/schemas/ResultEnvelope"},{type:"object",properties:{ret_data:{type:"object",required:["nick_name"],properties:{nick_name:{type:"string"}}}}}]})),
     },
     "/pv_account/get_token": {
-      post: operation("Return local account token", "Returns the token issued by the local guest-account handler.", "Account and authentication"),
+      post: operation("Return the native web-login token", "Authenticated RequestWebLoginToken callback reads ret_data.token. Return the persistent account web token there; compatible top-level vs-token aliases remain separate. No game allocation, resource regeneration, credential rotation or save write. The local profile WebView accepts only this web token.", "Account and authentication"),
     },
     "/pv_account/register_push_token": {
       post: operation("Register a push token", "Stores a push token in local mock state. Firebase delivery is not implemented.", "Account and authentication"),
     },
   };
 
+  const profileView={type:"object",required:["nick_name","info_message","rename_price","manda"],properties:{
+    nick_name:{type:"string"},info_message:{type:"string",maxLength:50},rename_price:{type:"integer",enum:[0,100]},manda:{type:"integer",minimum:0}}};
+  const {requestBody:profilePageBody,...profilePageOperation}=operation("Open the local profile editor",
+    "Opt-in BLUSTONE_PROFILE_MODE=archive-profile-projection advertises URL key my_info in launcher/login. Native formats three string arguments in order: web token, available SNS types, lowercase language. Local query names/routes and HTML replace the unrecovered original webpage. A unique account web token authorizes only that account; no pvid selector, game allocation or resource regeneration. Native Android bridge SetData({result_code:1,action_type:0,ret_data:{}}) followed by CloseView triggers self brief refresh. Country/avatar/SNS/account management are not implemented by this page. Native Android rendering remains pending.","Account and authentication");
+  paths["/webview/my-info"]={get:{...profilePageOperation,
+    parameters:[{name:"web_token",in:"query",required:true,schema:{type:"string"}}],
+    responses:{"200":{description:"Escaped mobile profile page.",content:{"text/html":{schema:{type:"string"}}}},"403":{description:"Disabled editor or invalid web token."}},
+    "x-evidence":"docs/profile-native-contract-2026-10-16.md; docs/profile-webview-bridge-2026-10-16.md"}};
+  paths["/webview/my-info/update"]={post:{...operation("Save the token owner's profile",
+    "Local replacement for the unrecovered original profile webpage backend. JSON body web_token plus partial patch nick_name/info_message. Historical undated screenshot: status up to50 characters, first actual nickname change free and later100Manda. LOCAL codepoint counting, nickname128 admission, exact comparison and free-first spending; no original uniqueness/normalization claim. Empty/equal patches do not write or materialize history. Name/status/wallet/counter persist atomically with exact rollback. Same requested name is a no-fee retry. Captured profile settings use schema7; older writers refuse rather than drop rename history, while editor-unused schemas1..6 retain prior versions. Actual status propagates as STRING profile_status in account/login and brief/friend/discovery responses; it is separate from Arena win/lose messages. Browser view is verified; native client UI validation pending.","Account and authentication",response("Current saved editor view.",{allOf:[{$ref:"#/components/schemas/ResultEnvelope"},{type:"object",properties:{ret_data:profileView}}]})),
+    requestBody:{required:true,content:{"application/json":{schema:{type:"object",required:["web_token","patch"],properties:{web_token:{type:"string",writeOnly:true},patch:{type:"object",additionalProperties:false,properties:{nick_name:{type:"string",maxLength:128},info_message:{type:"string",maxLength:50}}}}}}}},
+    "x-evidence":"tests/profile-settings-state.ts; docs/profile-native-contract-2026-10-16.md"}};
   const explicitlyDocumented = new Set(Object.keys(paths));
   paths["/tuto/Clear"] = { post: {
     ...operation("Persist the requested tutorial completion",
@@ -1490,7 +1502,7 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
             vs_token: { type: "string", minLength: 1, description: "Persistent account credential returned by the WebView/SNS login and checked by /v2/account/Login. Guest resume may omit it." },
             sns_list: { type: "object", additionalProperties: { type: "string" }, description: "Native auto-login identity map; key 0 is the email identity when present." },
             nickname_confirm: { type: "integer", example: 1, description: "Native login parser flag; 1 means the generated local nickname is already confirmed." },
-            profile_status: { type: "integer", example: 0 },
+            profile_status: { type: "string", example: "Ready for the next expedition." },
             login_day_count: { type: "integer", example: 0 },
             iap_quantity: { type: "integer", example: 0 },
             action_benefit_quantity: { type: "integer", example: 0 },

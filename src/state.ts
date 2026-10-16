@@ -31,6 +31,7 @@ import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors,mirageEndRefusal } from "./mirage.js";
 import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
+import {normalizeProfileSettings,planProfileSettings,profileEditView,validateProfileNickname,type ProfileSettings} from "./profile-settings.js";
 import {configuredBaitShop,normalizeBaitShopCounter,baitShopReferences,baitPurchaseInventory,planBaitPurchase,type BaitShopCounter,type BaitShopPolicy} from "./fishing-bait-shop.js";
 import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type FishingCatalogue} from "./fishing-catalogue.js";
 import {ownedFishingInventory} from "./fishing-inventory.js";
@@ -202,6 +203,7 @@ export interface Account {
   socialBlocks?: SocialBlocks;
   arenaComments?:ArenaComments;
   baitShopCounter?:BaitShopCounter;
+  profileSettings?:ProfileSettings;
 }
 
 export class NativeAuthError extends Error {
@@ -564,6 +566,7 @@ export class ServerState {
   private readonly skillMaterialIds:ReadonlySet<string>;
   private readonly fishingCatalogue?: FishingCatalogue;
   private readonly baitShopPolicy?:BaitShopPolicy;
+  private readonly profileMode:"disabled"|"archive-profile-projection";
   private readonly fishingSaleMode:"disabled"|"local-bound";
   private readonly fishingBindings?:FishingSaleBindings;
   private readonly guildChatMode:"disabled"|"local-memory";
@@ -599,10 +602,14 @@ export class ServerState {
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
+      profileMode?:"disabled"|"archive-profile-projection";
       baitShopMode?:"disabled"|"archive-2018-projection";baitShopDailyLimit?:unknown;
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    const profileMode=Object.hasOwn(options,"profileMode")?options.profileMode:process.env.BLUSTONE_PROFILE_MODE??"disabled";
+    if(profileMode!=="disabled"&&profileMode!=="archive-profile-projection")throw new TypeError("Unknown local profile mode");
+    this.profileMode=profileMode;
     this.baitShopPolicy=configuredBaitShop(Object.hasOwn(options,"baitShopMode")?options.baitShopMode:process.env.BLUSTONE_BAIT_SHOP_MODE??"disabled",
       Object.hasOwn(options,"baitShopDailyLimit")?options.baitShopDailyLimit:process.env.BLUSTONE_BAIT_SHOP_DAILY_LIMIT);
     const questMode=Object.hasOwn(options,"questMode")?options.questMode:process.env.BLUSTONE_QUEST_MODE??"disabled";
@@ -739,9 +746,9 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
     const ids = new Set<number>();
@@ -751,8 +758,9 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.baitShopCounter!==undefined&&saved.version!==6)throw new TypeError("Bait purchase counters require state schema6");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6)throw new TypeError("Arena comments require state schema5 or6");
+      if(raw.profileSettings!==undefined&&saved.version!==7)throw new TypeError("Profile settings require state schema7");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7)throw new TypeError("Bait purchase counters require state schema6");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7)throw new TypeError("Arena comments require state schema5 or6");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -761,6 +769,8 @@ export class ServerState {
       this.indexAccount(account);
       this.nextPvid = Math.max(this.nextPvid, account.pvid + 1);
     }
+    if(saved.version===7&&![...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined))
+      throw new TypeError("Schema7 requires captured profile edits");
     if(saved.version===6&&![...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined))
       throw new TypeError("Schema6 requires captured bait purchases");
     if(saved.version===5&&![...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined))
@@ -825,7 +835,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6)throw new TypeError("Linear quests require state schema4,5 or6");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7)throw new TypeError("Linear quests require state schema4,5 or6");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -854,11 +864,12 @@ export class ServerState {
     if (!this.stateFile) return;
     mkdirSync(path.dirname(this.stateFile), { recursive: true });
     // Older writers must refuse journals/settings they cannot preserve.
+    const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const snapshot = { version: profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -2432,7 +2443,7 @@ export class ServerState {
     const peer = this.accountsByPvid.get(pvid);
     return peer ? { pvid: peer.pvid, nickname: peer.nickname, serverId: peer.serverId,
       beginUtc: peer.beginUtc, lastLoginAt: peer.lastLoginAt,
-      profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH,
+      profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH,profile_status:this.profileStatus(pvid),
       ...(viewerPvid === undefined ? {} : this.socialLikeMetadata(viewerPvid, pvid)) } : undefined;
   }
 
@@ -2474,7 +2485,7 @@ export class ServerState {
       Object.hasOwn(viewer.socialBlocks ?? {}, String(targetPvid)) ||
       Object.hasOwn(peer.socialBlocks ?? {}, String(viewerPvid))) return undefined;
     return { pvid: peer.pvid, reg_utc: peer.beginUtc, utc: Math.floor(Date.now() / 1000),
-      nick_name: peer.nickname, country_code: "", profile_status: "", ...this.socialLikeMetadata(viewerPvid, targetPvid),
+      nick_name: peer.nickname, country_code: "", profile_status: this.profileStatus(targetPvid), ...this.socialLikeMetadata(viewerPvid, targetPvid),
       profile_url: this.baseUrl + LOCAL_MAIL_PORTRAIT_PATH };
   }
 
@@ -3395,7 +3406,7 @@ export class ServerState {
       // assigns server_url to the host used for all game/reference requests.
       otp: account.otp,
       nickname_confirm: 1,
-      profile_status: 0,
+      profile_status: this.profileStatus(account.pvid),
       login_day_count: 0,
       level: 30,
       iap_quantity: game.gacha_iap_qty,
@@ -3414,6 +3425,7 @@ export class ServerState {
         { url_key: "sns_list", address: this.baseUrl, param_format: "" },
         { url_key: "cdn", address: this.baseUrl, param_format: "" },
         { url_key: "resource", address: this.baseUrl, param_format: "" },
+        ...this.profileUrls(),
         ...this.chatUrls(),
       ],
       // Compatibility aliases retained for the launcher/account wrappers.
@@ -3482,6 +3494,7 @@ export class ServerState {
         { url_key: "auth", address: this.baseUrl, param_format: "" },
         { url_key: "sns_list", address: this.baseUrl, param_format: "" },
         { url_key: "resource", address: this.baseUrl, param_format: "" },
+        ...this.profileUrls(),
         ...this.chatUrls(),
       ],
       // The native client persists pvid, sns_list and vs_token in cloud/v2pv.acct
@@ -3600,9 +3613,58 @@ export class ServerState {
 
   confirmNickname(payload: Record<string, unknown>, headers: Record<string, string>) {
     const account = this.accountFor(payload, headers);
-    if (payload.nick_name || payload.nickname) account.nickname = String(payload.nick_name ?? payload.nickname);
-    this.persist();
-    return this.envelope(this.accountSnapshot(account), { nickname: account.nickname });
+    let nickname;
+    try{nickname=validateProfileNickname(payload.nick_name??payload.nickname);}
+    catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid nickname");}
+    if(nickname!==account.nickname){
+      if(account.profileSettings!==undefined)return this.failure(2001,"Nickname edits require the profile editor");
+      const before=account.nickname;account.nickname=nickname;
+      try{this.persist();}catch(error){account.nickname=before;throw error;}
+    }
+    return this.envelope({nick_name:account.nickname},{nickname:account.nickname});
+  }
+
+  profileStatus(pvid:number):string {return this.accountsByPvid.get(pvid)?.profileSettings?.info_message??"";}
+
+  webLoginToken(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers);
+    return this.envelope({token:account.webToken},{token:account.vsToken,vs_token:account.vsToken,pvid:account.pvid});
+  }
+
+  private profileUrls() {
+    return this.profileMode==="disabled"?[]:[{url_key:"my_info",address:this.baseUrl+"/webview/my-info",
+      param_format:"?web_token=%s&sns=%s&lang=%s"}];
+  }
+
+  private webProfileAccount(raw:unknown) {
+    if(this.profileMode==="disabled")throw new NativeAuthError(2001,"Local profile editor is disabled");
+    if(typeof raw!=="string"||!raw||raw.length>256)throw new NativeAuthError(2001,"A valid web token is required");
+    const matches=[...this.accountsByPvid.values()].filter(account=>account.webToken===raw);
+    if(matches.length!==1)throw new NativeAuthError(2001,"Web profile session is unavailable");return matches[0];
+  }
+
+  webProfile(raw:unknown) {
+    const account=this.webProfileAccount(raw),game=this.gameByPvid.get(account.pvid);
+    if(!game)throw new NativeAuthError(2001,"Profile owned snapshot is unavailable");
+    return profileEditView(account.nickname,account.profileSettings,game.gacha_free_qty,game.gacha_iap_qty);
+  }
+
+  updateWebProfile(raw:unknown,patch:unknown) {
+    const account=this.webProfileAccount(raw),game=this.gameByPvid.get(account.pvid);
+    if(!game)return this.failure(2001,"Profile owned snapshot is unavailable");
+    let plan;
+    try{plan=planProfileSettings(account.nickname,account.profileSettings,game.gacha_free_qty,game.gacha_iap_qty,patch);}
+    catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid profile edit");}
+    if(plan.changed){
+      const nickname=account.nickname,settings=account.profileSettings,free=game.gacha_free_qty,paid=game.gacha_iap_qty;
+      account.nickname=plan.nickname;account.profileSettings=plan.settings;
+      game.gacha_free_qty=plan.gacha_free_qty;game.gacha_iap_qty=plan.gacha_iap_qty;
+      try{this.persist();}catch(error){
+        account.nickname=nickname;if(settings===undefined)delete account.profileSettings;else account.profileSettings=settings;
+        game.gacha_free_qty=free;game.gacha_iap_qty=paid;throw error;
+      }
+    }
+    return this.envelope(profileEditView(account.nickname,account.profileSettings,game.gacha_free_qty,game.gacha_iap_qty));
   }
 
   registerPushToken(payload: Record<string, unknown>, headers: Record<string, string>) {
@@ -3787,6 +3849,7 @@ function normalizeStoredAccount(raw: Record<string, unknown>): Account {
     ...(raw.socialBlocks === undefined ? {} : { socialBlocks: { ...raw.socialBlocks as SocialBlocks } }),
     ...(raw.arenaComments===undefined?{}:{arenaComments:normalizeArenaComments(raw.arenaComments)}),
     ...(raw.baitShopCounter===undefined?{}:{baitShopCounter:normalizeBaitShopCounter(raw.baitShopCounter)}),
+    ...(raw.profileSettings===undefined?{}:{profileSettings:normalizeProfileSettings(raw.profileSettings)}),
   };
 }
 
