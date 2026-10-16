@@ -102,9 +102,11 @@ export function friendlyBattleAttackReady(game:LocalGameState,knownRefs:Readonly
  * does not choose a target deck: explicit saved type5 is local admission.
  * Rank0 and neutral current book/chain effects are local presentation policy;
  * no AI, ownership mutation, fee, standings or battle result is generated. */
-export function friendlyBattleRival(peer:FriendlyBattlePeer,game:LocalGameState,knownRefs:ReadonlySet<string>,
+export function ownedDefenseRival(peer:FriendlyBattlePeer,game:LocalGameState,knownRefs:ReadonlySet<string>,
     occupiedIds:ReadonlySet<number|string>,gemReferences:readonly GemReference[]=[]){
-  const pvid=friendlyTargetPvid(field(peer,"pvid")),nickname=text(field(peer,"nickname"),true),status=text(field(peer,"profile_status"));
+  const pvid=field(peer,"pvid");
+  if(typeof pvid!=="number"||!Number.isSafeInteger(pvid)||pvid<=0)throw new TypeError("Owned defense requires a positive exact safe uint64 identity");
+  const nickname=text(field(peer,"nickname"),true),status=text(field(peer,"profile_status"));
   const rawComments=Object.hasOwn(peer,"arenaComments")?field(peer,"arenaComments"):undefined;
   const comments=rawComments===undefined?undefined:normalizeArenaComments(rawComments);
   neutralCollectionEffects();
@@ -126,4 +128,13 @@ export function friendlyBattleRival(peer:FriendlyBattlePeer,game:LocalGameState,
   const gem=friendlyBattleGems(game,gemReferences,cardMirrors,new Set([...occupiedIds,...occupied]));
   return {nickname,thumbnail:text(field(leader,"ref_id"),true),profile_status:status,country_code:"",status:1,
     user_exp:uint(game.exp),vip_exp:uint(game.vip_exp),chain_bonus:[],card_book:{atk:0,def:0,hp:0,crt_dmg:0,crt_chance:0},battle,deck,gem};
+}
+
+/** Preserve the separately supported friendly-request U32 admission. The
+ * shared native Defender DTO itself accepts full64 peer IDs; global ranking
+ * uses the exact safe numeric subset through ownedDefenseRival directly. */
+export function friendlyBattleRival(peer:FriendlyBattlePeer,game:LocalGameState,knownRefs:ReadonlySet<string>,
+    occupiedIds:ReadonlySet<number|string>,gemReferences:readonly GemReference[]=[]) {
+  friendlyTargetPvid(field(peer,"pvid"));
+  return ownedDefenseRival(peer,game,knownRefs,occupiedIds,gemReferences);
 }

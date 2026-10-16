@@ -788,7 +788,13 @@ try {
       const saved=persisted.gameStates.find(([pvid])=>pvid===Number(account.pvid))[1];
       assert.equal(saved.arena.rating_point,points);assert.equal(saved.arena.win,wins);
     }
-    arenaRanksProof={owner,friend,other,expected,battle,comment};
+    const globalRanks=(await secure('/arena/GetGlobalRankList',{...auth,page:'1',page_scale:'10'})).ret_data;
+    assert.equal(globalRanks.season_no,1);
+    assert.deepEqual(globalRanks.list.map(row=>[row.battle.pvid,row.battle.rank,row.battle.rating_point]),
+      [[Number(friend.account.pvid),1,30],[Number(other.account.pvid),2,20],[Number(auth.pvid),3,10]],
+      'Full global Defender pages use actual local earned standings and real owned parties');
+    assert.deepEqual(readFileSync(stateFile),bytes,'Valid global pages are also strictly read-only');
+    arenaRanksProof={owner,friend,other,expected,battle,comment,globalRanks};
   }
   if(exerciseArenaComments) {
     const originalBattle=(await secure('/arena/Enter',auth)).ret_data.user.battle;
@@ -1169,6 +1175,7 @@ try {
       'Arena profile, messages and non-first rank survive compiled process restart');
     const bytes=readFileSync(stateFile);
     assert.deepEqual((await secure('/arena/GetFriendRankList',auth)).ret_data,arenaRanksProof.expected);
+    assert.deepEqual((await secure('/arena/GetGlobalRankList',{...auth,page:'1',page_scale:'10'})).ret_data,arenaRanksProof.globalRanks);
     assert.deepEqual((await secure('/arena/GetMyRank',auth)).ret_data,{rank:3});
     assert.deepEqual((await secure('/arena/SaveComment',arenaRanksProof.comment)).ret_data.user.battle,arenaRanksProof.battle);
     assert.equal((await secure('/arena/GetGlobalRankList',auth,{allowPlainRefusal:true})).result_code,2001);

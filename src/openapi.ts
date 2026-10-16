@@ -424,9 +424,9 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-runtime-confidence":"Disposable state tests; native ranking UI pending"}};
     explicitlyDocumented.add(route);
   }
-  paths["/arena/GetGlobalRankList"]={post:{...operation("Global Fight Club rankings unavailable",
-    "Authenticated explicit failure2001. Native sends page/page_scale uint32 (UI starts page1, scale10); success requires season_no plus a list of complete ParseDefender combat descriptors. Compact friend rows cannot substitute. Original global season, full source-compatible opponent projection and placement rules remain incomplete.","Fight Club"),
-    "x-evidence":"docs/arena-rankings-native-2026-10-16.md","x-reverse-engineering-status":"request-and-parser-recovered-success-unreconstructed"}};
+  paths["/arena/GetGlobalRankList"]={post:{...operation("Read actual-owned local Fight Club ranking pages",
+    "Authenticated native page/page_scale U32 request; UI starts page1/scale10. LOCAL scale1..100 and same-realm loaded participants use established earned rating-descending/PVID-tie standings. Mutual blocks filter visibility before paging while ranks retain gaps. Success ret_data has season_no1 plus complete native ParseDefender rows from explicit owned defense5 parties and mounted Gems, real profile metadata and actual rating/counters; no generated rival or enrollment. Positive safe full64 account IDs remain exact; friendly-request U32 admission is unchanged. Missing/unsupported selected defense/card/Gem/book projection refuses the whole page2001 without deck initialization, clocks, fees or save changes. Huge valid pages return empty list. Rank-row clicks open user profiles; real-peer ranked battles are not added. Original season/placement rules and native rendered UI remain unverified.","Fight Club"),
+    "x-evidence":"docs/arena-global-rankings-2026-10-17.md","x-reverse-engineering-status":"native-parser-reconstructed-with-local-owned-ranking-policy"}};
   explicitlyDocumented.add("/arena/GetGlobalRankList");
   paths["/gym/LevelUp"] = { post: {
     ...operation("Train an owned hunter using source hunters",

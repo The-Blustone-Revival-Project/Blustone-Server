@@ -1,3 +1,4 @@
+import {globalArenaPage} from "./arena-global-rankings.js";
 import {configuredMirageReentry,createMirageSeries,normalizeMirageSeries,proposeMirageReentry,consumeMirageReentry,mirageReentryBeginTime,type MirageReentryPolicy,type MirageSeries} from "./mirage-reentry.js";
 import {planMirageRevive} from "./mirage-revive.js";
 import {validatedMiragePolicy,createMirageRun,normalizeMirageRun,advanceMirageReward,abandonMirageRun,type MiragePolicy,type MirageRun} from "./mirage-run.js";
@@ -11,7 +12,7 @@ import {DORM_SHOP_ID,configuredDormExpansion,hunterCapacity,dormExpansionReferen
 import {HUNTER_MIN_RANK_PROFILE} from "./hunter-minimum-rank.js";
 import {hunterRegistrationTime} from "./hunter-registration.js";
 import {quickAdvancementMode,quickAdvancementReferences,planQuickAdvancement} from "./quick-advancement.js";
-import {friendlyTargetPvid,friendlyBattleRival,friendlyBattleAttackReady} from "./friendly-battle.js";
+import {friendlyTargetPvid,friendlyBattleRival,friendlyBattleAttackReady,ownedDefenseRival} from "./friendly-battle.js";
 import crypto from "node:crypto";
 import { guildLobby,type GuildRecord } from "./guild-lobby.js";
 import { establishedGuildRecords } from "./guild-records.js";
@@ -3453,10 +3454,33 @@ export class ServerState {
     if(rank===undefined)throw new TypeError("Local Arena requester has no standing");return rank;
   }
 
+  private localArenaGlobalRows(actor:Account,payload:Record<string,unknown>) {
+    const standings=this.localArenaStandingRows(actor),visible=new Set(standings.flatMap(row=>{
+      const peer=this.accountsByPvid.get(row.pvid);
+      return peer&&(row.pvid===actor.pvid||!Object.hasOwn(actor.socialBlocks??{},String(row.pvid))&&
+        !Object.hasOwn(peer.socialBlocks??{},String(actor.pvid)))?[row.pvid]:[];
+    }));
+    const selected=globalArenaPage(standings,visible,payload),own=this.gameByPvid.get(actor.pvid)!;
+    const refs=new Set(starterReference.map(row=>row.base.id));
+    return selected.map(row=>{
+      const peer=this.accountsByPvid.get(row.pvid),game=this.gameByPvid.get(row.pvid);
+      if(!peer||!game||peer.serverId!==actor.serverId)throw new TypeError("Global ranking owned profile is unavailable");
+      // Reuse the complete native Defender projection, without initializing a
+      // defense deck, entering Arena, regenerating energy or admitting combat.
+      assertOwnedCardCompatibility(own);assertOwnedCardCompatibility(game);
+      this.validateOwnedGems(own);this.validateOwnedGems(game);
+      const occupied=new Set<number|string>([...own.starter_cards,...own.recruited_cards,...game.starter_cards,...game.recruited_cards].map(card=>card.inst_id));
+      for(const owner of [own,game])for(const gem of owner.owned_gems??[])occupied.add(String(gem.inst_id));
+      const rival=ownedDefenseRival({pvid:peer.pvid,nickname:peer.nickname,profile_status:this.profileStatus(peer.pvid),arenaComments:peer.arenaComments},game,refs,occupied,this.gemReferences);
+      rival.battle.rank=row.rank;
+      return rival;
+    });
+  }
+
   arenaRankingAction(route:string,payload:Record<string,unknown>,headers:Record<string,string>) {
     const actor=this.accountFor(payload,headers);
-    if(route==="/arena/GetGlobalRankList")return this.failure(2001,"Global ranking combat descriptors are not reconstructed");
     try {
+      if(route==="/arena/GetGlobalRankList")return this.envelope({season_no:1,list:this.localArenaGlobalRows(actor,payload)});
       const rows=this.localArenaStandingRows(actor);
       if(route==="/arena/GetMyRank")return this.envelope({rank:rows.find(row=>row.pvid===actor.pvid)!.rank});
       if(route!=="/arena/GetFriendRankList")return this.failure(2001,"Unknown Arena ranking operation");

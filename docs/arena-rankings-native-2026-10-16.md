@@ -67,6 +67,11 @@ leaderboard behavior remain independently unverified.
 
 ## Friend request, cache and self row
 
+> The global success blocker described here was resolved by the later
+> [actual-owned global page implementation](arena-global-rankings-2026-10-17.md).
+> This earlier note retains the original request/parser evidence and historical
+> implementation boundary; global pages are no longer universally unsupported.
+
 RequestFriendRank Gf60ae4 sends auth5 only, with route at Gf60d18.
 ReqFriendRankCB Gf6109c invokes ParseFriendRanking G94616c; list is
 selected at G94618c/194 and replaces FC+22c. Each row consumes exactly

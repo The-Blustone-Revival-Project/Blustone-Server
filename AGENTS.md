@@ -1,3 +1,48 @@
+## Latest continuation: actual-owned global Fight Club pages (2026-10-17)
+
+Previous checkpoint6980524 added eight indexed material skill graphs; f35813e
+made Search saves atomic. Goal ACTIVE. Server only; DataDump read only. No live
+profile/private save/device/APK/original asset/Docker/Collector/inference changes.
+Input hold persists. No native battle or APK rebuild/release owed.
+
+/arena/GetGlobalRankList now publishes ret_data{season_no:1,list:[Defender]}
+from actual loaded same-realm local participants and their explicit owned
+DEFENSE5 parties. Original RequestWorldRank auth5+U32page/page_scale and shared
+ParseDefender complete grammar were already recovered; later owned-friendly
+projection supplied the missing DTO. Fixed fake Arena rival/unentered peers/
+cross-realm accounts never become world-ranking rows. Existing local ratingDESC/
+PVIDASC order, sequential ranks and season1 are LOCAL, not original world rules.
+
+Mutual block visibility precedes paging but keeps established rank gaps/self.
+Canonical page1..U32 and LOCALscale1..100; BigInt offsets prevent wrap. Empty
+out-of-range pages are valid. Every selected row requires complete actual
+saved defense/card/equipment/Gem projection; one bad row refuses whole page.
+No deck creation/copying, enrollment, energy regeneration, fees, identity or
+rank mutation, or file write occurs. Mounted Gem mirror target links preserved;
+private card/account fields omitted. Read fields use loaded maps, not gameFor.
+
+Generic ownedDefenseRival now accepts exact positive SAFE numeric full64 PVID,
+including4294967297, instead of unnecessarily narrowing global IDs toU32.
+Existing friendlyBattleRival wrapper still checks its original supported U32
+request boundary. No unsafe-number aliases/full-U64-string account support.
+Native ParseWorldRanking stores independent row BATTLE_ENEMY objects; identical
+transient aliases are row-local. Bounded row-click handler opens MyInfo/UserInfo,
+not BattleStart/fees/actors. Thus no actual-peer ranked combat was invented.
+Any future combined actor map must remap coherently; don't reuse row aliases.
+
+New pure/state/compiled encrypted HTTP tests PASS, including actual accepted
+local Arena ratings, registered owned defense5, native full DTO parents, Gems,
+ties/pages/mutual blocks/cross-realm/private omission, wide IDs, stale energy,
+whole-page refusal and exact nested references/file preservation. Original
+client sessions survive replacement HTTP app from persisted file. Independent
+compiled PROCESS verifier now checks complete global pages and equality after
+process restart: node scripts/verify-independent.mjs --fixture
+--exercise-arena-ranks PASS. Missing-page legacy probe still correctly2001.
+Build/focused global command PASS; full224-program runtime regression PASS.
+Independent review clear. Native rendered leaderboard/profile remains PENDING.
+See docs/arena-global-rankings-2026-10-17.md; original parser note qualified and
+OpenAPI updated. Parallel material paid-progression proof is next checkpoint.
+
 ## Latest continuation: eight indexed material-Hunter skill graphs (2026-10-17)
 
 Previous checkpointf35813e made Search persistence atomic; before that098622c
