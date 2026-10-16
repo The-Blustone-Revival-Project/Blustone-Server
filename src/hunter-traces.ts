@@ -3,13 +3,22 @@ import { fuelItemReference } from "./shop-fuel.js";
 import { SEARCH_CAPSULE_ID, searchCapsuleReference } from "./search-capsules.js";
 import { ARENA_HONOR_DISPLAY_REFERENCE } from "./arena-honor-reference.js";
 
-/** Native use_type3 binds item.effect (hunter ID) to CardInfo's trace item ID.
- * Original item IDs, thresholds and drop tables are missing. These are local
- * reference/navigation fixtures, never inventory grants or original drops. */
-export const HUNTER_TRACE_ITEMS = [
-  { id: "local_gerard_trace", cardId: "005", rank: 2, name: "Gerard Traces", collect_qty: 20 },
-  { id: "local_sylvester_trace", cardId: "006", rank: 1, name: "Sylvester Traces", collect_qty: 10 },
-] as const;
+/** Import-time opt-in only. Historical threshold evidence does not recover
+ * original trace item IDs, drops or final-version economic authority. */
+export const TRACE_THRESHOLD_PROFILE=process.env.BLUSTONE_TRACE_THRESHOLD_PROFILE??"local-fixture";
+if(!["local-fixture","archive-images-2017-2018"].includes(TRACE_THRESHOLD_PROFILE))
+  throw new TypeError("Unknown trace threshold profile");
+/** Native use_type3 binds item.effect (Hunter ID) to CardInfo's trace item ID.
+ * These IDs remain LOCAL. Default20/10 is the existing revival fixture;
+ * opt-in40/20 projects exact historical named image observations. No grant or
+ * drop rate is inferred. Freeze both levels so all consumers share one policy.
+ * Evidence: docs/trace-threshold-image-projection-2026-10-16.md. */
+export const HUNTER_TRACE_ITEMS = Object.freeze([
+  Object.freeze({ id: "local_gerard_trace", cardId: "005", rank: 2, name: "Gerard Traces",
+    collect_qty: TRACE_THRESHOLD_PROFILE==="archive-images-2017-2018"?40:20 } as const),
+  Object.freeze({ id: "local_sylvester_trace", cardId: "006", rank: 1, name: "Sylvester Traces",
+    collect_qty: TRACE_THRESHOLD_PROFILE==="archive-images-2017-2018"?20:10 } as const),
+] as const);
 export const HUNTER_TRACE_STAGE = "n_01_07";
 
 /** Library SetRole filters CardInfo.collect_qty before building its row vector.

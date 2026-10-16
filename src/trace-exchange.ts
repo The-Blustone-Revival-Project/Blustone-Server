@@ -10,7 +10,8 @@ const integer = (raw: unknown) => typeof raw === "number" ? raw :
   typeof raw === "string" && /^\d+$/.test(raw) ? Number(raw) : NaN;
 
 /** RequestShardExchange: cnt is HUNTERS; UseItem consumes trace qty deltas.
- * Thresholds/birth stats are published local fixtures, not original economics.
+ * Thresholds use the published local fixture or selected historical image
+ * projection; birth stats and original final economics remain incomplete.
  * No request nonce exists: a repeated valid request is another paid exchange. */
 export function exchangeHunterTraces(payload: Record<string, unknown>, game: LocalGameState,
     persist: () => void): { data: Record<string, unknown> } | { error: string; code?: number } {

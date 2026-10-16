@@ -3,9 +3,10 @@ import { hunterSearchInstances, hunterSearchReference } from "./hunter-search.js
 import { searchHelperReference, SEARCH_HELPER_SERIAL } from "./search-helpers.js";
 import { SEARCH_CAPSULE_ID, explicitSearchCapsuleVictory } from "./search-capsules.js";
 import { SEARCH_STAGE_ID, SEARCH_WAVE_COUNT } from "./search-stage.js";
-import { HUNTER_TRACE_ITEMS } from "./hunter-traces.js";
-
-const GUIDE_TRACE_QTY = HUNTER_TRACE_ITEMS.find((row) => row.cardId === "006")!.collect_qty;
+/** Existing LOCAL guided payout, independent of optional historical exchange
+ * thresholds. Keep10 for both new attempts and retained receipt admission;
+ * changing a reference profile must never raise grants or invalidate history. */
+const GUIDE_TRACE_QTY = 10;
 
 export interface SearchAttempt {
   log_id: number; ref_id: string; stage_id: string; helper_id: string;
@@ -209,8 +210,9 @@ export function searchBattleRequest(route: string, payload: Record<string, unkno
       consume_result: [], item: [], gem: [], special: [], reward_item: [] };
     if (won) {
       const refId = "local_sylvester_trace";
-      // LOCAL initial guide payout must enable its next Recruit step. This is
-      // independent of a paid capsule versus the one-time cost waiver.
+      // Existing LOCAL initial guide payout remains10, independent of paid
+      // capsule/cost waiver and optional historical recruitment thresholds.
+      // An opt-in higher threshold needs additional earned traces, not a grant.
       const quantity = attempt.guided ? GUIDE_TRACE_QTY : 1;
       let item = game.items.find((row) => row.ref_id === refId && row.lock === 0);
       if (item && item.qty > 0xffffffff - quantity) return { error: "Trace inventory is full" };

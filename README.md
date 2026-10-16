@@ -19,6 +19,13 @@ For local HTTP verification or another port:
 npm start -- --host 127.0.0.1 --port 18081 --base-url http://127.0.0.1:18081 --state-file local/manual-test-state.json
 ```
 
+Historical Hunter trace requirements are available with
+`BLUSTONE_TRACE_THRESHOLD_PROFILE=archive-images-2017-2018`: Sylvester20 and
+Gerard40, corroborated by extracted screenshots. The default retains the local
+10/20 fixture. Item IDs, drops and the fixed10 guided reward remain local;
+selecting historical requirements does not backfill traces or alter receipts.
+See the [image projection evidence](docs/trace-threshold-image-projection-2026-10-16.md).
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

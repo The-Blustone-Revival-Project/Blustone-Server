@@ -1,3 +1,48 @@
+## Latest continuation: image-backed historical trace requirements (2026-10-16)
+
+Previous checkpoint b3b3c1c repaired Arena save-failure recovery. This
+checkpoint consumes exact new DataDump manual image extractions to add an
+opt-in historical Hunter trace threshold projection. Goal ACTIVE; no live
+profile/client/private-save changes, original asset modifications or APK operations.
+BlueStacks input hold and Server/Instrumented write boundaries persist.
+
+BLUSTONE_TRACE_THRESHOLD_PROFILE unset/local-fixture retains Sylvester006=10,
+Gerard005=20. archive-images-2017-2018 uses historical20/40. Unsupported or
+empty settings refuse at import; restart to change it. Frozen array AND rows
+keep GetItem, PieceExchange and existing guided37/1 on one selected policy.
+Item identities, acquisition/drops and generated ownership remain LOCAL.
+No rank-wide inference, final-version threshold claim or active activation.
+
+Pinned DataDump batches04/28/55 corroborate Sylvester46/20+39/20 and
+Gerard55/40+21/40+7/40. Filename-derived dates2017-06-30/2018-05-21 are not
+verified capture metadata; original transcriptions were used, no new visual
+reread. Native type3/exacteffect PostProcessG87d348/G87d3c8/3ca supplies
+collect_qty; floor/count arithmeticGce1252/56/5c uses that threshold. Full
+source paths, exact lines and SHA256s live in
+docs/trace-threshold-image-projection-2026-10-16.md. Root rechecked all three
+file hashes and selected source rows; independent source/code review passed.
+
+Critical compatibility boundary: Search GUIDE_TRACE_QTY is now explicit
+existingLOCAL10, no longer derived from recruitment threshold. New guide
+awards and retained1/10 receipts remain unchanged in both profiles, including
+default-save reopened under historical. No schema change/backfill or grant
+increase. Historical20 requires ten more earned traces after guide10; tutorial
+Recruit refuses at10 rather than funding an unearned Hunter. Search replay
+keeps reward preview10 but returns item:[] as before, avoiding duplicate grant.
+
+Isolated-process tests cover default/explicit local/historical/invalid startup,
+exact two-Hunter references+debits, shortages/locks, import snapshot and deep
+immutability, actual disposable mission→guide Search10→restart/replay, default
+save→historical read with exact bytes and tutorial eligibility. All180 gameplay
+programs, focused tests, TypeScript build and independent review PASS.
+OpenAPI/README/.env.example document the opt-in and original-vs-local boundary.
+
+Next data opportunities: these same image rows also show named other-Hunter
+trace denominators (e.g. Mowgli40/Nene80), but no additional binding or exchange
+is implemented here. Validate identities/consumers before extending the
+historical projection; never replace all missing navigation thresholds with a
+rank-wide guess. Native rendered validation remains pending.
+
 ## Latest continuation: retryable Fight Club persistence failures (2026-10-16)
 
 Previous checkpoint aff2d81 restored actual local friend standings. This
