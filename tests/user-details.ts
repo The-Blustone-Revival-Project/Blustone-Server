@@ -1,0 +1,40 @@
+import assert from "node:assert/strict";
+import {createLocalGameState} from "../src/game.js";
+import {cardInstance} from "../src/bootstrap.js";
+import {parseUserDetailTargets,ownedUserDetail,LOCAL_USER_DETAIL_MAX} from "../src/user-details.js";
+
+assert.deepEqual(parseUserDetailTargets(" [2, 1, 4294967295, 2] "),[2,1,4294967295]);
+assert.deepEqual(parseUserDetailTargets([2,1,2]),[2,1]);assert.deepEqual(parseUserDetailTargets("[]"),[]);
+for(const raw of [null,undefined,{},true,1,"null","{}","[0]","[-1]","[1.0]","[1e2]","[01]",'["1"]',"[true]","[1,]",
+  "[4294967296]","[9007199254740993]","[18446744073709551615]","[18446744073709551616]",[Number.MAX_SAFE_INTEGER+1],["1"],Array(1),
+  Array(LOCAL_USER_DETAIL_MAX+1).fill(1),"x".repeat(32769)])assert.throws(()=>parseUserDetailTargets(raw),TypeError);
+const game=createLocalGameState();
+const a=cardInstance(0x1_0000_0001,"001"),b=cardInstance(0x1_0000_0002,"002");
+Object.assign(a,{exp:137,rank:3,rank_up_cnt:2,overcome_cnt:1,awk_overcome:0,skin_ref_id:"authored_skin",skill_1_level:17});
+game.starter_cards=[a];game.recruited_cards=[b];game.leader_inst_id=b.inst_id;game.decks=[{type:1,list:[a.inst_id,0,b.inst_id,0,0]}];
+game.exp=205;game.vip_exp=40;game.arena.league_level=2;game.arena.rating_point=19;
+const stages=["n_01_01","n_01_02","n_02_01"],refs=new Set(["001","002"]),before=structuredClone(game);
+let detail=ownedUserDetail(2,game,stages,refs);
+assert.equal(detail.group_exp,205);assert.equal(detail.vip_exp,40);assert.equal(detail.rating_point,19);
+assert.equal(detail.stage_id,"n_01_01","No earned stage uses first published display location without granting progress");
+assert.equal(detail.inst_id_leader,b.inst_id);assert.equal(detail.inst_id_1,a.inst_id);assert.equal(detail.inst_id_3,b.inst_id);
+assert.equal(detail.exp_1,137);assert.equal(detail.skill_1_level_1,17);assert.equal(detail.skin_ref_id_1,"authored_skin");
+for(const slot of [2,4,5])assert.deepEqual(Object.keys(detail).filter(key=>key.endsWith(`_${slot}`)),[`inst_id_${slot}`],"Zero slots expose only their zero ID; never clone leader");
+assert.equal(detail.inst_id_2,0);assert.equal(detail.ref_id_2,undefined);assert.equal(detail.gem,undefined);assert.equal(detail.weapon_level_1,undefined);
+assert.deepEqual(game,before);detail.exp_1=999;assert.equal(a.exp,137);
+game.stage_stars.n_01_02=3;game.stage_achievements.n_01_02=[];
+assert.equal(ownedUserDetail(2,game,stages,refs).stage_id,"n_01_01");
+game.stage_achievements.n_02_01=[0];game.stage_achievements.n_99_99=[0,1,2];
+assert.equal(ownedUserDetail(2,game,stages,refs).stage_id,"n_02_01","Only actually earned published stage changes display position");
+const invalid=(change:(copy:typeof game)=>void)=>{const copy=structuredClone(game);change(copy);assert.throws(()=>ownedUserDetail(2,copy,stages,refs),TypeError);};
+invalid(copy=>{copy.leader_inst_id=999;});invalid(copy=>{copy.decks=[];});invalid(copy=>{copy.decks.push(copy.decks[0]);});
+invalid(copy=>{copy.decks[0].list=[a.inst_id,a.inst_id];});invalid(copy=>{copy.decks[0].list=[0,0,0,0,0];});
+invalid(copy=>{copy.decks[0].list=[999];});invalid(copy=>{copy.starter_cards.push(copy.starter_cards[0]);});
+invalid(copy=>{copy.starter_cards[0].ref_id="unpublished";});invalid(copy=>{delete copy.recruited_cards[0].skin_ref_id;});
+invalid(copy=>{copy.starter_cards[0].skin_ref_id="bad\ud800";});invalid(copy=>{copy.starter_cards[0].rank=0x1_0000_0000;});
+invalid(copy=>{copy.starter_cards[0].exp=-1;});invalid(copy=>{delete copy.starter_cards[0].skill_5_level;});
+invalid(copy=>{copy.arena.rating_point=NaN;});invalid(copy=>{copy.vip_exp=0x1_0000_0000;});
+assert.throws(()=>ownedUserDetail(0,game,stages,refs));assert.throws(()=>ownedUserDetail(0x1_0000_0000,game,stages,refs));
+assert.throws(()=>ownedUserDetail(2,game,[],refs));assert.throws(()=>ownedUserDetail(2,game,["CB0101"],refs));
+assert.throws(()=>ownedUserDetail(2,game,["n_01_01","n_01_01"],refs));
+console.log("User details: exact numeric request IDs/U32 response boundary, saved leader/ordinary party, five native zero-slot guards, actual progression and earned-only local display placement passed; no grants/inventory/equipment/Gem claim.");

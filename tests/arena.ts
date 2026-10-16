@@ -25,7 +25,12 @@ try {
     const details = profiles("/world/GetUserDetail", JSON.stringify(ids));
     assert.deepEqual(details.ret_data.map((row: any) => row.pvid), ids);
     const own = details.ret_data.find((row: any) => row.pvid === ownPvid);
-    if (own) assert.deepEqual(own, state.partyProfileSnapshot(ownPvid));
+    if (own) {
+      assert.equal(own.group_exp,game.exp);assert.equal(own.vip_exp,game.vip_exp);
+      assert.equal(own.inst_id_leader,game.leader_inst_id);
+      for(let slot=1;slot<=5;slot++)assert.equal(own[`inst_id_${slot}`],game.decks.find(row=>row.type===1)!.list[slot-1]??0,
+        "Detailed profile preserves actual empty/fifth slots rather than the legacy leader fallback");
+    }
     const rival = details.ret_data.find((row: any) => row.pvid === ARENA_RIVAL_PVID);
     if (rival) assert.equal(rival.ref_id_leader, "002");
   }

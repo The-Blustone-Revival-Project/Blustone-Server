@@ -23882,10 +23882,10 @@
     },
     "/world/GetUserDetail": {
       "post": {
-        "summary": "Read the local notice sender detail",
-        "description": "The native profile cache requires a second stage: ret_data is a bare ARRAY of detailed party-profile rows. Only authenticated singleton list[1] is implemented as local presentation metadata; other targets refuse2001. No card/account grant or original administrative identity is implied. Native portrait completion requires an image node exactly100x100.",
+        "summary": "GetUserDetail",
+        "description": "Authenticated numeric list of1..50 targets (LOCAL input quota), deduplicated in request order. Native request IDs are uint64 but the detailed response pvid narrows to uint32, so wider identities refuse before aliasing. Returns a bare ret_data array for self, same-server mutually nonblocked real peers and documented notice/Arena presentation fixtures. Real rows use existing saved leaders and ordinary deck1 slots1..5, actual group/VIP EXP, ranks, skills, skins and Arena counters. Empty numbered positions emit inst_id_N0 and are skipped by the native parser, never cloned from the leader. Stage placement is LOCAL furthest earned published stage or the first stage for a fresh account; awake/history/messages remain neutral local metadata. Unknown, blocked, cross-server, missing-game or incomplete owned snapshots refuse the whole batch. Reads never regenerate energy, create ownership or persist. Equipment/Gem fields and battle admission are outside this native flat profile grammar; profile rendering remains unverified.",
         "tags": [
-          "Missions and combat"
+          "Social"
         ],
         "parameters": [
           {
@@ -23933,11 +23933,76 @@
         },
         "responses": {
           "200": {
-            "description": "Mock-compatible response.",
+            "description": "Bare detailed-profile collection; zero slots have no synthetic Hunter fields.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultEnvelope"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ResultEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "ret_data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "pvid": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 4294967295
+                              },
+                              "group_exp": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 4294967295
+                              },
+                              "vip_exp": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 4294967295
+                              },
+                              "stage_id": {
+                                "type": "string"
+                              },
+                              "inst_id_leader": {
+                                "type": "integer",
+                                "format": "uint64",
+                                "minimum": 0
+                              },
+                              "inst_id_1": {
+                                "type": "integer",
+                                "format": "uint64",
+                                "minimum": 0
+                              },
+                              "inst_id_2": {
+                                "type": "integer",
+                                "format": "uint64",
+                                "minimum": 0
+                              },
+                              "inst_id_3": {
+                                "type": "integer",
+                                "format": "uint64",
+                                "minimum": 0
+                              },
+                              "inst_id_4": {
+                                "type": "integer",
+                                "format": "uint64",
+                                "minimum": 0
+                              },
+                              "inst_id_5": {
+                                "type": "integer",
+                                "format": "uint64",
+                                "minimum": 0
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -23957,8 +24022,8 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "analysis/research/search-entry-reference-contract.md; server-ts/src/hunter-search.ts; server-ts/tests/hunter-search.ts",
-        "x-runtime-confidence": "Server contract/no-mutation checks pass. Native Search map, guide focus, partner selection, two-wave combat, successful End, Search Complete2/2, trace1/10 and village return verified. Original content/economics remain fixtures; normal capsule spending, dispatch and recruitment remain unverified."
+        "x-evidence": "docs/user-detail-native-2026-10-16.md; tests/user-details-state.ts",
+        "x-runtime-confidence": "Saved self/peer projection tested; native detailed-profile rendering pending"
       }
     },
     "/world/RefreshInven": {

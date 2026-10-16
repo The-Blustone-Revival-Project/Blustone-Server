@@ -260,7 +260,7 @@ const stop = async () => {
   throw new Error('Verifier listener did not close; no replacement process was started');
 };
 let secret,token;
-let friendPeer,friendId,ownerConnection,peerConnection;
+let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
   const response=await fetch(base+'/shared_secret/Exchange',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},
@@ -371,6 +371,19 @@ try {
     const brief=(await secure('/relation/GetTargetUserInfo',{...auth,list:JSON.stringify([Number(friendPeer.pvid)])})).ret_data.list[0];
     assert.equal(brief.pvid,Number(friendPeer.pvid));assert.ok(brief.nick_name);
     assert.ok(!('otp' in brief) && !('device_id' in brief) && !('ref_id_leader' in brief),'Candidate brief must not expose credentials or a synthetic party');
+    const detailBefore=readFileSync(stateFile);
+    const peerGame=JSON.parse(detailBefore).gameStates.find(([pvid])=>pvid===Number(friendPeer.pvid))[1];
+    const peerDetails=(await secure('/world/GetUserDetail',{...auth,list:JSON.stringify([Number(friendPeer.pvid)])})).ret_data;
+    assert.ok(Array.isArray(peerDetails));assert.equal(peerDetails.length,1);peerDetailSnapshot=peerDetails;
+    const detail=peerDetails[0];assert.equal(detail.pvid,Number(friendPeer.pvid));
+    assert.equal(detail.inst_id_leader,peerGame.leader_inst_id);assert.equal(detail.vip_exp,peerGame.vip_exp);
+    assert.equal(detail.group_exp,peerGame.exp);
+    for(let slot=1;slot<=5;slot++) {
+      const id=peerGame.decks.find(deck=>deck.type===1).list[slot-1]??0;
+      assert.equal(detail['inst_id_'+slot],id);
+      if(!id)assert.equal(Object.hasOwn(detail,'ref_id_'+slot),false,'Empty profile positions cannot clone a leader');
+    }
+    assert.deepEqual(readFileSync(stateFile),detailBefore,'Candidate detailed profile must not write or regenerate energy');
     const searched=(await secure('/relation/FriendSearch',{...auth,target_nick_name:brief.nick_name,start:'0',end:'10'})).ret_data;
     assert.equal(searched.start,0);assert.equal(searched.length,searched.list.length);
     assert.ok(searched.list.some(row=>row.target_pvid===Number(friendPeer.pvid)));
@@ -785,6 +798,8 @@ try {
     assert.equal(owned.list[0].like_cnt,1);assert.equal(owned.list[0].is_like,1,'Owned like must survive compiled restart');
     assert.deepEqual((await secure('/world/GetFriendMissionRecord',auth)).ret_data,[],
       'Fresh friend mission cache remains empty across compiled restart');
+    assert.deepEqual((await secure('/world/GetUserDetail',{...auth,list:JSON.stringify([Number(friendPeer.pvid)])})).ret_data,peerDetailSnapshot,
+      'Actual peer detailed profile survives compiled restart');
     ({secret,token}=peerConnection);
     const peer=(await secure('/relation/GetList',{...friendPeer,type:'1'})).ret_data;
     assert.equal(peer.list.length,1);assert.equal(peer.list[0].friend_id,friendId);

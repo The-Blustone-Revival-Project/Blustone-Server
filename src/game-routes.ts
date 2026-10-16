@@ -1,4 +1,4 @@
-import { FIXTURE_CARD_ID, LEGACY_WAVE_REF_ID, partyProfile, starterAreas, starterBookReference, starterLevels, starterMonsterTable, starterReference, starterStageMonstersByMonsterId, starterStageMonstersByStageId, starterStages, type StageMonsterRecord } from "./bootstrap.js";
+import { LEGACY_WAVE_REF_ID, starterAreas, starterBookReference, starterLevels, starterMonsterTable, starterReference, starterStageMonstersByMonsterId, starterStageMonstersByStageId, starterStages, type StageMonsterRecord } from "./bootstrap.js";
 import { NativeAuthError,ServerState } from "./state.js";
 import { campaignReceiptProjection, recordCampaignReceipt } from "./campaign-receipt-trace.js";
 import { RESOURCE_REFRESH_SECONDS } from "./game.js";
@@ -576,20 +576,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     });
   }
   if (route === "/world/GetUserDetail") {
-    const account = state.accountFor(payload, headers);
-    let detailTargets: unknown;
-    try { detailTargets = typeof payload.list === "string" ? JSON.parse(payload.list) : payload.list; }
-    catch { detailTargets = null; }
-    if (Array.isArray(detailTargets) && detailTargets.length >= 1 && detailTargets.length <= 3 &&
-        detailTargets.every((id) => id === LOCAL_MAIL_SENDER.pvid || id === account.pvid || id === ARENA_RIVAL_PVID)) {
-      // ParseUserDatailInfo Gf6e278/f6e300 consumes ret_data directly as rows.
-      // Rival detail uses the same LOCAL compatibility leader fallback as the
-      // notice profile; numbered slots are not a defense roster or owned cards.
-      return state.envelope([...new Set(detailTargets)].map((id) => id === account.pvid
-        ? state.partyProfileSnapshot(account.pvid)
-        : partyProfile(id, id === ARENA_RIVAL_PVID ? arenaRival().thumbnail : FIXTURE_CARD_ID)));
-    }
-    return state.failure(2001, "Detailed target profiles are only reconstructed for self and local presentation identities");
+    return state.userDetails(payload,headers);
   }
   if (route === "/relation/GetTargetUserInfo" || route === "/relation/GetTargetUserInfo.WithAI") {
     // Native Mail asks for its selected sender through a JSON list. This

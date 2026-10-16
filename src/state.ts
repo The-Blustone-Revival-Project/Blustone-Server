@@ -41,6 +41,9 @@ import { socialDiscovery } from "./social-discovery.js";
 import {friendMissionRecords} from "./friend-mission-records.js";
 import {syncOwnedCards} from "./inventory-card-sync.js";
 import {syncOwnedItems} from "./inventory-item-sync.js";
+import {parseUserDetailTargets,ownedUserDetail} from "./user-details.js";
+import {ARENA_RIVAL_PVID,arenaRival} from "./arena.js";
+import {LOCAL_MAIL_SENDER} from "./mail.js";
 import { emptySocialLikes, normalizeSocialLikes, planSocialLikeToggle, readSocialLikeCount, socialLikeProjection, type SocialLikes } from "./social-likes.js";
 import { planGroupRankUp } from "./group-rank-up.js";
 import { cardSellProfitRows, planHunterSale, type CardSellProfit } from "./hunter-sale.js";
@@ -2075,6 +2078,29 @@ export class ServerState {
   partyProfileSnapshot(pvid: number) {
     const account = this.accountsByPvid.get(pvid);
     return account ? ownedPartyProfile(pvid, this.gameFor(account)) : partyProfile(pvid);
+  }
+
+  userDetails(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const actor=this.accountFor(payload,headers);
+    try {
+      const targets=parseUserDetailTargets(payload.list),published=new Set(starterStages.stage.map(row=>row.id));
+      if(!targets.length)throw new TypeError("Detailed profiles require at least one target");
+      const order=[...new Set(starterAreas.area.flatMap(area=>area.stage.map(link=>link.stage_id)))]
+        .filter(id=>id.startsWith("n_")&&published.has(id));
+      const refs=new Set(starterReference.map(row=>row.base.id));
+      const rows=targets.map(id=>{
+        if(this.accountsByPvid.has(id)) {
+          if(id!==actor.pvid&&!this.localSocialProfile(actor.pvid,id))throw new TypeError("Detailed profile target is not visible on this server");
+          const game=this.gameByPvid.get(id);if(!game)throw new TypeError("Detailed profile owned snapshot is unavailable");
+          assertOwnedCardCompatibility(game);
+          return ownedUserDetail(id,game,order,refs);
+        }
+        if(id===LOCAL_MAIL_SENDER.pvid)return partyProfile(id);
+        if(id===ARENA_RIVAL_PVID)return partyProfile(id,arenaRival().thumbnail);
+        throw new TypeError("Unknown detailed profile target");
+      });
+      return this.envelope(rows);
+    }catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid detailed profile request");}
   }
 
   /** Native RegisterDeck posts deck_info=[{type,list:[five ordered IDs]}].

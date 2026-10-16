@@ -1,3 +1,52 @@
+## Latest continuation: real detailed player profiles (2026-10-16)
+
+Previous turn was progress:01843d4 completedall3inventorysyncmodes. This turn
+/world/GetUserDetail nowserves actualsavedself/eligiblepeerparty details;
+no new borrowedownedcards or battleadmission. Goal ACTIVE/nativeUIPENDING.
+
+NativeAsyncRequestUserDetailGf66944 sendsauth5+list(JSONnumericU64vector),
+nooriginalthree-profilecap. CallbackReqUserDetailCBGf671c0 requiresresult1
+thenParseUserDatailInfoGf6e240 consumesBAREret_dataarray. CRITICALresponse
+pvid narrowsU32 (Gf6e388/3b0/3b8) despiteU64requestIDs; alias-wideIDsREFUSE.
+CardinstIDleaderANDnumbered FULL64; loopSLOTS1..5 PLUSleader. ZeroIDskips
+allocation/strictfieldreads (Gf6ecd6..da), NEVERleaderfallback. Nonzero rows
+needstrictref_id/skin_ref_id, U32rank/rank_up/awake/overcome/EXP/5skills.
+Rootgroup_exp/vip_exp/league/rating/awake/prev_rank U32; stage_id andwin/lose
+messagesstrictstrings. NOequipment/Gemdetailfields inthisparser.
+
+src/user-details.ts exacttargettokens→U32bound, LOCAL50INPUTcap andfirst
+orderdedup. Pure[]decoderallowed; stateROUTEretainsLOCAL1minimum. Actual
+leader+ordinarydeck1 validated, all5positions emitted; zero ONLYinst_id_N0,
+no syntheticclone orfallback001. Actualgroup/VIP EXP, skills/ranks/skins,
+Arena league/rating projected. This DETAILroute fixespriorVIP0/empty-slot
+leaderclones/fifthslotmissing; oldflatlobbycompatibilityhelperunchanged.
+StoredcardIDs remainpositiveSAFEsubsetofnativeU64. Stage displayLOCALlast
+actuallyearnedpublishednormalstage orfirstknownstageforfreshowner(NOclear).
+awake0/prev_rank0/emptymessages LOCALneutral/notinventedoriginalhistory.
+
+StateuserDetails auth+self oractualmutuallynonblocked SAME-serverpeer,
+includingdiscoverycandidates(noinventedfriendrequirement). Actualaccount
+lookupPRECEDESnotice/Arena fixture branches, preventingidentitycollision
+privacybypass. Unknown/unready/blocked/other-server/missinggame/malformed
+mixedbatch failsWHOLEresponse. DirectgameByPvid, no partyProfileSnapshot/
+gameFor/energyregen/ownershipallocation/persist. BareprimitiveDTOs detached.
+Knownnotice/Arena presentationfixtures preserved, noactualownershipclaim.
+
+171 gameplayprograms/build/independentreviewPASS. Productiontestactual
+Supplyvisit→LoginBonusReward VIP20, SkillUp,missionwinEXP,Gachaownedrecruit,
+SetDeckreorder/zeros/fifthslot thenreaddetails. Auth/U32/mixed/blocks/server/
+missinggame/ref/leader/numericfailure,exactnestedrefs/file/elapsedAPBP and
+restart covered. Compiled--fixture--exercise-social verifiesrealcandidate
+BEFOREfriendship overECDH/HMAC/AES, actualsavedleader/VIP/5slots/zeros and
+byte-preservingread, identicalprofileafterprocessrestart. Nativeprofile
+pixelsremainunverified. OpenAPI regenerated; docs/user-detail-native-2026-10-16.md.
+
+No private/liveprofile/save/client/APK/UI change orreleaseowed. BlueStacks
+inputhold persists. WorkonlyServer/Instrumented; DataDump/retainedworkspace
+read-only; Collector/Docker/inference untouched. Originalbackendparty/stage/
+historyselectionandfullgameparityremainincomplete; FriendlyBattleInfo stays
+2001pendingidentity/preparationstrategy/nativevalidation.
+
 ## Latest continuation: all three inventory sync modes (2026-10-16)
 
 Previous turn was progress:51280c6 targetedcard-onlysync+guardedworldrefusals.
