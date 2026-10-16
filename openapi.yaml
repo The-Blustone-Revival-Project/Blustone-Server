@@ -1109,7 +1109,26 @@ paths:
         captured bait counter uses schema6 so older writers refuse it;
         schemas1..5 without bait history retain prior versions. Original daily
         limits, metadata/icon and catch behavior are unrecovered. Native bait
-        purchase UI validation pending."
+        purchase UI validation pending. Optional Rupee modes
+        archive-2017-base-only and archive-2021-base-only use LOCAL
+        local_rupee_pack/use_type11 and local_rupee_coupon identities because
+        original IDs are unrecovered. Effect5000/provide_qty1 gives5000gold;
+        historical Manda quotes are10 in repeated2017 screens or5 in one2021
+        screen, not a universal original price rule. Coupon payment price_type4
+        consumes one owned unlocked canonical coupon; receipt target_item_inst
+        {inst_id:exact numeric uint64,qty:absolute remaining},
+        consumed_inst_list empty, prevents double debit. Manda uses
+        type1/instance0; both require qty1. Native UI shares its cap across
+        payment counters1/2/4; an explicit BLUSTONE_RUPEE_SHOP_DAILY_LIMIT is
+        required and current neutral VIP benefits are enforced for coherence.
+        The native VIP gold-exchange cap bonus is not reconstructed. Counter and
+        currency/coupon persist together with exact rollback; reads publish all
+        three scalar counter rows including zero. No AP/BP or owned stock grant
+        occurs. Jackpot1/1 selects native normal presentation; paying base5000
+        deterministically is explicitly LOCAL and no original RNG or GC6 bonus
+        is inferred. First captured Rupee counter uses schema8; prior
+        schemas1..7 remain unchanged without it. Native Rupee UI validation
+        remains pending."
       tags:
         - Shop and economy
       parameters: *a1
@@ -1188,7 +1207,26 @@ paths:
         captured bait counter uses schema6 so older writers refuse it;
         schemas1..5 without bait history retain prior versions. Original daily
         limits, metadata/icon and catch behavior are unrecovered. Native bait
-        purchase UI validation pending."
+        purchase UI validation pending. Optional Rupee modes
+        archive-2017-base-only and archive-2021-base-only use LOCAL
+        local_rupee_pack/use_type11 and local_rupee_coupon identities because
+        original IDs are unrecovered. Effect5000/provide_qty1 gives5000gold;
+        historical Manda quotes are10 in repeated2017 screens or5 in one2021
+        screen, not a universal original price rule. Coupon payment price_type4
+        consumes one owned unlocked canonical coupon; receipt target_item_inst
+        {inst_id:exact numeric uint64,qty:absolute remaining},
+        consumed_inst_list empty, prevents double debit. Manda uses
+        type1/instance0; both require qty1. Native UI shares its cap across
+        payment counters1/2/4; an explicit BLUSTONE_RUPEE_SHOP_DAILY_LIMIT is
+        required and current neutral VIP benefits are enforced for coherence.
+        The native VIP gold-exchange cap bonus is not reconstructed. Counter and
+        currency/coupon persist together with exact rollback; reads publish all
+        three scalar counter rows including zero. No AP/BP or owned stock grant
+        occurs. Jackpot1/1 selects native normal presentation; paying base5000
+        deterministically is explicitly LOCAL and no original RNG or GC6 bonus
+        is inferred. First captured Rupee counter uses schema8; prior
+        schemas1..7 remain unchanged without it. Native Rupee UI validation
+        remains pending."
       tags:
         - Shop and economy
       parameters: *a1

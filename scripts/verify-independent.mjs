@@ -50,6 +50,9 @@ const authoredEquipmentRankPrice={rank:exerciseEquipmentUpgrade?2:1,attr:1,price
 const authoredEquipmentPrices=exerciseEquipmentUpgrade?[authoredEquipmentLevelPrice,{...authoredEquipmentLevelPrice,level:11,price:29}]:[authoredEquipmentLevelPrice];
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
+const exerciseRupeeShop=process.argv.includes('--exercise-rupee-shop');
+if(exerciseRupeeShop&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-rupee-shop')))
+  throw new Error('Rupee shop requires a separate disposable --fixture exercise');
 const exerciseVeteranGift=process.argv.includes('--exercise-veteran-gift');
 if(exerciseVeteranGift&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-veteran-gift')))
   throw new Error('Veteran gifting requires a separate disposable --fixture exercise');
@@ -210,6 +213,8 @@ const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
+  env.BLUSTONE_RUPEE_SHOP_MODE=exerciseRupeeShop?'archive-2021-base-only':'disabled';
+  if(exerciseRupeeShop)env.BLUSTONE_RUPEE_SHOP_DAILY_LIMIT='3';
   env.BLUSTONE_VETERAN_GIFT_MODE=exerciseVeteranGift?'local-points':'disabled';
   if(exerciseVeteranGift)env.BLUSTONE_VETERAN_POINTS_PER_TICKET='25';
   env.BLUSTONE_PROFILE_MODE=exerciseProfile?'archive-profile-projection':'disabled';
@@ -282,7 +287,7 @@ const stop = async () => {
   throw new Error('Verifier listener did not close; no replacement process was started');
 };
 let secret,token;
-let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle,arenaRanksProof,baitShopProof,profileProof,veteranGiftProof;
+let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle,arenaRanksProof,baitShopProof,profileProof,veteranGiftProof,rupeeShopProof;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
   const response=await fetch(base+'/shared_secret/Exchange',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},
@@ -296,7 +301,9 @@ async function secure(route,values,{allowPlainRefusal=false}={}) {
   const plain=Buffer.from(String(new URLSearchParams(values)));const cipher=crypto.createCipheriv('aes-256-cbc',secret.subarray(0,32),secret.subarray(32,48));
   const response=await fetch(base+route,{method:'POST',headers:{'content-type':'application/octet-stream','pv-accesstoken':token,
     'pv-signature':crypto.createHmac('sha384',secret).update(plain).digest('base64')},body:Buffer.concat([cipher.update(plain),cipher.final()])});
-  assert.equal(response.status,200,route);
+  if(exerciseRupeeShop&&response.status!==200)
+    writeFileSync(path.join(folder,'rupee-http-failure-body.txt'),(await response.text()).slice(0,8192));
+  assert.equal(response.status,200,route+(exerciseRupeeShop?' (failed response body retained in owned fixture directory)':''));
   const bytes=Buffer.from(await response.arrayBuffer());
   // Native failure envelopes deliberately remain plaintext (sendResponse).
   // Opt in only for explicit negative probes; a plaintext success is never OK.
@@ -404,6 +411,59 @@ try {
       {item:[{inst_id:id,ref_id:'LU003',qty:20,lock:0}]});
     assert.deepEqual(readFileSync(stateFile),syncBytes,'Absolute bait repair cannot grant or write');
     baitShopProof={id,packet,game:JSON.parse(syncBytes).gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1]};
+  }
+
+  if(exerciseRupeeShop) {
+    const owner={secret,token};await exchange();
+    const other=await secure('/v2/account/RegisterGuest',{device_id:'standalone-rupee-foreign-owner'});
+    const peer={otp:String(other.ret_data.otp),pvid:String(other.pvid)},connection={secret,token};
+    assert.equal((await secure('/lobby/Enter',peer)).result_code,1);({secret,token}=owner);
+    assert.ok(!before.accounts.some(row=>row.pvid===Number(auth.pvid)),'Imported coupon belongs only to a newly registered disposable actor');
+    await stop();
+    const initial=JSON.parse(readFileSync(stateFile)),actorGame=initial.gameStates.find(([id])=>id===Number(auth.pvid))[1];
+    const id=4294967331,pack='local_rupee_pack',coupon='local_rupee_coupon';
+    assert.ok(!actorGame.items.some(row=>row.inst_id===id||row.ref_id===coupon));
+    actorGame.items.push({inst_id:id,ref_id:coupon,qty:2,lock:0});actorGame.next_item_inst_id=Math.max(actorGame.next_item_inst_id,id+1);
+    writeFileSync(stateFile,JSON.stringify(initial));await launch();
+    const refs=(await secure('/reference/GetItem',auth)).ret_data;
+    const nativeSelection=refs.item.filter(row=>row.use_type===11);assert.equal(nativeSelection.length,1);assert.equal(nativeSelection[0].id,pack);assert.equal(nativeSelection[0].effect,'5000');
+    assert.equal(refs.item.find(row=>row.id===coupon).use_type,0);
+    const offer=refs.global_item.find(row=>row.item_id===pack);assert.equal(offer.provide_qty,1);assert.equal(offer.buy_limit,3);
+    assert.equal(offer.ticket_ref_id,coupon);assert.equal(offer.ticket_qty,1);
+    assert.deepEqual(offer.price_list,[1,2,3].map(buy_cnt=>({price_type:1,buy_cnt,price:5})));
+    const manda={...auth,target_ref_id:pack,price_type:'1',item_inst_id:'0',qty:'1'},ticket={...manda,price_type:'4',item_inst_id:String(id)};
+    for(const forged of [{price:'0'},{qty:'10'},{price_type:'2'},{price_type:'4'}]){
+      const bytes=readFileSync(stateFile);assert.equal((await secure('/shop/BuyGlobalItem',{...manda,...forged},{allowPlainRefusal:true})).result_code,2001);assert.deepEqual(readFileSync(stateFile),bytes);
+    }
+    const foreignBytes=readFileSync(stateFile);({secret,token}=connection);
+    assert.equal((await secure('/shop/BuyGlobalItem',{...ticket,...peer},{allowPlainRefusal:true})).result_code,2001,'Foreign actor cannot consume the source coupon');
+    assert.deepEqual(readFileSync(stateFile),foreignBytes);({secret,token}=owner);
+    const baseline=JSON.parse(readFileSync(stateFile)).gameStates,baseGame=baseline.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    const first=await secure('/shop/BuyGlobalItem',manda);assert.equal(first.result_code,1);
+    const free1=Math.min(baseGame.gacha_free_qty,5),paid1=baseGame.gacha_iap_qty-(5-free1);
+    assert.deepEqual(first.ret_data,{jackpot_level:1,jackpot_multiply:1,user:{gold:{prev:baseGame.gold,cur:baseGame.gold+5000},iap:{iap_qty:paid1,free_iap_qty:baseGame.gacha_free_qty-free1}},
+      target_inst:{item_id:pack,price_type:1,buy_cnt:{prev:0,cur:1}},consumed_inst_list:[]});
+    const expected=structuredClone(baseline),expectedGame=expected.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    expectedGame.gold+=5000;expectedGame.gacha_free_qty-=free1;expectedGame.gacha_iap_qty=paid1;
+    assert.deepEqual(JSON.parse(readFileSync(stateFile)).gameStates,expected,'Manda purchase changes only gold and actual currency debit');
+    const second=await secure('/shop/BuyGlobalItem',ticket);assert.equal(second.result_code,1);
+    assert.deepEqual(second.ret_data,{jackpot_level:1,jackpot_multiply:1,user:{gold:{prev:baseGame.gold+5000,cur:baseGame.gold+10000}},
+      target_inst:{item_id:pack,price_type:4,buy_cnt:{prev:0,cur:1}},target_item_inst:{inst_id:id,qty:1},consumed_inst_list:[]});
+    expectedGame.gold+=5000;expectedGame.items.find(row=>row.inst_id===id).qty=1;
+    assert.deepEqual(JSON.parse(readFileSync(stateFile)).gameStates,expected,'Coupon purchase changes only gold and selected absolute coupon quantity');
+    assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:JSON.stringify([coupon])})).ret_data,{item:[{inst_id:id,ref_id:coupon,qty:1,lock:0}]});
+    const third=await secure('/shop/BuyGlobalItem',manda);assert.equal(third.result_code,1);
+    const free2=Math.min(expectedGame.gacha_free_qty,5);expectedGame.gacha_free_qty-=free2;expectedGame.gacha_iap_qty-=5-free2;expectedGame.gold+=5000;
+    assert.deepEqual(third.ret_data,{jackpot_level:1,jackpot_multiply:1,user:{gold:{prev:baseGame.gold+10000,cur:baseGame.gold+15000},iap:{iap_qty:expectedGame.gacha_iap_qty,free_iap_qty:expectedGame.gacha_free_qty}},
+      target_inst:{item_id:pack,price_type:1,buy_cnt:{prev:1,cur:2}},consumed_inst_list:[]});
+    assert.deepEqual(JSON.parse(readFileSync(stateFile)).gameStates,expected,'Second Manda purchase has no jackpot/item award or unrelated clock mutation');
+    const capped=readFileSync(stateFile);assert.equal((await secure('/shop/BuyGlobalItem',ticket,{allowPlainRefusal:true})).result_code,2001);assert.deepEqual(readFileSync(stateFile),capped,'Shared cap refuses funded fourth coupon purchase without a debit');
+    const saved=JSON.parse(capped);assert.equal(saved.version,8);
+    assert.equal(saved.accounts.find(row=>row.pvid===Number(auth.pvid)).rupeeShopCounter.manda,2);assert.equal(saved.accounts.find(row=>row.pvid===Number(auth.pvid)).rupeeShopCounter.coupon,1);
+    const inventory=(await secure('/lobby/GetItemInven',auth)).ret_data;
+    assert.deepEqual(inventory.item.find(row=>row.inst_id===id),{inst_id:id,ref_id:coupon,qty:1,lock:0});
+    assert.deepEqual(inventory.global_item.filter(row=>row.item_id===pack),[1,2,4].map((price_type,i)=>({item_id:pack,price_type,buy_cnt:[2,0,1][i]})));
+    rupeeShopProof={id,pack,coupon,ticket,game:expectedGame};
   }
 
   if(exerciseVeteranGift) {
@@ -1050,6 +1110,14 @@ try {
   }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
+  if(exerciseRupeeShop) {
+    const bytes=readFileSync(stateFile),saved=JSON.parse(bytes),proof=rupeeShopProof,game=saved.gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    assert.equal(saved.version,8);assert.equal(game.gold,proof.game.gold);assert.equal(game.gacha_free_qty,proof.game.gacha_free_qty);assert.equal(game.gacha_iap_qty,proof.game.gacha_iap_qty);
+    assert.deepEqual(game.items,proof.game.items);
+    assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:JSON.stringify([proof.coupon])})).ret_data,{item:[{inst_id:proof.id,ref_id:proof.coupon,qty:1,lock:0}]});
+    assert.equal((await secure('/shop/BuyGlobalItem',proof.ticket,{allowPlainRefusal:true})).result_code,2001);
+    assert.deepEqual(readFileSync(stateFile),bytes,'Restarted funded cap refusal and absolute coupon read preserve stock/currency and bytes');
+  }
   if(exerciseVeteranGift) {
     const bytes=readFileSync(stateFile),saved=JSON.parse(bytes),proof=veteranGiftProof;
     const sender=saved.gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
@@ -1238,6 +1306,8 @@ try {
   }
   const report={compiled_process:true,unrelated_working_directory:true,encrypted_ecdh_hmac_aes:true,
     direct_compiled_process:true,launcher_process_verified:false,
+    configured_rupee_shop_fixture:exerciseRupeeShop,rupee_shop_restart_fixture:exerciseRupeeShop,
+    owned_rupee_coupon_fixture_import:exerciseRupeeShop,original_rupee_identity_verified:false,
     configured_veteran_gift_fixture:exerciseVeteranGift,veteran_gift_restart_fixture:exerciseVeteranGift,
     owned_gc6_fixture_import:exerciseVeteranGift,veteran_gift_original_benefit_verified:false,
     encrypted_profile_edit_fixture:exerciseProfile,profile_edit_restart_fixture:exerciseProfile,

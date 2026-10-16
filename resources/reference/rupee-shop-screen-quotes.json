@@ -1,0 +1,139 @@
+{
+  "kind": "Historical named Rupee shop screen observations; not an original reference table or RNG policy",
+  "date_method": "Dates/years are derived from image filenames only; not verified capture metadata. Undated filenames have null year.",
+  "scope": "Original shop/coupon item IDs remain unrecovered. No RP1 join, drop rates, jackpot probabilities, daily cap/reset or VIP policy is inferred. Future local type11 shop references are authored identities, not recovered IDs.",
+  "quotes": [
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-68.tsv",
+      "source_sha256": "b2e7006ce6b8fb706b6b2997c8a5932926c91dfe460a04ae46c67bc9c55aca69",
+      "line": 39,
+      "idx": 3388,
+      "image_filename": "Screenshot_20210619-234357_Blustone-3c4b7c1ef94acf7e.jpg",
+      "filename_year": 2021,
+      "observation_kind": "base-price-5",
+      "raw_tsv_row": "3388\tScreenshot_20210619-234357_Blustone-3c4b7c1ef94acf7e.jpg\t1080\t2400\tshop\t\t\t\t\t\tRupee purchase popup Current Amount 125; Midgard Basic Currency ...; My Veteran Level Professional 1; Daily Purchase 5/9; x5000 Purchase?; With a Coupon 1 (greyed); Purchase with Manda 5; Manda 739 coupon 0\t\tno\thigh\trupee/manda/coupon economy",
+      "raw_row_sha256": "846865655a504bcd7ad1e982abe4b8b17b06618fe64bffea40ccf62070423e06",
+      "filename_date": "2021-06-19"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-38.tsv",
+      "source_sha256": "4425221f2e99304ebf0c11f1aa40f72cf16032932605b1c68654311f0a6466b9",
+      "line": 30,
+      "idx": 1879,
+      "image_filename": "Screenshot_20170703-191845-0af883b768e285c4.png",
+      "filename_year": 2017,
+      "observation_kind": "base-price-10",
+      "raw_tsv_row": "1879\tScreenshot_20170703-191845-0af883b768e285c4.png\t1080\t1920\tshop\t\t\t\t\t\tRupee shop; Current Amount 219545; flavor A small, shiny coin and the main currency of all the tribes.; My Veteran Level Expert 1; Daily Purchase 4/12; x5000 Purchase?; Purchase with Manda 10; wallet gems 0 / tickets 0\t\tno\thigh\tPairs idx 1884 (same Expert 1, 12/12 capped, 256642 holdings)",
+      "raw_row_sha256": "0b01271847c01eea3da8ba843d34d4b9fb118433cf4b8718bede4a53adc60c94",
+      "filename_date": "2017-07-03"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-38.tsv",
+      "source_sha256": "4425221f2e99304ebf0c11f1aa40f72cf16032932605b1c68654311f0a6466b9",
+      "line": 35,
+      "idx": 1884,
+      "image_filename": "Screenshot_20170708-150606-c061afd1a601ed5d.png",
+      "filename_year": 2017,
+      "observation_kind": "base-price-10",
+      "raw_tsv_row": "1884\tScreenshot_20170708-150606-c061afd1a601ed5d.png\t1080\t1920\tshop\t\t\t\t\t\tRupee shop; Current Amount 256642; flavor A small, shiny coin and the main currency of all the tribes.; My Veteran Level Expert 1; Daily Purchase 12/12 (capped); x5000 Purchase?; Purchase with Manda 10; wallet gems 0 / tickets 0\t\tno\thigh\tCapped 12/12 purchase counter vs 4/12 at idx 1879 (same Expert 1)",
+      "raw_row_sha256": "06bfbb4fd50307ed7e20ce53ab3d5dce6e59639beba9621b9316f4836eb8ed5f",
+      "filename_date": "2017-07-08"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-33.tsv",
+      "source_sha256": "8924ecff7c76a8d387a0b1d11e9b7a31a7594f8bd86f446c6f3070f38f0c70a6",
+      "line": 42,
+      "idx": 1641,
+      "image_filename": "Screenshot_20170528-102721-c3aef1c3774905ea.png",
+      "filename_year": 2017,
+      "observation_kind": "coupon-1",
+      "raw_tsv_row": "1641\tScreenshot_20170528-102721-c3aef1c3774905ea.png\t720\t1280\tshop\t\t\t\t\t\tRupee shop popup: Rupee 168 / 98; Current Amount 1689; A small, shiny coin and the main currency of all the tribes.; My VeteranLevel Expert1; Daily Purchase 12/12; x5000 Purchase?; With a Coupon 1; wallet gems 16 + tickets 9\t\tno\thigh\tRupee-pack economy: x5000 fixed stock, 12/12 daily cap, coupon path",
+      "raw_row_sha256": "b9cdd9831abb3daa5d631c8bd482e09412a94588dd52565aa9de279104e255fc",
+      "filename_date": "2017-05-28"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-34.tsv",
+      "source_sha256": "ccf930946b1e35267ab521d75a331cb3a33577446b87cd97c3f1373a226e9c3e",
+      "line": 26,
+      "idx": 1675,
+      "image_filename": "Screenshot_20170530-210041-c29aecc91db50c07.png",
+      "filename_year": 2017,
+      "observation_kind": "coupon-1",
+      "raw_tsv_row": "1675\tScreenshot_20170530-210041-c29aecc91db50c07.png\t1080\t1920\tshop\t\t\t\t\t\tRupee shop; Current Amount 27958; flavor A small, shiny coin and the main currency of all the tribes.; My Veteran Level Professional 3; Daily Purchase 0/11; x5000 Purchase?; With a Coupon 1; wallet gems 10 / tickets 7\t\tno\thigh\tVeteran Professional 3 + 0/11 purchase counter",
+      "raw_row_sha256": "e07c6040eca4d99bbdf28252607ee83d540ab16953f7db7cedff493cb81fdfa6",
+      "filename_date": "2017-05-30"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-05.tsv",
+      "source_sha256": "b1aa93f1c8ff112e3d7165505c2caea09f05d85b91f0ea91e5397b295f56981d",
+      "line": 48,
+      "idx": 247,
+      "image_filename": "Blustone_2017-08-05-15-09-47-c40523f0892b4f28.png",
+      "filename_year": 2017,
+      "observation_kind": "coupon-1",
+      "raw_tsv_row": "247\tBlustone_2017-08-05-15-09-47-c40523f0892b4f28.png\t1080\t1920\tshop\t\t\t\t\t\tshop=Rupee purchase; current=388092; veteran=Expert 3; daily=15/15; offer=x5000 with coupon x1; wallet_gems=83; wallet_tickets=3\tno\tno\thigh\tRupee description: small shiny coin and the main currency of all the tribes",
+      "raw_row_sha256": "126993988c03e733e2e661a05b537435d343c144d1ebd6a770e067922c726a11",
+      "filename_date": "2017-08-05"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-11.tsv",
+      "source_sha256": "aaef87c3375684e25b7e78c6a5ca416f03ed59c1c15ee4cfc91e56c4f4fdae75",
+      "line": 49,
+      "idx": 548,
+      "image_filename": "image0-0c3183754b9e1699.png",
+      "filename_year": null,
+      "observation_kind": "price-7-uncertain",
+      "raw_tsv_row": "548\timage0-0c3183754b9e1699.png\t640\t1136\tshop\t\t\t\t\t\tRupee shop: Current Amount=87887; orbs=5; coupons=1; Vet Expert=1; Daily=0/12; purchase x5000; coupon=1 / manda=7\t\tno\tmedium-high\tRupee/currency shop; icon labels partly inferred",
+      "raw_row_sha256": "1d8b8a166a8ab2fcf2b1e0577e2315ef6ac2a0db19b109a2b271b3f26df3aebd",
+      "filename_date": null
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-58.tsv",
+      "source_sha256": "88a72051906dd3dafecbc349aca152bdeac4b50ee1f225de1b11e69bfadb1ec3",
+      "line": 51,
+      "idx": 2900,
+      "image_filename": "Screenshot_20180909-211032-8ce2b48281c71d84.png",
+      "filename_year": 2018,
+      "observation_kind": "observed-200-percent",
+      "raw_tsv_row": "2900\tScreenshot_20180909-211032-8ce2b48281c71d84.png\t720\t1280\tshop\t\t\t\t\t\tVery Successful Purchase 200% x10000 coins; Received a large amount of Rupee; Show off now!; Okay (full-view)\t\tno\thigh\tPromo ladder 1600% x80000 (2859/2880) vs 200% x10000 (2900): 8x ratio both legs",
+      "raw_row_sha256": "02cfbf68b2d7238ecd722cfd9f2ced6883fd29c0c75b3938248d966fd41e314b",
+      "filename_date": "2018-09-09"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-58.tsv",
+      "source_sha256": "88a72051906dd3dafecbc349aca152bdeac4b50ee1f225de1b11e69bfadb1ec3",
+      "line": 10,
+      "idx": 2859,
+      "image_filename": "Screenshot_20180816-130805_Blustone-b8b48ff315a54d7e.jpg",
+      "filename_year": 2018,
+      "observation_kind": "observed-1600-percent",
+      "raw_tsv_row": "2859\tScreenshot_20180816-130805_Blustone-b8b48ff315a54d7e.jpg\t1080\t1920\tshop\t\t\t\t\t\tVery Successful Purchase 1600% x80000 coins (OCR misread 41600%, visual zoom wins); Extra Bonus Veteran Point Gift Certificate 3; Received a Veteran Point Gift Certificate; Received a huge amount of Rupee; Share / Okay (full-view)\t\tno\thigh\tZero-digit promo run anchor (one OCR to verify); promo pair with 2880",
+      "raw_row_sha256": "4e738147b42912ecd2949feb61088c41c7c0dd665f878847ef98a8665cfa94e8",
+      "filename_date": "2018-08-16"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-58.tsv",
+      "source_sha256": "88a72051906dd3dafecbc349aca152bdeac4b50ee1f225de1b11e69bfadb1ec3",
+      "line": 31,
+      "idx": 2880,
+      "image_filename": "Screenshot_20180830-152214-316a7bbf7526b91f.png",
+      "filename_year": 2018,
+      "observation_kind": "observed-1600-percent",
+      "raw_tsv_row": "2880\tScreenshot_20180830-152214-316a7bbf7526b91f.png\t1080\t1920\tshop\t\t\t\t\t\tVery Successful Purchase 1600% x80000 coins; Extra Bonus Veteran Point Gift Certificate 3; Received a huge amount of Rupee; Share / Okay (full-view)\t\tno\thigh\tPromo pair with 2859 (identical 1600% x80000)",
+      "raw_row_sha256": "a1071004e1209604c364c7e493168d4f18e6c16c72be7394d00dc489e5773564",
+      "filename_date": "2018-08-30"
+    },
+    {
+      "source_path": "findings/hunters/base-stats-visual-hunt/manual-scrapes-2026-10-14/batch-50.tsv",
+      "source_sha256": "c1eabd52424c4d8e5bdca006b5ba80246e1e7d6774e06fcc1074d1d1d9fbc55a",
+      "line": 50,
+      "idx": 2499,
+      "image_filename": "Screenshot_2018-03-31-05-29-32-d060954f8ede5e26.png",
+      "filename_year": 2018,
+      "observation_kind": "observed-1600-percent",
+      "raw_tsv_row": "2499\tScreenshot_2018-03-31-05-29-32-d060954f8ede5e26.png\t1440\t2560\tother\t\t\t\t\t\tVery Successful Purchase; 1600% (visual-read; OCR frag '41600%' rejected, zoom wins, z50_2499_pct + _tmp50_ocr/2499.txt); coin x80000 (zoom); Extra Bonus; Veteran Point Gift Certificate 3; 'Received a huge amount of Rupee.'; Okay\t\tno\thigh\t1600% promo, Rupee variant with cert 3 (cf batch-48 2353/2379); OCR misread rejected",
+      "raw_row_sha256": "fd587f3b3581deeba9221082f7f17ae49c08b4044990ade7554df4f0b0daaef8",
+      "filename_date": "2018-03-31"
+    }
+  ]
+}

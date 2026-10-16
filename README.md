@@ -50,6 +50,13 @@ consumption are recovered; recipient points are a local policy, not a recovered
 original amount. Enabling the mode grants no tickets. See the
 [Veteran gift workflow](docs/veteran-gift-workflow-2026-10-16.md).
 
+An optional Rupee exchange uses `BLUSTONE_RUPEE_SHOP_MODE=archive-2021-base-only`
+(5 Manda) or `archive-2017-base-only` (10 Manda), plus an explicit
+`BLUSTONE_RUPEE_SHOP_DAILY_LIMIT`. It provides5,000 Rupees per purchase, with
+owned local coupons as another payment. IDs, daily policy and base-only payouts
+are local; original jackpots and item identities remain missing. First purchase
+captures schema8 counters. See the [Rupee workflow](docs/rupee-shop-workflow-2026-10-16.md).
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

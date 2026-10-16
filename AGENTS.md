@@ -1,3 +1,70 @@
+## Latest continuation: historical base-only Rupee shop (2026-10-16)
+
+Previous checkpoint24f3f0c restoredconfiguredGC6gifts/refusedunbackedWebViews.
+Thischeckpoint restores optionaltype11goldshop usingLOCALitem/couponIDs,
+historicalquotes, BOTHpayments andpropernativecounter/receiptgrammar. Goal
+ACTIVE/nativeAndroidRupeeUI PENDING; inputhold persists. No live/private/client/
+APK/originalasset/Docker/Collector/inference changes. Allstatetestsdisposable.
+
+NativeGold.InitGd4cd38 selects GetItemRefID(use_type11)Gd4cde4/e6, getter
+Gaf1374 returnsINFO.idstring(node+30Gaf13be), nothardcodedRP1. Globalrow
+suppliescouponrefGaf1518/needGaf1540. ORIGINALIDstringsunrecovered. New
+LOCALlocal_rupee_pack(use11,effect5000)/local_rupee_coupon(type0) +provide1
+areexplicitreconstruction; noRP1aliasclaim. GoldiconIT_CO LOCALdisplaybinding.
+POSITIVEcouponneed1 avoidsnullGetItemInstdereference afterzeroaffordability.
+Exactlyoneuse11record; fishimports0/17 cannotcollide/reservedLOCALIDs.
+
+BLUSTONE_RUPEE_SHOP_MODE archive-2017-base-only picks10Manda (repeated2017),
+archive-2021-base-only picks5 (singlehighconfidence2021idx3388), each5000gold.
+Requires explicit BLUSTONE_RUPEE_SHOP_DAILY_LIMIT1..1000. Old7Mandamedium
+observationretainednotreconciled. VIP/era/tierlawunknown; constantpriceacross
+localtiers, UTCreset/freefirst/noRNG/neutralmetadata LOCAL. 11rawrows/8sources
+pinned resources/reference/rupee-shop-screen-quotes.json SHA
+2b87d9a7576ff81d1b52bdbed7f6c2169c738c8180e61a88d1d46c29c3968bf5.
+No coupons/grantsatstartup, originalproducer/odds/GC6jackpotnotinvented.
+
+GoldUIUpdateTextGd4d290..384 subtractscounters1+2+4 frombuy_limit+VIPtype5
+UPGRADE_NUMBER_GOLD_EXCHANGE benefit, storesremaining+ec; BOTHbuttonscheckit.
+SHAREDcap mandatory, notManda-only/unlimitedcoupon. Emitinventoryglobalrows
+1/2zero/4 inclzeroresets. Currentneutralvip/vip_group enforcedatstartup;
+futurepositiveVIPbenefits needcoherentcapimplementation first. Manda'sprice
+indexstillMandaOwnCount+1, independentofcouponcount.
+
+MandapacketGd4ee06..18 price_type1/inst0/qty1; couponGd4df94..fb0 type4/
+realownedfull64couponinst/qty1; samechosenofferID/NOPRICEparam. Successgold
+user.gold.cur absolute; truthfulprev/curpair emitted. Couponreceipt
+ target_item_inst:{inst_id:exactnumericU64,qty:ABSremaining}
+→SetItemQuantityGaec4bc viaGf8bfa6/ac. NOTqty pair orremovaldelta; consumed_
+inst_list[] preventsdoubledebit. target_instseparateper-typebuycntpairs.
+NativePopupShopResultGd50ee4 level1→Gd50fd8 NORMAL_LOGO; local1/1basepayout
+fitsnormalpresentation. ThisdoesNOTrecoverRNG; nohigherbonus/itemawards.
+
+Pureplan+directloadedstate commitgold/Manda ORselectedcouponqty +account
+counter inONEpersist. Failuresrestoreexactscalars/couponcontents/counterref/
+absence; noAPBP/clock/party/allocator/otheraccountchange. Couponrefmultiple
+stacks(includingzero) refusefornativefirststackcoherence; locks/shortage/
+duplicateIDs/forgery/goldINT32cap/U32stockrefuse. Full64scalarwire viaRawJSON.
+No nonce; fundedrepeatsareadditionalpurchases, absRefresh repairscouponqty.
+
+FirstcapturedAccount.rupeeShopCounter promotesSCHEMA8. 8requirescounter+
+quest/dispatcharrays; earlier1..7withcounterreject. Profile7/bait6/comments5/
+linear4 preserveundertheirguards. No-shopaccounts retainpriorversions;
+disabledkeepshistory/stock. Actualstate test mission/Entrust/linear/Arena/
+bait/statuscohort7→8 andlaterunrelatedwrite/restartallpreserved.
+
+All191programs/build/independentreviewPASS. Newpure+state sourceANDcompiled
+checks bothquotes/oneuse11/couponpositive guard/actualManda+coupon/sharedcap/
+allcounterrows/dayroll/clockback, real.tmp+renamefailures(firstManda+first
+coupon+aftercounterexists), exactrefs/bytes/auth/foreign/short/overflow/noalloc.
+Compiled --fixture --exercise-rupee-shop PASS freshfirstattempt, guardedfixture
+ONLY: stopownedchild→importnewactorcoupon2(ID4294967331)/allocator→restart
+→encryptedManda/coupon/Manda gold+15000 +coupon1, targetabsoluteqty/noManda
+oncoupon, fourthcouponfundedbutcap3refusesexactbytes, absRefresh/inven1=2/
+2=0/4=1, finalschema8/keysrestart. Oldfixture1EXACTunchanged. Report3rupee/
+importflagsTRUE, original_rupee_identity_verifiedFALSE. Nooriginalcoupon
+producer/nativeUIclaim. Docsrupee-shop-native/image-quotes/workflow ownlimits.
+NoAPKrebuild/releaseowed. Fullrevivalremainsincomplete; continuegoal.
+
 ## Latest continuation: explicit GC6 gifts and honest WebView refusals (2026-10-16)
 
 Previous checkpointe323ae6 restoredMyInfo editor. This checkpoint restores
