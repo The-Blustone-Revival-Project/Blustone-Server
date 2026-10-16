@@ -91,6 +91,15 @@ export function requireMirageCombatCache(raw:unknown,context:MirageReadiness):Mi
     !Number.isInteger(context.now)||context.now<0||context.now>0x7fff_ffff||cache.ref_hero.end_ltime<context.now)throw new TypeError("Mirage combat floor/state/clock is unavailable");
   if(!cache.inst_enemy.length||cache.inst_enemy.some(enemy=>enemy.hp_percent<0||enemy.hp_percent>10000||!context.enemySupported(Object.freeze({...enemy})))||
     !cache.inst_enemy.some(enemy=>enemy.hp_percent>0))throw new TypeError("Mirage enemy references/projection or living camp is unavailable");
+  requireMirageReferenceCache(cache,context);
+  return cache;
+}
+
+/** Static policy/resource readiness, independent of live party health. This
+ * admits no enrollment or combat; callers still bind owned commitments. */
+export function requireMirageReferenceCache(raw:unknown,context:MirageReadiness):MirageCache {
+  const cache=parseMirageCache(raw),base=cache.inst_base;
+  if(base.stair<1||base.stair>cache.ref_stair.list.length)throw new TypeError("Mirage reference stair is unavailable");
   if(cache.ref_stair.list.some(row=>row.grade<0||row.grade>3)||cache.ref_stair.list[base.stair-1].balance<=0||
     // base.bg_res presence remains an additional LOCAL UI admission check;
     // native battle environment selection does not read this field here.

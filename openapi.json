@@ -13768,14 +13768,14 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md; docs/mirage-revive-native-2026-10-17.md; docs/mirage-getinfo-enrollment-boundary-2026-10-17.md",
-        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three-stair HTTP lifecycle checked; native scene pending"
+        "x-evidence": "docs/mirage-local-reentry-2026-10-17.md; docs/mirage-reentry-choice-native-2026-10-17.md; docs/mirage-reentry-clock-native-2026-10-17.md; docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three/six-stair plus re-entry HTTP lifecycle checked; native scene pending"
       }
     },
     "/mirage/GetFriendInfo": {
       "post": {
         "summary": "Read Mirage friend floors",
-        "description": "Authenticated request with no floor selector. Native ParseFriendInfo consumes bare ret_data rows {floor,nick_list:string[]}. Returns actual captured Mirage highest-floor records for accepted same-server friends, checking both block directions. No journal means no invented floor. A fresh captured attempt has earned highest0; a fully completed configured floor records its floor; abandonment records0. Ignores forged floor/user selectors. Detached read only, with no account creation, energy regeneration or save write.",
+        "description": "Authenticated request with no floor selector. Native ParseFriendInfo consumes bare ret_data rows {floor,nick_list:string[]}. Returns actual captured Mirage highest-floor records for accepted same-server friends, checking both block directions. No journal means no invented floor. A first captured attempt has highest0; completed floors update the cumulative maximum, and later re-entry/abandonment preserves earlier earned highest. Ignores forged floor/user selectors. Detached read only, with no account creation, energy regeneration or save write.",
         "tags": [
           "Mirage"
         ],
@@ -13856,7 +13856,7 @@
     "/mirage/GetInfo": {
       "post": {
         "summary": "GetInfo",
-        "description": "Default guarded empty lobby preserves unrepresented carry. Optional BLUSTONE_MIRAGE_MODE=local-configured plus explicit BLUSTONE_MIRAGE_POLICY_JSON and selected pinned MIRAGE/LEVELING/ST002 CDN resources captures a one-floor schema12 run (schema13 when optional first aid is configured). Native section selectors entry/inst_base/inst_enemy/ref_stair_list/ref_hero use0/1 and ret_data.ref_stair differs from request ref_stair_list. LOCAL enrollment selects one ordinary owned Hunter per char_id by rank, EXP, lowest ID; initial admitted HP10000, unenrolled -1, no card or item grants. Unknown historical carry refuses. Empty selector reads do not enroll. Captured policy is immutable, retained when disabled. reset1 is explicit LOCAL reward-free ABANDON ONLY, releasing commitments with highest0 and partial claims preserved; it does not create another attempt or claim original reset/assignment law. Captured runs continue their frozen entry cohort beyond the new-enrollment deadline. Completion/abandon releases owned HP to historical local1000. Native scene validation remains pending.",
+        "description": "Default guarded empty lobby preserves unrepresented carry. Optional BLUSTONE_MIRAGE_MODE=local-configured plus explicit BLUSTONE_MIRAGE_POLICY_JSON and selected pinned MIRAGE/LEVELING/ST002 CDN resources captures a schema12 run (schema13 with first aid); optional BLUSTONE_MIRAGE_REENTRY_JSON captures an explicit multi-floor series in schema14. Native section selectors entry/inst_base/inst_enemy/ref_stair_list/ref_hero use0/1 and ret_data.ref_stair differs from request ref_stair_list. LOCAL enrollment selects one ordinary owned Hunter per char_id by rank, EXP, lowest ID; initial admitted HP10000, unenrolled -1, no card or item grants. Unknown historical carry refuses. Empty selector reads do not enroll. Captured policy is immutable, retained when disabled. Without re-entry configuration reset1 is LOCAL reward-free abandon only. Captured re-entry uses an offered reset1/stay0 accept or stay1 same-floor NEW attempt, actual owned re-enrollment/full HP and explicit daily quota, all atomic. Unavailable quota/deadline/cap offers abandon for active or inspection for inactive runs. Matching consumed-choice retries hydrate CURRENT cache without another heal or attempt. Native clock begin_ltime is projected from eligibility while private start/history remain actual; inactive daily exhaustion counts to fixed-offset midnight, not start plus24hours. No original assignment/calendar/payment law is claimed. Captured runs continue their frozen entry cohort beyond the new-enrollment deadline. Completion/abandon releases owned HP to historical local1000. Native scene validation remains pending.",
         "tags": [
           "Mirage"
         ],
@@ -13930,16 +13930,16 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md; docs/mirage-revive-native-2026-10-17.md; docs/mirage-getinfo-enrollment-boundary-2026-10-17.md",
-        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three-stair HTTP lifecycle checked; native scene pending"
+        "x-evidence": "docs/mirage-local-reentry-2026-10-17.md; docs/mirage-reentry-choice-native-2026-10-17.md; docs/mirage-reentry-clock-native-2026-10-17.md; docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three/six-stair plus re-entry HTTP lifecycle checked; native scene pending"
       }
     },
     "/mirage/GetNextFloor": {
       "post": {
-        "summary": "Recovered /mirage/GetNextFloor route",
-        "description": "The route literal **/mirage/GetNextFloor** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
+        "summary": "GetNextFloor",
+        "description": "Configured mode and captured run only. Without re-entry policy returns current floor to reach legacy abandon-only native shortcut. With captured re-entry policy persists a generation/day/current-run-token offer and returns scalar ret_data.next_floor; it does not heal, enroll, pay or consume quota. Cleared/failed destinations, free-local payment, initial-counted daily_attempts and fixed day_offset_minutes are explicit LOCAL inputs. Every destination is a complete supplied floor; no arithmetic assignment or missing-data substitute. Native accept sends reset1stay0, Stay/equal shortcut reset1stay1, Close sends nothing. Reset requires a fresh offer and full cache hydration; stale run/day/clock choices refuse. Unavailable quota/destination/archive capacity offers current-floor abandon or preserving inspection instead of inventing floor0. Capture schema14 retains current and archived claims/first-aid IDs/global highest. Midnight renews availability without wiping ongoing carry. Mode-off retains reads but refuses mutation. All detected native reset callers obtain GetNextFloor first; original server quota/timezone/formula remain unknown.",
         "tags": [
-          "mirage"
+          "Mirage"
         ],
         "parameters": [
           {
@@ -14010,9 +14010,9 @@
             }
           }
         },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+        "x-reverse-engineering-status": "native-parser-reconstructed",
+        "x-evidence": "docs/mirage-local-reentry-2026-10-17.md; docs/mirage-reentry-choice-native-2026-10-17.md; docs/mirage-reentry-clock-native-2026-10-17.md; docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three/six-stair plus re-entry HTTP lifecycle checked; native scene pending"
       }
     },
     "/mirage/RegisterDeck": {
@@ -14092,8 +14092,8 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md; docs/mirage-revive-native-2026-10-17.md; docs/mirage-getinfo-enrollment-boundary-2026-10-17.md",
-        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three-stair HTTP lifecycle checked; native scene pending"
+        "x-evidence": "docs/mirage-local-reentry-2026-10-17.md; docs/mirage-reentry-choice-native-2026-10-17.md; docs/mirage-reentry-clock-native-2026-10-17.md; docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three/six-stair plus re-entry HTTP lifecycle checked; native scene pending"
       }
     },
     "/mirage/Revive": {
@@ -14173,8 +14173,8 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md; docs/mirage-revive-native-2026-10-17.md; docs/mirage-getinfo-enrollment-boundary-2026-10-17.md",
-        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three-stair HTTP lifecycle checked; native scene pending"
+        "x-evidence": "docs/mirage-local-reentry-2026-10-17.md; docs/mirage-reentry-choice-native-2026-10-17.md; docs/mirage-reentry-clock-native-2026-10-17.md; docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three/six-stair plus re-entry HTTP lifecycle checked; native scene pending"
       }
     },
     "/mirage/Reward": {
@@ -14254,8 +14254,8 @@
           }
         },
         "x-reverse-engineering-status": "native-parser-reconstructed",
-        "x-evidence": "docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md; docs/mirage-revive-native-2026-10-17.md; docs/mirage-getinfo-enrollment-boundary-2026-10-17.md",
-        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three-stair HTTP lifecycle checked; native scene pending"
+        "x-evidence": "docs/mirage-local-reentry-2026-10-17.md; docs/mirage-reentry-choice-native-2026-10-17.md; docs/mirage-reentry-clock-native-2026-10-17.md; docs/mirage-local-run-2026-10-17.md; docs/mirage-local-first-aid-2026-10-17.md",
+        "x-runtime-confidence": "Source/compiled state, atomic failures and encrypted three/six-stair plus re-entry HTTP lifecycle checked; native scene pending"
       }
     },
     "/mission/Complete": {

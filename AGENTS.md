@@ -1,3 +1,91 @@
+## Latest continuation: Mirage re-entry, floor choices and native clock (2026-10-17)
+
+Previous checkpointdee622b added optional first aid. This checkpoint supplies
+configured multi-attempt/multi-floor Mirage with native offer/choice flow.
+Goal ACTIVE. No live profile/private save/device/APK/original asset/Docker/
+Collector/inference changes; input hold persists. Server/Instrumented writes
+only, DataDump read only. No rebuild/release owed. Native scene validation
+remains PENDING; encrypted host/API runs are not native combat evidence.
+
+Original choice proof: ALL SIX detected reset1 GetInfo callers are behind
+GetNextFloor. Active Retry shows Yes/No first; completed Retry requests floor
+straight away. Different target opens RetryConfirm: first button accepts
+(reset1,stay0), second keeps current floor for a NEW attempt (reset1,stay1);
+Close sends no reset. Equal floor automatically sends stay1. Failure's scalar0
+must never be promoted into a floor assignment. docs/mirage-reentry-choice-native-2026-10-17.md pins the complete caller chain.
+
+CRITICAL clock discovery: original main popup OnRefresh unconditionally compares
+begin_ltime+86400 with synchronized local seconds, hides Retry/counts down when
+>=, and shows it only after current>deadline. No native midnight rounding.
+Old actual-start wire value blocked same-day Retry/abandon. PRIVATE journal
+begin remains actual start for quota/history/cohort auditing; detached WIRE
+begin now projects eligibility: active/ready uses start-86401; inactive same-day
+exhaustion uses configured midnight so+86400 is next boundary. Cached boundary
+becomes ready at+1second due strict BGE; fresh boundary reads renew immediately.
+Legacy active one-floor mode gets ready projection too so its existing local
+abandon becomes reachable. Clock source and bounded other-consumer audit are
+in docs/mirage-reentry-clock-native-2026-10-17.md. No native patch was needed.
+
+Optional BLUSTONE_MIRAGE_REENTRY_JSON / mirageReentryPolicy raw keys EXACT:
+payment:'free-local',daily_attempts1..100,day_offset_minutes-840..840,
+on_unavailable:'abandon-local',floors:[ADDITIONAL complete MiragePolicy],
+transitions:[{floor,cleared,failed}] completeknowncoverage. Initial basepolicy
+separate; no recursive/duplicate/missing floor, unknown actor/assets or implicit
+transition. Initial attempt counts1. Midnight/calendar and free payment are
+LOCAL choices; original help confirms1/day but initial-count/timezone/payment/
+floor-delta transactions remain unknown. Do not borrow shop3refreshes or the
+unrelated UTC+9 water-bottle event into run rules. Image evidence pinned.
+
+First valid GetInfo captures schema14 root mirageSeries alongside current
+mirageRuns, all policies/history/day/usage/generation/highest/offer/last-choice.
+Existing captured legacy attempts cannot silently gain a series. Changed base/
+series config refuses before writes. Header14 requires both records/mandatory
+arrays and all earlier cohorts remain accepted; older schemas reject series.
+Globalbase config is compared with captured INITIAL policy even while current
+floor differs. All floors' enemies/static resource/environment/hero data are
+validated before capture and restoration, independently of current party HP.
+
+GetNextFloor persists ONLY an exact current-run SHA256/day/generation offer;
+no HP/money/attempt consumed. Reset consumes actual current choice, reenrolls
+real current families/fullHP under captured LOCAL rank/EXP/ID policy, clears
+party, archives old claim/paid-aid history, and updates quota/ownedHP/currentrun/
+series atomically. Stay is a genuine same-floor attempt and consumes allowance.
+Actual ownership is not archived/held by old generations. Historical rewards
+and spent Manda remain; no refund/regrant. New attempt has its own first-aid
+schedule. Highest completed floor persists globally through easier attempts.
+
+Lost reset reply returns CURRENT cache for same consumed choice, no new heal/
+quota/save and no HP rewind. Battle/claim/heal/day changes stale proposals;
+refresh selection rather than overwrite later progress. Source has no nonce:
+no complete anti-replay/battle authority claimed. Quota/destination-expiry/
+10000archive supported-cap unavailability offers currentfloor abandon when
+active or preserving inspection when inactive. No floor0/unknown substitute.
+All-dead/expired cohorts remain escapable. Stay on an expired current floor
+refuses without spending while another offered floor remains selectable.
+Midnight renews availability, never wipes/heals ongoing run. Clock rollback
+refuses. Old no-series configured NextFloor returns current floor only to reach
+legacy abandon; no new allowance is retrofitted.
+
+All214 regression programs, six resource suites, build and focused compiled
+policy/state/HTTP proofs PASS. Actual separate P384/HMAC/AES HTTP traverses
+3-stair floor1→6-stair floor21→Stayfresh21→quotaabandon; CURRENT lostreset repair
+after HP8500 never heals/recharges; schema14/history/highest/keys/OTP/modeoff/
+ordinary wallets/progress/peer isolation preserved. Source state tests cover
+day rollover/offset/private-vs-wire clock, all3+6claims, paid-aid archive/no
+refund, stale/deadline/cap choices, all-dead expiry exit, exact nestedref/file
+rollback at capture/proposal/reset/inspect/abandon, header downgrades, old cohort
+retention, immutable config and legacy behavior. An older first-aid HTTP test
+now explicitly distinguishes projected clock from unchanged private start.
+Independent final source review found no actionable issues. Complete documented
+configuration example passes production parsers. No live/native claim.
+
+Setup: docs/mirage-local-reentry-2026-10-17.md. Operator must explicitly select
+Mirage profile/mode and full policies; all live settings remain unchanged.
+NEXT broader revival: native scene validation only once human input hold lifted;
+more original item/reward/character data and other missing game workflows.
+Keep objective broad: configured Mirage replayability is progress, not goal
+completion or recovered original balance/assignment/calendar/economy parity.
+
 ## Latest continuation: configured Mirage first aid (2026-10-17)
 
 Previous checkpoint89856df restored configured one-floor lifecycle. This adds

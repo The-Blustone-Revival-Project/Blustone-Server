@@ -127,7 +127,8 @@ try {
   assert.equal(owned().gacha_free_qty,0);assert.equal(owned().gacha_iap_qty,4);assert.equal(owned().gold,100);
   await stop();await launch('disabled'); // Actual saved P384 key and OTP reused.
   const restartBytes=readFileSync(file),hydrated=await secure('/mirage/GetInfo');assert.equal(hydrated.result_code,1);
-  assert.deepEqual(hydrated.ret_data,{...active.cache,inst_base:{...active.cache.inst_base,deck:active.cache.inst_base.deck.map(Number)}});
+  assert.deepEqual(hydrated.ret_data,{...active.cache,inst_base:{...active.cache.inst_base,deck:active.cache.inst_base.deck.map(Number),begin_ltime:Math.max(0,active.cache.inst_base.begin_ltime-86401)}});
+  assert.equal(read().mirageRuns[0][1].cache.inst_base.begin_ltime,active.cache.inst_base.begin_ltime,"Native abort clock projection never rewrites the actual captured entry time");
   assert.equal(hydrated.ret_data.inst_base.revive_price,-1);
   assert.equal((await revive(1000001)).result_code,2001);
   const refusedEnd=await end(1000002,0,6000);assert.equal(refusedEnd.result_code,2001);assert.equal(Object.hasOwn(refusedEnd,'ret_data'),false);

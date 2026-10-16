@@ -1,5 +1,10 @@
 # Optional configured Mirage run
 
+Continuation: [configured re-entry](mirage-local-reentry-2026-10-17.md) now
+supports explicit multi-floor attempts in schema14. Statements below about
+new attempts/floor choices being unavailable are historical for that opt-in
+extension; original assignment/economy and native scene validation remain open.
+
 Continuation: [optional local first aid](mirage-local-first-aid-2026-10-17.md)
 now supplies an explicitly priced Revive workflow for new policies. Statements
 below about Revive being unavailable are historical for that opt-in extension;

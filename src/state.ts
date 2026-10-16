@@ -1,7 +1,8 @@
+import {configuredMirageReentry,createMirageSeries,normalizeMirageSeries,proposeMirageReentry,consumeMirageReentry,mirageReentryBeginTime,type MirageReentryPolicy,type MirageSeries} from "./mirage-reentry.js";
 import {planMirageRevive} from "./mirage-revive.js";
 import {validatedMiragePolicy,createMirageRun,normalizeMirageRun,advanceMirageReward,abandonMirageRun,type MiragePolicy,type MirageRun} from "./mirage-run.js";
 import {mirageRuntimeContext} from "./mirage-runtime-context.js";
-import {mirageCacheWire} from "./mirage-cache.js";
+import {mirageCacheWire,parseMirageCache,requireMirageReferenceCache} from "./mirage-cache.js";
 import {planMirageRegisterDeck,mirageRegisterDeckWire} from "./mirage-register.js";
 import {planMirageEnd,parseMirageEnd} from "./mirage-end.js";
 import {configuredHunterOvercome,hunterOvercomeWire,hunterOvercomeItems,hunterOvercomeFingerprint,type HunterOvercomePolicy} from "./hunter-overcome-reference.js";
@@ -595,6 +596,8 @@ export class ServerState {
   private configuredOvercomePolicy?:HunterOvercomePolicy;
   private capturedOvercomePolicy?:HunterOvercomePolicy;
   private readonly mirageRuns=new Map<number,MirageRun>();
+  private readonly mirageSeries=new Map<number,MirageSeries>();
+  private readonly mirageReentryPolicy?:MirageReentryPolicy;
   private readonly mirageMode:"disabled"|"local-configured";
   private readonly miragePolicy?:MiragePolicy;
   private readonly veteranGiftPolicy?:VeteranGiftPolicy;
@@ -638,7 +641,7 @@ export class ServerState {
       quickAdvancementMode?:"disabled"|"local-owned-tickets";
       friendlyBattleMode?:"disabled"|"local-owned-defense";
       hunterOvercomeMode?:"disabled"|"local-configured";hunterOvercomePolicy?:unknown;
-      mirageMode?:"disabled"|"local-configured";miragePolicy?:unknown;
+      mirageMode?:"disabled"|"local-configured";miragePolicy?:unknown;mirageReentryPolicy?:unknown;
       resourceShopMode?:"disabled"|"archive-2018-base-only";resourceApDailyLimit?:unknown;resourceBpDailyLimit?:unknown;
       rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
       veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
@@ -653,6 +656,11 @@ export class ServerState {
     const rawMirage=Object.hasOwn(options,"miragePolicy")?options.miragePolicy:process.env.BLUSTONE_MIRAGE_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_MIRAGE_POLICY_JSON);
     if(mirageMode==="local-configured")this.miragePolicy=validatedMiragePolicy(rawMirage);
     else if(rawMirage!==undefined)throw new TypeError("Mirage policy requires local-configured mode");
+    const rawReentry=Object.hasOwn(options,"mirageReentryPolicy")?options.mirageReentryPolicy:process.env.BLUSTONE_MIRAGE_REENTRY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_MIRAGE_REENTRY_JSON);
+    if(rawReentry!==undefined) {
+      if(!this.miragePolicy||mirageMode!=="local-configured")throw new TypeError("Mirage re-entry requires configured base policy");
+      this.mirageReentryPolicy=configuredMirageReentry(rawReentry,this.miragePolicy);
+    }
     const overcomeMode=Object.hasOwn(options,"hunterOvercomeMode")?options.hunterOvercomeMode:process.env.BLUSTONE_HUNTER_OVERCOME_MODE??"disabled";
     if(overcomeMode!=="disabled"&&overcomeMode!=="local-configured")throw new TypeError("Unknown Hunter transcendence mode");
     this.hunterOvercomeMode=overcomeMode;
@@ -818,26 +826,28 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
-    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13)throw new TypeError("Mirage run journals require schema12");
-    if((saved.version===12||saved.version===13)&&(!Array.isArray(saved.mirageRuns)||!saved.mirageRuns.length))throw new TypeError("Schema12 requires captured Mirage run journals");
+    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Mirage run journals require schema12");
+    if((saved.version===12||saved.version===13||saved.version===14)&&(!Array.isArray(saved.mirageRuns)||!saved.mirageRuns.length))throw new TypeError("Schema12 requires captured Mirage run journals");
+    if(saved.mirageSeries!==undefined&&saved.version!==14)throw new TypeError("Mirage re-entry journals require schema14");
+    if(saved.version===14&&(!Array.isArray(saved.mirageSeries)||!saved.mirageSeries.length))throw new TypeError("Schema14 requires captured Mirage re-entry journals");
     const hasMirageRevive=Array.isArray(saved.mirageRuns)&&saved.mirageRuns.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].policy)&&row[1].policy.revive_prices!==undefined);
-    if(hasMirageRevive&&saved.version!==13)throw new TypeError("Mirage first-aid policies require schema13");
+    if(hasMirageRevive&&saved.version!==13&&saved.version!==14)throw new TypeError("Mirage first-aid policies require schema13");
     if(saved.version===13&&!hasMirageRevive)throw new TypeError("Schema13 requires captured Mirage first-aid policy");
-    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Captured Hunter transcendence policy requires schema11");
+    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Captured Hunter transcendence policy requires schema11");
     if(saved.version===11&&saved.hunterOvercomePolicy===undefined)throw new TypeError("Schema11 requires a captured Hunter transcendence policy");
     if(saved.hunterOvercomePolicy!==undefined) {
       this.capturedOvercomePolicy=configuredHunterOvercome(saved.hunterOvercomePolicy,new Set(itemReference().item.map(row=>row.id)));
       if(this.configuredOvercomePolicy&&hunterOvercomeFingerprint(this.configuredOvercomePolicy)!==hunterOvercomeFingerprint(this.capturedOvercomePolicy))
         throw new TypeError("Configured transcendence policy differs from captured earned policy; refusing silent stat/cost changes");
     }
-    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
+    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
       throw new TypeError("Paid dorm expansion requires state schema10");
-    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
       [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
       throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
@@ -847,10 +857,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -931,13 +941,17 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
     if(saved.mirageRuns!==undefined)for(const row of saved.mirageRuns as unknown[]) {
       if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.mirageRuns.has(row[0]))throw new TypeError("Invalid Mirage journal owner");
       this.mirageRuns.set(row[0],normalizeMirageRun(row[1]));
+    }
+    if(saved.mirageSeries!==undefined)for(const row of saved.mirageSeries as unknown[]) {
+      if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.mirageRuns.has(row[0])||this.mirageSeries.has(row[0]))throw new TypeError("Invalid Mirage re-entry journal owner");
+      this.mirageSeries.set(row[0],normalizeMirageSeries(row[1],this.mirageRuns.get(row[0])!));
     }
     for (const row of saved.transportKeys) {
       if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== "string" || typeof row[1] !== "string") throw new Error("Malformed transport state");
@@ -970,7 +984,7 @@ export class ServerState {
     const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: [...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+    const snapshot = { version: this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
       ...(this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
       ...(this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
@@ -983,6 +997,7 @@ export class ServerState {
       ...(this.nextGuildNotificationId===undefined?{}:{nextGuildNotificationId:this.nextGuildNotificationId}),
       ...(this.capturedOvercomePolicy?{hunterOvercomePolicy:this.capturedOvercomePolicy}:{}),
       ...(this.mirageRuns.size?{mirageRuns:[...this.mirageRuns]}:{}),
+      ...(this.mirageSeries.size?{mirageSeries:[...this.mirageSeries]}:{}),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -1861,19 +1876,57 @@ export class ServerState {
 
   mirageResourcesRequired() {return this.mirageMode==="local-configured"||this.mirageRuns.size>0;}
 
-  private validateMirageRuns() {
-    for(const [pvid,run] of this.mirageRuns) {
-      const game=this.gameByPvid.get(pvid);if(!game)throw new TypeError("Missing Mirage owner game");
-      if(this.miragePolicy&&JSON.stringify(run.policy)!==JSON.stringify(this.miragePolicy))throw new TypeError("Configured Mirage policy differs from captured run");
-      const context=mirageRuntimeContext(game,run.cache,run.cache.inst_base.begin_ltime);
-      if(run.policy.stairs.some(stair=>stair.enemies.some(enemy=>!context.enemySupported(enemy))))throw new TypeError("Unsupported captured Mirage enemy policy");
+  private validateMiragePolicies(game:LocalGameState,run:MirageRun,policies:readonly MiragePolicy[]) {
+    const context=mirageRuntimeContext(game,run.cache,run.cache.inst_base.begin_ltime);
+    for(const policy of policies) {
+      if(policy.stairs.some(stair=>stair.enemies.some(enemy=>!context.enemySupported(enemy))))throw new TypeError("Unsupported captured Mirage enemy policy");
+      const reference=parseMirageCache({...run.cache,entry:[],inst_base:{...run.cache.inst_base,floor:policy.floor,stair:1,bg_res:policy.bg_res,dlg_begin:policy.dlg_begin,dlg_end:policy.dlg_end,deck:[]},
+        inst_enemy:policy.stairs[0].enemies,ref_stair:{res_prefix:policy.res_prefix,res_postfix_list:policy.res_postfix_list,list:policy.stairs.map(({grade,balance})=>({grade,balance}))},ref_hero:policy.hero});
+      requireMirageReferenceCache(reference,context);
     }
   }
 
-  private commitMirage(pvid:number,game:LocalGameState,next:LocalGameState,run:MirageRun) {
-    const old=this.mirageRuns.get(pvid),before={gold:game.gold,gacha_free_qty:game.gacha_free_qty,gacha_iap_qty:game.gacha_iap_qty,starter_cards:game.starter_cards,recruited_cards:game.recruited_cards};
+  private validateMirageRuns() {
+    for(const [pvid,run] of this.mirageRuns) {
+      const game=this.gameByPvid.get(pvid);if(!game)throw new TypeError("Missing Mirage owner game");
+      const series=this.mirageSeries.get(pvid),initial=series?.policy.floors.find(policy=>policy.floor===series.policy.initial_floor)??run.policy;
+      if(series) {
+        normalizeMirageSeries(series,run);
+        if(this.mirageReentryPolicy&&JSON.stringify(series.policy)!==JSON.stringify(this.mirageReentryPolicy))throw new TypeError("Configured Mirage re-entry policy differs from captured series");
+      }else if(this.mirageReentryPolicy)throw new TypeError("Existing Mirage attempt has no captured re-entry policy");
+      if(this.miragePolicy&&JSON.stringify(initial)!==JSON.stringify(this.miragePolicy))throw new TypeError("Configured Mirage policy differs from captured run");
+      this.validateMiragePolicies(game,run,series?.policy.floors??[run.policy]);
+    }
+  }
+
+  private enrollMirage(game:LocalGameState,policy:MiragePolicy,now:number):MirageRun {
+    assertOwnedCardCompatibility(game);
+    const cards=[...game.starter_cards,...game.recruited_cards],chosen=new Map<string,typeof cards[number]>();
+    for(const card of [...cards].sort((a,b)=>Number(b.rank)-Number(a.rank)||Number(b.exp)-Number(a.exp)||a.inst_id-b.inst_id)) {
+      const ref=starterReference.find(row=>row.base.id===card.ref_id);
+      if(!ref||ref.base.is_source!==0||card.awk_step!==0||!ref.stat.some(row=>row.rank===card.rank&&row.awk_step===0)||!ref.base.char_id)continue;
+      if(!chosen.has(ref.base.char_id))chosen.set(ref.base.char_id,card);
+    }
+    if(!chosen.size||chosen.size>100)throw new TypeError("Supported owned Mirage enrollment unavailable");
+    const ids=new Set([...chosen.values()].map(card=>card.inst_id));
+    for(const card of cards)card.mirage_remain_hp=ids.has(card.inst_id)?10000:-1;
+    const entries=[...chosen.values()].map(card=>({id:card.inst_id,mirage_remain_hp:10000}));
+    const run=createMirageRun(policy,entries,[],now);
+    const context=mirageRuntimeContext(game,run.cache,run.cache.inst_base.begin_ltime);
+    planMirageRegisterDeck(run.cache,JSON.stringify([entries[0].id]),context);
+    return run;
+  }
+
+  private commitMirage(pvid:number,game:LocalGameState,next:LocalGameState,run:MirageRun,series?:MirageSeries) {
+    const old=this.mirageRuns.get(pvid),oldSeries=this.mirageSeries.get(pvid),before={gold:game.gold,gacha_free_qty:game.gacha_free_qty,gacha_iap_qty:game.gacha_iap_qty,starter_cards:game.starter_cards,recruited_cards:game.recruited_cards};
+    const updatedSeries=series??(oldSeries?{...structuredClone(oldSeries),highest:Math.max(oldSeries.highest,run.cache.inst_base.highest)}:undefined);
+    if(updatedSeries)this.mirageSeries.set(pvid,normalizeMirageSeries(updatedSeries,run));
     Object.assign(game,{gold:next.gold,gacha_free_qty:next.gacha_free_qty,gacha_iap_qty:next.gacha_iap_qty,starter_cards:next.starter_cards,recruited_cards:next.recruited_cards});this.mirageRuns.set(pvid,run);
-    try{this.persist();}catch(error){Object.assign(game,before);if(old)this.mirageRuns.set(pvid,old);else this.mirageRuns.delete(pvid);throw error;}
+    try{this.persist();}catch(error){Object.assign(game,before);if(old)this.mirageRuns.set(pvid,old);else this.mirageRuns.delete(pvid);if(oldSeries)this.mirageSeries.set(pvid,oldSeries);else this.mirageSeries.delete(pvid);throw error;}
+  }
+
+  private mirageWire(run:MirageRun,series?:MirageSeries) {
+    const wire=mirageCacheWire(run.cache);if(series){wire.inst_base.highest=Math.max(series.highest,wire.inst_base.highest);wire.inst_base.begin_ltime=mirageReentryBeginTime(series,run,Math.floor(Date.now()/1000));}else if(run.cache.inst_base.state!==0)wire.inst_base.begin_ltime=Math.max(0,run.cache.inst_base.begin_ltime-86401);return wire;
   }
 
   private localMirageAction(pvid:number,route:string,payload:Record<string,unknown>):Record<string,unknown>|undefined {
@@ -1883,14 +1936,30 @@ export class ServerState {
     const refuse=(message:string)=>route==="/mirage/End"?mirageEndRefusal(2001,message):this.failure(2001,message);
     if(!game)return refuse("Mirage owner game unavailable");
     let next=structuredClone(game),run=existing?normalizeMirageRun(existing):undefined;
+    let series=run&&this.mirageSeries.has(pvid)?normalizeMirageSeries(this.mirageSeries.get(pvid),run):undefined;
     try {
       if(route==="/mirage/GetInfo") {
         if(![undefined,"0","1",0,1,false,true].includes(payload.reset as never))return refuse("Invalid Mirage reset flag");
         for(const key of ["stay","entry","inst_base","inst_enemy","ref_stair_list","ref_hero"])if(payload[key]!==undefined&&!["0","1",0,1,false,true].includes(payload[key] as never))return refuse("Invalid Mirage section flag");
         if(["1",1,true].includes(payload.reset as never)) {
           if(!run||this.mirageMode!=="local-configured")return refuse("Mirage reset/enrollment is unavailable");
-          if(run.cache.inst_base.state!==0) {
-            if(game.active_battle?.state==="active"||game.arena.active||game.search.active||this.dispatches.get(pvid)?.active)return refuse("Finish other combat/dispatch before abandoning Mirage");
+          if(game.active_battle?.state==="active"||game.arena.active||game.search.active||this.dispatches.get(pvid)?.active)return refuse("Finish other combat/dispatch before Mirage reset");
+          if(series) {
+            if(payload.stay===undefined)return refuse("Mirage re-entry requires an explicit stay choice");
+            const sections=["entry","inst_base","inst_enemy","ref_stair_list","ref_hero"];
+            if(sections.some(key=>Object.hasOwn(payload,key))&&sections.some(key=>!["1",1,true].includes(payload[key] as never)))return refuse("Mirage re-entry requires full cache hydration");
+            const consumed=consumeMirageReentry(series,run,["1",1,true].includes(payload.stay as never),now);
+            if(consumed.replay)return this.envelope(this.mirageWire(run,series));
+            series=consumed.series;
+            if(consumed.action==="reenter") {
+              mirageRuntimeContext(next,run.cache,run.cache.inst_base.begin_ltime);
+              run=this.enrollMirage(next,consumed.newPolicy,now);
+              this.validateMiragePolicies(next,run,series.policy.floors);
+            }else if(consumed.action==="abandon") {
+              run=abandonMirageRun(run);for(const card of [...next.starter_cards,...next.recruited_cards])card.mirage_remain_hp=1000;
+            }
+            this.commitMirage(pvid,game,consumed.action==="inspect"?game:next,run,series);
+          }else if(run.cache.inst_base.state!==0) {
             run=abandonMirageRun(run);
             for(const card of [...next.starter_cards,...next.recruited_cards])card.mirage_remain_hp=1000;
             this.commitMirage(pvid,game,next,run);
@@ -1902,30 +1971,24 @@ export class ServerState {
           if(game.active_battle?.state==="active"||game.arena.active||game.search.active||this.dispatches.get(pvid)?.active)return refuse("Finish active combat/dispatch before Mirage enrollment");
           const cards=[...next.starter_cards,...next.recruited_cards];
           if(cards.some(card=>card.mirage_remain_hp!==undefined&&card.mirage_remain_hp!==1000))return refuse("Unrepresented historical Mirage carry cannot be replaced");
-          assertOwnedCardCompatibility(next);
-          const chosen=new Map<string,typeof cards[number]>();
-          for(const card of [...cards].sort((a,b)=>Number(b.rank)-Number(a.rank)||Number(b.exp)-Number(a.exp)||a.inst_id-b.inst_id)) {
-            const ref=starterReference.find(row=>row.base.id===card.ref_id);
-            if(!ref||ref.base.is_source!==0||card.awk_step!==0||!ref.stat.some(row=>row.rank===card.rank&&row.awk_step===0)||!ref.base.char_id)continue;
-            if(!chosen.has(ref.base.char_id))chosen.set(ref.base.char_id,card);
-          }
-          if(!chosen.size||chosen.size>100)return refuse("Supported owned Mirage enrollment unavailable");
-          const ids=new Set([...chosen.values()].map(card=>card.inst_id));
-          for(const card of cards)card.mirage_remain_hp=ids.has(card.inst_id)?10000:-1;
-          const entries=[...chosen.values()].map(card=>({id:card.inst_id,mirage_remain_hp:10000}));
-          run=createMirageRun(this.miragePolicy,entries,[],now);
-          const context=mirageRuntimeContext(next,run.cache,run.cache.inst_base.begin_ltime);
-          if(run.policy.stairs.some(stair=>stair.enemies.some(enemy=>!context.enemySupported(enemy))))return refuse("Unsupported Mirage enemy policy");
-          planMirageRegisterDeck(run.cache,JSON.stringify([entries[0].id]),context);
-          this.commitMirage(pvid,game,next,run);
+          run=this.enrollMirage(next,this.miragePolicy,now);
+          series=this.mirageReentryPolicy?createMirageSeries(this.mirageReentryPolicy,run,now):undefined;
+          this.validateMiragePolicies(next,run,series?.policy.floors??[run.policy]);
+          this.commitMirage(pvid,game,next,run,series);
         }
-        const wire=mirageCacheWire(run.cache) as Record<string,unknown>;
+        const wire=this.mirageWire(run,series) as Record<string,unknown>;
         const flags=[["entry","entry"],["inst_base","inst_base"],["inst_enemy","inst_enemy"],["ref_stair_list","ref_stair"],["ref_hero","ref_hero"]];
         if(flags.some(([key])=>Object.hasOwn(payload,key)))return this.envelope(Object.fromEntries(flags.filter(([key])=>["1",1,true].includes(payload[key] as never)).map(([,key])=>[key,wire[key]])));
         return this.envelope(wire);
       }
       if(!run||this.mirageMode!=="local-configured")return refuse("Mirage mutations are disabled");
       if(game.active_battle?.state==="active"||game.arena.active||game.search.active||this.dispatches.get(pvid)?.active)return refuse("Another combat/dispatch owns these Hunters");
+      if(route==="/mirage/GetNextFloor") {
+        if(!series)return this.envelope({next_floor:run.cache.inst_base.floor});
+        const proposed=proposeMirageReentry(series,run,now);
+        if(!proposed.replay)this.commitMirage(pvid,game,game,run,proposed.series);
+        return this.envelope({next_floor:proposed.next_floor});
+      }
       if(route==="/mirage/RegisterDeck") {
         const context=mirageRuntimeContext(next,run.cache,run.cache.inst_base.begin_ltime);
         const planned=planMirageRegisterDeck(run.cache,payload.inst_list,context);run.cache=planned.cache;delete run.lastEnd;
@@ -1975,7 +2038,7 @@ export class ServerState {
     if (route === "/mirage/GetFriendInfo") {
       const peers=(this.socialFriends?.relations??[]).filter(row=>row.state==="accepted"&&(row.from_pvid===account.pvid||row.to_pvid===account.pvid)).map(row=>row.from_pvid===account.pvid?row.to_pvid:row.from_pvid);
       return this.envelope(mirageFriendFloors(peers.flatMap(pvid=>{const peer=this.accountsByPvid.get(pvid),run=this.mirageRuns.get(pvid);
-        return peer&&run&&peer.serverId===account.serverId&&!Object.hasOwn(account.socialBlocks??{},String(pvid))&&!Object.hasOwn(peer.socialBlocks??{},String(account.pvid))?[{nickname:peer.nickname,highestFloor:run.cache.inst_base.highest}]:[];})));
+        return peer&&run&&peer.serverId===account.serverId&&!Object.hasOwn(account.socialBlocks??{},String(pvid))&&!Object.hasOwn(peer.socialBlocks??{},String(account.pvid))?[{nickname:peer.nickname,highestFloor:Math.max(run.cache.inst_base.highest,this.mirageSeries.get(pvid)?.highest??0)}]:[];})));
     }
     if (route === "/mirage/GetInfo") {
       // Native renew: a refused GetNextFloor delegates zero, which can match

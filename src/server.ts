@@ -51,13 +51,13 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
   rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
   veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
   profileMode?:"disabled"|"archive-profile-projection";
-  mirageMode?:"disabled"|"local-configured";miragePolicy?:unknown;
+  mirageMode?:"disabled"|"local-configured";miragePolicy?:unknown;mirageReentryPolicy?:unknown;
   fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}): AppContext {
   const baseUrl = options.baseUrl ?? "http://127.0.0.1:8080";
   if((options.mirageMode??process.env.BLUSTONE_MIRAGE_MODE)==="local-configured")verifyMirageRuntimePackages();
   const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds,guildChatMode:options.guildChatMode,publicChatMode:options.publicChatMode,
     ...(Object.hasOwn(options,"dispatchMode")?{dispatchMode:options.dispatchMode}:{}),...(Object.hasOwn(options,"dispatchPolicy")?{dispatchPolicy:options.dispatchPolicy}:{}),
-    ...Object.fromEntries(["mirageMode","miragePolicy","rupeeShopMode","rupeeShopDailyLimit","veteranGiftMode","veteranPointsPerTicket","profileMode","fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
+    ...Object.fromEntries(["mirageMode","miragePolicy","mirageReentryPolicy","rupeeShopMode","rupeeShopDailyLimit","veteranGiftMode","veteranPointsPerTicket","profileMode","fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
   if(state.mirageResourcesRequired())verifyMirageRuntimePackages();
   const endpoints = discoverEndpoints(options.catalogPath ?? defaultCatalogPath());
   const openapi = buildOpenApi(endpoints, baseUrl);

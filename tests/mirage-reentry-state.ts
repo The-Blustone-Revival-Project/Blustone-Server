@@ -1,0 +1,83 @@
+import assert from 'node:assert/strict';
+import {mkdtempSync,readFileSync,writeFileSync,mkdirSync,rmdirSync,rmSync,existsSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import {ServerState} from '../src/state.js';
+import {cardInstance,starterReference} from '../src/bootstrap.js';
+
+// Authored free-local graph, quota, enemies and rewards; no original law claim.
+const directory=mkdtempSync(path.join(tmpdir(),'blustone-mirage-reentry-')),file=path.join(directory,'state.json');
+const realNow=Date.now,day0=1_800_000_000,dayLength=86400;let now=day0;Date.now=()=>now*1000;
+const rank=Math.max(3,starterReference.find(row=>row.base.id==='003')!.stat[0].rank);
+const enemy={ref_id:'003',hp_percent:10000,rank,rank_up_cnt:0,overcome_cnt:0,exp:0,skill_1_level:1,skill_2_level:1,skill_3_level:1,skill_4_level:rank>=4?1:0,skill_5_level:rank>=5?1:0};
+const floor=(floor:number,deadline=2_000_000_000)=>({enrollment:'rank-exp-id-projection',floor,bg_res:'MIRAGE_BG_G',dlg_begin:'',dlg_end:'',res_prefix:'MRG',res_postfix_list:['002'],stairs:Array.from({length:floor>=21?6:3},(_,i)=>({grade:i%4,balance:10000,enemies:[enemy],gold:i+1})),hero:{bonus:0,end_ltime:deadline,cur:[],next:[]},revive_prices:[3]});
+const base=floor(1),additional=floor(21),reentry={payment:'free-local',daily_attempts:1,day_offset_minutes:0,on_unavailable:'abandon-local',floors:[additional],transitions:[{floor:1,cleared:21,failed:1},{floor:21,cleared:21,failed:1}]};
+const options={mirageMode:'local-configured' as const,miragePolicy:base,mirageReentryPolicy:reentry};
+try{
+ const state=new ServerState('http://localhost',file,options),raw=state.registerGuest({device_id:'reentry-owner'},{}).ret_data as any,actor={pvid:raw.pvid,otp:raw.otp};
+ const peer=state.registerGuest({device_id:'reentry-peer'},{}).ret_data as any;
+ const games=(state as any).gameByPvid as Map<number,any>,accounts=(state as any).accountsByPvid as Map<number,any>,runs=(state as any).mirageRuns as Map<number,any>,series=(state as any).mirageSeries as Map<number,any>,game=games.get(actor.pvid);
+ game.starter_cards=[cardInstance(1000001,'003',rank)];game.recruited_cards=[];game.leader_inst_id=1000001;game.next_card_inst_id=1000002;game.decks=[{type:1,list:[1000001,0,0,0,0]}];
+ game.card_book=[...game.card_book.filter((row:any)=>row.ref_id!=='003'),{ref_id:'003',rank}];game.gold=100;game.gacha_free_qty=10;game.gacha_iap_qty=10;game.ap=1;game.bp=1;game.ap_updated_at=(day0-dayLength)*1000;game.bp_updated_at=game.ap_updated_at;(state as any).persist();
+ const originalGame=structuredClone(game),peerBefore=structuredClone(games.get(peer.pvid));
+ const call=(route:string,extra:Record<string,unknown>={},s=state)=>s.mirageAction('/mirage/'+route,{...actor,...extra},{}) as any;
+ const snapshot=()=>{const refs:{root:any;keys:string[];value:any}[]=[];const walk=(root:any,value:any,keys:string[]=[])=>{if(!value||typeof value!=='object')return;refs.push({root,keys,value});for(const [key,child]of Object.entries(value))walk(root,child,[...keys,key]);};for(const value of [...games.values(),...accounts.values(),...runs.values(),...series.values()])walk(value,value);return{bytes:readFileSync(file),games:structuredClone([...games]),accounts:structuredClone([...accounts]),runs:structuredClone([...runs]),series:structuredClone([...series]),refs};};
+ const unchanged=(b:ReturnType<typeof snapshot>)=>{assert.deepEqual(readFileSync(file),b.bytes);assert.deepEqual([...games],b.games);assert.deepEqual([...accounts],b.accounts);assert.deepEqual([...runs],b.runs);assert.deepEqual([...series],b.series);for(const {root,keys,value}of b.refs)assert.equal(keys.reduce((row,key)=>row[key],root),value,keys.join('.'));};
+ const faults=(operation:()=>any)=>{const before=snapshot();mkdirSync(file+'.tmp');try{assert.equal(operation().result_code,2001);}finally{rmdirSync(file+'.tmp');}unchanged(before);const blocked=path.join(directory,'rename-blocked');mkdirSync(blocked);(state as any).stateFile=blocked;try{assert.equal(operation().result_code,2001);}finally{(state as any).stateFile=file;rmdirSync(blocked);if(existsSync(blocked+'.tmp'))rmSync(blocked+'.tmp');}unchanged(before);};
+ const reset=(stay='0',extra:Record<string,unknown>={})=>call('GetInfo',{reset:'1',stay,...extra});
+ const end=(hp:number,enemyHp:number)=>call('End',{floor:String(runs.get(actor.pvid).policy.floor),stair:String(runs.get(actor.pvid).cache.inst_base.stair),remain_deck_hp:JSON.stringify([{inst_id:1000001,hp_percent:hp}]),remain_enemy_hp:JSON.stringify([enemyHp])});
+ const complete=()=>{if(runs.get(actor.pvid).cache.inst_base.state!==2)assert.equal(call('RegisterDeck',{inst_list:'[1000001]'}).result_code,1);const count=runs.get(actor.pvid).policy.stairs.length;for(let i=1;i<=count;i++){if(runs.get(actor.pvid).cache.inst_base.state!==2)assert.equal(end(9000-i,0).result_code,1);assert.equal(call('Reward',{floor:String(runs.get(actor.pvid).policy.floor),stair:String(i)}).result_code,1);}return count;};
+ const beforeInitial=snapshot();assert.deepEqual(call('GetInfo',{entry:'0'}).ret_data,{});unchanged(beforeInitial);faults(()=>call('GetInfo'));
+ const initial=call('GetInfo');assert.equal(initial.result_code,1,JSON.stringify(initial));assert.equal(series.get(actor.pvid).used,1);assert.equal(series.get(actor.pvid).generation,1);assert.equal(JSON.parse(readFileSync(file,'utf8')).version,14);
+ assert.equal(runs.get(actor.pvid).cache.inst_base.begin_ltime,day0);assert.equal(initial.ret_data.inst_base.begin_ltime,day0-86401);assert.ok(initial.ret_data.inst_base.begin_ltime+86400<now);
+ const fresh=snapshot();assert.equal(reset().result_code,2001);unchanged(fresh);
+ assert.equal(complete(),3);const privateBegin=runs.get(actor.pvid).cache.inst_base.begin_ltime;
+ const completed=call('GetInfo').ret_data;assert.equal(completed.inst_base.highest,1);assert.equal(completed.inst_base.begin_ltime,Math.floor(day0/dayLength)*dayLength);assert.equal(runs.get(actor.pvid).cache.inst_base.begin_ltime,privateBegin);
+ faults(()=>call('GetNextFloor'));assert.equal(call('GetNextFloor').ret_data.next_floor,1);assert.equal(series.get(actor.pvid).offer.action,'inspect');
+ const offer=snapshot();assert.equal(call('GetNextFloor').ret_data.next_floor,1);unchanged(offer);faults(()=>reset('1'));assert.equal(reset('1').result_code,1);assert.equal(series.get(actor.pvid).generation,1);
+ const inspected=snapshot();assert.equal(reset('1').result_code,1);unchanged(inspected);
+ now=day0+dayLength;assert.ok(call('GetInfo').ret_data.inst_base.begin_ltime+86400<now);assert.equal(call('GetNextFloor').ret_data.next_floor,21);
+ for(const flags of [{entry:'1'},{entry:'1',inst_base:'1',inst_enemy:'1',ref_stair_list:'1',ref_hero:'0'},{entry:'bad'}]){const b=snapshot();assert.equal(reset('0',flags).result_code,2001);unchanged(b);}
+ const noStay=snapshot();assert.equal(call('GetInfo',{reset:'1'}).result_code,2001);unchanged(noStay);faults(()=>reset());
+ const second=reset();assert.equal(second.result_code,1,JSON.stringify(second));assert.equal(second.ret_data.inst_base.floor,21);assert.equal(second.ret_data.inst_base.highest,1);assert.equal(second.ret_data.entry[0].mirage_remain_hp,10000);assert.equal(series.get(actor.pvid).generation,2);assert.equal(series.get(actor.pvid).used,1);assert.equal(series.get(actor.pvid).history[0].completed,true);assert.deepEqual(series.get(actor.pvid).history[0].revive_ids,[]);
+ assert.equal(call('RegisterDeck',{inst_list:'[1000001]'}).result_code,1);assert.equal(end(7000,0).result_code,1);
+ const damaged=snapshot(),repair=reset();assert.equal(repair.result_code,1);assert.equal(repair.ret_data.entry[0].mirage_remain_hp,7000);assert.equal(repair.ret_data.inst_enemy[0].hp_percent,0);unchanged(damaged);
+ assert.equal(complete(),6);assert.equal(call('GetInfo').ret_data.inst_base.highest,21);assert.equal(series.get(actor.pvid).highest,21);
+ now=day0+2*dayLength;assert.equal(call('GetNextFloor').ret_data.next_floor,21);assert.equal(reset('1').result_code,1);assert.equal(series.get(actor.pvid).generation,3);assert.equal(runs.get(actor.pvid).policy.floor,21);
+ assert.equal(call('RegisterDeck',{inst_list:'[1000001]'}).result_code,1);assert.equal(end(0,6000).result_code,1);
+ // Paid first aid is archived per attempt, not refunded or carried as stock.
+ assert.equal(call('Revive',{target_inst_id:1000001}).result_code,1);assert.equal(end(0,5000).result_code,1);assert.deepEqual(runs.get(actor.pvid).revive_ids,[1000001]);
+ // Quota exhausted active attempts offer a reward-free exit, not another entry.
+ assert.equal(call('GetNextFloor').ret_data.next_floor,21);assert.equal(series.get(actor.pvid).offer.action,'abandon');faults(()=>reset('1'));
+ assert.equal(reset('1').result_code,1);assert.equal(runs.get(actor.pvid).abandoned,true);assert.equal(game.starter_cards[0].mirage_remain_hp,1000);assert.equal(series.get(actor.pvid).generation,3);assert.equal(call('GetInfo').ret_data.inst_base.highest,21);
+ now=day0+3*dayLength;assert.equal(call('GetNextFloor').ret_data.next_floor,1);assert.equal(reset('1').result_code,1);assert.equal(runs.get(actor.pvid).policy.floor,21,'stay1 retains current floor despite shallower offer');assert.equal(series.get(actor.pvid).generation,4);assert.deepEqual(series.get(actor.pvid).history[2].revive_ids,[1000001]);assert.deepEqual(runs.get(actor.pvid).revive_ids,[]);assert.equal(game.gacha_free_qty,7);assert.equal(game.gacha_iap_qty,10);
+ // A changed run invalidates its prior proposal; a fresh request repairs it.
+ now=day0+4*dayLength;assert.equal(call('GetNextFloor').ret_data.next_floor,1);assert.equal(call('RegisterDeck',{inst_list:'[1000001]'}).result_code,1);assert.equal(end(8000,0).result_code,1);
+ const stale=snapshot();assert.equal(reset().result_code,2001);unchanged(stale);assert.equal(call('GetNextFloor').ret_data.next_floor,1);assert.equal(reset().ret_data.inst_base.floor,1);assert.equal(series.get(actor.pvid).generation,5);
+ const rollbackTime=now;now=day0;const backward=snapshot();assert.equal(call('GetNextFloor').result_code,2001);assert.equal(reset().result_code,2001);unchanged(backward);now=rollbackTime;
+ // Prior independent feature cohorts survive schema14 and a subsequent save.
+ const cohort=JSON.parse(readFileSync(file,'utf8')),cg=cohort.gameStates.find(([id]:any)=>id===actor.pvid)[1],ca=cohort.accounts.find((row:any)=>row.pvid===actor.pvid);
+ cg.dorm_expansion={capacity:103,manda:1,gold:0};cg.fuel_shop={day:20000,manda:0,gold:0,coupon:1};ca.profileSettings={info_message:'Retained in Mirage series',rename_count:1};ca.rupeeShopCounter={day:20000,manda:1,coupon:0};
+ const cohortFile=path.join(directory,'cohorts.json');writeFileSync(cohortFile,JSON.stringify(cohort));const cohortState=new ServerState('http://localhost',cohortFile,{mirageMode:'disabled'});cohortState.registerGuest({device_id:'cohort-extra'},{});
+ const savedCohort=JSON.parse(readFileSync(cohortFile,'utf8'));assert.equal(savedCohort.version,14);assert.deepEqual(savedCohort.gameStates.find(([id]:any)=>id===actor.pvid)[1].dorm_expansion,cg.dorm_expansion);assert.deepEqual(savedCohort.accounts.find((row:any)=>row.pvid===actor.pvid).profileSettings,ca.profileSettings);assert.deepEqual(savedCohort.mirageSeries,cohort.mirageSeries);
+ const durable=snapshot();const restart=new ServerState('http://localhost',file,options);assert.equal(call('GetInfo',{},restart).ret_data.inst_base.highest,21);assert.deepEqual(readFileSync(file),durable.bytes);
+ const off=new ServerState('http://localhost',file,{mirageMode:'disabled'});assert.equal(call('GetInfo',{},off).ret_data.inst_base.highest,21);assert.equal(call('GetNextFloor',{},off).result_code,2001);assert.equal(call('GetInfo',{reset:'1',stay:'0'},off).result_code,2001);assert.deepEqual(readFileSync(file),durable.bytes);
+ const retuned=structuredClone(reentry);retuned.daily_attempts=2;assert.throws(()=>new ServerState('http://localhost',file,{...options,mirageReentryPolicy:retuned}),/differ|match/i);assert.deepEqual(readFileSync(file),durable.bytes);
+ for(const version of [1,11,12,13]){const bad=JSON.parse(durable.bytes.toString());bad.version=version;const invalid=path.join(directory,'old-'+version+'.json');writeFileSync(invalid,JSON.stringify(bad));const bytes=readFileSync(invalid);assert.throws(()=>new ServerState('http://localhost',invalid,{mirageMode:'disabled'}));assert.deepEqual(readFileSync(invalid),bytes);}
+ for(const field of ['mirageSeries','mirageRuns','dispatches','quests']){const bad=JSON.parse(durable.bytes.toString());delete bad[field];const invalid=path.join(directory,'missing-'+field+'.json');writeFileSync(invalid,JSON.stringify(bad));const bytes=readFileSync(invalid);assert.throws(()=>new ServerState('http://localhost',invalid,{mirageMode:'disabled'}));assert.deepEqual(readFileSync(invalid),bytes);}
+ assert.deepEqual(games.get(peer.pvid),peerBefore);assert.equal(game.ap,originalGame.ap);assert.equal(game.bp,originalGame.bp);assert.equal(game.ap_updated_at,originalGame.ap_updated_at);assert.equal(game.bp_updated_at,originalGame.bp_updated_at);assert.equal(game.gold,127,'Only actually claimed 3+6 authored rewards are paid');
+ // Expired cohorts remain escapable. A valid pre-expiry offer is stale once
+ // its destination expires; requesting again produces abandon, without quota.
+ const expiryFile=path.join(directory,'expiry.json');now=day0;const expBase=floor(1,day0+10),expNext=floor(21,day0+dayLength+10);
+ const expOptions={...options,miragePolicy:expBase,mirageReentryPolicy:{...reentry,floors:[expNext],transitions:[{floor:1,cleared:21,failed:21},{floor:21,cleared:1,failed:1}]}};const exp=new ServerState('http://localhost',expiryFile,expOptions),er=exp.registerGuest({device_id:'expiry-owner'},{}).ret_data as any,ea={pvid:er.pvid,otp:er.otp};
+ const ec=(route:string,extra:object={})=>exp.mirageAction('/mirage/'+route,{...ea,...extra},{}) as any;assert.equal(ec('GetInfo').result_code,1);now=day0+dayLength;
+ assert.equal(ec('GetNextFloor').ret_data.next_floor,21,'live destination offered despite expired current cohort');const expiredStay=readFileSync(expiryFile);assert.equal(ec('GetInfo',{reset:'1',stay:'1'}).result_code,2001);assert.deepEqual(readFileSync(expiryFile),expiredStay);assert.equal((exp as any).mirageSeries.get(ea.pvid).generation,1);
+ // The same offer expires before consumption: no reset, healing or quota use.
+ now+=11;const expiredOffer=readFileSync(expiryFile);assert.equal(ec('GetInfo',{reset:'1',stay:'0'}).result_code,2001);assert.deepEqual(readFileSync(expiryFile),expiredOffer);assert.equal((exp as any).mirageSeries.get(ea.pvid).used,1);
+ const entries=ec('GetInfo').ret_data.entry;for(const row of entries){assert.equal(ec('RegisterDeck',{inst_list:JSON.stringify([row.id])}).result_code,1);assert.equal(ec('End',{floor:'1',stair:'1',remain_deck_hp:JSON.stringify([{inst_id:row.id,hp_percent:0}]),remain_enemy_hp:'[5000]'}).result_code,1);}
+ assert.equal(ec('GetNextFloor').ret_data.next_floor,1,'all future cohorts expired: current-floor abandon offer');assert.equal((exp as any).mirageSeries.get(ea.pvid).offer.action,'abandon');assert.equal(ec('GetInfo',{reset:'1',stay:'1'}).result_code,1);assert.equal((exp as any).mirageRuns.get(ea.pvid).abandoned,true);assert.ok((exp as any).gameByPvid.get(ea.pvid).starter_cards.every((card:any)=>card.mirage_remain_hp===1000));
+ const es=(exp as any).mirageSeries.get(ea.pvid);assert.equal(es.generation,1);assert.equal(es.used,1);const exited=readFileSync(expiryFile);assert.equal(ec('GetInfo',{reset:'1',stay:'1'}).result_code,1);assert.deepEqual(readFileSync(expiryFile),exited);
+ // Legacy single-floor saves keep the original local abandon policy.
+ now=day0;const legacyFile=path.join(directory,'legacy.json'),legacy=new ServerState('http://localhost',legacyFile,{mirageMode:'local-configured',miragePolicy:base});const lr=legacy.registerGuest({device_id:'legacy-owner'},{}).ret_data as any,la={pvid:lr.pvid,otp:lr.otp};assert.equal((legacy.mirageAction('/mirage/GetInfo',la,{}) as any).result_code,1);assert.equal((legacy.mirageAction('/mirage/GetNextFloor',la,{}) as any).ret_data.next_floor,1);assert.equal((legacy.mirageAction('/mirage/GetInfo',{...la,reset:'1',stay:'1'},{}) as any).result_code,1);assert.equal((legacy as any).mirageRuns.get(la.pvid).abandoned,true);assert.equal((legacy as any).mirageSeries.size,0);assert.equal(JSON.parse(readFileSync(legacyFile,'utf8')).version,13);assert.throws(()=>new ServerState('http://localhost',legacyFile,options),/legacy|attach|captur|series/i);
+ console.log('mirage-reentry-state: lifecycle, quota, CURRENT repair, exact rollback, schema14, expiry and legacy passed');
+}finally{Date.now=realNow;rmSync(directory,{recursive:true,force:true});}

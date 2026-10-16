@@ -1,5 +1,10 @@
 # Optional local Mirage first aid
 
+Continuation: [configured re-entry](mirage-local-reentry-2026-10-17.md) now
+supports explicit multi-floor attempts in schema14. Statements below about
+new attempts/floor choices being unavailable are historical for that opt-in
+extension; original assignment/economy and native scene validation remain open.
+
 First aid extends the [configured Mirage run](mirage-local-run-2026-10-17.md)
 using real enrolled Hunters and existing Manda. It supplies no item, Hunter,
 currency or original price. The native request/receipt is documented in

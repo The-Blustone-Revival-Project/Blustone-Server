@@ -1,5 +1,10 @@
 # Mirage combat starts from hydrated caches, not a guessed Begin receipt
 
+Continuation: [configured local re-entry](mirage-local-reentry-2026-10-17.md)
+now supplies explicit captured floor choices. Historical unsupported-server
+statements below are superseded only for that mode; original floor policy
+and native scene validation remain incomplete.
+
 2026-10-14. Read-only original ARM SHA256
 `c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec`;
 Ghidra code coordinates ELF+0x10000. Existing DataDump Mirage findings and
