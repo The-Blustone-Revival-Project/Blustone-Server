@@ -19,7 +19,7 @@ export function parseMirageRegisterDeck(raw:unknown):string[] {
     if(!/^(?:0|[1-9]\d*)$/.test(id)||BigInt(id)>0xffff_ffff_ffff_ffffn)throw new TypeError("Invalid Mirage registration uint64 identity");return id;
   });
 }
-/** Supported LOCAL existing-cache change only. Exact native same-name
+/** Supported LOCAL existing-cache change only. Exact native same-character-family
  * exclusion and living/owned slots are checked by readiness. No publication,
  * persistence, enrollment or battle-start endpoint is manufactured here. */
 export function planMirageRegisterDeck(rawCache:unknown,instList:unknown,context:MirageReadiness) {

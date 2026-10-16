@@ -9,7 +9,7 @@ const source={entry:[{id:101,mirage_remain_hp:10000},{id:102,mirage_remain_hp:50
     deck:[101,102,0],tier_percent:0,highest:1,revive_price:0,begin_ltime:100},inst_enemy:[enemy],
   ref_stair:{res_prefix:"AUTHORED_PREFIX_",res_postfix_list:["002"],list:[{grade:1,balance:10000}]},
   ref_hero:{bonus:0,end_ltime:200,cur:["AUTHORED_HERO_A"],next:["AUTHORED_HERO_B"]}};
-const context:MirageReadiness={owned:new Map([[101,{ref_id:"AUTHORED_HERO_A",name:"Authored A"}],[102,{ref_id:"AUTHORED_HERO_B",name:"Authored B"}]]),
+const context:MirageReadiness={owned:new Map([[101,{ref_id:"AUTHORED_HERO_A",char_id:"Authored A"}],[102,{ref_id:"AUTHORED_HERO_B",char_id:"Authored B"}]]),
   commitments:new Map([[101,10000],[102,5000]]),heroIds:new Set(["AUTHORED_HERO_A","AUTHORED_HERO_B"]),
   resources:new Set(["AUTHORED_BASE","AUTHORED_PREFIX_002"]),dialogueIds:new Set(["AUTHORED_DIALOG"]),
   environments:new Map([["env-key","STI002"]]),readyEnvironments:new Set(["env-key"]),

@@ -1845,7 +1845,7 @@ export class ServerState {
     if (route === "/mirage/GetFriendInfo") return this.envelope(mirageFriendFloors());
     if (route === "/mirage/GetInfo") {
       // Native renew: a refused GetNextFloor delegates zero, which can match
-      // Floor0 and request GetInfo(reset:"t", stay:"t"). Gbfdeec/Gbfd250.
+      // Floor0 and request GetInfo(reset:"1", stay:"1"). Gbfdeec/Gbfd250.
       // Do not acknowledge a run reset by returning the read-only empty lobby.
       if (["t", "true", "1", true, 1].includes(payload.reset as string | boolean | number))
         return this.failure(2001, "Mirage run reset is not reconstructed");

@@ -54,7 +54,7 @@ wallet parser or quest parser occurs in this inner callback.** Registering a
 party is not proof of enrolling/resetting Hunters to10000 HP or creating a
 run. Those producers remain separate required provenance.
 
-## UI admission, five slots and duplicate-name rule
+## UI admission, five slots and duplicate-character-family rule
 
 CSRExploreMirageDeckHandler.Init **G928dcc** sets its slot count to
 **5** at G928de4..de6 and initializes the selected vector to that size.
@@ -82,21 +82,22 @@ an instruction to add a duplicate. For different IDs it compares two
 **CSRCardInfo strings at+30** G92a47a..4ee and rejects equal strings with
 “same character cannot deploy simultaneously” G92a612..628.
 
-The compared field is positively **`base.name`**, not ref_id or char_id:
-CSRCardInfoContainer.SetCard G87bd16 selects the `name` literal, converts
-the string G87bd24..34 and stores it into CardInfo+30 G87bd3c..66.
-The preceding `char_id` selection G87bcbe stores to+3c separately. Native
-duplicate checking is exact byte-string name equality (length then bytes or
-memcmp), with no case normalization here. Distinct refs sharing the same
-source display name are rejected. Existing distinct-ref readiness alone
-does not close this UI restriction; a server policy must use trustworthy
-source names or explicitly acknowledge a narrower local approximation.
+Correction2026-10-17: the compared field is **base.char_id**, not display
+name. The old paragraph mistook the shared allocation for its returned object.
+SetCard allocates control/object storage together and returns allocation+0x0c.
+Name is written at allocation+0x30, hence object+0x24; char_id is written at
+allocation+0x3c, hence object+0x30. GetCardData and CSRCard.GetCardInfo preserve
+that object pointer. The picker compares object+0x30 exactly by length/bytes,
+without case normalization. Distinct references in one family cannot deploy
+together; different families with equal display names pass this particular
+gate. Full pointer proof and addresses are in
+[Mirage character-family correction](mirage-character-family-owner-correction-2026-10-17.md).
 
 The picker checks clicked gauge<=0 in mode0 G92a5f0..604 and refuses it
-G92a6ce..6e4. It rejects same-name selection when adding, refuses when no
+G92a6ce..6e4. It rejects same-family selection when adding, refuses when no
 empty slot exists G92a644..65a, and otherwise inserts into the first empty
 slot G92a672..696. Removing an already-selected same instance happens before
-the living-gauge check and is allowed. Duplicate-name comparison is stronger
+the living-gauge check and is allowed. Duplicate-family comparison is stronger
 than merely requiring different Hunter instance IDs or different refs.
 
 ## Caller completion and remaining producer boundary
@@ -110,7 +111,7 @@ RegisterDeck has a positive result guard before parsing.
 
 Implementable contract: authenticated full64-ID list registration for an
 **already independently established run/entry set**, one through five owned
-living selected Hunters, no duplicate instances or exact source names,
+living selected Hunters, no duplicate instances or exact character families,
 atomic persisted party replacement, bare numeric-ID-array response. The
 one-to-five and strict scalar checks are conservative server admission of the
 native UI subset; builder itself does not enforce them. No native initial

@@ -1,0 +1,23 @@
+[
+  {
+    "name": "LEVELING.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/LEVELING.jet",
+    "destination": "resources/runtime/assets/LEVELING.jet",
+    "bytes": 18524,
+    "sha256": "ba73fff17002cc94f7f1a98bf657be1bef042283051a5b92c395347006d3c57e"
+  },
+  {
+    "name": "ST002.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/ST002.jet",
+    "destination": "resources/runtime/assets/ST002.jet",
+    "bytes": 2985916,
+    "sha256": "e75a9e7be84632e960a3084e4262726604c013d96633c3015d125f9ada9129ba"
+  },
+  {
+    "name": "MIRAGE.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/MIRAGE.jet",
+    "destination": "resources/runtime/assets/MIRAGE.jet",
+    "bytes": 3861142,
+    "sha256": "d2cf0adca895de1174f35f507cf5e38a21b8e74572a5c895c50ad6c062f4374e"
+  }
+]

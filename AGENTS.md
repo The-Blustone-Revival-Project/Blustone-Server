@@ -1,3 +1,77 @@
+## Latest continuation: Mirage resources, family correction and End planner (2026-10-17)
+
+Previous checkpoint2e4bc86 corrected ordinary transcendence source admission.
+This checkpoint advances Mirage restoration; it DOES NOT enable a Mirage run.
+Goal ACTIVE. No live profile/private save/device/APK/original asset/Docker/
+Collector/inference changes. Input hold persists. Server/Instrumented writes
+only; DataDump read only. No rebuild/release owed.
+
+IMPORTANT native owner correction: Mirage duplicate-party comparison uses
+base.char_id, NOT base.name. SetCard allocates A/control and returns A+0xc;
+name at A+30 is object+24, char_id at A+3c is object+30. The map/GetCardData/
+FindCardByID/card+4c/GetCardInfo chain preserves that object pointer into
+OnClickBottom. Earlier Mirage docs misread allocation-relative offsets.
+Readiness now takes owned ref_id+char_id; different names in one family refuse,
+shared names in distinct families pass. Existing distinct-ref check is still
+additional LOCAL readiness. Overcome char_id logic was confirmed correct.
+Full chain: docs/mirage-character-family-owner-correction-2026-10-17.md.
+
+Inactive config/profiles/current-e6-mirage.json preserves exact139 baseline
+names and appends only original MIRAGE.jet ->140/stamp1634687. LEVELING/ST002
+already selected and are independently pinned prerequisites. Preparer verifies
+all3 original bytes/provenance, conflicting duplicate copies, complete baseline,
+future/overflow/malformed stamps and idempotence. No folded extras, synthetic
+art/enemies/floors/grants or activation. Script --inspect-only writes nothing.
+Actual compiled ephemeral HTTP proof:140 ordered/coherent manifest rows and
+all3 downloaded PKGI containers have exact tables/offsets/EOF, original SHA/MD5,
+outer MD5 and size. Baseline/profile/originals unchanged; no saved account used.
+See docs/mirage-resource-profile-preparation-2026-10-17.md.
+
+src/mirage-end.ts supplies pure report decoder + bound carry transition.
+Exact native JSON-string player/enemy collections; full64 numeric player IDs;
+positive signed32 floor/stair and normal HP0..10000 are LOCAL supported bounds.
+Complete existing cache/readiness binds exact owned selected camp and enemies.
+Exactly one surviving camp required (LOCAL ambiguity handling); player win
+->state2, loss->state1. Updates only selected entry/enemy HP and state, retaining
+reserve HP, healed participants, reference/progression fields and coordinates.
+Native reply uses remain_hp_percent; request uses hp_percent. Canonical report
+fingerprint prepared for future retry journal. No runtime registration/End/
+reward/journal or automatic enrollment/HP1000 migration is enabled. Default End
+still omits ret_data on refusal. Details: docs/mirage-end-planner-2026-10-17.md.
+
+GetInfo request sends exact strings0/1 reset/stay and section bits1/2/4/8/16;
+reset0 XOR-suppresses populated caches; reset1 bypasses suppression. Request
+ref_stair_list corresponds to response ref_stair. No enrollment IDs/HP/price/
+run nonce sent. Guarded callback independently parses present sections; entry
+resets all native owned carry before rows. Original enrollment strongest-copy
+law/ties, reset/stay semantics/pricing remain unknown. Native source evidence:
+docs/mirage-getinfo-enrollment-boundary-2026-10-17.md.
+
+Published final2.8 help gives3/6/9 battles at floors1..20/21..40/41+, fixed
+strongest-copy enrollment, current-floor HP carry, daily re-entry availability
+(not automatic ongoing-run midnight wipe) and full-HP first aid. Original
+payouts/balance/enemies/first-aid price/cap still missing. New idx3586 popup
+explicitly offers floor223 retreat/weaker enemies/reduced rewards, no formula.
+Do not mix Forest of Mirage event data into Ruins. Updated historical-image note.
+
+All205 regression programs, six resource-profile suites, build, focused source/
+compiled cache/RegisterDeck/End, preserving refusal/carry checks and actual
+compiled profile HTTP proof PASS. Independent native End review clean. New
+End tests cover owner/floor/stair/camp binding, reserve isolation/healing,
+uint64 precision, malformed/foreign/duplicate reports, loss/win and ambiguous
+camp refusal. No native Mirage combat/rendering or original balance claim.
+
+NEXT: implement explicit LOCAL full run policy and durable owner-bound journal,
+then wire GetInfo enrollment/RegisterDeck/End/Reward together atomically. Capture
+policy and participant choice, preserve unsupported historical carry, commit
+cache+owned HP+retry receipt together, defend stale End/Reward/reset replays and
+emit inline next-stair/enemy data (Reward close need not GetInfo). Define source-
+missing assignment/payout/reset rules explicitly instead of inventing originals.
+Future protection checks must use represented enrolled commitments: legacy
+HP1000/-1 and unrepresented carry are not interchangeable. No native Begin
+request exists in the verified cached scene entry. Profile remains INACTIVE;
+device input hold persists. Do not present these prerequisites as a playable run.
+
 ## Latest continuation: native transcendence source admission (2026-10-16)
 
 Previous checkpoint86bded4 restored optional ordinary transcendence. This

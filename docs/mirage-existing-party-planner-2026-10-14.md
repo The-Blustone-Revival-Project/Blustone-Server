@@ -1,4 +1,4 @@
-# Mirage existing-party registration codec and source-name admission
+# Mirage existing-party registration codec and character-family admission
 
 The exact registration codec now decodes inst_list JSON STRING with full64
 unsigned decimal numeric tokens, and emits the successful bare numeric ID
@@ -16,13 +16,16 @@ no journal initialized, and no HP/state/floor/stair/enemy/reward created. This
 is the registration unit toward a complete persistent Mirage run, not a native
 registration milestone or a substitute for an entry producer.
 
-Readiness now requires exact supplied native Hunter DISPLAY NAME as well as
-reference identity. The source rejects two different instances whose base.name
-strings are equal; it does not use char_id or ref_id for that comparison. Missing,
-empty or invalid UTF8 names refuse. Equality is exact and case-sensitive, with
-no Unicode normalization or transliteration. The existing distinct-reference
-check remains explicitly additional local policy. Dead, unowned or unrepresented
-participants refuse; declared commitments must exactly match supplied entries.
+Correction2026-10-17: readiness requires exact native **base.char_id**
+character families, not display names. Shared allocation+0x0c is the returned
+CSRCardInfo pointer, so the compared object+0x30 field is char_id; name is
+object+0x24. Different refs in one family refuse, while equal display names
+in different families are admitted. Missing/empty/invalid UTF8 families refuse
+under local readiness; comparisons remain exact and case-sensitive, without
+Unicode normalization. The independent distinct-ref check remains additional
+LOCAL policy. Dead, unowned or unrepresented participants refuse; declared
+commitments must exactly match supplied entries. See
+[the pointer-owner correction](mirage-character-family-owner-correction-2026-10-17.md).
 Registration never upgrades the historical1000 placeholder to full10000 HP.
 
 Source registration can treat result10189 as an accepted reply as well as1,
@@ -50,6 +53,6 @@ remain incomplete. See mirage-register-deck-native-2026-10-14.md and
 mirage-reward-cache-transition-native-2026-10-14.md.
 
 Authored offline tests verify exact IDs/wire grammar, living five-slot owned
-parties, name/ref variants, current cache/context detachment and preservation
+parties, family/ref and independent-name variants, current cache/context detachment and preservation
 of all HP, base/enemy/stair/hero fields. No private/live state, profile or APK
 change; DataDump/originals read-only. Existing API remains guarded read-only.

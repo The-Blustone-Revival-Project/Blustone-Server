@@ -92,3 +92,24 @@ anecdote, not an authoritative floor reward table. Existing shop price rows
 likewise describe purchases, not battle payouts.
 
 This note introduces no runtime catalogue, floor, rewards or owned Hunters.
+
+## Follow-up2026-10-17: explicit retreat and final-build rules
+
+`batch-72.tsv:37`, idx3586, undated, records a retreat popup offering floor223
+with weaker enemies and slightly reduced rewards, or staying on the current
+floor. The existing batch-72 SHA256 above pins this source. It does not prove
+a decrement formula, current-floor assignment or a reward percentage.
+
+Published DataDump `findings/hunters/mirage-original-content-search-20261010.md`
+positively locates final2.8 help CONTENTS9_1..12 in original UI_CSV.jet (SHA256
+73a9dc4755baf8eb84c3fa945b7dd8b10228fe73d47a945de27137de2c84dac8).
+It gives3/6/9 battles for floors1..20/21..40/41+, strongest-copy enrollment fixed
+for the attempt, carry within the current floor and full-HP paid first aid.
+The midnight rule renews re-entry availability; it does not establish an
+automatic wipe of an ongoing run. Assignment power formula/ties, first-aid
+price/cap, payouts and original fragment ID remain unknown. These rules do not
+turn the authored unit-test floor caches into original floor instances.
+
+Native party correction: the older duplicate-display-name interpretation was
+wrong. The picker compares base.char_id families. See
+[the exact returned-pointer proof](mirage-character-family-owner-correction-2026-10-17.md).

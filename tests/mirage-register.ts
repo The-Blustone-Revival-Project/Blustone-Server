@@ -12,8 +12,8 @@ const source={entry:[{id:101,mirage_remain_hp:10000},{id:102,mirage_remain_hp:50
     deck:[101],tier_percent:4,highest:7,revive_price:3,begin_ltime:100},inst_enemy:[enemy],
   ref_stair:{res_prefix:"AUTHORED_PREFIX_",res_postfix_list:["002"],list:[{grade:1,balance:10000}]},
   ref_hero:{bonus:2,end_ltime:200,cur:["AUTHORED_HERO_A"],next:["AUTHORED_HERO_B"]}};
-const context:MirageReadiness={owned:new Map([[101,{ref_id:"AUTHORED_HERO_A",name:"Authored A"}],
-  [102,{ref_id:"AUTHORED_HERO_B",name:"Authored B"}],[103,{ref_id:"AUTHORED_HERO_C",name:"Authored C"}]]),
+const context:MirageReadiness={owned:new Map([[101,{ref_id:"AUTHORED_HERO_A",char_id:"Authored A"}],
+  [102,{ref_id:"AUTHORED_HERO_B",char_id:"Authored B"}],[103,{ref_id:"AUTHORED_HERO_C",char_id:"Authored C"}]]),
   commitments:new Map([[101,10000],[102,5000],[103,0]]),heroIds:new Set(["AUTHORED_HERO_A","AUTHORED_HERO_B"]),
   resources:new Set(["AUTHORED_BASE","AUTHORED_PREFIX_002"]),dialogueIds:new Set(["AUTHORED_DIALOG"]),
   environments:new Map([["env-key","STI002"]]),readyEnvironments:new Set(["env-key"]),
@@ -46,16 +46,23 @@ unchanged();
 for(const list of ["[]","[0,0]","[101,101]","[103]","[101,103]","[999]","[18446744073709551615]"]){
   assert.throws(()=>planMirageRegisterDeck(source,list,context));unchanged();
 }
-function withNames(a:string,b:string):MirageReadiness{return {...context,owned:new Map([...context.owned].map(([id,row])=>
-  [id,{...row,name:id===101?a:id===102?b:row.name}]))};}
-assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",withNames("Same","Same")),/names/,
-  "Different instances and references sharing exact native base.name are forbidden");
-assert.deepEqual(planMirageRegisterDeck(source,"[101,102]",withNames("Same","same")).deck,["101","102"],
-  "Native duplicate-name compare is case-sensitive");
-assert.deepEqual(planMirageRegisterDeck(source,"[101,102]",withNames("헌터","ハンター")).deck,["101","102"]);
-assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",withNames("헌터","헌터")),/names/);
-assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",withNames("","Known")),/names/);
-assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",withNames("bad\ud800","Known")),/lossless/);
+function withFamilies(a:string,b:string):MirageReadiness{return {...context,owned:new Map([...context.owned].map(([id,row])=>
+  [id,{...row,char_id:id===101?a:id===102?b:row.char_id}]))};}
+assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",withFamilies("Same","Same")),/families/,
+  "Different instances and references sharing exact native base.char_id are forbidden");
+assert.deepEqual(planMirageRegisterDeck(source,"[101,102]",withFamilies("Same","same")).deck,["101","102"],
+  "Native duplicate-family compare is case-sensitive");
+assert.deepEqual(planMirageRegisterDeck(source,"[101,102]",withFamilies("헌터","ハンター")).deck,["101","102"]);
+assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",withFamilies("헌터","헌터")),/families/);
+assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",withFamilies("","Known")),/families/);
+assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",withFamilies("bad\ud800","Known")),/lossless/);
+// Character identity is independent of localization/display names. The old
+// allocation-relative offset reading mislabeled char_id as base.name.
+const named=(a:string,b:string,familyA:string,familyB:string):MirageReadiness=>({...context,owned:new Map([...context.owned].map(([id,row])=>
+  [id,{...row,name:id===101?a:b,char_id:id===101?familyA:familyB}]))});
+assert.deepEqual(planMirageRegisterDeck(source,"[101,102]",named("Shared name","Shared name","family-a","family-b")).deck,["101","102"]);
+assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",named("Different A","Different B","same-family","same-family")),/families/);
+assert.deepEqual(planMirageRegisterDeck(source,"[101,102]",named("","","family-a","family-b")).deck,["101","102"],"Name presence is not this native admission gate");
 assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",{...context,owned:new Map([[101,context.owned.get(101)!]])}),/commitments/);
 assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",{...context,commitments:new Map([[101,1000],[102,5000],[103,0]])}),/commitments/);
 assert.throws(()=>planMirageRegisterDeck(source,"[101,102]",{...context,owned:new Map([...context.owned].map(([id,row])=>
@@ -67,4 +74,4 @@ unchanged();
 planned.deck.push("999");planned.cache.inst_base.deck.reverse();planned.cache.entry[0].mirage_remain_hp=1;
 planned.cache.inst_enemy[0].hp_percent=0;planned.cache.ref_stair.list[0].balance=1;planned.cache.ref_hero.cur.push("NEW");
 unchanged();assert.deepEqual(newDeck,["101","102"],"Returned cache/deck can change independently of input");
-console.log("Mirage registration: numeric JSON-string/full64 bare wire, zero omission/order, malformed refusal, living owned five-slot and exact source-name admission, detached existing cache/HP/state preservation passed; no run/publication.");
+console.log("Mirage registration: numeric JSON-string/full64 bare wire, zero omission/order, malformed refusal, living owned five-slot and exact character-family admission, detached existing cache/HP/state preservation passed; no run/publication.");
