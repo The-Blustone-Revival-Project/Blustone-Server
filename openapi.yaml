@@ -2238,11 +2238,13 @@ paths:
         top-level card map keyed CASE4 snapshot IDs with direct unchanged EXP
         pairs. Complete does not resync AP/BP. Local honor10/rating+10 win,
         rating-10 loss and six wins per league are fixtures; original
-        rewards/EXP allowance are unknown. Repeated matching completion without
-        an active attempt replays the original persisted receipt without another
-        reward. No completion nonce was recovered: a stale completion crossing a
-        later same-target Start is indistinguishable; transport exactly-once is
-        not promised. Native fight/result/reload validation pending."
+        rewards/EXP allowance are unknown. Failed write/rename restores the
+        exact active attempt, counters, honor and previous receipt so retry can
+        settle once. Repeated matching completion without an active attempt
+        replays the original persisted receipt without another reward. No
+        completion nonce was recovered: a stale completion crossing a later
+        same-target Start is indistinguishable; transport exactly-once is not
+        promised. Native fight/result/reload validation pending."
       tags:
         - Missions and combat
       parameters: *a1
@@ -2275,8 +2277,9 @@ paths:
         Local BP cost1, AP unchanged. Native ParseApBp requires ALL FOUR flat
         scalar fields user.ap/ap_charge_time/bp/bp_charge_time; target is
         arena.combat_info, with root refresh_price. Persists separate arena
-        attempt and CASE4 party; active-start replay spends no extra BP.
-        Expedition/arena active attempts cannot overlap.
+        attempt and CASE4 party; failed write/rename restores the prior BP, BP
+        anchor, attempt and formation references. Active-start replay spends no
+        extra BP. Expedition/arena active attempts cannot overlap.
         Revenge/friendship/nonzero bids are unimplemented and refuse. This
         replaces the incorrect mission alias; native fight rendering remains
         unverified.
@@ -2309,13 +2312,15 @@ paths:
     post:
       summary: Enter local Fight Club
       description: Native arena.status1 and arena.season, user.battle scalar profile,
-        user.is_weekly_reward0 and root deck. First entry seeds a separate CASE4
-        deck from the existing expedition party without changing CASE1 or
-        granting hunters. Native season deadline units are server-epoch seconds;
-        calendar alignment and duration remain local fixtures. Own rank shares
-        the local same-server standings with GetMyRank, friend rankings and
-        SaveComment; rating descending and PVID ascending ties are explicit
-        local policy. Rendered timing/display validation is pending.
+        user.is_weekly_reward0 and root deck. First entry seeds separate CASE4/5
+        decks from the existing expedition party without changing CASE1 or
+        granting hunters. Failed write/rename removes only newly initialized
+        decks, preserving existing formations for retry. Native season deadline
+        units are server-epoch seconds; calendar alignment and duration remain
+        local fixtures. Own rank shares the local same-server standings with
+        GetMyRank, friend rankings and SaveComment; rating descending and PVID
+        ascending ties are explicit local policy. Rendered timing/display
+        validation is pending.
       tags:
         - Missions and combat
       parameters: *a1

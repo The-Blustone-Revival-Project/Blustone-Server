@@ -20,6 +20,19 @@ function arenaDeck(game: LocalGameState) {
  * explicitly local policies; original economics are still unknown. */
 export function arenaRequest(route: string, payload: Record<string, unknown>, pvid: number,
     game: LocalGameState, persist: () => void,comments?:ArenaComments,rank=1): Result {
+  // Entry, Start and Complete change only these fields. Keep the original
+  // nested objects/arrays so a failed write or rename leaves a retryable live
+  // attempt and exactly the prior BP, reward, receipt and formation state.
+  const arena=game.arena,beforeArena={...arena},deckCount=game.decks.length;
+  const before={bp:game.bp,bp_updated_at:game.bp_updated_at,honor:game.honor};
+  try{return arenaRequestTransition(route,payload,pvid,game,persist,comments,rank);}
+  catch(error){
+    Object.assign(arena,beforeArena);Object.assign(game,before);
+    game.decks.splice(deckCount);throw error;
+  }
+}
+function arenaRequestTransition(route:string,payload:Record<string,unknown>,pvid:number,
+    game:LocalGameState,persist:()=>void,comments:ArenaComments|undefined,rank:number):Result {
   if (route === "/arena/Enter") {
     let initialized = false;
     if (!game.decks.some((row) => row.type === ARENA_DECK_TYPE)) {

@@ -1,3 +1,26 @@
+## Latest continuation: retryable Fight Club persistence failures (2026-10-16)
+
+Previous checkpoint aff2d81 restored actual local friend standings. This
+checkpoint reproduces and repairs real Arena mutation-before-save failures.
+Disposable failed Enter retained deck count1->3; Start/completion likewise
+had no rollback for BP/attempt/reward/counters/receipt. arenaRequest now
+snapshots only fields its transitions own and restores original nested
+references on write/rename exceptions. Existing formations survive; only
+appended decks are removed. Failed completion retains the exact active
+attempt and prior receipt so a successful retry settles normally once.
+Native payloads and existing LOCAL economics/no-nonce limitations unchanged.
+
+Boundary begins AFTER existing gameFor resource recovery/migration; that
+separate behavior is not rolled back here. tests/arena-atomic-state.ts uses
+fixed time, actual .tmp write and rename blockers, no4/5 vs existing4 entry,
+Start without Enter, winning/losing failures, successful retries, no-write
+receipt replay, exact nested object references, unrelated accounts and restart.
+179 gameplay programs/build/independent review PASS; compiled encrypted multi-account Arena
+rankings+actual earnings+restart proof PASS. See
+docs/arena-atomic-transitions-2026-10-16.md. OpenAPI updates only the three
+relevant Arena transition descriptions. Goal ACTIVE/native UI pending;
+no private/live/APK/Docker/Collector/inference operations. Input hold persists.
+
 ## Latest continuation: real local Fight Club standings (2026-10-16)
 
 Previous checkpoint9783a56 restored persistent Fight Club messages. This
