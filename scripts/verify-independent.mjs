@@ -50,6 +50,9 @@ const authoredEquipmentRankPrice={rank:exerciseEquipmentUpgrade?2:1,attr:1,price
 const authoredEquipmentPrices=exerciseEquipmentUpgrade?[authoredEquipmentLevelPrice,{...authoredEquipmentLevelPrice,level:11,price:29}]:[authoredEquipmentLevelPrice];
 if(exerciseSale && exerciseBulk) throw new Error('Use separate disposable fixture runs for sale and bulk promotion');
 const exerciseSocial=process.argv.includes('--exercise-social');
+const exerciseVeteranGift=process.argv.includes('--exercise-veteran-gift');
+if(exerciseVeteranGift&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-veteran-gift')))
+  throw new Error('Veteran gifting requires a separate disposable --fixture exercise');
 const exerciseProfile=process.argv.includes('--exercise-profile');
 if(exerciseProfile&&(!process.argv.includes('--fixture')||process.argv.some(arg=>arg.startsWith('--exercise-')&&arg!=='--exercise-profile')))
   throw new Error('Profile editing requires a separate disposable --fixture exercise');
@@ -207,6 +210,8 @@ const before = JSON.parse(readFileSync(stateFile, 'utf8'));
 let child;
 const launch = async () => {
   const env={...process.env,...profile.env};
+  env.BLUSTONE_VETERAN_GIFT_MODE=exerciseVeteranGift?'local-points':'disabled';
+  if(exerciseVeteranGift)env.BLUSTONE_VETERAN_POINTS_PER_TICKET='25';
   env.BLUSTONE_PROFILE_MODE=exerciseProfile?'archive-profile-projection':'disabled';
   if(exerciseBaitShop){env.BLUSTONE_BAIT_SHOP_MODE='archive-2018-projection';env.BLUSTONE_BAIT_SHOP_DAILY_LIMIT='2';}
   env.BLUSTONE_GUILD_CREATION_MODE=exerciseGuildFound?'local-gold':'disabled';
@@ -277,7 +282,7 @@ const stop = async () => {
   throw new Error('Verifier listener did not close; no replacement process was started');
 };
 let secret,token;
-let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle,arenaRanksProof,baitShopProof,profileProof;
+let friendPeer,friendId,ownerConnection,peerConnection,peerDetailSnapshot,selectedLeaderId,savedArenaBattle,arenaRanksProof,baitShopProof,profileProof,veteranGiftProof;
 async function exchange() {
   const pair=crypto.generateKeyPairSync('ec',{namedCurve:'secp384r1'});
   const response=await fetch(base+'/shared_secret/Exchange',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},
@@ -399,6 +404,70 @@ try {
       {item:[{inst_id:id,ref_id:'LU003',qty:20,lock:0}]});
     assert.deepEqual(readFileSync(stateFile),syncBytes,'Absolute bait repair cannot grant or write');
     baitShopProof={id,packet,game:JSON.parse(syncBytes).gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1]};
+  }
+
+  if(exerciseVeteranGift) {
+    const owner={secret,token};
+    await exchange();
+    const registered=await secure('/v2/account/RegisterGuest',{device_id:'standalone-veteran-gift-recipient'});
+    const peer={otp:String(registered.ret_data.otp),pvid:String(registered.pvid)},connection={secret,token};
+    assert.equal((await secure('/lobby/Enter',peer)).result_code,1);
+    ({secret,token}=owner);
+    assert.ok(!before.accounts.some(row=>row.pvid===Number(auth.pvid)||row.pvid===Number(peer.pvid)),
+      'Only newly registered disposable accounts may participate in the owned-stock import');
+    // Stop ONLY this verifier's owned listener before editing its disposable
+    // state. Neither a live writer nor a preserved/private save is a target.
+    await stop();
+    const saved=JSON.parse(readFileSync(stateFile)),actorGame=saved.gameStates.find(([id])=>id===Number(auth.pvid))[1];
+    const targetGame=saved.gameStates.find(([id])=>id===Number(peer.pvid))[1],id=4294967311;
+    assert.ok(!actorGame.items.some(row=>row.inst_id===id||row.ref_id==='GC6'));
+    const peerItems=structuredClone(targetGame.items),baselineVip=targetGame.vip_exp,baselineSenderVip=actorGame.vip_exp;
+    actorGame.items.push({inst_id:id,ref_id:'GC6',qty:3,lock:0});actorGame.next_item_inst_id=Math.max(actorGame.next_item_inst_id,id+1);
+    writeFileSync(stateFile,JSON.stringify(saved));
+    await launch();
+    const refs=(await secure('/reference/GetItem',auth)).ret_data.item;
+    assert.equal(refs.filter(row=>row.id==='GC6').length,1);
+    assert.equal(refs.find(row=>row.id==='GC6').use_type,0);
+    assert.match(refs.find(row=>row.id==='GC6').desc,/25 Veteran Points/);
+    const packet={...auth,inst_id:String(id),target_pvid:peer.pvid,qty:'1'};
+    for(const forged of [{target_pvid:auth.pvid},{target_pvid:'9000001'},{target_pvid:'18446744073709551615'}]) {
+      const bytes=readFileSync(stateFile);
+      assert.equal((await secure('/world/UseVIPTicket',{...packet,...forged},{allowPlainRefusal:true})).result_code,2001);
+      assert.deepEqual(readFileSync(stateFile),bytes,'Self/unknown recipient refusals happen while stock is funded');
+    }
+    const expected=qty=>({consumed_item_list:[{inst_id:id,qty}]});
+    const first=await secure('/world/UseVIPTicket',packet);assert.equal(first.result_code,1);assert.deepEqual(first.ret_data,expected(1));
+    const syncBytes=readFileSync(stateFile);
+    const expectedFirst=structuredClone(saved.gameStates);
+    expectedFirst.find(([pvid])=>pvid===Number(auth.pvid))[1].items.find(row=>row.inst_id===id).qty=2;
+    expectedFirst.find(([pvid])=>pvid===Number(peer.pvid))[1].vip_exp=baselineVip+25;
+    assert.deepEqual(JSON.parse(syncBytes).gameStates,expectedFirst,'First gift changes only sender quantity and recipient VIP EXP, including no clock/resource changes');
+    assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'["GC6"]'})).ret_data,
+      {item:[{inst_id:id,ref_id:'GC6',qty:2,lock:0}]});
+    assert.deepEqual(readFileSync(stateFile),syncBytes,'Absolute sender stock read cannot grant or write');
+    ({secret,token}=connection);
+    const own=(await secure('/world/GetUserDetail',{...peer,list:JSON.stringify([Number(peer.pvid)])})).ret_data[0];
+    assert.equal(own.vip_exp,baselineVip+25);
+    assert.deepEqual((await secure('/world/RefreshInven',{...peer,item_ref_list:'["GC6"]'})).ret_data,
+      {item:peerItems.filter(row=>row.ref_id==='GC6')},'Recipient gets points, not a transferred ticket stack');
+    assert.equal((await secure('/lobby/Enter',peer)).ret_data.user.vip_exp,baselineVip+25);
+    assert.deepEqual(JSON.parse(readFileSync(stateFile)).gameStates.find(([pvid])=>pvid===Number(peer.pvid))[1].items,peerItems);
+    ({secret,token}=owner);
+    // Lobby has existing lazy full-energy clock updates in memory. Restart
+    // our child before the next transaction audit so a later persist cannot
+    // flush unrelated pending read clocks into the disk-only baseline.
+    await stop();await launch();
+    const beforeSecond=JSON.parse(readFileSync(stateFile)).gameStates;
+    const second=await secure('/world/UseVIPTicket',{...packet,qty:'2'});assert.equal(second.result_code,1);assert.deepEqual(second.ret_data,expected(2));
+    const settled=JSON.parse(readFileSync(stateFile)),sender=settled.gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    beforeSecond.find(([pvid])=>pvid===Number(auth.pvid))[1].items.find(row=>row.inst_id===id).qty=0;
+    beforeSecond.find(([pvid])=>pvid===Number(peer.pvid))[1].vip_exp=baselineVip+75;
+    assert.deepEqual(settled.gameStates,beforeSecond,'Funded repeat changes only the second actual debit and configured recipient points');
+    assert.equal(sender.items.find(row=>row.inst_id===id).qty,0);assert.equal(sender.vip_exp,baselineSenderVip);
+    const recipient=settled.gameStates.find(([pvid])=>pvid===Number(peer.pvid))[1];assert.equal(recipient.vip_exp,baselineVip+75);assert.deepEqual(recipient.items,peerItems);
+    const exhausted=readFileSync(stateFile);
+    assert.equal((await secure('/world/UseVIPTicket',packet,{allowPlainRefusal:true})).result_code,2001);assert.deepEqual(readFileSync(stateFile),exhausted);
+    veteranGiftProof={owner,peer,connection,id,packet,baselineVip,baselineSenderVip,peerItems};
   }
 
   if(exerciseEpisodeWallet) {
@@ -981,6 +1050,20 @@ try {
   }
   // Reuse persisted transport key and bound credentials, proving process restart continuity.
   const afterLobby=await secure('/lobby/Enter',auth);assert.ok(afterLobby.ret_data);
+  if(exerciseVeteranGift) {
+    const bytes=readFileSync(stateFile),saved=JSON.parse(bytes),proof=veteranGiftProof;
+    const sender=saved.gameStates.find(([pvid])=>pvid===Number(auth.pvid))[1];
+    const recipient=saved.gameStates.find(([pvid])=>pvid===Number(proof.peer.pvid))[1];
+    assert.equal(sender.vip_exp,proof.baselineSenderVip);assert.equal(recipient.vip_exp,proof.baselineVip+75);
+    assert.deepEqual(recipient.items,proof.peerItems);
+    assert.deepEqual((await secure('/world/RefreshInven',{...auth,item_ref_list:'["GC6"]'})).ret_data,
+      {item:[{inst_id:proof.id,ref_id:'GC6',qty:0,lock:0}]});
+    ({secret,token}=proof.connection);
+    assert.equal((await secure('/world/GetUserDetail',{...proof.peer,list:JSON.stringify([Number(proof.peer.pvid)])})).ret_data[0].vip_exp,proof.baselineVip+75);
+    ({secret,token}=proof.owner);
+    assert.equal((await secure('/world/UseVIPTicket',proof.packet,{allowPlainRefusal:true})).result_code,2001);
+    assert.deepEqual(readFileSync(stateFile),bytes,'Restarted absolute stock/detail reads and exhausted retry cannot regrant or write');
+  }
   if(exerciseProfile) {
     const bytes=readFileSync(stateFile),saved=JSON.parse(bytes),account=saved.accounts.find(row=>row.pvid===Number(auth.pvid));
     assert.equal(saved.version,7);assert.equal(account.nickname,profileProof.patch.nick_name);
@@ -1155,6 +1238,8 @@ try {
   }
   const report={compiled_process:true,unrelated_working_directory:true,encrypted_ecdh_hmac_aes:true,
     direct_compiled_process:true,launcher_process_verified:false,
+    configured_veteran_gift_fixture:exerciseVeteranGift,veteran_gift_restart_fixture:exerciseVeteranGift,
+    owned_gc6_fixture_import:exerciseVeteranGift,veteran_gift_original_benefit_verified:false,
     encrypted_profile_edit_fixture:exerciseProfile,profile_edit_restart_fixture:exerciseProfile,
     compiled_my_info_url_advertised:exerciseProfile,
     encrypted_bait_shop_fixture:exerciseBaitShop,bait_shop_restart_fixture:exerciseBaitShop,

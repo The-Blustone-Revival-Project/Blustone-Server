@@ -32,15 +32,14 @@ function requestKeys(body: unknown): string[] {
 function fixtureHandler(route: string): RequestHandler {
   return (req, res) => {
     const keys = requestKeys(req.body);
-    const isList = route.endsWith("GetCardList");
-    const isReward = /Reward|PointReward|JoinCamp|RecordCardRecommend/.test(route);
-    const data = isList ? [] : isReward ? { accepted: true, claimed: true, items: [] } : { accepted: true };
-    // result_code == 1 is observed in cached WebView handlers. This envelope
-    // is a local fixture and must not be reused as a native API schema.
+    const data = { accepted: false, claimed: false, items: [] };
+    // Cached route names do not establish current event policy, ownership or
+    // settlement. This provisional LOCAL refusal is not an original error code
+    // or a native game RPC contract, and performs no account/game lookup.
     return res.json({
-      result_code: 1,
-      success: true,
-      message: "accepted",
+      result_code: 2001,
+      success: false,
+      message: "This WebView operation is unavailable in the local revival.",
       ret_data: data,
       data,
       replica: true,

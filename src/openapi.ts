@@ -374,6 +374,16 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     "x-reverse-engineering-status": "native-parser-reconstructed",
   } };
   explicitlyDocumented.add("/world/SetDeck");
+  paths["/world/UseVIPTicket"]={post:{
+    ...operation("Gift an owned Veteran ticket to another local captain",
+      "Native RequestUseVIPTicket posts inst_id:uint64, target_pvid:uint64 and qty:uint32; the actual UserInfo gift button selects owned GC6 and sends1. This is an OTHER-player gift, not self VIP training. Default authenticated failure2001 replaces the former empty success. Optional BLUSTONE_VETERAN_GIFT_MODE=local-points requires explicit positive uint32 BLUSTONE_VETERAN_POINTS_PER_TICKET: recipient VIP EXP delivery/amount is LOCAL policy because original recipient benefits are unrecovered. Requires loaded real other same-server mutually nonblocked accounts, owned unlocked GC6, valid quantities and checked recipient uint32 capacity. The local API permits funded positive batch quantities; original UI only proves1. One write decrements the sender's selected stack and increments recipient vip_exp, preserving exact prior values/references on write or rename failure. Sender VIP EXP, recipient ticket inventory, other wallets/cards/clocks and allocator stay unchanged. Native success ret_data.consumed_item_list is a removal-delta array with exact numeric uint64 inst_id, not absolute remain or consumed_inst_list. No nonce: another funded repeat is another gift. No original ticket issuance, mail, reward magnitude, rank/type/icon or reciprocal reward is inferred. GC6 metadata is neutral LOCAL and published only when enabled; unknown fish imports cannot claim this genuine ticket ID. Native gift UI execution remains pending.",
+      "Account and authentication",response("Native sender ticket removal; local recipient benefit is separately saved.",{
+        allOf:[{$ref:"#/components/schemas/ResultEnvelope"},{type:"object",properties:{ret_data:{type:"object",required:["consumed_item_list"],properties:{consumed_item_list:{type:"array",items:{type:"object",required:["inst_id","qty"],properties:{inst_id:{type:"integer",format:"uint64",minimum:1},qty:{type:"integer",minimum:1,maximum:0xffff_ffff}}}}}}}}],
+      })),
+    "x-evidence":"docs/veteran-gift-native-2026-10-16.md; tests/veteran-gift-state.ts",
+    "x-reverse-engineering-status":"native-packet-reconstructed-local-recipient-policy",
+  }};
+  explicitlyDocumented.add("/world/UseVIPTicket");
   paths["/card_handler/SetLeader"]={post:{
     ...operation("Select an owned leader",
       "Native RequestCardLeader sends target_inst_id as a full64 scalar plus app_code/app_ver/pvid/otp; market is not required by this requester. Authenticated local selection requires an actual owned, published Hunter. Locked cards remain eligible; no role/rank restriction is invented. Success ret_data is the scalar selected ID, not an object or inventory grant. Selection is free local policy and changes the saved leader independently of ordered party presets. Changed selections refuse active ordinary/Search/Fight Club attempts as explicit local policy; choosing the current leader is a no-write acknowledgement. Uses the existing loaded snapshot without energy regeneration or game creation. Write/rename failures restore the previous leader. Native UI selection remains unverified.",
@@ -640,20 +650,20 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
   ];
   for (const route of webviewEvidenceRoutes) {
     paths[route] = { post: {
-      summary: `WebView fixture ${route.split("/").at(-1)}`,
+      summary: `Unavailable WebView operation ${route.split("/").at(-1)}`,
       description: [
         `The offline WebView cache observed the form/page contract for **${route}**.`,
         "This is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.",
-        "The local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "The local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
       ].join("\n\n"),
       tags: ["WebView events"],
       requestBody: { required: false, content: {
         "application/x-www-form-urlencoded": { schema: { type: "object", additionalProperties: { type: "string" } } },
         "application/json": { schema: { $ref: "#/components/schemas/GenericRequest" } },
       } },
-      responses: response("Local WebView fixture response.", { $ref: "#/components/schemas/WebViewFixtureResponse" }),
+      responses: response("Explicit local unavailable response; never a claim acknowledgement.", { $ref: "#/components/schemas/WebViewFixtureResponse" }),
       "x-reverse-engineering-status": "webview-form-evidence",
-      "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+      "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
       "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established",
     } };
   }
@@ -1409,11 +1419,11 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
           type: "object",
           required: ["result_code", "success", "ret_data", "data", "replica", "evidence_route", "request_keys"],
           properties: {
-            result_code: { type: "integer", enum: [1], description: "Observed WebView handler success marker." },
-            success: { type: "boolean", example: true },
-            message: { type: "string", example: "accepted" },
-            ret_data: { type: "object", additionalProperties: true, description: "Redacted local fixture data; no recovered scalar reward values." },
-            data: { type: "object", additionalProperties: true },
+            result_code: { type: "integer", enum: [2001], description: "Provisional LOCAL unavailable code; original error vocabulary unknown." },
+            success: { type: "boolean", enum:[false] },
+            message: { type: "string", example: "This WebView operation is unavailable in the local revival." },
+            ret_data: { type: "object", required:["accepted","claimed","items"], properties:{accepted:{type:"boolean",enum:[false]},claimed:{type:"boolean",enum:[false]},items:{type:"array",maxItems:0,items:{}}} },
+            data: { type: "object", description:"Same unavailable data as ret_data." },
             replica: { type: "boolean", enum: [true] },
             evidence_route: { type: "string" },
             request_keys: { type: "array", items: { type: "string" }, description: "Non-sensitive submitted field names only." },

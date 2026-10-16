@@ -43,6 +43,13 @@ The first edit uses save schema7 to preserve rename history. See the
 [profile workflow](docs/profile-editor-workflow-2026-10-16.md) for setup,
 source limits and the remaining Android validation.
 
+Owned Veteran tickets can be gifted with
+`BLUSTONE_VETERAN_GIFT_MODE=local-points` and an explicit
+`BLUSTONE_VETERAN_POINTS_PER_TICKET` value. Native GC6 identity and sender
+consumption are recovered; recipient points are a local policy, not a recovered
+original amount. Enabling the mode grants no tickets. See the
+[Veteran gift workflow](docs/veteran-gift-workflow-2026-10-16.md).
+
 ## Resource bundle
 
 Guild text Chat is available in explicit local memory mode:

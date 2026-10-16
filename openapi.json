@@ -2433,6 +2433,126 @@
         "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
       }
     },
+    "/world/UseVIPTicket": {
+      "post": {
+        "summary": "Gift an owned Veteran ticket to another local captain",
+        "description": "Native RequestUseVIPTicket posts inst_id:uint64, target_pvid:uint64 and qty:uint32; the actual UserInfo gift button selects owned GC6 and sends1. This is an OTHER-player gift, not self VIP training. Default authenticated failure2001 replaces the former empty success. Optional BLUSTONE_VETERAN_GIFT_MODE=local-points requires explicit positive uint32 BLUSTONE_VETERAN_POINTS_PER_TICKET: recipient VIP EXP delivery/amount is LOCAL policy because original recipient benefits are unrecovered. Requires loaded real other same-server mutually nonblocked accounts, owned unlocked GC6, valid quantities and checked recipient uint32 capacity. The local API permits funded positive batch quantities; original UI only proves1. One write decrements the sender's selected stack and increments recipient vip_exp, preserving exact prior values/references on write or rename failure. Sender VIP EXP, recipient ticket inventory, other wallets/cards/clocks and allocator stay unchanged. Native success ret_data.consumed_item_list is a removal-delta array with exact numeric uint64 inst_id, not absolute remain or consumed_inst_list. No nonce: another funded repeat is another gift. No original ticket issuance, mail, reward magnitude, rank/type/icon or reciprocal reward is inferred. GC6 metadata is neutral LOCAL and published only when enabled; unknown fish imports cannot claim this genuine ticket ID. Native gift UI execution remains pending.",
+        "tags": [
+          "Account and authentication"
+        ],
+        "parameters": [
+          {
+            "name": "PV-AccessToken",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Transport-session token returned by shared_secret/Exchange. Required for native encrypted requests; distinct from the account OTP sent inside the encrypted form body. Keys survive restart when BLUSTONE_STATE_FILE is configured; otherwise they are in memory only. The local state file contains secrets and must never be published."
+          },
+          {
+            "name": "PV-Signature",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Observed native request-signature header. Exact canonicalization remains unverified."
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenericRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Native sender ticket removal; local recipient benefit is separately saved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ResultEnvelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "ret_data": {
+                          "type": "object",
+                          "required": [
+                            "consumed_item_list"
+                          ],
+                          "properties": {
+                            "consumed_item_list": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "inst_id",
+                                  "qty"
+                                ],
+                                "properties": {
+                                  "inst_id": {
+                                    "type": "integer",
+                                    "format": "uint64",
+                                    "minimum": 1
+                                  },
+                                  "qty": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 4294967295
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Route not present in the recovered catalog."
+          },
+          "500": {
+            "description": "Local scaffold failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-reverse-engineering-status": "native-packet-reconstructed-local-recipient-policy",
+        "x-evidence": "docs/veteran-gift-native-2026-10-16.md; tests/veteran-gift-state.ts",
+        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
+      }
+    },
     "/card_handler/SetLeader": {
       "post": {
         "summary": "Select an owned leader",
@@ -24800,87 +24920,6 @@
         "x-runtime-confidence": "Authenticated state-preserving refusal tested; successful gameplay remains unsupported"
       }
     },
-    "/world/UseVIPTicket": {
-      "post": {
-        "summary": "Recovered /world/UseVIPTicket route",
-        "description": "The route literal **/world/UseVIPTicket** was recovered from the ARM native library.\n\nThe exact request fields and response model have not yet been confirmed with a live ARM-device capture.\n\nThe local scaffold accepts JSON, URL-encoded form data, or opaque octet bodies and returns a success envelope with mock data.\n\nReplace this handler with a persistence-backed implementation once the corresponding request/response pair is captured.",
-        "tags": [
-          "World state"
-        ],
-        "parameters": [
-          {
-            "name": "PV-AccessToken",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Transport-session token returned by shared_secret/Exchange. Required for native encrypted requests; distinct from the account OTP sent inside the encrypted form body. Keys survive restart when BLUSTONE_STATE_FILE is configured; otherwise they are in memory only. The local state file contains secrets and must never be published."
-          },
-          {
-            "name": "PV-Signature",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Observed native request-signature header. Exact canonicalization remains unverified."
-          }
-        ],
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GenericRequest"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                }
-              }
-            },
-            "application/octet-stream": {
-              "schema": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Mock-compatible response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResultEnvelope"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Route not present in the recovered catalog."
-          },
-          "500": {
-            "description": "Local scaffold failure.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "x-reverse-engineering-status": "recovered-native-route",
-        "x-evidence": "analysis/native-all-strings.tsv and analysis/native-network-decomp.txt",
-        "x-runtime-confidence": "route literal confirmed; payload/response shape pending ARM-device capture"
-      }
-    },
     "/world/WatchAd": {
       "post": {
         "summary": "Recovered /world/WatchAd route",
@@ -24964,8 +25003,8 @@
     },
     "/webview/evaluation/GetCardList": {
       "post": {
-        "summary": "WebView fixture GetCardList",
-        "description": "The offline WebView cache observed the form/page contract for **/webview/evaluation/GetCardList**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "summary": "Unavailable WebView operation GetCardList",
+        "description": "The offline WebView cache observed the form/page contract for **/webview/evaluation/GetCardList**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
         "tags": [
           "WebView events"
         ],
@@ -24989,7 +25028,7 @@
         },
         "responses": {
           "200": {
-            "description": "Local WebView fixture response.",
+            "description": "Explicit local unavailable response; never a claim acknowledgement.",
             "content": {
               "application/json": {
                 "schema": {
@@ -25013,14 +25052,14 @@
           }
         },
         "x-reverse-engineering-status": "webview-form-evidence",
-        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
         "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established"
       }
     },
     "/webview/evaluation/RecordCardRecommend": {
       "post": {
-        "summary": "WebView fixture RecordCardRecommend",
-        "description": "The offline WebView cache observed the form/page contract for **/webview/evaluation/RecordCardRecommend**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "summary": "Unavailable WebView operation RecordCardRecommend",
+        "description": "The offline WebView cache observed the form/page contract for **/webview/evaluation/RecordCardRecommend**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
         "tags": [
           "WebView events"
         ],
@@ -25044,7 +25083,7 @@
         },
         "responses": {
           "200": {
-            "description": "Local WebView fixture response.",
+            "description": "Explicit local unavailable response; never a claim acknowledgement.",
             "content": {
               "application/json": {
                 "schema": {
@@ -25068,14 +25107,14 @@
           }
         },
         "x-reverse-engineering-status": "webview-form-evidence",
-        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
         "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established"
       }
     },
     "/webview/event_battle/PointReward": {
       "post": {
-        "summary": "WebView fixture PointReward",
-        "description": "The offline WebView cache observed the form/page contract for **/webview/event_battle/PointReward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "summary": "Unavailable WebView operation PointReward",
+        "description": "The offline WebView cache observed the form/page contract for **/webview/event_battle/PointReward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
         "tags": [
           "WebView events"
         ],
@@ -25099,7 +25138,7 @@
         },
         "responses": {
           "200": {
-            "description": "Local WebView fixture response.",
+            "description": "Explicit local unavailable response; never a claim acknowledgement.",
             "content": {
               "application/json": {
                 "schema": {
@@ -25123,14 +25162,14 @@
           }
         },
         "x-reverse-engineering-status": "webview-form-evidence",
-        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
         "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established"
       }
     },
     "/webview/event_battle/WinReward": {
       "post": {
-        "summary": "WebView fixture WinReward",
-        "description": "The offline WebView cache observed the form/page contract for **/webview/event_battle/WinReward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "summary": "Unavailable WebView operation WinReward",
+        "description": "The offline WebView cache observed the form/page contract for **/webview/event_battle/WinReward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
         "tags": [
           "WebView events"
         ],
@@ -25154,7 +25193,7 @@
         },
         "responses": {
           "200": {
-            "description": "Local WebView fixture response.",
+            "description": "Explicit local unavailable response; never a claim acknowledgement.",
             "content": {
               "application/json": {
                 "schema": {
@@ -25178,14 +25217,14 @@
           }
         },
         "x-reverse-engineering-status": "webview-form-evidence",
-        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
         "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established"
       }
     },
     "/webview/event_item_collect/ItemExchangeReward": {
       "post": {
-        "summary": "WebView fixture ItemExchangeReward",
-        "description": "The offline WebView cache observed the form/page contract for **/webview/event_item_collect/ItemExchangeReward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "summary": "Unavailable WebView operation ItemExchangeReward",
+        "description": "The offline WebView cache observed the form/page contract for **/webview/event_item_collect/ItemExchangeReward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
         "tags": [
           "WebView events"
         ],
@@ -25209,7 +25248,7 @@
         },
         "responses": {
           "200": {
-            "description": "Local WebView fixture response.",
+            "description": "Explicit local unavailable response; never a claim acknowledgement.",
             "content": {
               "application/json": {
                 "schema": {
@@ -25233,14 +25272,14 @@
           }
         },
         "x-reverse-engineering-status": "webview-form-evidence",
-        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
         "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established"
       }
     },
     "/webview/event_money_spend/Reward": {
       "post": {
-        "summary": "WebView fixture Reward",
-        "description": "The offline WebView cache observed the form/page contract for **/webview/event_money_spend/Reward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "summary": "Unavailable WebView operation Reward",
+        "description": "The offline WebView cache observed the form/page contract for **/webview/event_money_spend/Reward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
         "tags": [
           "WebView events"
         ],
@@ -25264,7 +25303,7 @@
         },
         "responses": {
           "200": {
-            "description": "Local WebView fixture response.",
+            "description": "Explicit local unavailable response; never a claim acknowledgement.",
             "content": {
               "application/json": {
                 "schema": {
@@ -25288,14 +25327,14 @@
           }
         },
         "x-reverse-engineering-status": "webview-form-evidence",
-        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
         "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established"
       }
     },
     "/webview/event_quest/JoinCamp": {
       "post": {
-        "summary": "WebView fixture JoinCamp",
-        "description": "The offline WebView cache observed the form/page contract for **/webview/event_quest/JoinCamp**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "summary": "Unavailable WebView operation JoinCamp",
+        "description": "The offline WebView cache observed the form/page contract for **/webview/event_quest/JoinCamp**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
         "tags": [
           "WebView events"
         ],
@@ -25319,7 +25358,7 @@
         },
         "responses": {
           "200": {
-            "description": "Local WebView fixture response.",
+            "description": "Explicit local unavailable response; never a claim acknowledgement.",
             "content": {
               "application/json": {
                 "schema": {
@@ -25343,14 +25382,14 @@
           }
         },
         "x-reverse-engineering-status": "webview-form-evidence",
-        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
         "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established"
       }
     },
     "/webview/event_quest/Reward": {
       "post": {
-        "summary": "WebView fixture Reward",
-        "description": "The offline WebView cache observed the form/page contract for **/webview/event_quest/Reward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "summary": "Unavailable WebView operation Reward",
+        "description": "The offline WebView cache observed the form/page contract for **/webview/event_quest/Reward**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
         "tags": [
           "WebView events"
         ],
@@ -25374,7 +25413,7 @@
         },
         "responses": {
           "200": {
-            "description": "Local WebView fixture response.",
+            "description": "Explicit local unavailable response; never a claim acknowledgement.",
             "content": {
               "application/json": {
                 "schema": {
@@ -25398,14 +25437,14 @@
           }
         },
         "x-reverse-engineering-status": "webview-form-evidence",
-        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
         "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established"
       }
     },
     "/webview/event_quest/RewardLast": {
       "post": {
-        "summary": "WebView fixture RewardLast",
-        "description": "The offline WebView cache observed the form/page contract for **/webview/event_quest/RewardLast**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local fixture returns a redacted, idempotent success-shaped response with request key names only; it does not grant production rewards or expose recovered scalar values.",
+        "summary": "Unavailable WebView operation RewardLast",
+        "description": "The offline WebView cache observed the form/page contract for **/webview/event_quest/RewardLast**.\n\nThis is deliberately separate from native lobby/gameplay evidence: cached WebView handlers prove page-level fields and result_code == 1 comparisons, not native response schemas.\n\nThe local handler refuses with HTTP200/result_code2001/successfalse and acceptedfalse/claimedfalse/items[]. This provisional LOCAL failure code is not original backend evidence. No current period, catalogue, recommendation, camp enrollment or reward settlement is reconstructed; no account lookup, allocation, write or grant occurs. Sanitized request key names remain diagnostic only.",
         "tags": [
           "WebView events"
         ],
@@ -25429,7 +25468,7 @@
         },
         "responses": {
           "200": {
-            "description": "Local WebView fixture response.",
+            "description": "Explicit local unavailable response; never a claim acknowledgement.",
             "content": {
               "application/json": {
                 "schema": {
@@ -25453,7 +25492,7 @@
           }
         },
         "x-reverse-engineering-status": "webview-form-evidence",
-        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json",
+        "x-evidence": "analysis/recovered-investigation-2026-09-19/outputs/web/web-evidence.json; docs/webview-event-refusals-2026-10-16.md; tests/webview-unavailable.ts",
         "x-runtime-confidence": "Form path and result markers observed; native gameplay semantics not established"
       }
     }
@@ -27104,26 +27143,50 @@
           "result_code": {
             "type": "integer",
             "enum": [
-              1
+              2001
             ],
-            "description": "Observed WebView handler success marker."
+            "description": "Provisional LOCAL unavailable code; original error vocabulary unknown."
           },
           "success": {
             "type": "boolean",
-            "example": true
+            "enum": [
+              false
+            ]
           },
           "message": {
             "type": "string",
-            "example": "accepted"
+            "example": "This WebView operation is unavailable in the local revival."
           },
           "ret_data": {
             "type": "object",
-            "additionalProperties": true,
-            "description": "Redacted local fixture data; no recovered scalar reward values."
+            "required": [
+              "accepted",
+              "claimed",
+              "items"
+            ],
+            "properties": {
+              "accepted": {
+                "type": "boolean",
+                "enum": [
+                  false
+                ]
+              },
+              "claimed": {
+                "type": "boolean",
+                "enum": [
+                  false
+                ]
+              },
+              "items": {
+                "type": "array",
+                "maxItems": 0,
+                "items": {}
+              }
+            }
           },
           "data": {
             "type": "object",
-            "additionalProperties": true
+            "description": "Same unavailable data as ret_data."
           },
           "replica": {
             "type": "boolean",

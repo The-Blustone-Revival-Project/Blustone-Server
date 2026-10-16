@@ -50,9 +50,9 @@ try {
     body: new URLSearchParams({ event_id: "fixture-event", camp_1_agg: "redacted" }),
   });
   assert.equal(webviewFixture.response.status, 200);
-  assert.equal(webviewFixture.body.result_code, 1);
-  assert.equal(webviewFixture.body.success, true);
-  assert.equal((webviewFixture.body.ret_data as { accepted: boolean }).accepted, true);
+  assert.equal(webviewFixture.body.result_code, 2001);
+  assert.equal(webviewFixture.body.success, false);
+  assert.deepEqual(webviewFixture.body.ret_data, { accepted: false, claimed: false, items: [] });
   assert.deepEqual(webviewFixture.body.request_keys, ["camp_1_agg", "event_id"]);
 
   const baseInfo = await json("/launcher/GetBaseInfo", {

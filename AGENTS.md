@@ -1,3 +1,63 @@
+## Latest continuation: explicit GC6 gifts and honest WebView refusals (2026-10-16)
+
+Previous checkpointe323ae6 restoredMyInfo editor. This checkpoint restores
+optionalownedGC6 gifting andstopsfalseclaimresponses for9unreconstructed
+WebViewoperations. GoalACTIVE; BlueStacksinputhold persists. No live/private/
+client/APK/Docker/Collector/inference actions. ActualnativegiftUI PENDING.
+
+PositiveoriginalitemidentityGC6: UserInfoGiftbutton Gd96928 inventorycheck
+Gd9695c..96a; confirmGd982c6/c8 loadsGC6→GetItemInstGaec894 atGd982d4;
+ownedfull64inst atGd98372, targetPVIDfromdisplayeduser atGd9836e, qty1Gd98384.
+ReqUseVIPTicketGf6a090 auth5+inst_idU64/target_pvidU64/qtyU32→world/UseVIPTicket.
+CallbackGf6a7f8 guardsresult1, optionalachievement, consumed_item_list
+[{inst_idU64,qtyU32}]→RemoveItemGaec5f4 viaGf6aa66. REMOVALDELTA, notremain,
+notconsumed_inst_list. It doesNOTaward senderVIPexp. VIP1display!=GC6ticket.
+
+Originalrecipientbenefitamount/delivery UNKNOWN. Optional
+BLUSTONE_VETERAN_GIFT_MODE=local-points REQUIRESEXPLICIT positiveU32
+BLUSTONE_VETERAN_POINTS_PER_TICKET. LOCALmodel debitsownedunlockedGC6 and
+creditsconfiguredVIPexp torealotherloadedaccount, sameserver+mutualblocks.
+NativeUIprovesqty1; largerfundedquantity isLOCALbatchpolicy. No senderreward,
+recipienttickettransfer, mail, nonce or ticketproducer/grant. GC6metadata
+neutralLOCAL andmodeonly; reserveidentityagainstunrelatedfishimports.
+
+Pureplanner exactcanonicalU64 supportsstrings>MAXSAFE andnumericwireRawJSON,
+rejectsduplicate/aliasIDs, locks/wrongref/stock andcheckedBigIntU32overflow.
+Rootusesdirectloadedmaps; ONEpersist senderqty+recipientVIPexp, failure restores
+exact existingobjects/scalars. Wholeothergame/wallet/clocks/party/allocator
+preserved. SharedinstanceIDs acrossaccounts stayisolated. Depletedrowqty0
+retained. No newstatefields/schema; olderexistingmetadata staysunderown guards.
+Anotherfundedrequest isanothergift, notfree replay; RefreshInven canrepairqty.
+
+9webviewEvidenceRoutes hadacceptedtrue/claimedtrue/emptycataloguesuccess with
+no actualperiod/reward/catalogue/camp/recommendation settlement. AllnowHTTP200
+result2001/successfalse, ret_data+data{accepted:false,claimed:false,items:[]}.
+CodeprovisionalLOCAL/notoriginalerror. No authlookup/gamecreation/writes/
+grants; redactedrequest_keysonly. ExistingworkingMyInfoGET/POSTuntouched.
+Smokeassertionscorrected; newall9 JSON/form/authed/anonymous/malformedstate
+andthrowingsentinel tests prove no hiddenmutation orsecretreflection.
+
+All189programs/build/independentreviewPASS. Newgiftpure+state tests cover
+nativefull64delta, source/targetsameIDdifferentowner, qty+recipient-onlypoints,
+forgedamountignored, blocks/self/other-server/presentationID/authspoof, missing
+bothsnapshots/noallocation, actual.tmp+renamefailures/exactrefs/bytes/clocks,
+retries/depletion/restart/disabledpreservation. No originalbenefitclaim.
+Compiled --fixture --exercise-veteran-gift TWOconsecutivefinalrunsPASS:
+stopownedchild→authoredGC6import ONLYnewactor→actualencryptedqty1+qty2 gifts,
+source3→2→0, target+25→+75, absinvenrepair/peerDetail+Lobby(nopeerstocktransfer),
+refusals/restart/cryptoaccountcontinuity/fixture1exact. Reportthreegift/import
+flagsTRUE, veteran_gift_original_benefit_verifiedFALSE. Initialprior-build
+RegisterGuest500 wasunexplained/unreproducedafterfreshbuild; nofixclaimed.
+PeerLobbyfullclocks mustbe flushed/restarted beforedisk-onlytransactionaudit;
+verifierdoesownedrestart, neverweakensauditmask forpendingclockwrites.
+
+Remaining: actualrecipientbenefit/originalissuance, nativeUI, random-box and
+roulettecatalogue/weights/quotas. Newphotos show960fuel or80000rupees+3tickets
+with1600%banner, NOTlicensetodeterministicjackpot. Rupee5000/5Manda quote
+idx3388 iscandidateonly: exactshop/couponID producer stillneedsnativeclosure.
+Docs veteran-gift-native-2026-10-16.md/veteran-gift-workflow-2026-10-16.md and
+webview-event-refusals-2026-10-16.md owncontracts/setup/limits. NoAPKreleaseowed.
+
 ## Latest continuation: reconstructed My Info profile editor (2026-10-16)
 
 Previous checkpointb445cc1 restoredoptionalhistoricalbait purchases. This

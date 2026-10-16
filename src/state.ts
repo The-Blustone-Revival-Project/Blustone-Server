@@ -31,6 +31,7 @@ import { LOCAL_CAMPAIGN_FIRST_CLEAR_TEAM_EXP } from "./campaign-reward-policy.js
 import type { CampaignTraceContext } from "./campaign-receipt-trace.js";
 import { mirageLobby, mirageFriendFloors,mirageEndRefusal } from "./mirage.js";
 import {configuredFishingItems,type FishingItemReference} from "./fishing-item-references.js";
+import {configuredVeteranGift,veteranGiftItem,planVeteranGift,type VeteranGiftPolicy} from "./veteran-gift.js";
 import {normalizeProfileSettings,planProfileSettings,profileEditView,validateProfileNickname,type ProfileSettings} from "./profile-settings.js";
 import {configuredBaitShop,normalizeBaitShopCounter,baitShopReferences,baitPurchaseInventory,planBaitPurchase,type BaitShopCounter,type BaitShopPolicy} from "./fishing-bait-shop.js";
 import {configuredFishingCatalogue,fishingPoolRows,fishingPriceRows,type FishingCatalogue} from "./fishing-catalogue.js";
@@ -566,6 +567,7 @@ export class ServerState {
   private readonly skillMaterialIds:ReadonlySet<string>;
   private readonly fishingCatalogue?: FishingCatalogue;
   private readonly baitShopPolicy?:BaitShopPolicy;
+  private readonly veteranGiftPolicy?:VeteranGiftPolicy;
   private readonly profileMode:"disabled"|"archive-profile-projection";
   private readonly fishingSaleMode:"disabled"|"local-bound";
   private readonly fishingBindings?:FishingSaleBindings;
@@ -602,11 +604,14 @@ export class ServerState {
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
       guildInvitationMode?:"disabled"|"local-invitations";guildLevelBenefits?:unknown;guildBenefitStrings?:unknown;
       guildContributionPoints?:unknown;guildContributionRewards?:unknown;
+      veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
       profileMode?:"disabled"|"archive-profile-projection";
       baitShopMode?:"disabled"|"archive-2018-projection";baitShopDailyLimit?:unknown;
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
+    this.veteranGiftPolicy=configuredVeteranGift(Object.hasOwn(options,"veteranGiftMode")?options.veteranGiftMode:process.env.BLUSTONE_VETERAN_GIFT_MODE??"disabled",
+      Object.hasOwn(options,"veteranPointsPerTicket")?options.veteranPointsPerTicket:process.env.BLUSTONE_VETERAN_POINTS_PER_TICKET);
     const profileMode=Object.hasOwn(options,"profileMode")?options.profileMode:process.env.BLUSTONE_PROFILE_MODE??"disabled";
     if(profileMode!=="disabled"&&profileMode!=="archive-profile-projection")throw new TypeError("Unknown local profile mode");
     this.profileMode=profileMode;
@@ -650,7 +655,7 @@ export class ServerState {
     for(const price of skillLevelRows)skillMaterialRequirements([price],this.skillMaterialIds); // Before restore/private save writes.
     const fishItems=Object.hasOwn(options,"fishingItems")?options.fishingItems:
       process.env.BLUSTONE_FISHING_ITEMS_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_FISHING_ITEMS_JSON);
-    this.fishingItems=configuredFishingItems(fishItems,new Set([...knownItems,"LU001","LU003",...starterReference.map(row=>row.base.id)]));
+    this.fishingItems=configuredFishingItems(fishItems,new Set([...knownItems,"LU001","LU003","GC6",...starterReference.map(row=>row.base.id)]));
     const fishCatalogue=Object.hasOwn(options,"fishingCatalogue")?options.fishingCatalogue:
       process.env.BLUSTONE_FISHING_CATALOGUE_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_FISHING_CATALOGUE_JSON);
     if(fishCatalogue!==undefined) this.fishingCatalogue=configuredFishingCatalogue(fishCatalogue,new Set(this.fishingItems.map(row=>row.id)));
@@ -1719,7 +1724,7 @@ export class ServerState {
   itemReferenceRows() {
     const base=itemReference();
     const bait=this.baitShopPolicy?baitShopReferences(this.baitShopPolicy):{item:[],global_item:[]};
-    return {...base,item:[...base.item,...bait.item,...this.fishingItems.map(row=>({...row}))],
+    return {...base,item:[...base.item,...bait.item,...(this.veteranGiftPolicy?[veteranGiftItem(this.veteranGiftPolicy)]:[]),...this.fishingItems.map(row=>({...row}))],
       global_item:[...base.global_item,...bait.global_item]};
   }
 
@@ -3622,6 +3627,24 @@ export class ServerState {
       try{this.persist();}catch(error){account.nickname=before;throw error;}
     }
     return this.envelope({nick_name:account.nickname},{nickname:account.nickname});
+  }
+
+  giftVeteranTicket(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const actor=this.accountFor(payload,headers);
+    if(!this.veteranGiftPolicy)return this.failure(2001,"Local Veteran gifts are disabled; original recipient benefits are unrecovered");
+    try{
+      const raw=payload.target_pvid,targetId=typeof raw==="number"?raw:
+        typeof raw==="string"&&/^[1-9]\d*$/.test(raw)?Number(raw):NaN;
+      if(!Number.isSafeInteger(targetId)||targetId<=0||String(targetId)!==String(raw)||targetId===actor.pvid||!this.localSocialProfile(actor.pvid,targetId))
+        return this.failure(2001,"Veteran gift requires another visible same-server account");
+      const sender=this.gameByPvid.get(actor.pvid),recipient=this.gameByPvid.get(targetId);
+      if(!sender||!recipient)return this.failure(2001,"Veteran gift ownership snapshot is unavailable");
+      const plan=planVeteranGift(payload,sender.items,recipient.vip_exp,this.veteranGiftPolicy);
+      const item=sender.items[plan.index],quantity=item.qty,vip=recipient.vip_exp;
+      item.qty=plan.remaining;recipient.vip_exp=plan.vip_exp;
+      try{this.persist();}catch(error){item.qty=quantity;recipient.vip_exp=vip;throw error;}
+      return this.envelope(plan.receipt);
+    }catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
   }
 
   profileStatus(pvid:number):string {return this.accountsByPvid.get(pvid)?.profileSettings?.info_message??"";}
