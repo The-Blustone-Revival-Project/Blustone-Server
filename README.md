@@ -28,6 +28,14 @@ uncertainty retain the existing local fallback; recruitment eligibility stays un
 selecting historical requirements does not backfill traces or alter receipts.
 See the [image projection evidence](docs/trace-threshold-image-projection-2026-10-16.md).
 
+Optional `BLUSTONE_MATERIAL_SKILL_PROFILE=episode-indexed-projection`, with
+`BLUSTONE_CARD_REFERENCE_PROFILE=materials`, publishes exact selected Episode
+skill graphs for Captain, Vincent, Karl, Denali, Lapis, Bear, Bibi and Bright.
+Using these encounter graphs for ordinary Hunters is explicit local policy;
+original ordinary growth and native execution remain unverified. The prepared
+`current-e6-materials-skills` profile keeps all139 resources/stamps unchanged.
+See the [indexed skill profile](docs/material-skill-indexed-projection-2026-10-17.md).
+
 A historical High-quality Bait offer is available with
 `BLUSTONE_BAIT_SHOP_MODE=archive-2018-projection` and an explicit local cap,
 for example `BLUSTONE_BAIT_SHOP_DAILY_LIMIT=2`. Each purchase spends6 Manda

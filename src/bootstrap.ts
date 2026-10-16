@@ -18,6 +18,7 @@ import {
 import { skillLevelRows } from "./skill-training.js";
 import { ordinaryHunterLevels } from "./hunter-levels.js";
 import { fixtureSkillSlots } from "./skills.js";
+import { MATERIAL_SKILL_PROFILE } from "./material-skill-projection.js";
 import { projectOrdinaryStats } from "./ordinary-stat-projection.js";
 import { additionalMaterialReferences } from "./character-materials.js";
 import { RECOVERED_MONSTER_NAMESPACES, requireSelectedMonsterArt } from "./monster-art.js";
@@ -217,18 +218,20 @@ const originalStarterReference = [...new Map([
 
 /** Opt-in reference coverage only. Original six references, owned cards and
  * recruitment pools remain unchanged. New material-backed rows deliberately
- * retain explicit local stats and neutral skill slots; historical projection
- * requires its separate opt-in. Their original
+ * retain local stats and neutral skill slots by default; indexed Episode skills
+ * and historical stats each require their separate opt-in. Original
  * ordinary combat magnitudes are unknown, not inferred from Episode artwork. */
 export const CARD_REFERENCE_PROFILE = process.env.BLUSTONE_CARD_REFERENCE_PROFILE ?? "starter";
 if (!["starter", "materials"].includes(CARD_REFERENCE_PROFILE))
   throw new Error("Unknown ordinary card reference profile");
+if(MATERIAL_SKILL_PROFILE!=="neutral"&&CARD_REFERENCE_PROFILE!=="materials")
+  throw new TypeError("Material skill projection requires the materials card reference profile");
 export const starterReference = configuredEquipmentReferences(projectHunterMinimumRanks([...originalStarterReference,
   ...(CARD_REFERENCE_PROFILE === "materials" ? additionalMaterialReferences({
     packageNames: (process.env.BLUSTONE_PACKAGE_NAMES ?? "").split(","),
     publishedIds: originalStarterReference.map((card) => card.base.id),
     fixtureStats: ordinaryRankStats(cardOneLegacyStat),
-    neutralSkillSlots: fixtureSkillSlots,
+    skillSlots: fixtureSkillSlots,
     projectStats: projectMaterialStats,
   }) : []),
 ],HUNTER_MIN_RANK_PROFILE));

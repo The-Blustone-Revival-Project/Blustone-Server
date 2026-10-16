@@ -1,6 +1,6 @@
 /** Exact symbolic mechanics and original scripted Episode graphs for material
  * Hunters. Episode numbers are encounter data, not recovered ordinary balance.
- * No active profile/ownership mutation; selection is explicit and read-only.
+ * Selection is read-only; the optional material-skill-projection adapter is separate.
  */
 /** Read-only readiness; exact text/cost/art identity is separate from native
  * ordinary admission and final ordinary effect magnitudes. */

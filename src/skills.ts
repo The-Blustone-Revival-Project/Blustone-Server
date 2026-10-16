@@ -1,3 +1,4 @@
+import {projectMaterialSkillSlots} from "./material-skill-projection.js";
 /** Reconstructed effects with selected original Episode active/type2 tuples.
  * Final ordinary magnitudes/growth and cinematic/icon bindings are missing.
  * Opt-in native validation, not production balance.
@@ -86,7 +87,7 @@ export function fixtureSkillSlots(refId: string) {
   const followup = ["episode-followups", "episode-actives", "episode-complete"].includes(ACTIVE_SKILL_MODE) ? episodeFollowups[refId] : undefined;
   const original = ["episode-actives", "episode-complete"].includes(ACTIVE_SKILL_MODE) ? episodeActives[refId] : undefined;
   const additional = ACTIVE_SKILL_MODE === "episode-complete" ? episodeAdditional[refId] : undefined;
-  return Array.from({ length: 5 }, (_, index) => ({
+  const slots = Array.from({ length: 5 }, (_, index) => ({
     target_rank: index + 1, type: index + 1,
     name: index === 0 && active ? active.name : `Skill ${index + 1}`,
     desc: index === 0 && active ? active.desc : "",
@@ -102,4 +103,5 @@ export function fixtureSkillSlots(refId: string) {
       : index === 1 && followup ? [{ ...followup.effect, effect_desc: [...followup.effect.effect_desc] }]
       : (additional?.[index + 1] ?? []).map((effect, offset) => ({ ...effect, serial: offset + 1, effect_desc: [...effect.effect_desc] })),
   }));
+  return projectMaterialSkillSlots(refId,slots);
 }

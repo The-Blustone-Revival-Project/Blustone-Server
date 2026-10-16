@@ -36,7 +36,7 @@ for (const row of characterIdentities) {
 const stats = [{ rank: 1, awk_step: 0, hp: "1000", atk: "100", def: "50", spd: "100" }];
 const before = structuredClone({ stats, published, names });
 const references = additionalMaterialReferences({ packageNames: names, publishedIds: published,
-  fixtureStats: stats, neutralSkillSlots: fixtureSkillSlots });
+  fixtureStats: stats, skillSlots: fixtureSkillSlots });
 assert.deepEqual(references.map((row) => row.id), candidates.map((row) => row.id));
 assert.ok(references.every((row) => row.is_main === 0 && row.base.id === row.id && row.base.res_prefix === `C${row.id}`));
 assert.deepEqual({ stats, published, names }, before, "building additional references never mutates fixture inputs or existing references");
@@ -44,7 +44,7 @@ references[0].stat[0].hp = "caller-only";
 assert.equal(stats[0].hp, "1000");
 assert.equal(references[1].stat[0].hp, "1000", "rows independently own local fixture stats");
 assert.throws(() => additionalMaterialReferences({ packageNames: names, publishedIds: published,
-  fixtureStats: [], neutralSkillSlots: fixtureSkillSlots }), /Explicit local fixture/);
+  fixtureStats: [], skillSlots: fixtureSkillSlots }), /Explicit local fixture/);
 
 // Bootstrap selects an immutable profile at module import. Test every profile
 // in a fresh process rather than allowing cached imports to fake isolation.

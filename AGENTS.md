@@ -1,3 +1,70 @@
+## Latest continuation: eight indexed material-Hunter skill graphs (2026-10-17)
+
+Previous checkpointf35813e made Search persistence atomic; before that098622c
+added configured fishing. Goal ACTIVE. Server-only implementation/docs/tests;
+no live profile/private save/device/APK/original asset/Docker/Collector/inference
+change. Device input hold persists. DataDump read only. No APK release owed.
+
+Optional BLUSTONE_MATERIAL_SKILL_PROFILE=episode-indexed-projection requires
+BLUSTONE_CARD_REFERENCE_PROFILE=materials. Default neutral output unchanged.
+New src/material-skill-projection.ts adopts exact original indexed Episode
+skill graphs as explicit LOCAL ordinary policy, not recovered ordinary balance:
+009→13/EVCB0201_009;010→130/CB0302_010_1;012→143/CB0601_012_1;
+013→4/EVCB0201_013;017→150/CB0401_017_1;036→68/CB0601_036_1;
+040→70/EVCB0301_040;049→93/CB0202_049_1. Every active cost agrees with
+independently pinned ordinary SKILL_REF text. Both source files SHA-pinned;
+identity/base art/role/element and entire embedded/source graph checked.
+
+CRITICAL variant/scope distinctions: Karl143 is cooldown5000/type4base1.0,
+not duplicate144 cooldown6000/base1.2. Bear68 supplies crit50 and rank4 selfheal;
+Bibi70 matches ordinary cost3 while69/115 cost4 do not. Bright93 uses sourceDEF
+rather than73 destinationmaxHP and omits crit, wrapped explicit LOCAL0.
+Denali4 retains encounter team-maxHP/timed healing; ordinary text's DEF-based
+formula is NOT recovered or substituted. Do not merge stronger alternatives,
+rescale effects or change cost to fit a preferred graph. Locke/Dino/etc. remain
+outside this eight-ref policy even when broader material packages are selected.
+
+Exact type/target_rank/selector/effect order/floating coefficients/raw duration
+and interval preserved. All five native slots retained; missing source slots
+empty. Sequential serials, up_number0/duration_up0, empty formula/description/
+presentation bindings and absent metadata0 are LOCAL wire wrappers. No original
+ordinary growth/probability/magnitudes claim. Existing first-six refs and all
+reference stats/base/equipment/dialogue/owned ranks/levels/skill keys0 untouched.
+Publishing references grants no Hunter and expands no gacha/trace eligibility.
+
+Positive source-only presentation closure: native parser strict-string copies
+cut_in_id/icon_id but has no nonempty gate in inspected function. Battle skill
+HUD uses actual role/attribute/cost through CSRGameUIIconSkill.SetData and
+original generic role sprites; prologue uses actorRef/ResID/ResPrefix. These
+closed battle paths do not require guessed per-skill icon/cut bindings. Detail/
+training icons and actual material-Hunter combat/portrait/resource readiness
+remain UNVERIFIED. Exact sources/addresses in
+ docs/material-skill-indexed-projection-2026-10-17.md.
+
+INACTIVE config/profiles/current-e6-materials-skills.json adds only new skill
+flag to current-e6-materials: same139 package order/bytes/stamp1634683, existing
+starter skills/stat/recruitment/persistence unchanged. No live/default selection
+or broader169 activation. Character-material helper now calls its supplied
+skillSlots policy explicitly, rather than naming it always-neutral.
+
+Verification: build PASS; complete npm test220-program run PASS. Final
+npm run test:material-skills (build + parity unit + compiled encrypted HTTP)
+PASS. Unit checks exact source graphs/costs/rank/order/wrappers, corrupt-source
+refusal, default/first-six preservation, caller-copy safety and unknown/profile
+guards. HTTP restores a neutral-profile prior save with all8 AUTHORED disposable
+material owners and progressed starter data, proves14 refs/eight skill changes,
+full owned key/rank/level/peer preservation and complete post-auth read/save-byte
+identity across targeted inventory/reference reads and restart. No native input.
+Independent implementation/source review clear. README/OpenAPI/.env document flag.
+
+Release14 recheck: normalized565 skill/113 hero estimate tables unchanged from
+10-11.2; new3626-image lane is evidence, not a new original table. Fishing names/
+quoted historical prices newly retained with source hashes in
+ docs/fishing-release14-display-boundary-2026-10-17.md, but no original wire-ID,
+metadata/pool/tuning join. No price/grade table or fish grant inferred. Next:
+more original numeric/provider recovery, material acquisition/ordinary mechanics,
+and separately authorized native validation. Full revival remains incomplete.
+
 ## Latest continuation: atomic Missing Hunter Search saves (2026-10-17)
 
 Previous checkpoint098622c added configured fishing casts. Goal ACTIVE. No live

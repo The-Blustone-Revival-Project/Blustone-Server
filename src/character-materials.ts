@@ -36,13 +36,13 @@ export function characterMaterialCoverage(packageNames: readonly string[], publi
 
 /** Constructs additional ordinary reference rows only from metadata with all
  * four explicitly selected original material packages. The caller must supply
- * separately documented local stats and neutral skill slots: a material match
+ * separately documented stats and an explicit skill policy: a material match
  * never promotes archive observations or artwork into original balance.
  * Existing references and ownership are outside this function's scope. */
 export function additionalMaterialReferences<Stat extends Record<string, unknown>, Skill>(options: {
   packageNames: readonly string[]; publishedIds: readonly string[];
   fixtureStats: readonly Stat[];
-  neutralSkillSlots: (refId: string) => Skill[];
+  skillSlots: (refId: string) => Skill[];
   projectStats?: (refId: string, stat: Stat) => Stat;
 }) {
   if (!options.fixtureStats.length || options.fixtureStats.some((row) => !Number.isInteger(row.rank)))
@@ -53,7 +53,7 @@ export function additionalMaterialReferences<Stat extends Record<string, unknown
       base: { id: row.id, char_id: row.id, name: row.name!, is_main: 0,
         attr: row.attr!, role: row.role!, res_prefix: `C${row.id}`,
         is_source: 0, source_field: 0, cool_time: 1000 },
-      equipment: [], dialog: [], skill: structuredClone(options.neutralSkillSlots(row.id)),
+      equipment: [], dialog: [], skill: structuredClone(options.skillSlots(row.id)),
       stat: options.fixtureStats.map((stat) => options.projectStats
         ? options.projectStats(row.id, structuredClone(stat)) : structuredClone(stat)),
     }));

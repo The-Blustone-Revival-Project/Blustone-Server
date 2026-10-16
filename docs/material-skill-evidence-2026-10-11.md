@@ -1,5 +1,10 @@
 # Original skill mechanics for material Hunters
 
+> This note records the original isolated evidence module. The later
+> [indexed projection](material-skill-indexed-projection-2026-10-17.md) adds a
+> separate explicit opt-in adapter for eight reviewed encounter rows. The
+> source selector itself remains read-only and does not publish or grant cards.
+
 The isolated `src/material-skill-evidence.ts` module preserves original symbolic
 skill rows, formulas, Rage costs, mechanic tags and dialogue/effect labels for
 the twelve new material-backed ordinary identities. Original source hashes and
