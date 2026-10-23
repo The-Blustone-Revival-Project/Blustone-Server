@@ -27,7 +27,8 @@
     "test:fishing-casts": "npm run build && node dist/tests/fishing-casts-state.js && node dist/tests/fishing-casts-http.js && node dist/tests/fishing-casts-cohorts.js",
     "test:restoration": "npm run build && node tests/resource-profile-restoration.mjs && node dist/tests/restoration-profile-http.js",
     "test:fever-resources": "npm run build && node tests/fever-profile-http.mjs",
-    "test:restoration-fever": "npm run build && node tests/resource-profile-restoration-fever.mjs && node tests/restoration-fever-profile-http.mjs"
+    "test:restoration-fever": "npm run build && node tests/resource-profile-restoration-fever.mjs && node tests/restoration-fever-profile-http.mjs",
+    "test:restoration-fever-compatible": "npm run build && node tests/resource-profile-restoration-fever-compatible.mjs && node tests/restoration-fever-compatible-http.mjs"
   },
   "dependencies": {
     "express": "latest",
