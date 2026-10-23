@@ -6,6 +6,10 @@ It grants no Hunter, EXP, item or currency. Every stair awards zero gold.
 This is an authored test scenario using original artwork and existing Hunter
 references, not the recovered original Mirage assignment or balance.
 
+The subsequent [native trial](mirage-native-validation-2026-10-23.md) verified
+entry, a separate owned party, two wins/claims, final defeat and abandonment.
+The floor remains incomplete; the first win was human-assisted.
+
 **Opening the configured Mirage panel is a durable action.** Its first GetInfo
 enrolls supported owned Hunter families, sets their Mirage carried HP to10000,
 marks unselected duplicates−1 and captures the full three-stair recipe. It
@@ -60,12 +64,12 @@ owned HP/holds without re-enrollment or reward. Pending reward state2 must first
 be claimed, even when gold is zero. The Retry wire clock is projected ready
 for an active run; the captured enrollment timestamp is preserved internally.
 
-This UI chain still needs native verification on this recipe, including its
-warning/owner gate. Backend and source tests do not prove the control is
-currently reachable or a battle is safe. No native battle or completion is
-claimed by publishing the recipe. After a client crash, the durable active
-cache survives restart; the same intended Retry chain remains the source-backed
-release path. This recipe adds no automatic healing-on-reopen mechanism.
+The subsequent native trial verified this Retry warning/owner gate and roster
+release after final-stair defeat. It did not complete the floor or exercise
+native recovery after a client crash. Backend/source tests alone do not prove
+those additional paths. The durable active cache survives restart in compiled
+tests; the same Retry chain remains the source-backed release path for that
+case. This recipe adds no automatic healing-on-reopen mechanism.
 
 ## Focused coexistence check
 
