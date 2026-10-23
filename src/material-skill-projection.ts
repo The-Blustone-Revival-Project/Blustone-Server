@@ -53,6 +53,12 @@ export function validateMaterialSkillSources(episodeBytes:Buffer,symbolicBytes:B
     !isDeepStrictEqual(brightActive.effect[0],{effect_type:1,target_type:4,target_stat:1,
       refer_target_type:1,refer_target_stat:3,base_number:20,duration:4100,interval:1000}))
     throw new TypeError("Bright skill display serial/formula/source graph binding mismatch");
+  const bibiText=symbolic["040|1|1"],bibiActive=actors[70]?.skill?.find((skill:EpisodeSkill)=>skill.type===1);
+  if(bibiText?.SUB_SERIAL!=="0" || bibiText.FORMULAR!=="(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5" ||
+    bibiText.IS_FLOAT!=="0" || !isDeepStrictEqual(bibiActive,{type:1,target_rank:1,cool_time:5000,cost:3,crt_chance:50,
+      effect:[{effect_type:1,target_type:1,target_stat:1,refer_target_type:1,refer_target_stat:1,
+        base_number:-400,duration:4000,interval:1000}]}))
+    throw new TypeError("Bibi skill display serial/formula/source graph binding mismatch");
   return MATERIAL_SKILL_DONORS.map(donor=>{
     const selected=selectMaterialEpisodeGraph(donor.refId,donor.sourceIndex),actor=actors[donor.sourceIndex];
     const text=symbolic[`${donor.refId}|1|0`]?.EN;
@@ -81,7 +87,7 @@ const selected=MATERIAL_SKILL_PROFILE==="episode-indexed-projection"
     readFileSync(repositoryPath("resources/reference/episodes/SKILL_REF.json"))):[];
 
 /** Ordinary wire wrappers are LOCAL: sequential serials except the pinned Bright
- * active display join (serial0), no growth, unresolved
+ * and Bibi active display joins (serial0), no growth, unresolved
  * formula/display/cinematic bindings empty, absent numeric metadata zero.
  * Raw source selectors, coefficients, rank gates and timing stay unchanged. */
 export function projectMaterialSkillSlots(refId:string,neutral:MaterialWireSkill[]):MaterialWireSkill[] {
@@ -99,7 +105,7 @@ export function projectMaterialSkillSlots(refId:string,neutral:MaterialWireSkill
     return {...slot,icon_id,type:source.type,target_rank:source.target_rank,
       cost:source.cost??0,cool_time:source.cool_time??0,crt_chance:source.crt_chance??0,
       effect:source.effect.map((effect,index)=>({...effect,
-        serial:refId==="049"&&source.type===1&&source.effect.length===1?0:index+1,
+        serial:(refId==="049"||refId==="040")&&source.type===1&&source.effect.length===1?0:index+1,
         up_number:0,duration_up:0,value_calc:"",effect_desc:[]}))};
   });
 }

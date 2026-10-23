@@ -11,6 +11,10 @@ const brightText=JSON.parse(symbolicBytes.toString("utf8"))["049|1|1"];
 assert.equal(brightText.SUB_SERIAL,"0");
 assert.equal(brightText.FORMULAR,"stat*(value+value_up*skill_level)*5/100");
 assert.equal(brightText.IS_FLOAT,"0");
+const bibiText=JSON.parse(symbolicBytes.toString("utf8"))["040|1|1"];
+assert.equal(bibiText.SUB_SERIAL,"0");
+assert.equal(bibiText.FORMULAR,"(-1*(stat*(8+2*rank))*(value+value_up*skill_level)/10000)*5");
+assert.equal(bibiText.IS_FLOAT,"0");
 const valid=validateMaterialSkillSources(episodeBytes,symbolicBytes);
 const iconResources=spawnSync(process.platform==="win32"?"python":"python3",["-B",repositoryPath("tests/material-skill-icon-resources.py")],
   {cwd:repositoryPath(),encoding:"utf8",timeout:30_000});
@@ -74,7 +78,7 @@ for(const ref of after.refs) {
     assert.equal(slot.target_rank,native.target_rank);assert.equal(slot.cost,native.cost??0);
     assert.equal(slot.cool_time,native.cool_time??0);assert.equal(slot.crt_chance,native.crt_chance??0);
     assert.deepEqual(slot.effect,native.effect.map((effect:any,index:number)=>({...effect,
-      serial:ref.base.id==="049"&&type===1?0:index+1,
+      serial:(ref.base.id==="049"||ref.base.id==="040")&&type===1?0:index+1,
       up_number:0,duration_up:0,value_calc:"",effect_desc:[]})),"Exact graph order/selectors/floating coefficients/raw timing plus explicit local wrapper");
   }
 }
@@ -83,6 +87,8 @@ assert.equal(karl[0].cool_time,5000);assert.equal(karl[3].effect[0].base_number,
 assert.equal(after.refs.find((r:any)=>r.base.id==="049").skill[0].crt_chance,0,"Missing Bright probability is not invented50");
 assert.deepEqual(after.refs.find((r:any)=>r.base.id==="049").skill.slice(0,2).map((slot:any)=>slot.effect.map((effect:any)=>effect.serial)),
   [[0],[1]],"Only Bright active's sole effect binds the original description SUB_SERIAL; skill2 retains its wrapper identity");
+assert.deepEqual(after.refs.find((r:any)=>r.base.id==="040").skill.map((slot:any)=>slot.effect.map((effect:any)=>effect.serial)),
+  [[0],[1],[1],[1],[1]],"Only Bibi active binds SUB_SERIAL0; other slots retain their local identities despite symbolic mismatches");
 assert.deepEqual(after.refs.find((r:any)=>r.base.id==="049").skill.slice(2).map((slot:any)=>({icon_id:slot.icon_id,effect:slot.effect})),
   [3,4,5].map(type=>({icon_id:`C049_SI${type}`,effect:[]})),"Original icon art never fills Bright's absent numeric graphs");
 for(const [mode,card] of [["unknown","materials"],["episode-indexed-projection","starter"]]) {

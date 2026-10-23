@@ -91,7 +91,7 @@ try {
       if(!native){assert.deepEqual(slot.effect,[]);continue;}
       assert.equal(slot.target_rank,native.target_rank);assert.equal(slot.cost,native.cost??0);
       assert.deepEqual(slot.effect,native.effect.map((effect:any,i:number)=>({...effect,
-        serial:row.base.id==="049"&&slot.type===1?0:i+1,
+        serial:(row.base.id==="049"||row.base.id==="040")&&slot.type===1?0:i+1,
         up_number:0,duration_up:0,value_calc:"",effect_desc:[]})));
     }
   }

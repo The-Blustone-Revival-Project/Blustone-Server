@@ -116,3 +116,12 @@ reserve body/Victory and earned10EXP are now verified. The later narrow active
 serial0 binding supersedes the earlier general sequential wrapper statement
 for this one effect. Heal activation/ticks/recovery are still pending; see
 bright-native-acquisition-2026-10-23.md for current authoritative outcomes.
+
+## Later observer preparation
+
+Instrumented now has a host-only explicitly selected C049/1000018 read-only
+Episode skill snapshot mode, with old C004/default/touch guards unchanged.
+Host compile, pure argument tests and independent review passed. Actual native
+qualification/skill activation remains pending: Windows control could not
+activate the emulator window twice, so root held inputs and asked for restore.
+Client7068/server46444 remain live; no new Episode battle or save change.
