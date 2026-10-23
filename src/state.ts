@@ -58,6 +58,7 @@ import {ownedFishingInventory} from "./fishing-inventory.js";
 import {localQuestPolicy,localQuestJournal,beginLocalQuests,localQuestProgress,localQuestReferenceWire,recordLocalQuestWin,planLocalQuestClaim,planLocalLinearClaim,type LocalQuestPolicy,type LocalQuestJournal} from "./local-quests.js";
 import {fishingSaleBindings,planFishingSale,type FishingSaleBindings} from "./fishing-sale.js";
 import {configuredFishingCasts,normalizeFishingCasts,fishingReferenceHash,fishingCastBindings,validateFishingCastStock,planFishingBegin,planFishingEnd,fishingEndLog,fishingCastRecordRows,type FishingCastPolicy,type FishingCastJournal} from "./fishing-casts.js";
+import {configuredFishingTutorial,normalizeFishingTutorial,fishingTutorialReferenceHash,validateFishingTutorialStock,validateFishingTutorialEnd,planFishingTutorial,type FishingTutorialPolicy,type FishingTutorialJournal} from "./fishing-tutorial.js";
 import { changeSocialBlocks, socialBlockRows, type SocialBlocks } from "./social-blocks.js";
 import { emptySocialFriends, normalizeSocialFriends, planSocialFriend, planSocialFriendRemoval, receivedSocialFriendCount, socialFriendList, type SocialFriends } from "./social-friends.js";
 import { socialDiscovery } from "./social-discovery.js";
@@ -610,6 +611,9 @@ export class ServerState {
   private readonly veteranGiftPolicy?:VeteranGiftPolicy;
   private readonly profileMode:"disabled"|"archive-profile-projection";
   private readonly fishingCasts=new Map<number,FishingCastJournal>();
+  private readonly fishingTutorials=new Map<number,FishingTutorialJournal>();
+  private readonly fishingTutorialMode:"disabled"|"local-first-catch";
+  private readonly fishingTutorialPolicy?:FishingTutorialPolicy;
   private readonly fishingCastMode:"disabled"|"local-configured";
   private readonly fishingCastPolicy?:FishingCastPolicy;
   private readonly fishingSaleMode:"disabled"|"local-bound";
@@ -659,6 +663,7 @@ export class ServerState {
       profileMode?:"disabled"|"archive-profile-projection";
       baitShopMode?:"disabled"|"archive-2018-projection";baitShopDailyLimit?:unknown;
       fishingCastMode?:"disabled"|"local-configured";fishingCastPolicy?:unknown;
+      fishingTutorialMode?:"disabled"|"local-first-catch";fishingTutorialPolicy?:unknown;
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
       dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
@@ -763,6 +768,16 @@ export class ServerState {
       const baitIds=new Set([...itemReference().item,...(this.baitShopPolicy?baitShopReferences(this.baitShopPolicy).item:[])].map(item=>item.id));
       if(this.fishingCastPolicy.contexts.some(context=>!baitIds.has(context.lure_id)))throw new TypeError("Configured casting bait requires separately published item metadata");
     }
+    const tutorialMode=options.fishingTutorialMode??process.env.BLUSTONE_FISHING_TUTORIAL_MODE??"disabled";
+    if(tutorialMode!=="disabled"&&tutorialMode!=="local-first-catch")throw new TypeError("Unknown fishing tutorial mode");
+    this.fishingTutorialMode=tutorialMode;
+    const tutorialPolicy=Object.hasOwn(options,"fishingTutorialPolicy")?options.fishingTutorialPolicy:
+      process.env.BLUSTONE_FISHING_TUTORIAL_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_FISHING_TUTORIAL_POLICY_JSON);
+    if(tutorialMode==="local-first-catch") {
+      this.fishingTutorialPolicy=configuredFishingTutorial(tutorialPolicy,this.fishingItems,this.fishingCatalogue);
+      if(![...itemReference().item,...(this.baitShopPolicy?baitShopReferences(this.baitShopPolicy).item:[])].some(item=>item.id==="LU003"))
+        throw new TypeError("Fishing tutorial requires separately published LU003 metadata");
+    } else if(tutorialPolicy!==undefined)throw new TypeError("Fishing tutorial policy requires local-first-catch mode");
     const levelPrices = readPrices("equipmentLevelPrices","BLUSTONE_EQUIPMENT_LEVEL_PRICES_JSON");
     const rankPrices = readPrices("equipmentRankPrices","BLUSTONE_EQUIPMENT_RANK_PRICES_JSON");
     this.equipmentLevelPrices = Object.freeze((Array.isArray(levelPrices) && levelPrices.length===0 ? [] :
@@ -860,32 +875,34 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14||saved.version===15||saved.version===16)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14||saved.version===15||saved.version===16||saved.version===17)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
-    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Mirage run journals require schema12");
+    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Mirage run journals require schema12");
     if((saved.version===12||saved.version===13||saved.version===14)&&(!Array.isArray(saved.mirageRuns)||!saved.mirageRuns.length))throw new TypeError("Schema12 requires captured Mirage run journals");
-    if(saved.mirageSeries!==undefined&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Mirage re-entry journals require schema14");
+    if(saved.mirageSeries!==undefined&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Mirage re-entry journals require schema14");
     if(saved.version===14&&(!Array.isArray(saved.mirageSeries)||!saved.mirageSeries.length))throw new TypeError("Schema14 requires captured Mirage re-entry journals");
-    if(saved.fishingCasts!==undefined&&saved.version!==15&&saved.version!==16)throw new TypeError("Fishing cast journals require schema15");
+    if(saved.fishingCasts!==undefined&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Fishing cast journals require schema15");
     if(saved.version===15&&(!Array.isArray(saved.fishingCasts)||!saved.fishingCasts.length))throw new TypeError("Schema15 requires captured fishing casts");
-    if(saved.gemPolishJournals!==undefined&&saved.version!==16)throw new TypeError("Gem polish journals require schema16");
+    if(saved.gemPolishJournals!==undefined&&saved.version!==16&&saved.version!==17)throw new TypeError("Gem polish journals require schema16");
     if(saved.version===16&&(!Array.isArray(saved.gemPolishJournals)||!saved.gemPolishJournals.length))throw new TypeError("Schema16 requires completed supplied Gem polish work");
+    if(saved.fishingTutorials!==undefined&&saved.version!==17)throw new TypeError("Fishing tutorial journals require schema17");
+    if(saved.version===17&&(!Array.isArray(saved.fishingTutorials)||!saved.fishingTutorials.length))throw new TypeError("Schema17 requires captured fishing tutorial settlement");
     const hasMirageRevive=Array.isArray(saved.mirageRuns)&&saved.mirageRuns.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].policy)&&row[1].policy.revive_prices!==undefined);
-    if(hasMirageRevive&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Mirage first-aid policies require schema13");
+    if(hasMirageRevive&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Mirage first-aid policies require schema13");
     if(saved.version===13&&!hasMirageRevive)throw new TypeError("Schema13 requires captured Mirage first-aid policy");
-    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Captured Hunter transcendence policy requires schema11");
+    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Captured Hunter transcendence policy requires schema11");
     if(saved.version===11&&saved.hunterOvercomePolicy===undefined)throw new TypeError("Schema11 requires a captured Hunter transcendence policy");
     if(saved.hunterOvercomePolicy!==undefined) {
       this.capturedOvercomePolicy=configuredHunterOvercome(saved.hunterOvercomePolicy,new Set(itemReference().item.map(row=>row.id)));
       if(this.configuredOvercomePolicy&&hunterOvercomeFingerprint(this.configuredOvercomePolicy)!==hunterOvercomeFingerprint(this.capturedOvercomePolicy))
         throw new TypeError("Configured transcendence policy differs from captured earned policy; refusing silent stat/cost changes");
     }
-    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
+    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
       throw new TypeError("Paid dorm expansion requires state schema10");
-    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
       [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
       throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
@@ -895,10 +912,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -979,7 +996,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -1000,6 +1017,14 @@ export class ServerState {
         throw new TypeError("Configured fishing ownership bindings differ from captured casts");
       validateFishingCastStock(this.gameByPvid.get(row[0])!,journal,new Set(this.fishingItems.filter(item=>item.use_type===17).map(item=>item.id)));
       this.fishingCasts.set(row[0],journal);
+    }
+    if(saved.fishingTutorials!==undefined)for(const row of saved.fishingTutorials as unknown[]) {
+      if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.fishingTutorials.has(row[0]))
+        throw new TypeError("Invalid fishing tutorial journal owner");
+      const journal=normalizeFishingTutorial(row[1],this.fishingItems,this.fishingCatalogue);
+      if(this.fishingTutorialPolicy&&JSON.stringify(journal.policy)!==JSON.stringify(this.fishingTutorialPolicy))throw new TypeError("Configured tutorial differs from captured fishing tutorial");
+      validateFishingTutorialStock(this.gameByPvid.get(row[0])!,journal);
+      this.fishingTutorials.set(row[0],journal);
     }
     if(saved.gemPolishJournals!==undefined)for(const row of saved.gemPolishJournals as unknown[]) {
       if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.gameByPvid.has(row[0])||!this.accountsByPvid.has(row[0])||this.gemPolishJournals.has(row[0]))throw new TypeError("Invalid Gem polish journal owner");
@@ -1039,9 +1064,9 @@ export class ServerState {
     const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: this.gemPolishJournals.size?16:this.fishingCasts.size?15:this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const snapshot = { version: this.fishingTutorials.size?17:this.gemPolishJournals.size?16:this.fishingCasts.size?15:this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -1054,6 +1079,7 @@ export class ServerState {
       ...(this.mirageRuns.size?{mirageRuns:[...this.mirageRuns]}:{}),
       ...(this.mirageSeries.size?{mirageSeries:[...this.mirageSeries]}:{}),
       ...(this.fishingCasts.size?{fishingCasts:[...this.fishingCasts]}:{}),
+      ...(this.fishingTutorials.size?{fishingTutorials:[...this.fishingTutorials]}:{}),
       ...(this.gemPolishJournals.size?{gemPolishJournals:[...this.gemPolishJournals]}:{}),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
@@ -1882,6 +1908,28 @@ export class ServerState {
 
   fishingAction(route: string, payload: Record<string, unknown>, headers: Record<string, string>) {
     const account=this.accountFor(payload, headers);
+    if(route==="/fishing/EndWithSell"&&(payload.log_id===-1||payload.log_id==="-1")) {
+      const game=this.gameByPvid.get(account.pvid),ordinary=this.fishingCasts.get(account.pvid);
+      // The native callback removes CURRENT consume markers even for old results.
+      if(ordinary?.casts.at(-1)?.state==="pending")return this.failure(2001,"An ordinary fishing cast is pending");
+      if(this.fishingTutorialMode!=="local-first-catch"||!this.fishingTutorialPolicy||!this.fishingCatalogue||!game)
+        return this.failure(2001,"Configured fishing tutorial is unavailable");
+      try{validateFishingTutorialEnd(payload);}catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+      // Success carries additive item deltas. Never replay that receipt.
+      if(this.fishingTutorials.has(account.pvid))return this.failure(10203,"Local fishing tutorial already settled; cold reload repairs missed cached records");
+      if(game.tutorial.some(row=>row.type===27&&row.step>=2&&row.is_cleared===1)||fishingCastRecordRows(ordinary).length||
+        (game.owned_fish??[]).some(row=>row.b_cnt>0||row.s_cnt>0||row.g_cnt>0))return this.failure(2001,"Fishing first-catch eligibility has ended");
+      let plan;
+      try{plan=planFishingTutorial(game,account.pvid,this.fishingTutorialPolicy,
+        fishingTutorialReferenceHash(this.fishingTutorialPolicy,this.fishingItems,this.fishingCatalogue),this.fishingCatalogue,payload,Math.floor(Date.now()/1000));}
+      catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+      const before={items:game.items,owned_fish:game.owned_fish,gold:game.gold,next_item_inst_id:game.next_item_inst_id};
+      Object.assign(game,{items:plan.items,owned_fish:plan.owned_fish,gold:plan.gold,next_item_inst_id:plan.next_item_inst_id});
+      this.fishingTutorials.set(account.pvid,plan.journal);
+      try{this.persist();}catch(error){Object.assign(game,before);if(before.owned_fish===undefined)delete game.owned_fish;this.fishingTutorials.delete(account.pvid);throw error;}
+      // Only the client's subsequent /tutorial/Clear may advance27/2.
+      return this.envelope({...plan.receipt,achievement:null});
+    }
     if(route==="/fishing/Begin"||route==="/fishing/EndWithSell") {
       const game=this.gameByPvid.get(account.pvid),prior=this.fishingCasts.get(account.pvid);
       if(this.fishingCastMode!=="local-configured"||!this.fishingCastPolicy||!this.fishingCatalogue||!game)
@@ -1944,7 +1992,14 @@ export class ServerState {
       try {return this.envelope(ownedFishingInventory(this.gameByPvid.get(account.pvid)?.owned_fish??[],new Set(this.fishingItems.map(row=>row.id))));}
       catch(error){return this.failure(2001,error instanceof Error?error.message:"Invalid owned fishing inventory");}
     }
-    if(route==="/fishing/GetRecord") return this.envelope(fishingCastRecordRows(this.fishingCasts.get(account.pvid)));
+    if(route==="/fishing/GetRecord") {
+      const first=this.fishingTutorials.get(account.pvid)?.policy.outcome;
+      const records=new Map(first?[[first.fish_id,{...first}]]:[]);
+      for(const row of fishingCastRecordRows(this.fishingCasts.get(account.pvid))) {
+        const prior=records.get(row.fish_id);if(!prior||row.length>prior.length)records.set(row.fish_id,row);
+      }
+      return this.envelope([...records.values()]);
+    }
     return this.failure(2001, "Fishing catches, pools, prices and settlement are not reconstructed");
   }
 

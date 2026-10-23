@@ -113,5 +113,25 @@ try {
   for(const expected of ordinary.accounts)assert.deepEqual(final.accounts.find((a:any)=>a.pvid===expected.pvid),expected);
   const good=readFileSync(file),old=JSON.parse(good.toString());old.version=15;const bad=JSON.stringify(old);writeFileSync(file,bad);
   assert.throws(()=>new ServerState("http://localhost",file,options));assert.equal(readFileSync(file,"utf8"),bad);writeFileSync(file,good);
+  // Schema17 adds a genuine first tutorial catch for the uncaught peer while
+  // preserving the owner's real schema14/15/16 work and every earlier cohort.
+  const tutorialOptions={...options,fishingTutorialMode:"local-first-catch" as const,
+    fishingTutorialPolicy:{origin:"local-authored",stock:"new-stack-per-catch",bait_debit:"none-local",on_win:"sell",
+      outcome:{fish_id:castFish.id,grade:1,length:10000}}};
+  const tutorialState=new ServerState("http://localhost",file,tutorialOptions),beforeTutorial=JSON.parse(readFileSync(file,"utf8"));
+  const tutorialResult=gameResponse(tutorialState,"/fishing/EndWithSell",{...peer,log_id:"-1",is_win:"1"}) as any;
+  assert.equal(tutorialResult.result_code,1,JSON.stringify(tutorialResult));
+  const withTutorial=JSON.parse(readFileSync(file,"utf8"));assert.equal(withTutorial.version,17);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","guilds","dispatches","quests","accounts","transportKeys","sessionBindings"])
+    assert.deepEqual(withTutorial[key],beforeTutorial[key],key);
+  assert.deepEqual(withTutorial.gameStates.find(([id]:any)=>id===actor.pvid),beforeTutorial.gameStates.find(([id]:any)=>id===actor.pvid));
+  const tutorialBytes=readFileSync(file),tutorialOff=new ServerState("http://localhost",file,{...tutorialOptions,fishingTutorialMode:"disabled",fishingTutorialPolicy:undefined});
+  assert.deepEqual(readFileSync(file),tutorialBytes);
+  assert.deepEqual((gameResponse(tutorialOff,"/fishing/GetRecord",peer) as any).ret_data,[{fish_id:castFish.id,grade:1,length:10000}]);
+  tutorialOff.confirmNickname({...peer,nick_name:"Tutorial Cohort Peer"},{});
+  const final17=JSON.parse(readFileSync(file,"utf8"));assert.equal(final17.version,17);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","dispatches","quests"])
+    assert.deepEqual(final17[key],withTutorial[key],key);
+  assert.deepEqual(final17.gameStates,withTutorial.gameStates);
 } finally {Date.now=clock;rmSync(directory,{recursive:true,force:true});}
 console.log("Gem polish cohorts: real Mirage schema14 current/archived paid aid and abandon → actual fishing schema15 → supplied Gem work schema16, Guild TYPE2 aggregate fees, restart/unrelated saves/modeoff and complete earlier-state retention passed.");

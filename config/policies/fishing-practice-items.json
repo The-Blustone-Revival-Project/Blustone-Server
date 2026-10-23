@@ -1,0 +1,13 @@
+[
+  {
+    "id": "LOCAL_PRACTICE_FISH",
+    "name": "Practice Fish",
+    "desc": "A practice catch for the restored fishing trial.",
+    "thumbnail_id": "FS001",
+    "effect": "",
+    "rank": 1,
+    "use_type": 17,
+    "sell_price": 0,
+    "collect_qty": 0
+  }
+]

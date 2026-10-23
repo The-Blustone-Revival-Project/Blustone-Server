@@ -1,0 +1,144 @@
+{
+  "origin": "local-authored",
+  "bait_debit": "end-all",
+  "bait_qty": 1,
+  "stock": "new-stack-per-catch",
+  "on_win": "sell",
+  "contexts": [
+    {
+      "place_id": "PLC001",
+      "cast_dist": 1,
+      "lure_id": "LU003",
+      "tuning": {
+        "init_val": 30,
+        "max_val": 100,
+        "dec_val": 2,
+        "inc_val": 12,
+        "dec_val_on_burn": 4,
+        "first_burn": {
+          "min": 5,
+          "max": 7
+        },
+        "burn_cool": {
+          "min": 2,
+          "max": 4
+        },
+        "burn_dur": {
+          "min": 1,
+          "max": 2
+        },
+        "wait_time": {
+          "min": 1,
+          "max": 3
+        }
+      },
+      "outcomes": [
+        {
+          "fish_id": "LOCAL_PRACTICE_FISH",
+          "grade": 1,
+          "length": 10000
+        },
+        {
+          "fish_id": "LOCAL_PRACTICE_FISH",
+          "grade": 2,
+          "length": 12000
+        },
+        {
+          "fish_id": "LOCAL_PRACTICE_FISH",
+          "grade": 3,
+          "length": 15000
+        }
+      ]
+    },
+    {
+      "place_id": "PLC001",
+      "cast_dist": 2,
+      "lure_id": "LU003",
+      "tuning": {
+        "init_val": 30,
+        "max_val": 100,
+        "dec_val": 2,
+        "inc_val": 12,
+        "dec_val_on_burn": 4,
+        "first_burn": {
+          "min": 5,
+          "max": 7
+        },
+        "burn_cool": {
+          "min": 2,
+          "max": 4
+        },
+        "burn_dur": {
+          "min": 1,
+          "max": 2
+        },
+        "wait_time": {
+          "min": 1,
+          "max": 3
+        }
+      },
+      "outcomes": [
+        {
+          "fish_id": "LOCAL_PRACTICE_FISH",
+          "grade": 1,
+          "length": 10000
+        },
+        {
+          "fish_id": "LOCAL_PRACTICE_FISH",
+          "grade": 2,
+          "length": 12000
+        },
+        {
+          "fish_id": "LOCAL_PRACTICE_FISH",
+          "grade": 3,
+          "length": 15000
+        }
+      ]
+    },
+    {
+      "place_id": "PLC001",
+      "cast_dist": 3,
+      "lure_id": "LU003",
+      "tuning": {
+        "init_val": 30,
+        "max_val": 100,
+        "dec_val": 2,
+        "inc_val": 12,
+        "dec_val_on_burn": 4,
+        "first_burn": {
+          "min": 5,
+          "max": 7
+        },
+        "burn_cool": {
+          "min": 2,
+          "max": 4
+        },
+        "burn_dur": {
+          "min": 1,
+          "max": 2
+        },
+        "wait_time": {
+          "min": 1,
+          "max": 3
+        }
+      },
+      "outcomes": [
+        {
+          "fish_id": "LOCAL_PRACTICE_FISH",
+          "grade": 1,
+          "length": 10000
+        },
+        {
+          "fish_id": "LOCAL_PRACTICE_FISH",
+          "grade": 2,
+          "length": 12000
+        },
+        {
+          "fish_id": "LOCAL_PRACTICE_FISH",
+          "grade": 3,
+          "length": 15000
+        }
+      ]
+    }
+  ]
+}

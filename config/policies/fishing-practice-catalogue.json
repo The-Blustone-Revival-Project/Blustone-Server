@@ -1,0 +1,16 @@
+{
+  "pools": [
+    {
+      "lure_id": "LU003",
+      "fish_id": "LOCAL_PRACTICE_FISH"
+    }
+  ],
+  "prices": [
+    {
+      "fish_id": "LOCAL_PRACTICE_FISH",
+      "b_price": 10,
+      "s_price": 20,
+      "g_price": 30
+    }
+  ]
+}

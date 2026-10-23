@@ -1,0 +1,7 @@
+{
+  "origin": "local-authored",
+  "stock": "new-stack-per-catch",
+  "bait_debit": "none-local",
+  "on_win": "sell",
+  "outcome": {"fish_id": "LOCAL_PRACTICE_FISH", "grade": 1, "length": 10000}
+}
