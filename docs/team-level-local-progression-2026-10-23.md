@@ -24,6 +24,11 @@ level2 threshold100, level5 threshold400, level100 threshold9900. Both the step
 and cap are authored local choices. Missing/legacy selects the exact old two
 rows. Unknown values refuse startup. Each call returns detached rows.
 
+The launchers also expose --team-level-profile local-linear-100 (Node) or
+-TeamLevelProfile local-linear-100 (PowerShell); they validate the exact named
+choice and print a LOCAL policy notice. The checked-in resource profiles are
+unchanged, so the wider curve remains an explicit operator choice.
+
 GetLevel.user, native GetUserLevel, server area gates and mission EXP/level
 receipts consume the same selected table. Hunter curves, combat stats, VIP,
 max AP/BP and level-up rewards are unchanged. Existing EXP is not rewritten;

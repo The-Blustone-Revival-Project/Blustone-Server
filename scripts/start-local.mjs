@@ -33,9 +33,17 @@ if (args.includes('--recruit-card')) {
 // Explicit app-lifetime immutable resource bytes; changing originals requires
 // a new process. No profile or persistent gameplay setting is rewritten.
 if (args.includes('--resource-snapshot')) env.BLUSTONE_RESOURCE_SNAPSHOT = '1';
+if (args.includes('--team-level-profile')) {
+  const teamProfile = option('--team-level-profile');
+  if (!['legacy', 'local-linear-100'].includes(teamProfile))
+    throw new Error('--team-level-profile requires legacy or local-linear-100');
+  env.BLUSTONE_TEAM_LEVEL_PROFILE = teamProfile;
+}
 preflight(root, profile);
 mkdirSync(path.dirname(env.BLUSTONE_STATE_FILE), { recursive: true });
 console.log(`Profile ${profileName}: ${profile.expectedPackages} packages, version ${env.BLUSTONE_RESOURCE_VERSION}, port ${env.BLUSTONE_PORT}`);
+if (env.BLUSTONE_TEAM_LEVEL_PROFILE === 'local-linear-100')
+  console.log('Team level policy: LOCAL 100-EXP steps, 100 levels; original thresholds unknown');
 const command = args.includes('--dev') ? ['--import', 'tsx', path.join(root, 'src/server.ts')] : [path.join(root, 'dist/src/server.js')];
 const child = spawn(process.execPath, command, { cwd: root, env, stdio: 'inherit' });
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => child.kill(signal));

@@ -1,6 +1,6 @@
 # Blustone Server
 
-A local TypeScript/Express compatibility server for the preserved BLUSTONE client. The current E6 resource profile is pinned to 139 packages and stamp 1634683. Many original systems remain compatibility fixtures or explicitly unsupported; this is not a claim of complete game functionality.
+A local TypeScript/Express compatibility server for the preserved BLUSTONE client. The default E6 resource profile remains pinned to 139 packages and stamp 1634683. Many original systems remain compatibility fixtures or explicitly unsupported; this is not a claim of complete game functionality.
 
 ## Run on Windows
 
@@ -18,6 +18,24 @@ For local HTTP verification or another port:
 ```powershell
 npm start -- --host 127.0.0.1 --port 18081 --base-url http://127.0.0.1:18081 --state-file local/manual-test-state.json
 ```
+
+The broader experimental resource profile retains compatible material progression
+and serves170 original package groups, including Guild, Mirage and fever artwork:
+
+```powershell
+npm start -- --profile current-restoration-fever-compatible-progression --resource-snapshot --team-level-profile local-linear-100
+```
+
+The team curve is an explicit LOCAL extension to100 levels at100 EXP per step;
+original thresholds remain unknown. It uses existing earned EXP and grants no
+EXP, rewards or Hunters. Without that option the old two-row curve still caps
+team level at2. Native Guild Bar introduction/discovery/ranking now render under
+the local curve; Guild creation, fees, joined progression and GvG remain separate
+data/policy gaps. Resource coverage does not bypass Episode gates.
+See [local team progression](docs/team-level-local-progression-2026-10-23.md).
+Resource snapshots retain the selected raw/package bytes in RAM for one app;
+changing those files or settings requires a fresh process. They remain optional;
+see [resource snapshot behavior](docs/resource-snapshot-2026-10-23.md).
 
 Historical Hunter trace requirements are available with
 `BLUSTONE_TRACE_THRESHOLD_PROFILE=archive-images-2017-2018`: Sylvester20 and
