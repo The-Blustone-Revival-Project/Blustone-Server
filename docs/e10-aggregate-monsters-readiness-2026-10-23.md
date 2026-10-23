@@ -19,7 +19,9 @@ identity; it does not restrict the resource names inside it to M012.
 CB1002's unique original STAT rows are106 CB1002_M1/M035,107 CB1002_M2/M036,
 and110 CB1002_M3/M034. The five enemy slots remain M1,M2,M1,M2,M3. Its ST900
 background is already selected by E9. CB1001 still uses unique146 Karl/C012
-and147 Acerola/C030 with ST007; all are already selected. No combat stats,
+and147 Acerola/C030 with environment selector7, whose original table prefix is
+STI001 in ST001.jet; all are already selected. The selector is not a package
+basename. The earlier ST007 attribution was incorrect. No combat stats,
 coefficients, targets, monster identity, party or enemy order are modified.
 
 The new four-original manifest additionally pins:

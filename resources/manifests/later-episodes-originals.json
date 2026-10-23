@@ -1,0 +1,492 @@
+[
+  {
+    "name": "C008.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C008.jet",
+    "destination": "resources/runtime/assets/C008.jet",
+    "bytes": 1258251,
+    "sha256": "0e01a954edeb2e33914bc37d8a2be21aab8f383c3bbfef2c564aeca8ee3532c4"
+  },
+  {
+    "name": "C008_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C008_EFT.jet",
+    "destination": "resources/runtime/assets/C008_EFT.jet",
+    "bytes": 3085158,
+    "sha256": "04c2c3c170e203ab45826648dc17fb89bcb883ea3cc34dd3631def339cf969b0"
+  },
+  {
+    "name": "C008_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C008_Q.jet",
+    "destination": "resources/runtime/assets/C008_Q.jet",
+    "bytes": 51236,
+    "sha256": "30d58a6e7dce79b19d6ed2a01700948d964ac7cae32870246bb2b80022670e0d"
+  },
+  {
+    "name": "C008_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C008_SND.jet",
+    "destination": "resources/runtime/assets/C008_SND.jet",
+    "bytes": 151464,
+    "sha256": "53d1873c06f7a42a0b0e6989fdc1abb3e876eca64696a8c06c27a51fd584f2a6"
+  },
+  {
+    "name": "C019.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C019.jet",
+    "destination": "resources/runtime/assets/C019.jet",
+    "bytes": 1006359,
+    "sha256": "9118f0b1985a165a3ce66a4fb771766c204e9a3e935256c27ef12b9c18ef35f0"
+  },
+  {
+    "name": "C019_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C019_EFT.jet",
+    "destination": "resources/runtime/assets/C019_EFT.jet",
+    "bytes": 3639431,
+    "sha256": "4d737840a7e5bfde6aca776e4359ca2ebe0174b81aa4057e541b1418bb1e7dae"
+  },
+  {
+    "name": "C019_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C019_Q.jet",
+    "destination": "resources/runtime/assets/C019_Q.jet",
+    "bytes": 128378,
+    "sha256": "f9053a5752ccc2a27f8c8b86667ae6760ad65bbc63973af0e9968e232c6413e0"
+  },
+  {
+    "name": "C019_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C019_SND.jet",
+    "destination": "resources/runtime/assets/C019_SND.jet",
+    "bytes": 84975,
+    "sha256": "fa4dcd9c466137724273496b48ec7f8c35a63890cdc2d4d4bcc5efa72f9ad8db"
+  },
+  {
+    "name": "C023.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C023.jet",
+    "destination": "resources/runtime/assets/C023.jet",
+    "bytes": 684063,
+    "sha256": "0e0f349e143e91eb4be245f6927f60feb7e0917d80230b5b64dedd2f963c5baa"
+  },
+  {
+    "name": "C023_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C023_EFT.jet",
+    "destination": "resources/runtime/assets/C023_EFT.jet",
+    "bytes": 2684266,
+    "sha256": "cd37f5e43dd2832d3f1e4eae832d3752fb5a59f7a5f00ab48caa23ac453f0aba"
+  },
+  {
+    "name": "C023_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C023_Q.jet",
+    "destination": "resources/runtime/assets/C023_Q.jet",
+    "bytes": 47846,
+    "sha256": "2dd61442a8b386e7d1bfffaabcdb0264b6d1bc1c36b35cd48f75205857c5f233"
+  },
+  {
+    "name": "C023_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C023_SND.jet",
+    "destination": "resources/runtime/assets/C023_SND.jet",
+    "bytes": 102529,
+    "sha256": "2d987eb51b35e70caa26041742f06580946db1b8c60b8764007fe40bc992ca3e"
+  },
+  {
+    "name": "C028.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C028.jet",
+    "destination": "resources/runtime/assets/C028.jet",
+    "bytes": 1590116,
+    "sha256": "b5f14b4710a89bdcd3429e90bb16536f1b9ba54226f02ca8836d67fc51a95ab7"
+  },
+  {
+    "name": "C028_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C028_EFT.jet",
+    "destination": "resources/runtime/assets/C028_EFT.jet",
+    "bytes": 1826648,
+    "sha256": "cc2308c0a575892bd07d5c980b071f7a79707374fc5745376835dee8a25e852b"
+  },
+  {
+    "name": "C028_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C028_Q.jet",
+    "destination": "resources/runtime/assets/C028_Q.jet",
+    "bytes": 52800,
+    "sha256": "46e516ac0b13341bdbdadac193d69256c972aa679e7c14a21129cee4cf0f4305"
+  },
+  {
+    "name": "C028_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C028_SND.jet",
+    "destination": "resources/runtime/assets/C028_SND.jet",
+    "bytes": 178664,
+    "sha256": "3e8d2633f67fe363cb5af2c1b4d91882174340650a7696436c9db7de5229fb99"
+  },
+  {
+    "name": "C043.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C043.jet",
+    "destination": "resources/runtime/assets/C043.jet",
+    "bytes": 1235758,
+    "sha256": "220ccc4a101bebb81ab7ea0958d46698fe1536a5b9985a9e51630204d6576c9d"
+  },
+  {
+    "name": "C043_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C043_EFT.jet",
+    "destination": "resources/runtime/assets/C043_EFT.jet",
+    "bytes": 2041289,
+    "sha256": "db2ac87c4071c3ec007519d58635159ded477ccbad8bb3ec18371bfacd227e2d"
+  },
+  {
+    "name": "C043_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C043_Q.jet",
+    "destination": "resources/runtime/assets/C043_Q.jet",
+    "bytes": 61861,
+    "sha256": "dbc0420b8e7b1ffe26e99d5049b091f62cee2ca1ffbad9e145682dfcd3cb8edb"
+  },
+  {
+    "name": "C043_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C043_SND.jet",
+    "destination": "resources/runtime/assets/C043_SND.jet",
+    "bytes": 179928,
+    "sha256": "c56e94e2831b4bad8d7538de8d269bda4de44035db9f7c298beb023e0d55bb60"
+  },
+  {
+    "name": "C046.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C046.jet",
+    "destination": "resources/runtime/assets/C046.jet",
+    "bytes": 1451563,
+    "sha256": "3a63e61edf8b98f6f40dc90d45bd80b20a6fe57b555080e6bf97e6f764ec02f8"
+  },
+  {
+    "name": "C046_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C046_EFT.jet",
+    "destination": "resources/runtime/assets/C046_EFT.jet",
+    "bytes": 1281233,
+    "sha256": "044804c3558bbe1db5f5e8bf1996d63c21329e3c0895b52df07a33d748ba8242"
+  },
+  {
+    "name": "C046_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C046_Q.jet",
+    "destination": "resources/runtime/assets/C046_Q.jet",
+    "bytes": 52882,
+    "sha256": "8239162bbbb2d89a6f507980d385a4800c97250009b3161cdb4b32eff294f2e4"
+  },
+  {
+    "name": "C046_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C046_SND.jet",
+    "destination": "resources/runtime/assets/C046_SND.jet",
+    "bytes": 138450,
+    "sha256": "f09dea34c781eccc6d2889bfec6f95d4e4cc94a3a455577eab638435a7bb2c3b"
+  },
+  {
+    "name": "C057.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C057.jet",
+    "destination": "resources/runtime/assets/C057.jet",
+    "bytes": 959618,
+    "sha256": "5c3a6d557d1b05a740d14cc59f3487ab70c87a9b618407a12bc6870cb56c2bfa"
+  },
+  {
+    "name": "C057_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C057_EFT.jet",
+    "destination": "resources/runtime/assets/C057_EFT.jet",
+    "bytes": 2405438,
+    "sha256": "b355bb1cb4fb6080243b0b2e9e595007e8a5b3c57b5882d0af5ac5ba0f13cdaf"
+  },
+  {
+    "name": "C057_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C057_Q.jet",
+    "destination": "resources/runtime/assets/C057_Q.jet",
+    "bytes": 62925,
+    "sha256": "f1d12b9a7b8395d8c28ec8d4965b47462f53b44556acd99839a0c50745fe61bb"
+  },
+  {
+    "name": "C057_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C057_SND.jet",
+    "destination": "resources/runtime/assets/C057_SND.jet",
+    "bytes": 139216,
+    "sha256": "c10f0e8a4083353aa331c2f6ac29b832db797db87fa7f8ced44ab620d5861d92"
+  },
+  {
+    "name": "C064.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C064.jet",
+    "destination": "resources/runtime/assets/C064.jet",
+    "bytes": 1565579,
+    "sha256": "059aef498003350ecc16c4f77f55164b3637d4ea64a75d081e52fdce86661155"
+  },
+  {
+    "name": "C064_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C064_EFT.jet",
+    "destination": "resources/runtime/assets/C064_EFT.jet",
+    "bytes": 2850105,
+    "sha256": "762e84a122284a15eb333fcb0d017ee8c974dcc0ee7501782349fdede4a541a7"
+  },
+  {
+    "name": "C064_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C064_Q.jet",
+    "destination": "resources/runtime/assets/C064_Q.jet",
+    "bytes": 52191,
+    "sha256": "dd1fcba9d964dd020e799a75dc5ce9b86b8c6fe399aaf12fee853ce7daa5a786"
+  },
+  {
+    "name": "C064_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C064_SND.jet",
+    "destination": "resources/runtime/assets/C064_SND.jet",
+    "bytes": 159958,
+    "sha256": "4ae9008b8553c9f1ea533cd17496a1acf77082d2bd5d7849217d1e7adc306a8a"
+  },
+  {
+    "name": "C068.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C068.jet",
+    "destination": "resources/runtime/assets/C068.jet",
+    "bytes": 1798531,
+    "sha256": "3c004a974232368e41e83417caf2883fa44c2c45b62fb779a69ffa199d602a3b"
+  },
+  {
+    "name": "C068_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C068_EFT.jet",
+    "destination": "resources/runtime/assets/C068_EFT.jet",
+    "bytes": 4828946,
+    "sha256": "8666e61cdf6ba0bf5e9de5ad75efcd8a38ceac930144db5cc7401021e0c15b68"
+  },
+  {
+    "name": "C068_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C068_Q.jet",
+    "destination": "resources/runtime/assets/C068_Q.jet",
+    "bytes": 65262,
+    "sha256": "5b2a741fd4dda0975f3785dbed4ba05b6bd4ae42f55565c77553dac0ef008ca9"
+  },
+  {
+    "name": "C068_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C068_SND.jet",
+    "destination": "resources/runtime/assets/C068_SND.jet",
+    "bytes": 111439,
+    "sha256": "afecb1c0aba992f734392cfdeecf65172108f7d21aff1be0bf2a059b7e6bc40a"
+  },
+  {
+    "name": "C071.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C071.jet",
+    "destination": "resources/runtime/assets/C071.jet",
+    "bytes": 1785757,
+    "sha256": "583cba6eb9c3d5491aae2548aa789c2c7fd878d345fb89c58f721467b5fba614"
+  },
+  {
+    "name": "C071_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C071_EFT.jet",
+    "destination": "resources/runtime/assets/C071_EFT.jet",
+    "bytes": 4300805,
+    "sha256": "5ac47a90fac591c5234afaf19ca09951097ad7f5787df2c3ee68a8d200659a04"
+  },
+  {
+    "name": "C071_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C071_Q.jet",
+    "destination": "resources/runtime/assets/C071_Q.jet",
+    "bytes": 63990,
+    "sha256": "f9c18034d6d275da03ea45fef396e34c10ee8826955fee0ab45e60edb624e556"
+  },
+  {
+    "name": "C071_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C071_SND.jet",
+    "destination": "resources/runtime/assets/C071_SND.jet",
+    "bytes": 254643,
+    "sha256": "0c901457fd32af82c729da1a1715b55727faab5d48e619cdfc5b2590255b1de1"
+  },
+  {
+    "name": "C509.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C509.jet",
+    "destination": "resources/runtime/assets/C509.jet",
+    "bytes": 2395347,
+    "sha256": "505f30d9ea7b707176b367d0d788c9ad389e96cd6672b8a0fd08e5905eefa640"
+  },
+  {
+    "name": "C509_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C509_EFT.jet",
+    "destination": "resources/runtime/assets/C509_EFT.jet",
+    "bytes": 4150156,
+    "sha256": "be3c73a91e44a89030c41df90a05a13cbef69ac6a10b5c1d5b36861c1635f1c4"
+  },
+  {
+    "name": "C509_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C509_Q.jet",
+    "destination": "resources/runtime/assets/C509_Q.jet",
+    "bytes": 53690,
+    "sha256": "6d7d594b114a0c235310232854f73471d705752c600fafdac64b2c9653fbc8fb"
+  },
+  {
+    "name": "C509_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C509_SND.jet",
+    "destination": "resources/runtime/assets/C509_SND.jet",
+    "bytes": 138833,
+    "sha256": "97b77db66f802cad33198c01b76712cd878c3c6a6ae08bcb9f47f9f976465f22"
+  },
+  {
+    "name": "C510.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C510.jet",
+    "destination": "resources/runtime/assets/C510.jet",
+    "bytes": 2359538,
+    "sha256": "ca9219d813c730a0e6978f606bd3bfec102d838635d3e7e1dae5c914f4e387dd"
+  },
+  {
+    "name": "C510_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C510_EFT.jet",
+    "destination": "resources/runtime/assets/C510_EFT.jet",
+    "bytes": 4569329,
+    "sha256": "46ec03599acbb9f1e3eb6f734eb39550b89b880432f16282f3435e53c521bad0"
+  },
+  {
+    "name": "C510_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C510_Q.jet",
+    "destination": "resources/runtime/assets/C510_Q.jet",
+    "bytes": 50438,
+    "sha256": "e2db31a85d49a7c5e18c239dff18a4512500f00af906427ecc967b6c727e6d10"
+  },
+  {
+    "name": "C510_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C510_SND.jet",
+    "destination": "resources/runtime/assets/C510_SND.jet",
+    "bytes": 74241,
+    "sha256": "2df88d2f990e5a4764bbc1721f536dc23c05a5f0dc4453ce40d636b4d5f7e808"
+  },
+  {
+    "name": "M014.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/M014.jet",
+    "destination": "resources/runtime/assets/M014.jet",
+    "bytes": 1557994,
+    "sha256": "d4c6aafef0fcf31511312da39e19320c84d9dad0d60b891dd4ce7a5410855225"
+  },
+  {
+    "name": "M100.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/M100.jet",
+    "destination": "resources/runtime/assets/M100.jet",
+    "bytes": 584684,
+    "sha256": "f133b1aec0d04c67e524abe97b795565c439b803ba5175f56d76fdc641283243"
+  },
+  {
+    "name": "ST902.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/ST902.jet",
+    "destination": "resources/runtime/assets/ST902.jet",
+    "bytes": 1673990,
+    "sha256": "40bfd2d1a5c86d36bf0b4846d1f51eac71224cc4a343bd9768d47f6e71f46455"
+  },
+  {
+    "name": "CUT_002.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_002.jet",
+    "destination": "resources/runtime/assets/CUT_002.jet",
+    "bytes": 1938440,
+    "sha256": "1d23f20f03b610c4f3c1c77ceb239f2654364bad6e3d540627410deea1ff03c4"
+  },
+  {
+    "name": "CUT_E1201.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1201.jet",
+    "destination": "resources/runtime/assets/CUT_E1201.jet",
+    "bytes": 401397,
+    "sha256": "86849aa1ab782eb7e307cfe2b227532c5a4fa1f7c5621569b35189ddaabef524"
+  },
+  {
+    "name": "CUT_E1301.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1301.jet",
+    "destination": "resources/runtime/assets/CUT_E1301.jet",
+    "bytes": 497849,
+    "sha256": "a29b7ffb906396754a2b8e95fc670d9eb24d86066c578433cab1f02378cb765c"
+  },
+  {
+    "name": "CUT_E1401.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1401.jet",
+    "destination": "resources/runtime/assets/CUT_E1401.jet",
+    "bytes": 459503,
+    "sha256": "98954ad4b51572b2dc938a0a889825dd4fc2d1100cd96455570104d7062923d8"
+  },
+  {
+    "name": "CUT_E1402.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1402.jet",
+    "destination": "resources/runtime/assets/CUT_E1402.jet",
+    "bytes": 453145,
+    "sha256": "249e7c620b0dd2061843c9db8d2210c095b10855f42df61d53dd1a092489a308"
+  },
+  {
+    "name": "CUT_E1501.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1501.jet",
+    "destination": "resources/runtime/assets/CUT_E1501.jet",
+    "bytes": 489809,
+    "sha256": "c97481061bbe26559d35fb55c554c935560fcd59d230e6491361a0d6e222df55"
+  },
+  {
+    "name": "CUT_E1601.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1601.jet",
+    "destination": "resources/runtime/assets/CUT_E1601.jet",
+    "bytes": 352386,
+    "sha256": "a3045300976ec747c2084afa3bd0e5b3f39bcf764256ff9343e95fc9b56d8c1c"
+  },
+  {
+    "name": "CUT_E1701.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1701.jet",
+    "destination": "resources/runtime/assets/CUT_E1701.jet",
+    "bytes": 398441,
+    "sha256": "4200a87602da9a59a92d2b2d64af49c60e7f0aae4eab10c6d46a2a7e6ec278c0"
+  },
+  {
+    "name": "CUT_E1801.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1801.jet",
+    "destination": "resources/runtime/assets/CUT_E1801.jet",
+    "bytes": 785442,
+    "sha256": "8e869b32be43a360f32138fbf9da6f77ee3e9930c04c7d1cca155c225e9d850e"
+  },
+  {
+    "name": "CUT_MI01.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_MI01.jet",
+    "destination": "resources/runtime/assets/CUT_MI01.jet",
+    "bytes": 398690,
+    "sha256": "e4c2f9a18c9a6ea43334b979f1fa9c5f92a678ec1b0fe152a9bba1b56a29b92f"
+  },
+  {
+    "name": "CUT_N2.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_N2.jet",
+    "destination": "resources/runtime/assets/CUT_N2.jet",
+    "bytes": 576625,
+    "sha256": "84f329b02044f3a1479383fd8871d8b6ec66c6e362d97892d69766370ef2110b"
+  },
+  {
+    "name": "CUT_N4.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_N4.jet",
+    "destination": "resources/runtime/assets/CUT_N4.jet",
+    "bytes": 387918,
+    "sha256": "2b944afba825f316aa429acf133261c2ab14d2ff321df9883ea45854b429ecab"
+  },
+  {
+    "name": "DIAL_BG011.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/DIAL_BG011.jet",
+    "destination": "resources/runtime/assets/DIAL_BG011.jet",
+    "bytes": 297130,
+    "sha256": "6375773d092aa57ce4358a1d622b1d5b582e941736e711fef0de2e76b91252e7"
+  },
+  {
+    "name": "N010.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/N010.jet",
+    "destination": "resources/runtime/assets/N010.jet",
+    "bytes": 1650793,
+    "sha256": "f40a3ea39cd2f5b19eed2ec608b1d6451e75cc0de131ac3e70d940e4cc31889a"
+  },
+  {
+    "name": "N502.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/N502.jet",
+    "destination": "resources/runtime/assets/N502.jet",
+    "bytes": 179526,
+    "sha256": "2960b3e13df33513889a4528b29f68280a5965b25a21fae6ebe7ad93fd3c9a89"
+  },
+  {
+    "name": "C035.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C035.jet",
+    "destination": "resources/runtime/assets/C035.jet",
+    "bytes": 628747,
+    "sha256": "6311e945fb8a841f1fc70049469af3d5ba2dc7693c5bb197850d89eb3ac582cc"
+  },
+  {
+    "name": "C035_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C035_Q.jet",
+    "destination": "resources/runtime/assets/C035_Q.jet",
+    "bytes": 55463,
+    "sha256": "b292cfe99b7e67559b37ca716771bdc87d1f5378810f3518e4ab7e344e1da7c2"
+  },
+  {
+    "name": "C035_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C035_EFT.jet",
+    "destination": "resources/runtime/assets/C035_EFT.jet",
+    "bytes": 1442230,
+    "sha256": "dd0090a7df9722ff3407f698df5bc282b0cc06210ef7eddad4ecea3e1fc49562"
+  },
+  {
+    "name": "C035_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C035_SND.jet",
+    "destination": "resources/runtime/assets/C035_SND.jet",
+    "bytes": 275784,
+    "sha256": "00084ad8351cd3e6f8bf4131db1d34ff1806a8d9ce2879caa4ebd95fadc075cb"
+  }
+]

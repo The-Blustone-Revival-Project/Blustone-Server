@@ -81,7 +81,8 @@ datasets review. Do not revive those systems using invented providers.
 
 E10's original chapter graph has seven stories EP_1701A..1707A; S04 links
 CB1001, S06 links CB1002. CB1001 selects unique STAT146 Karl/C012 and147
-Acerola/C030, with game_res_id7. Their art and ST007 are already in the E9
+Acerola/C030, with game_res_id7 (original environment table maps to STI001 in
+ST001.jet, not ST007). Their art and ST001 are already in the E9
 preparation chain. CB1002 selects106 CB1002_M1/M035,107 CB1002_M2/M036,
 110 CB1002_M3/M034, with game_res_id900; its right party repeats M1/M2 then
 adds M3. ST900 is present, but directly named M034/M035/M036 packs are absent
