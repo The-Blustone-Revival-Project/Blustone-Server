@@ -39,6 +39,13 @@ fallback, conditional GET and If-Range behavior. Wrapped-package routes retain
 their existing stricter range grammar and forced206 diagnostic setting. The
 snapshot does not turn a failed/unsupported game request into cached success.
 
+Raw-file preconditions follow the installed send implementation: If-Match
+(including its weak-tag/list comparison) takes precedence over
+If-Unmodified-Since. A failed precondition returns412 before range parsing;
+a fresh matching If-None-Match/If-Modified-Since returns304 before even an
+unsatisfiable Range is considered. This applies to both raw JET and unwrapped
+package routes. Wrapped-package semantics remain unchanged.
+
 ## Verification
 
 `resource-snapshot-http.ts` passes real disposable HTTP off/on comparisons:
@@ -48,6 +55,11 @@ files, independent app/config/stamp epochs, lazy construction, debug overrides,
 new-app visibility and unchanged game/auth summary. Files are authored fixtures
 under one temporary directory; no originals or live saves are edited.
 TypeScript `--noEmit` passes. No dist build was performed by this lane.
+The additional precondition-order tests use Node HTTP directly so fetch cannot
+silently add request no-cache headers and mask the expected304 branch. They
+assert exact off/on status, bytes, Content-Range/Length/Type for412/304 and
+successful weak/list/wildcard ETag and date cases, including contradictory
+conditions and unsatisfiable ranges.
 
 The bounded actual170-profile A/B used separate disposable loopback listeners
 and the same source runtime, sequentially off then on. Measured client HTTP

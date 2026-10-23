@@ -500,6 +500,20 @@ function sendFileSnapshot(req:Request,res:Response,body:Buffer,modified:Date,fil
   const etag=`W/"${body.length.toString(16)}-${modified.getTime().toString(16)}"`;
   res.setHeader("Accept-Ranges","bytes");res.setHeader("Cache-Control","public, max-age=0");
   res.setHeader("Last-Modified",modified.toUTCString());res.setHeader("ETag",etag);
+  // sendFile checks preconditions and cache freshness before looking at Range.
+  // If-Match takes precedence over If-Unmodified-Since, including weak-tag
+  // equivalence used by the installed send implementation.
+  const header=(name:string)=>{const value=req.headers[name];return Array.isArray(value)?value.join(","):value;};
+  const match=header("if-match"),unmodified=header("if-unmodified-since");
+  const unmodifiedTime=unmodified?Date.parse(unmodified):NaN;
+  const failed=match ? match!=="*" && match.split(",").map(token=>token.replace(/^ +| +$/g,"")).filter(Boolean)
+    .every(token=>token!==etag&&token!=="W/"+etag&&"W/"+token!==etag)
+    : !Number.isNaN(unmodifiedTime)&&Date.parse(modified.toUTCString())>unmodifiedTime;
+  if(failed)return res.status(412).json({error:"resource package read failed"});
+  if(req.fresh) {
+    for(const key of ["Content-Encoding","Content-Language","Content-Length","Content-Range","Content-Type"])res.removeHeader(key);
+    return res.status(304).end();
+  }
   const rawIfRange=req.headers["if-range"],ifRange=Array.isArray(rawIfRange)?rawIfRange.join(","):rawIfRange;
   const freshRange=!ifRange || (ifRange.includes('"')?ifRange.includes(etag):Date.parse(modified.toUTCString())<=Date.parse(ifRange));
   const rawRange=req.headers.range,range=Array.isArray(rawRange)?rawRange.join(","):rawRange;

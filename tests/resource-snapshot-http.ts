@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {createServer,type Server} from 'node:http';
+import {createServer,request as httpRequest,type Server} from 'node:http';
 import {mkdtempSync,mkdirSync,writeFileSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
@@ -28,6 +28,17 @@ const get=async(base:string,route:string,headers:Record<string,string>={})=>{
     range:response.headers.get('content-range'),length:response.headers.get('content-length'),accept:response.headers.get('accept-ranges')};
 };
 const md5=(b:Buffer)=>createHash('md5').update(b).digest('hex').toUpperCase();
+// Native HTTP avoids fetch adding no-cache to conditional requests, which would
+// otherwise prevent a real304 freshness/precondition-ordering assertion.
+const conditionalGet=(base:string,route:string,headers:Record<string,string>)=>new Promise<{
+  status:number;bytes:Buffer;range:string|undefined;length:string|undefined;type:string|undefined
+}>((resolve,reject)=>{
+  const request=httpRequest(base+route,{headers},response=>{
+    const chunks:Buffer[]=[];response.on('data',chunk=>chunks.push(Buffer.from(chunk)));
+    response.on('end',()=>resolve({status:response.statusCode!,bytes:Buffer.concat(chunks),range:response.headers['content-range'],
+      length:response.headers['content-length'],type:response.headers['content-type']}));response.on('error',reject);
+  });request.on('error',reject);request.end();
+});
 try {
   writeFileSync(path.join(assets,'Tiny.jet'),'original tiny bytes');writeFileSync(path.join(assets,'E_NEW.jet'),'base original');
   writeFileSync(path.join(assets,'Extra.jet'),'folded original');
@@ -49,6 +60,26 @@ try {
   const conditionals:Record<string,string>[]=[{'if-none-match':rawResponse.headers.get('etag')!},{'if-modified-since':rawResponse.headers.get('last-modified')!}];
   for(const headers of conditionals)
     assert.deepEqual(await get(on.base,'/Tiny.jet',headers),await get(off.base,'/Tiny.jet',headers),'Raw conditional-file behavior remains exact');
+  const etag=rawResponse.headers.get('etag')!,strongTag=etag.replace(/^W\//,''),modified=rawResponse.headers.get('last-modified')!;
+  const preconditions:{headers:Record<string,string>;status:number}[]=[
+    {headers:{'if-match':'"wrong"'},status:412},
+    {headers:{'if-match':'"wrong"',range:'bytes=999999-'},status:412},
+    {headers:{'if-unmodified-since':'Thu, 01 Jan 1970 00:00:00 GMT'},status:412},
+    {headers:{'if-unmodified-since':'Thu, 01 Jan 1970 00:00:00 GMT',range:'bytes=999999-'},status:412},
+    {headers:{'if-match':'*',range:'bytes=0-2'},status:206},
+    {headers:{'if-match':strongTag,'if-unmodified-since':'Thu, 01 Jan 1970 00:00:00 GMT',range:'bytes=0-2'},status:206},
+    {headers:{'if-match':`"wrong", ${etag}`,range:'bytes=0-2'},status:206},
+    {headers:{'if-unmodified-since':modified,range:'bytes=0-2'},status:206},
+    {headers:{'if-unmodified-since':'invalid date',range:'bytes=0-2'},status:206},
+    {headers:{'if-none-match':etag,range:'bytes=999999-'},status:304},
+    {headers:{'if-none-match':'*',range:'bytes=999999-'},status:304},
+    {headers:{'if-modified-since':modified,range:'bytes=999999-'},status:304},
+    {headers:{'if-match':'"wrong"','if-none-match':etag,range:'bytes=999999-'},status:412},
+  ];
+  for(const {headers,status} of preconditions) {
+    const expected=await conditionalGet(off.base,'/Tiny.jet',headers),actual=await conditionalGet(on.base,'/Tiny.jet',headers);
+    assert.equal(expected.status,status,'Baseline sendFile precondition result');assert.deepEqual(actual,expected,'Snapshot mirrors precondition/freshness before Range');
+  }
   assert.equal((await get(on.base,'/Missing_200.pkg')).status,404);
   // Raw and folded bytes/config remain one coherent app epoch after originals change.
   writeFileSync(path.join(assets,'Tiny.jet'),'changed tiny bytes longer');writeFileSync(path.join(assets,'Extra.jet'),'changed folded');
@@ -82,6 +113,14 @@ try {
   configure(true,{BLUSTONE_PACKAGE_MODE:''});const rawOn=await app();
   for(const range of ['bytes=-3','bytes=0-2','bytes=999999-','nonsense'])
     assert.deepEqual(await get(rawOn.base,'/Tiny_200.pkg',{range}),await get(rawOff.base,'/Tiny_200.pkg',{range}));
+  const packageHeaders=await fetch(rawOff.base+'/Tiny_200.pkg');await packageHeaders.arrayBuffer();
+  for(const {headers,status} of [
+    {headers:{'if-match':'"wrong"',range:'bytes=999999-'},status:412},
+    {headers:{'if-none-match':packageHeaders.headers.get('etag')!,range:'bytes=999999-'},status:304},
+  ]) {
+    const expected=await conditionalGet(rawOff.base,'/Tiny_200.pkg',headers),actual=await conditionalGet(rawOn.base,'/Tiny_200.pkg',headers);
+    assert.equal(expected.status,status);assert.deepEqual(actual,expected,'Unwrapped pkg uses the same file precondition ordering');
+  }
   for(const mode of ['pkgi1','wrap','empty']) {
     configure(false,{BLUSTONE_PACKAGE_MODE:mode});const defaultMode=await app();
     configure(true,{BLUSTONE_PACKAGE_MODE:mode});const snapshotMode=await app();
