@@ -113,7 +113,8 @@ The final stair was lost; the floor remains incomplete. Balance and opponents
 are LOCAL authored content, and the captured recipe permits one attempt.
 An additional [terminal-adoption opt-in](docs/mirage-terminal-adoption-2026-10-23.md)
 lets a finished one-attempt record use configured re-entry without erasing its
-history; backend/HTTP checks pass, while native re-entry remains pending.
+history. [Native Retry, quota release and cold reload](docs/mirage-terminal-adoption-native-2026-10-23.md)
+now pass alongside the backend and encrypted HTTP checks.
 Abandonment releases the owned roster; its COMPLETE map labels do not prove
 a win. Original Mirage assignments, balance and a repeatable native loop
 remain unfinished.

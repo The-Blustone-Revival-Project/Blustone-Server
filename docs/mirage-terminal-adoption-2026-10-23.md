@@ -110,9 +110,14 @@ profile, Rupee policy and team curve with adoption enabled: GetInfo returned
 the terminal cache while the captured-series map stayed empty and both the
 copy and live source bytes remained exact. That is configuration/read proof,
 not a native offer/reset or a live journal migration.
-Native adoption/re-entry, another full-floor attempt and a win remain pending;
-the earlier native trial's two wins and final defeat are unchanged facts.
+The subsequent [native adoption trial](mirage-terminal-adoption-native-2026-10-23.md)
+verified the offer/reset, two fresh generations, quota-exhausted roster release
+and cold reload with adoption disabled. No battle occurred during that check;
+a new full-floor attempt/win remains pending. The earlier native trial's two
+wins and final defeat are unchanged facts.
 
-No live configuration, journal or private save was edited to implement/test
-this feature. No active server restart, APK patch/rebuild/install/release,
-DataDump/original asset, phone, Docker or collector change was required.
+The implementation/disposable tests did not modify live configuration or saves.
+The later native validation deliberately restarted the local server and unchanged
+client with explicit settings, then persisted journals through native requests.
+It used no host gameplay request or private-save edit. No APK patch/rebuild/
+install/release, DataDump/original asset, phone, Docker or collector change occurred.

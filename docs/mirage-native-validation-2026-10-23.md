@@ -109,5 +109,6 @@ AUTO's skill/exchange AI. It also closes one opaque255 bench-skill press,
 not a hold gesture. Native DASH selection and the manual heal remain unproved.
 Next combat work must qualify that mode and eligible skill control, preserve
 short input-to-observation cycles, and prioritize timely healing and swaps.
-Further Mirage work includes repeatable re-entry, truthful abandoned-map
-presentation and a real final-stair/full-floor win.
+The subsequent [terminal-adoption trial](mirage-terminal-adoption-native-2026-10-23.md)
+now verifies configured re-entry, quota release and persistence. Truthful
+abandoned-map presentation and a real final-stair/full-floor win remain open.
