@@ -25,7 +25,8 @@
     "test:material-progression": "npm run build && node dist/tests/material-hunter-progression-http.js",
     "test:material-skills": "npm run build && node dist/tests/material-skill-projection.js && node dist/tests/material-skill-projection-http.js",
     "test:fishing-casts": "npm run build && node dist/tests/fishing-casts-state.js && node dist/tests/fishing-casts-http.js && node dist/tests/fishing-casts-cohorts.js",
-    "test:restoration": "npm run build && node tests/resource-profile-restoration.mjs && node dist/tests/restoration-profile-http.js"
+    "test:restoration": "npm run build && node tests/resource-profile-restoration.mjs && node dist/tests/restoration-profile-http.js",
+    "test:fever-resources": "npm run build && node tests/fever-profile-http.mjs"
   },
   "dependencies": {
     "express": "latest",
