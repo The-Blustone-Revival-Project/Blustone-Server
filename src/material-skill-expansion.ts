@@ -13,12 +13,21 @@ export const EXPANDED_MATERIAL_SKILL_DONORS=Object.freeze([
   Object.freeze({refId:'056',sourceIndex:135,actorId:'CB0802_056_1',role:1,attr:2,ordinaryRageCost:3}),
 ]);
 const effectFields=['effect_type','target_type','target_stat','refer_target_type','refer_target_stat','base_number','duration','interval'];
+export interface IndexedMaterialSkillDonor {
+  readonly refId:string;readonly sourceIndex:number;readonly actorId:string;
+  readonly role:number;readonly attr:number;readonly ordinaryRageCost:number;
+}
 export function validateExpandedMaterialSkillSources(episodeBytes:Buffer,symbolicBytes:Buffer) {
+  return validateIndexedMaterialSkillSources(episodeBytes,symbolicBytes,EXPANDED_MATERIAL_SKILL_DONORS);
+}
+/** Shared exact-source admission. This does not interpret or flatten effects. */
+export function validateIndexedMaterialSkillSources(episodeBytes:Buffer,symbolicBytes:Buffer,
+  donors:readonly IndexedMaterialSkillDonor[]) {
   const hash=(bytes:Buffer)=>createHash('sha256').update(bytes).digest('hex');
   if(hash(episodeBytes)!==MATERIAL_SKILL_SOURCE_PINS.episode.sha256||hash(symbolicBytes)!==MATERIAL_SKILL_SOURCE_PINS.symbolic.sha256)
     throw new TypeError('Expanded material skill source pin mismatch');
   const actors=JSON.parse(episodeBytes.toString('utf8')),symbolic=JSON.parse(symbolicBytes.toString('utf8'));
-  return EXPANDED_MATERIAL_SKILL_DONORS.map(donor=>{
+  return donors.map(donor=>{
     const actor=actors[donor.sourceIndex],text=symbolic[donor.refId+'|1|0']?.EN;
     const match=typeof text==='string'?/^Uses (\d+) Rage Gauge when using a skill\.$/.exec(text):null;
     if(!actor||actor.id!==donor.actorId||actor.ref_id!==donor.refId||actor.res_id!=='C'+donor.refId||

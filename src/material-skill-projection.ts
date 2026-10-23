@@ -4,9 +4,10 @@ import {isDeepStrictEqual} from "node:util";
 import {repositoryPath} from "./paths.js";
 import {MATERIAL_SKILL_SOURCE_PINS,selectMaterialEpisodeGraph} from "./material-skill-evidence.js";
 import {validateExpandedMaterialSkillSources} from "./material-skill-expansion.js";
+import {validateLaterMaterialSkillSources} from "./later-material-skills.js";
 
 export const MATERIAL_SKILL_PROFILE=process.env.BLUSTONE_MATERIAL_SKILL_PROFILE??"neutral";
-if(!["neutral","episode-indexed-projection","episode-indexed-expanded-projection"].includes(MATERIAL_SKILL_PROFILE))
+if(!["neutral","episode-indexed-projection","episode-indexed-expanded-projection","episode-indexed-later-projection"].includes(MATERIAL_SKILL_PROFILE))
   throw new TypeError("Unknown material skill profile");
 
 /** Explicit LOCAL adoption of these exact encounter variants. Neither matching
@@ -86,8 +87,11 @@ export function validateMaterialSkillSources(episodeBytes:Buffer,symbolicBytes:B
 const selected=MATERIAL_SKILL_PROFILE!=="neutral"
   ?validateMaterialSkillSources(readFileSync(repositoryPath(MATERIAL_SKILL_SOURCE_PINS.episode.path)),
     readFileSync(repositoryPath("resources/reference/episodes/SKILL_REF.json"))):[];
-if(MATERIAL_SKILL_PROFILE==="episode-indexed-expanded-projection")
+if(["episode-indexed-expanded-projection","episode-indexed-later-projection"].includes(MATERIAL_SKILL_PROFILE))
   selected.push(...validateExpandedMaterialSkillSources(readFileSync(repositoryPath(MATERIAL_SKILL_SOURCE_PINS.episode.path)),
+    readFileSync(repositoryPath("resources/reference/episodes/SKILL_REF.json"))));
+if(MATERIAL_SKILL_PROFILE==="episode-indexed-later-projection")
+  selected.push(...validateLaterMaterialSkillSources(readFileSync(repositoryPath(MATERIAL_SKILL_SOURCE_PINS.episode.path)),
     readFileSync(repositoryPath("resources/reference/episodes/SKILL_REF.json"))));
 
 /** Ordinary wire wrappers are LOCAL: sequential serials except the pinned Bright
