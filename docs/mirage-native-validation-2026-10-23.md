@@ -102,7 +102,12 @@ that test establish native combat. No APK was patched, rebuilt or installed;
 no instrumented release was required. Original assets, DataDump, the physical
 phone, Docker, collector and inference were untouched.
 
-Next combat work must settle the AUTO/manual skill controls before starting
-another fight, preserve short input-to-observation cycles, and prioritize
-timely healing and swaps. Further Mirage work includes repeatable re-entry,
-truthful abandoned-map presentation and a real final-stair/full-floor win.
+The subsequent Instrumented source report
+`docs/battle-auto-manual-skill-controls-2026-10-23.md` closes the current
+OFF0→ALL2→DASH1→OFF0 cycle: DASH/TAP separates automatic attacks from full
+AUTO's skill/exchange AI. It also closes one opaque255 bench-skill press,
+not a hold gesture. Native DASH selection and the manual heal remain unproved.
+Next combat work must qualify that mode and eligible skill control, preserve
+short input-to-observation cycles, and prioritize timely healing and swaps.
+Further Mirage work includes repeatable re-entry, truthful abandoned-map
+presentation and a real final-stair/full-floor win.
