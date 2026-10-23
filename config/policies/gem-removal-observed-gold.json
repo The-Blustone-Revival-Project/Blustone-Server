@@ -1,0 +1,22 @@
+[
+  {
+    "level": 1,
+    "price_type": 2,
+    "price": 2500
+  },
+  {
+    "level": 6,
+    "price_type": 2,
+    "price": 15000
+  },
+  {
+    "level": 7,
+    "price_type": 2,
+    "price": 17500
+  },
+  {
+    "level": 15,
+    "price_type": 2,
+    "price": 40000
+  }
+]

@@ -1,3 +1,5 @@
+> Update2026-10-23: an optional [sparse historical gold2 quote dataset](gem-removal-observed-gold-2026-10-23.md) now supplies four observed levels. The complete final-server table is still missing; no default activation. Missing native quotes may display0 even while the server refuses removal.
+
 # Configured Gem set effects and removal workflow
 
 The native reference/owned joins, six-cell request and old-level removal fee
