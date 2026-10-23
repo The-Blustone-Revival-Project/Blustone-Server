@@ -2445,7 +2445,12 @@ export class ServerState {
     if (fresh.length) {
       game.gold += amount;
       fresh.forEach((row) => { row!.claimed = true; });
-      this.persist();
+      try { this.persist(); }
+      catch (error) {
+        game.gold = prev;
+        fresh.forEach((row) => { row!.claimed = false; });
+        throw error;
+      }
     }
     // Absolute native balances; repeats settle IDs without another award.
     return this.envelope({ target_inst_id: ids, ...(amount ? { user: { gold: { prev, cur: game.gold } } } : {}) });
@@ -2497,16 +2502,35 @@ export class ServerState {
    * Claim marker and AP persist together before success. Duplicate requests
    * refuse without a second reward, including after a restart. */
   claimActivitySupply(payload: Record<string, unknown>, headers: Record<string, string>) {
-    const game = this.gameFor(this.accountFor(payload, headers));
+    const account = this.accountFor(payload, headers);
     const now = Date.now();
     if (payload.id !== FIXTURE_FUEL_ID) return this.failure(2001, "unknown Supply activity");
+    let cycle;
+    try { cycle = fuelCycle(now); }
+    catch { return this.failure(2001, "Invalid Supply clock"); }
+    const game = this.gameByPvid.get(account.pvid) ?? this.gameFor(account);
     if (fuelStatus(game.supply_fuel_claim_day, now) !== 1) return this.failure(2001, "Supply already received");
-    if (!Number.isSafeInteger(game.ap + FIXTURE_FUEL_AP)) return this.failure(2001, "invalid AP balance");
-    game.supply_fuel_claim_day = fuelCycle(now).day;
-    game.ap += FIXTURE_FUEL_AP; // reward overflow is preserved, as with other AP rewards
-    this.persist();
+    // Plan regeneration without gameFor's intermediate write. The reward and
+    // AP/BP anchors must commit together, or retain the exact previous state.
+    const planned = { ...game };
+    if (![planned.ap, planned.bp].every(value => Number.isInteger(value) && value >= 0 && value <= 0xffffffff))
+      return this.failure(2001, "Invalid Supply resource balance");
+    regenerateResources(planned, now);
+    const ap = planned.ap + FIXTURE_FUEL_AP;
+    if (!Number.isInteger(ap) || ap < 0 || ap > 0xffffffff)
+      return this.failure(2001, "Supply AP capacity exceeded");
+    planned.ap = ap; // Earned overflow above max_ap is preserved.
+    const charge = resourceChargeTime(planned, "ap");
+    if (!Number.isInteger(charge) || charge < 0 || charge > 0xffffffff)
+      return this.failure(2001, "Supply charge time exceeds native capacity");
+    const previous = { ap: game.ap, bp: game.bp, ap_updated_at: game.ap_updated_at,
+      bp_updated_at: game.bp_updated_at, supply_fuel_claim_day: game.supply_fuel_claim_day };
+    Object.assign(game, { ap, bp: planned.bp, ap_updated_at: planned.ap_updated_at,
+      bp_updated_at: planned.bp_updated_at, supply_fuel_claim_day: cycle.day });
+    try { this.persist(); }
+    catch (error) { Object.assign(game, previous); throw error; }
     return this.envelope({ target_inst: { id: FIXTURE_FUEL_ID, status: 2 },
-      user: { ap: { cur: game.ap, ap_charge_time: resourceChargeTime(game, "ap") } } });
+      user: { ap: { cur: game.ap, ap_charge_time: charge } } });
   }
 
   refreshInventory(payload:Record<string,unknown>,headers:Record<string,string>) {

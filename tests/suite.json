@@ -86,6 +86,8 @@
   "tests/guided-search-recruitment.ts",
   "tests/mail.ts",
   "tests/special-supply.ts",
+  "tests/supply-atomic-state.ts",
+  "tests/supply-atomic-http.ts",
   "tests/episode-progress.ts",
   "tests/episode-reward.ts",
   "tests/gem-contract.ts",
