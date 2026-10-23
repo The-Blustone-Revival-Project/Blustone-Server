@@ -75,7 +75,8 @@ try {
   const settled=read(),owner=settled.gameStates.find(([id]:any)=>id===auth.pvid)[1];
   const inst=ownerBefore.next_item_inst_id,fish=tutorial.outcome.fish_id;
   assert.equal(settled.version,17);assert.equal(settled.fishingTutorials.length,1);
-  assert.deepEqual(first.ret_data.user.item,[{inst_id:inst,ref_id:fish,added:1}]);
+  assert.deepEqual(first.ret_data.item,[{inst_id:inst,ref_id:fish,added:1}]);
+  assert.equal(first.ret_data.user?.item,undefined,'Original ParseEnd reads ret_data.item, never user.item');
   assert.deepEqual(first.ret_data.consumed_inst_list,[]);
   assert.deepEqual(first.ret_data.sell.item,[{inst_id:inst,qty:1}]);
   assert.deepEqual(first.ret_data.sell.user.gold,{prev:ownerBefore.gold,cur:ownerBefore.gold+10});

@@ -253,7 +253,8 @@ export function planFishingEnd(game:LocalGameState,pvid:number,prior:FishingCast
     if(!fish){fish={fish_id:outcome.fish_id,b_cnt:0,s_cnt:0,g_cnt:0};owned_fish.push(fish);}
     const key=(["b_cnt","s_cnt","g_cnt"] as const)[outcome.grade-1];
     fish[key]=uint(fish[key]+1,0,key==="g_cnt"?0xffff_ffff:I32);
-    Object.assign(receipt,outcome,{user:{item:[{inst_id,ref_id:outcome.fish_id,added:1}]}});
+    // ParseEnd Gb2a9ca retains ret_data in fp; additions are outside user.
+    Object.assign(receipt,outcome,{item:[{inst_id,ref_id:outcome.fish_id,added:1}]});
     if(journal.policy.on_win==="sell") {
       const sale=planFishingSale({...game,items,owned_fish,gold},pvid,{[String(pvid)]:fishingCastBindings(journal)},catalogue,fishIds,
         {fish_id:outcome.fish_id,grade:outcome.grade,qty:1});

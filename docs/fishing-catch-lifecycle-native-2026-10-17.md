@@ -1,3 +1,5 @@
+> Correction2026-10-23: fishing item additions belong to ret_data.item. See [original ARM parent proof](fishing-end-item-parent-correction-2026-10-23.md).
+
 # Fishing catch lifecycle: native producer and settlement boundary
 
 Read-only source closure, 2026-10-17. Original DataDump ELF
@@ -129,15 +131,18 @@ ParseEnd first handles optional `ret_data.user` updates:
   present. Native branches also handle max_ap, increase_ap, ap/bp prev/cur and
   ap_charge_time/bp_charge_time; an initial configured catch must not fabricate
   energy or EXP changes merely because those optional receipt branches exist.
-- `user.item:[{inst_id:full64 numeric,added:uint32,ref_id:string},...]`
+
+Separate ROOT ret_data collections (outside user):
+
+- `item:[{inst_id:full64 numeric,added:uint32,ref_id:string},...]`
   calls **AddItem Gaec508 at Gb2ab20**: positive addition quantity, not an
   absolute resulting stock count.
-- `user.card` has a separate card-addition branch at Gb2ac38; no fish catch
+- `card` has a separate card-addition branch at Gb2ac38; no fish catch
   requires a guessed Hunter reward.
 
 At the ROOT of ret_data, **fish_id:string**, **grade:numeric32** and
 **length:numeric32** are read at **Gb2accc**, **Gb2ad2a**, **Gb2ad80** and
-stored in Fishing+0x68/+0x78/+0x7c. fish_id uses strict string conversion.
+stored in Fishing+0x68/+0x78/+0x7c. fish_id passes through the native string converter; its null fallback does not establish a meaningful catch.
 The integer fields take low32 (signed/unsigned interpretation follows consumer);
 unsupported grade values do not become valid because parsing accepts a word.
 The native grade1/2/3 pricing/count mapping is separately closed in the

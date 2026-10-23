@@ -118,7 +118,8 @@ export function planFishingTutorial(game:LocalGameState,pvid:number,rawPolicy:Fi
   // newly generated stack in its ownership domain. Never sell earlier stock.
   const sale=planFishingSale({...game,items:[{inst_id:next,ref_id:fish_id,qty:1,lock:0}],owned_fish:[isolated]},pvid,
     {[String(pvid)]:[{fish_id,grade:policy.outcome.grade,inst_id:next}]},catalogue,new Set([fish_id]),{fish_id,grade:policy.outcome.grade,qty:1});
+  // Shared ParseEnd adds ret_data.item before optional ParseSell removes it.
   return {items:[...items,...sale.items],owned_fish:owned,gold:sale.gold,next_item_inst_id:next+1,journal,
-    receipt:{...policy.outcome,user:{item:[{inst_id:next,ref_id:fish_id,added:1}]},consumed_inst_list:[],
+    receipt:{...policy.outcome,item:[{inst_id:next,ref_id:fish_id,added:1}],consumed_inst_list:[],
       sell:{...sale.receipt,sell_result:{...fish}}}};
 }

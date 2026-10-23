@@ -1,3 +1,5 @@
+> Correction2026-10-23: fishing item additions belong to ret_data.item. See [original ARM parent proof](fishing-end-item-parent-correction-2026-10-23.md).
+
 # Configured fishing casts and durable catches
 
 Implementation checkpoint, 2026-10-17. Default **disabled**. This restores the
@@ -100,7 +102,7 @@ rename restores the original fields and journal references, including absence
 of owned_fish. First-ever loss changes only bait and journal, creates no empty
 fish inventory, and preserves the item allocator and gold.
 
-A win returns root fish_id/grade/length, user.item positive added1, and
+A win returns root fish_id/grade/length, item positive added1, and
 consumed_inst_list bait REMOVAL deltas. With keep, sell is absent. With immediate
 sale, ParseEnd first adds the catch/count/record; optional ParseSell then applies
 sell.user.gold prev/cur, sell.item removals and sell.sell_result ABSOLUTE grade

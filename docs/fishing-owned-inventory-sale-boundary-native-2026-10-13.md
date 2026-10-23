@@ -1,3 +1,5 @@
+> Correction2026-10-23: fishing item additions belong to ret_data.item. See [original ARM parent proof](fishing-end-item-parent-correction-2026-10-23.md).
+
 # Fishing owned inventory and the remaining sale ownership boundary
 
 Source audit only: no catches, RNG, inventory grants, original prices or sale
@@ -69,7 +71,7 @@ item equals one grade counter. This is the concrete remaining sale boundary.
 
 ## Follow-up catch classification and the separate generic receipt
 
-`ParseEnd` Gb2a560 supports generic `ret_data.user.item` rows with
+`ParseEnd` Gb2a560 supports generic `ret_data.item` rows with
 inst_id/added/ref_id; it calls CSRInventory.AddItem Gaec508 at **Gb2ab20**.
 It independently supports card additions (Gb2ac38) and later consumed item
 updates (UseItem Gaea5f8 at Gb2ae90). The actual catch fish_id/grade/length

@@ -22,7 +22,7 @@ assert.equal(game.items.some(row=>row.ref_id==="LU003"),false,"tutorial must wor
 assert.equal(plan.gold,52);assert.equal(plan.next_item_inst_id,13);
 assert.deepEqual(plan.items,[original.items[0],{inst_id:12,ref_id:fish_id,qty:0,lock:0}]);
 assert.deepEqual(plan.owned_fish,[{fish_id,b_cnt:0,s_cnt:0,g_cnt:0}]);
-assert.deepEqual(plan.receipt,{fish_id,grade:1,length:10000,user:{item:[{inst_id:12,ref_id:fish_id,added:1}]},consumed_inst_list:[],
+assert.deepEqual(plan.receipt,{fish_id,grade:1,length:10000,item:[{inst_id:12,ref_id:fish_id,added:1}],consumed_inst_list:[],
   sell:{user:{gold:{prev:42,cur:52}},item:[{inst_id:12,qty:1}],sell_result:{fish_id,b_cnt:0,s_cnt:0,g_cnt:0}}});
 assert.deepEqual(plan.journal,{policy,reference_hash:hash,item_inst_id:12,settled_ltime:1234});
 assert.deepEqual(normalizeFishingTutorial(plan.journal,items,catalogue),plan.journal);

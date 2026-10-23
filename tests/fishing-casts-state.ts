@@ -60,7 +60,7 @@ try {
   const restarted=new ServerState("http://localhost",file,options);
   const won=gameResponse(restarted,"/fishing/EndWithSell",{...auth,log_id:"1",is_win:"1"}) as any;
   assert.equal(won.result_code,1);assert.equal(won.ret_data.fish_id,castFish.id);
-  assert.deepEqual(won.ret_data.user.item,[{inst_id:baitId+1,ref_id:castFish.id,added:1}]);
+  assert.deepEqual(won.ret_data.item,[{inst_id:baitId+1,ref_id:castFish.id,added:1}]);
   assert.deepEqual(won.ret_data.consumed_inst_list,[{inst_id:baitId,qty:2}]);assert.equal(won.ret_data.sell,undefined);
   let current=restarted;
   const call=(suffix:string,extra:Record<string,unknown>={})=>gameResponse(current,"/fishing/"+suffix,{...auth,...extra}) as any;
@@ -133,7 +133,7 @@ try {
   assert.equal(autoGame.items,autoItems);assert.equal((auto as any).fishingCasts.get(auth.pvid),autoJournal);
   autoGame.gold=autoBefore.gold;
   const autoWon=gameResponse(auto,"/fishing/EndWithSell",{...auth,log_id:1,is_win:1}) as any;
-  assert.equal(autoWon.result_code,1);assert.deepEqual(autoWon.ret_data.user.item,[{inst_id:baitId+1,ref_id:castFish.id,added:1}]);
+  assert.equal(autoWon.result_code,1);assert.deepEqual(autoWon.ret_data.item,[{inst_id:baitId+1,ref_id:castFish.id,added:1}]);
   assert.deepEqual(autoWon.ret_data.sell.item,[{inst_id:baitId+1,qty:1}]);assert.equal(autoWon.ret_data.sell.user.gold.cur,10011);
   assert.deepEqual(autoWon.ret_data.sell.sell_result,{fish_id:castFish.id,b_cnt:0,s_cnt:0,g_cnt:0});
   assert.equal(JSON.parse(readFileSync(saleFile,"utf8")).gameStates[0][1].items.at(-1).qty,0);

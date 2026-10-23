@@ -72,7 +72,8 @@ try {
   await close();ctx=createApp(options);await listen();
   assert.deepEqual(readFileSync(file),pending);
   const caughtResponse=await secure("/fishing/EndWithSell",{log_id:"1",is_win:"1"}),caught=caughtResponse.decoded;
-  assert.equal(caught.result_code,1);assert.deepEqual(caught.ret_data.user.item,[{inst_id:firstId+1,ref_id:castFish.id,added:1}]);
+  assert.equal(caught.result_code,1);assert.deepEqual(caught.ret_data.item,[{inst_id:firstId+1,ref_id:castFish.id,added:1}]);
+  assert.equal(caught.ret_data.user?.item,undefined,"Original ParseEnd reads ret_data.item, never user.item");
   assert.ok(caughtResponse.text.includes('"inst_id":'+(firstId+1)),"Full64-capable catch ID is numeric on encrypted wire");
   assert.deepEqual(caught.ret_data.consumed_inst_list,[{inst_id:firstId,qty:2}]);
   assert.deepEqual((await secure("/fishing/GetRecord",{})).decoded.ret_data,[{fish_id:castFish.id,grade:1,length:100}]);
