@@ -28,7 +28,8 @@
     "test:restoration": "npm run build && node tests/resource-profile-restoration.mjs && node dist/tests/restoration-profile-http.js",
     "test:fever-resources": "npm run build && node tests/fever-profile-http.mjs",
     "test:restoration-fever": "npm run build && node tests/resource-profile-restoration-fever.mjs && node tests/restoration-fever-profile-http.mjs",
-    "test:restoration-fever-compatible": "npm run build && node tests/resource-profile-restoration-fever-compatible.mjs && node tests/restoration-fever-compatible-http.mjs"
+    "test:restoration-fever-compatible": "npm run build && node tests/resource-profile-restoration-fever-compatible.mjs && node tests/restoration-fever-compatible-http.mjs",
+    "test:resource-snapshot": "npm run build && node dist/tests/resource-snapshot-http.js && node dist/tests/resource-snapshot-profile-benchmark.js"
   },
   "dependencies": {
     "express": "latest",

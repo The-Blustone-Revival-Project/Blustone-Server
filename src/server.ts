@@ -37,6 +37,9 @@ interface ResourcePackage {
   stamp: string;
   step: number;
   filePath: string;
+  snapshotRaw?: Buffer;
+  snapshotPayload?: Buffer;
+  snapshotModified?: Date;
 }
 
 const coreRoutes = new Set([
@@ -67,6 +70,20 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
   let runtimeReslistSequence: string[] | undefined;
   let runtimeReslistIndex = 0;
   let reslistRequestCount = 0;
+  const snapshotEnabled=process.env.BLUSTONE_RESOURCE_SNAPSHOT==="1";
+  let resourceSnapshot: {env:NodeJS.ProcessEnv;resources:ResourcePackage[];manifest:Buffer}|undefined;
+  const resources=()=>{
+    if(!snapshotEnabled)return resourcePackages();
+    if(!resourceSnapshot) {
+      // Only resource configuration is retained; no authentication/game state.
+      const env=Object.freeze(Object.fromEntries(Object.entries(process.env).filter(([key])=>
+        /^BLUSTONE_(?:RESOURCE_|PACKAGE_|UI_PACKAGE_|RESLIST_|FORCE_PACKAGE_)/.test(key))));
+      const selected=resourcePackages(env,true);
+      resourceSnapshot={env,resources:selected,manifest:Buffer.from(resourceManifest(selected,env),"utf8")};
+    }
+    return resourceSnapshot.resources;
+  };
+  const resourceEnv=()=>resourceSnapshot?.env??process.env;
   const app = express();
   const routeDefinitions: RouteDefinition[] = [];
 
@@ -106,16 +123,18 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
   app.get(/^\/reslist_\d+\.list$/, (_req, res) => {
     const requestIndex = reslistRequestCount++;
     const sequenceBody = runtimeReslistSequence?.[Math.min(runtimeReslistIndex++, runtimeReslistSequence.length - 1)];
-    const bootstrapHeader = requestIndex === 0 ? process.env.BLUSTONE_RESLIST_BOOTSTRAP_HEADER : undefined;
-    const explicitHeader = sequenceBody ?? runtimeReslistHeader ?? bootstrapHeader ?? process.env.BLUSTONE_RESLIST_HEADER;
-    const body = explicitHeader ?? resourceManifest(resourcePackages());
+    const bootstrapHeader = requestIndex === 0 ? resourceEnv().BLUSTONE_RESLIST_BOOTSTRAP_HEADER : undefined;
+    const explicitHeader = sequenceBody ?? runtimeReslistHeader ?? bootstrapHeader ?? resourceEnv().BLUSTONE_RESLIST_HEADER;
+    const body = explicitHeader ?? (snapshotEnabled ? (resources(),resourceSnapshot!.manifest) : resourceManifest(resources()));
+    if(Buffer.isBuffer(body))return res.status(200).setHeader("Content-Type","text/plain; charset=utf-8").send(body);
     return res.status(200).type("text/plain").send(body.endsWith("\n") ? body : `${body}\n`);
   });
   app.get(/^\/(?:cdn\/|resource\/|resources\/)?([^/]+\.jet)$/i, (req, res) => {
     const packageName = String(req.params[0] ?? "");
-    const resource = resourcePackages().find((item) => item.packageName.toLowerCase() === packageName.toLowerCase());
+    const resource = resources().find((item) => item.packageName.toLowerCase() === packageName.toLowerCase());
     if (!resource) return res.status(404).json({ error: "resource package not found", package: packageName });
     res.type("application/octet-stream");
+    if(resource.snapshotRaw)return sendFileSnapshot(req,res,resource.snapshotRaw,resource.snapshotModified!,resource.filePath);
     return res.sendFile(resource.filePath, { dotfiles: "deny" }, (error) => {
       const statusCode = typeof (error as { statusCode?: unknown } | undefined)?.statusCode === "number"
         ? (error as unknown as { statusCode: number }).statusCode
@@ -125,9 +144,14 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
   });
   app.get(/^\/(?:cdn\/|resource\/|resources\/)?([A-Za-z0-9_.-]+)_([0-9]+)\.pkg$/i, (req, res) => {
     const packageName = `${String(req.params[0] ?? "")}.jet`;
-    const resource = resourcePackages().find((item) => item.packageName.toLowerCase() === packageName.toLowerCase());
+    const resource = resources().find((item) => item.packageName.toLowerCase() === packageName.toLowerCase());
     if (!resource) return res.status(404).json({ error: "resource package not found", package: packageName });
     res.type("application/octet-stream");
+    if(resource.snapshotPayload) {
+      if(["empty","wrap","pkgi1","pkgi1-tree"].includes(resourceEnv().BLUSTONE_PACKAGE_MODE??""))
+        return sendBufferWithRange(req,res,resource.snapshotPayload,resourceEnv().BLUSTONE_FORCE_PACKAGE_RANGE==="1");
+      return sendFileSnapshot(req,res,resource.snapshotPayload,resource.snapshotModified!,resource.filePath);
+    }
     if (["empty", "wrap", "pkgi1", "pkgi1-tree"].includes(process.env.BLUSTONE_PACKAGE_MODE ?? "")) {
       return sendBufferWithRange(req, res, packagePayload(resource));
     }
@@ -245,18 +269,18 @@ function verifyMirageRuntimePackages() {
   }
 }
 
-function resourcePackages(): ResourcePackage[] {
+function resourcePackages(env: NodeJS.ProcessEnv = process.env, retain = false): ResourcePackage[] {
   const packageDirectory = path.resolve(
-    process.env.BLUSTONE_PACKAGE_DIR
+    env.BLUSTONE_PACKAGE_DIR
       ?? repositoryPath("resources", "runtime", "packages"),
   );
-  const names = (process.env.BLUSTONE_PACKAGE_NAMES ?? "E_NEW.jet,E_MIDAGE.jet")
+  const names = (env.BLUSTONE_PACKAGE_NAMES ?? "E_NEW.jet,E_MIDAGE.jet")
     .split(",")
     .map((name) => name.trim())
     .filter((name) => /^[A-Za-z0-9_.-]+\.jet$/i.test(name));
-  const stamp = process.env.BLUSTONE_RESLIST_STAMP ?? "1634659";
-  const assetDirectory = process.env.BLUSTONE_RESOURCE_ASSET_DIR
-    ? path.resolve(process.env.BLUSTONE_RESOURCE_ASSET_DIR)
+  const stamp = env.BLUSTONE_RESLIST_STAMP ?? "1634659";
+  const assetDirectory = env.BLUSTONE_RESOURCE_ASSET_DIR
+    ? path.resolve(env.BLUSTONE_RESOURCE_ASSET_DIR)
     : undefined;
   return names.flatMap((packageName) => {
     const bundledPath = path.join(packageDirectory, packageName);
@@ -264,7 +288,7 @@ function resourcePackages(): ResourcePackage[] {
     const filePath = existsSync(bundledPath) ? bundledPath : (assetPath ?? bundledPath);
     if (!existsSync(filePath) || !statSync(filePath).isFile()) return [];
     const sourceBytes = readFileSync(filePath);
-    const bytes = packagePayload({ filePath, stamp });
+    const bytes = packagePayload({ filePath, stamp }, env, retain ? sourceBytes : undefined);
     return [{
       name: packageName.slice(0, -4),
       packageName,
@@ -278,12 +302,13 @@ function resourcePackages(): ResourcePackage[] {
       stamp,
       step: 0,
       filePath,
+      ...(retain ? {snapshotRaw:sourceBytes,snapshotPayload:bytes,snapshotModified:statSync(filePath).mtime} : {}),
     }];
   });
 }
 
-function packagePayload(resource: Pick<ResourcePackage, "filePath" | "stamp">): Buffer {
-  if (process.env.BLUSTONE_PACKAGE_MODE === "empty") {
+function packagePayload(resource: Pick<ResourcePackage, "filePath" | "stamp">, env: NodeJS.ProcessEnv = process.env, sourceBytes?: Buffer): Buffer {
+  if (env.BLUSTONE_PACKAGE_MODE === "empty") {
     const header = Buffer.alloc(20);
     const stamp = Number(resource.stamp) || 0;
     header.writeUInt32LE(stamp, 0);
@@ -293,8 +318,8 @@ function packagePayload(resource: Pick<ResourcePackage, "filePath" | "stamp">): 
     header.writeUInt32LE(0, 16);
     return header;
   }
-  if (process.env.BLUSTONE_PACKAGE_MODE === "pkgi1") {
-    const payload = readFileSync(resource.filePath);
+  if (env.BLUSTONE_PACKAGE_MODE === "pkgi1") {
+    const payload = (sourceBytes ?? readFileSync(resource.filePath));
     const name = Buffer.from(path.basename(resource.filePath), "utf8");
     const stamp = Number(resource.stamp) || 0;
     const header = Buffer.alloc(20);
@@ -315,8 +340,8 @@ function packagePayload(resource: Pick<ResourcePackage, "filePath" | "stamp">): 
     record.writeUInt32LE(header.length + recordLength, 5 + name.length);
     return Buffer.concat([header, record, payload]);
   }
-  if (process.env.BLUSTONE_PACKAGE_MODE === "pkgi1-tree") {
-    const entries = packageTreeEntries(resource.filePath);
+  if (env.BLUSTONE_PACKAGE_MODE === "pkgi1-tree") {
+    const entries = packageTreeEntries(resource.filePath, env, sourceBytes);
     const stamp = Number(resource.stamp) || 0;
     const header = Buffer.alloc(20);
     header.writeUInt32LE(stamp, 0);
@@ -343,8 +368,8 @@ function packagePayload(resource: Pick<ResourcePackage, "filePath" | "stamp">): 
     }
     return Buffer.concat([header, ...records, ...entries.map((entry) => entry.payload)]);
   }
-  if (process.env.BLUSTONE_PACKAGE_MODE === "wrap") {
-    const payload = readFileSync(resource.filePath);
+  if (env.BLUSTONE_PACKAGE_MODE === "wrap") {
+    const payload = (sourceBytes ?? readFileSync(resource.filePath));
     const name = Buffer.from(path.basename(resource.filePath), "utf8");
     const header = Buffer.alloc(20);
     const stamp = Number(resource.stamp) || 0;
@@ -363,7 +388,7 @@ function packagePayload(resource: Pick<ResourcePackage, "filePath" | "stamp">): 
     record.writeUInt32LE(0, 13 + name.length);
     return Buffer.concat([header, record, payload]);
   }
-  return readFileSync(resource.filePath);
+  return (sourceBytes ?? readFileSync(resource.filePath));
 }
 
 interface PackageEntry {
@@ -371,7 +396,7 @@ interface PackageEntry {
   payload: Buffer;
 }
 
-function packageTreeEntries(packagePath: string): PackageEntry[] {
+function packageTreeEntries(packagePath: string, env: NodeJS.ProcessEnv = process.env, sourceBytes?: Buffer): PackageEntry[] {
   // These opt-in trees are for reconstructed local resources that the original
   // package unpacker writes below files/local. They are deliberately disabled
   // by default and only allow files below configured directories.
@@ -379,15 +404,15 @@ function packageTreeEntries(packagePath: string): PackageEntry[] {
   const isUiDatabase = ["UI_XML_RO.JET", "UI_XML_RO.DB.JET"].includes(packageBase);
   const entries: PackageEntry[] = isUiDatabase
     ? []
-    : [{ name: path.basename(packagePath), payload: readFileSync(packagePath) }];
+    : [{ name: path.basename(packagePath), payload: sourceBytes ?? readFileSync(packagePath) }];
   const treeRoot = isUiDatabase
-    ? (process.env.BLUSTONE_UI_PACKAGE_TREE_DIR ?? process.env.BLUSTONE_PACKAGE_TREE_DIR)
-    : process.env.BLUSTONE_PACKAGE_TREE_DIR;
+    ? (env.BLUSTONE_UI_PACKAGE_TREE_DIR ?? env.BLUSTONE_PACKAGE_TREE_DIR)
+    : env.BLUSTONE_PACKAGE_TREE_DIR;
   if (!treeRoot || (!["E_NEW.JET", "UI_XML_RO.JET", "UI_XML_RO.DB.JET"].includes(packageBase))) return entries;
   const root = path.resolve(treeRoot);
   if (!existsSync(root) || !statSync(root).isDirectory()) return entries;
   const requiredPrefix = isUiDatabase
-    ? (process.env.BLUSTONE_UI_PACKAGE_TREE_PREFIX ?? "UI_XML_RO.db/").replaceAll("\\", "/")
+    ? (env.BLUSTONE_UI_PACKAGE_TREE_PREFIX ?? "UI_XML_RO.db/").replaceAll("\\", "/")
     : undefined;
   const files: string[] = [];
   const visit = (directory: string) => {
@@ -409,9 +434,9 @@ function packageTreeEntries(packagePath: string): PackageEntry[] {
   // entries.  Include only the explicitly selected, offline-recovered assets
   // in the E_NEW package so the native CDN unpacker materializes them below
   // files/local.  This keeps arbitrary host files out of the package route.
-  if (!isUiDatabase && packageBase === "E_NEW.JET" && process.env.BLUSTONE_RESOURCE_ASSET_DIR) {
-    const assetRoot = path.resolve(process.env.BLUSTONE_RESOURCE_ASSET_DIR);
-    const assetNames = (process.env.BLUSTONE_RESOURCE_ASSET_NAMES
+  if (!isUiDatabase && packageBase === "E_NEW.JET" && env.BLUSTONE_RESOURCE_ASSET_DIR) {
+    const assetRoot = path.resolve(env.BLUSTONE_RESOURCE_ASSET_DIR);
+    const assetNames = (env.BLUSTONE_RESOURCE_ASSET_NAMES
       ?? "MAP_ZONE_1.jet,ST001.jet,M001.jet,MAIN_BG01.jet,MAIN_ICON.jet,SNOW.jet,UI_BATTLE.jet,UI_BATTLE2.jet")
       .split(",")
       .map((name) => path.basename(name.trim()))
@@ -433,7 +458,7 @@ function packageTreeEntries(packagePath: string): PackageEntry[] {
     // whole family (+5.9 MB of effect/portrait/voice) or `'C00*.jet'` for the
     // entire roster. Only files that actually exist under the asset root are
     // folded in, so a bad glob is a no-op rather than a crash.
-    for (const pattern of (process.env.BLUSTONE_RESOURCE_ASSET_GLOB ?? "").split(",").map((value) => value.trim()).filter(Boolean)) {
+    for (const pattern of (env.BLUSTONE_RESOURCE_ASSET_GLOB ?? "").split(",").map((value) => value.trim()).filter(Boolean)) {
       if (!/^[A-Za-z0-9_.*?-]+$/.test(pattern)) continue;
       for (const entry of readdirSync(assetRoot, { withFileTypes: true })) {
         if (!entry.isFile() || !globMatches(pattern, entry.name)) continue;
@@ -467,14 +492,34 @@ function globMatches(pattern: string, name: string): boolean {
   return new RegExp(`^${source}$`, "i").test(name);
 }
 
-function sendBufferWithRange(req: Request, res: Response, body: Buffer) {
+/** In-memory counterpart to the raw sendFile route: suffix/combined ranges,
+ * malformed/multiple-range fallback and stale If-Range remain file semantics. */
+function sendFileSnapshot(req:Request,res:Response,body:Buffer,modified:Date,filePath:string) {
+  if(filePath.split(path.sep).some(part=>part.startsWith(".")&&part.length>1))
+    return res.status(404).json({error:"resource package read failed"});
+  const etag=`W/"${body.length.toString(16)}-${modified.getTime().toString(16)}"`;
+  res.setHeader("Accept-Ranges","bytes");res.setHeader("Cache-Control","public, max-age=0");
+  res.setHeader("Last-Modified",modified.toUTCString());res.setHeader("ETag",etag);
+  const rawIfRange=req.headers["if-range"],ifRange=Array.isArray(rawIfRange)?rawIfRange.join(","):rawIfRange;
+  const freshRange=!ifRange || (ifRange.includes('"')?ifRange.includes(etag):Date.parse(modified.toUTCString())<=Date.parse(ifRange));
+  const rawRange=req.headers.range,range=Array.isArray(rawRange)?rawRange.join(","):rawRange;
+  const ranges=freshRange && /^ *bytes=/.test(range??"")?req.range(body.length,{combine:true}):undefined;
+  if(ranges===-1)return res.status(416).setHeader("Content-Range",`bytes */${body.length}`).json({error:"resource package read failed"});
+  if(ranges && typeof ranges!=="number" && ranges.length===1) {
+    const {start,end}=ranges[0]!;
+    return res.status(206).setHeader("Content-Range",`bytes ${start}-${end}/${body.length}`).setHeader("Content-Length",end-start+1).send(body.subarray(start,end+1));
+  }
+  return res.status(200).setHeader("Content-Length",body.length).send(body);
+}
+
+function sendBufferWithRange(req: Request, res: Response, body: Buffer, forceRange = process.env.BLUSTONE_FORCE_PACKAGE_RANGE === "1") {
   res.setHeader("Accept-Ranges", "bytes");
   const range = req.headers.range;
   // CPVCDN normally sends a Range header, but some BlueStacks startup paths
   // omit it while still parsing the package as a partial response.  Keep the
   // normal 200 behavior by default and expose a diagnostic compatibility mode
   // that turns an un-ranged package fetch into a complete 206 response.
-  if (!range && process.env.BLUSTONE_FORCE_PACKAGE_RANGE !== "1") {
+  if (!range && !forceRange) {
     return res.status(200).setHeader("Content-Length", body.length).send(body);
   }
   if (!range) {
@@ -497,9 +542,9 @@ function sendBufferWithRange(req: Request, res: Response, body: Buffer) {
     .send(body.subarray(start, end + 1));
 }
 
-function resourceManifest(resources: ResourcePackage[]): string {
+function resourceManifest(resources: ResourcePackage[], env: NodeJS.ProcessEnv = process.env): string {
   const totalSize = resources.reduce((total, resource) => total + resource.size, 0);
-  const lines = [String(process.env.BLUSTONE_RESLIST_HEADER_STAMP ?? process.env.BLUSTONE_RESLIST_STAMP ?? "1634659"), String(resources.length), String(totalSize)];
+  const lines = [String(env.BLUSTONE_RESLIST_HEADER_STAMP ?? env.BLUSTONE_RESLIST_STAMP ?? "1634659"), String(resources.length), String(totalSize)];
   for (const resource of resources) {
     lines.push([resource.name, resource.stamp, resource.size, resource.step, resource.signature, resource.packageMd5].join(","));
   }

@@ -30,6 +30,9 @@ if (args.includes('--recruit-card')) {
     throw new Error('--recruit-card requires a three-digit non-main ordinary Hunter ID');
   env.BLUSTONE_RECRUIT_CARD = recruitCard;
 }
+// Explicit app-lifetime immutable resource bytes; changing originals requires
+// a new process. No profile or persistent gameplay setting is rewritten.
+if (args.includes('--resource-snapshot')) env.BLUSTONE_RESOURCE_SNAPSHOT = '1';
 preflight(root, profile);
 mkdirSync(path.dirname(env.BLUSTONE_STATE_FILE), { recursive: true });
 console.log(`Profile ${profileName}: ${profile.expectedPackages} packages, version ${env.BLUSTONE_RESOURCE_VERSION}, port ${env.BLUSTONE_PORT}`);
