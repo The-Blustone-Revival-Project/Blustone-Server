@@ -3,9 +3,10 @@ import {createHash} from "node:crypto";
 import {isDeepStrictEqual} from "node:util";
 import {repositoryPath} from "./paths.js";
 import {MATERIAL_SKILL_SOURCE_PINS,selectMaterialEpisodeGraph} from "./material-skill-evidence.js";
+import {validateExpandedMaterialSkillSources} from "./material-skill-expansion.js";
 
 export const MATERIAL_SKILL_PROFILE=process.env.BLUSTONE_MATERIAL_SKILL_PROFILE??"neutral";
-if(!["neutral","episode-indexed-projection"].includes(MATERIAL_SKILL_PROFILE))
+if(!["neutral","episode-indexed-projection","episode-indexed-expanded-projection"].includes(MATERIAL_SKILL_PROFILE))
   throw new TypeError("Unknown material skill profile");
 
 /** Explicit LOCAL adoption of these exact encounter variants. Neither matching
@@ -25,7 +26,7 @@ interface EpisodeEffect {
   refer_target_type:number;refer_target_stat:number;
   base_number:number;duration:number;interval:number;
 }
-interface EpisodeSkill {type:number;target_rank:number;cost?:number;cool_time?:number;crt_chance?:number;effect:EpisodeEffect[]}
+export interface EpisodeSkill {type:number;target_rank:number;cost?:number;cool_time?:number;crt_chance?:number;effect:EpisodeEffect[]}
 export interface MaterialWireEffect extends EpisodeEffect {
   serial:number;up_number:number;duration_up:number;value_calc:string;effect_desc:string[];
 }
@@ -82,9 +83,12 @@ export function validateMaterialSkillSources(episodeBytes:Buffer,symbolicBytes:B
   });
 }
 
-const selected=MATERIAL_SKILL_PROFILE==="episode-indexed-projection"
+const selected=MATERIAL_SKILL_PROFILE!=="neutral"
   ?validateMaterialSkillSources(readFileSync(repositoryPath(MATERIAL_SKILL_SOURCE_PINS.episode.path)),
     readFileSync(repositoryPath("resources/reference/episodes/SKILL_REF.json"))):[];
+if(MATERIAL_SKILL_PROFILE==="episode-indexed-expanded-projection")
+  selected.push(...validateExpandedMaterialSkillSources(readFileSync(repositoryPath(MATERIAL_SKILL_SOURCE_PINS.episode.path)),
+    readFileSync(repositoryPath("resources/reference/episodes/SKILL_REF.json"))));
 
 /** Ordinary wire wrappers are LOCAL: sequential serials except the pinned Bright
  * and Bibi active display joins (serial0), no growth, unresolved

@@ -124,6 +124,8 @@
   "tests/material-skill-evidence.ts",
   "tests/material-skill-projection.ts",
   "tests/material-skill-projection-http.ts",
+  "tests/material-expanded-skills.ts",
+  "tests/material-expanded-skills-http.ts",
   "tests/material-hunter-progression-http.ts",
   "tests/hunter-sale.ts",
   "tests/social-friends.ts",
