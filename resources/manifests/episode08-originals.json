@@ -1,0 +1,100 @@
+[
+  {
+    "name": "C052.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C052.jet",
+    "destination": "resources/runtime/assets/C052.jet",
+    "bytes": 2456292,
+    "sha256": "6bfe2e7b997bbdc3f1d4af46ff23c8a2758a8c1190c4e8d9c45d9f8d8f5abd98"
+  },
+  {
+    "name": "C052_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C052_EFT.jet",
+    "destination": "resources/runtime/assets/C052_EFT.jet",
+    "bytes": 2149195,
+    "sha256": "f81e6e1fc6a7103e39f4f7946c35f69a79527f1ec3785171d3e46bc3e63e5ff6"
+  },
+  {
+    "name": "C052_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C052_Q.jet",
+    "destination": "resources/runtime/assets/C052_Q.jet",
+    "bytes": 61352,
+    "sha256": "b7bb86d00b6dd51877b126004d9e19cb105f5f7c4fe9853b7f8af530bbcbe333"
+  },
+  {
+    "name": "C052_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C052_SND.jet",
+    "destination": "resources/runtime/assets/C052_SND.jet",
+    "bytes": 167898,
+    "sha256": "fd1c0d3433a59326c1b9dc4d424bc13e795c64b7ae46db91dad39baa6f1806e8"
+  },
+  {
+    "name": "C056.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C056.jet",
+    "destination": "resources/runtime/assets/C056.jet",
+    "bytes": 1624597,
+    "sha256": "8660d0b766fe219c06ea4924c2f9f7a5f97f1936c1e6c0e316f2d53724132bb2"
+  },
+  {
+    "name": "C056_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C056_EFT.jet",
+    "destination": "resources/runtime/assets/C056_EFT.jet",
+    "bytes": 1854919,
+    "sha256": "07d6966cc82fe1fab28a676207fcd244b0c371700e703ea030571973886e0578"
+  },
+  {
+    "name": "C056_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C056_Q.jet",
+    "destination": "resources/runtime/assets/C056_Q.jet",
+    "bytes": 54679,
+    "sha256": "70808f3608ffbbb6dbac92f6c1af11580576a4ef9cd3928ebdfdf7d82388d943"
+  },
+  {
+    "name": "C056_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C056_SND.jet",
+    "destination": "resources/runtime/assets/C056_SND.jet",
+    "bytes": 199988,
+    "sha256": "ee18a4e25e8895d98c51b69b768e278eb8e9624e5064a7d580a0d681061b5591"
+  },
+  {
+    "name": "N008.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/N008.jet",
+    "destination": "resources/runtime/assets/N008.jet",
+    "bytes": 875989,
+    "sha256": "d77fa04ccf2039712b9f31a8455ecf6e13c28aca50e5cff89a121b8bd8ffe1f1"
+  },
+  {
+    "name": "N008_BG.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/N008_BG.jet",
+    "destination": "resources/runtime/assets/N008_BG.jet",
+    "bytes": 2134891,
+    "sha256": "dd2fedce3805c48841db31e06f2f2bbca2a55a9ca5ab1dc3506f509c15381c9d"
+  },
+  {
+    "name": "ST007.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/ST007.jet",
+    "destination": "resources/runtime/assets/ST007.jet",
+    "bytes": 447537,
+    "sha256": "acbe3807cb2661f45f62bea0248fe5961092e22d639aee9ba9888cb9a5f2d274"
+  },
+  {
+    "name": "ST900.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/ST900.jet",
+    "destination": "resources/runtime/assets/ST900.jet",
+    "bytes": 908439,
+    "sha256": "a44cc38dc6d21dcbbf4b34a24a0434f28ca69e5340b3b0177a197afc49302a69"
+  },
+  {
+    "name": "CUT_E0601.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E0601.jet",
+    "destination": "resources/runtime/assets/CUT_E0601.jet",
+    "bytes": 413110,
+    "sha256": "256c81524c9a4a505510196de742671ae5a10742342f84c1e75fa98161be46c7"
+  },
+  {
+    "name": "CUT_N9.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_N9.jet",
+    "destination": "resources/runtime/assets/CUT_N9.jet",
+    "bytes": 443630,
+    "sha256": "acf560d8797b746d001680a5e10601785dfb87aa4fc334abea8e4d63e96498b5"
+  }
+]

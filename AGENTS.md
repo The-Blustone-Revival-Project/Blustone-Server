@@ -1,3 +1,27 @@
+## Latest continuation: native campaign and rankings verified (2026-10-23)
+
+Goal ACTIVE. Human explicitly RESUMED exclusive BlueStacks control; earlier
+Escape/input hold superseded. Safe Snowfield map, NO active battle.
+Current local listener62012/current-e6-materials/139groups/stamp1634683/+15APK.
+Native n_01_10 WIN after prompt12 ordinary taps; Next→Snowfield26/30.
+Persisted130→131 totalstars, stage10[0,2]→[0,1,2], AP60→59, capsule63→64,
+four participants+10EXP each. Gold/teamEXP/BP/honor unchanged; other2games exact.
+Native Overall/Friend rank1/30 and own profile4portraits/power26243 verified.
+Native day8claim+100gold/+20VIPEXP verified; VIPthumbnail remains unresolved.
+Profile2070 date source-closed to epoch0+original format, not fixed/guessed.
+
+Campaign Start/Complete now persist detached game+quest before publishing live
+state; write/rename failure tests prove rollback and retry. Full228-program
+npm test/build PASS. See docs/campaign-atomic-persistence-2026-10-23.md and
+docs/native-validation-2026-10-23.md for evidence and private backup locations.
+
+Inactive current-e8 profile prepared:169→183 exactgroups/14originalpacks,
+46provenancepins/24materialrefs. All8profileprograms PASS. NOT activated.
+E6S04/CB0602 still uncleared; earned gates remain. E8 CERUM02 reward unknown.
+See docs/e8-readiness-2026-10-23.md. No APK build/release owed; no Docker,
+Collector, inference, original or DataDump change. Only Server writes.
+Continue more native systems and original-provider recovery; revival not done.
+
 ## Latest continuation: supplied complete Gem polishing (2026-10-23)
 
 Previous checkpoint9cbe534 verified the newer DataDump17 publication and found
