@@ -1,0 +1,30 @@
+[
+  {
+    "name": "M012.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/M012.jet",
+    "destination": "resources/runtime/assets/M012.jet",
+    "bytes": 866108,
+    "sha256": "9ba4e88489c28f3c18c7353cee6e9213c284b7d936163ffb9dbdf950259ad3f9"
+  },
+  {
+    "name": "CUT_E1001.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1001.jet",
+    "destination": "resources/runtime/assets/CUT_E1001.jet",
+    "bytes": 300034,
+    "sha256": "82395aa981186418b2698a142358b02fcae4092e36e2519461d4642d1e36aca6"
+  },
+  {
+    "name": "CUT_E1002.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1002.jet",
+    "destination": "resources/runtime/assets/CUT_E1002.jet",
+    "bytes": 350099,
+    "sha256": "6d96a0a34fddd3c91aaed48e689486031ff2ff5ed33febae5a0f0f5e5df9d116"
+  },
+  {
+    "name": "CUT_E1003.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E1003.jet",
+    "destination": "resources/runtime/assets/CUT_E1003.jet",
+    "bytes": 386434,
+    "sha256": "9953d006013da930c6db37e3b5f6e11b077935bedcea682b53b27be49397ce35"
+  }
+]

@@ -67,6 +67,13 @@ native gameplay proof. Existing earned progress remains authoritative.
 
 ## E10: a bounded missing-original boundary
 
+**Superseded by the aggregate ownership audit:** the directly named packs remain
+absent, but original `M012.jet` contains all three required M034/M035/M036
+namespaces. Fresh strict parsing and matching DataDump bytes prove that binding.
+See `e10-aggregate-monsters-readiness-2026-10-23.md` and the inactive209-group
+candidate. The filename-only gap below is historical; native E10 validation is
+still pending.
+
 The latest published DataDump release remains2026-10-17; current local changes
 preserve findings text and move raw media. No new equipment numeric table,
 coupon item dictionary or fishing/GvG provider was located in the bounded
