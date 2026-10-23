@@ -107,6 +107,14 @@ are local; original jackpots and item identities remain missing. First purchase
 captures schema8 counters. See the [Rupee workflow](docs/rupee-shop-workflow-2026-10-16.md).
 The 2021 base mode now has [native purchase and restart validation](docs/rupee-shop-native-validation-2026-10-23.md): the exact Manda debit, 5,000 Rupees credited, updated quota, and refusal without a coupon.
 
+An explicit [zero-reward Mirage recipe](docs/mirage-local-zero-reward-setup-2026-10-23.md)
+now has [native entry, two stair wins/claims and abandonment validation](docs/mirage-native-validation-2026-10-23.md).
+The final stair was lost; the floor remains incomplete. Balance and opponents
+are LOCAL authored content, and the captured recipe permits one attempt.
+Abandonment releases the owned roster; its COMPLETE map labels do not prove
+a win. Original Mirage assignments, balance and a repeatable native loop
+remain unfinished.
+
 Optional `BLUSTONE_RESOURCE_SHOP_MODE=archive-2018-base-only` supplies60 fuel
 or2 Challenge Invitations for5 Manda,5,000 Rupees or one owned local coupon.
 Both `BLUSTONE_RESOURCE_AP_DAILY_LIMIT` and `BLUSTONE_RESOURCE_BP_DAILY_LIMIT`
