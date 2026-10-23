@@ -3600,9 +3600,50 @@ export class ServerState {
     return this.envelope(result.data);
   }
 
+  /** Commit the complete campaign candidate once; failed writes leave the
+   * original game/quest object graph untouched. Lazy gameFor/quest admission
+   * remains the existing preceding boundary, not a new campaign reward. */
+  private commitCampaignMutation(account: Account, liveGame: LocalGameState,
+      planned: LocalGameState, nextQuest?: LocalQuestJournal) {
+    const priorQuest = this.quests.get(account.pvid);
+    this.gameByPvid.set(account.pvid, planned);
+    if (nextQuest !== undefined) this.quests.set(account.pvid, nextQuest);
+    try { this.persist(); }
+    finally {
+      this.gameByPvid.set(account.pvid, liveGame);
+      if (priorQuest === undefined) this.quests.delete(account.pvid);
+      else this.quests.set(account.pvid, priorQuest);
+    }
+    // Preserve retained successful capsule/card/mission/array identities too.
+    const publish = (before: any, after: any): any => {
+      if (Array.isArray(before) && Array.isArray(after)) {
+        for (let index = 0; index < after.length; index++) before[index] = publish(before[index], after[index]);
+        before.length = after.length;
+        return before;
+      }
+      if (before && after && typeof before === "object" && typeof after === "object" &&
+          !Array.isArray(before) && !Array.isArray(after)) {
+        for (const key of Object.keys(before)) if (!Object.hasOwn(after, key)) delete before[key];
+        for (const [key, value] of Object.entries(after)) before[key] = publish(before[key], value);
+        return before;
+      }
+      return after;
+    };
+    publish(liveGame, planned);
+    if (nextQuest !== undefined) this.quests.set(account.pvid, nextQuest);
+  }
+
   startMission(payload: Record<string, unknown>, headers: Record<string, string>) {
-    const account = this.accountFor(payload, headers);
-    const game = this.gameFor(account);
+    const account = this.accountFor(payload, headers), liveGame = this.gameFor(account);
+    const planned = structuredClone(liveGame);
+    let changed = false;
+    const response = this.startMissionWithGame(payload, account, planned, () => { changed = true; });
+    if (changed) this.commitCampaignMutation(account, liveGame, planned);
+    return response;
+  }
+
+  private startMissionWithGame(payload: Record<string, unknown>, account: Account,
+      game: LocalGameState, persist: () => void) {
     const requestedStageId = String(payload.stage_id ?? payload.stage ?? payload.id ?? "");
     if (game.arena.active) return this.failure(2001, "a Fight Club battle is active");
     if (game.search.active) return this.failure(2001, "a Search battle is active");
@@ -3690,7 +3731,7 @@ export class ServerState {
     } else {
       game.missions.push({ id: missionId, stage_id: stageId, state: 1, progress: 0, target: 1, reward_gold: 10 });
     }
-    this.persist();
+    persist();
     return this.envelope({
       accepted: true,
       stage_id: stageId,
@@ -3765,9 +3806,18 @@ export class ServerState {
    * result level-up flag can now reflect an actual published threshold crossing.
    */
   completeMission(payload: Record<string, unknown>, headers: Record<string, string>) {
-    const account = this.accountFor(payload, headers);
-    const liveGame = this.gameFor(account),priorQuest=this.ensureLocalQuests(account.pvid);
-    const game = priorQuest&&this.questMode==="local-fixed"?structuredClone(liveGame):liveGame;
+    const account = this.accountFor(payload, headers), liveGame = this.gameFor(account);
+    const priorQuest = this.ensureLocalQuests(account.pvid), planned = structuredClone(liveGame);
+    let changed = false, nextQuest = priorQuest;
+    const response = this.completeMissionWithGame(payload, planned, priorQuest,
+      () => { changed = true; }, journal => { nextQuest = journal; });
+    if (changed) this.commitCampaignMutation(account, liveGame, planned, nextQuest);
+    return response;
+  }
+
+  private completeMissionWithGame(payload: Record<string, unknown>, game: LocalGameState,
+      priorQuest: LocalQuestJournal | undefined, persist: () => void,
+      captureQuest: (journal: LocalQuestJournal) => void) {
     const requestedStageId = String(payload.stage_id ?? payload.stage ?? game.active_stage_id ?? "");
     const stageId = requestedStageId.length > 1 ? requestedStageId : (game.active_stage_id || "n_01_01");
     const battleId = String(payload.battle_id ?? game.active_battle?.battle_id ?? "");
@@ -3888,10 +3938,8 @@ export class ServerState {
     }
     const completedBattle = game.active_battle?.stage_id === stageId ? game.active_battle : null;
     game.active_battle = null;
-    if(game!==liveGame) {
-      const before={...liveGame};Object.assign(liveGame,game);if(nextQuest)this.quests.set(account.pvid,nextQuest);
-      try{this.persist();}catch(error){Object.assign(liveGame,before);this.quests.set(account.pvid,priorQuest!);throw error;}
-    }else this.persist();
+    if (nextQuest) captureQuest(nextQuest);
+    persist();
     // `achieve` carries the stars this completion granted: a first clear grants
     // indices0..2; replays may earn previously missing flags (battle-lifecycle.md
     // §5.4: answer 1 and report `prev == cur` so the second run's map state is
