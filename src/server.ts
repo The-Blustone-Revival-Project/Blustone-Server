@@ -50,7 +50,7 @@ const coreRoutes = new Set([
   "/pv_account/register_push_token",
 ]);
 
-export function createApp(options: { baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;dispatchInstantMode?:"disabled"|"local-entitled";dispatchSkipMode?:"disabled"|"local-manda-all"|"local-manda-sequential";
+export function createApp(options: {guildFuelMode?:"disabled"|"local-requests";guildFuelRequestSeconds?:unknown; baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;dispatchInstantMode?:"disabled"|"local-entitled";dispatchSkipMode?:"disabled"|"local-manda-all"|"local-manda-sequential";
   rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
   veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
   profileMode?:"disabled"|"archive-profile-projection";
@@ -64,7 +64,7 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
   const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds,guildChatMode:options.guildChatMode,publicChatMode:options.publicChatMode,
     ...(Object.hasOwn(options,"dispatchMode")?{dispatchMode:options.dispatchMode}:{}),...(Object.hasOwn(options,"dispatchPolicy")?{dispatchPolicy:options.dispatchPolicy}:{}),
     ...(Object.hasOwn(options,"dispatchInstantMode")?{dispatchInstantMode:options.dispatchInstantMode}:{}),
-    ...Object.fromEntries(["dispatchSkipMode","fishingTutorialMode","fishingTutorialPolicy","gemPolishMode","gemPolishPolicy","mirageMode","miragePolicy","mirageReentryPolicy","mirageReentryAdoption","rupeeShopMode","rupeeShopDailyLimit","veteranGiftMode","veteranPointsPerTicket","profileMode","baitShopMode","baitShopDailyLimit","fishingCastMode","fishingCastPolicy","fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
+    ...Object.fromEntries(["guildFuelMode","guildFuelRequestSeconds","dispatchSkipMode","fishingTutorialMode","fishingTutorialPolicy","gemPolishMode","gemPolishPolicy","mirageMode","miragePolicy","mirageReentryPolicy","mirageReentryAdoption","rupeeShopMode","rupeeShopDailyLimit","veteranGiftMode","veteranPointsPerTicket","profileMode","baitShopMode","baitShopDailyLimit","fishingCastMode","fishingCastPolicy","fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
   if(state.mirageResourcesRequired())verifyMirageRuntimePackages();
   const endpoints = discoverEndpoints(options.catalogPath ?? defaultCatalogPath());
   const openapi = buildOpenApi(endpoints, baseUrl);

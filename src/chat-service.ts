@@ -63,6 +63,26 @@ export function attachLocalChat(server:Server,state:ServerState):ChatService {
           catch{try{reply(peer,current,20000,tag,null,{code:2001,message:"Choose a channel from 1 to 9999"});}catch{ws.terminate();}}
           return;
         }
+        if(peer.kind==="guild"&&packet.command===11000&&payload&&typeof payload==="object"&&!Array.isArray(payload)&&
+          ((payload as any).type===11010||(payload as any).type===11011)) {
+          let event;
+          try {
+            if(Object.keys(payload).length!==2||!Object.hasOwn(payload,"message")||typeof (payload as any).message!=="string")
+              throw new Error("Native Guild fuel action requires message/type only");
+            event=state.guildFuelChat(peer.headers,(payload as any).type,(payload as any).message);
+          } catch {
+            try{reply(peer,current,11000,tag,null,{code:2001,message:"This Guild fuel request/support action is not available"});}catch{ws.terminate();}
+            return;
+          }
+          for(const recipient of peers) {
+            let target:Scope;
+            try{target=scope(recipient);}catch{recipient.socket.close(1008,"Chat subscription changed");continue;}
+            if(recipient.kind!=="guild"||target.serverId!==current.serverId||target.guildId!==current.guildId)continue;
+            try{reply(recipient,target,11000,tag,receivedGuildPayloadWire(state.guildFuelPayloadFor(event,target.pvid)));}
+            catch{recipient.socket.terminate();}
+          }
+          return;
+        }
         const requestCommand=peer.kind==="guild"?11000:10010,innerCommand=peer.kind==="guild"?11000:10002;
         if(packet.command!==requestCommand||peer.kind==="public"&&peer.channel===undefined||!payload||typeof payload!=="object"||Array.isArray(payload)||
           Object.keys(payload).length!==2||!Object.hasOwn(payload,"message")||!Object.hasOwn(payload,"type")||

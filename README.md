@@ -163,9 +163,15 @@ Native battle validation is pending; see the [friendly preparation policy](docs/
 Guild text Chat is available in explicit local memory mode:
 `BLUSTONE_GUILD_CHAT_MODE=local-memory`. It requires existing joined Guild
 records and authenticated exchange sessions; ordinary encrypted text is
-supported, while fuel requests and persistent history remain incomplete.
+supported. Persistent text history remains incomplete.
 The default stays disabled. See the [Guild Chat workflow](docs/guild-chat-local-workflow-2026-10-13.md)
 for setup and the remaining native validation requirements.
+
+Guild fuel request/support records have a separate opt-in mode,
+`BLUSTONE_GUILD_FUEL_MODE=local-requests`, requiring persistent state, Guild Chat,
+an explicit request lifetime and contribution values. Creation, support and
+personalized chat updates are implemented; **AP payouts remain unsupported**.
+See the [partial fuel workflow](docs/guild-fuel-record-workflow-2026-10-23.md).
 
 Public channel Chat has its own opt-in flag,
 `BLUSTONE_PUBLIC_CHAT_MODE=local-memory`. It supports explicit channel entry

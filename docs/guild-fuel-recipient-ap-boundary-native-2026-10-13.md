@@ -27,7 +27,7 @@ currency settlement. Do not interpret a completion-looking row as12 AP earned.
 CSRPopUpChat's fuel receive continuation parses the message string Gba61f6
 and requires its result slot1 Gba61fa..61fe. It resolves cached owner fuel
 Gba620e, compares that owner with current account PVID Gba6214..622c, and
-for the requester writes CHATDATA flag3 Gba6232. It passes cached regdate+24
+for the requester writes CHATDATA flag3 Gba6232. It passes cached expdate+24
 to UpdateFuelTime at Gba6236..623c, then branches to the end of this UI case.
 No AP quantity is passed to that method.
 

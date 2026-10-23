@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
 import {mkdtempSync,readFileSync,writeFileSync,rmSync} from "node:fs";
 import {tmpdir} from "node:os";
 import path from "node:path";
@@ -180,5 +181,35 @@ try {
     assert.deepEqual(final19[key],beforeRows[key],key);
   assert.deepEqual(final19.gameStates.filter(([id]:any)=>id!==actor.pvid),beforeRows.gameStates.filter(([id]:any)=>id!==actor.pvid));
   new ServerState("http://localhost",file,{...sequentialOptions,dispatchSkipMode:"disabled"});
+  // Genuine Guild support capture coexists with every previously exercised cohort.
+  const fuel=new ServerState("http://localhost",file,{...sequentialOptions,guildChatMode:"local-memory",
+    guildFuelMode:"local-requests",guildFuelRequestSeconds:3600,guildContributionPoints:{"1":0,"2":0,"3":0,"4":0}});
+  const pair=crypto.generateKeyPairSync("ec",{namedCurve:"secp384r1"});
+  const exchange=fuel.exchangeSecret({publicKey:pair.publicKey.export({format:"der",type:"spki"}).toString("base64url")});
+  const headers={"pv-accesstoken":exchange.accessToken,"x-pv-accesstoken":exchange.accessToken};
+  fuel.accountFor(actor,headers);
+  (fuel as any).persist(); // Authentication binding precedes the mutation baseline.
+  const before20=JSON.parse(readFileSync(file,"utf8"));
+  const event=fuel.guildFuelChat(headers,11010,"");
+  const supported=gameResponse(fuel,"/guild/SupportFuel",{...peer,request_id:event.requestId}) as any;
+  assert.equal(supported.result_code,1,JSON.stringify(supported));
+  const after20=JSON.parse(readFileSync(file,"utf8"));assert.equal(after20.version,20);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","dispatches","quests","accounts","gameStates","transportKeys","sessionBindings"])
+    assert.deepEqual(after20[key],before20[key],key);
+  assert.equal(after20.guildFuelLedger.requests[0].supporters.length,1);
+  const mixed20File=path.join(directory,"fuel-with-active-paid-rows.json");
+  const mixed20={...after20,dispatches:afterMixed.dispatches,gameStates:afterMixed.gameStates};
+  writeFileSync(mixed20File,JSON.stringify(mixed20));
+  const mixed20Cold=new ServerState("http://localhost",mixed20File,{...sequentialOptions,dispatchSkipMode:"disabled",guildFuelMode:"disabled"});
+  mixed20Cold.confirmNickname({...peer,nick_name:"Mixed Schema20 Peer"},{});
+  const mixed20Saved=JSON.parse(readFileSync(mixed20File,"utf8"));assert.equal(mixed20Saved.version,20);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","dispatches","quests","gameStates","guildFuelLedger"])
+    assert.deepEqual(mixed20Saved[key],mixed20[key],key);
+  const cold20=new ServerState("http://localhost",file,{...sequentialOptions,guildFuelMode:"disabled"});
+  assert.equal((gameResponse(cold20,"/guild/GetFuelRequests",actor) as any).ret_data.fuel_requests[0].supports,1);
+  cold20.confirmNickname({...peer,nick_name:"Fuel Cohort Peer"},{});
+  const retained20=JSON.parse(readFileSync(file,"utf8"));assert.equal(retained20.version,20);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","dispatches","quests","gameStates","guildFuelLedger"])
+    assert.deepEqual(retained20[key],after20[key],key);
 } finally {Date.now=clock;rmSync(directory,{recursive:true,force:true});}
 console.log("Gem polish cohorts: real Mirage schema14 current/archived paid aid and abandon → actual fishing schema15 → supplied Gem work schema16, Guild TYPE2 aggregate fees, restart/unrelated saves/modeoff and complete earlier-state retention passed.");

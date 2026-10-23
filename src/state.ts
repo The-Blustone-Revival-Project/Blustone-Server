@@ -1,3 +1,5 @@
+import {normalizeGuildFuelLedger,reconcileGuildFuelMembership,planGuildFuelCreate,planGuildFuelSupport,planGuildFuelRelay,guildFuelRows,guildFuelWireMessage,
+  type GuildFuelLedger,type GuildFuelEvent} from "./guild-fuel-ledger.js";
 import {planSequentialDispatchSkip,replayDispatchRowSkips,projectSequentialFinish} from "./dispatch-row-skips.js";
 import {configuredGemPolish,normalizeGemPolish,sameGemPolishPolicy,validateGemPolishHistory,planGemPolish,polishIdentity,type GemPolishJournal} from "./gem-polish.js";
 import {globalArenaPage} from "./arena-global-rankings.js";
@@ -576,6 +578,9 @@ export class ServerState {
   private socialFriends?: SocialFriends;
   private socialLikes?: SocialLikes;
   private guilds?: GuildRecord[];
+  private guildFuelLedger?:GuildFuelLedger;
+  private readonly guildFuelMode:"disabled"|"local-requests";
+  private readonly guildFuelRequestSeconds?:number;
   private nextGuildId?:number;
   private guildPending?:GuildApplication[];
   private guildNotifications?:GuildNotification[];
@@ -650,7 +655,7 @@ export class ServerState {
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
       gemPolishMode?:"disabled"|"local-supplied-sequence";gemPolishPolicy?:unknown;
       gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown;
-      guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first";
+      guildFuelMode?:"disabled"|"local-requests";guildFuelRequestSeconds?:unknown;guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first";
       guildDonationMode?:"disabled"|"local-gold";
       guildMembershipMode?:"disabled"|"local-public-approval";guildMembershipPolicy?:unknown;
       guildManagementMode?:"disabled"|"local-management";guildRolePolicy?:unknown;
@@ -872,6 +877,15 @@ export class ServerState {
     if(text!==undefined) this.guildBenefitText=Object.freeze(guildBenefitStrings(text));
     if(points!==undefined) this.guildPoints=Object.freeze(guildContributionPoints(points));
     if(rewards!==undefined) this.guildRewards=Object.freeze(guildContributionRewards(rewards,knownItems));
+    const fuelMode=options.guildFuelMode??process.env.BLUSTONE_GUILD_FUEL_MODE??"disabled";
+    if(fuelMode!=="disabled"&&fuelMode!=="local-requests")throw new TypeError("Unknown Guild fuel mode");
+    this.guildFuelMode=fuelMode;
+    const fuelRaw=Object.hasOwn(options,"guildFuelRequestSeconds")?options.guildFuelRequestSeconds:process.env.BLUSTONE_GUILD_FUEL_REQUEST_SECONDS;
+    const fuelSeconds=typeof fuelRaw==="string"&&/^[1-9]\d*$/.test(fuelRaw)?Number(fuelRaw):fuelRaw;
+    if(fuelSeconds!==undefined&&(typeof fuelSeconds!=="number"||!Number.isInteger(fuelSeconds)||fuelSeconds<1||fuelSeconds>86400))throw new TypeError("Guild fuel request seconds require explicit1..86400");
+    this.guildFuelRequestSeconds=fuelSeconds as number|undefined;
+    if(fuelMode!=="disabled"&&(!this.stateFile||!this.guildChatEnabled()||fuelSeconds===undefined||!this.guildPoints||this.guildPoints["4"]<0))
+      throw new TypeError("Guild fuel records require persistent state, local Guild Chat, explicit request lifetime and nonnegative action4 points");
     const rawOvercome=Object.hasOwn(options,"hunterOvercomePolicy")?options.hunterOvercomePolicy:
       process.env.BLUSTONE_HUNTER_OVERCOME_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_HUNTER_OVERCOME_POLICY_JSON);
     if(this.hunterOvercomeMode!=="disabled")this.configuredOvercomePolicy=configuredHunterOvercome(rawOvercome,new Set(itemReference().item.map(row=>row.id)));
@@ -888,40 +902,43 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14||saved.version===15||saved.version===16||saved.version===17||saved.version===18||saved.version===19)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14||saved.version===15||saved.version===16||saved.version===17||saved.version===18||saved.version===19||saved.version===20)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
-    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Mirage run journals require schema12");
+    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Mirage run journals require schema12");
     if((saved.version===12||saved.version===13||saved.version===14)&&(!Array.isArray(saved.mirageRuns)||!saved.mirageRuns.length))throw new TypeError("Schema12 requires captured Mirage run journals");
-    if(saved.mirageSeries!==undefined&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Mirage re-entry journals require schema14");
+    if(saved.mirageSeries!==undefined&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Mirage re-entry journals require schema14");
     if(saved.version===14&&(!Array.isArray(saved.mirageSeries)||!saved.mirageSeries.length))throw new TypeError("Schema14 requires captured Mirage re-entry journals");
-    if(saved.fishingCasts!==undefined&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Fishing cast journals require schema15");
+    if(saved.fishingCasts!==undefined&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Fishing cast journals require schema15");
     if(saved.version===15&&(!Array.isArray(saved.fishingCasts)||!saved.fishingCasts.length))throw new TypeError("Schema15 requires captured fishing casts");
-    if(saved.gemPolishJournals!==undefined&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Gem polish journals require schema16");
+    if(saved.gemPolishJournals!==undefined&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Gem polish journals require schema16");
     if(saved.version===16&&(!Array.isArray(saved.gemPolishJournals)||!saved.gemPolishJournals.length))throw new TypeError("Schema16 requires completed supplied Gem polish work");
-    if(saved.fishingTutorials!==undefined&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Fishing tutorial journals require schema17");
+    if(saved.fishingTutorials!==undefined&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Fishing tutorial journals require schema17");
     if(saved.version===17&&(!Array.isArray(saved.fishingTutorials)||!saved.fishingTutorials.length))throw new TypeError("Schema17 requires captured fishing tutorial settlement");
     const hasPaidFinish=Array.isArray(saved.dispatches)&&saved.dispatches.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].active)&&Object.hasOwn(row[1].active,"paid_finish"));
-    if(hasPaidFinish&&saved.version!==18&&saved.version!==19)throw new TypeError("Paid dispatch finish requires state schema18");
+    if(hasPaidFinish&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Paid dispatch finish requires state schema18");
     if(saved.version===18&&!hasPaidFinish)throw new TypeError("Schema18 requires captured paid dispatch finish");
     const hasRowSkips=Array.isArray(saved.dispatches)&&saved.dispatches.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].active)&&Object.hasOwn(row[1].active,"row_skips"));
-    if(hasRowSkips&&saved.version!==19)throw new TypeError("Dispatch row skips require state schema19");
+    if(hasRowSkips&&saved.version!==19&&saved.version!==20)throw new TypeError("Dispatch row skips require state schema19");
     if(saved.version===19&&!hasRowSkips)throw new TypeError("Schema19 requires captured dispatch row skips");
+    if(saved.guildFuelLedger!==undefined&&saved.version!==20)throw new TypeError("Guild fuel ledger requires state schema20");
+    if(saved.version===20&&(!isRecord(saved.guildFuelLedger)||!Array.isArray(saved.guildFuelLedger.requests)||!saved.guildFuelLedger.requests.length))
+      throw new TypeError("Schema20 requires a captured Guild fuel request ledger");
     const hasMirageRevive=Array.isArray(saved.mirageRuns)&&saved.mirageRuns.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].policy)&&row[1].policy.revive_prices!==undefined);
-    if(hasMirageRevive&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Mirage first-aid policies require schema13");
+    if(hasMirageRevive&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Mirage first-aid policies require schema13");
     if(saved.version===13&&!hasMirageRevive)throw new TypeError("Schema13 requires captured Mirage first-aid policy");
-    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Captured Hunter transcendence policy requires schema11");
+    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Captured Hunter transcendence policy requires schema11");
     if(saved.version===11&&saved.hunterOvercomePolicy===undefined)throw new TypeError("Schema11 requires a captured Hunter transcendence policy");
     if(saved.hunterOvercomePolicy!==undefined) {
       this.capturedOvercomePolicy=configuredHunterOvercome(saved.hunterOvercomePolicy,new Set(itemReference().item.map(row=>row.id)));
       if(this.configuredOvercomePolicy&&hunterOvercomeFingerprint(this.configuredOvercomePolicy)!==hunterOvercomeFingerprint(this.capturedOvercomePolicy))
         throw new TypeError("Configured transcendence policy differs from captured earned policy; refusing silent stat/cost changes");
     }
-    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
+    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
       throw new TypeError("Paid dorm expansion requires state schema10");
-    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
       [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
       throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
@@ -931,10 +948,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -954,6 +971,7 @@ export class ServerState {
     if (saved.socialLikes !== undefined)
       this.socialLikes = normalizeSocialLikes(saved.socialLikes, (pvid) => this.socialAccountProfile(pvid));
     if(saved.guilds!==undefined) this.guilds=establishedGuildRecords(saved.guilds,this.accountsByPvid);
+    if(saved.guildFuelLedger!==undefined)this.guildFuelLedger=normalizeGuildFuelLedger(saved.guildFuelLedger,this.guilds??[],this.accountsByPvid);
     if(saved.guildPending!==undefined) this.guildPending=guildApplications(saved.guildPending,this.guilds??[],this.accountsByPvid);
     if(saved.guildNotifications!==undefined) this.guildNotifications=guildNotificationState(saved.guildNotifications,this.accountsByPvid,this.guildServerScopes());
     if(saved.guildInvitations!==undefined) this.guildInvitations=guildInvitationState(saved.guildInvitations,this.guilds??[],this.accountsByPvid,this.guildNotifications??[]);
@@ -1015,7 +1033,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&saved.version!==20)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -1085,12 +1103,14 @@ export class ServerState {
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
     const paidRows=[...this.dispatches.values()].some(row=>row.active?.row_skips?.length);
     const paidFinish=[...this.dispatches.values()].some(row=>row.active?.paid_finish);
-    const snapshot = { version: paidRows?19:paidFinish?18:this.fishingTutorials.size?17:this.gemPolishJournals.size?16:this.fishingCasts.size?15:this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(paidRows||paidFinish||this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(paidRows||paidFinish||this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const fuelLedger=this.guildFuelLedger?reconcileGuildFuelMembership(this.guildFuelLedger,this.guilds??[],this.accountsByPvid):undefined;
+    const snapshot = { version: fuelLedger?20:paidRows?19:paidFinish?18:this.fishingTutorials.size?17:this.gemPolishJournals.size?16:this.fishingCasts.size?15:this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(fuelLedger||paidRows||paidFinish||this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(fuelLedger||paidRows||paidFinish||this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
+      ...(fuelLedger?{guildFuelLedger:fuelLedger}:{}),
       ...(this.nextGuildId === undefined ? {} : { nextGuildId: this.nextGuildId }),
       ...(this.guildPending === undefined ? {} : { guildPending: this.guildPending }),
       ...(this.guildNotifications===undefined?{}:{guildNotifications:this.guildNotifications}),
@@ -1111,6 +1131,7 @@ export class ServerState {
     const temporary = `${this.stateFile}.tmp`;
     writeFileSync(temporary, JSON.stringify(snapshot), { mode: 0o600 });
     renameSync(temporary, this.stateFile);
+    if(fuelLedger)this.guildFuelLedger=fuelLedger;
   }
 
   resourceVersion = Number(process.env.BLUSTONE_RESOURCE_VERSION ?? 0);
@@ -1724,12 +1745,57 @@ export class ServerState {
     if (route === "/guild/GetNotifications") return this.envelope({guild_notifications:this.guildVisibleNotifications(account.pvid)});
     // RequestFuelList Ga7bcdc/innerGa90d90 selects this named row array,
     // upserts each entry and returns its cached map. Empty is NOT a cache clear.
-    // No local fuel request producer, support amount or ownership exists yet.
-    if(route==="/guild/GetFuelRequests") return this.envelope({fuel_requests:[]});
+    // Optional local records supply ownership/counts; AP settlement is unresolved.
+    if(route==="/guild/GetFuelRequests") return this.envelope({fuel_requests:this.guildPersonal(account.pvid).my_guild.status===3?
+      guildFuelRows(this.guildFuelLedger,this.guilds??[],this.accountsByPvid,{pvid:account.pvid,serverId:account.serverId}):[]});
+    if(route==="/guild/SupportFuel")return this.supportGuildFuel(account,payload);
     // Explicit ephemeral Chat mode has no persisted archive. ParseChatLog takes
     // ret_data directly and clears only its archive, not the live socket log.
     if(route==="/guild/GetChattingLog"&&this.guildChatEnabled()) return this.envelope([]);
     return this.failure(2001, "Guild establishment, fees, references and participation are not reconstructed");
+  }
+
+  private supportGuildFuel(account:Account,payload:Record<string,unknown>) {
+    if(this.guildFuelMode!=="local-requests"||!this.guildFuelLedger||this.guildPersonal(account.pvid).my_guild.status!==3)
+      return this.failure(2001,"Local Guild fuel request/support records are unavailable");
+    if(!Object.hasOwn(payload,"request_id")||Reflect.ownKeys(payload).some(key=>typeof key!=="string"||
+      !["app_code","app_ver","market","pvid","otp","request_id"].includes(key)||!Object.hasOwn(Object.getOwnPropertyDescriptor(payload,key)!,"value")))
+      return this.failure(2001,"Guild fuel support requires native request_id only");
+    let plan;
+    try{plan=planGuildFuelSupport(this.guildFuelLedger,this.guilds??[],this.accountsByPvid,
+      {pvid:account.pvid,serverId:account.serverId},payload.request_id,Math.floor(Date.now()/1000),this.guildPoints!["4"]);}
+    catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+    const before=this.guildFuelLedger,beforeGuilds=this.guilds;
+    this.guildFuelLedger=plan.ledger;this.guilds=plan.guilds;
+    try{this.persist();}catch(error){this.guildFuelLedger=before;this.guilds=beforeGuilds;throw error;}
+    const row=guildFuelRows(this.guildFuelLedger,this.guilds??[],this.accountsByPvid,{pvid:account.pvid,serverId:account.serverId}).find(row=>row.id===plan.requestId)!;
+    const personal=this.guildPersonal(account.pvid);
+    return this.envelope({...personal,guilds:guildDetailRows([String(personal.my_guild.guild_id)],this.guilds??[],account.serverId,this.accountsByPvid),fuel_requests:[row]});
+  }
+
+  /** Native authenticated Chat creation/relay. This workflow grants NO AP. */
+  guildFuelChat(headers:Record<string,string>,type:number,message:unknown):GuildFuelEvent {
+    const actor=this.chatGuildFor(headers);
+    if(this.guildFuelMode!=="local-requests")throw new TypeError("Local Guild fuel request/support records are disabled");
+    const now=Math.floor(Date.now()/1000);
+    let plan;
+    if(type===11010)plan=planGuildFuelCreate(this.guildFuelLedger,this.guilds??[],this.accountsByPvid,actor,message,now,this.guildFuelRequestSeconds!);
+    else if(type===11011&&this.guildFuelLedger)plan=planGuildFuelRelay(this.guildFuelLedger,this.guilds??[],this.accountsByPvid,actor,message,now);
+    else throw new TypeError("Guild fuel Chat action is unavailable");
+    const before=this.guildFuelLedger;this.guildFuelLedger=plan.ledger;
+    try{this.persist();}catch(error){this.guildFuelLedger=before;throw error;}
+    return plan.event;
+  }
+
+  guildFuelPayloadFor(event:GuildFuelEvent,recipientPvid:number) {
+    if(!this.guildFuelLedger)throw new TypeError("Guild fuel event is unavailable");
+    const sender=this.accountsByPvid.get(event.senderPvid),recipient=this.accountsByPvid.get(recipientPvid);
+    if(!sender||!recipient||this.guildPersonal(sender.pvid).my_guild.status!==3||this.guildPersonal(recipient.pvid).my_guild.status!==3)
+      throw new TypeError("Guild fuel event requires current joined participants");
+    for(const actor of [sender,recipient])if(!guildFuelRows(this.guildFuelLedger,this.guilds??[],this.accountsByPvid,
+      {pvid:actor.pvid,serverId:actor.serverId}).some(row=>row.id===event.requestId))throw new TypeError("Guild fuel event is outside current room scope");
+    return {who:String(sender.pvid),nickname:sender.nickname,type:event.type,
+      message:guildFuelWireMessage(this.guildFuelLedger,event,{pvid:recipient.pvid,serverId:recipient.serverId})};
   }
 
   private guildPersonal(pvid:number) {
