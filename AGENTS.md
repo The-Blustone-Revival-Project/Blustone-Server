@@ -1,3 +1,48 @@
+## Latest source continuation: E9 ready, Bibi display bound, UI unavailable (2026-10-23)
+
+Goal ACTIVE. UIHELD after two failed Windowsactivation attempts includingfresh
+reselection; userrestorequestionpending. No new nativeinput/Episodebattle.
+Client7068/listener46444 remainLIVE; whole private save EXACT topretrial copy.
+Do NOTrestart processes merelybecause capturefailed. Freshwindowobservation
+required afterrestoration; prior exclusiveauthorizationremains valid.
+
+LIVE CODE remains Bright-validated9882693. Source/build NOWnewerBibi040active
+serial0 is NOT hotloaded; no liveprofile/save changes. NewBibi bindingmatches
+exact040|1|1 SUB_SERIAL0/rawFORMULAR andwholeSTAT70active; other2..5serial1,
+Bright0/40icons/numericgraphs unchanged. Nativepopup uses separate1-rowdisplay
+list/rawbase-400, not normalizedcombat-4/mainstat33companion. Types3/5semantic
+mismatches remain. See bibi-skill-display-binding/material-native-bibi-preflight
+docs. NativeBibi acquisition/rendering/activation STILLpending.
+
+InactiveE9 current-e9.json prepared183->205 exactorderedgroups, stamp1634690.
+22neworiginals20,045,894bytes/68totalprovenancepins; N006_BG isINSIDEN006.jet,
+no separateBGpack.7stories/CB0901+CB0902/9entry-winXMLs fullyreachable, stage99
+alreadyselected. Actualbootstrap24->29refs, prior24EXACT,5newneutral/unowned.
+No activation/grants/statretune; E6S04stilluncleared; E7/E8/E9nativepending.
+
+Build/full230runtimeprograms/all9profiles/compiledBibi projection+HTTP PASS,
+independentreviews clear. HistoricalE8/E9publicationfixtures injectfixedpeers,
+separatelytestfreshdefaultall-peeradvancement; oldprofilesbyteunchanged.
+InstrumentedhostBrightobservercompiled+CLI/Marker tests PASS; nativepending.
+No Docker/Collector/inference/APKbuild/install/release or original/DDchanges.
+
+## Current UI constraint and Bright observer preparation (2026-10-23)
+
+Goal ACTIVE; UIINPUTS HELD because Windowscontrol returned failed-to-activate
+capturedwindow TWICE, including freshapp/window reselection. Capture showed
+desktop/wallpaper ratherthan game. Humanrestorequestionpending; thisisNOTa
+newpermission request or proofclientstopped. Sourceworkcontinues. Reobserve
+freshactualBlueStackswindowafteruserrestore before anygameinput.
+Read-onlyPIDcheck: client7068 STILLrunning; listener46444 STILLserving8080.
+All3savedgames EXACT topre-bright-e6-trial.json; NO newEpisodebattle started.
+Do notrestartclient/server merelybecause windowcapture failed.
+
+Host-only Brightqualification addedinInstrumented/tools/InspectNativeInput.java:
+--episode-skills --frame --heal-source-ref=C049 --heal-source-serial=1000018.
+ExistingC004/default/badge/touchguards unchanged. Hostcompile+pureCLItests and
+existingMarker/CDN tests PASS, independentreviewclear. Nativeprobe/heal still
+PENDING. Doesnotauthorizeinput. No APKbuild/release or livepatch.
+
 ## Latest continuation: Bright paid/native progression and skill display (2026-10-23)
 
 Goal ACTIVE. Current listener46444/session66496, instrumentedclient7068/+15APK.

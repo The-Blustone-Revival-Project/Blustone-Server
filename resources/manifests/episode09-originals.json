@@ -1,0 +1,156 @@
+[
+  {
+    "name": "C024.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C024.jet",
+    "destination": "resources/runtime/assets/C024.jet",
+    "bytes": 708837,
+    "sha256": "ec9b3819ee832e00e337eebdcb891f16b9abd0140ec4d968fa2dc442fc1daf30"
+  },
+  {
+    "name": "C024_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C024_EFT.jet",
+    "destination": "resources/runtime/assets/C024_EFT.jet",
+    "bytes": 1806148,
+    "sha256": "709f22186bb760b0e0ba67f3140dac432dd47b9f063fc5575b285a60396604ca"
+  },
+  {
+    "name": "C024_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C024_Q.jet",
+    "destination": "resources/runtime/assets/C024_Q.jet",
+    "bytes": 121860,
+    "sha256": "8844c8bab64bf437bcde06023fe7f0358046cb397e100a795f90610e5d2b420b"
+  },
+  {
+    "name": "C024_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C024_SND.jet",
+    "destination": "resources/runtime/assets/C024_SND.jet",
+    "bytes": 81632,
+    "sha256": "9e828bf7834eb26658c8e9bfdecfc6f6b2d4a4d3ec943268966e80c78b8d430a"
+  },
+  {
+    "name": "C021.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C021.jet",
+    "destination": "resources/runtime/assets/C021.jet",
+    "bytes": 928329,
+    "sha256": "6d22f96f1d83752297735f6d1beb4222f53841cfd4fdf42b8f8dd7cd984ce4db"
+  },
+  {
+    "name": "C021_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C021_EFT.jet",
+    "destination": "resources/runtime/assets/C021_EFT.jet",
+    "bytes": 2905595,
+    "sha256": "c5b39118edd5761a1d64077f27503375ac4c901d3b84c2f79cdabd24dd29b706"
+  },
+  {
+    "name": "C021_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C021_Q.jet",
+    "destination": "resources/runtime/assets/C021_Q.jet",
+    "bytes": 51048,
+    "sha256": "9b222e6082dc33df4587ba7e512998e8eccd965c448bbebbd472561260922778"
+  },
+  {
+    "name": "C021_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C021_SND.jet",
+    "destination": "resources/runtime/assets/C021_SND.jet",
+    "bytes": 93367,
+    "sha256": "008883900e6ed4c1a34ef19264519ff6ba534b4966370a2256d33e362b1a7544"
+  },
+  {
+    "name": "C039.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C039.jet",
+    "destination": "resources/runtime/assets/C039.jet",
+    "bytes": 868473,
+    "sha256": "6206e0877a239df80912ae212439ed2b50562fa3660dce8795db0040c064c01f"
+  },
+  {
+    "name": "C039_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C039_EFT.jet",
+    "destination": "resources/runtime/assets/C039_EFT.jet",
+    "bytes": 2048958,
+    "sha256": "db0f78faa9cd6c3edccf053313f4db283b9af6f9357bcfbd2173fa402daf39ec"
+  },
+  {
+    "name": "C039_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C039_Q.jet",
+    "destination": "resources/runtime/assets/C039_Q.jet",
+    "bytes": 50338,
+    "sha256": "26393f0f00ddced1c096aeda5feb7586dd7e8c0aede50acca369ea8832880c66"
+  },
+  {
+    "name": "C039_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C039_SND.jet",
+    "destination": "resources/runtime/assets/C039_SND.jet",
+    "bytes": 162507,
+    "sha256": "be6d39a8215b5076fd50db3fef10d063ba51e9f17bb4085f3dbe66810c90b31b"
+  },
+  {
+    "name": "C041.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C041.jet",
+    "destination": "resources/runtime/assets/C041.jet",
+    "bytes": 1386271,
+    "sha256": "5c72d43e6f776070a30998287cad142ddbf405278610f8718e419e2f8b68265e"
+  },
+  {
+    "name": "C041_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C041_EFT.jet",
+    "destination": "resources/runtime/assets/C041_EFT.jet",
+    "bytes": 1624641,
+    "sha256": "75772d466f4cec1fc6b13541988977c46135bc2e54800bdf8554e739f1fd310b"
+  },
+  {
+    "name": "C041_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C041_Q.jet",
+    "destination": "resources/runtime/assets/C041_Q.jet",
+    "bytes": 59874,
+    "sha256": "d01fdebf3d8d029e2404a4843b3c77673758c045984a99f32a7c603972277593"
+  },
+  {
+    "name": "C041_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C041_SND.jet",
+    "destination": "resources/runtime/assets/C041_SND.jet",
+    "bytes": 222586,
+    "sha256": "6fb1b1b71933e7eae0be3e5095ea6abbbb3d86c79b97b978841d39496bc9141f"
+  },
+  {
+    "name": "C020.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C020.jet",
+    "destination": "resources/runtime/assets/C020.jet",
+    "bytes": 657801,
+    "sha256": "2fe2059227222dbef2939765dcc2945b31ee8418f8faf9b4a317c078480e13d7"
+  },
+  {
+    "name": "C020_EFT.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C020_EFT.jet",
+    "destination": "resources/runtime/assets/C020_EFT.jet",
+    "bytes": 3172772,
+    "sha256": "61d415196684d23ff6f1d8a0bc45b1474d3dcf37ea316ca6a51b9d9c6e10b328"
+  },
+  {
+    "name": "C020_Q.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C020_Q.jet",
+    "destination": "resources/runtime/assets/C020_Q.jet",
+    "bytes": 60160,
+    "sha256": "5ac35c7b57b59d590526483f904016bdd37809f24eac3100d9c2fe39dae29915"
+  },
+  {
+    "name": "C020_SND.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/C020_SND.jet",
+    "destination": "resources/runtime/assets/C020_SND.jet",
+    "bytes": 85747,
+    "sha256": "15a1623752249ede334914898461d2a355fa835dbea6b9685b1f86a34e87e39c"
+  },
+  {
+    "name": "N006.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/N006.jet",
+    "destination": "resources/runtime/assets/N006.jet",
+    "bytes": 2478315,
+    "sha256": "2da4b713b04585f36e3b24d4cf99c3c850128662d69aa18a2d86827e9b311f89"
+  },
+  {
+    "name": "CUT_E0901.jet",
+    "source": "recovered-assets/phone-2026-09-18/extracted/split_PADResource/assets/CUT_E0901.jet",
+    "destination": "resources/runtime/assets/CUT_E0901.jet",
+    "bytes": 470635,
+    "sha256": "8e3029ac4e2f5429489c7e076a4745452e34e48691a3aece85035719af29f9be"
+  }
+]

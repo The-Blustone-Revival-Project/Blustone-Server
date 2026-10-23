@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync,writeFileSync,mkdtempSync,mkdirSync,copyFileSync,rmSync,existsSync} from 'node:fs';
+import {readFileSync,readdirSync,writeFileSync,mkdtempSync,mkdirSync,copyFileSync,rmSync,existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -13,7 +13,8 @@ const read=name=>JSON.parse(readFileSync(path.join(root,name),'utf8'));
 const sourceFile=path.join(root,'config/profiles/current-restoration.json'),sourceBytes=readFileSync(sourceFile);
 const outputFile=path.join(root,'config/profiles/current-e8.json'),outputBytes=readFileSync(outputFile);
 const source=read('config/profiles/current-restoration.json'),before=structuredClone(source),originals=episode08Originals();
-const prior=restorationOriginals(),pins=[...prior,...originals],candidate=prepareE8Profile(source);
+const fixtureOptions={sourceProfiles:[]};
+const prior=restorationOriginals(),pins=[...prior,...originals],candidate=prepareE8Profile(source,fixtureOptions);
 assert.equal(originals.length,14);assert.equal(pins.length,46);assert.equal(new Set(pins.map(p=>p.name)).size,46);
 assert.equal(originals.reduce((sum,row)=>sum+row.bytes,0),13_792_516);
 assert.equal(candidate.expectedPackages,183);assert.equal(candidate.resourceStamp,'1634689');assert.equal(candidate.preparedOnly,true);
@@ -21,8 +22,17 @@ assert.deepEqual(candidate.env.BLUSTONE_PACKAGE_NAMES.split(','),[...source.env.
 const stampKeys=['BLUSTONE_RESOURCE_VERSION','BLUSTONE_RESLIST_STAMP','BLUSTONE_RESLIST_HEADER_STAMP'];
 const unchanged=env=>Object.fromEntries(Object.entries(env).filter(([key])=>!stampKeys.includes(key)&&key!=='BLUSTONE_PACKAGE_NAMES'));
 assert.deepEqual(unchanged(candidate.env),unchanged(source.env));assert.deepEqual(source,before);
-assert.deepEqual(prepareE8Profile(candidate),candidate);assert.deepEqual(read('config/profiles/current-e8.json'),candidate);
+assert.deepEqual(prepareE8Profile(candidate,fixtureOptions),candidate);assert.deepEqual(read('config/profiles/current-e8.json'),candidate);
 preflight(root,candidate);
+// Keep the published historical E8 fixture fixed, while separately verifying
+// fresh default preparation advances beyond every newer checked-in peer.
+const freshDefault=prepareE8Profile(source);
+for(const filename of readdirSync(path.join(root,'config/profiles')).filter(name=>/^current.*\.json$/.test(name)&&name!=='current-e8.json')) {
+  const peer=read('config/profiles/'+filename);
+  assert.ok(Number(freshDefault.resourceStamp)>Number(peer.resourceStamp??peer.env.BLUSTONE_RESOURCE_VERSION),
+    'Fresh E8 preparation must not collide with a newer repository profile');
+}
+
 // Isolated source-only bootstrap processes: no dist build/write and no state,
 // sockets or device input. Publishing new material references is not ownership.
 const snapshot=profile=>{
