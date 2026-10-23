@@ -25,6 +25,7 @@ import { RECOVERED_MONSTER_NAMESPACES, requireSelectedMonsterArt } from "./monst
 import { projectMaterialStats } from "./material-stat-projection.js";
 import { configuredEquipmentReferences } from "./equipment-reference-profile.js";
 import {HUNTER_MIN_RANK_PROFILE,projectHunterMinimumRanks} from "./hunter-minimum-rank.js";
+import {teamLevelReference} from "./team-level-reference.js";
 
 /**
  * `BLUSTONE_CAMPAIGN=full|minimal`, resolved once at import. **`full`** is the
@@ -383,7 +384,7 @@ export const starterBookReference = [0, 1, 2, 3, 4].flatMap((card_role) =>
 /** CSRUserLV::SetLevel consumes named arrays, not a flat list. Numbers are
  * provisional progression thresholds. Empty VIP benefits mean no paid bonus. */
 export const starterLevels = {
-  user: [{ min_exp: 0 }, { min_exp: 100 }],
+  user: teamLevelReference(),
   vip: [{ min_exp: 0, title: "Local", benefit: [] }, { min_exp: 1000, title: "Local", benefit: [] }],
   vip_group: [],
   card: ordinaryHunterLevels,
