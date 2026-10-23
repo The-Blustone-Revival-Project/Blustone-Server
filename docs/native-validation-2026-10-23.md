@@ -88,3 +88,23 @@ The bounded read-only item reference observer, client4606, exited0 after
 DUMMY missing, no native getters. Instrumented capture retained locally at
 local/verification/item-references-20261023.txt. No private save mutation or
 client patch followed. See vip-thumbnail-native-boundary-2026-10-23.md.
+
+## Native duplicate-character admission
+
+A proposed second-Nene reserve strategy was directly tested before any battle.
+Removed Captain from ordinary slot3, then clicked the already-owned second
+Nene1000017/Lv1 row. The native client rejected it with The same character
+cannot be in a team. Slot3 remained empty and no duplicate was selected.
+Captain was restored through its visible roster row, returning team power26243
+and the exact original deck. All three complete saved games matched the
+pre-leader-ui snapshot afterward. No battle, spend, consumption or grant.
+Ignored screenshot duplicate-hunter-refused.jpg retains the toast. This
+disproves the duplicate-Nene strategy for native ordinary formation; distinct
+owned instance IDs alone do not establish distinct-character eligibility.
+
+The type1 request admission fix was independently reviewed and passed the full
+229-program suite, build and compiled new test. Server listener45504 now loads
+that fix on the unchanged139/stamp1634683 profile. Whole private save bytes
+were EXACT across idle reload; safe lower Village was freshly observed.
+This is compiled server admission proof plus original native UI refusal, not
+a native request from the rejecting UI or a broader character-family law.

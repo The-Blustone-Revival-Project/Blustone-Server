@@ -8,6 +8,7 @@ import {LOCAL_MAIL_SENDER} from "../src/mail.js";
 import {ARENA_RIVAL_PVID} from "../src/arena.js";
 
 const directory=mkdtempSync(path.join(tmpdir(),"blustone-user-details-"));
+const originalRecruit=process.env.BLUSTONE_RECRUIT_CARD;
 const originalNow=Date.now;let now=1_800_000_000_000;Date.now=()=>now;
 try {
   const file=path.join(directory,"state.json"),state=new ServerState("http://localhost",file);
@@ -41,6 +42,9 @@ try {
   assert.equal((state.completeMission({...peer,stage_id:"n_01_01",play_info:JSON.stringify({clear:1,clear_time:10,dead_cnt:0})},{}) as any).ret_data.accepted,true);
   assert.ok(leader.exp>expBefore);assert.ok(game.exp>groupBefore);
   const earnedLeaderExp=leader.exp;
+  // Native ordinary teams require distinct Hunter references. Keep actual paid
+  // recruitment and fifth-slot coverage, using Nene beside the two starters.
+  process.env.BLUSTONE_RECRUIT_CARD="003";
   while(game.starter_cards.length+game.recruited_cards.length<5)assert.equal(call(peer,"/shop/GachaPremium",{cnt:1}).result_code,1);
   const owned=[...game.starter_cards,...game.recruited_cards],ids=owned.map((card:any)=>card.inst_id);
   assert.equal(new Set(ids).size,ids.length);
@@ -48,6 +52,7 @@ try {
   assert.notEqual(fifth,leaderId);
   const deck=[ids.find((id:number)=>id!==leaderId)!,0,leaderId,0,fifth];
   assert.equal(new Set(deck.filter(Boolean)).size,3);
+  assert.equal(new Set(deck.filter(Boolean).map(id=>owned.find((card:any)=>card.inst_id===id)!.ref_id)).size,3);
   assert.equal(call(peer,"/world/SetDeck",{deck_info:JSON.stringify([{type:1,list:deck}])}).result_code,1);
   const response=immutable(()=>detail()),row=response.ret_data[0];assert.equal(response.result_code,1);
   assert.equal(row.vip_exp,20);assert.equal(row.group_exp,game.exp);assert.equal(row.stage_id,"n_01_01","Progress label is locally derived from actual earned stage");
@@ -89,5 +94,5 @@ try {
   const restarted=new ServerState("http://localhost",file);
   assert.deepEqual(immutable(()=>detail(JSON.stringify([peer.pvid]),restarted),restarted).ret_data,[finalRow]);
   assert.deepEqual(readFileSync(file),bytes);
-}finally{Date.now=originalNow;rmSync(directory,{recursive:true,force:true});}
+}finally{Date.now=originalNow;if(originalRecruit===undefined)delete process.env.BLUSTONE_RECRUIT_CARD;else process.env.BLUSTONE_RECRUIT_CARD=originalRecruit;rmSync(directory,{recursive:true,force:true});}
 console.log("Real user details: public same-server snapshots, actual VIP/skill/mission/recruitment/party changes, five slots plus leader, zeros, privacy, whole-batch admission, read-only failure/clock behavior and restart passed; no native render claim.");

@@ -2638,7 +2638,9 @@ export class ServerState {
       try { value = JSON.parse(value); } catch { return this.failure(2001, "invalid deck_info"); }
     }
     if (!Array.isArray(value) || !value.length) return this.failure(2001, "missing deck_info");
-    const owned = new Set([...game.starter_cards, ...game.recruited_cards].map((card) => card.inst_id));
+    const ownedCards = [...game.starter_cards, ...game.recruited_cards];
+    const owned = new Set(ownedCards.map((card) => card.inst_id));
+    const ownedRefs = new Map(ownedCards.map((card) => [card.inst_id, card.ref_id]));
     const updates: LocalGameState["decks"] = [];
     for (const row of value) {
       if (!isRecord(row) || !Number.isSafeInteger(row.type) || Number(row.type) < 1 ||
@@ -2647,6 +2649,11 @@ export class ServerState {
         return this.failure(2001, "deck contains invalid or unowned slots");
       }
       const members = row.list.filter((id) => id !== 0);
+      // Native ordinary crew selection rejects a second instance of the same
+      // Hunter reference. Distinct instance IDs do not bypass that type1 rule.
+      // Other deck types retain their independently established admission.
+      if (row.type === 1 && new Set(members.map((id) => ownedRefs.get(Number(id)))).size !== members.length)
+        return this.failure(2001, "The same Hunter reference cannot be in an ordinary team twice");
       const incomingList = row.list;
       if (row.type === 1 && game.search.active && JSON.stringify(Array.from({ length: 5 }, (_, index) => Number(incomingList[index] ?? 0))) !==
           JSON.stringify(game.decks.find((deck) => deck.type === 1)?.list)) {

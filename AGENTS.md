@@ -1,3 +1,29 @@
+## Latest continuation: ordinary same-Hunter rule enforced (2026-10-23)
+
+Goal ACTIVE; same+15APK, exclusive BlueStacks control resumed, safe lowerVillage,
+no ordinary/Search/Arena battle/helper. CURRENT listener45504/session3003 on
+current-e6-materials139/stamp1634683. Whole private save bytes EXACT across
+idle source reload; prior listener62012 intentionally stopped.131stars unchanged.
+
+NativeBuildTeam REFUSED secondownedNene1000017 beside1000004 with exact same-
+character toast. Captainrestored; all3complete games EXACT topretest. SetDeck
+type1 now rejects distinctinst IDs sharingexactref_id before batch mutation/
+clock refresh/persist. Otherdeck/legacyload behavior unchanged; no guessed
+awakened/costume-family rule. NewtestrealpaidduplicateNeneproductionIDs, whole
+batch/bytes/nestedrefs/idempotence/validdistinctrefs/restart. Full229-program
+npmtest/build+compilednewtest PASS; independentreviewclear. Existingprofile
+testfixtureupdated to paid distinctNene while retaining5thslot/privacychecks.
+
+See docs/e6-earned-strategy-2026-10-23.md: duplicateNene strategy DISPROVED,
+all originalNeneSTAT donors lackpassive3/5, no numericDEFvalue inferred.
+Mowgli skill1 hasexistingLOCALfixturegrowth and may support earnedpaidupgrade;
+othercurrentactivecoefficients zerogrowth. No fee/grant/training spent here.
+Original20starter skill names stillmissingidentityjoin: native rawnamefield
+closed but no publictablemapping; docs/starter-skill-name-boundary-2026-10-23.md.
+No inventedtitles. No APKbuild/release/Docker/Collector/inference/DataDumpchange.
+E6S04 remainsuncleared; inactiveE7/E8 preserved. Further material-Hunter native
+recruitment/skill validation and original progression evidence remain useful.
+
 ## Latest continuation: native Gym/leader and missing-data closure (2026-10-23)
 
 Goal ACTIVE; exclusive BlueStacks control remains resumed. Safe lowerVillage,
@@ -15,7 +41,8 @@ RP1->IT_CO/DUMMYmissing; qualifiedowner/no nativegetters/observerterminal0.
 Blankrewardthumbnail is NOT missingmetadata; mesh/residency/scale stillunknown.
 See docs/vip-thumbnail-native-boundary-2026-10-23.md. No guessed rankart alias.
 OriginalCoherentNene rows47/63/77 ALL lackskill3/5; symbolicDEFformula alone
-cannot supplymissingmagnitude. EarnedduplicateNene strategy remainsunplayed.
+cannot supplymissingmagnitude. NativeordinaryduplicateNene strategy REFUSED: same character cannot be in a
+team. Captainrestored/all3savedgamesexact; no battle. See nativevalidation.
 No APK build/release or Docker/Collector/inference change.
 
 ## Latest continuation: native campaign and rankings verified (2026-10-23)
