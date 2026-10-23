@@ -64,7 +64,11 @@ export function mailboxRequest(route: string, payload: Record<string, unknown>, 
     const row = state.received.find((row) => row.id === id);
     if (!row) return { error: "Owned message not found" };
     const field = route.endsWith("Read") ? "is_read" : "is_archived";
-    if (!row[field]) { row[field] = 1; persist(); }
+    if (!row[field]) {
+      row[field] = 1;
+      try { persist(); }
+      catch (error) { row[field] = 0; throw error; }
+    }
     return { data: { unread_count: unread(state), target_list: [id] } };
   }
   if (route === "/message/RemoveReceived") {
@@ -80,9 +84,15 @@ export function mailboxRequest(route: string, payload: Record<string, unknown>, 
     const fresh = ids.filter((id) => !state.deleted.includes(id));
     if (state.deleted.length + fresh.length > MAX_ROWS) return { error: "Mailbox deletion capacity reached" };
     if (fresh.length) {
+      const previousReceived = state.received, previousDeletedLength = state.deleted.length;
       state.received = state.received.filter((row) => !ids.includes(row.id));
       state.deleted.push(...fresh);
-      persist();
+      try { persist(); }
+      catch (error) {
+        state.received = previousReceived;
+        state.deleted.length = previousDeletedLength;
+        throw error;
+      }
     }
     return { data: { unread_count: unread(state), target_list: ids } };
   }

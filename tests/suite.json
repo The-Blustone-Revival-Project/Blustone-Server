@@ -85,6 +85,8 @@
   "tests/login-bonus.ts",
   "tests/guided-search-recruitment.ts",
   "tests/mail.ts",
+  "tests/mail-atomic-state.ts",
+  "tests/mail-atomic-http.ts",
   "tests/special-supply.ts",
   "tests/supply-atomic-state.ts",
   "tests/supply-atomic-http.ts",
