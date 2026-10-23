@@ -1,5 +1,11 @@
 # Optional historical Rupee exchange
 
+Native continuation2026-10-23: one2021-base Manda purchase, normal result,
+exact wallet/counter changes, unfunded-coupon refusal and cold reload are now
+verified. See [native validation](rupee-shop-native-validation-2026-10-23.md).
+The earlier input-hold/live-pending statements below describe the original
+implementation checkpoint; original identities and economics gaps remain.
+
 ```powershell
 $env:BLUSTONE_RUPEE_SHOP_MODE = "archive-2021-base-only"
 $env:BLUSTONE_RUPEE_SHOP_DAILY_LIMIT = "3" # Explicit LOCAL shared cap

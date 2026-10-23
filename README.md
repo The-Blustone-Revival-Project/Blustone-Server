@@ -105,6 +105,7 @@ An optional Rupee exchange uses `BLUSTONE_RUPEE_SHOP_MODE=archive-2021-base-only
 owned local coupons as another payment. IDs, daily policy and base-only payouts
 are local; original jackpots and item identities remain missing. First purchase
 captures schema8 counters. See the [Rupee workflow](docs/rupee-shop-workflow-2026-10-16.md).
+The 2021 base mode now has [native purchase and restart validation](docs/rupee-shop-native-validation-2026-10-23.md): the exact Manda debit, 5,000 Rupees credited, updated quota, and refusal without a coupon.
 
 Optional `BLUSTONE_RESOURCE_SHOP_MODE=archive-2018-base-only` supplies60 fuel
 or2 Challenge Invitations for5 Manda,5,000 Rupees or one owned local coupon.
