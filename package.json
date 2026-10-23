@@ -30,7 +30,8 @@
     "test:restoration-fever": "npm run build && node tests/resource-profile-restoration-fever.mjs && node tests/restoration-fever-profile-http.mjs",
     "test:restoration-fever-compatible": "npm run build && node tests/resource-profile-restoration-fever-compatible.mjs && node tests/restoration-fever-compatible-http.mjs",
     "test:resource-snapshot": "npm run build && node dist/tests/resource-snapshot-http.js && node dist/tests/resource-snapshot-profile-benchmark.js",
-    "test:team-level-local": "npm run build && node dist/tests/team-level-local.js && node dist/tests/team-exp.js"
+    "test:team-level-local": "npm run build && node dist/tests/team-level-local.js && node dist/tests/team-exp.js",
+    "test:mirage-public-policy": "npm run build && node tests/mirage-public-policy-cohorts.mjs"
   },
   "dependencies": {
     "express": "latest",

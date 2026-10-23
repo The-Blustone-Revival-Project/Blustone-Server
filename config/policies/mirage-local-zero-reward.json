@@ -1,0 +1,79 @@
+{
+  "enrollment": "rank-exp-id-projection",
+  "floor": 1,
+  "bg_res": "MIRAGE_BG_G",
+  "dlg_begin": "",
+  "dlg_end": "",
+  "res_prefix": "MRG",
+  "res_postfix_list": [
+    "002"
+  ],
+  "stairs": [
+    {
+      "grade": 0,
+      "balance": 10000,
+      "enemies": [
+        {
+          "ref_id": "003",
+          "hp_percent": 10000,
+          "rank": 3,
+          "rank_up_cnt": 0,
+          "overcome_cnt": 0,
+          "exp": 0,
+          "skill_1_level": 1,
+          "skill_2_level": 1,
+          "skill_3_level": 1,
+          "skill_4_level": 0,
+          "skill_5_level": 0
+        }
+      ],
+      "gold": 0
+    },
+    {
+      "grade": 0,
+      "balance": 10000,
+      "enemies": [
+        {
+          "ref_id": "003",
+          "hp_percent": 10000,
+          "rank": 3,
+          "rank_up_cnt": 0,
+          "overcome_cnt": 0,
+          "exp": 0,
+          "skill_1_level": 1,
+          "skill_2_level": 1,
+          "skill_3_level": 1,
+          "skill_4_level": 0,
+          "skill_5_level": 0
+        }
+      ],
+      "gold": 0
+    },
+    {
+      "grade": 0,
+      "balance": 10000,
+      "enemies": [
+        {
+          "ref_id": "003",
+          "hp_percent": 10000,
+          "rank": 3,
+          "rank_up_cnt": 0,
+          "overcome_cnt": 0,
+          "exp": 0,
+          "skill_1_level": 1,
+          "skill_2_level": 1,
+          "skill_3_level": 1,
+          "skill_4_level": 0,
+          "skill_5_level": 0
+        }
+      ],
+      "gold": 0
+    }
+  ],
+  "hero": {
+    "bonus": 0,
+    "end_ltime": 2147483647,
+    "cur": [],
+    "next": []
+  }
+}
