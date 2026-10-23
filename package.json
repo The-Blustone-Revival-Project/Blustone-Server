@@ -36,7 +36,8 @@
     "test:fishing-tutorial": "npm run build && node dist/tests/fishing-tutorial.js && node dist/tests/fishing-tutorial-state.js && node dist/tests/fishing-tutorial-http.js && node dist/tests/gem-polish-cohorts.js && node tests/fishing-practice-policy.mjs",
     "resources:verify-fishing-art": "node scripts/resources/verify-fishing-art.mjs",
     "test:gem-observed-removal": "npm run build && node dist/tests/gem-removal-observed-gold.js && node dist/tests/gem-replacement-state.js",
-    "test:gem-manda-removal": "npm run build && node dist/tests/gem-removal-observed-gold-manda.js && node dist/tests/gem-manda-mount.js && node dist/tests/gem-manda-mount-state.js && node dist/tests/gem-manda-mount-http.js && node dist/tests/gem-paid-mount.js && node dist/tests/gem-replacement-state.js && node dist/tests/gem-removal-observed-gold.js"
+    "test:gem-manda-removal": "npm run build && node dist/tests/gem-removal-observed-gold-manda.js && node dist/tests/gem-manda-mount.js && node dist/tests/gem-manda-mount-state.js && node dist/tests/gem-manda-mount-http.js && node dist/tests/gem-paid-mount.js && node dist/tests/gem-replacement-state.js && node dist/tests/gem-removal-observed-gold.js",
+    "test:dispatch-instant": "npm run build && node dist/tests/expedition-skip-quote.js && node dist/tests/local-dispatch-instant-state.js && node dist/tests/local-dispatch-instant-http.js && node dist/tests/local-dispatch-state.js && node dist/tests/local-dispatch-http.js && node dist/tests/mirage-run-social.js"
   },
   "dependencies": {
     "express": "latest",

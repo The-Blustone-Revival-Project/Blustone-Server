@@ -1053,6 +1053,11 @@ export function buildOpenApi(endpoints: string[], baseUrl = "http://127.0.0.1:80
     } };
   }
 
+  paths["/mission/EntrustByIAP"]={post:{...operation("Instant dispatch for a supplied existing Auto Pass",
+    "Default disabled. BLUSTONE_DISPATCH_INSTANT_MODE=local-entitled additionally requires local-timed dispatch and a supplied owner pass whose signed32 expiry is strictly later than server time. This route never grants or sells a pass. Native request contains only auth5 and deck_type/stage_id/cnt; unexpected producer fields refuse. Normal earned unlock/selected-stage stars, owned deck2, idle actor, AP cost, configured rewards/run cap and Guild duration metadata apply. The native Auto button chooses this compound route for an existing pass and ordinary timed Entrust otherwise; do not price it with ongoing GetSkipPrice. Zero additional Manda is explicit LOCAL policy. Prepare entrust.data Start/AP, skip.data list plus both absolute Manda scalars, and end.data.result specialized rewards, then persist once. Rollback restores game and journal; current Mirage and pending dispatch commitments refuse. The collected journal uses existing schema2 or newer and survives disabled-mode restart. Without a request nonce, each funded repeated instant request is NEW work; only subsequent EndEntrust repair is non-additive. Original pass acquisition, full original rewards and native UI remain unverified.","Missions and combat"),
+    "x-evidence":"docs/expedition-instant-pass-native-2026-10-23.md; src/state.ts; tests/local-dispatch-instant-state.ts; tests/local-dispatch-instant-http.ts",
+    "x-runtime-confidence":"Disposable state and encrypted HTTP validation; no native instant-dispatch claim."}};
+
   return {
     openapi: "3.0.3",
     info: {

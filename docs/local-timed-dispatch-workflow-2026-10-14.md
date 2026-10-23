@@ -1,3 +1,5 @@
+> Update2026-10-23: the separate optional [pass-entitled instant route](expedition-instant-pass-native-2026-10-23.md) is implemented behind dispatchInstantMode=local-entitled. It requires an existing supplied unexpired owner pass and charges normal AP under explicit LOCAL zero-additional-Manda policy. Ongoing paid Skip still refuses with ret_data:null.
+
 # Opt-in persistent local Expedition dispatch
 
 The server now implements normal `/mission/Entrust` → Refresh → elapsed End

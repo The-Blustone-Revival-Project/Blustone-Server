@@ -29,7 +29,7 @@ import {planLocalGuildDonate} from "./guild-local-donate.js";
 import {nativeGuildSaleValue} from "./equipment-fee.js";
 import {parseExpeditionEntrustRequest} from "./expedition-entrust.js";
 import {dispatchPolicy,normalizeDispatch,planDispatchStart,dispatchId,dispatchStartWire,dispatchEndResult,dispatchEndWire,applyDispatchItems,
-  type DispatchPolicy,type DispatchJournal} from "./local-dispatch.js";
+  type DispatchPolicy,type DispatchJournal,type DispatchJob} from "./local-dispatch.js";
 import {guildWalletReceipt} from "./guild-wallet-receipt.js";
 import {guildMembershipPolicy,type GuildMembershipPolicy} from "./guild-membership-policy.js";
 import {guildApplications,guildPendingLobby,guildApplicantRows,type GuildApplication} from "./guild-applications.js";
@@ -621,6 +621,7 @@ export class ServerState {
   private readonly guildChatMode:"disabled"|"local-memory";
   private readonly publicChatMode:"disabled"|"local-memory";
   private readonly dispatchMode:"disabled"|"local-timed";
+  private readonly dispatchInstantMode:"disabled"|"local-entitled";
   private readonly dispatchPolicy?:DispatchPolicy;
   private dispatches=new Map<number,DispatchJournal>();
   private quests=new Map<number,LocalQuestJournal>();
@@ -665,7 +666,7 @@ export class ServerState {
       fishingCastMode?:"disabled"|"local-configured";fishingCastPolicy?:unknown;
       fishingTutorialMode?:"disabled"|"local-first-catch";fishingTutorialPolicy?:unknown;
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
-      dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
+      dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;dispatchInstantMode?:"disabled"|"local-entitled";questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     const mirageMode=options.mirageMode??process.env.BLUSTONE_MIRAGE_MODE??"disabled";
     if(mirageMode!=="disabled"&&mirageMode!=="local-configured")throw new TypeError("Unknown Mirage mode");
@@ -720,6 +721,10 @@ export class ServerState {
     const policy=Object.hasOwn(options,"dispatchPolicy")?options.dispatchPolicy:process.env.BLUSTONE_DISPATCH_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_DISPATCH_POLICY_JSON);
     if(policy!==undefined)this.dispatchPolicy=dispatchPolicy(policy);
     if(dispatchMode!=="disabled"&&!this.dispatchPolicy)throw new TypeError("Local timed dispatch requires explicit reward/pass policy");
+    const instantMode=options.dispatchInstantMode??process.env.BLUSTONE_DISPATCH_INSTANT_MODE??"disabled";
+    if(instantMode!=="disabled"&&instantMode!=="local-entitled")throw new TypeError("Unknown instant dispatch mode");
+    if(instantMode!=="disabled"&&dispatchMode!=="local-timed")throw new TypeError("Instant dispatch requires configured local timed dispatch");
+    this.dispatchInstantMode=instantMode;
     const chatMode=options.guildChatMode??process.env.BLUSTONE_GUILD_CHAT_MODE??"disabled";
     if(chatMode!=="disabled"&&chatMode!=="local-memory") throw new TypeError("Unknown Guild Chat mode");
     this.guildChatMode=chatMode;
@@ -3163,6 +3168,10 @@ export class ServerState {
     const dispatch=this.dispatches.get(account.pvid)?.active;
     if(dispatch)return this.envelope({area_achieve:this.areaRewardClaims(game),area_progress:this.areaProgressSnapshot(game),stage:stageAchieveList(game),
       mission:game.missions,missions:game.missions,entrust:{...dispatchStartWire(dispatch.snapshot),pass:{...dispatch.pass}}});
+    const pass=this.dispatchInstantMode==="local-entitled"?this.dispatchPolicy?.passes[String(account.pvid)]:undefined;
+    if(pass)return this.envelope({area_achieve:this.areaRewardClaims(game),area_progress:this.areaProgressSnapshot(game),stage:stageAchieveList(game),
+      mission:game.missions,missions:game.missions,entrust:{...dispatchStartWire({entrust_id:"0",stage_id:"",cnt:0,complete_second:0,
+        skip_price:this.dispatchPolicy!.skip_price,entrust_second_per_cost:this.dispatchPolicy!.entrust_second_per_cost,list:[]}),pass:{...pass}}});
     if (process.env.BLUSTONE_SKIP_MISSION_TUTORIAL === "1") {
       // The stage map's markers and the progress counter are driven from here.
       // An experiment that published these catalogs as JSON objects (on the
@@ -3188,7 +3197,7 @@ export class ServerState {
   }
 
   mirageBlocks(route:string,payload:Record<string,unknown>,headers:Record<string,string>):boolean {
-    if(!this.mirageRuns.size||!(/^\/(gym|card_handler|gem)\//.test(route)||["/world/UseItem","/world/SetDeck","/world/SetLeader","/shop/SellCard","/mission/Start","/mission/Entrust","/arena/BattleStart","/explore/Begin","/world/GetFriendlyBattleInfo"].includes(route)))return false;
+    if(!this.mirageRuns.size||!(/^\/(gym|card_handler|gem)\//.test(route)||["/world/UseItem","/world/SetDeck","/world/SetLeader","/shop/SellCard","/mission/Start","/mission/Entrust","/mission/EntrustByIAP","/arena/BattleStart","/explore/Begin","/world/GetFriendlyBattleInfo"].includes(route)))return false;
     return (this.mirageRuns.get(this.accountFor(payload,headers).pvid)?.cache.inst_base.state??0)!==0;
   }
 
@@ -3203,8 +3212,15 @@ export class ServerState {
     const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid);
     if(this.dispatchMode!=="local-timed"||!game)return this.failure(2001,"Local timed dispatch is unavailable");
     const prior=this.dispatches.get(account.pvid),journal=prior??{active:null,last_id:"0",last_deck:[]},now=Math.floor(Date.now()/1000);
-    if(route==="/mission/Entrust") {
+    const instant=route==="/mission/EntrustByIAP";
+    if(instant&&(this.dispatchInstantMode!=="local-entitled"||!this.dispatchPolicy?.passes[String(account.pvid)]||
+      this.dispatchPolicy.passes[String(account.pvid)].end_datetime_utc<=now))return this.failure(2001,"Existing unexpired Auto Pass and explicit instant mode required");
+    if(instant&&(!["deck_type","stage_id","cnt"].every(key=>Object.hasOwn(payload,key))||Reflect.ownKeys(payload).some(key=>
+      typeof key!=="string"||!["app_code","app_ver","market","pvid","otp","deck_type","stage_id","cnt"].includes(key)||
+      !Object.hasOwn(Object.getOwnPropertyDescriptor(payload,key)!,"value"))))return this.failure(2001,"Instant dispatch requires native context fields only");
+    if(route==="/mission/Entrust"||instant) {
       if(journal.active) {
+        if(instant)return this.failure(2001,"Collect the existing dispatch before instant dispatch");
         const job=journal.active.snapshot;
         let request;try{request=parseExpeditionEntrustRequest(payload);}catch{return this.failure(2001,"Invalid duplicate dispatch request");}
         if(request.stage_id!==job.stage_id||request.deck_type!==2||request.cnt!==job.cnt||request.is_tuto!==0)return this.failure(2001,"Another dispatch is pending");
@@ -3223,9 +3239,21 @@ export class ServerState {
         if(guildId&&(!guild||!this.guildLevels))throw new TypeError("Dispatch Guild duration requires complete supplied benefits");
         const benefit=guildId?selectedGuildBenefit(this.guildLevels!,guild!.contribution,"intrust"):null;
         let id:string;do{id=crypto.randomBytes(8).readBigUInt64LE().toString();}while(id==="0"||id===journal.last_id);
-        job=planDispatchStart(next,account.pvid,this.dispatchPolicy!,payload,id,now,stage,benefit);
+        // Native instant builder omits is_tuto; it is the normal deck2 path.
+        job=planDispatchStart(next,account.pvid,this.dispatchPolicy!,instant?{...payload,is_tuto:0}:payload,id,now,stage,benefit);
         if(next.ap>=next.max_ap)next.ap_updated_at=Date.now();next.ap-=job.snapshot.cnt*stage.ap_cost;
         const data={...dispatchStartWire(job.snapshot),user:{ap:next.ap,ap_charge_time:resourceChargeTime(next,"ap")}};
+        if(instant) {
+          if(![next.gacha_iap_qty,next.gacha_free_qty].every(value=>Number.isInteger(value)&&value>=0&&value<=0xffff_ffff))
+            throw new TypeError("Instant dispatch wallet cannot be represented by native receipt");
+          // Pass authorization is supplied, never acquired here. Zero additional
+          // Manda is LOCAL policy; ongoing paid Skip has a different producer.
+          const result=this.collectDispatch(next,job);
+          const compound={entrust:{data},skip:{data:{skip_price:job.snapshot.skip_price,list:data.list,
+            user:{iap_qty:next.gacha_iap_qty,free_iap_qty:next.gacha_free_qty}}},end:{data:{user:null,result}}};
+          this.commitDispatch(account.pvid,game,next,{active:null,last_id:id,last_deck:[...job.deck]},prior);
+          return this.envelope(compound);
+        }
         this.commitDispatch(account.pvid,game,next,{active:job,last_id:journal.last_id,last_deck:journal.last_deck},prior);return this.envelope(data);
       }catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
     }
@@ -3247,8 +3275,16 @@ export class ServerState {
     }
     const job=journal.active;
     if(job.snapshot.entrust_id!==id||BigInt(job.snapshot.list.at(-1)!.end_utc)>BigInt(now))return this.failure(2001,"Dispatch is not complete or not owned");
-    const next=structuredClone(game);regenerateResources(next);let result;
+    const next=structuredClone(game);regenerateResources(next);
     try {
+      const result=this.collectDispatch(next,job);
+      const data={user:null,result};
+      this.commitDispatch(account.pvid,game,next,{active:null,last_id:id,last_deck:[...job.deck]},prior);return this.envelope(data);
+    }catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+  }
+
+  /** Plan all ordinary or pass-instant awards on the detached transaction clone. */
+  private collectDispatch(next:LocalGameState,job:DispatchJob) {
       const rows=job.deck.map(id=>{
         const card=[...next.starter_cards,...next.recruited_cards].find(row=>row.inst_id===id);if(!card)throw new TypeError("Dispatch Hunter ownership changed");
         const curve=trainingCurve(card);if(!curve)throw new TypeError("Dispatch Hunter curve unavailable");
@@ -3256,11 +3292,9 @@ export class ServerState {
         card.exp=cur;return {inst_id:String(id),prev,cur};
       });
       const items=applyDispatchItems(next,job);
-      result=dispatchEndResult(next,rows,next.gold+job.gold*job.snapshot.cnt,next.exp+job.user_exp*job.snapshot.cnt,items);
+      const result=dispatchEndResult(next,rows,next.gold+job.gold*job.snapshot.cnt,next.exp+job.user_exp*job.snapshot.cnt,items);
       next.gold=result.gold.cur;next.exp=result.user_exp.cur;
-      const data={user:null,result:dispatchEndWire(result)};
-      this.commitDispatch(account.pvid,game,next,{active:null,last_id:id,last_deck:[...job.deck]},prior);return this.envelope(data);
-    }catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+      return dispatchEndWire(result);
   }
 
   private commitDispatch(pvid:number,game:LocalGameState,next:LocalGameState,journal:DispatchJournal,prior:DispatchJournal|undefined) {

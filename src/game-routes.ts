@@ -277,13 +277,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
     }
     return state.envelope(null,{result_code:2001,code:2001});
   }
-  if(["/mission/Entrust","/mission/RefreshEntrust","/mission/EndEntrust"].includes(route))return state.dispatchAction(route,payload,headers);
-  if(route==="/mission/EntrustByIAP") {
-    state.accountFor(payload,headers);
-    // ReqAutoCombatCB b40088 checks application result1 before parsing the
-    // timed-job body. A generic success without entrust_id/list is unsafe.
-    return state.failure(2001,"Expedition timed dispatch is not reconstructed");
-  }
+  if(["/mission/Entrust","/mission/RefreshEntrust","/mission/EndEntrust","/mission/EntrustByIAP"].includes(route))return state.dispatchAction(route,payload,headers);
   // **[RECOVERED]** The expedition-map chest claim. `CSRSyncMStage::
   // RequestReward` (0xb3bf4c) builds a 7-entry
   // `CPVHTTPMapToEncodedURLFormTransformer<unordered_map<string,string>>` and

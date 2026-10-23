@@ -52,7 +52,7 @@ try {
     ['/gym/SkillUp',{inst_id:1000001,skill_index:1}],['/gem/LevelUp',{}],
     ['/world/SetDeck',{deck_info:'[{"type":1,"list":[1000001]}]'}],['/world/UseItem',{inst_id:1,target_id:1000001,qty:1}],
     ['/shop/SellCard',{inst_id_list:'[1000001]'}],['/mission/Start',{stage_id:'n_01_01'}],
-    ['/mission/Entrust',{stage_id:'n_01_01'}],['/arena/BattleStart',{}],['/explore/Begin',{}],['/world/GetFriendlyBattleInfo',{target_pvid:owner.pvid}],
+    ['/mission/Entrust',{stage_id:'n_01_01'}],['/mission/EntrustByIAP',{stage_id:'n_01_01'}],['/arena/BattleStart',{}],['/explore/Begin',{}],['/world/GetFriendlyBattleInfo',{target_pvid:owner.pvid}],
   ];
   const verifyGuard=(who:any,s=state)=>{
     const before=snapshot(s);
