@@ -46,6 +46,7 @@ export function errorHandler(): (error: unknown, req: Request, res: Response, ne
     const message = error instanceof Error ? error.message : "Unhandled server error";
     console.error(`${req.method} ${req.path} unhandled_error=${message}`);
     if (res.headersSent) return;
+    if(req.path==="/mission/SkipEntrust"){res.status(500).json({result_code:2001,code:2001,ret_data:null,data:null,error:"local server failure"});return;}
     res.status(500).json({ error: "local server failure", message });
   };
 }

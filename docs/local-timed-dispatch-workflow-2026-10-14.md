@@ -1,3 +1,5 @@
+> Update2026-10-23: optional [whole-job paid Finish Now](dispatch-paid-finish-workflow-2026-10-23.md) is implemented behind dispatchSkipMode=local-manda-all. Individual-row/pass/tutorial skips remain unavailable. Future queued wire rows are zeroed for native presentation; stored schedules remain immutable.
+
 > Update2026-10-23: the separate optional [pass-entitled instant route](expedition-instant-pass-native-2026-10-23.md) is implemented behind dispatchInstantMode=local-entitled. It requires an existing supplied unexpired owner pass and charges normal AP under explicit LOCAL zero-additional-Manda policy. Ongoing paid Skip still refuses with ret_data:null.
 
 # Opt-in persistent local Expedition dispatch

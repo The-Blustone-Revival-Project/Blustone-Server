@@ -133,5 +133,29 @@ try {
   for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","dispatches","quests"])
     assert.deepEqual(final17[key],withTutorial[key],key);
   assert.deepEqual(final17.gameStates,withTutorial.gameStates);
+  // Exercise schema18 with every genuine prior14/15/16/17 cohort retained.
+  const setup18=JSON.parse(readFileSync(file,"utf8")),actor18=setup18.gameStates.find(([id]:any)=>id===actor.pvid)[1];
+  actor18.stage_achievements={...actor18.stage_achievements,n_01_01:[0],n_01_05:[0]};
+  actor18.stage_stars={...actor18.stage_stars,n_01_01:1,n_01_05:1};
+  actor18.decks.push({type:2,list:[1000001,0,0,0,0]});writeFileSync(file,JSON.stringify(setup18));
+  const paidOptions={...tutorialOptions,dispatchMode:"local-timed" as const,dispatchSkipMode:"local-manda-all" as const,
+    dispatchPolicy:{max_runs:1,gold_per_run:0,user_exp_per_run:0,card_exp_per_run:0,skip_price:1,entrust_second_per_cost:60,
+      passes:{[actor.pvid]:{end_datetime:"1970-01-01 00:00:00",end_datetime_utc:0}}}};
+  const paidState=new ServerState("http://localhost",file,paidOptions);
+  assert.equal((gameResponse(paidState,"/mission/Entrust",{...actor,deck_type:2,stage_id:"n_01_01",cnt:1,is_tuto:0}) as any).result_code,1);
+  const pending18=JSON.parse(readFileSync(file,"utf8")),job18=pending18.dispatches.find(([id]:any)=>id===actor.pvid)[1].active;
+  const paid18=gameResponse(paidState,"/mission/SkipEntrust",{...actor,entrust_id:job18.snapshot.entrust_id,serial:-1,use_iap_qty:3,is_tuto:0,is_iap_pass:0}) as any;
+  assert.equal(paid18.result_code,1,JSON.stringify(paid18));
+  const captured18=JSON.parse(readFileSync(file,"utf8"));assert.equal(captured18.version,18);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","quests","accounts"])
+    assert.deepEqual(captured18[key],pending18[key],key);
+  assert.deepEqual(captured18.gameStates.filter(([id]:any)=>id!==actor.pvid),pending18.gameStates.filter(([id]:any)=>id!==actor.pvid));
+  assert.deepEqual(captured18.dispatches[0][1].active.snapshot,job18.snapshot);
+  const paidBytes=readFileSync(file),modeOff18=new ServerState("http://localhost",file,{...paidOptions,dispatchSkipMode:"disabled"});
+  assert.deepEqual(readFileSync(file),paidBytes);assert.equal((gameResponse(modeOff18,"/mission/EndEntrust",{...actor,entrust_id:job18.snapshot.entrust_id}) as any).result_code,1);
+  const collected18=JSON.parse(readFileSync(file,"utf8"));assert.equal(collected18.version,17);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","quests","accounts"])
+    assert.deepEqual(collected18[key],pending18[key],key);
+  new ServerState("http://localhost",file,{...paidOptions,dispatchSkipMode:"disabled"});
 } finally {Date.now=clock;rmSync(directory,{recursive:true,force:true});}
 console.log("Gem polish cohorts: real Mirage schema14 current/archived paid aid and abandon → actual fishing schema15 → supplied Gem work schema16, Guild TYPE2 aggregate fees, restart/unrelated saves/modeoff and complete earlier-state retention passed.");

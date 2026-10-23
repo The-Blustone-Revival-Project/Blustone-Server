@@ -271,11 +271,10 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if(route==="/mission/SkipEntrust") {
     // This callback does NOT guard application result1 before reading data.
     // Its explicit null branch skips job and Manda writes, including auth errors.
-    try{state.accountFor(payload,headers);}catch(error){
+    try{return state.dispatchAction(route,payload,headers);}catch(error){
       if(!(error instanceof NativeAuthError))throw error;
       return state.envelope(null,{result_code:error.code,code:error.code});
     }
-    return state.envelope(null,{result_code:2001,code:2001});
   }
   if(["/mission/Entrust","/mission/RefreshEntrust","/mission/EndEntrust","/mission/EntrustByIAP"].includes(route))return state.dispatchAction(route,payload,headers);
   // **[RECOVERED]** The expedition-map chest claim. `CSRSyncMStage::
