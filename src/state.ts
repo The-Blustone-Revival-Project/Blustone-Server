@@ -1,3 +1,4 @@
+import {planSequentialDispatchSkip,replayDispatchRowSkips,projectSequentialFinish} from "./dispatch-row-skips.js";
 import {configuredGemPolish,normalizeGemPolish,sameGemPolishPolicy,validateGemPolishHistory,planGemPolish,polishIdentity,type GemPolishJournal} from "./gem-polish.js";
 import {globalArenaPage} from "./arena-global-rankings.js";
 import {configuredMirageReentry,createMirageSeries,adoptTerminalMirageSeries,normalizeMirageSeries,proposeMirageReentry,consumeMirageReentry,mirageReentryBeginTime,type MirageReentryPolicy,type MirageSeries} from "./mirage-reentry.js";
@@ -622,7 +623,7 @@ export class ServerState {
   private readonly guildChatMode:"disabled"|"local-memory";
   private readonly publicChatMode:"disabled"|"local-memory";
   private readonly dispatchMode:"disabled"|"local-timed";
-  private readonly dispatchSkipMode:"disabled"|"local-manda-all";
+  private readonly dispatchSkipMode:"disabled"|"local-manda-all"|"local-manda-sequential";
   private readonly dispatchInstantMode:"disabled"|"local-entitled";
   private readonly dispatchPolicy?:DispatchPolicy;
   private dispatches=new Map<number,DispatchJournal>();
@@ -668,7 +669,7 @@ export class ServerState {
       fishingCastMode?:"disabled"|"local-configured";fishingCastPolicy?:unknown;
       fishingTutorialMode?:"disabled"|"local-first-catch";fishingTutorialPolicy?:unknown;
       fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";
-      dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;dispatchInstantMode?:"disabled"|"local-entitled";dispatchSkipMode?:"disabled"|"local-manda-all";questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
+      dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;dispatchInstantMode?:"disabled"|"local-entitled";dispatchSkipMode?:"disabled"|"local-manda-all"|"local-manda-sequential";questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     const mirageMode=options.mirageMode??process.env.BLUSTONE_MIRAGE_MODE??"disabled";
     if(mirageMode!=="disabled"&&mirageMode!=="local-configured")throw new TypeError("Unknown Mirage mode");
@@ -728,7 +729,7 @@ export class ServerState {
     if(instantMode!=="disabled"&&dispatchMode!=="local-timed")throw new TypeError("Instant dispatch requires configured local timed dispatch");
     this.dispatchInstantMode=instantMode;
     const skipMode=options.dispatchSkipMode??process.env.BLUSTONE_DISPATCH_SKIP_MODE??"disabled";
-    if(skipMode!=="disabled"&&skipMode!=="local-manda-all")throw new TypeError("Unknown paid dispatch finish mode");
+    if(skipMode!=="disabled"&&skipMode!=="local-manda-all"&&skipMode!=="local-manda-sequential")throw new TypeError("Unknown paid dispatch finish mode");
     if(skipMode!=="disabled"&&dispatchMode!=="local-timed")throw new TypeError("Paid dispatch finish requires configured local timed dispatch");
     this.dispatchSkipMode=skipMode;
 
@@ -887,37 +888,40 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14||saved.version===15||saved.version===16||saved.version===17||saved.version===18)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14||saved.version===15||saved.version===16||saved.version===17||saved.version===18||saved.version===19)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
-    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Mirage run journals require schema12");
+    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Mirage run journals require schema12");
     if((saved.version===12||saved.version===13||saved.version===14)&&(!Array.isArray(saved.mirageRuns)||!saved.mirageRuns.length))throw new TypeError("Schema12 requires captured Mirage run journals");
-    if(saved.mirageSeries!==undefined&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Mirage re-entry journals require schema14");
+    if(saved.mirageSeries!==undefined&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Mirage re-entry journals require schema14");
     if(saved.version===14&&(!Array.isArray(saved.mirageSeries)||!saved.mirageSeries.length))throw new TypeError("Schema14 requires captured Mirage re-entry journals");
-    if(saved.fishingCasts!==undefined&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Fishing cast journals require schema15");
+    if(saved.fishingCasts!==undefined&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Fishing cast journals require schema15");
     if(saved.version===15&&(!Array.isArray(saved.fishingCasts)||!saved.fishingCasts.length))throw new TypeError("Schema15 requires captured fishing casts");
-    if(saved.gemPolishJournals!==undefined&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Gem polish journals require schema16");
+    if(saved.gemPolishJournals!==undefined&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Gem polish journals require schema16");
     if(saved.version===16&&(!Array.isArray(saved.gemPolishJournals)||!saved.gemPolishJournals.length))throw new TypeError("Schema16 requires completed supplied Gem polish work");
-    if(saved.fishingTutorials!==undefined&&saved.version!==17&&saved.version!==18)throw new TypeError("Fishing tutorial journals require schema17");
+    if(saved.fishingTutorials!==undefined&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Fishing tutorial journals require schema17");
     if(saved.version===17&&(!Array.isArray(saved.fishingTutorials)||!saved.fishingTutorials.length))throw new TypeError("Schema17 requires captured fishing tutorial settlement");
     const hasPaidFinish=Array.isArray(saved.dispatches)&&saved.dispatches.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].active)&&Object.hasOwn(row[1].active,"paid_finish"));
-    if(hasPaidFinish&&saved.version!==18)throw new TypeError("Paid dispatch finish requires state schema18");
+    if(hasPaidFinish&&saved.version!==18&&saved.version!==19)throw new TypeError("Paid dispatch finish requires state schema18");
     if(saved.version===18&&!hasPaidFinish)throw new TypeError("Schema18 requires captured paid dispatch finish");
+    const hasRowSkips=Array.isArray(saved.dispatches)&&saved.dispatches.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].active)&&Object.hasOwn(row[1].active,"row_skips"));
+    if(hasRowSkips&&saved.version!==19)throw new TypeError("Dispatch row skips require state schema19");
+    if(saved.version===19&&!hasRowSkips)throw new TypeError("Schema19 requires captured dispatch row skips");
     const hasMirageRevive=Array.isArray(saved.mirageRuns)&&saved.mirageRuns.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].policy)&&row[1].policy.revive_prices!==undefined);
-    if(hasMirageRevive&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Mirage first-aid policies require schema13");
+    if(hasMirageRevive&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Mirage first-aid policies require schema13");
     if(saved.version===13&&!hasMirageRevive)throw new TypeError("Schema13 requires captured Mirage first-aid policy");
-    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Captured Hunter transcendence policy requires schema11");
+    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Captured Hunter transcendence policy requires schema11");
     if(saved.version===11&&saved.hunterOvercomePolicy===undefined)throw new TypeError("Schema11 requires a captured Hunter transcendence policy");
     if(saved.hunterOvercomePolicy!==undefined) {
       this.capturedOvercomePolicy=configuredHunterOvercome(saved.hunterOvercomePolicy,new Set(itemReference().item.map(row=>row.id)));
       if(this.configuredOvercomePolicy&&hunterOvercomeFingerprint(this.configuredOvercomePolicy)!==hunterOvercomeFingerprint(this.capturedOvercomePolicy))
         throw new TypeError("Configured transcendence policy differs from captured earned policy; refusing silent stat/cost changes");
     }
-    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
+    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
       throw new TypeError("Paid dorm expansion requires state schema10");
-    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
       [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
       throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
@@ -927,10 +931,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -1011,7 +1015,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&saved.version!==17&&saved.version!==18&&saved.version!==19)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -1079,10 +1083,11 @@ export class ServerState {
     const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
+    const paidRows=[...this.dispatches.values()].some(row=>row.active?.row_skips?.length);
     const paidFinish=[...this.dispatches.values()].some(row=>row.active?.paid_finish);
-    const snapshot = { version: paidFinish?18:this.fishingTutorials.size?17:this.gemPolishJournals.size?16:this.fishingCasts.size?15:this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(paidFinish||this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(paidFinish||this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const snapshot = { version: paidRows?19:paidFinish?18:this.fishingTutorials.size?17:this.gemPolishJournals.size?16:this.fishingCasts.size?15:this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(paidRows||paidFinish||this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(paidRows||paidFinish||this.fishingTutorials.size||this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -3225,13 +3230,16 @@ export class ServerState {
     if(this.dispatchMode!=="local-timed"||!game)return refuse("Local timed dispatch is unavailable");
     const prior=this.dispatches.get(account.pvid),journal=prior??{active:null,last_id:"0",last_deck:[]},now=Math.floor(Date.now()/1000);
     if(route==="/mission/SkipEntrust") {
-      if(this.dispatchSkipMode!=="local-manda-all"||!journal.active)return refuse("Paid whole-job dispatch finish is unavailable");
+      if(this.dispatchSkipMode==="disabled"||!journal.active)return refuse("Paid dispatch acceleration is unavailable");
+      if(this.dispatchSkipMode==="local-manda-all"&&payload.serial!==-1&&payload.serial!=="-1")return refuse("Only whole-job dispatch finish is enabled");
       let plan;
-      try{plan=planPaidDispatchFinish(journal.active.snapshot,journal.active.pass.end_datetime_utc,journal.active.paid_finish,payload,now,
-        {free_iap_qty:game.gacha_free_qty,iap_qty:game.gacha_iap_qty});}
+      try{const wallet={free_iap_qty:game.gacha_free_qty,iap_qty:game.gacha_iap_qty};
+        plan=this.dispatchSkipMode==="local-manda-sequential"||journal.active.row_skips?
+          planSequentialDispatchSkip(journal.active.snapshot,journal.active.pass.end_datetime_utc,journal.active.row_skips,journal.active.paid_finish,payload,now,wallet):
+          planPaidDispatchFinish(journal.active.snapshot,journal.active.pass.end_datetime_utc,journal.active.paid_finish,payload,now,wallet);}
       catch(error){if(error instanceof TypeError)return refuse(error.message);throw error;}
       const next=structuredClone(game);next.gacha_free_qty=plan.wallet.free_iap_qty;next.gacha_iap_qty=plan.wallet.iap_qty;
-      const nextJournal={...journal,active:{...journal.active,paid_finish:plan.finish}};
+      const nextJournal={...journal,active:{...journal.active,...(plan.finish?{paid_finish:plan.finish}:{}),...("rows" in plan&&plan.rows?{row_skips:plan.rows}:{})}};
       const response=this.envelope(plan.receipt);
       this.commitDispatch(account.pvid,game,next,nextJournal,prior);return response;
     }
@@ -3297,7 +3305,7 @@ export class ServerState {
       return this.envelope(data);
     }
     const job=journal.active;
-    if(job.snapshot.entrust_id!==id||BigInt(job.paid_finish?.completed_at??job.snapshot.list.at(-1)!.end_utc)>BigInt(now))return this.failure(2001,"Dispatch is not complete or not owned");
+    if(job.snapshot.entrust_id!==id||BigInt(job.paid_finish?.completed_at??this.dispatchEffectiveSnapshot(job).list.at(-1)!.end_utc)>BigInt(now))return this.failure(2001,"Dispatch is not complete or not owned");
     const next=structuredClone(game);regenerateResources(next);
     try {
       const result=this.collectDispatch(next,job);
@@ -3306,8 +3314,14 @@ export class ServerState {
     }catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
   }
 
+  private dispatchEffectiveSnapshot(job:DispatchJob) {
+    return job.row_skips?replayDispatchRowSkips(job.snapshot,job.pass.end_datetime_utc,job.row_skips).effective:job.snapshot;
+  }
+
   private dispatchProjection(job:DispatchJob,now:number) {
-    return job.paid_finish?projectPaidDispatchFinish(job.snapshot,job.paid_finish):dispatchFutureProjection(job.snapshot,now);
+    const effective=this.dispatchEffectiveSnapshot(job);
+    return job.paid_finish?(job.row_skips?projectSequentialFinish(effective,job.paid_finish,job.pass.end_datetime_utc):
+      projectPaidDispatchFinish(effective,job.paid_finish)):dispatchFutureProjection(effective,now);
   }
 
   /** Plan all ordinary or pass-instant awards on the detached transaction clone. */

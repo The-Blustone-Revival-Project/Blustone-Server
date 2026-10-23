@@ -50,7 +50,7 @@ const coreRoutes = new Set([
   "/pv_account/register_push_token",
 ]);
 
-export function createApp(options: { baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;dispatchInstantMode?:"disabled"|"local-entitled";dispatchSkipMode?:"disabled"|"local-manda-all";
+export function createApp(options: { baseUrl?: string; catalogPath?: string; stateFile?: string; legacyCardIds?: boolean;guildChatMode?:"disabled"|"local-memory";publicChatMode?:"disabled"|"local-memory";dispatchMode?:"disabled"|"local-timed";dispatchPolicy?:unknown;dispatchInstantMode?:"disabled"|"local-entitled";dispatchSkipMode?:"disabled"|"local-manda-all"|"local-manda-sequential";
   rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
   veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
   profileMode?:"disabled"|"archive-profile-projection";

@@ -157,5 +157,28 @@ try {
   for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","quests","accounts"])
     assert.deepEqual(collected18[key],pending18[key],key);
   new ServerState("http://localhost",file,{...paidOptions,dispatchSkipMode:"disabled"});
+  // Row compression adds schema19 without losing any earlier captured system.
+  const sequentialOptions={...paidOptions,dispatchSkipMode:"local-manda-sequential" as const,
+    dispatchPolicy:{...paidOptions.dispatchPolicy,max_runs:3}};
+  const sequential=new ServerState("http://localhost",file,sequentialOptions);
+  assert.equal((gameResponse(sequential,"/mission/Entrust",{...actor,deck_type:2,stage_id:"n_01_01",cnt:3,is_tuto:0}) as any).result_code,1);
+  const beforeRows=JSON.parse(readFileSync(file,"utf8")),rowJob=beforeRows.dispatches.find(([id]:any)=>id===actor.pvid)[1].active;
+  const rowRequest={...actor,entrust_id:rowJob.snapshot.entrust_id,serial:0,use_iap_qty:1,is_tuto:0,is_iap_pass:0};
+  const rowReply=gameResponse(sequential,"/mission/SkipEntrust",rowRequest) as any;assert.equal(rowReply.result_code,1,JSON.stringify(rowReply));
+  const afterRow=JSON.parse(readFileSync(file,"utf8"));assert.equal(afterRow.version,19);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","quests","accounts"])
+    assert.deepEqual(afterRow[key],beforeRows[key],key);
+  assert.deepEqual(afterRow.dispatches[0][1].active.snapshot,rowJob.snapshot);
+  const coldRow=new ServerState("http://localhost",file,{...sequentialOptions,dispatchSkipMode:"local-manda-all"});
+  const mixedReply=gameResponse(coldRow,"/mission/SkipEntrust",{...rowRequest,serial:-1,use_iap_qty:6}) as any;
+  assert.equal(mixedReply.result_code,1,JSON.stringify(mixedReply));const afterMixed=JSON.parse(readFileSync(file,"utf8"));assert.equal(afterMixed.version,19);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","quests","accounts"])
+    assert.deepEqual(afterMixed[key],beforeRows[key],key);
+  assert.equal((gameResponse(coldRow,"/mission/EndEntrust",{...actor,entrust_id:rowJob.snapshot.entrust_id}) as any).result_code,1);
+  const final19=JSON.parse(readFileSync(file,"utf8"));assert.equal(final19.version,17);
+  for(const key of ["mirageRuns","mirageSeries","fishingCasts","gemPolishJournals","fishingTutorials","guilds","quests","accounts"])
+    assert.deepEqual(final19[key],beforeRows[key],key);
+  assert.deepEqual(final19.gameStates.filter(([id]:any)=>id!==actor.pvid),beforeRows.gameStates.filter(([id]:any)=>id!==actor.pvid));
+  new ServerState("http://localhost",file,{...sequentialOptions,dispatchSkipMode:"disabled"});
 } finally {Date.now=clock;rmSync(directory,{recursive:true,force:true});}
 console.log("Gem polish cohorts: real Mirage schema14 current/archived paid aid and abandon → actual fishing schema15 → supplied Gem work schema16, Guild TYPE2 aggregate fees, restart/unrelated saves/modeoff and complete earlier-state retention passed.");

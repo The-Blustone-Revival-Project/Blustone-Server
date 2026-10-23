@@ -1,3 +1,4 @@
+import {replayDispatchRowSkips,normalizeSequentialFinish,type DispatchRowSkip} from "./dispatch-row-skips.js";
 import {normalizePaidDispatchFinish,type PaidDispatchFinish} from "./dispatch-paid-finish.js";
 import type {LocalGameState} from "./game.js";
 import {resourceChargeTime} from "./game.js";
@@ -11,7 +12,7 @@ export interface DispatchPass {end_datetime:string;end_datetime_utc:number}
 export interface DispatchItemAward {ref_id:string;qty:number}
 export interface DispatchPolicy {max_runs:number;gold_per_run:number;user_exp_per_run:number;card_exp_per_run:number;
   skip_price:number;entrust_second_per_cost:number;passes:Record<string,DispatchPass>;items_per_run?:DispatchItemAward[]}
-export interface DispatchJob {snapshot:EntrustStart;deck:number[];pass:DispatchPass;gold:number;user_exp:number;card_exp:number;items_per_run?:DispatchItemAward[];paid_finish?:PaidDispatchFinish}
+export interface DispatchJob {snapshot:EntrustStart;deck:number[];pass:DispatchPass;gold:number;user_exp:number;card_exp:number;items_per_run?:DispatchItemAward[];paid_finish?:PaidDispatchFinish;row_skips?:DispatchRowSkip[]}
 export interface DispatchJournal {active:DispatchJob|null;last_id:string;last_deck:number[]}
 function object(raw:unknown,keys:readonly string[],optional:readonly string[]=[]):Record<string,unknown> {
   if(!raw||typeof raw!=="object"||Array.isArray(raw)||Object.getPrototypeOf(raw)!==Object.prototype||
@@ -92,7 +93,7 @@ export function normalizeDispatch(raw:unknown):DispatchJournal {
   if(!Array.isArray(last_deck)||last_deck.length>5||Array.from(last_deck).some(id=>!Number.isSafeInteger(id)||id<1)||
     new Set(last_deck).size!==last_deck.length||(last_id==="0")!==(last_deck.length===0))throw new TypeError("Malformed collected dispatch participants");
   if(row.active===null)return {active:null,last_id,last_deck:[...last_deck]};
-  const active=object(row.active,["snapshot","deck","pass","gold","user_exp","card_exp"],["items_per_run","paid_finish"]),snapshot=parseEntrustStart(active.snapshot);
+  const active=object(row.active,["snapshot","deck","pass","gold","user_exp","card_exp"],["items_per_run","paid_finish","row_skips"]),snapshot=parseEntrustStart(active.snapshot);
   const items=Object.hasOwn(active,"items_per_run")?itemAwards(active.items_per_run):[],preview=itemPreview(items);
   if(snapshot.entrust_id==="0"||snapshot.entrust_id===last_id||snapshot.cnt<1||snapshot.cnt>100||snapshot.list.length!==snapshot.cnt||
     !Array.isArray(active.deck)||!active.deck.length||active.deck.length>5||Array.from(active.deck).some(id=>!Number.isSafeInteger(id)||id<1)||new Set(active.deck).size!==active.deck.length)
@@ -103,8 +104,10 @@ export function normalizeDispatch(raw:unknown):DispatchJournal {
     BigInt(item.end_utc)-BigInt(item.begin_utc)!==BigInt(snapshot.complete_second)||
     index>0&&item.begin_utc!==snapshot.list[index-1].end_utc)throw new TypeError("Incoherent dispatch row schedule/reward");
   if(snapshot.complete_second<0||!snapshot.entrust_second_per_cost)throw new TypeError("Invalid dispatch duration/quote");
-  const pass=dispatchPass(active.pass),finish=Object.hasOwn(active,"paid_finish")?normalizePaidDispatchFinish(active.paid_finish,snapshot,pass.end_datetime_utc):undefined;
-  return {last_id,last_deck:[...last_deck],active:{snapshot,deck:[...active.deck],pass,gold,user_exp,card_exp,...(finish?{paid_finish:finish}:{}),
+  const pass=dispatchPass(active.pass),rowState=Object.hasOwn(active,"row_skips")?replayDispatchRowSkips(snapshot,pass.end_datetime_utc,active.row_skips):undefined;
+  const finish=Object.hasOwn(active,"paid_finish")?(rowState?normalizeSequentialFinish(active.paid_finish,rowState.effective,pass.end_datetime_utc):
+    normalizePaidDispatchFinish(active.paid_finish,snapshot,pass.end_datetime_utc)):undefined;
+  return {last_id,last_deck:[...last_deck],active:{snapshot,deck:[...active.deck],pass,gold,user_exp,card_exp,...(rowState?{row_skips:rowState.rows}:{}),...(finish?{paid_finish:finish}:{}),
     ...(Object.hasOwn(active,"items_per_run")?{items_per_run:items}:{})}};
 }
 /** Explicit LOCAL one-job timed policy. Original admission stars/deck2 and

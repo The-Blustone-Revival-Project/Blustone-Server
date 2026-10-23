@@ -1,3 +1,5 @@
+> Update2026-10-23: optional [sequential current-row skips](dispatch-row-skips-native-2026-10-23.md) now use schema19 receipts and replayed compressed schedules under local-manda-sequential. The older local-manda-all mode still refuses individual rows and uses compressed history for mixed whole-job finish. Native UI validation remains pending.
+
 # Optional paid Finish Now for local timed dispatch
 
 Paid Finish Now immediately spends Manda to finish an owned local dispatch;
