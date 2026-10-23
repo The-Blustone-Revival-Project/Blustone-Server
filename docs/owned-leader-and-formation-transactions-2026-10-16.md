@@ -46,3 +46,12 @@ subject to the exact sole-field assertion.
 
 No private/live save, client, runtime profile, original library or DataDump
 file was changed. No source-derived original fees or stat values are invented.
+
+## Native verification,2026-10-23
+
+Root exercised the real Gym Hunter List/detail crown and confirmation, changed
+Captain1000001 to locked owned Nene1000004, observed the gold crown and native
+list Leader marker, then restored Captain through the same path. Sole changed
+field was leader_inst_id; all three complete saved games equaled the immediate
+pre-test snapshot after restoration. Native ordinary formation remove/re-add
+also restored its exact ordered deck. See native-validation-2026-10-23.md.

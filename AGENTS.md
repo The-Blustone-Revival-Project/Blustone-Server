@@ -1,3 +1,23 @@
+## Latest continuation: native Gym/leader and missing-data closure (2026-10-23)
+
+Goal ACTIVE; exclusive BlueStacks control remains resumed. Safe lowerVillage,
+no ordinary/Search/Arena attempt. Same listener62012/139/stamp1634683/+15.
+Native Gym intro/HunterList10/100, Nene detail, SetLeader confirmation/crown/
+listmarker verified. SelectedNene1000004 then restoredCaptain1000001 natively;
+ALL3complete saved games EXACT to immediatepretest. Native formation removal/
+re-add also restoredexactordereddeck. No gold/card/skill/gear spend.
+NeneSkill3 empty effect/display and zero upgradegrowth observed; no fabricated
+passive value. CaptainEquipment gates at4stars in native UI. See appended
+docs/native-validation-2026-10-23.md and owned-leader transaction note.
+
+Current read-only native item cache POSITIVELY containsVIP1->ICON_VE/count22,
+RP1->IT_CO/DUMMYmissing; qualifiedowner/no nativegetters/observerterminal0.
+Blankrewardthumbnail is NOT missingmetadata; mesh/residency/scale stillunknown.
+See docs/vip-thumbnail-native-boundary-2026-10-23.md. No guessed rankart alias.
+OriginalCoherentNene rows47/63/77 ALL lackskill3/5; symbolicDEFformula alone
+cannot supplymissingmagnitude. EarnedduplicateNene strategy remainsunplayed.
+No APK build/release or Docker/Collector/inference change.
+
 ## Latest continuation: native campaign and rankings verified (2026-10-23)
 
 Goal ACTIVE. Human explicitly RESUMED exclusive BlueStacks control; earlier

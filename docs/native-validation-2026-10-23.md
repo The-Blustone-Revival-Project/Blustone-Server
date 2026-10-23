@@ -59,3 +59,32 @@ Ignored JPEG evidence: local/native-validation-20261023/overall-ranking.jpg,
 own-ranking-profile.jpg, friend-ranking.jpg, day8-received.jpg,
 campaign-victory.jpg and snowfield-26-stars.jpg. Server route-only evidence is
 in ignored local/native-validation-20261023-server-atomic.log.
+
+## Gym, formation and owned leader continuation
+
+Native Build Team displayed the four saved Hunters/power26243. Removing Nene
+from slot2 then selecting her owned row restored the exact ordered formation;
+no other deck was changed. Whole saved games were compared afterward.
+
+Village lower arrow reveals Gym; its original Westfield introduction rendered,
+then the get-stronger choice opened Hunter List10/100. Native Nene detail
+rendered Lv6/30, HP1810/ATK732/DEF870 and locked state. Leader crown opened
+the original confirmation and SetLeader succeeded: crown gold, sole persisted
+gameplay delta leader1000001 to1000004; other two games exact. Returning to the
+list marked Nene Leader. Selecting Captain and confirming restored1000001 and
+its gold crown. All three complete saved games were EXACT to pre-leader-ui.json
+after restoration, including wallets, cards, locks, formations and progress.
+
+Skill Training opens, but Nene active and unlocked passive3 preview zero
+growth/empty supplied effects respectively; no training fee was spent. Its
+passive label remains Skill3 under the existing reconstructed wrappers.
+Captain Equipment click gave native Available when advanced to4-star notice;
+no equipment upgrade/request was attempted. Ended safely in lower Village.
+Ignored evidence nene-native-leader.jpg and captain-leader-restored.jpg retained
+under the same local/native-validation-20261023 directory.
+
+The bounded read-only item reference observer, client4606, exited0 after
+0.738784s: default-delete-qualified22-row cache, VIP1->ICON_VE, RP1->IT_CO,
+DUMMY missing, no native getters. Instrumented capture retained locally at
+local/verification/item-references-20261023.txt. No private save mutation or
+client patch followed. See vip-thumbnail-native-boundary-2026-10-23.md.
