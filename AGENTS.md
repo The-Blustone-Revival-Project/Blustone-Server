@@ -1,3 +1,21 @@
+## Latest continuation: DataDump2026-10-17 artifact audit (2026-10-23)
+
+Previous checkpoint66387ff supplied paid material progression/launcher selection.
+Goal ACTIVE. Source Server clean at continuation start; DataDump HEAD6d2c3cc.
+GitHub latest release2026-10-17 is newer than previous14. Downloaded five public
+assets ONLY into ignored Server/local/datadump-release-2026-10-17-audit; rawSHA/
+sizes match GitHub asset digests, downloaded SUMS and manifest. Local CRLF release
+copies are different byte products; don't compare their raw hashes blindly.
+Published source consolidation changed after media migration; read-only git show
+5956fae recovers exact frozen manifest pin. No DataDump/original/private writes.
+
+All eight normalized datasets, three other derived tables and numeric/tier/
+class/confidence values unchanged. Fourteen hero rows change ONLY method notes;
+three curated evidence tables added. No gameplay stat/skill/economy retune follows.
+See docs/datadump-2026-10-17-use-audit.md. Updated Docker retention instructions
+acknowledged; Docker/Collector/inference remain untouched. Native input hold
+persists. Parallel supplied-Gem transition implementation is the next checkpoint.
+
 ## Latest continuation: real paid material-Hunter progression proof (2026-10-17)
 
 Previous checkpoint79e420c restored actual-owned local global ranking pages.
