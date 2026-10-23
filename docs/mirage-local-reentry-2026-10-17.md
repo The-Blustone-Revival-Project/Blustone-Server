@@ -74,7 +74,10 @@ All floors' enemies, static assets, layered backgrounds and hero references
 are checked before capture, not deferred until the first transition. A future
 floor with an expired cohort cannot be enrolled. Existing captured one-floor
 attempts cannot silently acquire a campaign; changed captured base or re-entry
-policy refuses startup. This is a new explicit configuration, not activation
+policy refuses startup. A later [explicit terminal-adoption option](mirage-terminal-adoption-2026-10-23.md)
+supports finished, fully released one-attempt records while preserving their
+old evidence and requiring the native offer/reset boundary. Without that
+additional opt-in, the original refusal remains. This is a new explicit configuration, not activation
 of the live profile.
 
 ## Offer, choice and response loss

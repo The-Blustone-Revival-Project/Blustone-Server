@@ -81,6 +81,19 @@ export function createMirageSeries(policy:MirageReentryPolicy,rawRun:MirageRun,n
   return normalizeMirageSeries({policy:captured,generation:1,day:mirageReentryDay(captured,now),used:1,highest:0,history:[]},run);
 }
 
+/** Explicit LOCAL terminal-journal adoption only. The existing run remains
+ * untouched: no reward, HP restoration, enrollment or invented adoption-time
+ * attempt. Its actual original begin day owns the already-used first attempt. */
+export function adoptTerminalMirageSeries(policy:MirageReentryPolicy,rawRun:MirageRun,now:number):MirageSeries {
+  const captured=policySnapshot(policy),run=normalizeMirageRun(rawRun);boundPolicy(captured,run);
+  const time=integer(now),base=run.cache.inst_base;
+  if(run.policy.floor!==captured.initial_floor||base.state!==0||run.cache.entry.length||base.deck.length)
+    throw new TypeError('Mirage adoption requires the terminal initial-floor run');
+  if(time<base.begin_ltime)throw new TypeError('Mirage adoption clock rollback');
+  return normalizeMirageSeries({policy:captured,generation:1,day:mirageReentryDay(captured,base.begin_ltime),
+    used:1,highest:base.highest,history:[]},run);
+}
+
 /** A stale offer is preserved as journal data, but consuming it requires a
  * current generation/day/exact-run-token match. No member IDs are archived. */
 export function normalizeMirageSeries(raw:unknown,rawRun:MirageRun):MirageSeries {

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {validatedMiragePolicy,createMirageRun,normalizeMirageRun,advanceMirageReward,abandonMirageRun,type MirageRun} from '../src/mirage-run.js';
-import {configuredMirageReentry,createMirageSeries,normalizeMirageSeries,proposeMirageReentry,consumeMirageReentry,mirageReentryDay,mirageReentryBeginTime} from '../src/mirage-reentry.js';
+import {configuredMirageReentry,createMirageSeries,adoptTerminalMirageSeries,normalizeMirageSeries,proposeMirageReentry,consumeMirageReentry,mirageReentryDay,mirageReentryBeginTime} from '../src/mirage-reentry.js';
 
 const now=1_800_000_000,enemy={ref_id:'AUTHORED_ENEMY',hp_percent:10000,rank:1,rank_up_cnt:0,overcome_cnt:0,exp:0,
   skill_1_level:1,skill_2_level:0,skill_3_level:0,skill_4_level:0,skill_5_level:0};
@@ -69,6 +69,48 @@ const quotaOne=configuredMirageReentry({...raw,daily_attempts:1},first),one=crea
 const oneComplete={...one,highest:2},oneOffer=proposeMirageReentry(oneComplete,complete,now);
 assert.equal(oneOffer.series.offer!.action,'inspect');assert.equal(oneOffer.next_floor,2);
 assert.equal(consumeMirageReentry(oneOffer.series,complete,true,now).series.used,1);
+
+// Terminal adoption binds existing evidence rather than creating/healing an
+// attempt at adoption time. Completed and partial abandoned outcomes differ.
+const partialAbandoned=abandonMirageRun(advanceMirageReward(win(run)).run);
+const paidAbandoned=structuredClone(partialAbandoned);paidAbandoned.revive_ids=[1000001];paidAbandoned.cache.inst_base.revive_price=5;
+const terminalPaid=normalizeMirageRun(paidAbandoned),adoptionTime=now+86400+30;
+for(const terminal of [complete,partialAbandoned,terminalPaid]) {
+  const original=structuredClone(terminal),capturedBefore=structuredClone(quotaOne);
+  const adopted=adoptTerminalMirageSeries(quotaOne,terminal,adoptionTime);
+  assert.deepEqual(terminal,original,'Adoption preserves original begin/claims/revive IDs/cache/policy');assert.deepEqual(quotaOne,capturedBefore);
+  assert.equal(adopted.generation,1);assert.deepEqual(adopted.history,[]);assert.equal(adopted.used,1);
+  assert.equal(adopted.day,mirageReentryDay(quotaOne,now));assert.notEqual(adopted.day,mirageReentryDay(quotaOne,adoptionTime));
+  assert.equal(adopted.highest,terminal.cache.inst_base.highest);assert.deepEqual(adopted.policy,quotaOne);
+  assert.equal(Object.hasOwn(adopted,'offer'),false);assert.equal(Object.hasOwn(adopted,'last_reset'),false);
+  const sameDay=adoptTerminalMirageSeries(quotaOne,terminal,now);
+  assert.equal(proposeMirageReentry(sameDay,terminal,now+1).series.offer!.action,'inspect','Initial attempt already consumes same-day quota');
+  const nextDayOffer=proposeMirageReentry(adopted,terminal,adoptionTime);
+  assert.equal(nextDayOffer.series.offer!.action,'reenter','Yesterday use is not charged again on adoption day');
+  const consumed=consumeMirageReentry(nextDayOffer.series,terminal,true,adoptionTime);
+  assert.equal(consumed.series.used,1);assert.equal(consumed.series.generation,2);assert.equal(consumed.series.day,mirageReentryDay(quotaOne,adoptionTime));
+  assert.equal(consumed.series.history[0].begin_ltime,now);assert.deepEqual(consumed.series.history[0].claimed,terminal.claimed);
+  assert.deepEqual(consumed.series.history[0].revive_ids,terminal.revive_ids);
+  assert.equal(consumed.series.history[0].abandoned,terminal.abandoned===true);assert.equal(consumed.series.history[0].completed,!terminal.abandoned);
+  assert.deepEqual(terminal,original,'Offer/consumption archives old evidence without changing the adopted run');
+  assert.throws(()=>createMirageSeries(quotaOne,terminal,adoptionTime),/fresh/,'Fresh-run creation must not become a terminal-adoption shortcut');
+}
+assert.equal(adoptTerminalMirageSeries(quotaOne,complete,now).highest,2);
+assert.equal(adoptTerminalMirageSeries(quotaOne,partialAbandoned,now).highest,0);
+assert.throws(()=>adoptTerminalMirageSeries(quotaOne,run,now),/terminal/);
+assert.throws(()=>adoptTerminalMirageSeries(quotaOne,win(run),now),/terminal/);
+assert.throws(()=>adoptTerminalMirageSeries(quotaOne,complete,now-1),/rollback/);
+for(const invalidNow of [-1,0.5,NaN,Infinity,0x80000000])assert.throws(()=>adoptTerminalMirageSeries(quotaOne,complete,invalidNow));
+const changedFirst={...structuredClone(first),stairs:first.stairs.map((row,index)=>({...structuredClone(row),gold:row.gold+(index===0?1:0)}))};
+const changedPolicy=configuredMirageReentry(raw,changedFirst);
+assert.throws(()=>adoptTerminalMirageSeries(changedPolicy,complete,now),/differs/,'Cannot retune captured initial policy');
+const otherInitial=configuredMirageReentry({...raw,floors:[first,deeper]},lower);
+assert.throws(()=>adoptTerminalMirageSeries(otherInitial,complete,now),/initial-floor/,'A known noninitial floor is not a legacy initial attempt');
+const malformedTerminal=structuredClone(partialAbandoned);malformedTerminal.cache.entry=[{id:1000001,mirage_remain_hp:10000}];
+assert.throws(()=>adoptTerminalMirageSeries(quotaOne,malformedTerminal,now));
+const expiredAdoption=adoptTerminalMirageSeries(quotaOne,complete,first.hero.end_ltime+1);
+assert.equal(proposeMirageReentry(expiredAdoption,complete,first.hero.end_ltime+1).series.offer!.action,'inspect',
+  'Adopting old terminal evidence does not renew its expired content deadline');
 
 // A changed HP/party/claim snapshot invalidates an existing offer without
 // making the captured stale metadata impossible to restore.

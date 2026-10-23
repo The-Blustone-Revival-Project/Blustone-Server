@@ -1,6 +1,6 @@
 import {configuredGemPolish,normalizeGemPolish,sameGemPolishPolicy,validateGemPolishHistory,planGemPolish,polishIdentity,type GemPolishJournal} from "./gem-polish.js";
 import {globalArenaPage} from "./arena-global-rankings.js";
-import {configuredMirageReentry,createMirageSeries,normalizeMirageSeries,proposeMirageReentry,consumeMirageReentry,mirageReentryBeginTime,type MirageReentryPolicy,type MirageSeries} from "./mirage-reentry.js";
+import {configuredMirageReentry,createMirageSeries,adoptTerminalMirageSeries,normalizeMirageSeries,proposeMirageReentry,consumeMirageReentry,mirageReentryBeginTime,type MirageReentryPolicy,type MirageSeries} from "./mirage-reentry.js";
 import {planMirageRevive} from "./mirage-revive.js";
 import {validatedMiragePolicy,createMirageRun,normalizeMirageRun,advanceMirageReward,abandonMirageRun,type MiragePolicy,type MirageRun} from "./mirage-run.js";
 import {mirageRuntimeContext} from "./mirage-runtime-context.js";
@@ -604,6 +604,7 @@ export class ServerState {
   private readonly mirageRuns=new Map<number,MirageRun>();
   private readonly mirageSeries=new Map<number,MirageSeries>();
   private readonly mirageReentryPolicy?:MirageReentryPolicy;
+  private readonly mirageReentryAdoption:"disabled"|"terminal-local";
   private readonly mirageMode:"disabled"|"local-configured";
   private readonly miragePolicy?:MiragePolicy;
   private readonly veteranGiftPolicy?:VeteranGiftPolicy;
@@ -651,7 +652,7 @@ export class ServerState {
       quickAdvancementMode?:"disabled"|"local-owned-tickets";
       friendlyBattleMode?:"disabled"|"local-owned-defense";
       hunterOvercomeMode?:"disabled"|"local-configured";hunterOvercomePolicy?:unknown;
-      mirageMode?:"disabled"|"local-configured";miragePolicy?:unknown;mirageReentryPolicy?:unknown;
+      mirageMode?:"disabled"|"local-configured";miragePolicy?:unknown;mirageReentryPolicy?:unknown;mirageReentryAdoption?:"disabled"|"terminal-local";
       resourceShopMode?:"disabled"|"archive-2018-base-only";resourceApDailyLimit?:unknown;resourceBpDailyLimit?:unknown;
       rupeeShopMode?:"disabled"|"archive-2017-base-only"|"archive-2021-base-only";rupeeShopDailyLimit?:unknown;
       veteranGiftMode?:"disabled"|"local-points";veteranPointsPerTicket?:unknown;
@@ -672,6 +673,11 @@ export class ServerState {
       if(!this.miragePolicy||mirageMode!=="local-configured")throw new TypeError("Mirage re-entry requires configured base policy");
       this.mirageReentryPolicy=configuredMirageReentry(rawReentry,this.miragePolicy);
     }
+    const adoption=Object.hasOwn(options,"mirageReentryAdoption")?options.mirageReentryAdoption:process.env.BLUSTONE_MIRAGE_REENTRY_ADOPTION??"disabled";
+    if(adoption!=="disabled"&&adoption!=="terminal-local")throw new TypeError("Unknown Mirage re-entry adoption mode");
+    if(adoption==="terminal-local"&&(!this.mirageReentryPolicy||mirageMode!=="local-configured"))
+      throw new TypeError("Terminal Mirage adoption requires explicit configured re-entry");
+    this.mirageReentryAdoption=adoption;
     const overcomeMode=Object.hasOwn(options,"hunterOvercomeMode")?options.hunterOvercomeMode:process.env.BLUSTONE_HUNTER_OVERCOME_MODE??"disabled";
     if(overcomeMode!=="disabled"&&overcomeMode!=="local-configured")throw new TypeError("Unknown Hunter transcendence mode");
     this.hunterOvercomeMode=overcomeMode;
@@ -1977,14 +1983,28 @@ export class ServerState {
   private validateMirageRuns() {
     for(const [pvid,run] of this.mirageRuns) {
       const game=this.gameByPvid.get(pvid);if(!game)throw new TypeError("Missing Mirage owner game");
-      const series=this.mirageSeries.get(pvid),initial=series?.policy.floors.find(policy=>policy.floor===series.policy.initial_floor)??run.policy;
+      const captured=this.mirageSeries.get(pvid);
+      let series=captured;
+      const initial=captured?.policy.floors.find(policy=>policy.floor===captured.policy.initial_floor)??run.policy;
       if(series) {
         normalizeMirageSeries(series,run);
         if(this.mirageReentryPolicy&&JSON.stringify(series.policy)!==JSON.stringify(this.mirageReentryPolicy))throw new TypeError("Configured Mirage re-entry policy differs from captured series");
-      }else if(this.mirageReentryPolicy)throw new TypeError("Existing Mirage attempt has no captured re-entry policy");
+      }else if(this.mirageReentryPolicy) {
+        series=this.terminalMirageSeries(game,run);
+        if(!series)throw new TypeError("Existing Mirage attempt has no captured re-entry policy");
+      }
       if(this.miragePolicy&&JSON.stringify(initial)!==JSON.stringify(this.miragePolicy))throw new TypeError("Configured Mirage policy differs from captured run");
       this.validateMiragePolicies(game,run,series?.policy.floors??[run.policy]);
     }
+  }
+
+  /** Explicit operator opt-in for released, terminal single-attempt records.
+   * This provisional value is never stored by validation or ordinary reads. */
+  private terminalMirageSeries(game:LocalGameState,run:MirageRun):MirageSeries|undefined {
+    if(this.mirageReentryAdoption!=="terminal-local"||!this.mirageReentryPolicy)return undefined;
+    if([...game.starter_cards,...game.recruited_cards].some(card=>card.mirage_remain_hp!==1000))
+      throw new TypeError("Terminal Mirage adoption requires every owned Hunter to be released at HP1000");
+    return adoptTerminalMirageSeries(this.mirageReentryPolicy,run,Math.floor(Date.now()/1000));
   }
 
   private enrollMirage(game:LocalGameState,policy:MiragePolicy,now:number):MirageRun {
@@ -2026,6 +2046,7 @@ export class ServerState {
     let next=structuredClone(game),run=existing?normalizeMirageRun(existing):undefined;
     let series=run&&this.mirageSeries.has(pvid)?normalizeMirageSeries(this.mirageSeries.get(pvid),run):undefined;
     try {
+      if(!series&&run)series=this.terminalMirageSeries(game,run);
       if(route==="/mirage/GetInfo") {
         if(![undefined,"0","1",0,1,false,true].includes(payload.reset as never))return refuse("Invalid Mirage reset flag");
         for(const key of ["stay","entry","inst_base","inst_enemy","ref_stair_list","ref_hero"])if(payload[key]!==undefined&&!["0","1",0,1,false,true].includes(payload[key] as never))return refuse("Invalid Mirage section flag");
@@ -2074,7 +2095,7 @@ export class ServerState {
       if(route==="/mirage/GetNextFloor") {
         if(!series)return this.envelope({next_floor:run.cache.inst_base.floor});
         const proposed=proposeMirageReentry(series,run,now);
-        if(!proposed.replay)this.commitMirage(pvid,game,game,run,proposed.series);
+        if(!proposed.replay||!this.mirageSeries.has(pvid))this.commitMirage(pvid,game,game,run,proposed.series);
         return this.envelope({next_floor:proposed.next_floor});
       }
       if(route==="/mirage/RegisterDeck") {

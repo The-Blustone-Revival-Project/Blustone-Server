@@ -1,0 +1,8 @@
+{
+  "payment": "free-local",
+  "daily_attempts": 3,
+  "day_offset_minutes": 0,
+  "on_unavailable": "abandon-local",
+  "floors": [],
+  "transitions": [{"floor": 1, "cleared": 1, "failed": 1}]
+}

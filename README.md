@@ -111,6 +111,9 @@ An explicit [zero-reward Mirage recipe](docs/mirage-local-zero-reward-setup-2026
 now has [native entry, two stair wins/claims and abandonment validation](docs/mirage-native-validation-2026-10-23.md).
 The final stair was lost; the floor remains incomplete. Balance and opponents
 are LOCAL authored content, and the captured recipe permits one attempt.
+An additional [terminal-adoption opt-in](docs/mirage-terminal-adoption-2026-10-23.md)
+lets a finished one-attempt record use configured re-entry without erasing its
+history; backend/HTTP checks pass, while native re-entry remains pending.
 Abandonment releases the owned roster; its COMPLETE map labels do not prove
 a win. Original Mirage assignments, balance and a repeatable native loop
 remain unfinished.
