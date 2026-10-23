@@ -39,3 +39,17 @@ Native boot and fever-transition validation are tracked in the latest
 continuation entry in AGENTS.md. Serving the correct original bytes alone
 does not prove that the null lookup has been fixed. No APK patch or rebuild
 has been made for this restoration.
+
+## Root native resource and battle validation
+
+Native client23967 fetched all140 unique groups including CFE_PUB (206) and
+reached Village at AP58/BP10/132stars. It retained the corrected Episode
+formation across reboot. The read-only fever observer then qualified both
+CFE4/CFE3_B concrete image owners under the expected battle UI path in
+paused CB0602 (cached rank0/phase7). Following Resume, bounded ordinary
+attack bursts continued through visible FEVER and native LOSS; the third
+option returned safely to E6map with the same client alive. No crash.
+All three saved game objects remained exact through migration and battle.
+The exact rank2 transition was not captured, so the original missing-node
+gap is closed but complete crash-fix qualification remains pending. No
+Bright heal or E6 clear is claimed. The source profile remains a candidate.
