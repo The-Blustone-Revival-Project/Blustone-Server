@@ -85,10 +85,13 @@ try {
     assert.deepEqual({...row,skill:old.skill},old,"Only these exact eight skill vectors change");
     const selected=MATERIAL_SKILL_DONORS.find(d=>d.refId===row.base.id)!;
     for(const slot of row.skill) {
+      assert.equal(slot.icon_id,`C${row.base.id}_SI${slot.type}`,"Encrypted reference retains the LOCAL exact AT binding");
+      assert.equal(slot.name,old.skill[slot.type-1].name);assert.equal(slot.cut_in_id,old.skill[slot.type-1].cut_in_id);
       const native=original[selected.sourceIndex].skill.find((s:any)=>s.type===slot.type);
       if(!native){assert.deepEqual(slot.effect,[]);continue;}
       assert.equal(slot.target_rank,native.target_rank);assert.equal(slot.cost,native.cost??0);
-      assert.deepEqual(slot.effect,native.effect.map((effect:any,i:number)=>({...effect,serial:i+1,
+      assert.deepEqual(slot.effect,native.effect.map((effect:any,i:number)=>({...effect,
+        serial:row.base.id==="049"&&slot.type===1?0:i+1,
         up_number:0,duration_up:0,value_calc:"",effect_desc:[]})));
     }
   }

@@ -1,3 +1,45 @@
+## Latest continuation: Bright paid/native progression and skill display (2026-10-23)
+
+Goal ACTIVE. Current listener46444/session66496, instrumentedclient7068/+15APK.
+Profile current-e6-materials-compatible-progression, explicit recruit049,
+139groups/stamp1634683 unchanged. SafeVillage/no ordinary/Search/Arena battle
+or helper. ExclusiveBlueStackscontrol remainsresumed. JDWP8701 oldforward is
+stale after clientrestarts; explicitlyrebind before a new read-only observer.
+
+Newmaterial-only cataloguebirthmode projects EXACT8materialIDs; originalfirst6
+references/current001/002rank1 savedowners preserved. Globalbirthmode still
+rejects oldMowgli1; neverforcepromote. Full230-programnpmtest/build/compiled
+newtest/resourcepreflight/reviewPASS, actual3gameprivateCOPY+liveidle reload
+wholebytesEXACT. No oldprofile/sourceasset/DataDump/APK edits.
+
+OneNATIVEpaid30greenManda draw got049Bright1000018/rank3/EXP0/lock1, skills
+[1,1,1,0,0], roster10->11/cardbook049rank3/allocator1000019. Green239640,
+paid240000. OriginalRecruitedbody/name/LittleMatchBoy/SupportFire/3stars verified.
+Automatic4staroffer preview Lv1->Lv1/7367->7896 appeared, CLOSED/no purchase.
+Partialmode doesNOTenablequickticket settlement; originalIAP stillunknown.
+
+Original40AT->S2->I2 skillicons nowbound LOCAL for8 opt-in Hunters; native
+Brighticons1/2/3 render,4/5locked. Brightskill1 soleeffect serial1->0 joins
+EXACTSKILL_REF049|1|1 SUB_SERIAL0; nativepopup nowcalculates756 vsraw[value].
+NOcoefficient/cost/timing/value_calc/effect_desc changes, other7serials intact.
+NativeBrightHP1720/ATK829/DEF756/power7367. Missing3/4/5 effects STILLempty.
+Finalfull230-programnpmtest+build andcompiledprojection/resource/HTTP/
+paidprogression/compatibility PASS,
+independentreviewclear. Formula display isNOT actualheal delivery/tick proof.
+
+NativeordinaryBuildTeam HOMEdiscarded edits/noSetDeck. Prep-supportportrait->
+BuildTeam->selectBright->TOPLEFTBACK sendsSetDeck200/saves. Currenttype1
+[1000002,1000004,1000001,1000018,0]; Arena4/5retainTyltyl1000005. C004-specific
+healobservers CANNOTqualifyBright1000018/C049; restoreTyltylviaBack/save or
+prepareproperBrightownerreader before E6trial. No healDOWNsentthisturn.
+
+NativeSnowfield9WIN/12prompttaps/BrightreservebodyHP1720/Victory/Next verified.
+Snowfield27/30,total132stars,n09[0,2]->[0,1,2],AP58/BP10,capsules65.
+BrightEXP10;001EXP630/002EXP530/003EXP530;004EXP1120unchanged. Gold13700,
+teamEXP1500/honor30 unchanged; other2games EXACT. E6S04stilluncleared.
+See docs/bright-native-acquisition-2026-10-23.md for ignored evidence/backups.
+No Docker/Collector/inference use or instrumentedAPKbuild/release owed.
+
 ## Latest continuation: ordinary same-Hunter rule enforced (2026-10-23)
 
 Goal ACTIVE; same+15APK, exclusive BlueStacks control resumed, safe lowerVillage,

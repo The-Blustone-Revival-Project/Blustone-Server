@@ -55,3 +55,12 @@ list Leader marker, then restored Captain through the same path. Sole changed
 field was leader_inst_id; all three complete saved games equaled the immediate
 pre-test snapshot after restoration. Native ordinary formation remove/re-add
 also restored its exact ordered deck. See native-validation-2026-10-23.md.
+
+## Native party-save workflow,2026-10-23
+
+Home from the observed Village Build Team flow discarded the proposed Bright
+support change and emitted no SetDeck. From battle preparation, tapping the
+support portrait opened the editor; selecting Bright and using top-left Back
+emitted SetDeck200 and saved type1 before Begin. Other parties stayed exact.
+Do not infer successful persistence from a changed team portrait/power alone.
+See bright-native-acquisition-2026-10-23.md for the actual saved IDs and battle.

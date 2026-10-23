@@ -45,6 +45,14 @@ export function validateMaterialSkillSources(episodeBytes:Buffer,symbolicBytes:B
   if(hash(episodeBytes)!==MATERIAL_SKILL_SOURCE_PINS.episode.sha256 || hash(symbolicBytes)!==MATERIAL_SKILL_SOURCE_PINS.symbolic.sha256)
     throw new TypeError("Material skill projection source pin mismatch");
   const actors=JSON.parse(episodeBytes.toString("utf8")),symbolic=JSON.parse(symbolicBytes.toString("utf8"));
+  // This exact local display join is narrower than an ordinary skill table:
+  // the popup matches SKILL_REF.SUB_SERIAL to the wire effect's serial.
+  const brightText=symbolic["049|1|1"],brightActive=actors[93]?.skill?.find((skill:EpisodeSkill)=>skill.type===1);
+  if(brightText?.SUB_SERIAL!=="0" || brightText.FORMULAR!=="stat*(value+value_up*skill_level)*5/100" ||
+    brightText.IS_FLOAT!=="0" || brightActive?.effect?.length!==1 ||
+    !isDeepStrictEqual(brightActive.effect[0],{effect_type:1,target_type:4,target_stat:1,
+      refer_target_type:1,refer_target_stat:3,base_number:20,duration:4100,interval:1000}))
+    throw new TypeError("Bright skill display serial/formula/source graph binding mismatch");
   return MATERIAL_SKILL_DONORS.map(donor=>{
     const selected=selectMaterialEpisodeGraph(donor.refId,donor.sourceIndex),actor=actors[donor.sourceIndex];
     const text=symbolic[`${donor.refId}|1|0`]?.EN;
@@ -72,7 +80,8 @@ const selected=MATERIAL_SKILL_PROFILE==="episode-indexed-projection"
   ?validateMaterialSkillSources(readFileSync(repositoryPath(MATERIAL_SKILL_SOURCE_PINS.episode.path)),
     readFileSync(repositoryPath("resources/reference/episodes/SKILL_REF.json"))):[];
 
-/** Ordinary wire wrappers are LOCAL: sequential serials, no growth, unresolved
+/** Ordinary wire wrappers are LOCAL: sequential serials except the pinned Bright
+ * active display join (serial0), no growth, unresolved
  * formula/display/cinematic bindings empty, absent numeric metadata zero.
  * Raw source selectors, coefficients, rank gates and timing stay unchanged. */
 export function projectMaterialSkillSlots(refId:string,neutral:MaterialWireSkill[]):MaterialWireSkill[] {
@@ -82,10 +91,15 @@ export function projectMaterialSkillSlots(refId:string,neutral:MaterialWireSkill
     throw new TypeError("Material projection requires all five ordinary skill slots");
   return neutral.map(slot=>{
     const source=donor.skills.find(skill=>skill.type===slot.type);
-    if(!source)return {...slot,effect:[]};
-    return {...slot,type:source.type,target_rank:source.target_rank,
+    // LOCAL slot-to-art reconstruction: all five exact AT records and their
+    // S2/I2 dependencies are retained in each selected Hunter's pinned Q pack.
+    // An icon does not supply an absent skill graph or an original server join.
+    const icon_id=`C${refId}_SI${slot.type}`;
+    if(!source)return {...slot,icon_id,effect:[]};
+    return {...slot,icon_id,type:source.type,target_rank:source.target_rank,
       cost:source.cost??0,cool_time:source.cool_time??0,crt_chance:source.crt_chance??0,
-      effect:source.effect.map((effect,index)=>({...effect,serial:index+1,
+      effect:source.effect.map((effect,index)=>({...effect,
+        serial:refId==="049"&&source.type===1&&source.effect.length===1?0:index+1,
         up_number:0,duration_up:0,value_calc:"",effect_desc:[]}))};
   });
 }

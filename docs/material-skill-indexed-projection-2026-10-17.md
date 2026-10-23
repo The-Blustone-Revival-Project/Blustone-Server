@@ -101,8 +101,10 @@ skill profiles remain a separate policy.
 
 ## Empty icon/cut-in fields: narrow positive native closure
 
-Empty strings remain explicit provisional bindings; no `C{id}_SI{slot}` or
-CUT filename mapping was inferred for these eight Hunters. Read-only original
+The original preparation kept icon/cut strings empty. The 2026-10-23 bounded
+resource audit now supplies LOCAL `C{id}_SI{slot}` icon bindings only for these
+eight opted-in Hunters; see `material-skill-icon-bindings-2026-10-23.md`.
+Cut strings remain empty; no CUT filename mapping is inferred. Read-only original
 ELF SHA256 `c4646ac3817b0008b6ea387fde9c8279fd439343ccc272acdc5883fab9d00eec`
 and retained DataDump consumers establish the following narrower facts:
 
@@ -184,3 +186,15 @@ The full220-program runtime regression run passed, alongside the final focused
 build/unit/compiled HTTP command. No live save or native input was used. Native
 combat/portraits/detail/training presentation and ordinary final balance remain
 unverified. The eight source graphs are encounter behavior adopted as policy.
+
+## Native continuation,2026-10-23
+
+A new selective material-only birth-grade profile safely preserves the actual
+rank1 starter saves; it now supplies these eight graphs and historical stats
+without altering001..006. One normal paid30-Manda draw acquired Bright049/
+rank3. Original body/name/role/element and icons1..3 now render; exact Bright
+active serial0 joins its original description formula, showing756 recovery.
+Missing graph slots remain empty. Native ordinary reserve body/Victory and
+participant EXP verified, but no Bright heal activation or E6 win is claimed.
+The older named profiles themselves remain unchanged. See the dedicated
+compatible-rank, icon-binding, Bright-description and native acquisition notes.

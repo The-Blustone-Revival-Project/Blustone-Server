@@ -164,6 +164,8 @@ The importer verifies exact contents, lengths and SHA-256, and refuses to replac
 
 ## Verification
 
+The tests use Python 3 (`python` on Windows, `python3` elsewhere) to verify original skill-icon resources.
+
 ```powershell
 npm test
 node scripts/verify-independent.mjs

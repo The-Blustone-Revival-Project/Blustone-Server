@@ -7,7 +7,14 @@ import {MATERIAL_SKILL_DONORS,validateMaterialSkillSources} from "../src/materia
 const episodeBytes=readFileSync(repositoryPath("resources/reference/episodes/EPISODE_STAT_ACTORS.json"));
 const symbolicBytes=readFileSync(repositoryPath("resources/reference/episodes/SKILL_REF.json"));
 const original=JSON.parse(episodeBytes.toString("utf8"));
+const brightText=JSON.parse(symbolicBytes.toString("utf8"))["049|1|1"];
+assert.equal(brightText.SUB_SERIAL,"0");
+assert.equal(brightText.FORMULAR,"stat*(value+value_up*skill_level)*5/100");
+assert.equal(brightText.IS_FLOAT,"0");
 const valid=validateMaterialSkillSources(episodeBytes,symbolicBytes);
+const iconResources=spawnSync(process.platform==="win32"?"python":"python3",["-B",repositoryPath("tests/material-skill-icon-resources.py")],
+  {cwd:repositoryPath(),encoding:"utf8",timeout:30_000});
+assert.equal(iconResources.status,0,iconResources.stderr||iconResources.stdout);
 assert.equal(valid.length,8);
 for(const row of valid)assert.deepEqual(row.skills,original[row.sourceIndex].skill);
 valid[0].skills[0].effect[0].base_number=999999;
@@ -60,17 +67,24 @@ for(const ref of after.refs) {
   assert.equal(ref.skill.length,5);
   for(let type=1;type<=5;type++) {
     const slot=ref.skill[type-1],native=source.skill.find((row:any)=>row.type===type);
-    assert.equal(slot.type,type);assert.equal(slot.cut_in_id,"");assert.equal(slot.icon_id,"");
-    if(!native){assert.deepEqual(slot,prior.skill[type-1],"Missing original slots remain exactly neutral");continue;}
+    assert.equal(slot.type,type);assert.equal(slot.cut_in_id,"");assert.equal(slot.icon_id,`C${ref.base.id}_SI${type}`);
+    assert.equal(slot.name,prior.skill[type-1].name);assert.equal(slot.desc,prior.skill[type-1].desc);
+    if(!native){assert.deepEqual({...slot,icon_id:prior.skill[type-1].icon_id},prior.skill[type-1],
+      "Missing original slots retain every neutral field except the LOCAL icon binding");continue;}
     assert.equal(slot.target_rank,native.target_rank);assert.equal(slot.cost,native.cost??0);
     assert.equal(slot.cool_time,native.cool_time??0);assert.equal(slot.crt_chance,native.crt_chance??0);
-    assert.deepEqual(slot.effect,native.effect.map((effect:any,index:number)=>({...effect,serial:index+1,
+    assert.deepEqual(slot.effect,native.effect.map((effect:any,index:number)=>({...effect,
+      serial:ref.base.id==="049"&&type===1?0:index+1,
       up_number:0,duration_up:0,value_calc:"",effect_desc:[]})),"Exact graph order/selectors/floating coefficients/raw timing plus explicit local wrapper");
   }
 }
 const karl=after.refs.find((r:any)=>r.base.id==="012").skill;
 assert.equal(karl[0].cool_time,5000);assert.equal(karl[3].effect[0].base_number,1);
 assert.equal(after.refs.find((r:any)=>r.base.id==="049").skill[0].crt_chance,0,"Missing Bright probability is not invented50");
+assert.deepEqual(after.refs.find((r:any)=>r.base.id==="049").skill.slice(0,2).map((slot:any)=>slot.effect.map((effect:any)=>effect.serial)),
+  [[0],[1]],"Only Bright active's sole effect binds the original description SUB_SERIAL; skill2 retains its wrapper identity");
+assert.deepEqual(after.refs.find((r:any)=>r.base.id==="049").skill.slice(2).map((slot:any)=>({icon_id:slot.icon_id,effect:slot.effect})),
+  [3,4,5].map(type=>({icon_id:`C049_SI${type}`,effect:[]})),"Original icon art never fills Bright's absent numeric graphs");
 for(const [mode,card] of [["unknown","materials"],["episode-indexed-projection","starter"]]) {
   const invalid=run(mode,card);assert.notEqual(invalid.status,0);assert.match(invalid.stderr,/material skill|Material skill/);
 }
