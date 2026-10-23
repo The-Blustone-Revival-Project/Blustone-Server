@@ -3,19 +3,23 @@ import {parseGemInstances,type GemReference} from "./gem-instances.js";
 import {parseGemMountRequest} from "./gem-mount.js";
 import {gemRemovalPrices,gemRemovalPriceAt,type GemRemovalPrice} from "./gem-removal-prices.js";
 const equipment=["weapon","armor","accessory"] as const;
-/** Configured gold2 six-cell replacement. A changed OLD occupied cell incurs
+export interface GemMandaWallet {free_iap_qty:number;iap_qty:number}
+/** Configured gold2/Manda1 six-cell replacement. A changed OLD occupied cell incurs
  * its OLD Gem level fee, including swaps. Cross-Hunter moves and type4 refuse.
  * Pure preparation only: caller owns authenticated atomic wallet/persistence. */
 export function planPaidGemMount(raw:unknown,cards:readonly LocalCardInstance[],gems:readonly Record<string,unknown>[],
-  refs:readonly GemReference[],busy:ReadonlySet<number>,prices:readonly GemRemovalPrice[],gold:number) {
+  refs:readonly GemReference[],busy:ReadonlySet<number>,prices:readonly GemRemovalPrice[],gold:number,manda?:GemMandaWallet) {
   try {
-    const quotes=gemRemovalPrices({result_code:1,ret_data:prices}),request=parseGemMountRequest(raw);
+    const quotes=gemRemovalPrices({result_code:1,ret_data:prices}),request=parseGemMountRequest(raw,true);
+    if(request.payment===1&&(!manda||![manda.free_iap_qty,manda.iap_qty].every(n=>Number.isInteger(n)&&n>=0&&n<=0x7fff_ffff)||
+      manda.free_iap_qty+manda.iap_qty>0x7fff_ffff))throw new TypeError("Manda removal requires explicit nonnegative signed32 wallet components and total");
     const targets=cards.filter(card=>String(card.inst_id)===request.target);
     if(targets.length!==1) throw new TypeError("Gem target is not uniquely owned");
     const target=targets[0];
     if(busy.has(target.inst_id)||(target.mirage_remain_hp!==undefined&&Number(target.mirage_remain_hp)!==1000))
       throw new TypeError("Gem target has active combat commitments");
     if(!Number.isSafeInteger(gold)||gold<0) throw new TypeError("Invalid Gem gold balance");
+    if(request.payment===2&&gold>0x7fff_ffff)throw new TypeError("Gem gold balance exceeds native signed32 funds comparison");
     const rank=(id:string,slot:number)=>Number(cards.find(card=>String(card.inst_id)===id)?.[`${equipment[slot]}_rank`]);
     const parsed=parseGemInstances({result_code:1,ret_data:gems},refs,new Set(cards.map(card=>String(card.inst_id))),rank);
     const byId=new Map(parsed.map(gem=>[gem.inst_id,gem])),refById=new Map(refs.map(ref=>[ref.id,ref]));
@@ -26,11 +30,11 @@ export function planPaidGemMount(raw:unknown,cards:readonly LocalCardInstance[],
     for(let slot=0;slot<3;slot++) for(let column=0;column<2;column++) {
       const old=before[slot][column],next=request.grids[slot][column];
       if(old!==next&&old!=="0") {
-        const quote=gemRemovalPriceAt(quotes,byId.get(old)!.level,2);
+        const quote=gemRemovalPriceAt(quotes,byId.get(old)!.level,request.payment);
         if(!quote) throw new TypeError("Changed occupied Gem cell has missing removal fee");
         fee+=quote.price;removedCells++;
-        // Native popup ADD32 wraps. Replica refuses wrapped/undercharged totals.
-        if(fee>0xffff_ffff) throw new TypeError("Gem removal fee total exceeds native uint32");
+        // Both native buttons use signed CMP/BLE after their32-bit additions.
+        if(fee>0x7fff_ffff)throw new TypeError("Gem removal fee exceeds native signed32 funds comparison");
       }
       if(next==="0") continue;
       const gem=byId.get(next),ref=gem&&refById.get(gem.ref_id);
@@ -41,7 +45,11 @@ export function planPaidGemMount(raw:unknown,cards:readonly LocalCardInstance[],
         throw new TypeError("Desired Gem equipment position is locked");
       desired.set(next,column+1);
     }
-    if(gold<fee) throw new TypeError("Insufficient gold for Gem removal");
+    if(request.payment===2&&gold<fee) throw new TypeError("Insufficient gold for Gem removal");
+    if(request.payment===1&&manda!.free_iap_qty+manda!.iap_qty<fee)throw new TypeError("Insufficient Manda for Gem removal");
+    // Native checks only the combined wallet. Free-first debit is LOCAL policy.
+    const freeSpent=request.payment===1?Math.min(manda!.free_iap_qty,fee):0;
+    const nextManda=request.payment===1?{free_iap_qty:manda!.free_iap_qty-freeSpent,iap_qty:manda!.iap_qty-(fee-freeSpent)}:undefined;
     let changed=0;
     const next=gems.map((wire,index)=>{
       const gem=parsed[index],position=desired.get(gem.inst_id);
@@ -54,6 +62,6 @@ export function planPaidGemMount(raw:unknown,cards:readonly LocalCardInstance[],
     // response was lost, removed rows no longer belong to the requested target:
     // a target-only echo cannot repair their stale mounted client state.
     const receipt=next.map(row=>structuredClone(row));
-    return {next,receipt,changed,removedCells,fee,gold:gold-fee};
+    return {next,receipt,changed,removedCells,fee,gold:request.payment===2?gold-fee:gold,manda:nextManda};
   } catch(error) {return {error:error instanceof Error?error.message:"Invalid Gem replacement"};}
 }

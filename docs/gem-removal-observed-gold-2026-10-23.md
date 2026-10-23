@@ -1,3 +1,5 @@
+> Update2026-10-23: this input still contains only gold2 rows. A separate [gold/Manda input](gem-removal-observed-gold-manda-2026-10-23.md) is now available with configured Manda transactions; missing selected-currency prices still refuse.
+
 # Sparse observed jewel removal fees
 
 `config/policies/gem-removal-observed-gold.json` supplies four historical

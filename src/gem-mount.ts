@@ -8,10 +8,11 @@ function serial(value:unknown,zero=false):string {
     throw new TypeError("Invalid Gem mount uint64 identity");
   return text;
 }
-export function parseGemMountRequest(raw:unknown) {
+export function parseGemMountRequest(raw:unknown,allowManda=false) {
   if(!raw||typeof raw!=="object"||Array.isArray(raw)) throw new TypeError("Invalid Gem mount request");
   const row=raw as Record<string,unknown>,target=serial(row.target_inst_id);
-  if(row.price_type!==2&&row.price_type!=="2") throw new TypeError("Gem mount supports recovered gold2 choice only");
+  const payment=row.price_type===2||row.price_type==="2"?2:allowManda&&(row.price_type===1||row.price_type==="1")?1:undefined;
+  if(payment===undefined) throw new TypeError("Gem mount supports gold2 or configured Manda1 choices only");
   const value=typeof row.combination==="string"?JSON.parse(row.combination,(_key,value,context?:{source:string})=>{
     if(typeof value!=="number") return value;
     if(context?.source && /^(?:0|[1-9]\d*)$/.test(context.source)) return context.source;
@@ -26,7 +27,7 @@ export function parseGemMountRequest(raw:unknown) {
   });
   const used=grids.flat().filter(id=>id!=="0");
   if(new Set(used).size!==used.length) throw new TypeError("Gem cannot occupy two desired positions");
-  return {target,grids};
+  return {target,grids,payment};
 }
 /** Proven free first-install/unchanged path. Replacing a changed occupied cell
  * needs its original removal price; no zero-price substitute is provided. */

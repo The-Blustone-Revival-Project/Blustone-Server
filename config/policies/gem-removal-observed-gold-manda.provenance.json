@@ -1,0 +1,45 @@
+{
+  "origin": "historical-manual-transcriptions",
+  "scope": "Separate sparse observed gold2 and Manda1 input. Reuses the original five manual anchors; no new screenshots, final-version table, interpolation, payment4, grant or native transaction claimed. Free-first debit is separate explicit LOCAL server policy, not recovered original debit order.",
+  "base_provenance": {
+    "path": "config/policies/gem-removal-observed-gold.provenance.json",
+    "sha256": "808da0a5208f31b519c7fb0b53e7b207b3ab2ab5ae3ed51ceae8fd4f3df8866f"
+  },
+  "observations": [
+    {
+      "index": 815,
+      "raw_row_sha256": "a105d5743fbc8109bb7f01de943fac22092aa73975d2f3789236fb98dbbbf7bd",
+      "level": 1,
+      "gold2": 2500,
+      "manda1": 2
+    },
+    {
+      "index": 1336,
+      "raw_row_sha256": "5717f5f9491f641813a70b7f2240dc321598596fb7694b54f9698c7603c1a521",
+      "level": 1,
+      "gold2": 2500,
+      "manda1": 2
+    },
+    {
+      "index": 889,
+      "raw_row_sha256": "c4369c5385c7938e65f9e2b1a8c4fbc6a1e9fc83705776d5301b6f3442da9602",
+      "level": 6,
+      "gold2": 15000,
+      "manda1": 15
+    },
+    {
+      "index": 599,
+      "raw_row_sha256": "31ab632024b5df9525a078c35872516a586c7f2633fbfef696eff289bb3495e1",
+      "level": 7,
+      "gold2": 17500,
+      "manda1": 17
+    },
+    {
+      "index": 3543,
+      "raw_row_sha256": "a3d0d453530d7f55ad17e3e4c1d76a017cb791503358c1d34f8d362610016f2a",
+      "level": 15,
+      "gold2": 40000,
+      "manda1": 40
+    }
+  ]
+}

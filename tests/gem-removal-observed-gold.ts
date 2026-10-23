@@ -53,7 +53,7 @@ for(const row of prices) {
   const retry=planPaidGemMount(request([0,0]),cards,result.next!,refs,new Set(),[],result.gold!);
   assert.equal(retry.fee,0);assert.equal(retry.changed,0);assert.deepEqual(retry.receipt,result.receipt);
   assert.match(planPaidGemMount(request([0,0]),cards,gems,refs,new Set(),prices,row.price-1).error!,/Insufficient/);
-  assert.match(planPaidGemMount(request([0,0],1),cards,gems,refs,new Set(),prices,100000).error!,/gold2/);
+  assert.match(planPaidGemMount(request([0,0],1),cards,gems,refs,new Set(),prices,100000).error!,/Manda/);
   assert.deepEqual({gems,cards,input},before,"successful and refused planning must preserve source rows");
 }
 const uncovered=[gem("1",8)];assert.match(planPaidGemMount(request([0,0]),cards,uncovered,refs,new Set(),prices,100000).error!,/missing/);

@@ -3362,13 +3362,15 @@ export class ServerState {
       ...(game.arena.active?.deck_inst_ids??[]),...(game.search.active?.deck_inst_ids??[])]);
     // Confirmation accumulates raw OLD-level removal quotes, including swaps.
     // Guild TYPE2 belongs to polishing, not this cached disassembly total.
-    const plan=planPaidGemMount(payload,cards,game.owned_gems??[],this.gemReferences,busy,this.gemDisassemblePrices,game.gold);
+    const plan=planPaidGemMount(payload,cards,game.owned_gems??[],this.gemReferences,busy,this.gemDisassemblePrices,game.gold,
+      {free_iap_qty:game.gacha_free_qty,iap_qty:game.gacha_iap_qty});
     if("error" in plan) return this.failure(2001,plan.error!);
-    const before=game.owned_gems,beforeGold=game.gold;
+    const before=game.owned_gems,beforeGold=game.gold,beforeFree=game.gacha_free_qty,beforePaid=game.gacha_iap_qty;
     if(plan.changed) {
       game.owned_gems=plan.next!;
       game.gold=plan.gold!;
-      try{this.persist();}catch(error){game.owned_gems=before;game.gold=beforeGold;throw error;}
+      if(plan.manda){game.gacha_free_qty=plan.manda.free_iap_qty;game.gacha_iap_qty=plan.manda.iap_qty;}
+      try{this.persist();}catch(error){game.owned_gems=before;game.gold=beforeGold;game.gacha_free_qty=beforeFree;game.gacha_iap_qty=beforePaid;throw error;}
     }
     // GDP remains the same explicit0 policy used by lobby; legacy game.gem is
     // not silently reinterpreted as a wallet or owned jewel count.

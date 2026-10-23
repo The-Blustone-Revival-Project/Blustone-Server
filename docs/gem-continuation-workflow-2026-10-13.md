@@ -1,3 +1,5 @@
+> Update2026-10-23: configured Manda1 removal now supports selected-currency quotes, LOCAL free-first spending and atomic wallet/inventory updates. Both native funds comparisons are signed; selected gold balance, Manda components/total and fee must fit nonnegative signed32. See [native payment proof](gem-manda-removal-native-2026-10-23.md).
+
 > Update2026-10-23: an optional [sparse historical gold2 quote dataset](gem-removal-observed-gold-2026-10-23.md) now supplies four observed levels. The complete final-server table is still missing; no default activation. Missing native quotes may display0 even while the server refuses removal.
 
 # Configured Gem set effects and removal workflow
