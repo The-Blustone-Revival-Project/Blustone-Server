@@ -90,3 +90,8 @@ metadata or a safe claim. No reward or Hunter is granted by this preparation.
 A future live continuation must also retain the currently active compatible
 material stat/skill/birth-rank policies; this historical E9-derived resource
 candidate is not authority to remove those policies from an active session.
+
+The separate `current-e10-compatible-progression` candidate now supplies that
+compatibility bridge:210 groups including current fever artwork, with all170
+baseline policies retained. See `e10-compatible-progression-readiness-2026-10-23.md`
+for private-copy save and encrypted transport verification. It remains inactive.
