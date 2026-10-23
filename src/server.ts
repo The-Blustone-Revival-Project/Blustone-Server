@@ -53,12 +53,13 @@ export function createApp(options: { baseUrl?: string; catalogPath?: string; sta
   profileMode?:"disabled"|"archive-profile-projection";
   baitShopMode?:"disabled"|"archive-2018-projection";baitShopDailyLimit?:unknown;
   mirageMode?:"disabled"|"local-configured";miragePolicy?:unknown;mirageReentryPolicy?:unknown;
+  gemPolishMode?:"disabled"|"local-supplied-sequence";gemPolishPolicy?:unknown;
   fishingCastMode?:"disabled"|"local-configured";fishingCastPolicy?:unknown;fishingItems?:unknown;fishingCatalogue?:unknown;fishingSaleMode?:"disabled"|"local-bound";fishingSaleBindings?:unknown;questMode?:"disabled"|"local-fixed";questPolicy?:unknown } = {}): AppContext {
   const baseUrl = options.baseUrl ?? "http://127.0.0.1:8080";
   if((options.mirageMode??process.env.BLUSTONE_MIRAGE_MODE)==="local-configured")verifyMirageRuntimePackages();
   const state = new ServerState(baseUrl, options.stateFile, { legacyCardIds: options.legacyCardIds,guildChatMode:options.guildChatMode,publicChatMode:options.publicChatMode,
     ...(Object.hasOwn(options,"dispatchMode")?{dispatchMode:options.dispatchMode}:{}),...(Object.hasOwn(options,"dispatchPolicy")?{dispatchPolicy:options.dispatchPolicy}:{}),
-    ...Object.fromEntries(["mirageMode","miragePolicy","mirageReentryPolicy","rupeeShopMode","rupeeShopDailyLimit","veteranGiftMode","veteranPointsPerTicket","profileMode","baitShopMode","baitShopDailyLimit","fishingCastMode","fishingCastPolicy","fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
+    ...Object.fromEntries(["gemPolishMode","gemPolishPolicy","mirageMode","miragePolicy","mirageReentryPolicy","rupeeShopMode","rupeeShopDailyLimit","veteranGiftMode","veteranPointsPerTicket","profileMode","baitShopMode","baitShopDailyLimit","fishingCastMode","fishingCastPolicy","fishingItems","fishingCatalogue","fishingSaleMode","fishingSaleBindings","questMode","questPolicy"].filter(key=>Object.hasOwn(options,key)).map(key=>[key,options[key as keyof typeof options]])) });
   if(state.mirageResourcesRequired())verifyMirageRuntimePackages();
   const endpoints = discoverEndpoints(options.catalogPath ?? defaultCatalogPath());
   const openapi = buildOpenApi(endpoints, baseUrl);

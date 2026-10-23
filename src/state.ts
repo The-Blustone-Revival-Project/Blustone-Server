@@ -1,3 +1,4 @@
+import {configuredGemPolish,normalizeGemPolish,sameGemPolishPolicy,validateGemPolishHistory,planGemPolish,polishIdentity,type GemPolishJournal} from "./gem-polish.js";
 import {globalArenaPage} from "./arena-global-rankings.js";
 import {configuredMirageReentry,createMirageSeries,normalizeMirageSeries,proposeMirageReentry,consumeMirageReentry,mirageReentryBeginTime,type MirageReentryPolicy,type MirageSeries} from "./mirage-reentry.js";
 import {planMirageRevive} from "./mirage-revive.js";
@@ -80,7 +81,7 @@ import {parseGemInstances,type GemReference} from "./gem-instances.js";
 import {planPaidGemMount} from "./gem-paid-mount.js";
 import {gemRemovalPrices,type GemRemovalPrice} from "./gem-removal-prices.js";
 import {gemSalePrices,planGemSale,type GemSalePrice} from "./gem-sale.js";
-import {gemLevelPrices as parseGemLevelPrices,type GemLevelPrice} from "./gem-level-prices.js";
+import {gemLevelPrices as parseGemLevelPrices,gemLevelPriceAt,type GemLevelPrice} from "./gem-level-prices.js";
 import {configuredGemCombinations} from "./gem-combination-reference.js";
 import {gemWireRows,parseStateWithGemIds} from "./gem-wire.js";
 import { episodeChapters, episodeLog, episodeStoryIds, recordEpisodeProgress } from "./episode-progress.js";
@@ -584,6 +585,9 @@ export class ServerState {
   private readonly gemCombinations: readonly Readonly<Record<string,string|number>>[];
   private readonly gemDisassemblePrices: readonly GemRemovalPrice[];
   private readonly gemSellPrices: readonly GemSalePrice[];
+  private readonly gemPolishJournals=new Map<number,GemPolishJournal>();
+  private readonly gemPolishMode:"disabled"|"local-supplied-sequence";
+  private readonly gemPolishPolicies?:ReadonlyMap<number,GemPolishJournal>;
   private readonly gemLevelPrices: readonly GemLevelPrice[];
   private readonly fishingItems: readonly Readonly<FishingItemReference>[];
   private readonly skillMaterialIds:ReadonlySet<string>;
@@ -635,6 +639,7 @@ export class ServerState {
   constructor(public baseUrl = "http://127.0.0.1:8080", private readonly stateFile?: string,
     private readonly options: { legacyCardIds?: boolean; hunterSaleProfits?: unknown;
       equipmentLevelPrices?: unknown; equipmentRankPrices?: unknown; gemReferences?:unknown; gemCombinations?:unknown;
+      gemPolishMode?:"disabled"|"local-supplied-sequence";gemPolishPolicy?:unknown;
       gemDisassemblePrices?:unknown; gemSellPrices?:unknown; gemLevelPrices?:unknown; guildPrices?:unknown;
       guildCreationMode?:"disabled"|"local-gold";guildUpdateMode?:"disabled"|"local-manda-free-first";
       guildDonationMode?:"disabled"|"local-gold";
@@ -773,6 +778,12 @@ export class ServerState {
     const gemLevelPrices=Object.hasOwn(options,"gemLevelPrices")?options.gemLevelPrices:
       process.env.BLUSTONE_GEM_LEVEL_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GEM_LEVEL_PRICES_JSON);
     this.gemLevelPrices=Object.freeze(parseGemLevelPrices({result_code:1,ret_data:gemLevelPrices}).map(row=>Object.freeze(row)));
+    const polishMode=options.gemPolishMode??process.env.BLUSTONE_GEM_POLISH_MODE??"disabled";
+    if(polishMode!=="disabled"&&polishMode!=="local-supplied-sequence")throw new TypeError("Unknown Gem polish mode");
+    this.gemPolishMode=polishMode;
+    const rawPolish=Object.hasOwn(options,"gemPolishPolicy")?options.gemPolishPolicy:process.env.BLUSTONE_GEM_POLISH_POLICY_JSON===undefined?undefined:JSON.parse(process.env.BLUSTONE_GEM_POLISH_POLICY_JSON);
+    if(polishMode!=="disabled")this.gemPolishPolicies=configuredGemPolish(rawPolish,this.gemReferences,this.gemLevelPrices);
+    else if(rawPolish!==undefined)throw new TypeError("Gem polish policy requires supplied-sequence mode");
     const guildPrices=Object.hasOwn(options,"guildPrices")?options.guildPrices:
       process.env.BLUSTONE_GUILD_ACTION_PRICES_JSON===undefined?[]:JSON.parse(process.env.BLUSTONE_GUILD_ACTION_PRICES_JSON);
     this.guildPrices=Object.freeze(guildActionPrices({result_code:1,ret_data:guildPrices}).map(row=>Object.freeze(row)));
@@ -843,30 +854,32 @@ export class ServerState {
   private restore(serialized: string) {
     let namespaceMigrated = false;
     const saved: unknown = parseStateWithGemIds(serialized);
-    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
+    if (!isRecord(saved) || (saved.version!==1&&saved.version!==2&&saved.version!==3&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16) || !Array.isArray(saved.accounts) || !Array.isArray(saved.transportKeys)||
       saved.version!==1&&!Array.isArray(saved.dispatches)||saved.version===1&&saved.dispatches!==undefined||
-      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14||saved.version===15)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
+      (saved.version===3||saved.version===4||saved.version===5||saved.version===6||saved.version===7||saved.version===8||saved.version===9||saved.version===10||saved.version===11||saved.version===12||saved.version===13||saved.version===14||saved.version===15||saved.version===16)&&!Array.isArray(saved.quests)||(saved.version===1||saved.version===2)&&saved.quests!==undefined) {
       throw new Error("Unsupported or malformed local state; refusing to overwrite it");
     }
-    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Mirage run journals require schema12");
+    if(saved.mirageRuns!==undefined&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Mirage run journals require schema12");
     if((saved.version===12||saved.version===13||saved.version===14)&&(!Array.isArray(saved.mirageRuns)||!saved.mirageRuns.length))throw new TypeError("Schema12 requires captured Mirage run journals");
-    if(saved.mirageSeries!==undefined&&saved.version!==14&&saved.version!==15)throw new TypeError("Mirage re-entry journals require schema14");
+    if(saved.mirageSeries!==undefined&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Mirage re-entry journals require schema14");
     if(saved.version===14&&(!Array.isArray(saved.mirageSeries)||!saved.mirageSeries.length))throw new TypeError("Schema14 requires captured Mirage re-entry journals");
-    if(saved.fishingCasts!==undefined&&saved.version!==15)throw new TypeError("Fishing cast journals require schema15");
+    if(saved.fishingCasts!==undefined&&saved.version!==15&&saved.version!==16)throw new TypeError("Fishing cast journals require schema15");
     if(saved.version===15&&(!Array.isArray(saved.fishingCasts)||!saved.fishingCasts.length))throw new TypeError("Schema15 requires captured fishing casts");
+    if(saved.gemPolishJournals!==undefined&&saved.version!==16)throw new TypeError("Gem polish journals require schema16");
+    if(saved.version===16&&(!Array.isArray(saved.gemPolishJournals)||!saved.gemPolishJournals.length))throw new TypeError("Schema16 requires completed supplied Gem polish work");
     const hasMirageRevive=Array.isArray(saved.mirageRuns)&&saved.mirageRuns.some(row=>Array.isArray(row)&&isRecord(row[1])&&isRecord(row[1].policy)&&row[1].policy.revive_prices!==undefined);
-    if(hasMirageRevive&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Mirage first-aid policies require schema13");
+    if(hasMirageRevive&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Mirage first-aid policies require schema13");
     if(saved.version===13&&!hasMirageRevive)throw new TypeError("Schema13 requires captured Mirage first-aid policy");
-    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Captured Hunter transcendence policy requires schema11");
+    if(saved.hunterOvercomePolicy!==undefined&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Captured Hunter transcendence policy requires schema11");
     if(saved.version===11&&saved.hunterOvercomePolicy===undefined)throw new TypeError("Schema11 requires a captured Hunter transcendence policy");
     if(saved.hunterOvercomePolicy!==undefined) {
       this.capturedOvercomePolicy=configuredHunterOvercome(saved.hunterOvercomePolicy,new Set(itemReference().item.map(row=>row.id)));
       if(this.configuredOvercomePolicy&&hunterOvercomeFingerprint(this.configuredOvercomePolicy)!==hunterOvercomeFingerprint(this.capturedOvercomePolicy))
         throw new TypeError("Configured transcendence policy differs from captured earned policy; refusing silent stat/cost changes");
     }
-    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
+    if(saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&Object.hasOwn(row[1],"dorm_expansion")))
       throw new TypeError("Paid dorm expansion requires state schema10");
-    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
+    if(saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16&&Array.isArray(saved.gameStates)&&saved.gameStates.some(row=>Array.isArray(row)&&isRecord(row[1])&&
       [row[1].fuel_shop,row[1].bp_shop].some(shop=>isRecord(shop)&&Object.hasOwn(shop,"coupon"))))
       throw new TypeError("Resource coupon counters require state schema9");
     const ids = new Set<number>();
@@ -876,10 +889,10 @@ export class ServerState {
         !raw.token || !Number.isSafeInteger(raw.serverId) || !isRecord(raw.extraData)) {
         throw new Error("Malformed account in local state; refusing to overwrite it");
       }
-      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Rupee shop counters require state schema8");
-      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Profile settings require state schema7 or newer");
-      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Bait purchase counters require state schema6 or newer");
-      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Arena comments require state schema5 or newer");
+      if(raw.rupeeShopCounter!==undefined&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Rupee shop counters require state schema8");
+      if(raw.profileSettings!==undefined&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Profile settings require state schema7 or newer");
+      if(raw.baitShopCounter!==undefined&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Bait purchase counters require state schema6 or newer");
+      if(raw.arenaComments!==undefined&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Arena comments require state schema5 or newer");
       const account = normalizeStoredAccount(raw);
       if (ids.has(account.pvid) || this.accountsByDevice.has(account.deviceId) || this.accountsByPvid.has(account.pvid)) {
         throw new Error("Duplicate account in local state");
@@ -960,7 +973,7 @@ export class ServerState {
       for(const row of saved.quests as unknown[]) {
         if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.accountsByPvid.has(row[0])||!this.gameByPvid.has(row[0])||this.quests.has(row[0]))throw new TypeError("Invalid quest journal owner");
         const journal=localQuestJournal(row[1],new Set(starterStages.stage.filter(row=>row.id.startsWith("n_")).map(row=>row.id)));
-        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
+        if(journal.linear&&saved.version!==4&&saved.version!==5&&saved.version!==6&&saved.version!==7&&saved.version!==8&&saved.version!==9&&saved.version!==10&&saved.version!==11&&saved.version!==12&&saved.version!==13&&saved.version!==14&&saved.version!==15&&saved.version!==16)throw new TypeError("Linear quests require state schema4 or newer");this.quests.set(row[0],journal);
       }
     }
     if(saved.version===4&&![...this.quests.values()].some(row=>row.linear))throw new TypeError("Schema4 requires captured linear sequence");
@@ -981,6 +994,13 @@ export class ServerState {
         throw new TypeError("Configured fishing ownership bindings differ from captured casts");
       validateFishingCastStock(this.gameByPvid.get(row[0])!,journal,new Set(this.fishingItems.filter(item=>item.use_type===17).map(item=>item.id)));
       this.fishingCasts.set(row[0],journal);
+    }
+    if(saved.gemPolishJournals!==undefined)for(const row of saved.gemPolishJournals as unknown[]) {
+      if(!Array.isArray(row)||row.length!==2||!Number.isSafeInteger(row[0])||!this.gameByPvid.has(row[0])||!this.accountsByPvid.has(row[0])||this.gemPolishJournals.has(row[0]))throw new TypeError("Invalid Gem polish journal owner");
+      const journal=normalizeGemPolish(row[1],this.gemReferences,this.gemLevelPrices),configured=this.gemPolishPolicies?.get(row[0]);
+      if(configured&&!sameGemPolishPolicy(journal,configured))throw new TypeError("Configured Gem polish sequence differs from captured work");
+      validateGemPolishHistory(journal,this.gameByPvid.get(row[0])!.owned_gems??[]);
+      this.gemPolishJournals.set(row[0],journal);
     }
     for (const row of saved.transportKeys) {
       if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== "string" || typeof row[1] !== "string") throw new Error("Malformed transport state");
@@ -1013,9 +1033,9 @@ export class ServerState {
     const profiles=[...this.accountsByPvid.values()].some(account=>account.profileSettings!==undefined);
     const bait=[...this.accountsByPvid.values()].some(account=>account.baitShopCounter!==undefined);
     const comments=[...this.accountsByPvid.values()].some(account=>account.arenaComments!==undefined);
-    const snapshot = { version: this.fishingCasts.size?15:this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
-      ...(this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
-      ...(this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
+    const snapshot = { version: this.gemPolishJournals.size?16:this.fishingCasts.size?15:this.mirageSeries.size?14:[...this.mirageRuns.values()].some(run=>run.policy.revive_prices!==undefined)?13:this.mirageRuns.size?12:this.capturedOvercomePolicy?11:dorms?10:resourceCoupons?9:rupees?8:profiles?7:bait?6:comments?5:[...this.quests.values()].some(row=>row.linear)?4:this.quests.size?3:this.dispatches.size?2:1, selectedServer: this.selectedServer,
+      ...(this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.dispatches.size||this.quests.size?{dispatches:[...this.dispatches]}:{}),
+      ...(this.gemPolishJournals.size||this.fishingCasts.size||this.mirageRuns.size||this.capturedOvercomePolicy||dorms||resourceCoupons||rupees||profiles||bait||comments||this.quests.size?{quests:[...this.quests]}:{}),
       ...(this.socialFriends === undefined ? {} : { socialFriends: this.socialFriends }),
       ...(this.socialLikes === undefined ? {} : { socialLikes: this.socialLikes }),
       ...(this.guilds === undefined ? {} : { guilds: this.guilds }),
@@ -1028,6 +1048,7 @@ export class ServerState {
       ...(this.mirageRuns.size?{mirageRuns:[...this.mirageRuns]}:{}),
       ...(this.mirageSeries.size?{mirageSeries:[...this.mirageSeries]}:{}),
       ...(this.fishingCasts.size?{fishingCasts:[...this.fishingCasts]}:{}),
+      ...(this.gemPolishJournals.size?{gemPolishJournals:[...this.gemPolishJournals]}:{}),
       accounts: [...this.accountsByDevice.values()],
       gameStates: [...this.gameByPvid].map(([pvid, game]) => [pvid, game]),
       transportKeys: [...this.sharedSecretsByAccessToken].map(([token, key]) => [token, key.toString("base64")]),
@@ -3197,6 +3218,33 @@ export class ServerState {
   gemLevelReference(payload:Record<string,unknown>,headers:Record<string,string>) {
     this.accountFor(payload,headers);
     return this.envelope(this.gemLevelPrices.map(row=>({...row})));
+  }
+
+  polishGem(payload:Record<string,unknown>,headers:Record<string,string>) {
+    const account=this.accountFor(payload,headers),game=this.gameByPvid.get(account.pvid),policy=this.gemPolishPolicies?.get(account.pvid);
+    if(this.gemPolishMode!=="local-supplied-sequence"||!game||!policy)return this.failure(2001,"Supplied Gem polishing is unavailable");
+    const prior=this.gemPolishJournals.get(account.pvid);let plan;
+    try {
+      assertOwnedCardCompatibility(game);this.validateOwnedGems(game);
+      const id=polishIdentity(payload.inst_id),gem=game.owned_gems?.find(g=>String(g.inst_id)===id);
+      if(!gem)throw new TypeError("Gem polish target is not owned");
+      const busy=new Set([...(game.active_battle?.state==="active"?game.active_battle.deck_inst_ids:[]),...(game.search.active?.deck_inst_ids??[]),...(game.arena.active?.deck_inst_ids??[])]);
+      if(busy.has(Number(gem.target_inst_id)))throw new TypeError("Mounted Gem owner is committed to active combat");
+      const quote=gemLevelPriceAt(this.gemLevelPrices,Number(gem.level)+1);
+      if(!quote||quote.price_type!==2)throw new TypeError("Gem polishing next-level gold quote is unavailable");
+      const guildId=this.guildPersonal(account.pvid).my_guild.guild_id;
+      let benefit:null|{mode:number;value:number}=null;
+      if(guildId) {
+        const guild=this.guilds?.find(record=>record.id===guildId);
+        if(!guild||!this.guildLevels)throw new TypeError("Gem polishing requires current Guild INFO and benefit references");
+        benefit=selectedGuildBenefit(this.guildLevels,guild.contribution,"gem_level_up");
+      }
+      plan=planGemPolish(prior??policy,game.owned_gems??[],game.gold,payload,nativeGuildSaleValue(quote.price,benefit));
+    }catch(error){if(error instanceof TypeError)return this.failure(2001,error.message);throw error;}
+    const before={gold:game.gold,gems:game.owned_gems};
+    game.gold=plan.gold;game.owned_gems=plan.gems;this.gemPolishJournals.set(account.pvid,plan.journal);
+    try{this.persist();}catch(error){game.gold=before.gold;game.owned_gems=before.gems;if(before.gems===undefined)delete game.owned_gems;if(prior)this.gemPolishJournals.set(account.pvid,prior);else this.gemPolishJournals.delete(account.pvid);throw error;}
+    return this.envelope({achievement:null,user:{gold:{cur:plan.gold},item:[]},tries:plan.tries,gem:gemWireRows([plan.gem])[0]});
   }
 
   sellGems(payload:Record<string,unknown>,headers:Record<string,string>) {

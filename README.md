@@ -202,3 +202,9 @@ No season, enrollment, reward claim or GvG route is enabled by these helpers.
 [Migration plan and report](docs/migration/) · [Legacy server implementation notes](docs/legacy-server-README.md)
 
 Release versions follow semver starting at 1.0.0; see [release policy](docs/RELEASING.md) and [changelog](CHANGELOG.md).
+
+Optional supplied Gem polishing is available with
+`BLUSTONE_GEM_POLISH_MODE=local-supplied-sequence` and complete owned before/after
+Gem records, explicit references and gold quotes. It supplies atomic native
+failure/success receipts without generating unknown rolls or growth. Default
+disabled; see the [supplied transition workflow](docs/gem-supplied-polish-2026-10-23.md).

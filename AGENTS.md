@@ -1,3 +1,71 @@
+## Latest continuation: supplied complete Gem polishing (2026-10-23)
+
+Previous checkpoint9cbe534 verified the newer DataDump17 publication and found
+method-only changes, no balance retune. Goal ACTIVE (goal tool rechecked).
+Only Server source/docs/tests changed. No live profile/private save/device/APK/
+original asset/Docker/Collector/inference change. Input hold persists. Updated
+Docker retention rule: if Docker work resumes retain about3–4 distinct family
+versions, inspect references first, preserve cache/exports/data/volumes; no
+Docker build/cleanup was performed here. No APK rebuild/release owed.
+
+/gem/LevelUp now supports OPTIONAL BLUSTONE_GEM_POLISH_MODE=
+local-supplied-sequence with BLUSTONE_GEM_POLISH_POLICY_JSON. Default disabled.
+Explicit outerclassification local-supplied-sequence and owners{PVID:[{inst_id,
+steps:[{before:FULLGEM,after:FULLGEM}]}]} required. No outcome, growth, substat or
+probability is generated. Original RNG/main/sub growth/compensation/batch/economy
+laws remain UNKNOWN; ANVILHEATED display is NOT a backend probability table.
+Every complete Gem includes raw ability/abilities/main/sub/failed counter.
+Current owner/instance/ref/rank/placement/fullstate bound, original reference/
+next-level gold2 quote prerequisite, JSON/accessor/dense/finite native float32
+checks. Exact complete before/after states, not copied current stats+newlevel.
+
+LOCAL supported transition law: beforelevel1..14; failures retain level and
+increment count, success adds1level/resets count, final15 allowed. LOCALmaxtries
+1..100; affordability uses checked effective current quote*max; charge per
+actual try and stop at first supplied success. Missing/stale sequence or no
+funds refuses ENTIRE work, no partial attempts or rollover. Active mounted
+ordinary/Search/Arena actors refuse; existing Mirage/dispatch route guards
+apply. Guild TYPE2 selected from current aggregate/INFO references and native
+float32 fee arithmetic; no-affiliation/null/presentzero remain distinct.
+
+Complete positive receipt: achievement:null,user:{gold:{cur:SIGNED32},item:[]},
+positive actualtries, ONEcomplete owned Gem. Exact fulluint64 ID emitted numeric
+via Gem wire codec (including18446744073709551615), not rounded strtod string.
+No stock/Gem/Manda/AP/EXP grant, deletion or guessed item consumption. Both
+accepted failures and batched prior failures→success are valid result1 work.
+
+Schema16 top-level gemPolishJournals captures normalized reference/price hash,
+complete per-owner plans and cursor arrays, while retaining all earlier optional
+cohorts. Old headers reject journals. Captured policy/ref/quote changes refuse;
+current owned ability/level/result must agree with completed cursor. Legitimate
+later mounting/sale preserves journal, though changed placement can stale a
+future exactbound step. Disabled mode keeps data/history and requires supplied
+reference/price dependencies. Cursor and wallet/Gem commit atomically; real
+write/rename failure restores exact live references/fields and prior file.
+
+No native operation nonce: another funded identical request is NEW work, not
+an idempotent receipt. After response loss reconcile absolute Gem inventory and
+gold before another call; exhausted sequence never replays or recharges old
+work. No transport exactly-once or native animation/scene validation claimed.
+See docs/gem-supplied-polish-2026-10-23.md and prior native callback/producer notes.
+
+Validation: build + npm run test:gem-polish PASS; full227-program npm test PASS.
+State: failures/batches/checked budget/signed limits/native float32/getter
+refusal, maximumfull64 wire, stale/corrupt policy/history, modeoff/sale,
+mountedbusy and atomic write/rename. EncryptedHTTP: exactIDs/authoritative
+main+sub results/tries/gold, replacement app+persisted client keys and peer/save
+preservation. Cohort: real Mirage schema14 current+archived paid first aid and
+abandon→actual configured fishing15→Gem16; Guild aggregate fee5/7 vsraw10/15,
+missingbenefit refusal, unrelated saves/restart/modeoff/allolderstate retention.
+Independent review clear after fixing float32overflow/accessor pre-coercion.
+No new original Gem acquisition or default/live feature activation.
+
+Guild/GvG re-audit did NOT justify new mutations: AutoRegister still lacks full
+season/GetInst owner; fuel callbacks update request/UI, not a proven AP payout
+or donor claim/expiry/cooldown law. Do not fill those gaps from constructor5/12
+or a contribution animation. Future work remains original provider recovery,
+more game systems and separately authorized native validation; revival not done.
+
 ## Latest continuation: DataDump2026-10-17 artifact audit (2026-10-23)
 
 Previous checkpoint66387ff supplied paid material progression/launcher selection.

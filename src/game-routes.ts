@@ -256,6 +256,7 @@ export function gameResponse(state: ServerState, route: string, payload: Record<
   if (route === "/reference/GetGemLevelUpPrice")
     return state.gemLevelReference(payload,headers);
   if(route==="/card_handler/EquipGem") return state.equipGems(payload,headers);
+  if(route==="/gem/LevelUp")return state.polishGem(payload,headers);
   if(route==="/gem/Sell") return state.sellGems(payload,headers);
   if (route.startsWith("/gem/")) return state.unavailableGemAction(payload, headers);
   if (["/reference/GetCardEquipmentLevelUpPrice","/reference/GetCardEquipmentRankUpPrice",

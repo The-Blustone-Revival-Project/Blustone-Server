@@ -1,5 +1,10 @@
 # Gem polishing price publication and corrected native transaction boundary
 
+> A later [supplied-sequence adapter](gem-supplied-polish-2026-10-23.md)
+> supports explicitly classified LOCAL complete outcomes. Price rows alone
+> still do not enable polishing or recover original RNG/growth. This earlier
+> note retains the native contract and missing-original-data boundary.
+
 `gem-level-prices.ts` supports detached explicit reference rows only. No original
 numeric prices, success chances, compensation values or polishing outcomes were
 recovered here. Price publication cannot authorize a level-up transaction:
