@@ -1,3 +1,14 @@
+## Server v1.2.0 published (2026-10-26)
+
+Public Latest: https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases/tag/v1.2.0
+Release424346994; immutable tag source7a7ac10e16f4cb4c6c945fec0956fe38d9c7b2d6.
+All three uploaded assets match staged digests; anonymous metadata/checksum and
+ZIP-range downloads verified. v1.1.0 remains intact. Installer now ships with
+this release; resources remain the same verified968-file bundle. Default139 /
+1634683 unchanged. Qualification: Server docs/releases/1.2.0-qualification.md.
+No APK build/install, live restart, game input or save mutation. Goal ACTIVE;
+stock/proxy assertion producer and broader native gameplay remain unverified.
+
 ## Discord clean-install report investigation (2026-10-26)
 
 Goal ACTIVE; newhumanrequest investigated communitystock/proxy crash vsassets.
