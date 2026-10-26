@@ -23,9 +23,9 @@ class ReleasePin:
 
 
 PUBLIC_RELEASE = ReleasePin(
-    "Blustone-Server-Resources-1.1.0.zip", 1113549668,
+    "Blustone-Server-Resources-1.2.0.zip", 1113549668,
     "8bee83d69c5105aedcfa834c789ff039009dc047aa0e139c5641548322df3ae1",
-    "https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases/download/v1.1.0/Blustone-Server-Resources-1.1.0.zip",
+    "https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases/download/v1.2.0/Blustone-Server-Resources-1.2.0.zip",
 )
 
 

@@ -2,6 +2,15 @@
 
 Release descriptions focus on game features and recovered content. The first public release introduces the available game; later versions describe changes from that public baseline.
 
+## 1.2.0 — 2026-10-26
+
+- Added verified resource installation and explicit local Guild/chat, dispatch, Mirage, fishing and progression workflows.
+- Expanded optional original Episode resource coverage and source-pinned Hunter skill/stat/birth projections, while preserving their experimental limits.
+- Fixed clean-install guidance, unconfigured executable startup, Mail/Supply rollback, and native wallet/inventory receipt consistency.
+- Existing saves and the default139-package profile remain supported; stock-APK equivalence and broader native validation remain incomplete.
+
+See [the full1.2.0 changes and limitations](releases/1.2.0.md).
+
 ## 1.1.0 — 2026-10-11
 
 - Added persistent local-account friendships and Likes, bulk rank-up, and explicitly configured hunter sale, equipment upgrades and initial Gem mounting.

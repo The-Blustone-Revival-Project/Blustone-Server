@@ -17,7 +17,7 @@ npm start
 ```
 
 `npm run setup` verifies existing resources or downloads and imports the pinned
-[v1.1.0 resource ZIP](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases/tag/v1.1.0)
+[v1.2.0 resource ZIP](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases/tag/v1.2.0)
 (about1.1GB). It checks SHA-256 and all968 manifest files, skips downloading when
 they are already correct, and never overwrites differing files or account saves.
 For an offline copy, use `npm run setup -- --bundle PATH_TO_RESOURCE_ZIP`.
@@ -239,7 +239,12 @@ npm test
 node scripts/verify-independent.mjs
 ```
 
-The second command runs the compiled server from an unrelated working directory against a disposable private state copy. It verifies encrypted ECDH/HMAC/AES traffic, authenticated lobby/reference/Episode routes, 139 resource rows, ranged package delivery, the portrait asset, and credential/transport persistence across restart. It preserves the three existing games and does not operate the Android app.
+The second command runs the compiled server from an unrelated working directory
+against disposable state: a copy of preserved local state when available, or a
+generated test account on a clean checkout. It verifies encrypted ECDH/HMAC/AES
+traffic, lobby/reference/Episode routes,139 resource rows, ranged packages,
+portraits and transport persistence across restart. It requires no private save
+and does not operate the Android app.
 
 ## Prepared Episode 7 resources
 

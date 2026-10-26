@@ -1,6 +1,6 @@
 {
   "name": "blustone-replica-server",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Locally scoped TypeScript/Express compatibility server scaffold for the recovered Blustone APK protocol.",
   "type": "module",
