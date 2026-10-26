@@ -776,5 +776,12 @@ export function startServer(port = Number(process.env.BLUSTONE_PORT ?? 8080), ho
 }
 
 if (process.argv[1]?.endsWith("server.ts") || process.argv[1]?.endsWith("server.js")) {
-  startServer();
+  // The executable is normally launched by start-local.mjs after profile
+  // selection/preflight. Bare execution otherwise advertises the two-package
+  // protocol fixture, which is not a playable installation.
+  if (!process.env.BLUSTONE_PACKAGE_NAMES?.trim()) {
+    console.error("No game resource profile is configured. Run npm run setup, then npm start (or npm start -- --profile NAME). " +
+      "Direct server execution requires an explicit resource configuration; createApp remains available for protocol fixtures.");
+    process.exitCode = 1;
+  } else startServer();
 }

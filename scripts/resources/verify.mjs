@@ -10,7 +10,7 @@ export function preflight(root, profile) {
   for (const name of names) {
     if (!/^[\w.-]+\.jet$/i.test(name)) throw new Error('Unsafe package name');
     const candidates = [profile.env.BLUSTONE_PACKAGE_DIR, profile.env.BLUSTONE_RESOURCE_ASSET_DIR].map(dir => path.resolve(root, dir, name));
-    if (!candidates.some(file => existsSync(file) && statSync(file).isFile())) throw new Error(`Missing ${name}. Import the pinned resource bundle; do not use a legacy fallback.`);
+    if (!candidates.some(file => existsSync(file) && statSync(file).isFile())) throw new Error(`Missing ${name}. Run npm run setup to import the pinned resource bundle (or use -- --bundle PATH for an offline ZIP); do not use a legacy fallback.`);
   }
   // Keep the existing E6 pin without modifying its profile bytes. New named
   // profiles declare their own coherent stamp, independently of server semver.
@@ -20,7 +20,7 @@ export function preflight(root, profile) {
   for (const key of ['BLUSTONE_RESOURCE_VERSION', 'BLUSTONE_RESLIST_STAMP', 'BLUSTONE_RESLIST_HEADER_STAMP']) {
     if (profile.env[key] !== expectedStamp) throw new Error(`Incoherent resource stamp: ${key}`);
   }
-  if (!existsSync(path.resolve(root, profile.env.BLUSTONE_PACKAGE_TREE_DIR, 'UI_XML_RO.db', 'CURRENT'))) throw new Error('Active UI database tree missing');
+  if (!existsSync(path.resolve(root, profile.env.BLUSTONE_PACKAGE_TREE_DIR, 'UI_XML_RO.db', 'CURRENT'))) throw new Error('Active UI database tree missing. Run npm run setup before starting the server.');
   return names.length;
 }
 

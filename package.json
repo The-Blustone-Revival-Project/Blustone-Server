@@ -8,6 +8,8 @@
     "dev": "node scripts/start-local.mjs --dev",
     "build": "tsc -p tsconfig.json",
     "start": "node scripts/start-local.mjs",
+    "setup": "python scripts/resources/setup.py",
+    "test:resource-setup": "python tests/resource-setup.py && npm run build && node dist/tests/startup-resource-profile.js",
     "test": "node scripts/test.mjs",
     "test:friendly-battle": "npm run build && node dist/tests/friendly-battle.js && node dist/tests/friendly-battle-state.js && node dist/tests/friendly-battle-http.js",
     "test:quick-advancement": "npm run build && node dist/tests/quick-advancement.js && node dist/tests/quick-advancement-http.js",

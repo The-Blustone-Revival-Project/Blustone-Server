@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Test clean resource installer
+        run: python tests/resource-setup.py
       - name: Import previous pinned resource bundle
         env:
           GH_TOKEN: ${{ github.token }}

@@ -4,14 +4,38 @@ A local TypeScript/Express compatibility server for the preserved BLUSTONE clien
 
 ## Run on Windows
 
+Requires Node.js22 or later and Python3.10 or later. A Git clone and the Docker
+image contain code/reference tables, **not the runtime binary assets**. Install
+the pinned resource bundle before starting:
+
 ```powershell
 npm ci
+npm run setup
 npm run resources:verify
 npm run build
 npm start
 ```
 
-The default profile serves the Android/BlueStacks host address `http://10.0.2.2:8080`, binds port 8080, and persists state in ignored `var/state.json`. Existing migration state is preserved separately at `local/private/preserved-state.json`; the working migrated save is copied into `var/state.json` during setup. Do not replace it with a fresh account fixture.
+`npm run setup` verifies existing resources or downloads and imports the pinned
+[v1.1.0 resource ZIP](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases/tag/v1.1.0)
+(about1.1GB). It checks SHA-256 and all968 manifest files, skips downloading when
+they are already correct, and never overwrites differing files or account saves.
+For an offline copy, use `npm run setup -- --bundle PATH_TO_RESOURCE_ZIP`.
+
+The default profile serves the Android/BlueStacks host address `http://10.0.2.2:8080`, binds port8080, and persists state in ignored `var/state.json`. Fresh installations create their own accounts; no private migration save is required. When upgrading, preserve your existing `var/` and do not replace it with a fresh fixture.
+
+Use `npm start` or `npm run dev`, which load and preflight the named resource
+profile. Unconfigured direct execution of `node dist/src/server.js` now refuses
+instead of advertising the minimal protocol fixture. Advanced explicit resource
+configurations and programmatic protocol tests remain supported.
+
+Client compatibility matters: the validated client is the side-by-side
+[Instrumented build](https://github.com/The-Blustone-Revival-Project/Blustone-Instrumented/releases).
+A stock APK redirected through a proxy is not yet verified equivalent. The
+instrumented client includes native and pre-start local-database compatibility
+changes, not just logging; installing the resource bundle does not apply them.
+See the [Discord report investigation](docs/discord-clean-install-and-assertion-2026-10-26.md)
+for the `!sVal.empty()` preparation-screen assertion and targeted diagnostics.
 
 For local HTTP verification or another port:
 
@@ -190,10 +214,17 @@ responses without duplicate rewards. See the
 [local dispatch workflow](docs/local-timed-dispatch-workflow-2026-10-14.md).
 The default is disabled; paid Skip/IAP and native UI verification remain pending.
 
-Resources are repo-local and pinned by `resources/manifests/imported-files.json`. Proprietary binary trees are ignored; a fresh checkout requires the locally retained bundle or an authorized distributed copy. Download the pinned resource bundle from the [server releases](https://github.com/The-Blustone-Revival-Project/Blustone-Server/releases). The migration also retained `local/bundles/resources-e6.zip`. Import it with:
+Resources are repo-local and pinned by `resources/manifests/imported-files.json`.
+Binary trees are ignored by Git. The release ZIP already includes the originals
+used by the139-,170- and280-package profiles; assets being installed and assets
+being selected by a profile are different checks. Setup imports the complete
+bundle but does not activate experimental profiles or bypass earned gates.
+Install automatically, or use an offline copy:
 
 ```powershell
-python scripts/resources/bundle.py import PATH_TO_resources-e6.zip
+npm run setup
+# Offline alternative:
+npm run setup -- --bundle PATH_TO_RESOURCE_ZIP
 npm run resources:verify
 ```
 
@@ -236,7 +267,12 @@ GvG snapshot validation and native reward lookup are available as offline tools;
 see [supplied snapshot workflow and remaining gates](docs/gvg-snapshot-workflow-2026-10-13.md).
 No season, enrollment, reward claim or GvG route is enabled by these helpers.
 
-`docker compose up --build -d` mounts the local imported runtime resources read-only and persists `var/`. The Node launch and tests are verified in this migration; container build/runtime validation is recorded separately in the migration report. Run one writer per state file.
+Run `npm run setup` on the host first. Then `docker compose up --build -d`
+mounts the imported `resources/runtime` read-only and persists `var/`. The bare
+image does not embed the1.1GB bundle: running it without the resource mount is
+not a complete game installation. The Node launch and tests are verified;
+container build/runtime validation is recorded separately in the migration
+report. Run one writer per state file.
 
 [Migration plan and report](docs/migration/) · [Legacy server implementation notes](docs/legacy-server-README.md)
 

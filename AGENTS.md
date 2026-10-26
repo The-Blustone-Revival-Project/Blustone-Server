@@ -1,3 +1,46 @@
+## Discord clean-install report investigation (2026-10-26)
+
+Goal ACTIVE; newhumanrequest investigated communitystock/proxy crash vsassets.
+Keep reportsSEPARATE: Matthias explicitlystockAPK+mitmproxy; Stinger screenshot
+APKunspecified andseparatelyrewritingnative. BrowserreadoriginalDiscordimage:
+PrepareforBattle/SnowfieldFirstExpedition, ASSERTION !sVal.empty(), beforeBegin.
+Exactoriginal CGMLevelDB.Put G794c90 emptyVALUE assertline63 atG794d0a; patch
+false->true atELF784cfe/G794cfe existsInstrumented+15. Notgetter/notamissing-
+textureerror. Emptywriteproducer/key/caller UNKNOWN; assetsnotprovenrootcause.
+Instrumented isnotstock+logging: native/localUIseed/bootstrapcompat changes.
+Stockpathnotcertifiedequivalent, notdeclaredimpossible. NOassertionsilencingfix.
+
+Read Server docs/discord-clean-install-and-assertion-2026-10-26.md. Currentpublic
+ServerLatest remainsv1.1.0(Oct11); publicmain914b78e(Oct23) was137commits newer
+atinspection. ResourceZIP ALREADYpublished1,113,549,668bytes/SHA8bee83d69c5105ae
+...32df3ae1; retainedlocalresources-e6.zip EXACTsamepublicdigest. ALL968ZIPmembers
+streamhashverified againstCURRENTmanifest,1,113,400,848payloadbytes. Manifest
+inventorysamev1.1/current; all139/170/280selectedpacks included, no extraomitted
+localartfromscope. Git/Dockerimage omit runtime; Compose needs importedhostmount.
+Bareunconfigurednodeexecution previouslyadvertised2-package protocolfixture.
+Default139 alsoselectslessartthan170/280 evenwhenfullbundleinstalled.
+
+Added scripts/resources/setup.py +npmrunsetup: verifyexistingall968first; warm
+noHTTP; otherwisestream pinnedexistingpublicZIP oroffline--bundle, validateSHA/
+size/exactmembernames/allpayloads BEFOREimport. No overwriteconflicts; owned
+.part cleanup, staged exclusive resourcepublication, interruptedretry/concurrent
+writers protected. No state/config imports. README first-run nowsetupbefore
+verify/start, no private migration-save requirement, stock/instrumented split,
+Dockerhostmount, proper npmstart wrapper. Bare executable without explicit
+PACKAGE_NAMES nowrefusesbeforelisten; explicit researchfixtures stillallowed.
+Resourcepreflighterrors pointtonpmrunsetup. CItests installer before release.
+
+13Pythonfixturetests PASS, compiledCLIguard PASS, build PASS, fullnpmtest262PASS
+(261prior+newstartup test), resourcepreflightregression PASS. Actualhostnpmsetup
+verified968ready/no download. Logs local/resource-setup-focused-20261026.log and
+resource-install-full-tests-20261026.log. No actualcold1GBdownloadneeded; fixtures
+exercise loopbackHTTP andoffline/import/interrupt/path/hash/concurrency cases.
+Newsetup belongschangedsource, NOToldv1.1sourcearchive untilnextServerrelease.
+No release/Discordmessage/APKbuild/install/liveNode/apprestart/gameinput/saveedit/
+original/DD/phone/Docker/collector/inference action. Native screenshotcause still
+needs matchingAPKhash/launchcommand/resliststampcount +sanitizedPutcaller/key/log.
+DoNOTaskprivateDBdumps/clear/reinstall. Existingrevivalgoal remainsACTIVE.
+
 ## Nine later material skill graphs (2026-10-23)
 
 Goal ACTIVE. Previous turn made progress inc24e9c9(E11..18 original280batch).

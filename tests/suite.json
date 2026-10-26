@@ -1,5 +1,6 @@
 [
   "tests/smoke.ts",
+  "tests/startup-resource-profile.ts",
   "tests/persistence.ts",
   "tests/profile-settings.ts",
   "tests/profile-settings-state.ts",
